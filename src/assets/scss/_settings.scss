@@ -1,0 +1,99 @@
+input::-ms-clear {
+    display: none;
+   }
+   input[type="number"]::-webkit-outer-spin-button,
+   input[type="number"]::-webkit-inner-spin-button {
+     -webkit-appearance: none;
+     margin: 0;
+   }
+   input[type="number"] {
+     -moz-appearance: textfield;
+   }
+   input[type="number"]::-webkit-inner-spin-button,
+   input[type="number"]::-webkit-outer-spin-button {
+     -webkit-appearance: none;
+     margin: 0;
+   }
+   /*modal по вертикали*/
+   .modal {
+     text-align: center;
+   }
+   @media screen and (min-width: 992px) {
+     .modal:before {
+       display: inline-block;
+       vertical-align: middle;
+       content: " ";
+       height: 100%;
+     }
+   }
+   .modal-dialog {
+     display: inline-block;
+     text-align: left;
+     vertical-align: middle;
+   }
+   /*a*/
+   a:hover {
+     text-decoration: none;
+     color: inherit;
+   }
+   ul li {
+     list-style-type: none;
+   }
+   a:focus, a:visited, a:link, a:hover, button:focus, button:visited, button:link, button:hover {
+     outline: none;
+   }
+   *:focus, div:focus, input:focus, input:visited, input:hover, input:link {
+     outline: none;
+   }
+   textarea:focus, textarea:visited, textarea:hover, textarea:link {
+     outline: none;
+   }
+   button, label {
+     cursor: pointer;
+   }
+   /*container*/
+   @media (min-width: 1200px) { 
+     .container {
+       max-width: 1200px;
+       width: 100%;
+     }
+   }
+   @media (min-width: 1275px) { 
+     .container {
+       max-width: 1275px;
+       width: 100%;
+     }
+   }
+   /*btn*/
+   .btn {
+     font-family: "Segoe UI";
+     font-size: 15px;
+     font-weight: 700;
+     line-height: 1;
+     border-radius: 9999px;
+   }
+   .btn:focus, .btn:hover {
+     -webkit-box-shadow: none !important;
+     box-shadow: none !important;
+   }
+   .btn_blue {
+     color: #2e9dda;
+     border: 1.6px solid #2e9dda;
+   }
+   .btn_blue:hover {
+     color: #2e9dda;
+   }
+   .btn_transparent {
+     background-color: #fff;
+     -webkit-transition: background-color 0.5s;
+     -o-transition: background-color 0.5s;
+     transition: background-color 0.5s;
+   }
+   .btn_transparent:hover {
+     background-color: rgba(29, 161, 242, 0.1);
+   }
+   /*placeholder*/
+   ::-webkit-input-placeholder {}
+   ::-moz-placeholder      {}
+   :-moz-placeholder       {}
+   :-ms-input-placeholder    {}
