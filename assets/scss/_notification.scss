@@ -1,0 +1,22 @@
+.vue-notification-group {
+    margin-top: 10px !important;
+}
+
+.vue-notification-wrapper .vue-notification {
+    font-size: 14px;
+    margin-right: 10px;
+    line-height: 18px;
+}
+
+.vue-notification a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.vue-notification a:hover {
+    text-decoration: none;
+}
+
+.notification-content__mt {
+    margin-top: 5px;
+}

@@ -1,0 +1,57 @@
+{
+  "name": "crypto-twitter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
+    "lintfix": "eslint --fix  --ext \".js,.vue\" --ignore-path .gitignore ."
+  },
+  "lint-staged": {
+    "*.{js,vue}": "npm run lint",
+    "*.{css,vue}": "stylelint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "@renatodeleao/vue-sticky-directive": "^0.3.0",
+    "@walletconnect/web3-provider": "^1.5.4",
+    "core-js": "^3.15.1",
+    "easy-circular-progress": "^1.0.4",
+    "eth-sig-util": "^3.0.1",
+    "gun": "^0.2020.1232",
+    "ipfs-http-client": "^52.0.0",
+    "nuxt": "2.15.2",
+    "nuxt-vuex-localstorage": "^1.3.0",
+    "vue-jazzicon": "^0.1.3",
+    "vue-js-modal": "^2.0.1",
+    "vue-loading-overlay": "^3.4.2",
+    "vue-notification": "^1.3.20",
+    "vue-slick-carousel": "^1.0.6",
+    "vuedraggable": "^2.24.3",
+    "vuex": "^3.4.0",
+    "web3": "^1.5.1"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^6.0.1",
+    "@nuxtjs/eslint-module": "^3.0.2",
+    "@nuxtjs/pwa": "^3.3.5",
+    "@nuxtjs/stylelint-module": "^4.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "fibers": "^5.0.0",
+    "husky": "^7.0.1",
+    "prettier": "^2.3.2",
+    "sass": "^1.37.5",
+    "sass-loader": "^10.2.0"
+  }
+}
