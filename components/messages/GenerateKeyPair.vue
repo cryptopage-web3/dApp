@@ -20,7 +20,7 @@ export default {
       const self = this
       this.$gun.user().create(address, password, function (data) {
         if (data.err && data.err === 'User already created!') {
-          this.$notify({
+          self.$notify({
             type: 'error',
             title: 'Something went wrong',
             text: `<div class="notification-content__mt">
