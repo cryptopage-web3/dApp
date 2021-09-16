@@ -1,6 +1,8 @@
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import Web3 from 'web3'
 
+import { deviceType } from '~/utils'
+
 const infuraId = '735bdc2ee05b43488952a9cd53bdcfa1'
 
 class Web3Provider {
@@ -165,9 +167,11 @@ class Web3Provider {
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
     if (address) {
+      window.$nuxt.$store._actions['auth/setSelectedAddress'][0](address)
       this.selectedAddress = address
     }
     if (chainId) {
+      window.$nuxt.$store._actions['auth/setSelectedChainId'][0](chainId)
       this.selectedChainId = chainId
     }
   }
@@ -199,6 +203,9 @@ class Web3Provider {
   init = (provider = 'metamask') => {
     if (typeof window === 'undefined') {
       return
+    }
+    if (deviceType() !== 'desktop') {
+      provider = 'walletConnect'
     }
     const lastProvider = window.localStorage.getItem('lastProvider')
     if (lastProvider) {
