@@ -3,7 +3,7 @@
     <div v-if="isOwner" class="tweet">
       <TweetAddForm :settings="settings" />
     </div>
-    <ProfileBottom :user="user" />
+    <ProfileBottom />
   </div>
 </template>
 <script>
@@ -18,14 +18,6 @@ export default {
     address: {
       type: String,
       required: true
-    },
-    user: {
-      type: Object,
-      default: () => ({
-        address: '0x7eE2BBC5d5004683ed84035591582be1Fc4953F5',
-        transactions: 58400,
-        blocks: 106
-      })
     }
   },
   data: () => ({

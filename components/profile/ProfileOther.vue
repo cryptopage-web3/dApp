@@ -1,44 +1,38 @@
 <template>
   <div id="profile-other" class="profile-other">
     <div class="profile-other-left">
-      <router-link
-        to="/"
+      <nuxt-link
+        :to="`/${address}`"
         exact-active-class=""
         active-class=""
-        class="profile-other__back"
+        class="profile-other-name"
       >
-        <jazzicon :address="user.address" :diameter="38" />
-      </router-link>
-      <router-link
-        to="/"
+        <jazzicon :address="address" :diameter="38" style="margin-right: 1em" />
+      </nuxt-link>
+      <nuxt-link
+        :to="`/${address}`"
         exact-active-class=""
         active-class=""
         class="profile-other-name"
       >
         <div class="profile-other-name__top">
-          <span>
-            {{ shortAddress }}
-          </span>
+          <span> {{ $shortAddress(address) }} </span>
         </div>
-        <span> {{ $humanizeCount(user.transactions) }} Transactions </span>
-      </router-link>
+        <span> {{ $humanizeCount(transactionsCount) }} Transactions </span>
+      </nuxt-link>
     </div>
   </div>
 </template>
 <script>
 export default {
   props: {
-    user: {
-      type: Object,
-      default: () => ({
-        address: '0x7eE2BBC5d5004683ed84035591582be1Fc4953F5',
-        transactions: 14900
-      })
-    }
-  },
-  computed: {
-    shortAddress() {
-      return this.$shortAddress(this.user.address)
+    address: {
+      type: String,
+      default: () => '0x7eE2BBC5d5004683ed84035591582be1Fc4953F5'
+    },
+    transactionsCount: {
+      type: Number,
+      default: () => 0
     }
   }
 }

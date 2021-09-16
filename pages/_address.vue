@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <profile-other />
+    <profile-other :address="$route.params.address" />
     <main-center :address="$route.params.address" />
     <main-tabs-links :address="$route.params.address" />
     <div class="main-tabs-cont">
