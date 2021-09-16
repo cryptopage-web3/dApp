@@ -142,36 +142,7 @@ const watchTokenTransfers = (
     console.log('event', event) // eslint-disable-line no-console
   })
 }
-/*
-const getTransactionsByAddress = (address, blockNumbers, callback) => {
-  const batch = new web3.eth.BatchRequest()
-  const handleBlock = (error, block) => {
-    if (error) console.error('ERROR:', error) // eslint-disable-line no-console
-    for (const transaction of block.transactions) {
-      if (isOwnerTransaction(address, transaction)) {
-        callback(transaction)
-      }
-    }
-  }
-  blockNumbers.forEach((blockNumber) => {
-    batch.add(web3.eth.getBlock.request(blockNumber, true, handleBlock))
-  })
 
-  return batch.execute()
-}
-*/
-/*
-function hexToDec(hex) {
-  let result = 0
-  let digitValue
-  hex = hex.toLowerCase()
-  for (let i = 0; i < hex.length; i++) {
-    digitValue = '0123456789abcdefgh'.indexOf(hex[i])
-    result = result * 16 + digitValue
-  }
-  return result
-}
-*/
 const getERC20TransferByHash = async (hash) => {
   const tx = await web3.eth.getTransaction(hash)
   if (
@@ -179,24 +150,13 @@ const getERC20TransferByHash = async (hash) => {
     (tx.input.length === 138 || tx.input.slice(2, 10) === 'a9059cbb')
   ) {
     const receiver = web3.utils.toChecksumAddress(`0x${tx.input.slice(34, 74)}`)
-    const amount = web3.utils.hexToNumber('0x' + tx.input.slice(74)) // hexToDec(tx.input.slice(74))
+    const amount = web3.utils.toBN('0x' + tx.input.slice(74)) // hexToDec(tx.input.slice(74))
     const symbol = tx.to
     const sender = web3.utils.toChecksumAddress(tx.from)
     return { receiver, amount, symbol, hash, sender }
   }
   return {}
 }
-
-/*
-const convertToNumber = (hex, decimals) => {
-  const amount = web3.utils.toBN(hex)
-  let amountDecimal = amount
-  if (decimals && amount.toLocaleString() === '0' && decimals < 20) {
-    amountDecimal = amount.div(Web3.utils.toBN(10 ** decimals))
-  }
-  return amountDecimal.toLocaleString()
-}
-*/
 
 export default ({ app }, inject) => {
   inject('web3', web3)
@@ -214,8 +174,5 @@ export default ({ app }, inject) => {
       watchTokenTransfers(tokenABI, tokenContractAddress, from, to, value)
   )
   inject('provider', web3Provider)
-  // inject('getTransactionsByAddress', (address, blockNumbers, callback) =>
-  // getTransactionsByAddress(address, blockNumbers, callback)
-  // )
   inject('getERC20TransferByHash', (hash) => getERC20TransferByHash(hash))
 }
