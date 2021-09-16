@@ -1,15 +1,28 @@
 <template>
-  <div class="posts">
-    <post v-for="item in items" :key="item.hash" :post="item" />
+  <div>
+    <div>Total: {{ total }}</div>
+    <div class="posts">
+      <post
+        v-for="item in items"
+        :key="item.hash"
+        :post="item"
+        :token="token"
+        :types="types"
+      />
+    </div>
   </div>
 </template>
 <script>
-import { _range } from '~/utils'
+import { tokens } from '~/constants/tokens'
 export default {
   components: {
     post: () => import('~/components/post/Post.vue')
   },
   props: {
+    types: {
+      type: Array,
+      default: () => []
+    },
     address: {
       type: String,
       required: true
@@ -20,56 +33,48 @@ export default {
     pageSize: 10,
     total: 0,
     items: [],
-    blockNumber: 0
+    isContract: false,
+    token: {},
+    abi: ''
   }),
-  fetch() {
-    this.$getTransactionsByAddress(
-      this.address,
-      this.blockNumbers,
-      this.addItem
-    )
-
-    // mocks data
-    this.setMockData()
+  async fetch() {
+    this.$nuxt.$loading.start()
+    const response = await this.getTransactions(this.address)
+    this.items.push(...response.result)
+    this.$nuxt.$loading.finish()
   },
-  fetchOnServer: false,
   computed: {
-    blockNumbers() {
-      return this.blockNumber
-        ? _range(this.blockNumber, this.blockNumber - this.pageSize * this.page)
-        : []
-    },
     showNext() {
-      return this.total >= this.page * this.pageSize
+      if (!this.isContract) {
+        return this.total >= this.page * this.pageSize
+      }
+      return true
     },
     showPrevious() {
       return this.page >= 2
     }
   },
   watch: {
-    blockNumbers: {
-      deep: true,
-      handler() {
-        setTimeout(() => {
-          if (this.total > 0 && this.items.length < this.pageSize * this.page) {
-            this.blockNumber = this.blockNumber - this.pageSize * this.page
-            this.$fetch()
-          } else {
-            this.$nuxt.$loading.finish()
-          }
-        }, 1000)
-      }
-    }
+    page: '$fetch',
+    pageSize: '$fetch'
   },
+  fetchOnServer: false,
   async mounted() {
     await this.$nextTick(async () => {
+      const code = await this.$web3.eth.getCode(this.address)
+      this.isContract = code !== '0x'
       this.total = await this.$web3.eth.getTransactionCount(this.address)
-      this.blockNumber = await this.$web3.eth.getBlockNumber()
-      this.$nuxt.$loading.start()
+      const address = this.$web3.utils.toChecksumAddress(this.address)
+      if (this.isContract) {
+        // this.abi = await this.getABI(address) PLEASE, DON'T REMOVE IT :)
+        this.token = tokens.find((token) => {
+          return this.$web3.utils.toChecksumAddress(token.address) === address
+        })
+      }
       window.onscroll = () => {
         const bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight ===
-          document.documentElement.offsetHeight
+          document.documentElement.scrollTop + window.innerHeight >=
+          document.documentElement.offsetHeight - 150
         if (bottomOfWindow) {
           this.next()
         }
@@ -78,7 +83,6 @@ export default {
   },
   methods: {
     next() {
-      this.$nuxt.$loading.start()
       if (!this.showNext) return
       this.page += 1
     },
@@ -91,36 +95,17 @@ export default {
         this.items.push(item)
       }
     },
-    setMockData() {
-      ;[
-        {
-          from: '0xEB014f8c8B418Db6b45774c326A0E64C78914dC0',
-          hash: '1',
-          gasPrice: '10000000000',
-          gas: '11000',
-          to: '0x3535353535353535353535353535353535353535',
-          value: '1000000000000000000',
-          data: ''
-        },
-        {
-          from: '0xdd014f8c8B418Db6b45774c326A0E64C78914dTt',
-          hash: '2',
-          gasPrice: '20000000000',
-          gas: '21000',
-          to: '0x6635353535353535353535353535353535353522',
-          value: '2000000000000000000',
-          data: ''
-        },
-        {
-          from: '0xmm014f8c8B418Db6b45774c326A0E64C78914dGg',
-          hash: '3',
-          gasPrice: '30000000000',
-          gas: '31000',
-          to: '0x5535353535353535353535353535353535353599',
-          value: '3000000000000000000',
-          data: ''
-        }
-      ].forEach((tr) => this.addItem(tr))
+    async getTransactions(address) {
+      const baseURL =
+        'https://api.etherscan.io/api?module=account&action=txlist'
+      const URL = `${baseURL}&address=${this.address}&startblock=0&endblock=99999999&page=${this.page}&offset=${this.pageSize}&sort=desc&apikey=VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'`
+      return await fetch(URL)
+        .then((response) => response.json())
+        .then((response) => response)
+    },
+    getABI(address) {
+      const URL = `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}`
+      return fetch(URL).then((response) => response.json())
     }
   }
 }

@@ -16,16 +16,16 @@
 <script>
 export default {
   data: () => ({
-    currentTab: 'Tweets',
+    currentTab: 'Transactions',
     tabs: [
       {
-        name: 'Tweets'
+        name: 'Transactions'
       },
       {
-        name: 'Tweets & replies'
+        name: 'NFT'
       },
       {
-        name: 'Media'
+        name: 'Tokens (ERC20)'
       },
       {
         name: 'Likes'

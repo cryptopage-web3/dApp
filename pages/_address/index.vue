@@ -1,8 +1,15 @@
 <template>
   <div class="transactions">
-    <AddressTransactionList :address="$route.params.address" />
+    <transactions :address="$route.params.address" :types="types" />
   </div>
 </template>
 <script>
-export default {}
+export default {
+  components: {
+    transactions: () => import('~/components/AddressTransactionList.vue')
+  },
+  data: () => ({
+    types: ['transactions', 'nft', 'tokens', 'likes']
+  })
+}
 </script>

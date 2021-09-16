@@ -30,12 +30,12 @@ export default {
         name: 'Transactions'
       },
       {
-        link: 'replies',
-        name: 'Tweets & replies'
+        link: 'nft',
+        name: 'NFT'
       },
       {
-        link: 'media',
-        name: 'Media'
+        link: 'tokens',
+        name: 'Tokens (ERC20)'
       },
       {
         link: 'likes',

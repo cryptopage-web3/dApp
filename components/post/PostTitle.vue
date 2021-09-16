@@ -1,9 +1,5 @@
 <template>
-  <div class="post-title">
-    Value: <b>{{ post.value }}</b>
-    <br />
-    GAS Price: <b>{{ post.gasPrice }}</b>
-  </div>
+  <div class="post-title"></div>
 </template>
 <script>
 export default {

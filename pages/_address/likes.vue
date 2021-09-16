@@ -1,14 +1,8 @@
 <template>
   <div class="posts">
-    <div v-for="post in posts" :key="post.id">
-      <post :post="post" />
-    </div>
+    <div>At the moment Likes is not displayed.</div>
   </div>
 </template>
 <script>
-export default {
-  data: () => ({
-    posts: []
-  })
-}
+export default {}
 </script>
