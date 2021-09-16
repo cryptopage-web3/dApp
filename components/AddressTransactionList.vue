@@ -3,9 +3,9 @@
     <div>Total: {{ total }}</div>
     <div class="posts">
       <post
-        v-for="item in items"
-        :key="item.hash"
-        :post="item"
+        v-for="transaction in items"
+        :key="transaction.hash"
+        :post="transaction"
         :token="token"
         :types="types"
       />
@@ -40,7 +40,15 @@ export default {
   async fetch() {
     this.$nuxt.$loading.start()
     const response = await this.getTransactions(this.address)
-    this.items.push(...response.result)
+    response.result.forEach((transaction) => {
+      const isTransfer = this.isTransfer(transaction)
+      const isSelected =
+        this.types.includes('transactions') || this.types.includes('tokens')
+      const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
+      if (isTransfer && isSelected && isUnique) {
+        this.items.push(transaction)
+      }
+    })
     this.$nuxt.$loading.finish()
   },
   computed: {
@@ -82,6 +90,9 @@ export default {
     })
   },
   methods: {
+    isTransfer(transaction) {
+      return transaction.input.startsWith('0xa9059')
+    },
     next() {
       if (!this.showNext) return
       this.page += 1
