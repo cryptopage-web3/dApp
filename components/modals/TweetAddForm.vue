@@ -14,7 +14,7 @@
         </svg>
       </div>
     </div>
-    <TweetAddForm v-for="(item, i) in settings" :key="i" :settings="item" />
+    <TweetAddForm />
   </div>
 </template>
 
@@ -23,19 +23,6 @@ export default {
   name: 'Tweet',
   components: {
     TweetAddForm: () => import('@/components/globals/tweets/TweetAddForm.vue')
-  },
-  data() {
-    return {
-      settings: [
-        {
-          maxCount: 75,
-          radius: 14,
-          strokeColor: '#1da1f2',
-          strokeWidth: 2,
-          minHeight: 100
-        }
-      ]
-    }
   }
 }
 </script>
