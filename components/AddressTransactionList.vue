@@ -1,37 +1,33 @@
 <template>
   <div>
-    <div>Total: {{ total }}</div>
     <div class="posts">
-      <post
-        v-for="transaction in items"
-        :key="transaction.hash"
-        :post="transaction"
-        :token="token"
-        :types="types"
-      />
+      <div v-for="transaction in items" :key="transaction.hash">
+        <slot name="transaction" :transaction="transaction" />
+      </div>
     </div>
   </div>
 </template>
 <script>
 import { tokens } from '~/constants/tokens'
+import EtherscanAPI from '~/utils/etherscan'
 export default {
-  components: {
-    post: () => import('~/components/post/Post.vue')
-  },
   props: {
-    types: {
-      type: Array,
-      default: () => []
+    type: {
+      type: String,
+      default: 'transactions'
     },
     address: {
       type: String,
       required: true
+    },
+    total: {
+      type: Number,
+      default: () => 0
     }
   },
   data: () => ({
     page: 1,
     pageSize: 10,
-    total: 0,
     items: [],
     isContract: false,
     token: {},
@@ -39,16 +35,13 @@ export default {
   }),
   async fetch() {
     this.$nuxt.$loading.start()
-    const response = await this.getTransactions(this.address)
-    response.result.forEach((transaction) => {
-      const isTransfer = this.isTransfer(transaction)
-      const isSelected =
-        this.types.includes('transactions') || this.types.includes('tokens')
-      const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
-      if (isTransfer && isSelected && isUnique) {
-        this.items.push(transaction)
-      }
-    })
+    const response = await this.getTransactions()
+    if (Array.isArray(response.result)) {
+      response.result.forEach((transaction) => {
+        const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
+        if (isUnique) this.items.push(transaction)
+      })
+    }
     this.$nuxt.$loading.finish()
   },
   computed: {
@@ -71,10 +64,8 @@ export default {
     await this.$nextTick(async () => {
       const code = await this.$web3.eth.getCode(this.address)
       this.isContract = code !== '0x'
-      this.total = await this.$web3.eth.getTransactionCount(this.address)
       const address = this.$web3.utils.toChecksumAddress(this.address)
       if (this.isContract) {
-        // this.abi = await this.getABI(address) PLEASE, DON'T REMOVE IT :)
         this.token = tokens.find((token) => {
           return this.$web3.utils.toChecksumAddress(token.address) === address
         })
@@ -106,17 +97,28 @@ export default {
         this.items.push(item)
       }
     },
-    async getTransactions(address) {
-      const baseURL =
-        'https://api.etherscan.io/api?module=account&action=txlist'
-      const URL = `${baseURL}&address=${this.address}&startblock=0&endblock=99999999&page=${this.page}&offset=${this.pageSize}&sort=desc&apikey=VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'`
-      return await fetch(URL)
-        .then((response) => response.json())
-        .then((response) => response)
-    },
-    getABI(address) {
-      const URL = `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}`
-      return fetch(URL).then((response) => response.json())
+    async getTransactions() {
+      const etherscan = new EtherscanAPI()
+      if (this.type === 'transactions') {
+        return await etherscan.txList({
+          address: this.address,
+          page: this.page,
+          offset: this.pageSize
+        })
+      } else if (this.type === 'tokens') {
+        return await etherscan.tokenTx({
+          address: this.address,
+          page: this.page,
+          offset: this.pageSize
+        })
+      } else if (this.type === 'nft') {
+        return await etherscan.tokenNFTTx({
+          address: this.address,
+          page: this.page,
+          offset: this.pageSize
+        })
+      }
+      return []
     }
   }
 }
