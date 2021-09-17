@@ -58,7 +58,7 @@
       </li>
     </ul>
     <a href="#" class="sidebar-tweet" @click.prevent="modalTweet">
-      <span>Tweet</span>
+      <span>Send crypto-post</span>
       <div>
         <Icon type="add-tweet" />
       </div>

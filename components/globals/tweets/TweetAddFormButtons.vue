@@ -8,24 +8,21 @@
       flex-wrap
     "
   >
-    <links @onImageClick="$emit('onImageClick')" />
+    <div class="tweet-add__post-links">
+      <a class="post-link post-link_blue" @click="$emit('onImageClick')">
+        <div>
+          <icon type="uploadImage" />
+        </div>
+      </a>
+    </div>
     <div class="tweet-add__send d-flex align-center">
-      <!--Progress
-      v-if="!labelShow"
-      :value="count"
-      :radius="radius"
-      :stroke-width="strokeWidth"
-      :stroke-color="strokeColor"
-      >
-        <div class="content">{{ input.length }}</div>
-      </Progress-->
       <button
         type="button"
         class="post-follow-top__link btn btn_blue btn_blue--bg"
         :disabled="!disabled"
         @click="$emit('onButtonSubmit')"
       >
-        Tweet
+        Send crypto-post
       </button>
     </div>
   </div>
@@ -33,8 +30,7 @@
 <script>
 export default {
   components: {
-    links: async () =>
-      await import('@/components/globals/tweets/TweetAddPostLinks')
+    Icon: async () => await import('@/components/icons/Icon')
   },
   props: {
     disabled: {
