@@ -3,7 +3,7 @@
     <div v-if="isOwner" class="tweet">
       <TweetAddForm :settings="settings" />
     </div>
-    <ProfileBottom />
+    <ProfileBottom :transactions-count="transactionsCount" />
   </div>
 </template>
 <script>
@@ -18,6 +18,10 @@ export default {
     address: {
       type: String,
       required: true
+    },
+    transactionsCount: {
+      type: Number,
+      default: () => 0
     }
   },
   data: () => ({
