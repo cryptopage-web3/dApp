@@ -1,0 +1,64 @@
+.start-page {
+    padding: 50px 0;
+}
+
+.start-page__logo {
+    text-align: center;
+}
+
+.start-page__logo svg {
+	width: 200px;
+}
+
+.start-page__logo svg path {
+	fill: #1da1f2;
+}
+
+.start-page__header {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.start-page__header-title {
+    font-size: 46px;
+}
+
+.start-page__header-subtitle {
+    margin-top: 25px;
+    font-size: 32px;
+    color: #8498a7;
+}
+
+.start-page__signin {
+    margin-top: 70px;
+    text-align: center;
+}
+
+.start-page__signin-btn {
+    border: none;
+    padding: 20px;
+    margin: 0;
+    background-color: #1d9bf0;
+    min-width: 400px;
+    border-radius: 999px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 24px;
+}
+
+.start-page__signin-btn:hover {
+    background-color: #0f8cdf;
+}
+
+.start-page__signin-title {
+    margin-top: 20px;
+    color: #8498a7;
+    font-size: 20px;
+}
+
+.start-page__auth {
+    position: fixed;
+    z-index: 5;
+    bottom: 15px;
+    width: 240px;
+}
