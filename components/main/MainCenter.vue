@@ -10,7 +10,7 @@
 export default {
   components: {
     TweetAddForm: async () =>
-      await import('@/components/globals/tweets/TweetAddForm.vue'),
+      await import('@/components/tweet/TweetAddForm.vue'),
     ProfileBottom: async () =>
       await import('@/components/profile/ProfileMoreBottom')
   },

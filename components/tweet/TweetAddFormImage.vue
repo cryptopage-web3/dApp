@@ -28,7 +28,6 @@ export default {
   },
   props: {
     file: {
-      type: Object,
       default: null
     }
   },
@@ -52,6 +51,7 @@ export default {
 
     fileDeleteHandler() {
       this.$emit('onFileUpdate', null)
+      this.$refs.file.value = ''
     },
 
     fileUpdateHandler() {

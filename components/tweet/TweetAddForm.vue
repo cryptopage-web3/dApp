@@ -26,11 +26,11 @@
 export default {
   components: {
     'tweet-message': async () =>
-      await import('@/components/globals/tweets/TweetAddFormMessage'),
+      await import('@/components/tweet/TweetAddFormMessage'),
     'tweet-image': async () =>
-      await import('@/components/globals/tweets/TweetAddFormImage'),
+      await import('@/components/tweet/TweetAddFormImage'),
     'tweet-buttons': async () =>
-      await import('@/components/globals/tweets/TweetAddFormButtons')
+      await import('@/components/tweet/TweetAddFormButtons')
   },
   data() {
     return {
