@@ -13,7 +13,7 @@
           @onFileUpdate="fileUpdateHandler"
         />
         <tweet-buttons
-          :disabled="loading"
+          :disabled="loading || !text"
           @onImageClick="uploadImage"
           @onButtonSubmit="submit"
         />
@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       text: '',
       file: null
     }
@@ -46,15 +46,7 @@ export default {
         return
       }
 
-      const fileType = file.type.split('/')[0]
-
-      if (fileType !== 'image') {
-        this.$notify({
-          type: 'error',
-          title: 'Invalid file extension',
-          text: `<div class="notification-content__mt">Please upload only image</div>`
-        })
-
+      if (!this.validateFileWithNotify(file)) {
         return
       }
 
@@ -67,6 +59,19 @@ export default {
 
     dragFile(event) {
       const file = event.dataTransfer.files[0]
+
+      if (!this.validateFileWithNotify(file)) {
+        return
+      }
+
+      this.file = file
+    },
+
+    validateFileWithNotify(file) {
+      if (!file) {
+        return false
+      }
+
       const fileType = file.type.split('/')[0]
 
       if (fileType !== 'image') {
@@ -76,10 +81,10 @@ export default {
           text: `<div class="notification-content__mt">Please upload only image</div>`
         })
 
-        return
+        return false
       }
 
-      this.file = file
+      return true
     },
 
     async getFileIPFSHash() {
