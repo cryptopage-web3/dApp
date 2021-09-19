@@ -6,7 +6,8 @@ import {
   validateTransaction,
   shortAddress
   // isOwnerTransaction
-} from '~/utils'
+} from '@/utils'
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from '@/constants/contract'
 
 const PROJECT_ID = `03d727fcc0e4440badfadb46a5388165`
 
@@ -143,6 +144,19 @@ const watchTokenTransfers = (
   })
 }
 
+const sendPostHash = ({ params, callbacks }) => {
+  const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
+
+  contract.methods
+    .safeMint(params.hash, params.comment)
+    .send({
+      from: params.from
+    })
+    .on('transactionHash', callbacks.onTransactionHash)
+    .on('receipt', callbacks.onReceipt)
+    .on('error', callbacks.onError)
+}
+
 const getERC20TransferByHash = async (hash) => {
   const tx = await web3.eth.getTransaction(hash)
   if (
@@ -175,4 +189,5 @@ export default ({ app }, inject) => {
   )
   inject('provider', web3Provider)
   inject('getERC20TransferByHash', (hash) => getERC20TransferByHash(hash))
+  inject('sendPostHash', (params) => sendPostHash(params))
 }

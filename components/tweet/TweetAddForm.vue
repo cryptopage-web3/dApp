@@ -110,6 +110,8 @@ export default {
     async submit() {
       this.loading = true
 
+      // get ipfs hash
+
       const ipfsHash = await this.getFormIPFSHash()
 
       this.loading = false
@@ -117,8 +119,12 @@ export default {
 
       this.$notify({
         type: 'success',
-        title: `IPFS path ${ipfsHash}`
+        title: `IPFS hash received`
       })
+
+      // send to contract
+
+      this.sendPostHash(ipfsHash)
     },
 
     async getFileIPFSHash() {
@@ -142,6 +148,44 @@ export default {
       await ipfs.pin.add(file.path)
 
       return file.path
+    },
+
+    sendPostHash(ipfsHash) {
+      const self = this
+      let txHash = ''
+
+      this.$sendPostHash({
+        params: {
+          from: this.$store.getters['auth/selectedAddress'],
+          hash: ipfsHash,
+          comment: false
+        },
+        callbacks: {
+          onTransactionHash(hash) {
+            txHash = hash
+
+            self.$notify({
+              type: 'info',
+              title: txHash,
+              text: `<div class="notification-content__mt">Transaction on pending</div>`
+            })
+          },
+          onReceipt() {
+            self.$notify({
+              type: 'success',
+              title: txHash || 'Unknown hash',
+              text: `<div class="notification-content__mt">Transaction completed</div>`
+            })
+          },
+          onError() {
+            self.$notify({
+              type: 'error',
+              title: txHash || 'Unknown hash',
+              text: `<div class="notification-content__mt">Transaction has some error</div>`
+            })
+          }
+        }
+      })
     }
   }
 }
