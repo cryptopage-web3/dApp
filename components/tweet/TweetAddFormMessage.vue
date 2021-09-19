@@ -2,7 +2,7 @@
   <div class="tweet-add__message">
     <label v-if="!value"> What's happening? </label>
     <span
-      id="input"
+      ref="input"
       class="tweet-add__input"
       :style="`min-height: ${minHeight}px`"
       contenteditable="true"
@@ -20,6 +20,18 @@ export default {
   data() {
     return {
       minHeight: 100
+    }
+  },
+  watch: {
+    value: {
+      handler(value) {
+        this.$nextTick(() => {
+          if (this.$refs.input.innerHTML !== value) {
+            this.$refs.input.innerHTML = value
+          }
+        })
+      },
+      immediate: true
     }
   }
 }

@@ -39,6 +39,20 @@ export default {
       file: null
     }
   },
+  computed: {
+    shortAddress() {
+      return this.$shortAddress(this.$store.getters['auth/selectedAddress'])
+    }
+  },
+  watch: {
+    loading(loading) {
+      if (loading) {
+        this.$nuxt.$loading.start()
+      } else {
+        this.$nuxt.$loading.finish()
+      }
+    }
+  },
   methods: {
     fileUpdateHandler(file) {
       if (!file) {
@@ -87,6 +101,25 @@ export default {
       return true
     },
 
+    resetForm() {
+      this.text = ''
+      this.file = null
+    },
+
+    async submit() {
+      this.loading = true
+
+      const ipfsHash = await this.getFormIPFSHash()
+
+      this.loading = false
+      this.resetForm()
+
+      this.$notify({
+        type: 'success',
+        title: `IPFS path ${ipfsHash}`
+      })
+    },
+
     async getFileIPFSHash() {
       const ipfs = await this.$ipfs
       const file = await ipfs.add(this.file)
@@ -96,15 +129,11 @@ export default {
 
     async getFormIPFSHash() {
       const fileHash = this.file ? await this.getFileIPFSHash() : null
+
       const nft = {
-        name: this.text,
-        externalLink: '',
-        description: '',
-        file: fileHash,
-        collection: this.collection,
-        properties: this.properties,
-        levels: this.levels,
-        stats: []
+        name: this.shortAddress,
+        description: this.text,
+        image: fileHash || undefined
       }
 
       const ipfs = await this.$ipfs
@@ -112,20 +141,6 @@ export default {
       await ipfs.pin.add(file.path)
 
       return file.path
-    },
-
-    async submit() {
-      this.$nuxt.$loading.start()
-      const ipfsHash = await this.getFormIPFSHash()
-      console.log('IPFS path', ipfsHash) // eslint-disable-line no-console
-      this.text = ''
-      Object.assign(this.$data, this.$options.data.apply(this))
-      setTimeout(() => this.$nuxt.$loading.finish(), 500)
-
-      this.$notify({
-        type: 'success',
-        title: `IPFS path ${ipfsHash}`
-      })
     }
   }
 }
