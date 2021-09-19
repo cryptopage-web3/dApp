@@ -18,8 +18,7 @@ export default {
                 <a href="https://chrome.google.com/webstore/detail/nkbihfbeogaeaoehlefnkodbefgpgknn" target="_blank">
                   Install MetaMask for Chrome
                 </a>
-              </div>`,
-            duration: 10000
+              </div>`
           })
           return
         }

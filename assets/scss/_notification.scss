@@ -17,6 +17,18 @@
     text-decoration: none;
 }
 
+.vue-notification .notification-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vue-notification .notification-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .notification-content__mt {
     margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

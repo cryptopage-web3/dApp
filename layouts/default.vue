@@ -2,7 +2,7 @@
   <div id="app" class="main">
     <PageLoadBG v-if="!isReadyStore" />
     <template v-else>
-      <notifications />
+      <notifications :duration="10000" />
       <div class="container">
         <div class="main-wr">
           <sidebar-left />
