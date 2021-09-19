@@ -6,14 +6,19 @@
   >
     <div class="tweet-add__form d-flex flex-column">
       <form>
-        <tweet-message v-model="text" />
-        <tweet-image
+        <text-field
+          v-model="title"
+          :is-single-line="true"
+          :placeholder="'Enter post title'"
+        />
+        <text-field v-model="text" :placeholder="'Enter post text'" />
+        <upload-image
           ref="upload-image"
           :file="file"
           @onFileUpdate="fileUpdateHandler"
         />
-        <tweet-buttons
-          :disabled="loading || !text"
+        <buttons
+          :disabled="loading || !text || !title"
           @onImageClick="uploadImage"
           @onButtonSubmit="submit"
         />
@@ -25,23 +30,18 @@
 <script>
 export default {
   components: {
-    'tweet-message': async () =>
+    'text-field': async () =>
       await import('@/components/tweet/TweetAddFormMessage'),
-    'tweet-image': async () =>
+    'upload-image': async () =>
       await import('@/components/tweet/TweetAddFormImage'),
-    'tweet-buttons': async () =>
-      await import('@/components/tweet/TweetAddFormButtons')
+    buttons: async () => await import('@/components/tweet/TweetAddFormButtons')
   },
   data() {
     return {
       loading: false,
       text: '',
+      title: '',
       file: null
-    }
-  },
-  computed: {
-    shortAddress() {
-      return this.$shortAddress(this.$store.getters['auth/selectedAddress'])
     }
   },
   watch: {
@@ -102,6 +102,7 @@ export default {
     },
 
     resetForm() {
+      this.title = ''
       this.text = ''
       this.file = null
     },
@@ -131,9 +132,9 @@ export default {
       const fileHash = this.file ? await this.getFileIPFSHash() : null
 
       const nft = {
-        name: this.shortAddress,
+        name: this.title,
         description: this.text,
-        image: fileHash || undefined
+        image: fileHash && `https://ipfs.io/ipfs/${fileHash}`
       }
 
       const ipfs = await this.$ipfs

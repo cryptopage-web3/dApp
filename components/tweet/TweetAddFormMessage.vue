@@ -1,10 +1,10 @@
 <template>
   <div class="tweet-add__message">
-    <label v-if="!value"> What's happening? </label>
+    <label v-if="!value">{{ placeholder }}</label>
     <span
       ref="input"
       class="tweet-add__input"
-      :style="`min-height: ${minHeight}px`"
+      :class="{ 'tweet-add__input_single': isSingleLine }"
       contenteditable="true"
       @input="$emit('input', $event.target.innerHTML)"
     />
@@ -15,11 +15,14 @@ export default {
   props: {
     value: {
       type: String
-    }
-  },
-  data() {
-    return {
-      minHeight: 100
+    },
+    placeholder: {
+      type: String,
+      default: 'Enter value'
+    },
+    isSingleLine: {
+      type: Boolean,
+      default: false
     }
   },
   watch: {
@@ -36,3 +39,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+.tweet-add__input {
+  min-height: 100px;
+}
+
+.tweet-add__input_single {
+  min-height: 50px;
+}
+</style>
