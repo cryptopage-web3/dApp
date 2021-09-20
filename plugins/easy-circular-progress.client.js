@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import Progress from "easy-circular-progress";
+import Progress from 'easy-circular-progress'
 
-Vue.component('Progress', Progress);
+Vue.component('Progress', Progress)

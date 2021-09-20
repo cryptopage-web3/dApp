@@ -5,16 +5,10 @@
         class="modal-close__btn d-flex align-center justify-center"
         @click="$modal.hide('tweet')"
       >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <g>
-            <path
-              d="M13.414 12l5.793-5.793c.39-.39.39-1.023 0-1.414s-1.023-.39-1.414 0L12 10.586 6.207 4.793c-.39-.39-1.023-.39-1.414 0s-.39 1.023 0 1.414L10.586 12l-5.793 5.793c-.39.39-.39 1.023 0 1.414.195.195.45.293.707.293s.512-.098.707-.293L12 13.414l5.793 5.793c.195.195.45.293.707.293s.512-.098.707-.293c.39-.39.39-1.023 0-1.414L13.414 12z"
-            ></path>
-          </g>
-        </svg>
+        <icon type="close" />
       </div>
     </div>
-    <TweetAddForm v-for="(item, i) in settings" :key="i" :settings="item" />
+    <TweetAddForm />
   </div>
 </template>
 
@@ -22,20 +16,8 @@
 export default {
   name: 'Tweet',
   components: {
-    TweetAddForm: () => import('@/components/globals/tweets/TweetAddForm.vue')
-  },
-  data() {
-    return {
-      settings: [
-        {
-          maxCount: 75,
-          radius: 14,
-          strokeColor: '#1da1f2',
-          strokeWidth: 2,
-          minHeight: 100
-        }
-      ]
-    }
+    Icon: async () => await import('@/components/icons/Icon'),
+    TweetAddForm: () => import('@/components/tweet/TweetAddForm.vue')
   }
 }
 </script>

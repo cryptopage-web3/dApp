@@ -1,6 +1,6 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  //target: 'server',
+  target: process.env.NUXT_TARGET || 'static',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -31,7 +31,7 @@ export default {
     '~/plugins/web3',
     '~/plugins/modals.client',
     '~/plugins/easy-circular-progress.client',
-    '~/plugins/notifications.client',
+    '~/plugins/notifications.client'
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
@@ -51,9 +51,12 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    ['nuxt-vuex-localstorage', {
-      localStorage: ['auth']
-    }]
+    [
+      'nuxt-vuex-localstorage',
+      {
+        localStorage: ['auth']
+      }
+    ]
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

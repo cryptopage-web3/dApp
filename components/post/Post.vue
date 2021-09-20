@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <div class="post-cont">
-      <div v-if="transfer && types.includes('tokens')" class="post-right">
+      <div v-if="transfer && type === 'tokens'" class="post-right">
         <div class="row">
           <nuxt-link class="column" :to="`/${transfer.sender}`">
             <jazzicon :seed="10211" :diameter="25" :address="transfer.sender" />
@@ -33,10 +33,7 @@
           </nuxt-link>
         </div>
       </div>
-      <div
-        v-else-if="!transfer && types.includes('transactions')"
-        class="post-right"
-      >
+      <div v-else-if="!transfer && type === 'transactions'" class="post-right">
         <div class="row">
           <nuxt-link class="column" :to="`/${post.from}`">
             <jazzicon :seed="10211" :diameter="25" :address="post.from" />

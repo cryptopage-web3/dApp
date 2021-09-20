@@ -3,14 +3,14 @@
     <div v-if="isOwner" class="tweet">
       <TweetAddForm :settings="settings" />
     </div>
-    <ProfileBottom />
+    <ProfileBottom :transactions-count="transactionsCount" />
   </div>
 </template>
 <script>
 export default {
   components: {
     TweetAddForm: async () =>
-      await import('@/components/globals/tweets/TweetAddForm.vue'),
+      await import('@/components/tweet/TweetAddForm.vue'),
     ProfileBottom: async () =>
       await import('@/components/profile/ProfileMoreBottom')
   },
@@ -18,6 +18,10 @@ export default {
     address: {
       type: String,
       required: true
+    },
+    transactionsCount: {
+      type: Number,
+      default: () => 0
     }
   },
   data: () => ({

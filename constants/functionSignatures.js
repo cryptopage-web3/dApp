@@ -19,5 +19,5 @@ export const signatures = [
     text_signature: 'approve(address,uint256)',
     hex_signature: '0x095ea7b3',
     bytes_signature: '\t^§³'
-  },
+  }
 ]

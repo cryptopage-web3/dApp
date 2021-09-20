@@ -4,7 +4,12 @@
 <script>
 import iconList from '@/constants/icons'
 export default {
-  props: ['type'],
+  props: {
+    type: {
+      type: String,
+      default: () => ''
+    }
+  },
   data: () => ({}),
   computed: {
     icon() {
