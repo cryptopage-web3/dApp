@@ -8,7 +8,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lintfix": "eslint --fix  --ext \".js,.vue\" --ignore-path .gitignore ."
+    "lintfix": "eslint --fix --ext \".js,.vue\" --ignore-path .gitignore ."
   },
   "lint-staged": {
     "*.{js,vue}": "npm run lint",
@@ -20,6 +20,7 @@
     }
   },
   "dependencies": {
+    "@nuxtjs/lunr-module": "^0.3.2",
     "@renatodeleao/vue-sticky-directive": "^0.3.0",
     "@walletconnect/web3-provider": "^1.5.4",
     "core-js": "^3.15.1",
