@@ -8,13 +8,13 @@ const POP_SELECTED_CHAIN_ID = 'POP_SELECTED_CHAIN_ID'
 export const state = () => ({
   selectedAddress: '',
   signature: '',
-  isAuth: (state) => !!state.selectedAddress,
   chainId: ''
 })
 
 export const getters = {
   selectedAddress: (state) => state.selectedAddress,
   signature: (state) => state.signature,
+  isAuth: (state) => !!state.selectedAddress,
   chainId: (state) => state.chainId
 }
 
