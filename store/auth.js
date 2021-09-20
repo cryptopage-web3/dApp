@@ -2,16 +2,19 @@ const SET_SELECTED_ADDRESS = 'SET_SELECTED_ADDRESS'
 const POP_SELECTED_ADDRESS = 'POP_SELECTED_ADDRESS'
 const SET_SIGNATURE = 'SET_SIGNATURE'
 const POP_SIGNATURE = 'POP_SIGNATURE'
+const SET_SELECTED_CHAIN_ID = 'SET_SELECTED_CHAIN_ID'
+const POP_SELECTED_CHAIN_ID = 'POP_SELECTED_CHAIN_ID'
 
 export const state = () => ({
   selectedAddress: '',
-  signature: ''
+  signature: '',
+  chainId: ''
 })
 
 export const getters = {
   selectedAddress: (state) => state.selectedAddress,
   signature: (state) => state.signature,
-  isAuth: (state) => !!state.selectedAddress
+  chainId: (state) => state.chainId
 }
 
 export const mutations = {
@@ -26,6 +29,12 @@ export const mutations = {
   },
   [POP_SIGNATURE](state) {
     state.signature = ''
+  },
+  [SET_SELECTED_CHAIN_ID](state, payload) {
+    state.chainId = payload
+  },
+  [POP_SELECTED_CHAIN_ID](state) {
+    state.chainId = ''
   }
 }
 
@@ -42,12 +51,10 @@ export const actions = {
   popSignature({ commit }) {
     commit(POP_SIGNATURE)
   },
-  signout({ commit }) {
-    commit(POP_SELECTED_ADDRESS)
-    commit(POP_SIGNATURE)
+  setSelectedChainId({ commit }, payload) {
+    commit(SET_SELECTED_CHAIN_ID, payload)
   },
-  signin({ commit }, { address, sig }) {
-    commit(SET_SELECTED_ADDRESS, address)
-    commit(SET_SIGNATURE, sig)
+  popSelecteChainId({ commit }) {
+    commit(POP_SELECTED_CHAIN_ID)
   }
 }

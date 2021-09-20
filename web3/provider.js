@@ -5,6 +5,8 @@ import { deviceType } from '~/utils'
 
 const infuraId = '735bdc2ee05b43488952a9cd53bdcfa1'
 
+const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
+
 class Web3Provider {
   constructor() {
     this.init()
@@ -20,6 +22,26 @@ class Web3Provider {
       name: 'Wallet Connect'
     }
   ]
+
+  _CHAINS = {
+    [BSC]: {
+      chainId: '0x38',
+      rpcUrls: ['https://bsc-dataseed.binance.org/'],
+      chainName: 'Binance Smart Chain',
+      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+      blockExplorerUrls: ['https://bscscan.com/']
+    },
+    [POLYGON]: {
+      chainId: '0x89',
+      rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
+      chainName: 'Matic Mainnet',
+      nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+      blockExplorerUrls: ['https://explorer.matic.network/']
+    },
+    [ETHEREUM]: {
+      chainId: '0x1'
+    }
+  }
 
   providerName = ''
   provider = null
@@ -167,12 +189,17 @@ class Web3Provider {
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
     if (address) {
-      window.$nuxt.$store._actions['auth/setSelectedAddress'][0](address)
+      window.wp = this
       this.selectedAddress = address
+      if (!window.$nuxt) return
+      // this check is for prevent initial read error
+      window.$nuxt.$store._actions['auth/setSelectedAddress'][0](address)
     }
     if (chainId) {
-      window.$nuxt.$store._actions['auth/setSelectedChainId'][0](chainId)
       this.selectedChainId = chainId
+      if (!window.$nuxt) return
+      // this check is for prevent initial read error
+      window.$nuxt.$store._actions['auth/setSelectedChainId'][0](chainId)
     }
   }
 
@@ -276,6 +303,34 @@ class Web3Provider {
       }
     }
     return connected
+  }
+
+  /**
+   * Change current network
+   * @param {String} networkName - name of the network blockchain, example ethereum, bsc, polygon
+   */
+  switchChain = async (networkName) => {
+    if (!this.ALLOWED_CHAINS.includes(networkName)) {
+      throw new Error('Network is not allowed.')
+    }
+    const chain = this._CHAINS[networkName]
+    try {
+      if (this.providerName !== 'metamask') return
+      if (!chain) throw new Error('Chain not found.')
+
+      await this.provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: chain.chainId }]
+      })
+    } catch (switchError) {
+      const CHAIN_NOT_FOUND_CODE = 4902
+      if (switchError.code === CHAIN_NOT_FOUND_CODE) {
+        await this.provider.request({
+          method: 'wallet_addEthereumChain',
+          params: [chain]
+        })
+      }
+    }
   }
 
   get metamaskInstalled() {
