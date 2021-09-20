@@ -16,9 +16,9 @@
         class="profile-other-name"
       >
         <div class="profile-other-name__top">
-          <span> {{ $shortAddress(address) }} </span>
+          <span> {{ address | shortAddress }} </span>
         </div>
-        <span> {{ $humanizeCount(transactionsCount) }} Transactions </span>
+        <span> {{ transactionsCount | humanizeCount }} Transactions </span>
       </nuxt-link>
     </div>
   </div>

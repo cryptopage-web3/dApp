@@ -1,21 +1,14 @@
 <template>
   <div class="post-thumbs">
-    <a href="#" class="post-thumb" :style="style" />
+    <img :src="src" class="post-thumb" />
   </div>
 </template>
 <script>
 export default {
   props: {
-    post: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  computed: {
-    style() {
-      return {
-        backgroundImage: `url(${this.post.image ? this.post.image : ''})`
-      }
+    src: {
+      type: String,
+      default: () => ''
     }
   }
 }

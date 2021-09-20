@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import { shortAddress } from '~/utils'
+import { shortAddress } from '~/utils/web3'
 export default {
   props: {
     room: {

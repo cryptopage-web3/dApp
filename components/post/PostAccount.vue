@@ -1,21 +1,25 @@
 <template>
   <div class="post-account">
     <div class="post-account-left">
+      <nuxt-link :to="`/${address}`" class="post-logo">
+        <jazzicon :seed="10211" :diameter="38" :address="address" />
+      </nuxt-link>
       <div class="post-account__link">
-        <span>
-          {{ $shortAddress(post.from) }}
-        </span>
+        <nuxt-link :to="`/${address}`">
+          <span>
+            {{ address | shortAddress }}
+          </span>
+        </nuxt-link>
       </div>
-      to {{ $shortAddress(post.to) }}
     </div>
   </div>
 </template>
 <script>
 export default {
   props: {
-    post: {
-      type: Object,
-      required: true
+    address: {
+      type: String,
+      default: () => ''
     }
   }
 }
