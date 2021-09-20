@@ -8,6 +8,7 @@ const POP_SELECTED_CHAIN_ID = 'POP_SELECTED_CHAIN_ID'
 export const state = () => ({
   selectedAddress: '',
   signature: '',
+  isAuth: (state) => !!state.selectedAddress,
   chainId: ''
 })
 
@@ -50,6 +51,14 @@ export const actions = {
   },
   popSignature({ commit }) {
     commit(POP_SIGNATURE)
+  },
+  signout({ commit }) {
+    commit(POP_SELECTED_ADDRESS)
+    commit(POP_SIGNATURE)
+  },
+  signin({ commit }, { address, sig }) {
+    commit(SET_SELECTED_ADDRESS, address)
+    commit(SET_SIGNATURE, sig)
   },
   setSelectedChainId({ commit }, payload) {
     commit(SET_SELECTED_CHAIN_ID, payload)
