@@ -9,7 +9,7 @@
               :diameter="25"
               :address="transaction.from"
             />
-            <span>{{ $shortAddress(transaction.from, 5, 7) }}</span>
+            <span>{{ transaction.from | shortAddress(5, 7) }}</span>
           </nuxt-link>
           <div class="column">
             <span> {{ $web3.utils.fromWei(transaction.value) }} ETH </span>
@@ -31,11 +31,11 @@
               :diameter="25"
               :address="transfer.receiver"
             />
-            <span>{{ $shortAddress(transfer.receiver, 5, 7) }}</span>
+            <span>{{ transfer.receiver | shortAddress(5, 7) }}</span>
           </nuxt-link>
           <nuxt-link v-else class="column" :to="`/${transaction.to}`">
             <jazzicon :seed="10211" :diameter="25" :address="transaction.to" />
-            <span>{{ $shortAddress(transaction.to, 5, 7) }}</span>
+            <span>{{ transaction.to | shortAddress(5, 7) }}</span>
           </nuxt-link>
         </div>
       </div>
