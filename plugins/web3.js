@@ -1,12 +1,12 @@
 import Web3 from 'web3'
 import web3Provider from '@/web3/provider'
 
+import { _range } from '~/utils/array'
 import {
-  _range,
-  validateTransaction,
-  shortAddress
-  // isOwnerTransaction
-} from '~/utils'
+  nftDataDecoder,
+  tokenURItoURI,
+  validateTransaction
+} from '~/utils/web3'
 
 const PROJECT_ID = `03d727fcc0e4440badfadb46a5388165`
 
@@ -158,6 +158,78 @@ const getERC20TransferByHash = async (hash) => {
   return {}
 }
 
+const getERC20Balance = async (address, contractAddress) => {
+  const minABI = [
+    {
+      constant: true,
+      inputs: [{ name: '_owner', type: 'address' }],
+      name: 'balanceOf',
+      outputs: [{ name: 'balance', type: 'uint256' }],
+      type: 'function'
+    },
+    {
+      constant: true,
+      inputs: [],
+      name: 'decimals',
+      outputs: [{ name: '', type: 'uint8' }],
+      type: 'function'
+    }
+  ]
+  try {
+    const contract = new web3.eth.Contract(minABI, contractAddress)
+    const balanceOf = await contract.methods.balanceOf(address).call()
+    const decimals = await contract.methods.decimals().call()
+    const balance = balanceOf / 10 ** decimals
+    return balance.toString()
+  } catch (error) {
+    console.error('ERROR in getERC20Balance: ', error)
+    return 0
+  }
+}
+
+const getERC721Data = async (tokenId, contractAddress) => {
+  const minABI = [
+    {
+      constant: true,
+      inputs: [{ name: 'tokenId', type: 'uint256' }],
+      name: 'tokenURI',
+      outputs: [{ name: '', type: 'string' }],
+      payable: false,
+      stateMutability: 'view',
+      type: 'function'
+    },
+    {
+      constant: true,
+      inputs: [{ name: '_tokenId', type: 'uint256' }],
+      name: 'ownerOf',
+      outputs: [{ name: 'owner', type: 'address' }],
+      payable: false,
+      stateMutability: 'view',
+      type: 'function'
+    }
+  ]
+  try {
+    const contract = new web3.eth.Contract(minABI, contractAddress)
+    const tokenURI = await contract.methods.tokenURI(tokenId).call()
+    const owner = await contract.methods.ownerOf(tokenId).call()
+    if (tokenURI) {
+      let response = {}
+      if (tokenURI.startsWith('data:') && tokenURI.includes(';base64,')) {
+        const base64 = tokenURI.split(';base64,')[1]
+        response = JSON.parse(atob(base64))
+      } else {
+        const URI = tokenURItoURI(tokenURI)
+        response = await fetch(URI).then((response) => response.json())
+      }
+      const nftData = Object.assign(response, { owner })
+      return nftDataDecoder(nftData)
+    }
+  } catch (error) {
+    console.error('ERROR in getERC721Data: ', error)
+    return null
+  }
+}
+
 export default ({ app }, inject) => {
   inject('web3', web3)
   inject('getBlocks', (number, storage) => getBlocks(number, storage))
@@ -167,7 +239,6 @@ export default ({ app }, inject) => {
   inject('watchAddressTransactions', (to, from, callback) =>
     watchAddressTransactions(to, from, callback)
   )
-  inject('shortAddress', (address, a, b, c) => shortAddress(address, a, b, c))
   inject(
     'watchTokenTransfers',
     (tokenABI, tokenContractAddress, from, to, value) =>
@@ -175,4 +246,10 @@ export default ({ app }, inject) => {
   )
   inject('provider', web3Provider)
   inject('getERC20TransferByHash', (hash) => getERC20TransferByHash(hash))
+  inject('getERC20Balance', (address, contractAddress) =>
+    getERC20Balance(address, contractAddress)
+  )
+  inject('getERC721Data', (address, contractAddress) =>
+    getERC721Data(address, contractAddress)
+  )
 }
