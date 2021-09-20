@@ -23,6 +23,7 @@ class Web3Provider {
     }
   ]
 
+  //chainid type is hexadecimal nubers
   _CHAINS = {
     [BSC]: {
       chainId: '0x38',
@@ -189,7 +190,6 @@ class Web3Provider {
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
     if (address) {
-      window.wp = this
       this.selectedAddress = address
       if (!window.$nuxt) return
       // this check is for prevent initial read error
