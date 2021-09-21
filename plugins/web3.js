@@ -92,11 +92,10 @@ const watchAddressTransactions = ({ address, callback }) => {
       try {
         address = web3.utils.toChecksumAddress(address)
         const tx = await web3.eth.getTransaction(txHash)
-        if (tx) {
-          const toAddress = tx.to ? web3.utils.toChecksumAddress(tx.to) : null
-          const fromAddress = tx.from
-            ? web3.utils.toChecksumAddress(tx.from)
-            : null
+        if (tx && tx.from && tx.to) {
+          const toAddress = web3.utils.toChecksumAddress(tx.to)
+          const fromAddress = web3.utils.toChecksumAddress(tx.from)
+
           if (toAddress === address || fromAddress === address) {
             callback(tx)
           }
