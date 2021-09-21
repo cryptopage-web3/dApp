@@ -2,7 +2,7 @@
   <div class="profile-more-bottom">
     <div class="profile-more-follows">
       <div class="profile-more-follow">
-        <strong> {{ $humanizeCount(transactionsCount) }} </strong> Transactions
+        <strong> {{ transactionsCount | humanizeCount }} </strong> Transactions
       </div>
     </div>
   </div>

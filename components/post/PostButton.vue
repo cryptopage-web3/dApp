@@ -28,7 +28,7 @@
       </svg>
     </div>
     <span v-if="count">
-      {{ $humanizeCount(count) }}
+      {{ count | humanizeCount }}
     </span>
   </a>
 </template>

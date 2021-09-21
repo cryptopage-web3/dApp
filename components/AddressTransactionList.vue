@@ -37,9 +37,22 @@ export default {
     this.$nuxt.$loading.start()
     const response = await this.getTransactions()
     if (Array.isArray(response.result)) {
-      response.result.forEach((transaction) => {
+      await response.result.forEach(async (transaction) => {
         const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
-        if (isUnique) this.items.push(transaction)
+        if (isUnique) {
+          if (this.type === 'nft') {
+            const nft = await this.$getERC721Data(
+              transaction.tokenID,
+              transaction.contractAddress
+            )
+            if (nft) {
+              transaction.nft = nft
+              this.items.push(transaction)
+            }
+          } else {
+            this.items.push(transaction)
+          }
+        }
       })
     }
     this.$nuxt.$loading.finish()

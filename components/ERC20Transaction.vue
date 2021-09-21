@@ -9,22 +9,26 @@
               :diameter="25"
               :address="transaction.from"
             />
-            <span>{{ $shortAddress(transaction.from, 5, 7) }}</span>
+            <span>{{ transaction.from | shortAddress(5, 7) }}</span>
           </nuxt-link>
           <div class="column">
+            <img v-if="meta" :src="meta.logo_url" width="25" height="25" />
             <jazzicon
+              v-else
               :seed="10211"
               :diameter="25"
               :address="transaction.contractAddress"
             />
-            <span>
-              {{ transaction.value }}
+            <span style="margin-top: 0.5em">
+              {{ transaction.value | toDecimals(transaction.tokenDecimal) }}
+            </span>
+            <span style="margin-top: 0.5em">
               {{ transaction.tokenSymbol }} ({{ transaction.tokenName }})
             </span>
           </div>
           <nuxt-link class="column" :to="`/${transaction.to}`">
             <jazzicon :seed="10211" :diameter="25" :address="transaction.to" />
-            <span>{{ $shortAddress(transaction.to, 5, 7) }}</span>
+            <span>{{ transaction.to | shortAddress(5, 7) }}</span>
           </nuxt-link>
         </div>
       </div>
@@ -38,6 +42,19 @@ export default {
       type: Object,
       default: () => ({})
     }
+  },
+  data: () => ({
+    meta: null
+  }),
+  mounted() {
+    this.$nextTick(() => {
+      const searchResults = this.$lunr.lunr.search(
+        this.transaction.contractAddress
+      )
+      if (searchResults) {
+        this.meta = this.$lunr.getMeta(searchResults[0].ref)
+      }
+    })
   }
 }
 </script>
