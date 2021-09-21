@@ -17,6 +17,7 @@
           :file="file"
           @onFileUpdate="fileUpdateHandler"
         />
+        <comment-checkbox v-model="hasComment" />
         <buttons
           :disabled="loading || !text || !title"
           @onImageClick="uploadImage"
@@ -32,6 +33,8 @@ export default {
   components: {
     'text-field': async () =>
       await import('@/components/tweet/TweetAddFormMessage'),
+    'comment-checkbox': async () =>
+      await import('@/components/tweet/TweetAddFormComment'),
     'upload-image': async () =>
       await import('@/components/tweet/TweetAddFormImage'),
     buttons: async () => await import('@/components/tweet/TweetAddFormButtons')
@@ -41,6 +44,7 @@ export default {
       loading: false,
       text: '',
       title: '',
+      hasComment: false,
       file: null
     }
   },
@@ -105,6 +109,7 @@ export default {
       this.title = ''
       this.text = ''
       this.file = null
+      this.hasComment = false
     },
 
     async submit() {
@@ -114,6 +119,12 @@ export default {
 
       const ipfsHash = await this.getFormIPFSHash()
 
+      // send to contract
+
+      this.sendPostHash(ipfsHash)
+
+      // success
+
       this.loading = false
       this.resetForm()
 
@@ -121,10 +132,6 @@ export default {
         type: 'success',
         title: `IPFS hash received`
       })
-
-      // send to contract
-
-      this.sendPostHash(ipfsHash)
     },
 
     async getFileIPFSHash() {
@@ -158,7 +165,7 @@ export default {
         params: {
           from: this.$store.getters['auth/selectedAddress'],
           hash: ipfsHash,
-          comment: false
+          comment: this.hasComment
         },
         callbacks: {
           onTransactionHash(hash) {
