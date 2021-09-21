@@ -38,21 +38,7 @@ export default {
     const response = await this.getTransactions()
     if (Array.isArray(response.result)) {
       await response.result.forEach(async (transaction) => {
-        const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
-        if (isUnique) {
-          if (this.type === 'nft') {
-            const nft = await this.$getERC721Data(
-              transaction.tokenID,
-              transaction.contractAddress
-            )
-            if (nft) {
-              transaction.nft = nft
-              this.items.push(transaction)
-            }
-          } else {
-            this.items.push(transaction)
-          }
-        }
+        await this.addTransaction(transaction)
       })
     }
     this.$nuxt.$loading.finish()
@@ -105,9 +91,21 @@ export default {
       if (!this.showPrevious) return
       this.page -= 1
     },
-    addItem(item) {
-      if (!this.items.some((tx) => tx.hash === item.hash)) {
-        this.items.push(item)
+    async addTransaction(transaction) {
+      const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
+      if (isUnique) {
+        if (this.type === 'nft') {
+          const nft = await this.$getERC721Data(
+            transaction.tokenID,
+            transaction.contractAddress
+          )
+          if (nft) {
+            transaction.nft = nft
+            this.items.push(transaction)
+          }
+        } else {
+          this.items.push(transaction)
+        }
       }
     },
     async getTransactions() {

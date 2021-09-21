@@ -2,24 +2,15 @@ import Web3 from 'web3'
 import web3Provider from '@/web3/provider'
 
 import { _range } from '~/utils/array'
-import {
-  nftDataDecoder,
-  tokenURItoURI,
-  validateTransaction
-} from '~/utils/web3'
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '@/constants/contract'
-
+import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 
 const PROJECT_ID = `03d727fcc0e4440badfadb46a5388165`
 
-const getInfuraProvider = ({
-  name = 'mainnet',
-  projectID = PROJECT_ID,
-  type = 'https'
-}) => {
-  if (type !== 'https' || type !== 'wss') return
+const getInfuraProvider = ({ name, type }) => {
+  if (!name) name = 'mainnet'
+  if (type !== 'https' || type !== 'wss') type = 'wss'
   let provider
-
   const https = [
     'mainnet',
     'ropsten',
@@ -34,19 +25,21 @@ const getInfuraProvider = ({
     'optimism-kovan'
   ]
   const wss = ['mainnet', 'ropsten', 'kovan', 'rinkeby', 'goerli']
-
   if (https.includes(name)) {
     provider = {
       https: `https://${name}.infura.io/v3/${PROJECT_ID}`
     }
     if (wss.includes(name)) {
-      provider.wss = `wss://${name}.infura.io/ws/v3/${PROJECT_ID}`
+      provider = {
+        ...provider,
+        wss: `wss://${name}.infura.io/ws/v3/${PROJECT_ID}`
+      }
     }
   }
   return provider[type]
 }
 
-const web3 = new Web3(Web3.givenProvider || getInfuraProvider({ type: 'wss' }))
+const web3 = new Web3(getInfuraProvider({ type: 'wss' }) || Web3.givenProvider)
 
 const getBlocks = async (count, showDetailTransactions = false, callback) => {
   const latest = await web3.eth.getBlockNumber()
@@ -88,7 +81,7 @@ const watchConfirmation = (
   }, timeout)
 }
 
-const watchAddressTransactions = (to, from, callback) => {
+const watchAddressTransactions = ({ address, callback }) => {
   const subscription = web3.eth.subscribe('pendingTransactions')
   subscription
     .subscribe((error, result) => {
@@ -97,14 +90,17 @@ const watchAddressTransactions = (to, from, callback) => {
     })
     .on('data', async (txHash) => {
       try {
+        address = web3.utils.toChecksumAddress(address)
         const tx = await web3.eth.getTransaction(txHash)
-        // console.log('tx', tx)
-        const valid = validateTransaction(tx)
-        if (!valid) return
-        if ((from && tx.from === from) || (to && tx.to === to)) {
-          callback()
+        if (tx) {
+          const toAddress = tx.to ? web3.utils.toChecksumAddress(tx.to) : null
+          const fromAddress = tx.from
+            ? web3.utils.toChecksumAddress(tx.from)
+            : null
+          if (toAddress === address || fromAddress === address) {
+            callback(tx)
+          }
         }
-        // subscription.unsubscribe()
       } catch (error) {
         console.log(`ERROR in watchAddressTransactions:`, error) // eslint-disable-line no-console
       }
@@ -123,7 +119,7 @@ const watchTokenTransfers = (
     tokenContractAddress,
     (error, result) => {
       // eslint-disable-next-line no-console
-      if (error) console.log(`ERROR in watchTokenTransfers:`, error)
+      if (error) console.log(`ERROR in watchTokenTransfers:`, error) // eslint-disable-line no-console
     }
   )
 
@@ -197,7 +193,7 @@ const getERC20Balance = async (address, contractAddress) => {
     const balance = balanceOf / 10 ** decimals
     return balance.toString()
   } catch (error) {
-    console.error('ERROR in getERC20Balance: ', error)
+    console.error('ERROR in getERC20Balance: ', error) // eslint-disable-line no-console
     return 0
   }
 }
@@ -240,7 +236,7 @@ const getERC721Data = async (tokenId, contractAddress) => {
       return nftDataDecoder(nftData)
     }
   } catch (error) {
-    console.error('ERROR in getERC721Data: ', error)
+    console.error('ERROR in getERC721Data: ', error) // eslint-disable-line no-console
     return null
   }
 }
@@ -251,15 +247,14 @@ export default ({ app }, inject) => {
   inject('watchConfirmation', (txHash, callback, confirmations, timeout) =>
     watchConfirmation(txHash, callback, confirmations, timeout)
   )
-  inject('watchAddressTransactions', (to, from, callback) =>
-    watchAddressTransactions(to, from, callback)
-  )
+  inject('watchAddressTransactions', (opt) => watchAddressTransactions(opt))
   inject(
     'watchTokenTransfers',
     (tokenABI, tokenContractAddress, from, to, value) =>
       watchTokenTransfers(tokenABI, tokenContractAddress, from, to, value)
   )
   inject('provider', web3Provider)
+  inject('sendPostHash', (params) => sendPostHash(params))
   inject('getERC20TransferByHash', (hash) => getERC20TransferByHash(hash))
   inject('getERC20Balance', (address, contractAddress) =>
     getERC20Balance(address, contractAddress)
