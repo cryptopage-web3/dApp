@@ -172,4 +172,26 @@
             }
         }
     }
+    &__comment {
+        padding: 10px 0 20px;
+
+        .custom-control-label {
+            padding-top: 5px;
+            color: #8899a7;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: #1da1f2;
+        }
+
+        .custom-control-label::before {
+            width: 17px;
+            height: 17px;
+        }
+
+        .custom-control-label::after {
+            width: 17px;
+            height: 17px;
+        }
+    }
 }

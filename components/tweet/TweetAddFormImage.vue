@@ -17,7 +17,10 @@
       >
         <icon type="close" />
       </div>
-      <img :src="fileURL" class="img-block" />
+      <video v-if="fileType === 'video'" class="video-block" controls>
+        <source :src="fileURL" />
+      </video>
+      <img v-else :src="fileURL" class="img-block" />
     </div>
   </div>
 </template>
@@ -34,6 +37,11 @@ export default {
   data() {
     return {
       fileURL: null
+    }
+  },
+  computed: {
+    fileType() {
+      return this.file ? this.file.type.split('/')[0] : null
     }
   },
   watch: {
@@ -64,5 +72,12 @@ export default {
 <style scoped>
 .img-block {
   margin: auto;
+}
+
+.video-block {
+  margin: auto;
+  height: 280px;
+  width: 100%;
+  z-index: 1;
 }
 </style>

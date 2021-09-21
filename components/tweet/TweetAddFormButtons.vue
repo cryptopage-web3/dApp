@@ -19,7 +19,7 @@
       <button
         type="button"
         class="post-follow-top__link btn btn_blue btn_blue--bg"
-        :disabled="!disabled"
+        :disabled="disabled"
         @click="$emit('onButtonSubmit')"
       >
         Send crypto-post

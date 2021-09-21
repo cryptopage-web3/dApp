@@ -6,14 +6,20 @@
   >
     <div class="tweet-add__form d-flex flex-column">
       <form>
-        <tweet-message v-model="text" />
-        <tweet-image
+        <text-field
+          v-model="title"
+          :is-single-line="true"
+          :placeholder="'Enter post title'"
+        />
+        <text-field v-model="text" :placeholder="'Enter post text'" />
+        <upload-image
           ref="upload-image"
           :file="file"
           @onFileUpdate="fileUpdateHandler"
         />
-        <tweet-buttons
-          :disabled="loading"
+        <comment-checkbox v-model="hasComment" />
+        <buttons
+          :disabled="loading || !text || !title"
           @onImageClick="uploadImage"
           @onButtonSubmit="submit"
         />
@@ -25,18 +31,30 @@
 <script>
 export default {
   components: {
-    'tweet-message': async () =>
+    'text-field': async () =>
       await import('@/components/tweet/TweetAddFormMessage'),
-    'tweet-image': async () =>
+    'comment-checkbox': async () =>
+      await import('@/components/tweet/TweetAddFormComment'),
+    'upload-image': async () =>
       await import('@/components/tweet/TweetAddFormImage'),
-    'tweet-buttons': async () =>
-      await import('@/components/tweet/TweetAddFormButtons')
+    buttons: async () => await import('@/components/tweet/TweetAddFormButtons')
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       text: '',
+      title: '',
+      hasComment: false,
       file: null
+    }
+  },
+  watch: {
+    loading(loading) {
+      if (loading) {
+        this.$nuxt.$loading.start()
+      } else {
+        this.$nuxt.$loading.finish()
+      }
     }
   },
   methods: {
@@ -46,15 +64,7 @@ export default {
         return
       }
 
-      const fileType = file.type.split('/')[0]
-
-      if (fileType !== 'image') {
-        this.$notify({
-          type: 'error',
-          title: 'Invalid file extension',
-          text: `<div class="notification-content__mt">Please upload only image</div>`
-        })
-
+      if (!this.validateFileWithNotify(file)) {
         return
       }
 
@@ -67,19 +77,61 @@ export default {
 
     dragFile(event) {
       const file = event.dataTransfer.files[0]
-      const fileType = file.type.split('/')[0]
 
-      if (fileType !== 'image') {
-        this.$notify({
-          type: 'error',
-          title: 'Invalid file extension',
-          text: `<div class="notification-content__mt">Please upload only image</div>`
-        })
-
+      if (!this.validateFileWithNotify(file)) {
         return
       }
 
       this.file = file
+    },
+
+    validateFileWithNotify(file) {
+      if (!file) {
+        return false
+      }
+
+      const fileType = file.type.split('/')[0]
+
+      if (!/(image|video)/.test(fileType)) {
+        this.$notify({
+          type: 'error',
+          title: 'Invalid file extension',
+          text: `<div class="notification-content__mt">Please upload only image or video</div>`
+        })
+
+        return false
+      }
+
+      return true
+    },
+
+    resetForm() {
+      this.title = ''
+      this.text = ''
+      this.file = null
+      this.hasComment = false
+    },
+
+    async submit() {
+      this.loading = true
+
+      // get ipfs hash
+
+      const ipfsHash = await this.getFormIPFSHash()
+
+      // send to contract
+
+      this.sendPostHash(ipfsHash)
+
+      // success
+
+      this.loading = false
+      this.resetForm()
+
+      this.$notify({
+        type: 'success',
+        title: `IPFS hash received`
+      })
     },
 
     async getFileIPFSHash() {
@@ -91,15 +143,11 @@ export default {
 
     async getFormIPFSHash() {
       const fileHash = this.file ? await this.getFileIPFSHash() : null
+
       const nft = {
-        name: this.text,
-        externalLink: '',
-        description: '',
-        file: fileHash,
-        collection: this.collection,
-        properties: this.properties,
-        levels: this.levels,
-        stats: []
+        name: this.title,
+        description: this.text,
+        image: fileHash && `https://ipfs.io/ipfs/${fileHash}`
       }
 
       const ipfs = await this.$ipfs
@@ -109,17 +157,41 @@ export default {
       return file.path
     },
 
-    async submit() {
-      this.$nuxt.$loading.start()
-      const ipfsHash = await this.getFormIPFSHash()
-      console.log('IPFS path', ipfsHash) // eslint-disable-line no-console
-      this.text = ''
-      Object.assign(this.$data, this.$options.data.apply(this))
-      setTimeout(() => this.$nuxt.$loading.finish(), 500)
+    sendPostHash(ipfsHash) {
+      const self = this
+      let txHash = ''
 
-      this.$notify({
-        type: 'success',
-        title: `IPFS path ${ipfsHash}`
+      this.$sendPostHash({
+        params: {
+          from: this.$store.getters['auth/selectedAddress'],
+          hash: ipfsHash,
+          comment: this.hasComment
+        },
+        callbacks: {
+          onTransactionHash(hash) {
+            txHash = hash
+
+            self.$notify({
+              type: 'info',
+              title: txHash,
+              text: `<div class="notification-content__mt">Transaction on pending</div>`
+            })
+          },
+          onReceipt() {
+            self.$notify({
+              type: 'success',
+              title: txHash || 'Unknown hash',
+              text: `<div class="notification-content__mt">Transaction completed</div>`
+            })
+          },
+          onError() {
+            self.$notify({
+              type: 'error',
+              title: txHash || 'Unknown hash',
+              text: `<div class="notification-content__mt">Transaction has some error</div>`
+            })
+          }
+        }
       })
     }
   }
