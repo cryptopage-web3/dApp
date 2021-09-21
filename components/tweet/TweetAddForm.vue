@@ -92,11 +92,11 @@ export default {
 
       const fileType = file.type.split('/')[0]
 
-      if (fileType !== 'image') {
+      if (!/(image|video|audio)/.test(fileType)) {
         this.$notify({
           type: 'error',
           title: 'Invalid file extension',
-          text: `<div class="notification-content__mt">Please upload only image</div>`
+          text: `<div class="notification-content__mt">Please upload only image, audio or video</div>`
         })
 
         return false
