@@ -1,9 +1,12 @@
 <template>
   <div class="post-account">
     <div class="post-account-left">
-      <nuxt-link :to="`/${address}`" class="post-logo">
-        <jazzicon :seed="10211" :diameter="38" :address="address" />
-      </nuxt-link>
+      <avatar
+        class="post-logo"
+        :address="address"
+        :show-address="false"
+        :diameter="38"
+      />
       <div class="post-account__link">
         <nuxt-link :to="`/${address}`">
           <span>
@@ -16,6 +19,9 @@
 </template>
 <script>
 export default {
+  components: {
+    avatar: async () => await import('@/components/UserAvatar')
+  },
   props: {
     address: {
       type: String,

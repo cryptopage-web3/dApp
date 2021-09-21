@@ -5,7 +5,7 @@ import { _range } from '~/utils/array'
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '@/constants/contract'
 import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 
-const PROJECT_ID = `03d727fcc0e4440badfadb46a5388165`
+const PROJECT_ID = `a925609bdb25477d8039c763faa7b61d`
 
 const getInfuraProvider = ({ name, type }) => {
   if (!name) name = 'mainnet'

@@ -3,21 +3,12 @@
     <div class="post-cont">
       <div class="post-right">
         <div class="row">
-          <nuxt-link class="column" :to="`/${transaction.from}`">
-            <jazzicon
-              :seed="10211"
-              :diameter="25"
-              :address="transaction.from"
-            />
-            <span>{{ transaction.from | shortAddress(5, 7) }}</span>
-          </nuxt-link>
+          <avatar class="column" :address="transaction.from" />
           <div class="column">
-            <img v-if="meta" :src="meta.logo_url" width="25" height="25" />
-            <jazzicon
-              v-else
-              :seed="10211"
-              :diameter="25"
-              :address="transaction.contractAddress"
+            <avatar
+              :address="transaction.from"
+              :image-url="meta ? meta.logo_url : ''"
+              :show-address="false"
             />
             <span style="margin-top: 0.5em">
               {{ transaction.value | toDecimals(transaction.tokenDecimal) }}
@@ -26,10 +17,7 @@
               {{ transaction.tokenSymbol }} ({{ transaction.tokenName }})
             </span>
           </div>
-          <nuxt-link class="column" :to="`/${transaction.to}`">
-            <jazzicon :seed="10211" :diameter="25" :address="transaction.to" />
-            <span>{{ transaction.to | shortAddress(5, 7) }}</span>
-          </nuxt-link>
+          <avatar class="column" :address="transaction.to" />
         </div>
       </div>
     </div>
@@ -37,6 +25,9 @@
 </template>
 <script>
 export default {
+  components: {
+    avatar: async () => await import('@/components/UserAvatar')
+  },
   props: {
     transaction: {
       type: Object,
