@@ -51,9 +51,8 @@ export default {
       const searchResults = this.$lunr.lunr.search(
         this.transaction.contractAddress
       )
-      if (searchResults) {
-        this.meta = this.$lunr.getMeta(searchResults[0].ref)
-      }
+      const ref = searchResults[0] ? searchResults[0].ref : null
+      if (ref) this.meta = this.$lunr.getMeta(ref)
     })
   }
 }
