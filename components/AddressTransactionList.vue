@@ -69,6 +69,7 @@ export default {
           return this.$web3.utils.toChecksumAddress(token.address) === address
         })
       }
+      // this.$watchAddressTransactions({ address, callback: this.addTransaction }) RATE LIMIT EXCEPTION
       window.onscroll = () => {
         const bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
@@ -94,7 +95,9 @@ export default {
     async addTransaction(transaction) {
       const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
       if (isUnique) {
-        if (this.type === 'nft') {
+        if (this.type === 'transactions') {
+          this.items.push(transaction)
+        } else if (transaction.contractAddress && this.type === 'nft') {
           const nft = await this.$getERC721Data(
             transaction.tokenID,
             transaction.contractAddress
@@ -103,7 +106,7 @@ export default {
             transaction.nft = nft
             this.items.push(transaction)
           }
-        } else {
+        } else if (transaction.contractAddress && this.type === 'tokens') {
           this.items.push(transaction)
         }
       }
