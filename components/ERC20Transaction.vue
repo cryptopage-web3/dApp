@@ -6,7 +6,7 @@
           <avatar class="column" :address="transaction.from" />
           <div class="column">
             <avatar
-              :address="transaction.from"
+              :address="transaction.contractAddress"
               :src="meta ? meta.logo_url : ''"
               :show-address="false"
             />
