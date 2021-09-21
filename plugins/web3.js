@@ -39,7 +39,7 @@ const getInfuraProvider = ({ name, type }) => {
   return provider[type]
 }
 
-const web3 = new Web3(getInfuraProvider({ type: 'wss' }) || Web3.givenProvider)
+const web3 = new Web3(Web3.givenProvider || getInfuraProvider({ type: 'wss' }))
 
 const getBlocks = async (count, showDetailTransactions = false, callback) => {
   const latest = await web3.eth.getBlockNumber()

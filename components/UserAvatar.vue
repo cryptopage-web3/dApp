@@ -1,12 +1,7 @@
 <template>
   <nuxt-link :to="`/${address}`">
-    <img
-      v-if="imageURL"
-      :src="imageURL"
-      :width="`${diameter}`"
-      :height="`${diameter}`"
-    />
-    <jazzicon :seed="10211" :diameter="diameter" :address="address" />
+    <img v-if="src" :src="src" :width="`${diameter}`" :height="`${diameter}`" />
+    <jazzicon v-else :seed="10211" :diameter="diameter" :address="address" />
     <span v-if="showAddress">{{ address | shortAddress(5, 7) }}</span>
   </nuxt-link>
 </template>
@@ -17,7 +12,7 @@ export default {
       type: String,
       default: () => ''
     },
-    imageURL: {
+    src: {
       type: String,
       default: () => ''
     },

@@ -7,7 +7,7 @@
           <div class="column">
             <avatar
               :address="transaction.from"
-              :image-url="meta ? meta.logo_url : ''"
+              :src="meta ? meta.logo_url : ''"
               :show-address="false"
             />
             <span style="margin-top: 0.5em">
