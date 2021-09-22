@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import { paginate } from '~/utils'
+import { paginate } from '~/utils/array'
 export default {
   props: {
     showTotal: {

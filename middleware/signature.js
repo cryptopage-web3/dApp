@@ -21,11 +21,11 @@ export default function ({ store, redirect }) {
     })
 
     if (recoveredAddress.toLowerCase() !== selectedAddress.toLowerCase()) {
-      this.$store.dispatch('auth/signout')
+      store.dispatch('auth/signout')
       redirect('/')
     }
   } catch (error) {
-    this.$store.dispatch('auth/signout')
+    store.dispatch('auth/signout')
     redirect('/')
   }
 }
