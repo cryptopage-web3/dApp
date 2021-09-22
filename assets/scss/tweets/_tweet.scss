@@ -1,0 +1,197 @@
+.tweet-add {
+    position: relative;
+    padding-bottom: 10px;
+    padding-top: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
+    border-bottom: solid 1px rgba(#eff3f4, 1);
+    &__user {
+        position: relative;
+    }
+    &__form {
+        width: calc(100% - 48px);
+        position: relative;
+        padding-left: 16px;
+        &.disabled {
+            .btn {
+                pointer-events: none;
+            }
+            .circle__progress--fill {
+                stroke: rgba(#f4212e, 1)!important;
+            }
+            .content {
+                color: rgba(#f4212e, 1)!important;
+            }
+        }
+    }
+    &__user-image {
+        position: relative;
+        width: 48px;
+        height: 48px;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+    }
+    &__input {
+        display: inline-block;
+        min-width: 100%;
+        max-width: 100%;
+        padding: 10px 0px;
+        line-height: 25px;
+        font-size: 20px;
+    }
+    &__message {
+        position: relative;
+        padding: 0px 4px;
+        label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            color: #536471;
+            padding-top: 14px;
+            padding-left: 4px;
+            z-index: 1;
+            font-size: 20px;
+        }
+    }
+    &__buttons {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: solid 1px rgba(#eff3f4, 1);
+    }
+    &__post-links {
+        position: relative;
+        display: flex;
+        align-items: center;
+        user-select: none;
+
+        .post-link {
+            margin-right: 5px;
+
+            svg {
+                width: 20px;
+                height: 20px;
+            }
+
+            div {
+                overflow: hidden;
+                position: relative;
+            }
+
+            div svg * {
+                fill: rgba(#1da1f2, 1);
+            }
+
+            input {
+                position: absolute;
+                left: -9px;
+                top: 0;
+                display: none;
+                width: 35px;
+                height: 35px;
+                opacity: 0;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            label {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+    }
+    &__send {
+        position: relative;
+    }
+    &__image {
+        position: relative;
+        height: 280px;
+        width: 100%;
+        overflow: hidden;
+        border-radius: 20px;
+        margin-bottom: 16px;
+        cursor: pointer;
+        &:hover {
+            &:before {
+                opacity: .3;
+            }
+        }
+        img {
+            max-width: 100%;
+        }
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0px 0px 5em rgba(#000, 1);
+            opacity: 0.13;
+            z-index: 1;
+            transition: 0.25s ease;
+        }
+    }
+    &__image-delete {
+        position: absolute;
+        z-index: 2;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        left: 16px;
+        top: 16px;
+        background: rgba(#000, 0.8);
+        transition: 0.35s ease;
+        &:hover {
+            background: rgba(#000, 0.7);
+        }
+        svg {
+            width: 18px;
+            height: 18px;
+            * {
+                fill: #fff;
+            }
+        }
+    }
+    &__comment {
+        .custom-control-label {
+            padding-top: 5px;
+            color: #8899a7;
+        }
+
+        .custom-control-input:checked ~ .custom-control-label::before {
+            background-color: #1da1f2;
+        }
+
+        .custom-control-label::before {
+            width: 17px;
+            height: 17px;
+        }
+
+        .custom-control-label::after {
+            width: 17px;
+            height: 17px;
+        }
+    }
+    &__attributes {
+        padding: 10px 0 20px;
+
+        &-toggle {
+            display: inline-block;
+            color: #1da1f2;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}
