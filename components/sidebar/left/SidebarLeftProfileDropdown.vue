@@ -7,7 +7,7 @@
             <jazzicon :address="address" :diameter="40" />
           </div>
           <span>
-            <mark>{{ shortAddress }}</mark>
+            <mark>{{ address | shortAddress }}</mark>
           </span>
         </div>
       </router-link>
@@ -27,11 +27,6 @@ export default {
     address: {
       type: String,
       required: true
-    }
-  },
-  computed: {
-    shortAddress() {
-      return this.$shortAddress(this.address)
     }
   },
   methods: {

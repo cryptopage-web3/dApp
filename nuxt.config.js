@@ -1,3 +1,5 @@
+import docs from './constants/coinmarketcap.json'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: process.env.NUXT_TARGET || 'static',
@@ -26,9 +28,10 @@ export default {
     '~/plugins/ipfs.client',
     '~/plugins/crypto.client',
     '~/plugins/service-worker.client',
-    '~/plugins/humanize',
+    '~/plugins/filters',
     '~/plugins/jazzicon',
     '~/plugins/web3',
+    '~/plugins/lunr.client',
     '~/plugins/modals.client',
     '~/plugins/easy-circular-progress.client',
     '~/plugins/notifications.client'
@@ -56,12 +59,38 @@ export default {
       {
         localStorage: ['auth']
       }
-    ]
+    ],
+    {
+      src: '@nuxtjs/lunr-module',
+      options: {
+        includeComponent: false,
+        globalComponent: false,
+        css: false,
+        ref: 'id',
+        fields: ['name', 'slug', 'symbol', 'address', 'logo_url']
+      }
+    }
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
+  hooks: {
+    ready (nuxt) {
+      let documentIndex = 1
+      for (const doc of docs) {
+        nuxt.callHook('lunr:document', {
+          document: {
+            // id: doc.address,
+            id: documentIndex,
+            ...doc
+          },
+          meta: doc
+        })
+        documentIndex++
+      }
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {

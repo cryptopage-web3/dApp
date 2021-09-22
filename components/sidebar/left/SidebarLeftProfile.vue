@@ -8,7 +8,7 @@
             <jazzicon :address="address" :diameter="40" />
           </div>
           <span>
-            <mark>{{ shortAddress }}</mark>
+            <mark>{{ address | shortAddress }}</mark>
           </span>
         </div>
         <Icon type="dots" />
@@ -41,9 +41,6 @@ export default {
     },
     address() {
       return this.$store.getters['auth/selectedAddress']
-    },
-    shortAddress() {
-      return this.$shortAddress(this.address)
     }
   },
   beforeMount() {

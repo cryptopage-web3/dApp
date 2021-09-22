@@ -1,5 +1,5 @@
-export default ({ app }, inject) => {
-  const humanizeCount = (count) => {
+
+export const humanizeCount = (count) => {
     if (count >= 1000 && count <= 1000000) {
       return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
     } else if (count >= 1000000) {
@@ -11,7 +11,7 @@ export default ({ app }, inject) => {
     }
   }
 
-  const humanizeDate = (date) => {
+export const humanizeDate = (date) => {
     const MINUTE = 60
     const HOUR = MINUTE * 60
     const DAY = HOUR * 24
@@ -43,6 +43,3 @@ export default ({ app }, inject) => {
     }
   }
 
-  inject('humanizeCount', (count) => humanizeCount(count))
-  inject('humanizeDate', (date) => humanizeDate(date))
-}

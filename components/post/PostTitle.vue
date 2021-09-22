@@ -1,12 +1,12 @@
 <template>
-  <div class="post-title"></div>
+  <div class="post-title">{{ title }}</div>
 </template>
 <script>
 export default {
   props: {
-    post: {
-      type: Object,
-      required: true
+    title: {
+      type: String,
+      default: () => ''
     }
   }
 }

@@ -28,10 +28,10 @@
         </div>
         <div class="profile-more-follows">
           <a href="/" aria-current="page" class="profile-more-follow">
-            <strong>{{ $humanizeCount(209) }}</strong> Following
+            <strong>{{ 209 | humanizeCount }}</strong> Following
           </a>
           <a href="/" aria-current="page" class="profile-more-follow">
-            <strong>{{ $humanizeCount(12391) }}</strong> Followers
+            <strong>{{ 12391 | humanizeCount }}</strong> Followers
           </a>
         </div>
       </div>

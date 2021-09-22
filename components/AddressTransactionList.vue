@@ -37,9 +37,8 @@ export default {
     this.$nuxt.$loading.start()
     const response = await this.getTransactions()
     if (Array.isArray(response.result)) {
-      response.result.forEach((transaction) => {
-        const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
-        if (isUnique) this.items.push(transaction)
+      await response.result.forEach(async (transaction) => {
+        await this.addTransaction(transaction)
       })
     }
     this.$nuxt.$loading.finish()
@@ -70,6 +69,7 @@ export default {
           return this.$web3.utils.toChecksumAddress(token.address) === address
         })
       }
+      // this.$watchAddressTransactions({ address, callback: this.addTransaction }) RATE LIMIT EXCEPTION
       window.onscroll = () => {
         const bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
@@ -92,9 +92,23 @@ export default {
       if (!this.showPrevious) return
       this.page -= 1
     },
-    addItem(item) {
-      if (!this.items.some((tx) => tx.hash === item.hash)) {
-        this.items.push(item)
+    async addTransaction(transaction) {
+      const isUnique = !this.items.some((tx) => tx.hash === transaction.hash)
+      if (isUnique) {
+        if (this.type === 'transactions') {
+          this.items.push(transaction)
+        } else if (transaction.contractAddress && this.type === 'nft') {
+          const nft = await this.$getERC721Data(
+            transaction.tokenID,
+            transaction.contractAddress
+          )
+          if (nft) {
+            transaction.nft = nft
+            this.items.push(transaction)
+          }
+        } else if (transaction.contractAddress && this.type === 'tokens') {
+          this.items.push(transaction)
+        }
       }
     },
     async getTransactions() {

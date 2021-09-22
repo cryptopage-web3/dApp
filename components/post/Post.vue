@@ -5,7 +5,7 @@
         <div class="row">
           <nuxt-link class="column" :to="`/${transfer.sender}`">
             <jazzicon :seed="10211" :diameter="25" :address="transfer.sender" />
-            <span>{{ $shortAddress(transfer.sender, 5, 7) }}</span>
+            <span>{{ transfer.sender | shortAddress(5, 7) }}</span>
           </nuxt-link>
           <div class="column">
             <span>
@@ -29,7 +29,7 @@
               :diameter="25"
               :address="transfer.receiver"
             />
-            <span>{{ $shortAddress(transfer.receiver, 5, 7) }}</span>
+            <span>{{ transfer.receiver | shortAddress(5, 7) }}</span>
           </nuxt-link>
         </div>
       </div>
@@ -37,14 +37,14 @@
         <div class="row">
           <nuxt-link class="column" :to="`/${post.from}`">
             <jazzicon :seed="10211" :diameter="25" :address="post.from" />
-            <span>{{ $shortAddress(post.from, 5, 7) }}</span>
+            <span>{{ post.from | shortAddress(5, 7) }}</span>
           </nuxt-link>
           <div class="column">
             <span> {{ post.value }} ETH </span>
           </div>
           <nuxt-link class="column" :to="`/${post.to}`">
             <jazzicon :seed="10211" :diameter="25" :address="post.to" />
-            <span>{{ $shortAddress(post.to, 5, 7) }}</span>
+            <span>{{ post.to | shortAddress(5, 7) }}</span>
           </nuxt-link>
         </div>
       </div>

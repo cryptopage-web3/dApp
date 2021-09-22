@@ -1,21 +1,31 @@
 <template>
   <div class="post-account">
     <div class="post-account-left">
+      <avatar
+        class="post-logo"
+        :address="address"
+        :show-address="false"
+        :diameter="38"
+      />
       <div class="post-account__link">
-        <span>
-          {{ $shortAddress(post.from) }}
-        </span>
+        <nuxt-link :to="`/${address}`">
+          <span>
+            {{ address | shortAddress }}
+          </span>
+        </nuxt-link>
       </div>
-      to {{ $shortAddress(post.to) }}
     </div>
   </div>
 </template>
 <script>
 export default {
+  components: {
+    avatar: async () => await import('@/components/UserAvatar')
+  },
   props: {
-    post: {
-      type: Object,
-      required: true
+    address: {
+      type: String,
+      default: () => ''
     }
   }
 }

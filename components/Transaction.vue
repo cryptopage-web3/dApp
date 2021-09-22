@@ -3,14 +3,7 @@
     <div class="post-cont">
       <div class="post-right">
         <div class="row">
-          <nuxt-link class="column" :to="`/${transaction.from}`">
-            <jazzicon
-              :seed="10211"
-              :diameter="25"
-              :address="transaction.from"
-            />
-            <span>{{ $shortAddress(transaction.from, 5, 7) }}</span>
-          </nuxt-link>
+          <avatar class="column" :address="transaction.from" />
           <div class="column">
             <span> {{ $web3.utils.fromWei(transaction.value) }} ETH </span>
             <span v-if="isContract" style="font-size: 12px; margin-top: 1em">
@@ -21,22 +14,8 @@
               function
             </span>
           </div>
-          <nuxt-link
-            v-if="transfer"
-            class="column"
-            :to="`/${transfer.receiver}`"
-          >
-            <jazzicon
-              :seed="10211"
-              :diameter="25"
-              :address="transfer.receiver"
-            />
-            <span>{{ $shortAddress(transfer.receiver, 5, 7) }}</span>
-          </nuxt-link>
-          <nuxt-link v-else class="column" :to="`/${transaction.to}`">
-            <jazzicon :seed="10211" :diameter="25" :address="transaction.to" />
-            <span>{{ $shortAddress(transaction.to, 5, 7) }}</span>
-          </nuxt-link>
+          <avatar v-if="transfer" class="column" :address="transfer.receiver" />
+          <avatar v-else class="column" :address="transaction.to" />
         </div>
       </div>
     </div>
@@ -45,6 +24,9 @@
 <script>
 import { tokens } from '~/constants/tokens'
 export default {
+  components: {
+    avatar: async () => await import('@/components/UserAvatar')
+  },
   props: {
     transaction: {
       type: Object,
