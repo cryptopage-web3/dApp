@@ -1,24 +1,26 @@
 <template>
-  <draggable
-    v-model="mems"
-    class="main-mems"
-    group="mems"
-    @start="drag = true"
-    @end="drag = false"
-  >
-    <nuxt-link
-      v-for="mem in mems"
-      :key="mem.address"
-      :to="`/${mem.address}`"
-      class="text-center"
-      style="margin: 1em"
+  <div v-if="$store.getters['auth/isAuth']">
+    <draggable
+      v-model="mems"
+      class="main-mems"
+      group="mems"
+      @start="drag = true"
+      @end="drag = false"
     >
-      <img :src="getImage(mem.address)" class="main-mem" />
-      <div style="color: black">
-        {{ getBalance(mem.address) }}
-      </div>
-    </nuxt-link>
-  </draggable>
+      <nuxt-link
+        v-for="mem in mems"
+        :key="mem.address"
+        :to="`/${mem.address}`"
+        class="text-center"
+        style="margin: 1em"
+      >
+        <img :src="getImage(mem.address)" class="main-mem" />
+        <div style="color: black">
+          {{ getBalance(mem.address) }}
+        </div>
+      </nuxt-link>
+    </draggable>
+  </div>
 </template>
 <script>
 import draggable from 'vuedraggable'
