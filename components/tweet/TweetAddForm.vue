@@ -48,6 +48,17 @@ export default {
       file: null
     }
   },
+  computed: {
+    isMediaFile() {
+      if (!this.file) {
+        return false
+      }
+
+      const fileType = this.file.type.split('/')[0]
+
+      return /(audio|video)/.test(fileType)
+    }
+  },
   watch: {
     loading(loading) {
       if (loading) {
@@ -92,11 +103,11 @@ export default {
 
       const fileType = file.type.split('/')[0]
 
-      if (!/(image|video)/.test(fileType)) {
+      if (!/(image|video|audio)/.test(fileType)) {
         this.$notify({
           type: 'error',
           title: 'Invalid file extension',
-          text: `<div class="notification-content__mt">Please upload only image or video</div>`
+          text: `<div class="notification-content__mt">Please upload only image, audio or video</div>`
         })
 
         return false
@@ -147,7 +158,8 @@ export default {
       const nft = {
         name: this.title,
         description: this.text,
-        image: fileHash && `https://ipfs.io/ipfs/${fileHash}`
+        [this.isMediaFile ? 'animation_url' : 'image']:
+          fileHash && `https://ipfs.io/ipfs/${fileHash}`
       }
 
       const ipfs = await this.$ipfs

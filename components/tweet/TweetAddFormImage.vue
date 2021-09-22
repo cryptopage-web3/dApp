@@ -20,6 +20,9 @@
       <video v-if="fileType === 'video'" class="video-block" controls>
         <source :src="fileURL" />
       </video>
+      <audio v-else-if="fileType === 'audio'" class="video-block" controls>
+        <source :src="fileURL" />
+      </audio>
       <img v-else :src="fileURL" class="img-block" />
     </div>
   </div>
