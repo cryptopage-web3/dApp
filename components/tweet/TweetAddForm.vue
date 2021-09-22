@@ -12,17 +12,35 @@
           :placeholder="'Enter post title'"
         />
         <text-field v-model="text" :placeholder="'Enter post text'" />
+
         <upload-image
           ref="upload-image"
           :file="file"
           @onFileUpdate="fileUpdateHandler"
         />
-        <comment-checkbox v-model="hasComment" />
-        <buttons
-          :disabled="loading || !text || !title"
-          @onImageClick="uploadImage"
-          @onButtonSubmit="submit"
-        />
+
+        <attributes />
+
+        <div class="tweet-add__buttons">
+          <div class="tweet-add__post-links">
+            <a class="post-link post-link_blue" @click="uploadImage">
+              <div>
+                <icon type="uploadImage" />
+              </div>
+            </a>
+            <comment-checkbox v-model="hasComment" />
+          </div>
+          <div class="tweet-add__send">
+            <button
+              type="button"
+              class="post-follow-top__link btn btn_blue btn_blue--bg"
+              :disabled="loading || !text || !title"
+              @click="submit"
+            >
+              Send crypto-post
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -37,7 +55,9 @@ export default {
       await import('@/components/tweet/TweetAddFormComment'),
     'upload-image': async () =>
       await import('@/components/tweet/TweetAddFormImage'),
-    buttons: async () => await import('@/components/tweet/TweetAddFormButtons')
+    attributes: async () =>
+      await import('@/components/tweet/TweetAddFormAttributes'),
+    icon: async () => await import('@/components/icons/Icon')
   },
   data() {
     return {
