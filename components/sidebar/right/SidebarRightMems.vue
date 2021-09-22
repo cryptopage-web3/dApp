@@ -1,35 +1,30 @@
 <template>
   <div v-if="$store.getters['auth/isAuth']">
     <draggable
-      v-model="mems"
+      v-model="items"
       class="main-mems"
       group="mems"
       @start="drag = true"
       @end="drag = false"
     >
-      <nuxt-link
-        v-for="mem in mems"
-        :key="mem.address"
-        :to="`/${mem.address}`"
-        class="text-center"
-        style="margin: 1em"
-      >
-        <img :src="getImage(mem.address)" class="main-mem" />
-        <div style="color: black">
-          {{ getBalance(mem.address) }}
-        </div>
-      </nuxt-link>
+      <item
+        v-for="item in items"
+        :key="item.address"
+        :address="item.address"
+        :symbol="item.symbol"
+      />
     </draggable>
   </div>
 </template>
 <script>
-import draggable from 'vuedraggable'
 export default {
   components: {
-    draggable
+    item: async () =>
+      await import('@/components/sidebar/right/SidebarRightMem'),
+    draggable: async () => await import('vuedraggable')
   },
   data: () => ({
-    mems: [
+    items: [
       {
         address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
         symbol: 'USDT'
@@ -47,24 +42,6 @@ export default {
         address: '0xE581F272706581F9Dcc362dF3C7934E99192c492'
       }
     ]
-  }),
-  methods: {
-    getImage(address) {
-      const searchResults = this.$lunr.lunr.search(address)
-      const ref = searchResults[0] ? searchResults[0].ref : null
-      const data = this.$lunr.getMeta(ref)
-      return data ? data.logo_url.replace('32x32', '128x128') : ''
-    },
-    getBalance(contractAddress) {
-      let balance = 0
-      this.$getERC20Balance(
-        this.$store.getters.selectedAddress,
-        contractAddress
-      ).then((result) => {
-        balance = result
-      })
-      return balance
-    }
-  }
+  })
 }
 </script>
