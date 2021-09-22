@@ -5,11 +5,13 @@ class Lunr {
     this.init()
   }
 
-  url = `http://localhost:3000/_nuxt/search-index/en.json`
+  host = window.location.protocol + '//' + window.location.host
+  url = `${this.host}/_nuxt/search-index/en.json`
   indexedJSON = null
   metas = null
   lunr = null
   init = () => {
+    console.log('this.url', this.url)
     if (!this.indexedJSON) {
       this.getIndexedJSON()
     }
