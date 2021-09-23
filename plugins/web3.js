@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import web3Provider from '@/web3/provider'
 
-import { _range } from '~/utils/array'
+import { _range } from '~/utils/array.ts'
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '@/constants/contract'
 import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 

@@ -51,7 +51,7 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/pwa'],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/pwa', '@nuxt/typescript-build'],
   eslint: {
     fix: true
   },

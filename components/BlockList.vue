@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import { _range, paginate } from '~/utils/array'
+import { _range, paginate } from '~/utils/array.ts'
 export default {
   props: {
     showTotal: {

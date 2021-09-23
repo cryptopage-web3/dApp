@@ -1,4 +1,4 @@
-export const _range = (start, stop, step) => {
+export const _range = (start:number, stop:number, step:number):number[] => {
   if (stop == null) {
     stop = start || 0
     start = 0
@@ -17,6 +17,6 @@ export const _range = (start, stop, step) => {
   return range
 }
 
-export const paginate = (array, pageNumber = 1, pageSize = 10) => {
+export const paginate = (array: object[], pageNumber:number = 1, pageSize:number = 10):object[] => {
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
 }
