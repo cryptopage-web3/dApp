@@ -188,10 +188,33 @@
         padding: 10px 0 20px;
 
         &-toggle {
-            display: inline-block;
-            color: #1da1f2;
+            display: flex;
             cursor: pointer;
-            text-decoration: underline;
+            align-items: center;
+
+            &-icon {
+                margin-right: 7px;
+                font-size: 21px;
+                color: #1da1f2;
+            }
+
+            &-text {
+                font-size: 15px;
+                color: #1da1f2;
+                text-decoration: underline;
+                text-decoration-style: dashed;
+                text-decoration-color: #cce4f3;
+                text-underline-offset: 2px;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+
+        &-container {
+            padding-top: 20px;
+            color: #cce4f3;
         }
     }
 }

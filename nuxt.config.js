@@ -20,7 +20,10 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@/assets/scss/main.scss'],
+  css: [
+    '@fortawesome/fontawesome-svg-core/styles.css',
+    '@/assets/scss/main.scss'
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -34,7 +37,8 @@ export default {
     '~/plugins/lunr.client',
     '~/plugins/modals.client',
     '~/plugins/easy-circular-progress.client',
-    '~/plugins/notifications.client'
+    '~/plugins/notifications.client',
+    '~/plugins/fontawesome.js'
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
