@@ -18,6 +18,11 @@ export default {
     Icon: async () => await import('@/components/icons/Icon')
   },
   layout: 'empty',
-  props: ['error']
+  props: {
+    error: {
+      type: Object,
+      default: () => ({})
+    }
+  }
 }
 </script>

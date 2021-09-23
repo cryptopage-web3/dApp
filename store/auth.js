@@ -1,20 +1,18 @@
 const SET_SELECTED_ADDRESS = 'SET_SELECTED_ADDRESS'
 const POP_SELECTED_ADDRESS = 'POP_SELECTED_ADDRESS'
-const SET_SIGNATURE = 'SET_SIGNATURE'
-const POP_SIGNATURE = 'POP_SIGNATURE'
+const SET_IS_AUTH = 'SET_IS_AUTH'
 const SET_SELECTED_CHAIN_ID = 'SET_SELECTED_CHAIN_ID'
 const POP_SELECTED_CHAIN_ID = 'POP_SELECTED_CHAIN_ID'
 
 export const state = () => ({
   selectedAddress: '',
-  signature: '',
-  chainId: ''
+  chainId: '',
+  isAuth: false
 })
 
 export const getters = {
   selectedAddress: (state) => state.selectedAddress,
-  signature: (state) => state.signature,
-  isAuth: (state) => !!state.selectedAddress,
+  isAuth: (state) => state.isAuth,
   chainId: (state) => state.chainId
 }
 
@@ -25,11 +23,8 @@ export const mutations = {
   [POP_SELECTED_ADDRESS](state) {
     state.selectedAddress = ''
   },
-  [SET_SIGNATURE](state, payload) {
-    state.signature = payload
-  },
-  [POP_SIGNATURE](state) {
-    state.signature = ''
+  [SET_IS_AUTH](state, payload) {
+    state.isAuth = payload
   },
   [SET_SELECTED_CHAIN_ID](state, payload) {
     state.chainId = payload
@@ -46,19 +41,17 @@ export const actions = {
   popSelectedAddress({ commit }) {
     commit(POP_SELECTED_ADDRESS)
   },
-  setSignature({ commit }, payload) {
-    commit(SET_SIGNATURE, payload)
-  },
-  popSignature({ commit }) {
-    commit(POP_SIGNATURE)
-  },
   signout({ commit }) {
     commit(POP_SELECTED_ADDRESS)
-    commit(POP_SIGNATURE)
+    commit(POP_SELECTED_CHAIN_ID)
+    commit(SET_IS_AUTH, false)
   },
-  signin({ commit }, { address, sig }) {
+  signin({ commit }, { address, redirectURL }) {
     commit(SET_SELECTED_ADDRESS, address)
-    commit(SET_SIGNATURE, sig)
+    commit(SET_IS_AUTH, true)
+    if (redirectURL) {
+      this.$router.push(redirectURL)
+    }
   },
   setSelectedChainId({ commit }, payload) {
     commit(SET_SELECTED_CHAIN_ID, payload)

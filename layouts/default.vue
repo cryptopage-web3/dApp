@@ -24,7 +24,6 @@ export default {
     'sidebar-right': async () =>
       await import('@/components/sidebar/right/SidebarRight')
   },
-  middleware: ['signature'],
   computed: {
     isReadyStore() {
       return this.$store.state.auth.status

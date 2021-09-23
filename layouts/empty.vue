@@ -10,7 +10,6 @@
 
 <script>
 export default {
-  middleware: ['signature'],
   computed: {
     isReadyStore() {
       return this.$store.state.auth.status

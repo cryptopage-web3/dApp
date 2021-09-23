@@ -3,7 +3,6 @@
 </template>
 <script>
 import { recoverPersonalSignature } from 'eth-sig-util'
-import { SIGNATURE_PHRASE } from '@/constants'
 
 export default {
   methods: {
@@ -33,24 +32,23 @@ export default {
         }
 
         const address = this.$provider.selectedAddress
+        const redirectURL = this.$route.query.next ? this.$route.query.next : ''
+        const signaturePhrase = await this.getSignaturePhrase(address)
         const sig = await this.$provider.provider.request({
           method: 'personal_sign',
-          params: [SIGNATURE_PHRASE, address]
+          params: [signaturePhrase, address]
         })
         const recoveredAddress = recoverPersonalSignature({
-          data: SIGNATURE_PHRASE,
+          data: signaturePhrase,
           sig
         })
 
         if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
-          this.$store.dispatch('auth/signin', { address, sig })
-
           this.$notify({
             type: 'success',
             title: 'Successfully logged in'
           })
-
-          return
+          return this.$store.dispatch('auth/signin', { address, redirectURL })
         }
 
         this.$notify({
@@ -68,9 +66,19 @@ export default {
             Please reload page and try again
           </div>`
         })
-
         console.error('ERROR in authenticate:', error) // eslint-disable-line no-console
       }
+    },
+    async getSignaturePhrase(address) {
+      const timestamp = new Date().getTime()
+      const random = Math.random().toString(16).substr(2, length)
+      const message = address + timestamp + random
+      const salt = await this.$sea.work(message, null, null, {
+        name: 'SHA-256'
+      })
+      return await this.$sea.work(message, salt, null, {
+        name: 'SHA-256'
+      })
     }
   }
 }
