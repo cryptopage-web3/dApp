@@ -5,9 +5,11 @@
     padding-left: 16px;
     padding-right: 16px;
     border-bottom: solid 1px rgba(#eff3f4, 1);
+
     &__user {
         position: relative;
     }
+
     &__form {
         width: calc(100% - 48px);
         position: relative;
@@ -24,16 +26,19 @@
             }
         }
     }
+
     &__user-image {
         position: relative;
         width: 48px;
         height: 48px;
+
         img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
         }
     }
+
     &__input {
         display: inline-block;
         min-width: 100%;
@@ -42,9 +47,11 @@
         line-height: 25px;
         font-size: 20px;
     }
+
     &__message {
         position: relative;
         padding: 0px 4px;
+
         label {
             position: absolute;
             top: 0;
@@ -57,6 +64,7 @@
             font-size: 20px;
         }
     }
+
     &__buttons {
         position: relative;
         display: flex;
@@ -65,6 +73,7 @@
         padding-top: 10px;
         border-top: solid 1px rgba(#eff3f4, 1);
     }
+
     &__post-links {
         position: relative;
         display: flex;
@@ -111,9 +120,11 @@
             }
         }
     }
+
     &__send {
         position: relative;
     }
+
     &__image {
         position: relative;
         height: 280px;
@@ -122,14 +133,17 @@
         border-radius: 20px;
         margin-bottom: 16px;
         cursor: pointer;
+
         &:hover {
             &:before {
                 opacity: .3;
             }
         }
+
         img {
             max-width: 100%;
         }
+
         &:before {
             content: '';
             position: absolute;
@@ -143,6 +157,7 @@
             transition: 0.25s ease;
         }
     }
+
     &__image-delete {
         position: absolute;
         z-index: 2;
@@ -153,9 +168,11 @@
         top: 16px;
         background: rgba(#000, 0.8);
         transition: 0.35s ease;
+
         &:hover {
             background: rgba(#000, 0.7);
         }
+
         svg {
             width: 18px;
             height: 18px;
@@ -164,6 +181,7 @@
             }
         }
     }
+
     &__comment {
         .custom-control-label {
             padding-top: 5px;
@@ -184,37 +202,76 @@
             height: 17px;
         }
     }
-    &__attributes {
-        padding: 10px 0 20px;
+}
 
-        &-toggle {
-            display: flex;
-            cursor: pointer;
-            align-items: center;
+/* ======= attributes ======== */
 
-            &-icon {
-                margin-right: 7px;
-                font-size: 21px;
-                color: #1da1f2;
-            }
+.tweet-add__attributes {
+    padding: 10px 0 20px;
 
-            &-text {
-                font-size: 15px;
-                color: #1da1f2;
-                text-decoration: underline;
-                text-decoration-style: dashed;
-                text-decoration-color: #cce4f3;
-                text-underline-offset: 2px;
+    &-toggle {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
 
-                &:hover {
-                    text-decoration: none;
-                }
-            }
+        &-icon {
+            margin-right: 7px;
+            font-size: 21px;
+            color: #1da1f2;
         }
 
-        &-container {
-            padding-top: 20px;
-            color: #cce4f3;
+        &-text {
+            font-size: 15px;
+            color: #1da1f2;
+            text-decoration: underline;
+            text-decoration-style: dashed;
+            text-decoration-color: #cce4f3;
+            text-underline-offset: 2px;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+    &-container {
+        margin-top: 20px;
+        border-radius: 5px;
+        overflow: hidden;
+        border: 1px solid #e5e8eb;
+    }
+}
+
+.tweet-add__attribute {
+    border-bottom: 1px solid #e5e8eb;
+    color: #536471;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &-header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 15px 17px;
+
+        &-icon {
+            margin-right: 15px;
+            width: 17px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        &-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        &-arrow {
+            font-size: 14px;
+            margin-left: auto;
         }
     }
 }

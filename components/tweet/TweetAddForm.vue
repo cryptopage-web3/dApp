@@ -56,7 +56,7 @@ export default {
     'upload-image': async () =>
       await import('@/components/tweet/TweetAddFormImage'),
     attributes: async () =>
-      await import('@/components/tweet/TweetAddFormAttributes'),
+      await import('@/components/tweet/attributes/TweetAddFormAttributes'),
     icon: async () => await import('@/components/icons/Icon')
   },
   data() {
