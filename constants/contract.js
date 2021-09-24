@@ -1,9 +1,9 @@
-export const CONTRACT_ADDRESS = '0xB01303799f43E529381d02327c07454087A30a29'
+export const CONTRACT_ADDRESS = '0xa63F7ecD41b86B5609Da5cb891Eb10065F1364b5'
 export const CONTRACT_ABI = [
   {
     inputs: [
       { internalType: 'address', name: '_PAGE_MINTER', type: 'address' },
-      { internalType: 'address', name: '_BANK_ADDRESS', type: 'address' }
+      { internalType: 'address', name: '_PAGE_TOKEN', type: 'address' }
     ],
     stateMutability: 'nonpayable',
     type: 'constructor'
@@ -56,31 +56,7 @@ export const CONTRACT_ABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address'
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address'
-      }
-    ],
-    name: 'OwnershipTransferred',
-    type: 'event'
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'from',
-        type: 'address'
-      },
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
       { indexed: true, internalType: 'address', name: 'to', type: 'address' },
       {
         indexed: true,
@@ -94,17 +70,15 @@ export const CONTRACT_ABI = [
   },
   {
     inputs: [],
-    name: 'BANK_ADDRESS',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'PAGE_MINTER',
+    outputs: [{ internalType: 'contract IMINTER', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function'
   },
   {
     inputs: [],
-    name: 'PAGE_MINTER',
-    outputs: [
-      { internalType: 'contract PageMinter', name: '', type: 'address' }
-    ],
+    name: 'PAGE_TOKEN',
+    outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function'
   },
@@ -123,6 +97,13 @@ export const CONTRACT_ABI = [
     name: 'balanceOf',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_tokenId', type: 'uint256' }],
+    name: 'burn',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function'
   },
   {
@@ -145,8 +126,22 @@ export const CONTRACT_ABI = [
   },
   {
     inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
+    name: 'creatorOf',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'getApproved',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    inputs: [],
+    name: 'getBaseURL',
+    outputs: [{ internalType: 'string', name: '', type: 'string' }],
     stateMutability: 'view',
     type: 'function'
   },
@@ -168,24 +163,10 @@ export const CONTRACT_ABI = [
     type: 'function'
   },
   {
-    inputs: [],
-    name: 'owner',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function'
-  },
-  {
     inputs: [{ internalType: 'uint256', name: 'tokenId', type: 'uint256' }],
     name: 'ownerOf',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
-    type: 'function'
-  },
-  {
-    inputs: [],
-    name: 'renounceOwnership',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function'
   },
   {
@@ -194,7 +175,7 @@ export const CONTRACT_ABI = [
       { internalType: 'bool', name: '_comment', type: 'bool' }
     ],
     name: 'safeMint',
-    outputs: [],
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'nonpayable',
     type: 'function'
   },
@@ -227,6 +208,13 @@ export const CONTRACT_ABI = [
       { internalType: 'bool', name: 'approved', type: 'bool' }
     ],
     name: 'setApprovalForAll',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [{ internalType: 'string', name: 'url', type: 'string' }],
+    name: 'setBaseURL',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'
@@ -279,13 +267,6 @@ export const CONTRACT_ABI = [
       { internalType: 'uint256', name: 'tokenId', type: 'uint256' }
     ],
     name: 'transferFrom',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function'
-  },
-  {
-    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
-    name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function'
