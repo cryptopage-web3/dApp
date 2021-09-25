@@ -1,46 +1,32 @@
 <template>
-  <nuxt-link
-    :key="address"
-    :to="`/${address}`"
-    class="text-center"
-    style="margin: 1em"
-  >
-    <img v-if="showImage" :src="src" class="main-mem" />
-    <div style="color: black">{{ balance }}</div>
-  </nuxt-link>
+  <div class="column">
+    <nuxt-link
+      :key="token.tokenInfo.address"
+      :to="`/${token.tokenInfo.address}`"
+    >
+      <img :src="token.tokenInfo.image" height="50px" width="50px" />
+    </nuxt-link>
+    <div style="color: black">{{ token.normalBalance.toFixed(2) }}</div>
+    <div style="color: black">{{ token.USDBalance.toFixed(2) }} $</div>
+  </div>
 </template>
 <script>
 export default {
   props: {
-    address: {
-      type: String,
+    token: {
+      type: Object,
       required: true
-    },
-    showImage: {
-      type: Boolean,
-      default: true
-    }
-  },
-  data: () => ({
-    balance: 0,
-    src: ''
-  }),
-  async mounted() {
-    await this.$nextTick(async () => {
-      const selectedAddress = this.$store.getters['auth/selectedAddress']
-      if (this.showImage) {
-        this.src = await this.getSrc()
-      }
-      this.balance = await this.$getERC20Balance(selectedAddress, this.address)
-    })
-  },
-  methods: {
-    async getSrc() {
-      const searchResults = await this.$lunr.lunr.search(this.address)
-      const ref = searchResults[0] ? searchResults[0].ref : null
-      const data = this.$lunr.getMeta(ref)
-      return data ? data.logo_url.replace('32x32', '128x128') : ''
     }
   }
 }
 </script>
+<style>
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1em;
+  text-align: center;
+  width: 75px;
+}
+</style>

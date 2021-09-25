@@ -6,7 +6,10 @@
           <avatar class="column" :address="transaction.from" />
           <div class="column">
             <span> {{ $web3.utils.fromWei(transaction.value) }} ETH </span>
-            <span v-if="isContract" style="font-size: 12px; margin-top: 1em">
+            <span
+              v-if="isContract || isTransfer"
+              style="font-size: 12px; margin-top: 1em"
+            >
               {{ token ? token.symbol : 'Unknown' }} contract call
               <span style="color: #768895">
                 {{ isTransfer ? 'transfer' : 'unknown' }}
@@ -14,7 +17,11 @@
               function
             </span>
           </div>
-          <avatar v-if="transfer" class="column" :address="transfer.receiver" />
+          <avatar
+            v-if="transfer && transfer.receiver"
+            class="column"
+            :address="transfer.receiver"
+          />
           <avatar v-else class="column" :address="transaction.to" />
         </div>
       </div>
@@ -54,7 +61,7 @@ export default {
   fetchOnServer: false,
   computed: {
     isTransfer() {
-      return this.transaction.input.startsWith('0xa9059')
+      return this.transaction.input.startsWith('0xa9059cbb')
     }
   }
 }

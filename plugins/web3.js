@@ -1,8 +1,9 @@
 import Web3 from 'web3'
 import web3Provider from '@/web3/provider'
 
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from '~/constants/contract'
+import { ERC20ABI, ERC721ABI } from '~/constants/abi-samples'
 import { _range } from '~/utils/array.ts'
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from '@/constants/contract'
 import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 
 const PROJECT_ID = `a925609bdb25477d8039c763faa7b61d`
@@ -160,7 +161,7 @@ const getERC20TransferByHash = async (hash) => {
     (tx.input.length === 138 || tx.input.slice(2, 10) === 'a9059cbb')
   ) {
     const receiver = web3.utils.toChecksumAddress(`0x${tx.input.slice(34, 74)}`)
-    const amount = web3.utils.toBN('0x' + tx.input.slice(74)) // hexToDec(tx.input.slice(74))
+    const amount = web3.utils.toBN('0x' + tx.input.slice(74))
     const symbol = tx.to
     const sender = web3.utils.toChecksumAddress(tx.from)
     return { receiver, amount, symbol, hash, sender }
@@ -169,24 +170,8 @@ const getERC20TransferByHash = async (hash) => {
 }
 
 const getERC20Balance = async (address, contractAddress) => {
-  const minABI = [
-    {
-      constant: true,
-      inputs: [{ name: '_owner', type: 'address' }],
-      name: 'balanceOf',
-      outputs: [{ name: 'balance', type: 'uint256' }],
-      type: 'function'
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'decimals',
-      outputs: [{ name: '', type: 'uint8' }],
-      type: 'function'
-    }
-  ]
   try {
-    const contract = new web3.eth.Contract(minABI, contractAddress)
+    const contract = new web3.eth.Contract(ERC20ABI, contractAddress)
     const balanceOf = await contract.methods.balanceOf(address).call()
     const decimals = await contract.methods.decimals().call()
     const balance = balanceOf / 10 ** decimals
@@ -198,28 +183,8 @@ const getERC20Balance = async (address, contractAddress) => {
 }
 
 const getERC721Data = async (tokenId, contractAddress) => {
-  const minABI = [
-    {
-      constant: true,
-      inputs: [{ name: 'tokenId', type: 'uint256' }],
-      name: 'tokenURI',
-      outputs: [{ name: '', type: 'string' }],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
-    },
-    {
-      constant: true,
-      inputs: [{ name: '_tokenId', type: 'uint256' }],
-      name: 'ownerOf',
-      outputs: [{ name: 'owner', type: 'address' }],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
-    }
-  ]
   try {
-    const contract = new web3.eth.Contract(minABI, contractAddress)
+    const contract = new web3.eth.Contract(ERC721ABI, contractAddress)
     const tokenURI = await contract.methods.tokenURI(tokenId).call()
     const owner = await contract.methods.ownerOf(tokenId).call()
     if (tokenURI) {

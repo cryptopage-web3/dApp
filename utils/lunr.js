@@ -11,7 +11,6 @@ class Lunr {
   metas = null
   lunr = null
   init = () => {
-    console.log('this.url', this.url)
     if (!this.indexedJSON) {
       this.getIndexedJSON()
     }

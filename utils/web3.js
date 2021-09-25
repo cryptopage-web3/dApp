@@ -1,5 +1,3 @@
-// import { ipfsToURI } from '~/utils/ipfs'
-
 export const shortAddress = (
   address,
   startCount = 5,

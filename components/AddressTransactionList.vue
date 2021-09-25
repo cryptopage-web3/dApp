@@ -9,12 +9,18 @@
 </template>
 <script>
 import { tokens } from '~/constants/tokens'
-import EtherscanAPI from '~/utils/etherscan'
+import api from '~/services/api'
 export default {
   props: {
     type: {
       type: String,
-      default: 'transactions'
+      default: 'transactions',
+      validator(type) {
+        if (!['transaction', 'tokens', 'nft'].includes(type)) {
+          return 'transactions'
+        }
+        return type
+      }
     },
     address: {
       type: String,
@@ -35,7 +41,12 @@ export default {
   }),
   async fetch() {
     this.$nuxt.$loading.start()
-    const response = await this.getTransactions()
+    const response = await api.getTransactions({
+      address: this.address,
+      page: this.page,
+      offset: this.pageSize,
+      type: this.type
+    })
     if (Array.isArray(response.result)) {
       await response.result.forEach(async (transaction) => {
         await this.addTransaction(transaction)
@@ -69,7 +80,6 @@ export default {
           return this.$web3.utils.toChecksumAddress(token.address) === address
         })
       }
-      // this.$watchAddressTransactions({ address, callback: this.addTransaction }) RATE LIMIT EXCEPTION
       window.onscroll = () => {
         const bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
@@ -110,29 +120,6 @@ export default {
           this.items.push(transaction)
         }
       }
-    },
-    async getTransactions() {
-      const etherscan = new EtherscanAPI()
-      if (this.type === 'transactions') {
-        return await etherscan.txList({
-          address: this.address,
-          page: this.page,
-          offset: this.pageSize
-        })
-      } else if (this.type === 'tokens') {
-        return await etherscan.tokenTx({
-          address: this.address,
-          page: this.page,
-          offset: this.pageSize
-        })
-      } else if (this.type === 'nft') {
-        return await etherscan.tokenNFTTx({
-          address: this.address,
-          page: this.page,
-          offset: this.pageSize
-        })
-      }
-      return []
     }
   }
 }

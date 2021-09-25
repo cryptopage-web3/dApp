@@ -7,7 +7,12 @@
         active-class=""
         class="profile-other-name"
       >
-        <jazzicon :address="address" :diameter="38" style="margin-right: 1em" />
+        <avatar
+          :src="meta ? meta.logo_url : ''"
+          :address="address"
+          :diameter="38"
+          :show-address="false"
+        />
       </nuxt-link>
       <nuxt-link
         :to="`/${address}`"
@@ -25,15 +30,28 @@
 </template>
 <script>
 export default {
+  components: {
+    avatar: async () => await import('~/components/UserAvatar')
+  },
   props: {
     address: {
       type: String,
-      default: () => '0x7eE2BBC5d5004683ed84035591582be1Fc4953F5'
+      required: true
     },
     transactionsCount: {
       type: Number,
-      default: () => 0
+      required: true
     }
+  },
+  data: () => ({
+    meta: null
+  }),
+  mounted() {
+    this.$nextTick(() => {
+      const searchResults = this.$lunr.lunr.search(this.address)
+      const ref = searchResults[0] ? searchResults[0].ref : null
+      if (ref) this.meta = this.$lunr.getMeta(ref)
+    })
   }
 }
 </script>
