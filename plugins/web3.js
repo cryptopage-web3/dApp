@@ -7,6 +7,55 @@ import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 
 const PROJECT_ID = `a925609bdb25477d8039c763faa7b61d`
 
+/// customWeb3 instance
+
+const web3State = {
+  nodeList: [
+    'https://api.mycryptoapi.com/eth',
+    'https://nodes.mewapi.io/rpc/eth',
+    'https://main-rpc.linkpool.io',
+    'https://cloudflare-eth.com',
+    'https://mainnet-nethermind.blockscout.com',
+    'https://mainnet.eth.cloud.ava.do'
+  ],
+  nodeIndex: 0
+}
+
+const changeNode = () => {
+  const { nodeIndex, nodeList } = web3State
+  let updateIndex = nodeIndex + 1;
+  if (updateIndex === nodeList.length) {
+    updateIndex = 0
+  }
+  web3State.nodeIndex = updateIndex
+}
+
+const getWeb3Ref = () => {
+  const { nodeIndex, nodeList } = web3State
+  const nodeUrl = nodeList[nodeIndex]
+  return new Web3(nodeUrl)
+}
+
+const getTransaction = async txHash => {
+  try {
+    const web3Ref = getWeb3Ref()
+    const timeStart = Date.now()
+    const tx = await web3Ref.eth.getTransaction(txHash)
+    const timeEnd = Date.now() - timeStart
+    if (timeEnd > 6 * 1000) {
+      changeNode()
+    }
+    return tx
+  } catch(e) {
+    // eslint-disable-next-line no-console
+    console.error(`ERROR in getConfirmations with txHash ${txHash}: changingNode`, e)
+    changeNode()
+    return await getTransaction(txHash)
+  }
+}
+
+/// customWeb3 instance
+
 const getInfuraProvider = ({ name, type }) => {
   if (!name) name = 'mainnet'
   if (type !== 'https' || type !== 'wss') type = 'wss'
@@ -91,7 +140,7 @@ const watchAddressTransactions = ({ address, callback }) => {
     .on('data', async (txHash) => {
       try {
         address = web3.utils.toChecksumAddress(address)
-        const tx = await web3.eth.getTransaction(txHash)
+        const tx = await getTransaction(txHash)
         if (tx && tx.from && tx.to) {
           const toAddress = web3.utils.toChecksumAddress(tx.to)
           const fromAddress = web3.utils.toChecksumAddress(tx.from)
