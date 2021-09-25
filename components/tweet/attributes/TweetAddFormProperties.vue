@@ -11,18 +11,47 @@
         />
       </div>
     </div>
+    <div v-if="isShow" class="tweet-add__attribute-container">
+      <property
+        v-for="property in properties"
+        :key="property.id"
+        :property="property"
+        @remove="removeProperty(property.id)"
+      />
+      <div
+        class="tweet-add__property tweet-add__property_add"
+        @click="addProperty"
+      >
+        <font-awesome-icon :icon="['fas', 'plus-circle']" />
+      </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
+  components: {
+    property: async () =>
+      await import('@/components/tweet/attributes/TweetAddFormProperty.vue')
+  },
   data() {
     return {
-      isShow: false
+      isShow: false,
+      properties: []
     }
   },
   methods: {
     toggle() {
       this.isShow = !this.isShow
+    },
+
+    addProperty() {
+      this.properties.push({
+        id: Number(new Date())
+      })
+    },
+
+    removeProperty(propertyId) {
+      this.properties = this.properties.filter(({ id }) => id !== propertyId)
     }
   }
 }
