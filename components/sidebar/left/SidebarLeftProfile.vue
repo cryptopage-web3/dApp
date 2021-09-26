@@ -14,6 +14,7 @@
         <Icon type="dots" />
       </a>
       <select
+        v-if="$provider.providerName === 'metamask'"
         v-model="$provider._CHAINS_BY_CHAIN_ID[$store.getters['auth/chainId']]"
         class="form-control"
         @change="changeChain"

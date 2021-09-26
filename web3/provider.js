@@ -50,7 +50,7 @@ class Web3Provider {
     }
   }
 
-  providerName = ''
+  providerName = 'walletConnect'
   provider = null
 
   webConnected = false
@@ -229,7 +229,7 @@ class Web3Provider {
    * Initialize web3 provider functionality
    * @param {String} provider - value of provider
    */
-  init = (provider = 'metamask') => {
+  init = (provider = this.providerName) => {
     if (typeof window === 'undefined') {
       return
     }
