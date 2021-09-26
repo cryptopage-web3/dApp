@@ -23,6 +23,12 @@ class Web3Provider {
     }
   ]
 
+  _CHAINS_BY_CHAIN_ID = {
+    1: ETHEREUM,
+    56: BSC,
+    137: POLYGON
+  }
+
   // chainid type is hexadecimal nubers
   _CHAINS = {
     [BSC]: {
@@ -306,9 +312,6 @@ class Web3Provider {
    * @param {String} networkName - name of the network blockchain, example ethereum, bsc, polygon
    */
   switchChain = async (networkName) => {
-    if (!this.ALLOWED_CHAINS.includes(networkName)) {
-      throw new Error('Network is not allowed.')
-    }
     const chain = this._CHAINS[networkName]
     try {
       if (this.providerName !== 'metamask') return

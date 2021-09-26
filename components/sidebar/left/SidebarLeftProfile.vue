@@ -13,6 +13,15 @@
         </div>
         <Icon type="dots" />
       </a>
+      <select
+        v-model="$provider._CHAINS_BY_CHAIN_ID[$store.getters['auth/chainId']]"
+        class="form-control"
+        @change="changeChain"
+      >
+        <option value="ETHEREUM">ETHEREUM</option>
+        <option value="BSC">BSC</option>
+        <option value="POLYGON">POLYGON</option>
+      </select>
     </template>
     <template v-else>
       <button class="sidebar-profile__signin-btn" type="button" @click="signin">
@@ -60,6 +69,9 @@ export default {
     },
     signin() {
       this.$refs.signin.init()
+    },
+    changeChain(event) {
+      this.$provider.switchChain(event.target.value)
     }
   }
 }
