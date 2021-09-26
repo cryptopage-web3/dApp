@@ -19,7 +19,10 @@
           @onFileUpdate="fileUpdateHandler"
         />
 
-        <attributes />
+        <attributes
+          :attributes="attributes"
+          @change="attributesChangeHandler"
+        />
 
         <div class="tweet-add__buttons">
           <div class="tweet-add__post-links">
@@ -65,6 +68,7 @@ export default {
       text: '',
       title: '',
       hasComment: false,
+      attributes: {},
       file: null
     }
   },
@@ -136,14 +140,57 @@ export default {
       return true
     },
 
+    attributesChangeHandler(attributes) {
+      this.attributes = attributes
+    },
+
     resetForm() {
       this.title = ''
       this.text = ''
       this.file = null
+      this.attributes = {}
       this.hasComment = false
     },
 
+    validateFormWithNotify() {
+      if (!this.title) {
+        this.$notify({
+          type: 'error',
+          title: 'Empty title'
+        })
+        return false
+      }
+
+      if (!this.text) {
+        this.$notify({
+          type: 'error',
+          title: 'Empty text'
+        })
+        return false
+      }
+
+      if (this.attributes.properties?.length) {
+        const hasEmptyField = this.attributes.properties.some(
+          ({ type, value }) => !type || !value
+        )
+
+        if (hasEmptyField) {
+          this.$notify({
+            type: 'error',
+            title: 'Empty field in properties'
+          })
+          return false
+        }
+      }
+
+      return true
+    },
+
     async submit() {
+      if (!this.validateFormWithNotify()) {
+        return
+      }
+
       this.loading = true
 
       // get ipfs hash
@@ -178,6 +225,7 @@ export default {
       const nft = {
         name: this.title,
         description: this.text,
+        attributes: this.getAdaptedAttributes(),
         [this.isMediaFile ? 'animation_url' : 'image']:
           fileHash && `https://ipfs.io/ipfs/${fileHash}`
       }
@@ -187,6 +235,13 @@ export default {
       await ipfs.pin.add(file.path)
 
       return file.path
+    },
+
+    getAdaptedAttributes() {
+      return (this.attributes.properties || []).map((property) => ({
+        trait_type: property.type,
+        value: property.value
+      }))
     },
 
     sendPostHash(ipfsHash) {

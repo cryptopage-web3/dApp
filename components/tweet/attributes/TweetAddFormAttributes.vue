@@ -8,8 +8,11 @@
       </div>
       <div class="tweet-add__attributes-toggle-text">Extended fields</div>
     </div>
-    <div v-if="isShow" class="tweet-add__attributes-container">
-      <properties-attribute />
+    <div v-show="isShow" class="tweet-add__attributes-container">
+      <properties-attribute
+        :properties="properties"
+        @change="propertiesChangeHandler"
+      />
       <stats-attribute />
       <levels-attribute />
       <dates-attribute />
@@ -31,14 +34,46 @@ export default {
     'boosts-attribute': async () =>
       await import('@/components/tweet/attributes/TweetAddFormBoosts.vue')
   },
+  props: {
+    attributes: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
-      isShow: false
+      isShow: false,
+      properties: []
+    }
+  },
+  watch: {
+    attributes: {
+      handler(attributes) {
+        const newValue = attributes.properties || []
+
+        if (JSON.stringify(newValue) === JSON.stringify(this.properties)) {
+          return
+        }
+
+        this.properties = attributes.properties || []
+      },
+      immediate: true
+    },
+
+    properties(properties) {
+      this.$emit('change', {
+        ...this.attributes,
+        properties
+      })
     }
   },
   methods: {
     toggle() {
       this.isShow = !this.isShow
+    },
+
+    propertiesChangeHandler(properties) {
+      this.properties = properties
     }
   }
 }

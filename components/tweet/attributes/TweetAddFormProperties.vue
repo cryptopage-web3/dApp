@@ -11,12 +11,13 @@
         />
       </div>
     </div>
-    <div v-if="isShow" class="tweet-add__attribute-container">
+    <div v-show="isShow" class="tweet-add__attribute-container">
       <property
-        v-for="property in properties"
+        v-for="property in localProperties"
         :key="property.id"
         :property="property"
         @remove="removeProperty(property.id)"
+        @change="propertyChangeHandler(property.id, $event)"
       />
       <div
         class="tweet-add__property tweet-add__property_add"
@@ -33,10 +34,34 @@ export default {
     property: async () =>
       await import('@/components/tweet/attributes/TweetAddFormProperty.vue')
   },
+  props: {
+    properties: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       isShow: false,
-      properties: []
+      localProperties: []
+    }
+  },
+  watch: {
+    properties: {
+      handler(properties) {
+        if (
+          JSON.stringify(properties) === JSON.stringify(this.localProperties)
+        ) {
+          return
+        }
+
+        this.localProperties = properties
+      },
+      immediate: true
+    },
+
+    localProperties(properties) {
+      this.$emit('change', properties)
     }
   },
   methods: {
@@ -45,13 +70,27 @@ export default {
     },
 
     addProperty() {
-      this.properties.push({
+      this.localProperties.push({
         id: Number(new Date())
       })
     },
 
     removeProperty(propertyId) {
-      this.properties = this.properties.filter(({ id }) => id !== propertyId)
+      this.localProperties = this.localProperties.filter(
+        ({ id }) => id !== propertyId
+      )
+    },
+
+    propertyChangeHandler(propertyId, data) {
+      this.localProperties = this.localProperties.map((item) =>
+        item.id === propertyId
+          ? {
+              ...item,
+              type: data.type,
+              value: data.value
+            }
+          : item
+      )
     }
   }
 }

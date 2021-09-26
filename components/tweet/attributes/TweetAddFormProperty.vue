@@ -23,10 +23,44 @@
 </template>
 <script>
 export default {
+  props: {
+    property: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data() {
     return {
       type: '',
       value: ''
+    }
+  },
+  watch: {
+    property: {
+      handler(property) {
+        if (property.type !== this.type) {
+          this.type = property.type || ''
+        }
+
+        if (property.value !== this.value) {
+          this.value = property.value || ''
+        }
+      },
+      immediate: true
+    },
+
+    type(type) {
+      this.$emit('change', {
+        type,
+        value: this.value
+      })
+    },
+
+    value(value) {
+      this.$emit('change', {
+        value,
+        type: this.type
+      })
     }
   }
 }
