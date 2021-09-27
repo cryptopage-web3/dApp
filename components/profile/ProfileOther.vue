@@ -48,9 +48,7 @@ export default {
   }),
   mounted() {
     this.$nextTick(() => {
-      const searchResults = this.$lunr.lunr.search(this.address)
-      const ref = searchResults[0] ? searchResults[0].ref : null
-      if (ref) this.meta = this.$lunr.getMeta(ref)
+      this.meta = this.$lunr.getFirstMeta(this.address)
     })
   }
 }
