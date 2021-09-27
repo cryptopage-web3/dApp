@@ -295,14 +295,14 @@
     justify-content: center;
     background-color: #eff8fd;
     border-radius: 6px;
-    border: 1px solid #15b2e5;
+    border: 1px solid #1da1f2;
     padding: 10px;
     text-align: center;
     position: relative;
 
     &_add {
         font-size: 32px;
-        color: #15b2e5;
+        color: #1da1f2;
         cursor: pointer;
     }
 
@@ -344,6 +344,113 @@
             color: #353840;
             font-size: 15px;
             line-height: 30px;
+        }
+    }
+}
+
+.tweet-add__level {
+    margin: 5px;
+    width: 100%;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #a1b3c1;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+
+    &_add {
+        height: 50px;
+        font-size: 24px;
+        color: #a1b3c1;
+        cursor: pointer;
+    }
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #536471;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &-fields {
+        width: 100%;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-type {
+        flex-grow: 1;
+    }
+
+    &-values {
+        margin-left: 20px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    &-value {
+        width: 90px;
+    }
+
+    &-delimiter {
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #707a83;
+    }
+
+    &-input {
+        border: none;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #707a83;
+        text-overflow: ellipsis;
+        background-color: transparent;
+        width: 100%;
+
+        &_value {
+            background-color: #eef3f9;
+            padding: 0 10px;
+            line-height: 26px;
+            font-size: 13px;
+        }
+    }
+
+    &-range {
+        width: 100%;
+
+        &-bar {
+            border: 1px solid #e5e8eb;
+            border-radius: 14px;
+            height: 14px;
+            margin-top: 4px;
+            overflow: hidden;
+
+            &__fill {
+                height: 14px;
+                background-color: #1da1f2;
+                width: 0;
+            }
         }
     }
 }
