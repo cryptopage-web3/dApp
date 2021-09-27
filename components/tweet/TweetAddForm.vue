@@ -183,6 +183,38 @@ export default {
         }
       }
 
+      if (this.attributes.levels?.length) {
+        let levelError = ''
+
+        this.attributes.levels.forEach(({ type, value, maxValue }) => {
+          if (levelError) {
+            return
+          }
+
+          if (!type || !value || !maxValue) {
+            levelError = 'Empty field in levels'
+            return
+          }
+
+          if (!isFinite(value) || !isFinite(maxValue)) {
+            levelError = 'Value is not a number in levels'
+            return
+          }
+
+          if (+maxValue < +value) {
+            levelError = 'Value is greater than maximum in levels'
+          }
+        })
+
+        if (levelError) {
+          this.$notify({
+            type: 'error',
+            title: levelError
+          })
+          return false
+        }
+      }
+
       return true
     },
 
@@ -238,10 +270,22 @@ export default {
     },
 
     getAdaptedAttributes() {
-      return (this.attributes.properties || []).map((property) => ({
+      // преобразуем properties для nft
+
+      const properties = (this.attributes.properties || []).map((property) => ({
         trait_type: property.type,
         value: property.value
       }))
+
+      // преобразуем levels для nft
+
+      const levels = (this.attributes.levels || []).map((level) => ({
+        trait_type: level.type,
+        value: +level.value,
+        max_value: +level.maxValue
+      }))
+
+      return [...properties, ...levels]
     },
 
     sendPostHash(ipfsHash) {
