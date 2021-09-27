@@ -5,37 +5,48 @@ class Lunr {
     this.init()
   }
 
-  host = window.location.protocol + '//' + window.location.host
-  url = `${this.host}/_nuxt/search-index/en.json`
   indexedJSON = null
   metas = null
   lunr = null
-  init = () => {
+  init = async () => {
     if (!this.indexedJSON) {
-      this.getIndexedJSON()
+      const json = await this.getIndexedJSON()
+      this.indexedJSON = json
+      this.metas = this.indexedJSON.metas
+    }
+    if (!this.lunr) {
+      this.lunr = await lunr.Index.load(this.indexedJSON)
     }
   }
 
-  getIndexedJSON = () => {
-    fetch(this.url)
-      .then((res) => {
-        if (res.status === 200) {
-          return res.json()
-        }
-      })
-      .then((json) => {
-        this.indexedJSON = json
-        this.metas = this.indexedJSON.metas
-        this.getSearchIndex()
-      })
-  }
-
-  getSearchIndex = () => {
-    this.lunr = lunr.Index.load(this.indexedJSON)
+  getIndexedJSON = async () => {
+    return await fetch('_nuxt/search-index/en.json').then((res) => {
+      if (res.status === 200) {
+        return res.json()
+      }
+    })
   }
 
   getMeta = (ref) => {
     return this.metas[ref]
+  }
+
+  search = (data) => {
+    if (this.lunr) {
+      return this.lunr.search(data)
+    } else {
+      return setTimeout(() => {
+        return this.search(data)
+      }, 100)
+    }
+  }
+
+  getFirstMeta = (data) => {
+    const searchResults = this.search(data)
+    const ref = searchResults[0] ? searchResults[0].ref : null
+    if (ref) {
+      return this.getMeta(ref)
+    }
   }
 }
 
