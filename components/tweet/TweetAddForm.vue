@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import { validateForm, getAdaptedAttributes } from '@/utils/tweetForm'
+
 export default {
   components: {
     'text-field': async () =>
@@ -155,66 +157,19 @@ export default {
     },
 
     validateFormWithNotify() {
-      if (!this.title) {
+      const result = validateForm({
+        title: this.title,
+        text: this.text,
+        attributes: this.attributes
+      })
+
+      if (!result.status) {
         this.$notify({
           type: 'error',
-          title: 'Empty title'
+          title: result.error || 'Invalid data'
         })
+
         return false
-      }
-
-      if (!this.text) {
-        this.$notify({
-          type: 'error',
-          title: 'Empty text'
-        })
-        return false
-      }
-
-      if (this.attributes.properties?.length) {
-        const hasEmptyField = this.attributes.properties.some(
-          ({ type, value }) => !type || !value
-        )
-
-        if (hasEmptyField) {
-          this.$notify({
-            type: 'error',
-            title: 'Empty field in properties'
-          })
-          return false
-        }
-      }
-
-      if (this.attributes.levels?.length) {
-        let levelError = ''
-
-        this.attributes.levels.forEach(({ type, value, maxValue }) => {
-          if (levelError) {
-            return
-          }
-
-          if (!type || !value || !maxValue) {
-            levelError = 'Empty field in levels'
-            return
-          }
-
-          if (!isFinite(value) || !isFinite(maxValue)) {
-            levelError = 'Value is not a number in levels'
-            return
-          }
-
-          if (+maxValue < +value) {
-            levelError = 'Value is greater than maximum in levels'
-          }
-        })
-
-        if (levelError) {
-          this.$notify({
-            type: 'error',
-            title: levelError
-          })
-          return false
-        }
       }
 
       return true
@@ -259,7 +214,7 @@ export default {
       const nft = {
         name: this.title,
         description: this.text,
-        attributes: this.getAdaptedAttributes(),
+        attributes: getAdaptedAttributes(this.attributes),
         [this.isMediaFile ? 'animation_url' : 'image']:
           fileHash && `https://ipfs.io/ipfs/${fileHash}`
       }
@@ -269,25 +224,6 @@ export default {
       await ipfs.pin.add(file.path)
 
       return file.path
-    },
-
-    getAdaptedAttributes() {
-      // преобразуем properties для nft
-
-      const properties = (this.attributes.properties || []).map((property) => ({
-        trait_type: property.type,
-        value: property.value
-      }))
-
-      // преобразуем levels для nft
-
-      const levels = (this.attributes.levels || []).map((level) => ({
-        trait_type: level.type,
-        value: +level.value,
-        max_value: +level.maxValue
-      }))
-
-      return [...properties, ...levels]
     },
 
     sendPostHash(ipfsHash) {
