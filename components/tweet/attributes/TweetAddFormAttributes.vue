@@ -83,6 +83,10 @@ export default {
       this.isShow = !this.isShow
     },
 
+    hide() {
+      this.isShow = false
+    },
+
     propertiesChangeHandler(properties) {
       this.properties = properties
     },

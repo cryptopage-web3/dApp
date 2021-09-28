@@ -20,6 +20,7 @@
         />
 
         <attributes
+          ref="attributes"
           :attributes="attributes"
           @change="attributesChangeHandler"
         />
@@ -150,6 +151,7 @@ export default {
       this.file = null
       this.attributes = {}
       this.hasComment = false
+      this.$refs.attributes.hide()
     },
 
     validateFormWithNotify() {
