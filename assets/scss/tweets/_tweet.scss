@@ -293,16 +293,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #eff8fd;
     border-radius: 6px;
-    border: 1px solid #1da1f2;
+    border: 1px solid #a1b3c1;
     padding: 10px;
     text-align: center;
     position: relative;
 
     &_add {
         font-size: 32px;
-        color: #1da1f2;
+        color: #a1b3c1;
         cursor: pointer;
     }
 
@@ -423,7 +422,7 @@
         font-size: 15px;
         font-weight: 500;
         line-height: 30px;
-        color: #707a83;
+        color: #353840;
         text-overflow: ellipsis;
         background-color: transparent;
         width: 100%;
