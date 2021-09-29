@@ -98,6 +98,34 @@ export const validateForm = ({ title, text, attributes }) => {
     }
   }
 
+  // validate boosts
+
+  if (attributes.boosts?.length) {
+    let boostsError = ''
+
+    attributes.boosts.forEach(({ type, value, displayType }) => {
+      if (boostsError) {
+        return
+      }
+
+      if (!type || !value || !displayType) {
+        boostsError = 'Empty field in boosts'
+        return
+      }
+
+      if (!isFinite(value)) {
+        boostsError = 'Value is not a number in boosts'
+      }
+    })
+
+    if (boostsError) {
+      return {
+        status: false,
+        error: boostsError
+      }
+    }
+  }
+
   return {
     status: true
   }
@@ -128,5 +156,13 @@ export const getAdaptedAttributes = (attributes) => {
     max_value: +stat.maxValue
   }))
 
-  return [...properties, ...levels, ...stats]
+  // adapt boosts
+
+  const boosts = (attributes.boosts || []).map((boost) => ({
+    display_type: boost.displayType,
+    trait_type: boost.type,
+    value: +boost.value
+  }))
+
+  return [...properties, ...levels, ...stats, ...boosts]
 }
