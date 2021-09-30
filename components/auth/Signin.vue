@@ -32,7 +32,7 @@ export default {
         }
 
         const address = this.$provider.selectedAddress
-        const redirectURL = this.$route.query.next ? this.$route.query.next : ''
+        // const redirectURL = this.$route.query.next ? this.$route.query.next : ''
         const signaturePhrase = await this.getSignaturePhrase(address)
         const sig = await this.$provider.provider.request({
           method: 'personal_sign',
@@ -48,7 +48,7 @@ export default {
             type: 'success',
             title: 'Successfully logged in'
           })
-          return this.$store.dispatch('auth/signin', { address, redirectURL })
+          return this.$store.dispatch('auth/signin', address)
         }
 
         this.$notify({
