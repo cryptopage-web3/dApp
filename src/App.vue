@@ -2,11 +2,11 @@
   <div id="app" class="main">
     <div class="container">
       <div class="main-wr">
-        <SidebarLeft/>
+        <SidebarLeft />
         <div class="main-center">
           <router-view></router-view>
         </div>
-        <SidebarRight/>
+        <SidebarRight />
       </div>
     </div>
   </div>
@@ -22,10 +22,8 @@ export default {
   directives: {
     sticky: VueStickyDirective
   },
-  data () {
-    return {
-
-    }
+  data() {
+    return {}
   }
 }
 </script>

@@ -2,7 +2,7 @@ import Web3 from 'web3'
 import web3Provider from '@/web3/provider'
 
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '~/constants/contract'
-import { ERC20ABI, ERC721ABI } from '~/constants/abi-samples'
+import { ERC20ABI, ERC721ABI } from '~/constants/abi-samples.ts'
 import { _range } from '~/utils/array.ts'
 import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 
@@ -40,7 +40,9 @@ const getInfuraProvider = ({ name, type }) => {
   return provider[type]
 }
 
-const web3 = new Web3(Web3.givenProvider || getInfuraProvider({ type: 'wss' }))
+export const web3 = new Web3(
+  getInfuraProvider({ type: 'wss' } || Web3.givenProvider)
+)
 
 const getBlocks = async (count, showDetailTransactions = false, callback) => {
   const latest = await web3.eth.getBlockNumber()
