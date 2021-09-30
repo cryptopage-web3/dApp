@@ -11,18 +11,80 @@
         />
       </div>
     </div>
+    <div v-show="isShow" class="tweet-add__attribute-container">
+      <boost
+        v-for="boost in localBoosts"
+        :key="boost.id"
+        :boost="boost"
+        @remove="removeBoost(boost.id)"
+        @change="boostChangeHandler(boost.id, $event)"
+      />
+      <div class="tweet-add__boost tweet-add__boost_add" @click="addBoost">
+        <font-awesome-icon :icon="['fas', 'plus-circle']" />
+      </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
+  components: {
+    boost: async () =>
+      await import('@/components/tweet/attributes/TweetAddFormBoost.vue')
+  },
+  props: {
+    boosts: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
-      isShow: false
+      isShow: false,
+      localBoosts: []
+    }
+  },
+  watch: {
+    boosts: {
+      handler(boosts) {
+        if (JSON.stringify(boosts) === JSON.stringify(this.localBoosts)) {
+          return
+        }
+
+        this.localBoosts = boosts
+      },
+      immediate: true
+    },
+
+    localBoosts(boosts) {
+      this.$emit('change', boosts)
     }
   },
   methods: {
     toggle() {
       this.isShow = !this.isShow
+    },
+
+    addBoost() {
+      this.localBoosts.push({
+        id: Number(new Date())
+      })
+    },
+
+    removeBoost(boostId) {
+      this.localBoosts = this.localBoosts.filter(({ id }) => id !== boostId)
+    },
+
+    boostChangeHandler(boostId, data) {
+      this.localBoosts = this.localBoosts.map((item) =>
+        item.id === boostId
+          ? {
+              ...item,
+              displayType: data.displayType,
+              type: data.type,
+              value: data.value
+            }
+          : item
+      )
     }
   }
 }
