@@ -38,7 +38,8 @@ export default {
     '~/plugins/modals.client',
     '~/plugins/easy-circular-progress.client',
     '~/plugins/notifications.client',
-    '~/plugins/fontawesome.js'
+    '~/plugins/fontawesome.js',
+    '~/plugins/type-di.ts',
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
@@ -51,13 +52,27 @@ export default {
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/pwa', '@nuxt/typescript-build'],
+  buildModules: [
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/pwa',
+    ['@nuxt/typescript-build', { 'typeCheck': true }]
+  ],
+
+  typescript: {
+    typeCheck: {
+      eslint: {
+        files: './**/*.{ts,js,vue}'
+      }
+    }
+  },
+
   eslint: {
     fix: true
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    ['@nuxtjs/axios'],
     [
       'nuxt-vuex-localstorage',
       {
@@ -77,10 +92,17 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    debug: process.env.NODE_ENV === 'development',
+    https: true,
+    proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
+    progress: true,
+    proxy: false,
+    retry: true,
+  },
 
   hooks: {
-    ready (nuxt) {
+    ready(nuxt) {
       let documentIndex = 1
       for (const doc of docs) {
         nuxt.callHook('lunr:document', {

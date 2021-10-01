@@ -1,4 +1,9 @@
 {
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+    }
+  },
   "compilerOptions": {
     "target": "ES2018",
     "module": "ESNext",
@@ -8,11 +13,15 @@
       "ESNext.AsyncIterable",
       "DOM"
     ],
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowJs": true,
     "sourceMap": true,
     "strict": true,
     "noEmit": true,
+    "noImplicitReturns": true,
     "baseUrl": ".",
     "paths": {
       "~/*": [
@@ -24,7 +33,8 @@
     },
     "types": [
       "@types/node",
-      "@nuxt/types"
+      "@nuxt/types",
+      "jest"
     ]
   },
   "exclude": [

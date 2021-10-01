@@ -108,14 +108,12 @@ export default {
         if (this.type === 'transactions') {
           this.items.push(transaction)
         } else if (transaction.contractAddress && this.type === 'nft') {
-          const nft = await this.$getERC721Data(
-            transaction.tokenID,
-            transaction.contractAddress
-          )
-          if (nft) {
-            transaction.nft = nft
-            this.items.push(transaction)
-          }
+          const response = await this.$store.dispatch('nft/fetchOne', {
+            tokenId: transaction.tokenID,
+            contractAddress: transaction.contractAddress
+          })
+          transaction.nft = response
+          this.items.push(transaction)
         } else if (transaction.contractAddress && this.type === 'tokens') {
           this.items.push(transaction)
         }

@@ -190,11 +190,11 @@ class Web3Provider {
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
     if (address) {
-      window.$nuxt.$store._actions['auth/setSelectedAddress'][0](address)
+      window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
       this.selectedAddress = address
     }
     if (chainId) {
-      window.$nuxt.$store._actions['auth/setSelectedChainId'][0](chainId)
+      window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
       this.selectedChainId = chainId
     }
   }

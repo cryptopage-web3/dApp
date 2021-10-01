@@ -11,4 +11,3 @@ export const deviceType = () => {
   }
   return 'desktop'
 }
-

@@ -39,9 +39,7 @@ export default {
   }),
   mounted() {
     this.$nextTick(() => {
-      const searchResults = this.$lunr.lunr.search(
-        this.transaction.contractAddress
-      )
+      const searchResults = this.$lunr.search(this.transaction.contractAddress)
       const ref = searchResults[0] ? searchResults[0].ref : null
       if (ref) this.meta = this.$lunr.getMeta(ref)
     })
