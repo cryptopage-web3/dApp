@@ -1,0 +1,34 @@
+.vue-notification-group {
+    margin-top: 10px !important;
+}
+
+.vue-notification-wrapper .vue-notification {
+    font-size: 14px;
+    margin-right: 10px;
+    line-height: 18px;
+}
+
+.vue-notification a {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.vue-notification a:hover {
+    text-decoration: none;
+}
+
+.vue-notification .notification-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vue-notification .notification-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notification-content__mt {
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
