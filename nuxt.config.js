@@ -1,4 +1,5 @@
 import docs from './constants/coinmarketcap.json'
+const webpack = require("webpack");
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -22,7 +23,7 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@fortawesome/fontawesome-svg-core/styles.css',
-    '@/assets/scss/main.scss'
+    '@/assets/scss_new/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -40,6 +41,7 @@ export default {
     '~/plugins/notifications.client',
     '~/plugins/fontawesome.js',
     '~/plugins/type-di.ts',
+    '~/plugins/bootstrap.js',
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
@@ -121,6 +123,15 @@ export default {
   build: {
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
-    }
+    },
+    vendor: ["jquery", "bootstrap"],
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: 'jquery',
+        jquery: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
   }
 }
