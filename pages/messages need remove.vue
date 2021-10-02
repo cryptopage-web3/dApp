@@ -4,7 +4,7 @@
       <div class="profile-other-left">
         <img
           class="menu-mobile-avatar"
-          :src="require('@/assets/img/post-logo_img6.jpg')"
+          :src="require('@/assets/img_old/post-logo_img6.jpg')"
           @click="mobileOpen"
         />
         <router-link
@@ -37,7 +37,9 @@
           class="post-follow"
         >
           <div class="msg-ava tweet-add__user-image">
-            <img :src="require('@/assets/img/default_profile_normal.png')" />
+            <img
+              :src="require('@/assets/img_old/default_profile_normal.png')"
+            />
           </div>
           <div class="post-follow-right" style="margin-left: 15px">
             <div class="post-follow-top">
@@ -61,7 +63,9 @@
       <div class="tweet-add chat-add d-flex align-start justify-space-between">
         <div class="tweet-add__user">
           <nuxt-link to="/media/1" class="tweet-add__user-image">
-            <img :src="require('@/assets/img/default_profile_normal.png')" />
+            <img
+              :src="require('@/assets/img_old/default_profile_normal.png')"
+            />
           </nuxt-link>
         </div>
         <div
@@ -157,7 +161,7 @@ export default {
         }
       )
     },
-    handleInput(e) {
+    handleInput() {
       if (this.count >= this.maxCount) {
         this.count = 0
       }
@@ -186,14 +190,12 @@ export default {
     },
     extractMessage(message) {
       if (message.data.startsWith('SEA')) {
-        const self = this
-        self
-          .$decrypt(message.data, self.sender.epub, self.receiver)
-          .then((dec) => {
+        this.$decrypt(message.data, this.sender.epub, this.receiver).then(
+          (dec) => {
             if (dec) {
               document.getElementById(message.id).innerHTML = `
                 <div class="msg-ava tweet-add__user-image">
-                  <img src="${require('@/assets/img/default_profile_normal.png')}">
+                  <img src="${require('@/assets/img_old/default_profile_normal.png')}">
                 </div>
                 <div class="post-follow-right" style="margin-left: 15px;">
                   <div class="post-follow-top">
@@ -206,7 +208,8 @@ export default {
               `
               this.scrollHeight()
             }
-          })
+          }
+        )
         return JSON.parse(message.data.slice(3, message.data.length)).ct
       }
       return message

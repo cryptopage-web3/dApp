@@ -41,8 +41,8 @@ export default {
         following: 106,
         text: 'meme necromancy while u wait',
         joined: 'June 2009',
-        topThumbnail: require('@/assets/img/profile-more-top__thumb_bg.png'),
-        centerThumbnail: require('@/assets/img/main-center-thumbnail_bg.jpg')
+        topThumbnail: require('@/assets/img_old/profile-more-top__thumb_bg.png'),
+        centerThumbnail: require('@/assets/img_old/main-center-thumbnail_bg.jpg')
       })
     }
   },

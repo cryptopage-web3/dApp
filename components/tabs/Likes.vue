@@ -17,7 +17,7 @@
           class="post-logo"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/post-logo_img5.png') + ')'
+              'url(' + require('@/assets/img_old/post-logo_img5.png') + ')'
           }"
         ></a>
         <div class="post-right">
@@ -63,7 +63,7 @@
                 :style="{
                   backgroundImage:
                     'url(' +
-                    require('@/assets/img/post-youtube-left_bg1.png') +
+                    require('@/assets/img_old/post-youtube-left_bg1.png') +
                     ')'
                 }"
               >
@@ -173,7 +173,7 @@
           class="post-logo"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/post-logo_img1.png') + ')'
+              'url(' + require('@/assets/img_old/post-logo_img1.png') + ')'
           }"
         ></a>
         <div class="post-right">
@@ -214,7 +214,7 @@
               class="post-thumb"
               :style="{
                 backgroundImage:
-                  'url(' + require('@/assets/img/post-thumb_bg1.jpg') + ')'
+                  'url(' + require('@/assets/img_old/post-thumb_bg1.jpg') + ')'
               }"
             ></a>
           </div>
@@ -290,7 +290,7 @@
           class="post-logo"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/post-logo_img2.png') + ')'
+              'url(' + require('@/assets/img_old/post-logo_img2.png') + ')'
           }"
         ></a>
         <div class="post-right">
@@ -633,7 +633,9 @@
           class="post-follow__logo"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/post-follow__logo_bg1.jpg') + ')'
+              'url(' +
+              require('@/assets/img_old/post-follow__logo_bg1.jpg') +
+              ')'
           }"
         ></a>
         <div class="post-follow-right">
@@ -662,9 +664,9 @@
             The World’s Leading Blockchain Ecosystem and Digital Asset
             Exchange<br />
             <a href="#">#Binance</a>
-            <img src="@/assets/img/post-follow__text_img1.png" alt="" />
+            <img src="@/assets/img_old/post-follow__text_img1.png" alt="" />
             <a href="#">#BNB</a>
-            <img src="@/assets/img/post-follow__text_img1.png" alt="" />
+            <img src="@/assets/img_old/post-follow__text_img1.png" alt="" />
           </div>
         </div>
       </div>
@@ -674,7 +676,9 @@
           class="post-follow__logo"
           :style="{
             backgroundImage:
-              'url(' + require('@/assets/img/post-follow__logo_bg2.jpg') + ')'
+              'url(' +
+              require('@/assets/img_old/post-follow__logo_bg2.jpg') +
+              ')'
           }"
         ></a>
         <div class="post-follow-right">
@@ -716,7 +720,7 @@
           </div>
           <div class="post-follow__text">
             There’s space for everybody.
-            <img src="@/assets/img/post-follow__text_img2.png" alt="" />
+            <img src="@/assets/img_old/post-follow__text_img2.png" alt="" />
           </div>
         </div>
       </div>
