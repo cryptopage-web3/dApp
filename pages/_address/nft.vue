@@ -1,29 +1,29 @@
 <template>
   <div class="transactions">
-    <transactions
-      :address="$route.params.address"
-      type="nft"
-      :total="transactionsCount"
-    >
-      <transaction
-        slot="transaction"
-        slot-scope="{ transaction }"
-        :transaction="transaction"
-      />
-    </transactions>
+    <transaction
+      v-for="transaction in $store.getters['transactions/ERC721Transactions']"
+      :key="transaction.hash"
+      :transaction="transaction"
+    />
   </div>
 </template>
 <script>
+import { paginationMixin } from '@/mixins/pagination'
 export default {
   components: {
-    transaction: () => import('~/components/ERC721Transaction.vue'),
-    transactions: () => import('~/components/AddressTransactionList.vue')
+    transaction: () => import('~/components/ERC721Transaction.vue')
   },
-  props: {
-    transactionsCount: {
-      type: Number,
-      default: () => 0
-    }
+  mixins: [paginationMixin],
+  async fetch() {
+    await this.$store.dispatch('transactions/getERC721Transactions', {
+      address: this.$route.params.address,
+      page: this.page,
+      offset: this.pageSize
+    })
+  },
+  watch: {
+    page: '$fetch',
+    pageSize: '$fetch'
   }
 }
 </script>
