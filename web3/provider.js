@@ -12,6 +12,12 @@ class Web3Provider {
     this.init()
   }
 
+  _NETWORKS = {
+    ETHEREUM,
+    BSC,
+    POLYGON
+  }
+
   _PROVIDERS = [
     {
       value: 'metamask',

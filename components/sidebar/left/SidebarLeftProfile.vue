@@ -13,16 +13,25 @@
         </div>
         <Icon type="dots" />
       </a>
-      <select
+      <SidebarLeftNetworkDropdown
+        v-if="networkDropdownShow"
+        :change-chain="changeChain"
+      />
+      <a
         v-if="$provider.providerName === 'metamask'"
-        v-model="$provider._CHAINS_BY_CHAIN_ID[$store.getters['auth/chainId']]"
-        class="form-control"
-        @change="changeChain"
+        to="#"
+        class="sidebar-profile__link"
+        @click="networkDropdownOpen"
       >
-        <option value="ETHEREUM">ETHEREUM</option>
-        <option value="BSC">BSC</option>
-        <option value="POLYGON">POLYGON</option>
-      </select>
+        <div>
+          <span>
+            <mark>{{
+              $provider._CHAINS_BY_CHAIN_ID[$store.getters['auth/chainId']]
+            }}</mark>
+          </span>
+        </div>
+        <Icon type="dots" />
+      </a>
     </template>
     <template v-else>
       <button class="sidebar-profile__signin-btn" type="button" @click="signin">
@@ -38,11 +47,14 @@ export default {
     Icon: async () => await import('@/components/icons/Icon'),
     SidebarLeftProfileDropdown: async () =>
       await import('./SidebarLeftProfileDropdown.vue'),
+    SidebarLeftNetworkDropdown: async () =>
+      await import('./SidebarLeftNetworkDropdown.vue'),
     Signin: async () => await import('@/components/auth/Signin.vue')
   },
   data() {
     return {
-      dropdownShow: false
+      dropdownShow: false,
+      networkDropdownShow: false
     }
   },
   computed: {
@@ -55,9 +67,11 @@ export default {
   },
   beforeMount() {
     if (process.browser) {
-      const onClickOutside = (e) =>
-        (this.dropdownShow = this.$el.contains(e.target) && this.dropdownShow)
-
+      const onClickOutside = (e) => {
+        this.dropdownShow = this.$el.contains(e.target) && this.dropdownShow
+        this.networkDropdownShow =
+          this.$el.contains(e.target) && this.networkDropdownShow
+      }
       document.addEventListener('click', onClickOutside)
       this.$on('hook:beforeDestroy', () => {
         document.removeEventListener('click', onClickOutside)
@@ -68,11 +82,15 @@ export default {
     dropdownOpen() {
       this.dropdownShow = !this.dropdownShow
     },
+    changeChain(value) {
+      this.networkDropdownOpen()
+      this.$provider.switchChain(value)
+    },
+    networkDropdownOpen() {
+      this.networkDropdownShow = !this.networkDropdownShow
+    },
     signin() {
       this.$refs.signin.init()
-    },
-    changeChain(event) {
-      this.$provider.switchChain(event.target.value)
     }
   }
 }
