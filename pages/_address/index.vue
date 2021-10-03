@@ -11,7 +11,7 @@
 import { paginationMixin } from '@/mixins/pagination'
 export default {
   components: {
-    transaction: () => import('~/components/Transaction.vue')
+    transaction: () => import('~/components/transactions/Transaction.vue')
   },
   mixins: [paginationMixin],
   async fetch() {
@@ -20,10 +20,6 @@ export default {
       page: this.page,
       offset: this.pageSize
     })
-  },
-  watch: {
-    page: '$fetch',
-    pageSize: '$fetch'
   }
 }
 </script>
