@@ -159,12 +159,6 @@
   width: fit-content;
   margin-right: 0.5rem;
 }
-.video-counts .video-count-time {
-}
-.video-counts .video-count-line {
-}
-.video-counts .video-count-fulltime {
-}
 .video-voice {
   display: flex;
   align-items: center;
@@ -441,6 +435,7 @@
   -moz-animation-timing-function: linear;
 
   transition-property: transform;
+  transition-duration: 1.2s;
   animation-name: rotate;
   animation-duration: 1.2s;
   animation-iteration-count: infinite;

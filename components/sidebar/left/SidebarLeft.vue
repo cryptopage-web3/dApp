@@ -4,7 +4,7 @@
       <div class="sidebar-top">
         <router-link to="/" class="logo">
           <div>
-            <Icon type="twitter-logo" />
+            <Icon type="logo" />
           </div>
         </router-link>
         <SidebarLeftMenu v-if="isAuth" />

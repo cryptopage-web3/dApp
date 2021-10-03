@@ -1,7 +1,7 @@
 <template>
   <div class="start-page">
     <div class="start-page__logo">
-      <Icon type="twitter-logo" />
+      <Icon type="logo" />
     </div>
     <div class="start-page__header">
       <div class="start-page__header-title">Welcome to Crypto.Page</div>

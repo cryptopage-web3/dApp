@@ -1,7 +1,7 @@
 <template>
   <div class="left-banner">
     <div class="left-banner__logo">
-      <Icon type="twitter-logo" />
+      <Icon type="logo" />
     </div>
     <div class="left-banner__title">Crypto.Page</div>
     <div class="left-banner__features">

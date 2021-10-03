@@ -8,11 +8,8 @@
 }
 
 .left-banner__logo svg {
-	width: 100px;
-}
-
-.left-banner__logo svg path {
-	fill: #1da1f2;
+  width: 100px;
+  height: 100px;
 }
 
 .left-banner__title {
@@ -114,10 +111,6 @@
 }
 
 .page-load svg {
-	max-width: 20%;
-  max-height: 40%;
-}
-
-.page-load svg path {
-	fill: #1da1f2;
+  width: 250px;
+  height: 250px;
 }

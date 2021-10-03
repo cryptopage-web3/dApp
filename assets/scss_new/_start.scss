@@ -1,5 +1,6 @@
 .start-page {
     padding: 50px 0;
+    color: #000305;
 }
 
 .start-page__logo {
@@ -8,10 +9,7 @@
 
 .start-page__logo svg {
 	width: 200px;
-}
-
-.start-page__logo svg path {
-	fill: #1da1f2;
+    height: 200px;
 }
 
 .start-page__header {
