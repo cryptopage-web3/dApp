@@ -5,22 +5,22 @@
         <div class="row">
           <avatar class="column" :address="transaction.from" />
           <div class="column">
-            <span> {{ $web3.utils.fromWei(transaction.value) }} ETH </span>
+            <span> {{ transaction.value }} ETH </span>
             <span
-              v-if="isContract || isTransfer"
+              v-if="isContract || transaction.transfer"
               style="font-size: 12px; margin-top: 1em"
             >
               {{ token ? token.symbol : 'Unknown' }} contract call
               <span style="color: #768895">
-                {{ isTransfer ? 'transfer' : 'unknown' }}
+                {{ transaction.transfer ? 'transfer' : 'unknown' }}
               </span>
               function
             </span>
           </div>
           <avatar
-            v-if="transfer && transfer.receiver"
+            v-if="transaction.transfer && transaction.transfer.receiver"
             class="column"
-            :address="transfer.receiver"
+            :address="transaction.transfer.receiver"
           />
           <avatar v-else class="column" :address="transaction.to" />
         </div>
@@ -47,9 +47,9 @@ export default {
   }),
   async fetch() {
     const address = this.$web3.utils.toChecksumAddress(this.transaction.to)
-    if (this.isTransfer) {
-      this.transfer = await this.$getERC20TransferByHash(this.transaction.hash)
-    }
+    // if (this.isTransfer) {
+    // this.transfer = await this.$getERC20TransferByHash(this.transaction.hash)
+    // }
     const code = await this.$web3.eth.getCode(this.transaction.to)
     this.isContract = code !== '0x'
     if (this.isContract) {
@@ -60,9 +60,9 @@ export default {
   },
   fetchOnServer: false,
   computed: {
-    isTransfer() {
-      return this.transaction.input.startsWith('0xa9059cbb')
-    }
+    // isTransfer() {
+    // return this.transaction.input.startsWith('0xa9059cbb')
+    // }
   }
 }
 </script>

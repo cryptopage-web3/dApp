@@ -6,15 +6,24 @@
           <avatar class="column" :address="transaction.from" />
           <div class="column">
             <avatar
-              :address="transaction.contractAddress"
+              :address="
+                transaction.transfer
+                  ? transaction.transfer.contractAddress
+                  : transaction.to
+              "
               :src="meta ? meta.logo_url : ''"
               :show-address="false"
             />
-            <span style="margin-top: 0.5em">
-              {{ transaction.value | toDecimals(transaction.tokenDecimal) }}
+            <span v-if="transaction.tokenInfo" style="margin-top: 0.5em">
+              {{
+                transaction.value
+                  | toDecimals(transaction.tokenInfo.tokenDecimal)
+              }}
             </span>
-            <span style="margin-top: 0.5em">
-              {{ transaction.tokenSymbol }} ({{ transaction.tokenName }})
+            <span v-if="transaction.tokenInfo" style="margin-top: 0.5em">
+              {{ transaction.tokenInfo.tokenSymbol }} ({{
+                transaction.tokenInfo.tokenName
+              }})
             </span>
           </div>
           <avatar class="column" :address="transaction.to" />
@@ -39,9 +48,11 @@ export default {
   }),
   mounted() {
     this.$nextTick(() => {
+      /*
       const searchResults = this.$lunr.search(this.transaction.contractAddress)
       const ref = searchResults[0] ? searchResults[0].ref : null
       if (ref) this.meta = this.$lunr.getMeta(ref)
+      */
     })
   }
 }
