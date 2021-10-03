@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="main">
+  <section class="main">
     <PageLoadBG v-if="!isReadyStore" />
     <template v-else>
       <notifications :duration="10000" />
@@ -13,7 +13,7 @@
         </div>
       </div>
     </template>
-  </div>
+  </section>
 </template>
 
 <script>

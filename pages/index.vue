@@ -9,7 +9,11 @@
     </div>
     <div v-if="!isAuth" class="start-page__signin">
       <div class="start-page__signin-control">
-        <button class="start-page__signin-btn" type="button" @click="signin">
+        <button
+          class="start-page__signin-btn btn_blue"
+          type="button"
+          @click="signin"
+        >
           Sign in
         </button>
       </div>
