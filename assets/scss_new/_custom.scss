@@ -1,0 +1,148 @@
+/* ===== sidebar left banner ===== */
+
+.left-banner {
+  border-radius: 5px;
+  border: 1px solid #eff3f4;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.left-banner__logo svg {
+  width: 100px;
+  height: 100px;
+}
+
+.left-banner__title {
+  color: #1da1f2;
+  font-size: 26px;
+  margin-bottom: 30px;
+  padding-bottom: 32px;
+  position: relative;
+}
+
+.left-banner__title::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background-color: #1da1f2;
+  bottom: 0;
+  left: 50%;
+  margin-left: -10px;
+}
+
+.left-banner__features {
+  font-size: 18px;
+  color: #496373;
+  margin-bottom: 30px;
+  padding-bottom: 32px;
+  position: relative;
+}
+
+.left-banner__features::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background-color: #1da1f2;
+  bottom: 0;
+  left: 50%;
+  margin-left: -10px;
+}
+
+.left-banner__feature {
+  margin-bottom: 15px;
+}
+
+.left-banner__feature:last-child {
+  margin-bottom: 0;
+}
+
+.left-banner__login-link {
+  color: #1da1f2;
+  font-size: 22px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.left-banner__login-link:hover {
+  text-decoration: none;
+}
+
+.left-banner__login-desc {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #496373;
+}
+
+/* ===== sidebar profile signin ===== */
+
+.sidebar-profile__signin-btn {
+  border: none;
+  margin: 0;
+  background-color: #1d9bf0;
+  width: 240px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 999px;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-size: 18px;
+}
+
+.sidebar-profile__signin-btn:hover {
+  background-color: #0f8cdf;
+}
+
+/* ===== page load ===== */
+
+.page-load {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.15;
+}
+
+.page-load svg {
+  width: 250px;
+  height: 250px;
+}
+
+/* ===== sidebar left create ===== */
+
+.sidebar-left__create {
+  padding: 40px 0;
+}
+
+/* ===== address profile ===== */
+
+.main-top {
+  margin-bottom: 0;
+}
+
+.profile {
+  padding-bottom: 0;
+}
+
+.profile-form {
+  padding-top: 30px;
+}
+
+.profile-form__container {
+  border-top: 1px solid #4d4d4d;
+}
+
+.transactions {
+  border: none;
+}
+
+.nav-tabs.transactions-list {
+  padding: 10px 0;
+}

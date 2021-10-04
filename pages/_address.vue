@@ -1,19 +1,10 @@
 <template>
-  <div class="home">
-    <profile-other
+  <div class="main-top">
+    <address-profile
       :address="$route.params.address"
       :transactions-count="transactionsCount"
     />
-    <main-center
-      :address="$route.params.address"
-      :transactions-count="transactionsCount"
-    />
-    <main-tabs-links :address="$route.params.address" />
-    <div class="main-tabs-cont">
-      <div class="main-tab show">
-        <nuxt-child :transactions-count="transactionsCount" />
-      </div>
-    </div>
+    <address-transaction :transactions-count="transactionsCount" />
   </div>
 </template>
 <script>
