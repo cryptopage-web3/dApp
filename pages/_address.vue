@@ -1,11 +1,10 @@
 <template>
-  <div>
-    <div class="main-top">
-      <address-profile
-        :address="$route.params.address"
-        :transactions-count="transactionsCount"
-      />
-    </div>
+  <div class="main-top">
+    <address-profile
+      :address="$route.params.address"
+      :transactions-count="transactionsCount"
+    />
+    <address-transaction :transactions-count="transactionsCount" />
   </div>
 </template>
 <script>

@@ -123,6 +123,10 @@
 
 /* ===== address profile ===== */
 
+.main-top {
+  margin-bottom: 0;
+}
+
 .profile {
   padding-bottom: 0;
 }
@@ -137,4 +141,8 @@
 
 .transactions {
   border: none;
+}
+
+.nav-tabs.transactions-list {
+  padding: 10px 0;
 }

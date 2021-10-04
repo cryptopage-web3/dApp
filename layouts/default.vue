@@ -1,19 +1,22 @@
 <template>
-  <section class="main">
+  <div>
     <PageLoadBG v-if="!isReadyStore" />
     <template v-else>
-      <notifications :duration="10000" />
-      <div class="container">
-        <div class="main-wr">
-          <sidebar-left />
-          <div class="main-center">
-            <nuxt />
+      <section class="main">
+        <notifications :duration="10000" />
+        <div class="container">
+          <div class="main-wr">
+            <sidebar-left />
+            <div class="main-center">
+              <nuxt />
+            </div>
+            <sidebar-right />
           </div>
-          <sidebar-right />
         </div>
-      </div>
+      </section>
+      <footer-section />
     </template>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -22,7 +25,8 @@ export default {
     'sidebar-left': async () =>
       await import('@/components/sidebar/left/SidebarLeft'),
     'sidebar-right': async () =>
-      await import('@/components/sidebar/right/SidebarRight')
+      await import('@/components/sidebar/right/SidebarRight'),
+    'footer-section': async () => await import('@/components/footer/Footer')
   },
   computed: {
     isReadyStore() {
