@@ -1,4 +1,5 @@
 import docs from './constants/coinmarketcap.json'
+const webpack = require("webpack");
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -9,6 +10,9 @@ export default {
     title: 'crypto-twitter',
     htmlAttrs: {
       lang: 'en'
+    },
+    bodyAttrs: {
+      class: 'white',
     },
     meta: [
       { charset: 'utf-8' },
@@ -22,7 +26,7 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@fortawesome/fontawesome-svg-core/styles.css',
-    '@/assets/scss/main.scss'
+    '@/assets/scss_new/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -40,6 +44,7 @@ export default {
     '~/plugins/notifications.client',
     '~/plugins/fontawesome.js',
     '~/plugins/type-di.ts',
+    '~/plugins/bootstrap.js',
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
@@ -89,6 +94,50 @@ export default {
     }]
   ],
 
+  workbox: {
+     runtimeCaching: [
+       {
+         urlPattern: 'https://*.etherscan.io/*',
+         strategyOptions: {
+           cacheName: 'etherscan-cache',
+         },
+         strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+       },
+       {
+         urlPattern: 'https://*.ethplorer.io/*',
+         strategyOptions: {
+           cacheName: 'ethplorer-cache',
+         },
+         strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+       },
+       {
+         urlPattern: 'https://ipfs.io/ipfs/*',
+         strategyOptions: {
+           cacheName: 'ipfs-cache',
+         },
+         strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+       }
+     ]
+  },
+
   hooks: {
     ready(nuxt) {
       let documentIndex = 1
@@ -110,10 +159,19 @@ export default {
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
+    vendor: ["jquery", "bootstrap"],
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: 'jquery',
+        jquery: 'jquery',
+        'window.jQuery': 'jquery'
+      })
+    ],
     extend (config, { isDev, isClient }) {
       config.node = {
         fs: 'empty'
       }
-    }
+    }    
   }
 }

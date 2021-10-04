@@ -1,6 +1,6 @@
 <template>
   <div class="page-load">
-    <Icon type="twitter-logo" />
+    <Icon type="logo" />
   </div>
 </template>
 <script>
