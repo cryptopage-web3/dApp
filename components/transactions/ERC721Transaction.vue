@@ -1,21 +1,21 @@
 <template>
-  <div class="post">
-    <div class="post-cont">
-      <div v-if="transaction.nft" class="post-right">
-        <post-account :address="transaction.nft.owner" />
-        <post-title :title="transaction.nft.title" />
-        <post-title :title="transaction.nft.description" />
-        <post-thumbs :src="transaction.nft.image" />
-      </div>
-    </div>
+  <div class="post post-image">
+    <top :address="transaction.nft.owner" :date="transaction.timeStamp" />
+    <a
+      href="#"
+      :style="{ backgroundImage: `url(${transaction.nft.image})` }"
+      class="post-image__link"
+    />
+    <text-block :text="transaction.nft.description" />
+    <bottom />
   </div>
 </template>
 <script>
 export default {
   components: {
-    postAccount: async () => await import('@/components/post/PostAccount'),
-    postTitle: async () => await import('@/components/post/PostTitle'),
-    postThumbs: async () => await import('@/components/post/PostThumbs')
+    top: async () => await import('@/components/post/PostTop'),
+    textBlock: async () => await import('@/components/post/PostTextBlock'),
+    bottom: async () => await import('@/components/post/PostBottom')
   },
   props: {
     transaction: {
