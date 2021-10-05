@@ -5,7 +5,6 @@
         <img
           class="menu-mobile-avatar"
           src="post-logo_img6.jpg"
-          @click="mobileOpen"
         />
         <router-link
           to="/"
@@ -22,26 +21,9 @@
   </div>
 </template>
 <script>
-import MobileMenu from '@/components/modals/globals/MobileMenu.vue'
 import { authMixin } from '@/mixins/auth'
 
 export default {
   mixins: [authMixin],
-  methods: {
-    mobileOpen() {
-      this.$modal.show(
-        MobileMenu,
-        { classes: '' },
-        {
-          width: 280,
-          height: 'auto',
-          adaptive: true,
-          shiftY: 0,
-          shiftX: 0,
-          name: 'MobileMenu'
-        }
-      )
-    }
-  }
 }
 </script>

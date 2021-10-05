@@ -4,7 +4,6 @@
       <img
         class="menu-mobile-avatar"
         src="post-logo_img6.jpg"
-        @click="mobileOpen"
       />
       <jazzicon
         :seed="10211"
@@ -18,18 +17,6 @@
         :address="receiver.address"
         style="margin: 0 0.5em"
       />
-      <!--router-link
-          to="/"
-          exact-active-class=""
-          active-class=""
-          class="profile-other-name"
-        >
-          <div class="profile-other-name__top">
-            <span>
-              Messages <b>{{ messages.length }}</b>
-            </span>
-          </div>
-        </router-link-->
     </div>
     <a
       href="#"
@@ -43,7 +30,6 @@
 </template>
 <script>
 import modalKeys from '@/components/modals/messages/Keys.vue'
-import mobileMenu from '@/components/modals/globals/MobileMenu.vue'
 export default {
   props: {
     sender: {
@@ -56,20 +42,6 @@ export default {
     }
   },
   methods: {
-    mobileOpen() {
-      this.$modal.show(
-        mobileMenu,
-        { classes: '' },
-        {
-          width: 280,
-          height: 'auto',
-          adaptive: true,
-          shiftY: 0,
-          shiftX: 0,
-          name: 'mobileMenu'
-        }
-      )
-    },
     modalKeys() {
       this.$modal.show(
         modalKeys,
