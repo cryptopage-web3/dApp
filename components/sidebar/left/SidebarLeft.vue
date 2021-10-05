@@ -20,10 +20,23 @@ export default {
     profile: async () =>
       await import('@/components/sidebar/left/SidebarLeftProfile')
   },
+  data: () => ({
+    stickySidebar: null
+  }),
   computed: {
     isAuth() {
       return this.$store.getters['auth/isAuth']
     }
+  },
+  mounted() {
+    this.stickySidebar = new StickySidebar('#left-sidebar', {
+      topSpacing: 20,
+      bottomSpacing: 20,
+      containerSelector: '.main-left',
+      innerWrapperSelector: '#left-sidebar',
+      resizeSensor: true,
+      minWidth: 1199.5
+    })
   }
 }
 </script>
