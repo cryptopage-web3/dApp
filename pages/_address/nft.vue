@@ -1,6 +1,12 @@
 <template>
   <div class="transactions-body">
-    <div class="post post-image">
+    <transaction
+      v-for="transaction in $store.getters['transactions/ERC721Transactions']"
+      :key="transaction.hash"
+      :transaction="transaction"
+    />
+    <!-- Post image type -->
+    <!--div class="post post-image">
       <div class="white-post-top">
         <div class="post-date">
           <a href="#" class="post-date__link">
@@ -54,8 +60,9 @@
           </form>
         </div>
       </div>
-    </div>
-    <div class="post post-video-wr">
+    </div-->
+    <!-- Post video type -->
+    <!--div class="post post-video-wr">
       <div class="white-post-top">
         <div class="post-date">
           <a href="#" class="post-date__link">
@@ -293,8 +300,9 @@
           </form>
         </div>
       </div>
-    </div>
-    <div class="post post-audio">
+    </div-->
+    <!-- Post audio type-->
+    <!--div class="post post-audio">
       <div class="white-post-top">
         <div class="post-date">
           <a href="#" class="post-date__link">
@@ -347,33 +355,22 @@
           </div>
         </div>
       </div>
-    </div>
+    </div-->
   </div>
-  <!-- <div class="transactions">
-    <transactions
-      :address="$route.params.address"
-      type="nft"
-      :total="transactionsCount"
-    >
-      <transaction
-        slot="transaction"
-        slot-scope="{ transaction }"
-        :transaction="transaction"
-      />
-    </transactions>
-  </div> -->
 </template>
 <script>
+import { paginationMixin } from '@/mixins/pagination'
 export default {
   components: {
-    // transaction: () => import('~/components/ERC721Transaction.vue'),
-    // transactions: () => import('~/components/AddressTransactionList.vue')
+    transaction: () => import('~/components/transactions/ERC721Transaction.vue')
   },
-  props: {
-    transactionsCount: {
-      type: Number,
-      default: () => 0
-    }
+  mixins: [paginationMixin],
+  async fetch() {
+    await this.$store.dispatch('transactions/getERC721Transactions', {
+      address: this.$route.params.address,
+      page: this.page,
+      offset: this.pageSize
+    })
   }
 }
 </script>

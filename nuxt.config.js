@@ -58,18 +58,15 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/pwa',
-    ['@nuxt/typescript-build', { 'typeCheck': true }]
-  ],
-
-  typescript: {
-    typeCheck: {
-      eslint: {
-        files: './**/*.{ts,js,vue}'
+    ['@nuxtjs/eslint-module'],
+    ['@nuxtjs/pwa'],
+    ['@nuxt/typescript-build', {
+      'typeCheck': true,
+      'eslint': {
+        'files': './**/*.{ts,js,vue}'
       }
-    }
-  },
+    }]
+  ],
 
   eslint: {
     fix: true
@@ -77,33 +74,68 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    ['@nuxtjs/axios'],
-    [
-      'nuxt-vuex-localstorage',
-      {
-        localStorage: ['auth']
-      }
-    ],
-    {
-      src: '@nuxtjs/lunr-module',
-      options: {
-        includeComponent: false,
-        globalComponent: false,
-        css: false,
-        ref: 'id',
-        fields: ['name', 'slug', 'symbol', 'address', 'logo_url']
-      }
-    }
+    ['@nuxtjs/axios', {
+      debug: process.env.NODE_ENV === 'development',
+      https: true,
+      proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
+      progress: true,
+      proxy: false,
+      retry: true
+    }],
+    ['nuxt-vuex-localstorage', {
+      localStorage: ['auth']
+    }],
+    ['@nuxtjs/lunr-module', {
+      includeComponent: false,
+      globalComponent: false,
+      css: false,
+      ref: 'id',
+      fields: ['name', 'slug', 'symbol', 'address', 'logo_url']
+    }]
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    debug: process.env.NODE_ENV === 'development',
-    https: true,
-    proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
-    progress: true,
-    proxy: false,
-    retry: true,
+  workbox: {
+     runtimeCaching: [
+       {
+         urlPattern: 'https://*.etherscan.io/*',
+         strategyOptions: {
+           cacheName: 'etherscan-cache',
+         },
+         strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+       },
+       {
+         urlPattern: 'https://*.ethplorer.io/*',
+         strategyOptions: {
+           cacheName: 'ethplorer-cache',
+         },
+         strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+       },
+       {
+         urlPattern: 'https://ipfs.io/ipfs/*',
+         strategyOptions: {
+           cacheName: 'ipfs-cache',
+         },
+         strategyPlugins: [{
+            use: 'Expiration',
+            config: {
+              maxEntries: 100,
+              maxAgeSeconds: 300
+            }
+          }]
+       }
+     ]
   },
 
   hooks: {
@@ -136,5 +168,10 @@ export default {
         'window.jQuery': 'jquery'
       })
     ],
+    extend (config, { isDev, isClient }) {
+      config.node = {
+        fs: 'empty'
+      }
+    }    
   }
 }

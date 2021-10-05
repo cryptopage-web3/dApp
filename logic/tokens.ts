@@ -12,6 +12,9 @@ export default {
   // NFT service:
   NFT_SERVICE: new Token('nft-service'),
 
+  // Transaction service:
+  TRANSACTION_SERVICE: new Token('transaction-service'),
+
   // Axios instance:
   AXIOS: new Token('axios'),
 

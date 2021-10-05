@@ -55,9 +55,6 @@
       </a>
     </div>
   </div>
-  <!-- <div class="posts">
-    <div class="under-maintenance-text">No transaction was found.</div>
-  </div> -->
 </template>
 <script>
 export default {}
