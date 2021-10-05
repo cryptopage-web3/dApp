@@ -45,6 +45,7 @@ export default {
     '~/plugins/fontawesome.js',
     '~/plugins/type-di.ts',
     '~/plugins/bootstrap.js',
+    '~/plugins/sticky-sidebar.js',
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading

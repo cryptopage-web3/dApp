@@ -50,19 +50,7 @@
         </form>
       </div>
       <div class="main-right-item">
-        <div class="banner">
-          <a href="#" class="banner__close">
-            <img src="@/assets/img/banner__close_img.png" alt="" />
-          </a>
-          <div class="banner__text">
-            Создай NFT <br />
-            и участвуй в розыгрыше <br />
-            <span>10000 page</span>
-          </div>
-          <a href="#" class="btn btn_white btn_banner">
-            <span> Создать NFT </span>
-          </a>
-        </div>
+        <banner />
         <div class="balances">
           <a href="#" class="balance">
             <div class="balance-top">
@@ -175,3 +163,23 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  components: {
+    banner: async () =>
+      await import('@/components/sidebar/right/SidebarRightBanner')
+  },
+  data: () => ({
+    stickySidebar: null
+  }),
+  mounted() {
+    this.stickySidebar = new StickySidebar('#right-sidebar', {
+      topSpacing: 20,
+      bottomSpacing: 20,
+      containerSelector: '.main-right',
+      innerWrapperSelector: '#right-sidebar',
+      resizeSensor: true
+    })
+  }
+}
+</script>
