@@ -51,8 +51,13 @@
 }
 
 .start-page__auth {
+    margin-left: auto;
+    width: 240px;
+}
+
+.start-page__auth-container {
     position: fixed;
     z-index: 5;
-    bottom: 15px;
+    top: 15px;
     width: 240px;
 }

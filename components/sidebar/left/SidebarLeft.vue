@@ -9,17 +9,11 @@
         <img src="@/assets/img/nav_bg2.svg" />
       </a>
       <SidebarLeftMenu v-if="isAuth" />
-      <SidebarLeftBanner v-else />
     </header>
-    <profile />
   </div>
 </template>
 <script>
 export default {
-  components: {
-    profile: async () =>
-      await import('@/components/sidebar/left/SidebarLeftProfile')
-  },
   data: () => ({
     stickySidebar: null
   }),
