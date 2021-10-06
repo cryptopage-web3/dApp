@@ -3,7 +3,7 @@
     <ul id="myTab" class="nav nav-tabs transactions-list" role="tablist">
       <li v-for="(tab, index) in tabs" :key="index" class="nav-item">
         <router-link
-          :to="`/${address}/${tab.link}`"
+          :to="`/${$store.getters['transactions/address']}/${tab.link}`"
           exact-active-class="active"
           class="nav-link"
           exact
@@ -16,12 +16,6 @@
 </template>
 <script>
 export default {
-  props: {
-    address: {
-      type: String,
-      required: true
-    }
-  },
   data: () => ({
     tabs: [
       {
