@@ -1,14 +1,14 @@
+import { AbiItem } from 'web3-utils'
 import { web3 } from '~/plugins/web3'
+import { ERC20ABI } from '~/constants/abi-samples'
 import {
   TransactionType,
-  TransferType,
-  TokenInfoType
-} from '~/logic/transactions/types'
-import {
   EtherscanTransactionType,
   EtherscanERC20TransactionType,
   EtherscanERC721TransactionType
-} from '~/logic/transactions/models'
+} from '~/logic/transactions/types'
+import { TokenInfoType } from '~/logic/address/types'
+import { SignatureType, signatures } from '~/constants/functionSignatures'
 
 export default class TransactionParser {
   private parseTransactionBody(
@@ -31,8 +31,7 @@ export default class TransactionParser {
       gasPrice: transaction.gasPrice,
       gasUsed: transaction.gasUsed,
       timeStamp: transaction.timeStamp,
-      to: transaction.to,
-      nft: undefined
+      to: transaction.to
     }
   }
 
@@ -40,28 +39,66 @@ export default class TransactionParser {
     transaction: EtherscanERC20TransactionType | EtherscanERC721TransactionType
   ): TokenInfoType {
     return {
-      tokenDecimal: transaction.tokenDecimal,
-      tokenName: transaction.tokenName,
-      tokenSymbol: transaction.tokenSymbol
+      id: undefined,
+      totalSupply: undefined,
+      contractAddress: transaction.contractAddress,
+      decimals: transaction.tokenDecimal,
+      name: transaction.tokenName,
+      symbol: transaction.tokenSymbol
     }
   }
 
-  private parseTransfer(
-    tx: EtherscanTransactionType
-  ): TransferType | undefined {
-    if (tx.input.length === 138 || tx.input.slice(2, 10) === 'a9059cbb') {
-      return {
-        receiver: web3.utils.toChecksumAddress(
-          '0x' + tx.input.slice(34, 74).toString()
-        ),
-        amount: web3.utils
-          .toBN('0x' + tx.input.slice(74).toString())
-          .toString(),
-        contractAddress: web3.utils.toChecksumAddress(tx.to),
-        sender: web3.utils.toChecksumAddress(tx.from)
+  private parseInput(tx: EtherscanTransactionType) {
+    try {
+      const inputSignature = tx.input.slice(0, 10)
+      const signatureObject = signatures.find(
+        (item: SignatureType) => item.signature === inputSignature
+      ) || { name: '' }
+      const abiItem = ERC20ABI.find(
+        (item: AbiItem) => item.name === signatureObject.name
+      )
+      const inputs =
+        abiItem && Array.isArray(abiItem.inputs) ? abiItem.inputs : []
+      if (inputs) {
+        const types = inputs.map((input) => String(input.type))
+        const decoded = web3.eth.abi.decodeParameters(
+          types,
+          '0x' + tx.input.slice(10)
+        )
+        const params = inputs.map((input, index: number) => {
+          const param = Object.assign({ value: '' }, input)
+          param.value = decoded[index]
+          return param
+        })
+        const name = signatureObject ? signatureObject.name : ''
+        return { name, params }
       }
+      return undefined
+    } catch {
+      return undefined
     }
-    return undefined
+  }
+
+  private parseSender(tx: TransactionType): string {
+    return web3.utils.toChecksumAddress(tx.from)
+  }
+
+  private parseReceiver(tx: TransactionType): string {
+    const input = tx.decodedInput
+    let receiver = tx.to
+    if (input && input.name === 'transfer') {
+      receiver = input.params[0].value
+    }
+    return web3.utils.toChecksumAddress(receiver)
+  }
+
+  private parseAmount(tx: TransactionType): string {
+    const input = tx.decodedInput
+    let amount = tx.value
+    if (input && input.name === 'transfer') {
+      amount = web3.utils.toBN(input.params[1].value).toString()
+    }
+    return amount
   }
 
   public parse(
@@ -75,8 +112,11 @@ export default class TransactionParser {
       transactionBody.tokenInfo = this.parseTokenInfo(transaction)
     }
     if (transaction.input.startsWith('0x')) {
-      transactionBody.transfer = this.parseTransfer(transaction)
+      transactionBody.decodedInput = this.parseInput(transaction)
     }
+    transactionBody.sender = this.parseSender(transactionBody)
+    transactionBody.receiver = this.parseReceiver(transactionBody)
+    transactionBody.amount = this.parseAmount(transactionBody)
     return transactionBody
   }
 }

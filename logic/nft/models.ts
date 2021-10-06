@@ -52,8 +52,3 @@ export const ParsedNFT = ts.type({
   description: ts.string,
   image: ts.string
 })
-
-export type AttributeType = ts.TypeOf<typeof Attribute>
-export type PropertyType = ts.TypeOf<typeof Property>
-export type NFTPayloadType = ts.TypeOf<typeof NFTPayload>
-export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>

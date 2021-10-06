@@ -1,10 +1,10 @@
-import { NFTType } from '~/logic/nft/types'
-import { TransactionType } from '~/logic/transactions/types'
 import {
+  TransactionType,
+  ParamsAdaptarType,
   EtherscanTransactionType,
   EtherscanERC20TransactionType,
   EtherscanERC721TransactionType
-} from '~/logic/transactions/models'
+} from '~/logic/transactions/types'
 import TransactionParser from '~/logic/transactions/parser'
 
 const TransactionAdapter = (
@@ -14,10 +14,15 @@ const TransactionAdapter = (
     | EtherscanERC721TransactionType
 ) => {
   return {
-    request: (nft?: NFTType): TransactionType => {
+    request: ({ nft, tokenInfo }: ParamsAdaptarType): TransactionType => {
       const parser = new TransactionParser()
       const data = parser.parse(transaction)
-      data.nft = nft
+      if (nft) {
+        data.nft = nft
+      }
+      if (tokenInfo) {
+        data.tokenInfo = tokenInfo
+      }
       return data
     }
   }

@@ -15,6 +15,11 @@ export default {
   // Transaction service:
   TRANSACTION_SERVICE: new Token('transaction-service'),
 
+  // Address services:
+  ADDRESS_API_SERVICE: new Token('address-api-service'),
+  ADDRESS_IPFS_SERVICE: new Token('address-ipfs-service'),
+  ADDRESS_WEB3_SERVICE: new Token('address-web3-service'),
+
   // Axios instance:
   AXIOS: new Token('axios'),
 

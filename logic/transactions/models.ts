@@ -11,12 +11,7 @@ const BaseStrictTransaction = ts.type({
   hash: ts.string,
   input: ts.string,
   nonce: ts.string,
-  // maxFeePerGas: ts.string,
-  // maxPriorityFeePerGas: ts.string,
   to: ts.string
-  // v: ts.string,
-  // r: ts.string,
-  // s: ts.string
 })
 
 const BaseTransaction = ts.intersection([
@@ -36,7 +31,6 @@ const BaseEtherscanTransaction = ts.type({
   timeStamp: ts.string,
   to: ts.string,
   transactionIndex: ts.string
-  // txreceipt_status: ts.string
 })
 
 /* Transaction types */
@@ -84,7 +78,7 @@ export const EtherscanERC721Transaction = ts.intersection([
 
 /* Responses */
 
-export const EtherscanStringResponse = ts.type({
+export const EtherscanABIResponse = ts.type({
   status: ts.string,
   message: ts.string,
   result: ts.string
@@ -113,30 +107,3 @@ export const EtherscanERC721TransactionsResponse = ts.type({
   message: ts.string,
   result: ts.array(EtherscanERC721Transaction)
 })
-
-/* Types */
-export type EtherscanTransactionType = ts.TypeOf<typeof EtherscanTransaction>
-export type EtherscanInternalTransactionType = ts.TypeOf<
-  typeof EtherscanInternalTransaction
->
-export type EtherscanERC20TransactionType = ts.TypeOf<
-  typeof EtherscanERC20Transaction
->
-export type EtherscanERC721TransactionType = ts.TypeOf<
-  typeof EtherscanERC721Transaction
->
-export type EtherscanTransactionsResponseType = ts.TypeOf<
-  typeof EtherscanTransactionsResponse
->
-export type EtherscanInternalTransactionsResponseType = ts.TypeOf<
-  typeof EtherscanInternalTransactionsResponse
->
-export type EtherscanERC20TransactionsResponseType = ts.TypeOf<
-  typeof EtherscanERC20TransactionsResponse
->
-export type EtherscanERC721TransactionsResponseType = ts.TypeOf<
-  typeof EtherscanERC721TransactionsResponse
->
-export type EtherscanStringResponseType = ts.TypeOf<
-  typeof EtherscanStringResponse
->
