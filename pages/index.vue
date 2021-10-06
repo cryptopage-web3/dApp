@@ -1,7 +1,7 @@
 <template>
   <div class="start-page">
     <div class="start-page__logo">
-      <Icon type="logo" />
+      <icon type="logo" />
     </div>
     <div class="start-page__header">
       <div class="start-page__header-title">Welcome to Crypto.Page</div>
@@ -20,18 +20,20 @@
       <div class="start-page__signin-title">Join Crypto.Page now!</div>
     </div>
     <div v-if="isAuth" class="start-page__auth">
-      <Profile />
+      <div class="start-page__auth-container">
+        <connect />
+      </div>
     </div>
-    <Signin ref="signin" />
+    <signin ref="signin" />
   </div>
 </template>
 <script>
 export default {
   components: {
-    Profile: async () =>
-      await import('@/components/sidebar/left/SidebarLeftProfile'),
-    Signin: async () => await import('@/components/auth/Signin.vue'),
-    Icon: async () => await import('@/components/icons/Icon')
+    connect: async () =>
+      await import('@/components/sidebar/right/SidebarRightConnect.vue'),
+    signin: async () => await import('@/components/auth/Signin.vue'),
+    icon: async () => await import('@/components/icons/Icon')
   },
   layout: 'empty',
   fetchOnServer: false,

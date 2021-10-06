@@ -5,11 +5,16 @@
       <notifications width="350" />
       <nuxt />
     </template>
+    <connect-modal />
   </div>
 </template>
 
 <script>
 export default {
+  components: {
+    'connect-modal': async () =>
+      await import('@/components/sidebar/right/SidebarRightConnectModal.vue')
+  },
   computed: {
     isReadyStore() {
       return this.$store.state.auth.status
