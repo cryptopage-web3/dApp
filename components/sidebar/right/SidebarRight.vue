@@ -63,80 +63,7 @@
             <span> Создать NFT </span>
           </a>
         </div>
-        <div class="balances">
-          <a href="#" class="balance">
-            <div class="balance-top">
-              <div class="balance__thumb">
-                <img src="@/assets/img/balance__thumb_img1.png" alt="" />
-              </div>
-              <div class="balance-right">
-                <div class="balance__countusdt">5.321$</div>
-                <div class="balance__procent">
-                  9.78%
-                  <img src="@/assets/img/balance__procent_img1.png" alt="" />
-                </div>
-              </div>
-            </div>
-            <div class="balance-bottom">
-              Balance: 11,2$<br />
-              <span>(0.00318 eth)</span>
-            </div>
-          </a>
-          <a href="#" class="balance">
-            <div class="balance-top">
-              <div class="balance__thumb">
-                <img src="@/assets/img/balance__thumb_img2.png" alt="" />
-              </div>
-              <div class="balance-right">
-                <div class="balance__countusdt">5.321$</div>
-                <div class="balance__procent">
-                  9.78%
-                  <img src="@/assets/img/balance__procent_img2.png" alt="" />
-                </div>
-              </div>
-            </div>
-            <div class="balance-bottom">
-              Balance: 182,2$<br />
-              <span>(0.00318 eth)</span>
-            </div>
-          </a>
-          <a href="#" class="balance">
-            <div class="balance-top">
-              <div class="balance__thumb">
-                <img src="@/assets/img/balance__thumb_img3.png" alt="" />
-              </div>
-              <div class="balance-right">
-                <div class="balance__countusdt">8.321$</div>
-                <div class="balance__procent">
-                  2.78%
-                  <img src="@/assets/img/balance__procent_img1.png" alt="" />
-                </div>
-              </div>
-            </div>
-            <div class="balance-bottom">
-              Balance: 11,2$<br />
-              <span>(0.00318 eth)</span>
-            </div>
-          </a>
-          <a href="#" class="balance">
-            <div class="balance-top">
-              <div class="balance__thumb">
-                <img src="@/assets/img/balance__thumb_img4.png" alt="" />
-              </div>
-              <div class="balance-right">
-                <div class="balance__countusdt">81.21$</div>
-                <div class="balance__procent">
-                  8.64%
-                  <img src="@/assets/img/balance__procent_img2.png" alt="" />
-                </div>
-              </div>
-            </div>
-            <div class="balance-bottom">
-              Balance: 182,2$<br />
-              <span>(0.00318 eth)</span>
-            </div>
-          </a>
-        </div>
+        <balance />
       </div>
       <div class="main-right-item">
         <div class="connect-wallet-wr">
@@ -175,3 +102,15 @@
     </div>
   </div>
 </template>
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+
+@Component({
+  components: {
+    balance: async () =>
+      await import('@/components/sidebar/right/SidebarRightBalance.vue')
+  }
+})
+export default class SidebarRight extends Vue {}
+</script>
