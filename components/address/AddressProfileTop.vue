@@ -2,13 +2,27 @@
   <div class="profile-top">
     <div class="profile-left">
       <div class="profile__thumb">
-        <jazzicon :seed="10211" :diameter="90" :address="address" />
+        <img
+          v-if="$store.getters['transactions/image']"
+          :src="$store.getters['transactions/image']"
+          width="90"
+          height="90"
+        />
+        <jazzicon
+          v-else
+          :seed="10211"
+          :diameter="90"
+          :address="$store.getters['transactions/address']"
+        />
       </div>
       <div class="profile-info">
-        <div class="profile-info__title">{{ address | shortAddress }}</div>
+        <div class="profile-info__title">
+          {{ $store.getters['transactions/address'] | shortAddress }}
+        </div>
         <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
         <div class="profile-info__text">
-          {{ transactionsCount | humanizeCount }} transactions<br />
+          {{ $store.getters['transactions/count'] | humanizeCount }}
+          transactions<br />
           0 inputs / 0 outputs
         </div>
       </div>
@@ -20,17 +34,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    address: {
-      type: String,
-      required: true
-    },
-    transactionsCount: {
-      type: Number,
-      required: true
-    }
-  }
-}
-</script>
