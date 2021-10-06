@@ -1,7 +1,7 @@
 <template>
   <div v-if="$store.getters['auth/isAuth']">
     <draggable
-      v-model="tokens"
+      v-model="$store.getters['auth/tokens']"
       class="main-mems"
       group="mems"
       @start="drag = true"
@@ -21,18 +21,6 @@ export default {
     item: async () =>
       await import('@/components/sidebar/right/SidebarRightMem'),
     draggable: async () => await import('vuedraggable')
-  },
-  data: () => ({
-    tokens: []
-  }),
-  async mounted() {
-    await this.$nextTick(async () => {
-      await this.$store.dispatch('wallet/get')
-      const tokens = this.$store.getters['wallet/tokens']
-      this.tokens = tokens
-        .slice(0, 6)
-        .sort((a, b) => b.normalBalance - a.normalBalance)
-    })
   }
 }
 </script>
