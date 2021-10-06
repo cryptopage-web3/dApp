@@ -16,6 +16,7 @@
       </section>
       <footer-section />
     </template>
+    <connect-modal />
   </div>
 </template>
 
@@ -26,7 +27,9 @@ export default {
       await import('@/components/sidebar/left/SidebarLeft'),
     'sidebar-right': async () =>
       await import('@/components/sidebar/right/SidebarRight'),
-    'footer-section': async () => await import('@/components/footer/Footer')
+    'footer-section': async () => await import('@/components/footer/Footer'),
+    'connect-modal': async () =>
+      await import('@/components/sidebar/right/SidebarRightConnectModal.vue')
   },
   computed: {
     isReadyStore() {
