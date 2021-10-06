@@ -4,7 +4,7 @@
       <a href="#" class="post-date__link">
         <img src="@/assets/img/post-date__link_img.png" alt="" />
       </a>
-      <div class="post-date__text">{{ date | humanizeDate }}</div>
+      <div class="post-date__text">{{ date | normalizeDate }}</div>
     </div>
     <nuxt-link :to="`/${address}`">
       <div class="white-post-id">Eth: {{ address | shortAddress(5, 7) }}</div>
