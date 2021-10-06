@@ -9,7 +9,8 @@ export const shortAddress = (
   return start + delimiter + end
 }
 
-export const toDecimals = (value, decimal) => value / 10 ** decimal
+export const toDecimals = (value, decimals = 18) =>
+  (Number(value) / 10 ** decimals).toFixed(2)
 
 export const tokenURItoURI = (uri) => {
   if (uri.startsWith('ipfs://ipfs/')) {
