@@ -2,10 +2,7 @@
   <div class="home">
     <div id="profile-other" class="profile-other">
       <div class="profile-other-left">
-        <img
-          class="menu-mobile-avatar"
-          src="post-logo_img6.jpg"
-        />
+        <img class="menu-mobile-avatar" src="post-logo_img6.jpg" />
         <router-link
           to="/"
           exact-active-class=""
@@ -24,6 +21,6 @@
 import { authMixin } from '@/mixins/auth'
 
 export default {
-  mixins: [authMixin],
+  mixins: [authMixin]
 }
 </script>
