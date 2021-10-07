@@ -105,8 +105,8 @@ export default {
          strategyPlugins: [{
             use: 'Expiration',
             config: {
-              maxEntries: 100,
-              maxAgeSeconds: 300
+              maxEntries: 10,
+              maxAgeSeconds: 30
             }
           }]
        },
@@ -118,8 +118,8 @@ export default {
          strategyPlugins: [{
             use: 'Expiration',
             config: {
-              maxEntries: 100,
-              maxAgeSeconds: 300
+              maxEntries: 10,
+              maxAgeSeconds: 30
             }
           }]
        },
@@ -131,8 +131,8 @@ export default {
          strategyPlugins: [{
             use: 'Expiration',
             config: {
-              maxEntries: 100,
-              maxAgeSeconds: 300
+              maxEntries: 10,
+              maxAgeSeconds: 30
             }
           }]
        }

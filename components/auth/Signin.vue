@@ -48,7 +48,9 @@ export default {
             type: 'success',
             title: 'Successfully logged in'
           })
-          return this.$store.dispatch('auth/signin', address)
+          this.$store.dispatch('auth/signin', address)
+          await this.$store.dispatch('auth/updateAddressInfo')
+          return
         }
 
         this.$notify({

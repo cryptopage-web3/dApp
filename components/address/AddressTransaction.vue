@@ -1,20 +1,10 @@
 <template>
   <div class="transactions">
-    <address-transaction-tabs :address="$route.params.address" />
+    <address-transaction-tabs />
     <div class="tab-content">
       <div class="tab-pane fade show active">
-        <nuxt-child :transactions-count="transactionsCount" />
+        <nuxt-child />
       </div>
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    transactionsCount: {
-      type: Number,
-      required: true
-    }
-  }
-}
-</script>

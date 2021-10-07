@@ -10,6 +10,23 @@ export const humanizeCount = (count) => {
   }
 }
 
+export const normalizeDate = (timestamp) => {
+  const date = new Date(timestamp * 1000)
+  let minute = date.getMinutes()
+  let hour = date.getHours()
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+
+  minute = (minute < 10 ? '0' : '') + minute
+  hour = (hour < 10 ? '0' : '') + hour
+  day = (day < 10 ? '0' : '') + day
+  month = (month < 10 ? '0' : '') + month
+  year = (year < 10 ? '0' : '') + year
+
+  return `${hour}:${minute} / ${day}.${month}.${year}`
+}
+
 export const humanizeDate = (date) => {
   const MINUTE = 60
   const HOUR = MINUTE * 60
@@ -18,7 +35,7 @@ export const humanizeDate = (date) => {
   const MONTH = WEEK * 4
   const YEAR = DAY * 365
 
-  const secondsAgo = Math.round((+new Date() - new Date(date)) / 1000)
+  const secondsAgo = Math.round((new Date() - new Date(date * 1000)) / 1000)
 
   if (secondsAgo < MINUTE) {
     return secondsAgo + ' s'

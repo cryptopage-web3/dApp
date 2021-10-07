@@ -1,5 +1,6 @@
 import { NFTType } from '~/logic/nft/types'
 import { TransactionType } from '~/logic/transactions/types'
+import { EthplorerGetAddressInfoResponseType } from '~/logic/address/types'
 /**
  * We use this state type to enforce the same structure with `vuex-simple`.
  *
@@ -18,6 +19,7 @@ export interface StateType {
     address: string,
     chain: string
     loggedIn: boolean,
+    addressInfo: EthplorerGetAddressInfoResponseType
   },
   transactions: TransactionType[]
 }

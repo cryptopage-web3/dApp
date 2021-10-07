@@ -42,14 +42,6 @@ export default {
       type: Number,
       required: true
     }
-  },
-  data: () => ({
-    meta: null
-  }),
-  mounted() {
-    this.$nextTick(() => {
-      this.meta = this.$lunr.getFirstMeta(this.address)
-    })
   }
 }
 </script>

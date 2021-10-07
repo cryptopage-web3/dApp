@@ -4,12 +4,14 @@ import { Service, Container } from 'vue-typedi'
 import Web3 from 'web3'
 import { web3 } from '~/plugins/web3'
 import { ERC721ABI } from '~/constants/abi-samples'
-import { NFTPayload, NFTPayloadType, ParsedNFTType } from '~/logic/nft/models'
+import { NFTPayload } from '~/logic/nft/models'
 import {
   NFTType,
   NFTAdapterType,
   FetchOneType,
-  FetchManyType
+  FetchManyType,
+  NFTPayloadType,
+  ParsedNFTType
 } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
 import api from '~/services/api'

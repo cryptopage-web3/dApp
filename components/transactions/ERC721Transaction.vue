@@ -10,18 +10,19 @@
     <bottom />
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { Component, Prop } from 'nuxt-property-decorator'
+import Vue from 'vue'
+import { TransactionType } from '~/logic/transactions/types'
+@Component({
   components: {
-    top: async () => await import('@/components/post/PostTop'),
-    textBlock: async () => await import('@/components/post/PostTextBlock'),
-    bottom: async () => await import('@/components/post/PostBottom')
-  },
-  props: {
-    transaction: {
-      type: Object,
-      default: () => ({})
-    }
+    top: async () => await import('@/components/post/PostTop.vue'),
+    textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
+    bottom: async () => await import('@/components/post/PostBottom.vue')
   }
+})
+export default class ERC721Transaction extends Vue {
+  @Prop({ required: true }) readonly transaction!: TransactionType
+  private fetchOnServer = false
 }
 </script>
