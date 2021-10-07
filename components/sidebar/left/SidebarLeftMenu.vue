@@ -109,7 +109,7 @@
         </div>
       </li>
     </ul>
-    <div class="sidebar-left__create">
+    <div v-if="isShowCreateNft" class="sidebar-left__create">
       <button class="btn btn_blue btn_creat-post" @click.prevent="modalTweet">
         <img src="@/assets/img/btn_creat-post_img.png" alt="" />
         <span>Create NFT</span>
@@ -121,6 +121,27 @@
 import ModalTweet from '@/components/modals/TweetAddForm.vue'
 
 export default {
+  data: () => ({
+    isShowCreateNft: false
+  }),
+  watch: {
+    $route: {
+      handler() {
+        this.$nextTick(() => {
+          $(window).unbind('scroll', this.showCreateNft)
+
+          if (!this.$route.params.address) {
+            this.isShowCreateNft = true
+            return
+          }
+
+          this.showCreateNft()
+          $(window).bind('scroll', this.showCreateNft)
+        })
+      },
+      immediate: true
+    }
+  },
   methods: {
     modalTweet() {
       this.$modal.show(
@@ -134,6 +155,10 @@ export default {
           name: 'tweet'
         }
       )
+    },
+
+    showCreateNft() {
+      this.isShowCreateNft = $(window).scrollTop() > 300
     }
   }
 }

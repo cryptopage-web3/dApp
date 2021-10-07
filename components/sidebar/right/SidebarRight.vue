@@ -19,7 +19,7 @@
         </form>
       </div>
       <div class="main-right-item">
-        <banner />
+        <banner v-if="isAuth" />
         <balance />
       </div>
     </div>
@@ -38,6 +38,11 @@ export default {
   data: () => ({
     stickySidebar: null
   }),
+  computed: {
+    isAuth() {
+      return this.$store.getters['auth/isAuth']
+    }
+  },
   mounted() {
     this.stickySidebar = new StickySidebar('#right-sidebar', {
       topSpacing: 20,
