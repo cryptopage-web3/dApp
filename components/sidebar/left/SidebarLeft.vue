@@ -8,12 +8,16 @@
       <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
         <img src="@/assets/img/nav_bg2.svg" />
       </a>
-      <SidebarLeftMenu v-if="isAuth" />
+      <left-menu v-show="isAuth" />
     </header>
   </div>
 </template>
 <script>
 export default {
+  components: {
+    'left-menu': async () =>
+      await import('@/components/sidebar/left/SidebarLeftMenu')
+  },
   data: () => ({
     stickySidebar: null
   }),
@@ -23,14 +27,16 @@ export default {
     }
   },
   mounted() {
-    this.stickySidebar = new StickySidebar('#left-sidebar', {
-      topSpacing: 20,
-      bottomSpacing: 20,
-      containerSelector: '.main-left',
-      innerWrapperSelector: '#left-sidebar',
-      resizeSensor: true,
-      minWidth: 1199.5
-    })
+    setTimeout(() => {
+      this.stickySidebar = new StickySidebar('#left-sidebar', {
+        topSpacing: 20,
+        bottomSpacing: 20,
+        containerSelector: '.main-left',
+        innerWrapperSelector: '#left-sidebar',
+        resizeSensor: true,
+        minWidth: 1199.5
+      })
+    }, 200)
 
     // Hide mobile menu
 
