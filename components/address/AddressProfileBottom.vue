@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="profile-bottom">
+    <div v-if="isAuth" class="profile-bottom">
       <a
         v-if="isOwner"
         href="#"
@@ -40,6 +40,9 @@ export default {
         this.$store.getters['transactions/address'] ===
         this.$store.getters['auth/selectedAddress']
       )
+    },
+    isAuth() {
+      return this.$store.getters['auth/isAuth']
     }
   },
   methods: {
