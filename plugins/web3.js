@@ -9,6 +9,20 @@ const PROJECT_ID = `a925609bdb25477d8039c763faa7b61d`
 
 /// customWeb3 instance
 
+const networkRpcList = {
+  ETHEREUM: {
+    wss: `wss://mainnet.infura.io/ws/v3/${PROJECT_ID}`
+  },
+  BSC: {
+    rpc: 'https://bsc-dataseed.binance.org',
+    wss: 'wss://bsc-ws-node.nariox.org:443'
+  },
+  POLYGON: {
+    rpc: ' https://polygon-rpc.com',
+    wss: 'wss://rpc-mainnet.matic.network'
+  }
+}
+
 const web3State = {
   nodeList: [
     'https://api.mycryptoapi.com/eth',
@@ -30,7 +44,14 @@ const changeNode = () => {
   web3State.nodeIndex = updateIndex
 }
 
-const getWeb3Ref = () => {
+const getWeb3Ref = (type = 'rpc') => {
+  const currentNetwork = web3Provider._CHAINS_BY_CHAIN_ID[web3Provider.selectedChainId]
+  if (currentNetwork !== 'ETHEREUM' || type === 'wss') {
+    const actualNetwork = networkRpcList[currentNetwork];
+    if (!actualNetwork) throw Error(`${currentNetwork} rpc data missing.`)
+    return new Web3(actualNetwork[type])
+  }
+  /// ethereum rpc only
   const { nodeIndex, nodeList } = web3State
   const nodeUrl = nodeList[nodeIndex]
   return new Web3(nodeUrl)
@@ -91,13 +112,14 @@ const getInfuraProvider = ({ name, type }) => {
 const web3 = new Web3(Web3.givenProvider || getInfuraProvider({ type: 'wss' }))
 
 const getBlocks = async (count, showDetailTransactions = false, callback) => {
-  const latest = await web3.eth.getBlockNumber()
+  const web3Instance = getWeb3Ref()
+  const latest = await web3Instance.eth.getBlockNumber()
   const blockNumbers = _range(latest - count, latest + 1)
-  const batch = new web3.eth.BatchRequest()
+  const batch = new web3Instance.eth.BatchRequest()
 
   blockNumbers.forEach((blockNumber) => {
     batch.add(
-      web3.eth.getBlock.request(blockNumber, showDetailTransactions, callback)
+      web3Instance.eth.getBlock.request(blockNumber, showDetailTransactions, callback)
     )
   })
 
@@ -106,8 +128,9 @@ const getBlocks = async (count, showDetailTransactions = false, callback) => {
 
 const getConfirmationsCount = async (txHash) => {
   try {
-    const tx = await web3.eth.getTransaction(txHash)
-    const currentBlock = await web3.eth.getBlockNumber()
+    const web3Instance = getWeb3Ref()
+    const tx = await web3Instance.eth.getTransaction(txHash)
+    const currentBlock = await web3Instance.eth.getBlockNumber()
     return tx.blockNumber === null ? 0 : currentBlock - tx.blockNumber
   } catch (error) {
     // eslint-disable-next-line no-console
@@ -131,7 +154,8 @@ const watchConfirmation = (
 }
 
 const watchAddressTransactions = ({ address, callback }) => {
-  const subscription = web3.eth.subscribe('pendingTransactions')
+  const web3Instance = getWeb3Ref('wss')
+  const subscription = web3Instance.eth.subscribe('pendingTransactions')
   subscription
     .subscribe((error, result) => {
       // eslint-disable-next-line no-console
@@ -162,7 +186,8 @@ const watchTokenTransfers = (
   to,
   value
 ) => {
-  const tokenContract = new web3.eth.Contract(
+  const web3Instance = getWeb3Ref()
+  const tokenContract = new web3Instance.eth.Contract(
     tokenABI,
     tokenContractAddress,
     (error, result) => {
@@ -190,7 +215,8 @@ const watchTokenTransfers = (
 }
 
 const sendPostHash = ({ params, callbacks }) => {
-  const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
+  const web3Instance = getWeb3Ref()
+  const contract = new web3Instance.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
 
   contract.methods
     .safeMint(params.hash, params.comment)
@@ -203,7 +229,8 @@ const sendPostHash = ({ params, callbacks }) => {
 }
 
 const getERC20TransferByHash = async (hash) => {
-  const tx = await web3.eth.getTransaction(hash)
+  const web3Instance = getWeb3Ref()
+  const tx = await web3Instance.eth.getTransaction(hash)
   if (
     tx !== null &&
     (tx.input.length === 138 || tx.input.slice(2, 10) === 'a9059cbb')
@@ -235,7 +262,8 @@ const getERC20Balance = async (address, contractAddress) => {
     }
   ]
   try {
-    const contract = new web3.eth.Contract(minABI, contractAddress)
+    const web3Instance = getWeb3Ref()
+    const contract = new web3Instance.eth.Contract(minABI, contractAddress)
     const balanceOf = await contract.methods.balanceOf(address).call()
     const decimals = await contract.methods.decimals().call()
     const balance = balanceOf / 10 ** decimals
@@ -268,7 +296,8 @@ const getERC721Data = async (tokenId, contractAddress) => {
     }
   ]
   try {
-    const contract = new web3.eth.Contract(minABI, contractAddress)
+    const web3Instance = getWeb3Ref()
+    const contract = new web3Instance.eth.Contract(minABI, contractAddress)
     const tokenURI = await contract.methods.tokenURI(tokenId).call()
     const owner = await contract.methods.ownerOf(tokenId).call()
     if (tokenURI) {
