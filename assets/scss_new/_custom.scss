@@ -85,3 +85,27 @@
 .nav-tabs.transactions-list {
   padding: 10px 0;
 }
+
+/* ===== wallet connect ===== */
+
+.connect-wallet__link_connect::after {
+  display: none;
+}
+
+.connect-wallet__link-status {
+  cursor: default;
+}
+
+.connect-wallet__link-status_connect {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.connect-wallet__link-status_connect:hover {
+  opacity: 1;
+}
+
+.modal-content__link_disabled {
+  background-color: transparent !important;
+  cursor: default;
+}

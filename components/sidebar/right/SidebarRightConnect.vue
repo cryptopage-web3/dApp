@@ -1,58 +1,52 @@
 <template>
   <div class="connect-wallet-wr">
-    <template v-if="isAuth">
-      <div ref="connect" class="connect-wallet-col connect-wallet__link-hover">
-        <a
-          href="#"
-          data-toggle="modal"
-          data-target="#modal-connect"
-          role="button"
-          class="connect-wallet__link"
-        >
-          <div class="connect-wallet__link-thumb">
-            <img src="@/assets/img/connect-wallet__link_img2.png" alt="" />
-          </div>
-          <div class="connect-wallet__link-text">
-            <div class="connect-wallet__link-tool">Etherum</div>
-            <div class="connect-wallet__link-status">
-              {{ address | shortAddress }}
-            </div>
-          </div>
-        </a>
-        <div class="connect-wallet-col-body">
-          <ul class="connect-wallet__list">
-            <li>
-              <router-link :to="`/${address}`">Home page</router-link>
-            </li>
-            <li><a href="#">Activate layer 2</a></li>
-            <li><a href="#">Copy Address</a></li>
-            <li><a href="#">Transaction history</a></li>
-            <li><a href="#">Claim</a></li>
-            <li><a href="#">Change Wallet</a></li>
-            <li><a href="#" @click.prevent="signout">Disconnect</a></li>
-          </ul>
+    <div ref="connect" class="connect-wallet-col connect-wallet__link-hover">
+      <a
+        href="#"
+        data-toggle="modal"
+        data-target="#modal-connect"
+        role="button"
+        class="connect-wallet__link"
+        :class="{ 'connect-wallet__link_connect': !isAuth }"
+      >
+        <div class="connect-wallet__link-thumb">
+          <img src="@/assets/img/connect-wallet__link_img2.png" alt="" />
         </div>
-      </div>
-    </template>
-    <template v-else>
-      <div class="connect-wallet-col connect-wallet__link-hover">
-        <a
-          href="#"
-          role="button"
-          class="connect-wallet__link"
-          @click.prevent="signin"
-        >
-          <div class="connect-wallet__link-thumb">
-            <img src="@/assets/img/connect-wallet__link_img2.png" alt="" />
+        <div class="connect-wallet__link-text">
+          <div class="connect-wallet__link-tool">Etherum</div>
+          <div
+            v-if="isAuth"
+            class="connect-wallet__link-status"
+            @click.prevent.stop=""
+          >
+            {{ address | shortAddress }}
           </div>
-          <div class="connect-wallet__link-text">
-            <div class="connect-wallet__link-tool">Etherum</div>
-            <div class="connect-wallet__link-status">Connect wallet</div>
+          <div
+            v-else
+            class="
+              connect-wallet__link-status connect-wallet__link-status_connect
+            "
+            @click.prevent.stop="signin"
+          >
+            Connect wallet
           </div>
-        </a>
-        <signin ref="signin" />
+        </div>
+      </a>
+      <div v-if="isAuth" class="connect-wallet-col-body">
+        <ul class="connect-wallet__list">
+          <li>
+            <router-link :to="`/${address}`">Home page</router-link>
+          </li>
+          <li><a href="#">Activate layer 2</a></li>
+          <li><a href="#">Copy Address</a></li>
+          <li><a href="#">Transaction history</a></li>
+          <li><a href="#">Claim</a></li>
+          <li><a href="#">Change Wallet</a></li>
+          <li><a href="#" @click.prevent="signout">Disconnect</a></li>
+        </ul>
       </div>
-    </template>
+      <signin ref="signin" />
+    </div>
     <a href="#" class="dark-white">
       <img src="@/assets/img/dark-white_img2.png" alt="" />
     </a>

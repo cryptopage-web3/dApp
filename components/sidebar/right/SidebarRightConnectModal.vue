@@ -43,13 +43,19 @@
                 </a>
               </li>
               <li>
-                <a href="#modal-content4" class="modal-content__link">
+                <a
+                  href="#modal-content4"
+                  class="modal-content__link modal-content__link_disabled"
+                >
                   <img src="@/assets/img/modal-content__link_img4.png" alt="" />
                   <span></span>
                 </a>
               </li>
               <li>
-                <a href="#modal-content5" class="modal-content__link">
+                <a
+                  href="#modal-content5"
+                  class="modal-content__link modal-content__link_disabled"
+                >
                   <img src="@/assets/img/modal-content__link_img5.png" alt="" />
                   <span></span>
                 </a>
@@ -361,8 +367,13 @@
 <script>
 export default {
   mounted() {
-    $('.modal-content__link').on('click', function () {
+    $('.modal-content__link').on('click', function (event) {
       event.preventDefault()
+
+      if ($(this).hasClass('modal-content__link_disabled')) {
+        return
+      }
+
       const id = $(this).attr('href')
       $('.modal-content__link').removeClass('active')
       $(this).addClass('active')
