@@ -26,6 +26,8 @@
   </div>
 </template>
 <script>
+import { init as stickySidebarInit } from '~/utils/stickySidebar'
+
 export default {
   components: {
     banner: async () =>
@@ -35,22 +37,13 @@ export default {
     connect: async () =>
       await import('@/components/sidebar/right/SidebarRightConnect.vue')
   },
-  data: () => ({
-    stickySidebar: null
-  }),
   computed: {
     isAuth() {
       return this.$store.getters['auth/isAuth']
     }
   },
   mounted() {
-    this.stickySidebar = new StickySidebar('#right-sidebar', {
-      topSpacing: 20,
-      bottomSpacing: 20,
-      containerSelector: '.main-right',
-      innerWrapperSelector: '#right-sidebar',
-      resizeSensor: true
-    })
+    stickySidebarInit('#right-sidebar', '.main-right')
   }
 }
 </script>

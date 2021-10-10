@@ -11231,7 +11231,7 @@ resize-observer-polyfill@1.5.1, resize-observer-polyfill@^1.5.1:
   resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
   integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
-resize-sensor@0.0.6, resize-sensor@^0.0.6:
+resize-sensor@0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/resize-sensor/-/resize-sensor-0.0.6.tgz#75147dcb273de6832760e461d2e28de6dcf88c45"
   integrity sha512-e+3wwdki9elemYP6AnyG2BK9/Gd7ak46wZN+Z62WwmWfhn2La1XV2rPRRIcar+PhRhfiQDXi29TapGMTIbI3Pg==
@@ -11968,7 +11968,7 @@ stdout-stream@^1.4.0:
   dependencies:
     readable-stream "^2.0.1"
 
-sticky-sidebar@^3.3.1, "sticky-sidebar@git+https://github.com/abouolia/sticky-sidebar.git#master":
+"sticky-sidebar@git+https://github.com/abouolia/sticky-sidebar.git#master":
   version "3.3.1"
   resolved "git+https://github.com/abouolia/sticky-sidebar.git#bcd40bbf95e84b75916bc3535d7475447f9383f8"
 
