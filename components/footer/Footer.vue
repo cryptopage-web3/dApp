@@ -7,9 +7,9 @@
             <img src="@/assets/img/footer-logo_img.png" alt="" />
           </a>
           <div class="footer-coperite">
-            2021 @ Crypto.page <br />
-            AS Reg.number 14352837 Address: Harju maakond, Tallinn, <br />
-            Kesklinna linnaosa, A. Lauteri tn 5, Estonia 10114
+            2021 @ Cryptohub OÜ <br />
+            AS Reg.number 16221045 Address: Harju maakond, Tallinn, <br />
+            Kesklinna linnaosa, Roseni tn 13, 10111
           </div>
         </div>
         <div class="footer-right">
