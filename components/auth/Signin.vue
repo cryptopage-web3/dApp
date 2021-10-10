@@ -48,8 +48,23 @@ export default {
             type: 'success',
             title: 'Successfully logged in'
           })
+
+          /** авторизация */
+
           this.$store.dispatch('auth/signin', address)
-          await this.$store.dispatch('auth/updateAddressInfo')
+
+          /** информация по адресу: баланс, контракт, токены и т.д. */
+
+          try {
+            await this.$store.dispatch('auth/updateAddressInfo')
+          } catch {}
+
+          /** редирект на home, если авторизация с главной страницы */
+
+          if (this.$route.path === '/') {
+            this.$router.push(`/${address}`)
+          }
+
           return
         }
 
