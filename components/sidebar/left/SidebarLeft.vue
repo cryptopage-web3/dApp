@@ -8,35 +8,25 @@
       <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
         <img src="@/assets/img/nav_bg2.svg" />
       </a>
-      <left-menu v-show="isAuth" />
+      <left-menu v-if="isAuth" />
     </header>
   </div>
 </template>
 <script>
+import { init as stickySidebarInit } from '~/utils/stickySidebar'
+
 export default {
   components: {
     'left-menu': async () =>
       await import('@/components/sidebar/left/SidebarLeftMenu')
   },
-  data: () => ({
-    stickySidebar: null
-  }),
   computed: {
     isAuth() {
       return this.$store.getters['auth/isAuth']
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.stickySidebar = new StickySidebar('#left-sidebar', {
-        topSpacing: 20,
-        bottomSpacing: 20,
-        containerSelector: '.main-left',
-        innerWrapperSelector: '#left-sidebar',
-        resizeSensor: true,
-        minWidth: 1199.5
-      })
-    }, 200)
+    stickySidebarInit('#left-sidebar', '.main-left')
 
     // Hide mobile menu
 

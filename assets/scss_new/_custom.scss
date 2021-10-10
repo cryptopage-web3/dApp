@@ -38,8 +38,26 @@
 
 /* ===== sidebar left create ===== */
 
+.main-left {
+  position: relative;
+}
+
+.main-right {
+  position: relative;
+}
+
 .sidebar-left__create {
   padding-top: 40px;
+}
+
+.header_fixed {
+  position: fixed;
+  top: 20px;
+}
+
+.header_bottom {
+  position: absolute;
+  bottom: 0;
 }
 
 /* ===== address profile ===== */
