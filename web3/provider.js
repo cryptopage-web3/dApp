@@ -169,6 +169,7 @@ class Web3Provider {
         const networkId = await this.web3.eth.net.getId()
         alert('accounts ' + JSON.stringify(accounts))
         this.setOrChangeWeb3Data(accounts[0], networkId)
+        alert('set accounts')
 
         provider.on('accountsChanged', (accounts) => {
           this.setOrChangeWeb3Data(accounts[0])
@@ -196,7 +197,9 @@ class Web3Provider {
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
     if (address) {
+      alert('selectedAddress begin')
       window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
+      alert('selectedAddress store')
       this.selectedAddress = address
     }
     if (chainId) {
