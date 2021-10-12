@@ -95,9 +95,11 @@ class Web3Provider {
         this.setOrChangeWeb3Data(accounts[0], networkId)
 
         provider.on('accountsChanged', (accounts) => {
+          alert(accounts)
           this.setOrChangeWeb3Data(accounts[0])
         })
         provider.on('chainChanged', (chain) => {
+          alert(chain)
           this.setOrChangeWeb3Data(null, chain)
         })
         provider.on('disconnect', async () => {
