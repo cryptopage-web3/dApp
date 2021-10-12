@@ -148,7 +148,6 @@ class Web3Provider {
   addWalletConnectEventsListener = async () => {
     try {
       if (typeof window !== 'undefined' && !this.walletConnectConnected) {
-        alert('listen in')
         const provider = await new WalletConnectProvider({
           infuraId,
           rpc: {
@@ -158,38 +157,30 @@ class Web3Provider {
             137: 'https://rpc-mainnet.maticvigil.com'
           }
         })
-        alert('connect')
+
         await provider.enable()
-        alert('enable')
         this.provider = provider
         this.web3 = await new Web3(provider)
-        alert('web3')
 
         const accounts = await this.web3.eth.getAccounts()
         const networkId = await this.web3.eth.net.getId()
-        alert(
-          'accounts ' + JSON.stringify(accounts) + ' networkId-' + networkId
-        )
-        this.setOrChangeWeb3Data(accounts[0], networkId)
-        alert('set accounts')
 
+        this.setOrChangeWeb3Data(accounts[0], networkId)
         provider.on('accountsChanged', (accounts) => {
           this.setOrChangeWeb3Data(accounts[0])
         })
-        alert('accountsChanged')
         provider.on('chainChanged', (chain) => {
           this.setOrChangeWeb3Data(null, chain)
         })
-        alert('chainChanged')
         provider.on('close', async () => {
           await this.kill()
         })
-        alert('close')
+
         this.walletConnectConnected = true
+
         return true
       }
     } catch (e) {
-      alert(JSON.stringify(e))
       return false
     }
   }
@@ -201,24 +192,19 @@ class Web3Provider {
    */
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
+
     if (address) {
-      alert('selectedAddress begin')
       if (window.$nuxt?.$store?._mutations?.['auth/setSelectedAddress']?.[0]) {
         window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
       }
-
-      alert('selectedAddress store')
       this.selectedAddress = address
-      alert('selectedAddress class')
     }
+
     if (chainId) {
-      alert('chainId begin')
       if (window.$nuxt?.$store?._mutations?.['auth/setSelectedChainId']?.[0]) {
         window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
       }
-      alert('chainId store')
       this.selectedChainId = chainId
-      alert('chainId class')
     }
   }
 
@@ -307,9 +293,7 @@ class Web3Provider {
         break
       }
       case 'walletConnect': {
-        alert('in')
         const status = await this.addWalletConnectEventsListener()
-        alert('status' + (status ? 1 : 0))
         if (status) {
           await this.changeProvider(provider)
           connected = 'success'
