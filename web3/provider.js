@@ -167,19 +167,24 @@ class Web3Provider {
 
         const accounts = await this.web3.eth.getAccounts()
         const networkId = await this.web3.eth.net.getId()
-        alert('accounts ' + JSON.stringify(accounts))
+        alert(
+          'accounts ' + JSON.stringify(accounts) + ' networkId-' + networkId
+        )
         this.setOrChangeWeb3Data(accounts[0], networkId)
         alert('set accounts')
 
         provider.on('accountsChanged', (accounts) => {
           this.setOrChangeWeb3Data(accounts[0])
         })
+        alert('accountsChanged')
         provider.on('chainChanged', (chain) => {
           this.setOrChangeWeb3Data(null, chain)
         })
+        alert('chainChanged')
         provider.on('close', async () => {
           await this.kill()
         })
+        alert('close')
         this.walletConnectConnected = true
         return true
       }
@@ -201,10 +206,14 @@ class Web3Provider {
       window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
       alert('selectedAddress store')
       this.selectedAddress = address
+      alert('selectedAddress class')
     }
     if (chainId) {
+      alert('chainId begin')
       window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
+      alert('chainId store')
       this.selectedChainId = chainId
+      alert('chainId class')
     }
   }
 
