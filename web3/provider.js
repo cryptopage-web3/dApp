@@ -163,9 +163,11 @@ class Web3Provider {
         alert('enable')
         this.provider = provider
         this.web3 = await new Web3(provider)
+        alert('web3')
 
         const accounts = await this.web3.eth.getAccounts()
         const networkId = await this.web3.eth.net.getId()
+        alert('accounts ' + JSON.stringify(accounts))
         this.setOrChangeWeb3Data(accounts[0], networkId)
 
         provider.on('accountsChanged', (accounts) => {
