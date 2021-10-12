@@ -148,6 +148,7 @@ class Web3Provider {
   addWalletConnectEventsListener = async () => {
     try {
       if (typeof window !== 'undefined' && !this.walletConnectConnected) {
+        alert('listen in')
         const provider = await new WalletConnectProvider({
           infuraId,
           rpc: {
@@ -157,7 +158,9 @@ class Web3Provider {
             137: 'https://rpc-mainnet.maticvigil.com'
           }
         })
+        alert('connect')
         await provider.enable()
+        alert('enable')
         this.provider = provider
         this.web3 = await new Web3(provider)
 
@@ -178,6 +181,7 @@ class Web3Provider {
         return true
       }
     } catch (e) {
+      alert(JSON.stringify(e))
       return false
     }
   }
