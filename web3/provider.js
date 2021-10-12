@@ -203,14 +203,19 @@ class Web3Provider {
     chainId = Number(chainId)
     if (address) {
       alert('selectedAddress begin')
-      window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
+      if (window.$nuxt?.$store?._mutations?.['auth/setSelectedAddress']?.[0]) {
+        window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
+      }
+
       alert('selectedAddress store')
       this.selectedAddress = address
       alert('selectedAddress class')
     }
     if (chainId) {
       alert('chainId begin')
-      window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
+      if (window.$nuxt?.$store?._mutations?.['auth/setSelectedChainId']?.[0]) {
+        window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
+      }
       alert('chainId store')
       this.selectedChainId = chainId
       alert('chainId class')
