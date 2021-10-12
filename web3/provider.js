@@ -95,11 +95,9 @@ class Web3Provider {
         this.setOrChangeWeb3Data(accounts[0], networkId)
 
         provider.on('accountsChanged', (accounts) => {
-          alert(accounts)
           this.setOrChangeWeb3Data(accounts[0])
         })
         provider.on('chainChanged', (chain) => {
-          alert(chain)
           this.setOrChangeWeb3Data(null, chain)
         })
         provider.on('disconnect', async () => {
@@ -286,7 +284,9 @@ class Web3Provider {
         break
       }
       case 'walletConnect': {
+        alert('in')
         const status = await this.addWalletConnectEventsListener()
+        alert('status' + (status ? 1 : 0))
         if (status) {
           await this.changeProvider(provider)
           connected = 'success'
