@@ -16,7 +16,12 @@
         />
       </div>
       <div class="profile-info">
-        <div class="profile-info__title">
+        <div v-if="$store.getters['address/name']" class="profile-info__title">
+          {{ $store.getters['address/name'] }} ({{
+            $store.getters['address/symbol']
+          }})
+        </div>
+        <div v-else class="profile-info__title">
           {{ $store.getters['address/address'] | shortAddress }}
         </div>
         <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
