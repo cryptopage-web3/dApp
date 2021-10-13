@@ -1,7 +1,7 @@
 <template>
   <div class="transactions">
     <transaction
-      v-for="transaction in $store.getters['transactions/allTransactions']"
+      v-for="transaction in $store.getters['address/allTransactions']"
       :key="transaction.hash"
       :transaction="transaction"
     />
@@ -15,7 +15,7 @@ export default {
   },
   mixins: [paginationMixin],
   async fetch() {
-    await this.$store.dispatch('transactions/getTransactions', {
+    await this.$store.dispatch('address/getTransactions', {
       address: this.$route.params.address,
       page: this.page,
       offset: this.pageSize

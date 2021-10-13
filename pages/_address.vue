@@ -12,7 +12,7 @@ export default {
   async mounted() {
     await this.$nextTick(async () => {
       await this.$store.dispatch(
-        'transactions/updateAddressInfo',
+        'address/updateAddressInfo',
         this.$route.params.address
       )
     })
