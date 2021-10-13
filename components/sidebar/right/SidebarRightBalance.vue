@@ -3,7 +3,7 @@
     <nuxt-link
       v-for="token in tokens"
       :key="token.tokenInfo.address"
-      :to="`/${token.tokenInfo.address}`"
+      :to="`/${token.tokenInfo.address}/tokens?address=${$store.getters['address/address']}`"
       class="balance"
     >
       <div class="balance-top">
