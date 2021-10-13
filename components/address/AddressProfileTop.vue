@@ -3,8 +3,8 @@
     <div class="profile-left">
       <div class="profile__thumb">
         <img
-          v-if="$store.getters['transactions/image']"
-          :src="$store.getters['transactions/image']"
+          v-if="$store.getters['address/image']"
+          :src="$store.getters['address/image']"
           width="90"
           height="90"
         />
@@ -12,16 +12,16 @@
           v-else
           :seed="10211"
           :diameter="90"
-          :address="$store.getters['transactions/address']"
+          :address="$store.getters['address/address']"
         />
       </div>
       <div class="profile-info">
         <div class="profile-info__title">
-          {{ $store.getters['transactions/address'] | shortAddress }}
+          {{ $store.getters['address/address'] | shortAddress }}
         </div>
         <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
         <div class="profile-info__text">
-          {{ $store.getters['transactions/count'] | humanizeCount }}
+          {{ $store.getters['address/transactionsCount'] | humanizeCount }}
           transactions<br />
           0 inputs / 0 outputs
         </div>
