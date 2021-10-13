@@ -67,6 +67,24 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get name(): string {
+    return this.addressInfo &&
+      this.addressInfo.tokenInfo &&
+      this.addressInfo.tokenInfo.name
+      ? this.addressInfo.tokenInfo.name
+      : ''
+  }
+
+  @Getter()
+  public get symbol(): string {
+    return this.addressInfo &&
+      this.addressInfo.tokenInfo &&
+      this.addressInfo.tokenInfo.symbol
+      ? this.addressInfo.tokenInfo.symbol
+      : ''
+  }
+
+  @Getter()
   public get hasTransactions(): boolean {
     return Boolean(this.transactions && this.transactions.length > 0)
   }
@@ -125,12 +143,12 @@ export default class AddressModule {
         Object.assign(transaction, findedTransaction)
       )
     } else {
-      this.transactions = [transaction, ...this.transactions]
+      this.transactions = [...this.transactions, transaction]
     }
   }
 
   @Mutation()
-  public clearTransactions(): void {
+  public removeTransactions(): void {
     this.transactions = []
   }
 
@@ -212,5 +230,10 @@ export default class AddressModule {
     )
     this.setTransactions(transactions)
     return transactions
+  }
+
+  @Action()
+  public clearTransactions(): void {
+    this.removeTransactions()
   }
 }
