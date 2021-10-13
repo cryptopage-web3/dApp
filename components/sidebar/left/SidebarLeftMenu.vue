@@ -68,44 +68,7 @@
               </div>
             </form>
           </div>
-          <div class="connect-wallet-wr">
-            <div class="connect-wallet-col">
-              <a
-                href="#"
-                data-toggle="modal"
-                data-target="#modal-connect"
-                role="button"
-                class="connect-wallet__link"
-              >
-                <div class="connect-wallet__link-thumb">
-                  <img
-                    src="@/assets/img/connect-wallet__link_img2.png"
-                    alt=""
-                  />
-                </div>
-                <div class="connect-wallet__link-text">
-                  <div class="connect-wallet__link-tool">Etherum</div>
-                  <div class="connect-wallet__link-status">Connect wallet</div>
-                </div>
-              </a>
-              <div
-                id="connect-wallet-col1_2"
-                class="collapse connect-wallet-col-body"
-              >
-                <ul class="connect-wallet__list">
-                  <li><a href="#">Activate layer 2</a></li>
-                  <li><a href="#">Copy Address</a></li>
-                  <li><a href="#">Transaction history</a></li>
-                  <li><a href="#">Claim</a></li>
-                  <li><a href="#">Change Wallet</a></li>
-                  <li><a href="#">Disconnect</a></li>
-                </ul>
-              </div>
-            </div>
-            <a href="#" class="dark-white">
-              <img src="@/assets/img/dark-white_img2.png" alt="" />
-            </a>
-          </div>
+          <connect />
         </div>
       </li>
     </ul>
@@ -121,6 +84,9 @@
 import ModalTweet from '@/components/modals/TweetAddForm.vue'
 
 export default {
+  components: {
+    connect: async () => await import('@/components/connect/Connect.vue')
+  },
   data: () => ({
     isShowCreateNft: false
   }),

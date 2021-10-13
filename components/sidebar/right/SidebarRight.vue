@@ -26,31 +26,25 @@
   </div>
 </template>
 <script>
+import { init as stickySidebarInit } from '~/utils/stickySidebar'
+
 export default {
   components: {
     banner: async () =>
       await import('@/components/sidebar/right/SidebarRightBanner'),
     balance: async () =>
       await import('@/components/sidebar/right/SidebarRightBalance'),
-    connect: async () =>
-      await import('@/components/sidebar/right/SidebarRightConnect.vue')
+    connect: async () => await import('@/components/connect/Connect.vue')
   },
-  data: () => ({
-    stickySidebar: null
-  }),
   computed: {
     isAuth() {
       return this.$store.getters['auth/isAuth']
     }
   },
   mounted() {
-    this.stickySidebar = new StickySidebar('#right-sidebar', {
-      topSpacing: 20,
-      bottomSpacing: 20,
-      containerSelector: '.main-right',
-      innerWrapperSelector: '#right-sidebar',
-      resizeSensor: true
-    })
+    if ($(window).width() > 767) {
+      stickySidebarInit('#right-sidebar', '.main-right')
+    }
   }
 }
 </script>

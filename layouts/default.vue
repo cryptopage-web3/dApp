@@ -29,7 +29,7 @@ export default {
       await import('@/components/sidebar/right/SidebarRight'),
     'footer-section': async () => await import('@/components/footer/Footer'),
     'connect-modal': async () =>
-      await import('@/components/sidebar/right/SidebarRightConnectModal.vue')
+      await import('@/components/connect/ConnectModal.vue')
   },
   computed: {
     isReadyStore() {

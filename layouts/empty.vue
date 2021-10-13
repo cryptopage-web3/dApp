@@ -13,7 +13,7 @@
 export default {
   components: {
     'connect-modal': async () =>
-      await import('@/components/sidebar/right/SidebarRightConnectModal.vue')
+      await import('@/components/connect/ConnectModal.vue')
   },
   computed: {
     isReadyStore() {

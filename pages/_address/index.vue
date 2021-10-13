@@ -1,5 +1,5 @@
 <template>
-  <div class="transactions">
+  <div class="transactions-body">
     <transaction
       v-for="transaction in $store.getters['address/allTransactions']"
       :key="transaction.hash"

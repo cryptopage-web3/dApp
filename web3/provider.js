@@ -157,14 +157,15 @@ class Web3Provider {
             137: 'https://rpc-mainnet.maticvigil.com'
           }
         })
+
         await provider.enable()
         this.provider = provider
         this.web3 = await new Web3(provider)
 
         const accounts = await this.web3.eth.getAccounts()
         const networkId = await this.web3.eth.net.getId()
-        this.setOrChangeWeb3Data(accounts[0], networkId)
 
+        this.setOrChangeWeb3Data(accounts[0], networkId)
         provider.on('accountsChanged', (accounts) => {
           this.setOrChangeWeb3Data(accounts[0])
         })
@@ -174,7 +175,9 @@ class Web3Provider {
         provider.on('close', async () => {
           await this.kill()
         })
+
         this.walletConnectConnected = true
+
         return true
       }
     } catch (e) {
@@ -189,12 +192,18 @@ class Web3Provider {
    */
   setOrChangeWeb3Data(address, chainId) {
     chainId = Number(chainId)
+
     if (address) {
-      window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
+      if (window.$nuxt?.$store?._mutations?.['auth/setSelectedAddress']?.[0]) {
+        window.$nuxt.$store._mutations['auth/setSelectedAddress'][0](address)
+      }
       this.selectedAddress = address
     }
+
     if (chainId) {
-      window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
+      if (window.$nuxt?.$store?._mutations?.['auth/setSelectedChainId']?.[0]) {
+        window.$nuxt.$store._mutations['auth/setSelectedChainId'][0](chainId)
+      }
       this.selectedChainId = chainId
     }
   }

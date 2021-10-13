@@ -38,8 +38,26 @@
 
 /* ===== sidebar left create ===== */
 
+.main-left {
+  position: relative;
+}
+
+.main-right {
+  position: relative;
+}
+
 .sidebar-left__create {
   padding-top: 40px;
+}
+
+.header_fixed {
+  position: fixed;
+  top: 20px;
+}
+
+.header_bottom {
+  position: absolute;
+  bottom: 0;
 }
 
 /* ===== address profile ===== */
@@ -66,4 +84,70 @@
 
 .nav-tabs.transactions-list {
   padding: 10px 0;
+}
+
+/* ===== wallet connect ===== */
+
+.connect-wallet__link_connect::after {
+  display: none;
+}
+
+.connect-wallet__link-status {
+  cursor: default;
+}
+
+.connect-wallet__link-status_connect {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.connect-wallet__link-status_connect:hover {
+  opacity: 1;
+}
+
+.modal-content__link_disabled {
+  background-color: transparent !important;
+  cursor: default;
+}
+
+.connect-wallet-col-body {
+  position: absolute;
+}
+
+/* ===== mobile ===== */
+
+@media (max-width: 767px) {
+  .page-load svg {
+    width: 150px;
+    height: 150px;
+  }
+
+  .header__top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .profile__thumb {
+    margin-right: 5px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .profile-form {
+    padding-top: 15px;
+  }
+
+  .nav-tabs.transactions-list {
+    padding: 0;
+  }
+
+  .sidebar-left__create {
+    display: none;
+  }
+
+  .connect-wallet-col-body {
+    position: static;
+  }
 }
