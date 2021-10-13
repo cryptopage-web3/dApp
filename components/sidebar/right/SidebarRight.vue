@@ -34,8 +34,7 @@ export default {
       await import('@/components/sidebar/right/SidebarRightBanner'),
     balance: async () =>
       await import('@/components/sidebar/right/SidebarRightBalance'),
-    connect: async () =>
-      await import('@/components/sidebar/right/SidebarRightConnect.vue')
+    connect: async () => await import('@/components/connect/Connect.vue')
   },
   computed: {
     isAuth() {

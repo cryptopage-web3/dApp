@@ -30,8 +30,7 @@
 <script>
 export default {
   components: {
-    connect: async () =>
-      await import('@/components/sidebar/right/SidebarRightConnect.vue'),
+    connect: async () => await import('@/components/connect/Connect.vue'),
     signin: async () => await import('@/components/auth/Signin.vue'),
     icon: async () => await import('@/components/icons/Icon')
   },
