@@ -28,7 +28,7 @@ export default {
       },
       {
         link: 'tokens',
-        name: 'Tockens (erc20)'
+        name: 'Tokens (erc20)'
       },
       {
         link: 'likes',

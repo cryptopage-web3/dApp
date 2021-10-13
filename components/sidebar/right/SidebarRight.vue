@@ -43,7 +43,9 @@ export default {
     }
   },
   mounted() {
-    stickySidebarInit('#right-sidebar', '.main-right')
+    if ($(window).width() > 767) {
+      stickySidebarInit('#right-sidebar', '.main-right')
+    }
   }
 }
 </script>

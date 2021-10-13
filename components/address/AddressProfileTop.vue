@@ -5,13 +5,13 @@
         <img
           v-if="$store.getters['transactions/image']"
           :src="$store.getters['transactions/image']"
-          width="90"
-          height="90"
+          :width="diameter"
+          :height="diameter"
         />
         <jazzicon
           v-else
           :seed="10211"
-          :diameter="90"
+          :diameter="diameter"
           :address="$store.getters['transactions/address']"
         />
       </div>
@@ -34,3 +34,10 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  data: () => ({
+    diameter: $(window).width() > 767 ? '90' : '40'
+  })
+}
+</script>

@@ -1,13 +1,15 @@
 <template>
   <div class="main-left">
     <header id="left-sidebar" class="header">
-      <router-link to="/" class="header-logo">
-        <img src="@/assets/img/header-logo_img.png" />
-        <div class="header-logo__text"><span>Crypto.</span>page</div>
-      </router-link>
-      <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
-        <img src="@/assets/img/nav_bg2.svg" />
-      </a>
+      <div class="header__top">
+        <router-link to="/" class="header-logo">
+          <img src="@/assets/img/header-logo_img.png" />
+          <div class="header-logo__text"><span>Crypto.</span>page</div>
+        </router-link>
+        <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
+          <img src="@/assets/img/nav_bg2.svg" />
+        </a>
+      </div>
       <left-menu v-if="isAuth" />
     </header>
   </div>
@@ -26,7 +28,9 @@ export default {
     }
   },
   mounted() {
-    stickySidebarInit('#left-sidebar', '.main-left')
+    if ($(window).width() > 767) {
+      stickySidebarInit('#left-sidebar', '.main-left')
+    }
 
     // Hide mobile menu
 
