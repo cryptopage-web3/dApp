@@ -1,9 +1,9 @@
 <template>
   <div class="balances">
-    <a
+    <nuxt-link
       v-for="token in tokens"
       :key="token.tokenInfo.address"
-      href="#"
+      :to="`/${token.tokenInfo.address}`"
       class="balance"
     >
       <div class="balance-top">
@@ -51,7 +51,7 @@
           {{ token.tokenInfo.symbol }}
         </span>
       </div>
-    </a>
+    </nuxt-link>
   </div>
 </template>
 <script lang="ts">
