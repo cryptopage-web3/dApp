@@ -37,7 +37,7 @@
 <script>
 export default {
   data: () => ({
-    diameter: $(window).width() > 767 ? '90' : '40'
+    diameter: $(window).width() > 767 ? 90 : 40
   })
 }
 </script>
