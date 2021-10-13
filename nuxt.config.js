@@ -139,6 +139,12 @@ export default {
      ]
   },
 
+  publicRuntimeConfig: {},
+  privateRuntimeConfig: {
+    infuraProjectId: process.env.NODE_ENV === 'production' ? process.env.INFURA_PROJECT_ID : 'a925609bdb25477d8039c763faa7b61d',
+    etherscanAPIKey: process.env.NODE_ENV === 'production' ? process.env.ETHERSCAN_API_KEY : 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'    
+  },
+
   hooks: {
     ready(nuxt) {
       let documentIndex = 1
