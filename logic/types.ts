@@ -1,4 +1,3 @@
-import { NFTType } from '~/logic/nft/types'
 import { TransactionType } from '~/logic/transactions/types'
 import { EthplorerGetAddressInfoResponseType } from '~/logic/address/types'
 /**
@@ -11,15 +10,18 @@ import { EthplorerGetAddressInfoResponseType } from '~/logic/address/types'
  */
 export interface StateType {
   // Module:
-  nft: {
-    // Module's state:
-    nfts: NFTType[]
-  },
   auth: {
     address: string,
-    chain: string
+    chain: number
     loggedIn: boolean,
     addressInfo: EthplorerGetAddressInfoResponseType
   },
   transactions: TransactionType[]
+}
+
+export interface ChainType {
+    networkName: string
+    serviceName: string
+    chainId: number
+    apiURL: string
 }
