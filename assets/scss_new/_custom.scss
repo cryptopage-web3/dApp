@@ -110,6 +110,12 @@
   cursor: default;
 }
 
+.connect-wallet-col-body {
+  position: absolute;
+}
+
+/* ===== mobile ===== */
+
 @media (max-width: 767px) {
   .page-load svg {
     width: 150px;
@@ -139,5 +145,9 @@
 
   .sidebar-left__create {
     display: none;
+  }
+
+  .connect-wallet-col-body {
+    position: static;
   }
 }
