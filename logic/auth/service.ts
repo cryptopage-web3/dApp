@@ -5,7 +5,7 @@ import { Service, Container } from 'vue-typedi'
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { Component } from 'nuxt-property-decorator'
 import { deviceType } from '~/utils'
-import { CallbackType, AuthServiceSigninResponseType } from '~/logic/auth/types'
+import { AuthServiceSigninResponseType } from '~/logic/auth/types'
 import tokens from '~/logic/tokens'
 
 declare const window: Window &

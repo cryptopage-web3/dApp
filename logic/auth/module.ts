@@ -1,10 +1,7 @@
 import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
-import AddressAPIService from '~/logic/address/services/api'
-import {
-  EthplorerTokenType,
-  EthplorerGetAddressInfoResponseType
-} from '~/logic/address/types'
+import AuthService from '~/logic/auth/service'
+import { AuthServiceSigninResponseType } from '~/logic/auth/types'
 import tokens from '~/logic/tokens'
 
 @Injectable()
@@ -17,126 +14,51 @@ import tokens from '~/logic/tokens'
 export default class AuthModule {
   // Dependencies
 
-  @Inject(tokens.ADDRESS_API_SERVICE)
-  public addressAPIService!: AddressAPIService
+  @Inject(tokens.AUTH_SERVICE)
+  public authService!: AuthService
 
   // State
 
   @State()
-  public address = ''
-
-  @State()
-  public chain = ''
-
-  @State()
-  public loggedIn = false
-
-  @State()
-  public addressInfo: EthplorerGetAddressInfoResponseType | undefined
+  public authenticated = false
 
   // Getters
 
   @Getter()
   public get selectedAddress(): string {
-    return this.address
+    return this.authService.data.selectedAddress
   }
 
   @Getter()
-  public get chainId(): string {
-    return this.chain
+  public get chainId(): number {
+    return this.authService.data.selectedChainId
   }
 
   @Getter()
   public get isAuth(): boolean {
-    return this.loggedIn
-  }
-
-  @Getter()
-  public get balance(): number {
-    if (this.addressInfo) {
-      return this.addressInfo.ETH.balance
-    }
-    return 0
-  }
-
-  @Getter()
-  public get price(): number {
-    if (this.addressInfo) {
-      return this.addressInfo.ETH.price.rate
-    }
-    return 3500
-  }
-
-  @Getter()
-  public get count(): number {
-    if (this.addressInfo) {
-      return this.addressInfo.countTxs
-    }
-    return 0
-  }
-
-  @Getter()
-  public get tokens(): EthplorerTokenType[] {
-    let tokens: EthplorerTokenType[] = []
-    if (this.addressInfo && 'tokens' in this.addressInfo) {
-      tokens = this.addressInfo.tokens || []
-    }
-    return tokens.sort((a, b) => (a.balance > b.balance ? -1 : 1))
+    return this.selectedAddress ? this.authenticated : false
   }
 
   // Mutations
 
   @Mutation()
-  public setSelectedAddress(selectedAddress: string): void {
-    this.address = selectedAddress
-  }
-
-  @Mutation()
-  public popSelectedAddress(): void {
-    this.address = ''
-  }
-
-  @Mutation()
   public setIsAuth(isAuth: boolean): void {
-    this.loggedIn = isAuth
-  }
-
-  @Mutation()
-  public setChainId(chainId: string): void {
-    this.chain = chainId
-  }
-
-  @Mutation()
-  public popChainId(): void {
-    this.chain = ''
-  }
-
-  @Mutation()
-  public setAddressInfo(
-    addressInfo: EthplorerGetAddressInfoResponseType
-  ): void {
-    this.addressInfo = addressInfo
+    this.authenticated = isAuth
   }
 
   // Actions
 
   @Action()
-  public signin(address: string): void {
-    this.setSelectedAddress(address)
-    this.setIsAuth(true)
+  public signin = async (): Promise<AuthServiceSigninResponseType> => {
+    const response = await this.authService.signin()
+    if (response.status === 'success') {
+      this.setIsAuth(true)
+    }
+    return response
   }
 
   @Action()
   public signout(): void {
-    this.popSelectedAddress()
     this.setIsAuth(false)
-  }
-
-  @Action()
-  public async updateAddressInfo(): Promise<void> {
-    const addressInfo = await this.addressAPIService.getAddressInfo(
-      this.address
-    )
-    this.setAddressInfo(addressInfo)
   }
 }
