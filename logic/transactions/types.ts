@@ -32,6 +32,7 @@ export type ParamsAdaptarType = {
 
 export type ParamsTransactionsType = {
   address: string
+  contractAddress?: string
   page?: number
   offset?: number
   sort?: string

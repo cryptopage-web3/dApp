@@ -111,6 +111,7 @@ export default class TransactionAPIService extends APIServiceMixin {
    */
   public getERC20Transactions = async ({
     address,
+    contractAddress,
     page = 1,
     offset = 10,
     sort = 'desc'
@@ -122,6 +123,9 @@ export default class TransactionAPIService extends APIServiceMixin {
       sort,
       module: 'account',
       action: 'tokentx'
+    }
+    if (contractAddress) {
+      Object.assign(options, { contractAddress }) //  options.contractAddress = contractAddress
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`

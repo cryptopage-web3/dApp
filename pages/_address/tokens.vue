@@ -15,8 +15,15 @@ export default {
   },
   mixins: [paginationMixin],
   async fetch() {
+    const address = this.$route.query.address
+      ? this.$route.query.address
+      : this.$route.params.address
+    const contractAddress = this.$route.query.address
+      ? this.$route.params.address
+      : ''
     await this.$store.dispatch('address/getERC20Transactions', {
-      address: this.$route.params.address,
+      address,
+      contractAddress,
       page: this.page,
       offset: this.pageSize
     })

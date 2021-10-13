@@ -199,12 +199,14 @@ export default class AddressModule {
   @Action()
   public async getERC20Transactions({
     address,
+    contractAddress,
     page = 1,
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
     const transactions = await this.transactionAPIService.getERC20Transactions({
       address,
+      contractAddress,
       page,
       offset,
       sort
