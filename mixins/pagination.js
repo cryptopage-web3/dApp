@@ -1,24 +1,26 @@
 export const paginationMixin = {
   data: () => ({
-    total: 0,
     page: 1,
     pageSize: 10
   }),
   watch: {
     page: '$fetch',
     pageSize: '$fetch',
-    address: 'reset',
+    address: 'addressReset',
     chainId: 'reset'
   },
   computed: {
     showNext() {
-      return this.total >= this.page * this.pageSize
+      return (
+        this.$store.getters['address/transactionsCount'] >=
+        this.page * this.pageSize
+      )
     },
     showPrevious() {
       return this.page >= 2
     },
     address() {
-      return this.$store.getters['transactions/address']
+      return this.$store.getters['address/address']
     },
     chainId() {
       return this.$store.getters['auth/chainId']
@@ -33,9 +35,16 @@ export const paginationMixin = {
       if (!this.showPrevious) return
       this.page -= 1
     },
-    reset() {
-      this.$store.commit('address/clearTransactions')
-      this.$fetch()
+    async reset() {
+      this.$store.dispatch('address/clearTransactions')
+      await this.$fetch()
+    },
+    async addressReset() {
+      await this.reset()
+      await this.$store.dispatch(
+        'address/updateAddressInfo',
+        this.$route.params.address
+      )
     }
   },
   mounted() {
@@ -43,7 +52,7 @@ export const paginationMixin = {
       window.onscroll = () => {
         const bottomOfWindow =
           document.documentElement.scrollTop + window.innerHeight >=
-          document.documentElement.offsetHeight - 150
+          document.documentElement.offsetHeight - 300
         if (bottomOfWindow) {
           this.next()
         }
