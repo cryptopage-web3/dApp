@@ -6,7 +6,7 @@
       </a>
       <div class="post-date__text">{{ date | normalizeDate }}</div>
     </div>
-    <div class="white-post-id">Eth: {{ hash | shortAddress(5, 7) }}</div>
+    <div class="white-post-id">Txn Hash: {{ hash | shortAddress(5, 7) }}</div>
   </div>
 </template>
 <script>
