@@ -6,15 +6,13 @@
       </a>
       <div class="post-date__text">{{ date | normalizeDate }}</div>
     </div>
-    <nuxt-link :to="`/${address}`">
-      <div class="white-post-id">Eth: {{ address | shortAddress(5, 7) }}</div>
-    </nuxt-link>
+    <div class="white-post-id">Eth: {{ hash | shortAddress(5, 7) }}</div>
   </div>
 </template>
 <script>
 export default {
   props: {
-    address: {
+    hash: {
       type: String,
       required: true
     },
