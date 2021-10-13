@@ -31,3 +31,8 @@ export interface FetchManyType {
   page: number
   pageSize: number
 }
+
+export interface ERC721ContractDataType {
+  tokenURI: string
+  owner: string
+}
