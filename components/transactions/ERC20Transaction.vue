@@ -19,9 +19,7 @@
     <div class="transactions-link-right">
       <div class="transactions-link__usdt">
         {{ income ? '-' : '' }}
-        {{
-          transaction.amount | normalizeAmount(transaction.tokenInfo.decimals)
-        }}
+        {{ transaction.amount }}
         {{ transaction.tokenInfo.symbol }}
       </div>
       <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
@@ -33,10 +31,11 @@ import { Component, Prop } from 'nuxt-property-decorator'
 import Vue from 'vue'
 import { TransactionType } from '~/logic/transactions/types'
 import { web3 } from '~/plugins/web3'
-@Component({})
+@Component({
+  fetchOnServer: false
+})
 export default class ERC20Transaction extends Vue {
   @Prop({ required: true }) readonly transaction!: TransactionType
-  private fetchOnServer = false
   protected get income(): boolean {
     const sender = this.transaction.sender
     const address = web3.utils.toChecksumAddress(this.$route.params.address)

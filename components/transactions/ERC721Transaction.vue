@@ -1,6 +1,6 @@
 <template>
   <div class="post post-image">
-    <top :address="transaction.nft.owner" :date="transaction.timeStamp" />
+    <top :hash="transaction.hash" :date="transaction.timeStamp" />
     <a
       href="#"
       :style="{ backgroundImage: `url(${transaction.nft.image})` }"
@@ -15,6 +15,7 @@ import { Component, Prop } from 'nuxt-property-decorator'
 import Vue from 'vue'
 import { TransactionType } from '~/logic/transactions/types'
 @Component({
+  fetchOnServer: false,
   components: {
     top: async () => await import('@/components/post/PostTop.vue'),
     textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
@@ -23,6 +24,5 @@ import { TransactionType } from '~/logic/transactions/types'
 })
 export default class ERC721Transaction extends Vue {
   @Prop({ required: true }) readonly transaction!: TransactionType
-  private fetchOnServer = false
 }
 </script>

@@ -20,7 +20,7 @@
     </div>
     <div class="transactions-link-right">
       <div class="transactions-link__usdt">
-        {{ income ? '-' : '' }} {{ transaction.amount | normalizeAmount }} ETH
+        {{ income ? '-' : '' }} {{ transaction.amount }} ETH
       </div>
       <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
     </div>
