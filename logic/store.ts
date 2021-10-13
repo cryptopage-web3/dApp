@@ -1,8 +1,7 @@
 import { Module } from 'vuex-simple'
 
-import NFTModule from '~/logic/nft/module'
 import AuthModule from '~/logic/auth/module'
-import TransactionModule from '~/logic/transactions/module'
+import AddressModule from '~/logic/address/module'
 /**
  * We use typed store with different modules inside.
  *
@@ -13,11 +12,8 @@ import TransactionModule from '~/logic/transactions/module'
  */
 export default class TypedStore {
   @Module()
-  public nft = new NFTModule()
-
-  @Module()
   public auth = new AuthModule()
 
   @Module()
-  public transactions = new TransactionModule()
+  public address = new AddressModule()
 }

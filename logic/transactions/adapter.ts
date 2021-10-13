@@ -23,6 +23,7 @@ const TransactionAdapter = (
       if (tokenInfo) {
         data.tokenInfo = tokenInfo
       }
+      data.amount = parser.parseAmount(data)
       return data
     }
   }

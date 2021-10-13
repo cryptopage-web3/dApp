@@ -1,7 +1,7 @@
 <template>
   <div class="balances">
     <a
-      v-for="token in $store.getters['auth/tokens']"
+      v-for="token in tokens"
       :key="token.tokenInfo.address"
       href="#"
       class="balance"
@@ -55,14 +55,19 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import { Component } from 'nuxt-property-decorator'
+import { Component, mixins } from 'nuxt-property-decorator'
+import TypedStoreMixin from '~/mixins/typed-store'
+import { EthplorerTokenType } from '~/logic/address/types'
 
 @Component({})
-export default class SidebarRightBalance extends Vue {
+export default class SidebarRightBalance extends mixins(TypedStoreMixin) {
+  public get tokens(): EthplorerTokenType[] {
+    return this.typedStore.address.tokens
+  }
+
   public usdBalance(balance: number, rate: number, decimals: number): string {
     if (rate > 0) {
-      return ((balance / 10 ** decimals) * rate).toFixed(2)
+      return String(((balance / 10 ** decimals) * rate).toFixed(2))
     }
     return String(0)
   }

@@ -1,10 +1,11 @@
-import { AxiosInstance, AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import * as tPromise from 'io-ts-promise'
-import { Container, Inject } from 'vue-typedi'
+import { Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
-import NFTService from '~/logic/nft/services'
+import NFTAPIService from '~/logic/nft/services/api'
 import AddressWeb3Service from '~/logic/address/services/web3'
 import TransactionAdapter from '~/logic/transactions/adapter'
+import { APIServiceMixin } from '~/logic/mixins'
 import {
   TransactionType,
   ParamsTransactionsType,
@@ -24,40 +25,13 @@ import {
   EtherscanInternalTransactionsResponse
 } from '~/logic/transactions/models'
 
-export default class TransactionAPIService {
+@Service(tokens.TRANSACTION_API_SERVICE)
+export default class TransactionAPIService extends APIServiceMixin {
   @Inject(tokens.ADDRESS_WEB3_SERVICE)
   private addressWeb3Service!: AddressWeb3Service
 
-  private network = 'mainnet'
-  protected etherscanAPIKey = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'
-  protected etherscanNetworks: Array<string> = [
-    'mainnet',
-    'goerli',
-    'kovan',
-    'rinkeby',
-    'ropsten'
-  ]
-
-  protected ethplorerNetworks: Array<string> = ['mainnet', 'kovan']
-
-  protected get $axios(): AxiosInstance {
-    return Container.get(tokens.AXIOS) as AxiosInstance
-  }
-
-  protected get nftService(): NFTService {
-    return Container.get(tokens.NFT_SERVICE) as NFTService
-  }
-
-  protected get baseURL(): string {
-    const network = this.network === 'mainnet' ? '' : `-${this.network}`
-    return `https://api${network}.etherscan.io/api?`
-  }
-
-  private changeNetwork = (network: string): void => {
-    if (this.network !== network) {
-      this.network = network
-    }
-  }
+  @Inject(tokens.NFT_API_SERVICE)
+  public nftAPIService!: NFTAPIService
 
   /**
    * Get a list of 'Normal' Transactions By Address from Etherscan API
@@ -78,7 +52,7 @@ export default class TransactionAPIService {
       action: 'txlist'
     }
     const params = new URLSearchParams(options).toString()
-    const URL = `${this.baseURL}${params}&apikey=${this.etherscanAPIKey}`
+    const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
     const response: AxiosResponse<EtherscanTransactionsResponseType> =
       await this.$axios.get(URL)
     const data = await tPromise.decode(
@@ -116,7 +90,7 @@ export default class TransactionAPIService {
       action: 'txlistinternal'
     }
     const params = new URLSearchParams(options).toString()
-    const URL = `${this.baseURL}${params}&apikey=${this.etherscanAPIKey}`
+    const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
     const response: AxiosResponse<EtherscanInternalTransactionsResponseType> =
       await this.$axios.get(URL)
     const data = await tPromise.decode(
@@ -150,7 +124,7 @@ export default class TransactionAPIService {
       action: 'tokentx'
     }
     const params = new URLSearchParams(options).toString()
-    const URL = `${this.baseURL}${params}&apikey=${this.etherscanAPIKey}`
+    const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
     const response: AxiosResponse<EtherscanERC20TransactionsResponseType> =
       await this.$axios.get(URL)
     const data = await tPromise.decode(
@@ -184,7 +158,7 @@ export default class TransactionAPIService {
       action: 'tokennfttx'
     }
     const params = new URLSearchParams(options).toString()
-    const URL = `${this.baseURL}${params}&apikey=${this.etherscanAPIKey}`
+    const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
     const response: AxiosResponse<EtherscanERC721TransactionsResponseType> =
       await this.$axios.get(URL)
     const data = await tPromise.decode(
@@ -197,7 +171,7 @@ export default class TransactionAPIService {
           transaction: EtherscanERC721TransactionType
         ): Promise<TransactionType> => {
           const adapter = TransactionAdapter(transaction)
-          const nft = await this.nftService.fetchOne({
+          const nft = await this.nftAPIService.fetchOne({
             tokenId: transaction.tokenID,
             contractAddress: transaction.contractAddress
           })

@@ -4,7 +4,7 @@
 
 // import { ssrContext as SSRContext } from 'nuxt'
 import Vue from 'vue'
-import Vuex, { Store, Plugin } from 'vuex'
+import Vuex, { Store, Plugin } from 'vuex' // eslint-disable-line import/named
 import { createVuexStore } from 'vuex-simple'
 
 import TypedStore from '~/logic/store'
@@ -27,7 +27,6 @@ export default function store(
   extraContext: { plugins: Plugin<StateType>[] }
 ): Store<StateType> {
   const typedStore = new TypedStore()
-
   return createVuexStore(typedStore, {
     plugins: extraContext ? extraContext.plugins : []
   })

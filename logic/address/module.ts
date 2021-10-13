@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
-import TransactionService from '~/logic/transactions/services'
+import TransactionAPIService from '~/logic/transactions/services/api'
 import AddressAPIService from '~/logic/address/services/api'
-import { EthplorerTokenInfoType } from '~/logic/address/types'
+import {
+  // EthplorerTokenInfoType,
+  EthplorerTokenType,
+  EthplorerGetAddressInfoResponseType
+} from '~/logic/address/types'
 import tokens from '~/logic/tokens'
 import {
   ParamsTransactionsType,
@@ -17,11 +21,11 @@ import {
  * @see https://vuex.vuejs.org/guide/modules.html
  * @see https://github.com/sascha245/vuex-simple
  */
-export default class TransactionModule {
+export default class AddressModule {
   // Dependencies
 
-  @Inject(tokens.TRANSACTION_SERVICE)
-  public service!: TransactionService
+  @Inject(tokens.TRANSACTION_API_SERVICE)
+  public transactionAPIService!: TransactionAPIService
 
   @Inject(tokens.ADDRESS_API_SERVICE)
   public addressAPIService!: AddressAPIService
@@ -29,22 +33,47 @@ export default class TransactionModule {
   // State
 
   @State()
-  public transactionAddress = ''
+  public currentAddress = '0x'
 
   @State()
   public transactions: TransactionType[] = []
 
   @State()
-  public transactionsCount = 0
-
-  @State()
-  public tokenInfo?: EthplorerTokenInfoType
+  public addressInfo: EthplorerGetAddressInfoResponseType | undefined
 
   // Getters
 
   @Getter()
+  public get address(): string {
+    return this.addressInfo ? this.addressInfo.address : this.currentAddress
+  }
+
+  @Getter()
+  public get tokens(): EthplorerTokenType[] {
+    let tokens: EthplorerTokenType[] = []
+    if (this.addressInfo && 'tokens' in this.addressInfo) {
+      tokens = this.addressInfo.tokens || []
+    }
+    return tokens.sort((a, b) => (a.balance > b.balance ? -1 : 1))
+  }
+
+  @Getter()
+  public get image(): string {
+    return this.addressInfo &&
+      this.addressInfo.tokenInfo &&
+      this.addressInfo.tokenInfo.image
+      ? 'https://ethplorer.io' + this.addressInfo.tokenInfo.image
+      : ''
+  }
+
+  @Getter()
   public get hasTransactions(): boolean {
     return Boolean(this.transactions && this.transactions.length > 0)
+  }
+
+  @Getter()
+  public get transactionsCount(): number {
+    return this.addressInfo ? this.addressInfo.countTxs : 0
   }
 
   @Getter()
@@ -62,24 +91,26 @@ export default class TransactionModule {
     return this.transactions.filter((tx: TransactionType) => tx.nft)
   }
 
-  @Getter()
-  public get address(): string {
-    return this.transactionAddress
-  }
-
-  @Getter()
-  public get image(): string {
-    return this.tokenInfo && this.tokenInfo.image
-      ? 'https://ethplorer.io' + this.tokenInfo.image
-      : ''
-  }
-
-  @Getter()
-  public get count(): number {
-    return this.transactionsCount
-  }
-
   // Mutations
+
+  @Mutation()
+  public setAddress(address: string): void {
+    this.currentAddress = address
+  }
+
+  @Mutation()
+  public setAddressInfo(
+    addressInfo: EthplorerGetAddressInfoResponseType
+  ): void {
+    this.addressInfo = addressInfo
+  }
+
+  @Mutation()
+  public setTransactions(transactions: TransactionType[]): void {
+    transactions.forEach((transaction: TransactionType) => {
+      this.setTransaction(transaction)
+    })
+  }
 
   @Mutation()
   public setTransaction(transaction: TransactionType): void {
@@ -99,33 +130,18 @@ export default class TransactionModule {
   }
 
   @Mutation()
-  public setTokenInfo(tokenInfo: EthplorerTokenInfoType) {
-    this.tokenInfo = tokenInfo
-  }
-
-  @Mutation()
-  public setAddress(address: string) {
-    this.transactionAddress = address
-  }
-
-  @Mutation()
-  public setTransactionsCount(count: number) {
-    this.transactionsCount = count
-  }
-
-  @Mutation()
-  public setTransactions(transactions: TransactionType[]): void {
-    transactions.forEach((transaction: TransactionType) => {
-      this.setTransaction(transaction)
-    })
-  }
-
-  @Mutation()
   public clearTransactions(): void {
     this.transactions = []
   }
 
   // Actions
+
+  @Action()
+  public async updateAddressInfo(address: string): Promise<void> {
+    this.setAddress(address)
+    const addressInfo = await this.addressAPIService.getAddressInfo(address)
+    this.setAddressInfo(addressInfo)
+  }
 
   @Action()
   public async getTransactions({
@@ -134,7 +150,7 @@ export default class TransactionModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.service.getTransactions({
+    const transactions = await this.transactionAPIService.getTransactions({
       address,
       page,
       offset,
@@ -151,12 +167,13 @@ export default class TransactionModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.service.getInternalTransactions({
-      address,
-      page,
-      offset,
-      sort
-    })
+    const transactions =
+      await this.transactionAPIService.getInternalTransactions({
+        address,
+        page,
+        offset,
+        sort
+      })
     this.setTransactions(transactions)
     return transactions
   }
@@ -168,7 +185,7 @@ export default class TransactionModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.service.getERC20Transactions({
+    const transactions = await this.transactionAPIService.getERC20Transactions({
       address,
       page,
       offset,
@@ -185,29 +202,15 @@ export default class TransactionModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.service.getERC721Transactions({
-      address,
-      page,
-      offset,
-      sort
-    })
+    const transactions = await this.transactionAPIService.getERC721Transactions(
+      {
+        address,
+        page,
+        offset,
+        sort
+      }
+    )
     this.setTransactions(transactions)
     return transactions
-  }
-
-  @Action()
-  public async updateAddressInfo(address: string): Promise<void> {
-    if (address !== this.address) {
-      this.setAddress(address)
-      const addressInfo = await this.addressAPIService.getAddressInfo(address)
-      if (addressInfo) {
-        const tokenInfo =
-          'tokenInfo' in addressInfo ? addressInfo.tokenInfo : undefined
-        if (tokenInfo) {
-          this.setTokenInfo(tokenInfo)
-        }
-        this.setTransactionsCount(addressInfo.countTxs)
-      }
-    }
   }
 }

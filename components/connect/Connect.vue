@@ -39,6 +39,15 @@
           </li>
           <li><a href="#">Activate layer 2</a></li>
           <li><a href="#">Copy Address</a></li>
+          <li>
+            <a
+              v-if="$installer.canInstall && !$installer.hasInstalled"
+              href="#"
+              @click="$installer.prompt"
+            >
+              Install app
+            </a>
+          </li>
           <li><a href="#">Transaction history</a></li>
           <li><a href="#">Claim</a></li>
           <li><a href="#">Change Wallet</a></li>
