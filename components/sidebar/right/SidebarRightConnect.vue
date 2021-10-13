@@ -25,8 +25,10 @@
               <router-link :to="`/${address}`">Home page</router-link>
             </li>
             <li><a href="#">Activate layer 2</a></li>
-            <li><a href="#">Copy Address</a></li>
-            <li><a href="#">Transaction history</a></li>
+            <li><a href="#" @click="copy(address)">Copy Address</a></li>
+            <li>
+              <nuxt-link :to="`/${address}`"> Transaction history </nuxt-link>
+            </li>
             <li><a href="#">Claim</a></li>
             <li><a href="#">Change Wallet</a></li>
             <li><a href="#" @click.prevent="signout">Disconnect</a></li>
@@ -58,50 +60,67 @@
     </a>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import { Watch, Component, Ref, mixins } from 'nuxt-property-decorator'
+import TypedStoreMixin from '~/mixins/typed-store'
+import Signin from '@/components/auth/Signin.vue'
+
+// Register the router hooks with their names
+Component.registerHooks(['created'])
+
+@Component({
   components: {
     signin: async () => await import('@/components/auth/Signin.vue')
-  },
-  computed: {
-    isAuth() {
-      return this.$store.getters['auth/isAuth']
-    },
-    address() {
-      return this.$store.getters['auth/selectedAddress']
-    }
-  },
-  watch: {
-    isAuth: {
-      handler(isAuth) {
-        if (isAuth) {
-          this.$nextTick(() => {
-            $(this.$refs.connect).hover(
-              function () {
-                $(this).addClass('active')
-                $(this)
-                  .find('.connect-wallet-col-body')
-                  .stop(true, true)
-                  .slideDown(300)
-              },
-              function () {
-                $(this).removeClass('active')
-                $(this).find('.connect-wallet-col-body').slideUp(300)
-              }
-            )
-          })
+  }
+})
+export default class SidebarRightConnect extends mixins(TypedStoreMixin) {
+  public canCopy = false
+
+  get address(): string {
+    return this.typedStore.auth.selectedAddress
+  }
+
+  @Ref() readonly signinComponent!: typeof Signin
+
+  public get isAuth(): boolean {
+    return this.typedStore.auth.isAuth
+  }
+
+  public signin(): void {
+    this.signinComponent.methods.init()
+  }
+
+  public signout(): void {
+    this.$store.dispatch('auth/signout')
+    this.$router.push('/')
+  }
+
+  async copy(s: string): Promise<void> {
+    await navigator.clipboard.writeText(s)
+  }
+
+  created(): void {
+    this.canCopy = !!navigator.clipboard
+  }
+
+  @Watch('isAuth', { immediate: true })
+  public authenticated(isAuth: boolean): void {
+    if (isAuth) {
+      /*
+      $(this.$refs.connect).hover(
+        function () {
+          $(this).addClass('active')
+          $(this)
+            .find('.connect-wallet-col-body')
+            .stop(true, true)
+            .slideDown(300)
+        },
+        function () {
+          $(this).removeClass('active')
+          $(this).find('.connect-wallet-col-body').slideUp(300)
         }
-      },
-      immediate: true
-    }
-  },
-  methods: {
-    signin() {
-      this.$refs.signin.init()
-    },
-    signout() {
-      this.$store.dispatch('auth/signout')
-      this.$router.push('/')
+      )
+      */
     }
   }
 }
