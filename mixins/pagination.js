@@ -34,7 +34,7 @@ export const paginationMixin = {
       this.page -= 1
     },
     reset() {
-      this.$store.commit('transactions/clearTransactions')
+      this.$store.commit('address/clearTransactions')
       this.$fetch()
     }
   },
