@@ -12,9 +12,14 @@
         <div class="transactions-link__number">
           {{ transaction.timeStamp | normalizeDate }} /
           {{ income ? 'To' : 'From' }} :
-          {{
-            income ? transaction.receiver : transaction.sender | shortAddress
-          }}
+          <nuxt-link
+            style="color: #a5a5a5"
+            :to="`/${income ? transaction.receiver : transaction.sender}`"
+          >
+            {{
+              income ? transaction.receiver : transaction.sender | shortAddress
+            }}
+          </nuxt-link>
         </div>
       </div>
     </div>
