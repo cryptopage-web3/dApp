@@ -45,11 +45,7 @@ export default class AddressModule {
 
   @Getter()
   public get address(): string {
-    const address = this.addressInfo
-      ? this.addressInfo.address
-      : this.currentAddress
-    console.log('address', address)
-    return address
+    return this.addressInfo ? this.addressInfo.address : this.currentAddress
   }
 
   @Getter()
@@ -97,16 +93,6 @@ export default class AddressModule {
 
   // Mutations
 
-  // @Mutation()
-  // public setAddress(address: string): void {
-  // this.transactionAddress = address
-  // }
-
-  // @Mutation()
-  // public setTransactionsCount(count: number): void {
-  // this.transactionsCount = count
-  // }
-
   @Mutation()
   public setAddress(address: string): void {
     this.currentAddress = address
@@ -152,13 +138,9 @@ export default class AddressModule {
 
   @Action()
   public async updateAddressInfo(address: string): Promise<void> {
-    console.log('updateAddressInfo', address)
     this.setAddress(address)
-    // if (address !== this.address) {
     const addressInfo = await this.addressAPIService.getAddressInfo(address)
     this.setAddressInfo(addressInfo)
-    // }
-    console.log('this.currentAddress', this.currentAddress)
   }
 
   @Action()
