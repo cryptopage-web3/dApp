@@ -6,7 +6,9 @@ export const paginationMixin = {
   }),
   watch: {
     page: '$fetch',
-    pageSize: '$fetch'
+    pageSize: '$fetch',
+    address: 'reset',
+    chainId: 'reset'
   },
   computed: {
     showNext() {
@@ -14,6 +16,12 @@ export const paginationMixin = {
     },
     showPrevious() {
       return this.page >= 2
+    },
+    address() {
+      return this.$store.getters['transactions/address']
+    },
+    chainId() {
+      return this.$store.getters['auth/chainId']
     }
   },
   methods: {
@@ -24,6 +32,10 @@ export const paginationMixin = {
     previous() {
       if (!this.showPrevious) return
       this.page -= 1
+    },
+    reset() {
+      this.$store.commit('transactions/clearTransactions')
+      this.$fetch()
     }
   },
   mounted() {
