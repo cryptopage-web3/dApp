@@ -26,5 +26,8 @@ export type CallbackType =  { (object: EventType): void }
 
 export type AuthServiceSigninResponseType = {
   status: string
-  message: string
+  message: {
+    title: string,
+    text: string
+  }
 }
