@@ -288,14 +288,12 @@ export default class AuthService extends Vue {
       return false
     }
     const device = deviceType()
-
     const lastProvider = window.localStorage.getItem('lastProvider')
-    if (lastProvider) {
-      providerName = lastProvider
-    }
 
     if (device !== 'desktop') {
       providerName = 'walletConnect'
+    } else if (lastProvider) {
+      providerName = lastProvider
     }
 
     const status = await this.switchProvider(providerName)
