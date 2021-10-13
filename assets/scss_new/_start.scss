@@ -61,3 +61,42 @@
     top: 15px;
     width: 240px;
 }
+
+@media (max-width: 767px) {
+    .start-page {
+        padding-top: 100px;
+    }
+
+    .start-page__logo svg {
+        width: 150px;
+        height: 150px;
+    }
+
+    .start-page__header {
+        margin-top: 30px;
+    }
+
+    .start-page__header-title {
+        font-size: 38px;
+    }
+    
+    .start-page__header-subtitle {
+        font-size: 24px;
+        margin-top: 20px;
+    }
+
+    .start-page__signin-btn {
+        font-size: 20px;
+        min-width: 250px;
+        padding: 15px;
+    }
+
+    .start-page__signin {
+        margin-top: 50px;
+    }
+
+    .start-page__signin-title {
+        margin-top: 15px;
+        font-size: 16px;
+    }
+}
