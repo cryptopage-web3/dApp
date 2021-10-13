@@ -92,13 +92,20 @@ export default class TransactionParser {
     return web3.utils.toChecksumAddress(receiver)
   }
 
-  private parseAmount(tx: TransactionType): string {
+  public parseAmount(tx: TransactionType): string {
     const input = tx.decodedInput
-    let amount = tx.value
+    let amount = Number(tx.value)
+    let decimals = 18
+
     if (input && input.name === 'transfer') {
-      amount = web3.utils.toBN(input.params[1].value).toString()
+      amount = Number(web3.utils.toBN(input.params[1].value))
     }
-    return amount
+    if (tx.tokenInfo) {
+      decimals = Number(tx.tokenInfo.decimals)
+    }
+    const divider = 10 ** decimals
+    const result = String(amount / divider)
+    return result
   }
 
   public parse(
@@ -108,15 +115,14 @@ export default class TransactionParser {
       | EtherscanERC721TransactionType
   ): TransactionType {
     const transactionBody = this.parseTransactionBody(transaction)
-    if ('tokenSymbol' in transaction) {
-      transactionBody.tokenInfo = this.parseTokenInfo(transaction)
-    }
     if (transaction.input.startsWith('0x')) {
       transactionBody.decodedInput = this.parseInput(transaction)
     }
+    if ('tokenSymbol' in transaction) {
+      transactionBody.tokenInfo = this.parseTokenInfo(transaction)
+    }
     transactionBody.sender = this.parseSender(transactionBody)
     transactionBody.receiver = this.parseReceiver(transactionBody)
-    transactionBody.amount = this.parseAmount(transactionBody)
     return transactionBody
   }
 }

@@ -35,6 +35,8 @@ export type ParamsTransactionsType = {
   page?: number
   offset?: number
   sort?: string
+  module?: string
+  action?: string
 }
 
 export type TransactionType = ParamsAdaptarType & {
