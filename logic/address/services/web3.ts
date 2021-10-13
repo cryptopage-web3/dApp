@@ -1,14 +1,17 @@
+import { Container, Service } from 'vue-typedi'
+import Web3 from 'web3'
 import * as tPromise from 'io-ts-promise'
-import { Service } from 'vue-typedi'
 import { ERC20ABI } from '~/constants/abi-samples'
-import { web3 } from '~/plugins/web3'
 import { TokenInfo } from '~/logic/address/models'
 import { TokenInfoType } from '~/logic/address/types'
 import tokens from '~/logic/tokens'
 
-
 @Service(tokens.ADDRESS_WEB3_SERVICE)
 export default class AddressWeb3Service {
+  protected get $web3(): Web3 {
+    return Container.get(tokens.WEB3) as Web3
+  }
+
   /**
    * Get contract name, totalSupply, decimals and symbol from  web3
    */
@@ -16,7 +19,7 @@ export default class AddressWeb3Service {
     address: string
   ): Promise<TokenInfoType | undefined> => {
     try {
-      const contract = new web3.eth.Contract(ERC20ABI, address)
+      const contract = new this.$web3.eth.Contract(ERC20ABI, address)
       const name = await contract.methods.name().call()
       const totalSupply = await contract.methods.totalSupply().call()
       const decimals = await contract.methods.decimals().call()
@@ -31,5 +34,16 @@ export default class AddressWeb3Service {
     } catch {
       return undefined
     }
+  }
+
+  public getBalanceOf = async (
+    address: string,
+    contractAddress: string
+  ): Promise<string> => {
+    const contract = new this.$web3.eth.Contract(ERC20ABI, contractAddress)
+    const balanceOf = await contract.methods.balanceOf(address).call()
+    const decimals = await contract.methods.decimals().call()
+    const balance = balanceOf / 10 ** decimals
+    return balance.toString()
   }
 }
