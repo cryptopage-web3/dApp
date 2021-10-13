@@ -9,7 +9,7 @@ export class APIServiceMixin {
   protected etherscanAPIKey = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.ETHERSCAN_API_KEY
   protected bscscanAPIKey = 'TQDPK4XAU4BZT8WQNN6IETRRXXDI37W64Y'
   protected polygonscanAPIKey = '4DCKF5U2YGR1HNG1KHWP8DSK47AH85W28Z'
-  protected ethplorerAPIKey = 'freekey' // 'EK-wMnq4-9P88Qoh-AC399'
+  protected ethplorerAPIKey = 'EK-wMnq4-9P88Qoh-AC399'
 
   protected get authService(): AuthService {
     return Container.get(tokens.AUTH_SERVICE) as AuthService
