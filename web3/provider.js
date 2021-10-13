@@ -133,7 +133,7 @@ class Web3Provider {
         setTimeout(() => {
           this.setOrChangeWeb3Data(
             window.ethereum.selectedAddress,
-            window.ethereum.networkVersion
+            window.ethereum.chainId
           )
         }, 300)
       }
