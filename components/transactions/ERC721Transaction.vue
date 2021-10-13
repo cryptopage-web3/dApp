@@ -11,11 +11,11 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Prop } from 'nuxt-property-decorator'
 import Vue from 'vue'
+import { Component, Prop } from 'nuxt-property-decorator'
 import { TransactionType } from '~/logic/transactions/types'
+Component.registerHooks(['fetchOnServer'])
 @Component({
-  fetchOnServer: false,
   components: {
     top: async () => await import('@/components/post/PostTop.vue'),
     textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
@@ -24,5 +24,8 @@ import { TransactionType } from '~/logic/transactions/types'
 })
 export default class ERC721Transaction extends Vue {
   @Prop({ required: true }) readonly transaction!: TransactionType
+  fetchOnServer(): boolean {
+    return true
+  }
 }
 </script>

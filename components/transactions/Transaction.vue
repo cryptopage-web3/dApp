@@ -27,10 +27,13 @@
   </a>
 </template>
 <script lang="ts">
-import { Component, Prop } from 'nuxt-property-decorator'
 import Vue from 'vue'
+import Web3 from 'web3'
+import { Container } from 'vue-typedi'
+import { Component, Prop } from 'nuxt-property-decorator'
 import { TransactionType } from '~/logic/transactions/types'
-import { web3 } from '~/plugins/web3'
+import tokens from '~/logic/tokens'
+Component.registerHooks(['fetchOnServer'])
 @Component({
   components: {
     token: async () =>
@@ -40,28 +43,21 @@ import { web3 } from '~/plugins/web3'
   }
 })
 export default class Transaction extends Vue {
+  protected get $web3(): Web3 {
+    return Container.get(tokens.WEB3) as Web3
+  }
+
   @Prop({ required: true }) readonly transaction!: TransactionType
-  private fetchOnServer = false
   protected get income(): boolean {
     const sender = this.transaction.sender
-    const address = web3.utils.toChecksumAddress(this.$route.params.address)
+    const address = this.$web3.utils.toChecksumAddress(
+      this.$route.params.address
+    )
     return sender === address
+  }
+
+  fetchOnServer(): boolean {
+    return true
   }
 }
 </script>
-<style scoped="">
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-}
-.column {
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  align-items: center;
-  padding: 1em 1em;
-  color: black;
-}
-</style>

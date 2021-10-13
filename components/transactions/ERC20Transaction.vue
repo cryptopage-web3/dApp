@@ -27,19 +27,31 @@
   </a>
 </template>
 <script lang="ts">
-import { Component, Prop } from 'nuxt-property-decorator'
 import Vue from 'vue'
+import Web3 from 'web3'
+import { Container } from 'vue-typedi'
+import { Component, Prop } from 'nuxt-property-decorator'
 import { TransactionType } from '~/logic/transactions/types'
-import { web3 } from '~/plugins/web3'
-@Component({
-  fetchOnServer: false
-})
+import tokens from '~/logic/tokens'
+
+Component.registerHooks(['fetchOnServer'])
+@Component({})
 export default class ERC20Transaction extends Vue {
+  protected get $web3(): Web3 {
+    return Container.get(tokens.WEB3) as Web3
+  }
+
   @Prop({ required: true }) readonly transaction!: TransactionType
   protected get income(): boolean {
     const sender = this.transaction.sender
-    const address = web3.utils.toChecksumAddress(this.$route.params.address)
+    const address = this.$web3.utils.toChecksumAddress(
+      this.$route.params.address
+    )
     return sender === address
+  }
+
+  fetchOnServer(): boolean {
+    return true
   }
 }
 </script>
