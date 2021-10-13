@@ -287,29 +287,37 @@ export default class AuthService extends Vue {
     if (typeof window === 'undefined') {
       return false
     }
-    if (deviceType() !== 'desktop') {
-      providerName = 'walletConnect'
-    }
+    const device = deviceType()
+
     const lastProvider = window.localStorage.getItem('lastProvider')
     if (lastProvider) {
       providerName = lastProvider
     }
+
+    if (device !== 'desktop') {
+      providerName = 'walletConnect'
+    }
+
     const status = await this.switchProvider(providerName)
     return Boolean(status === 'connected')
   }
 
   public signin = async (): Promise<AuthServiceSigninResponseType> => {
+    const device = deviceType()
+    const response = {
+      status: 'error',
+      message: {
+        title: 'Something wrong!',
+        text: 'Please reload page and try again.'
+      }
+    }
     if (this.provider) {
-      if (!this.metamaskInstalled) {
-        return {
-          status: 'error',
-          message: 'MetaMask not installed'
-        }
-      } else if (!this.metamaskConnected) {
-        return {
-          status: 'error',
-          message: 'Not authorized in MetaMask'
-        }
+      if (device !== 'desktop' && !this.walletConnectConnected) {
+        response.message.title = 'WalletConnect not connected!'
+      } else if (device === 'desktop' && !this.metamaskInstalled) {
+        response.message.title = 'WalletConnect not connected!'
+      } else if (device === 'desktop' && !this.metamaskConnected) {
+        response.message.title = 'Not authorized in MetaMask!'
       }
       try {
         const signaturePhrase = await this.getSignaturePhrase()
@@ -323,27 +331,19 @@ export default class AuthService extends Vue {
         })
         const address = this.$web3.utils.toChecksumAddress(recoveredAddress)
         if (address === this.selectedAddress) {
-          return {
-            status: 'success',
-            message: 'Signature verified. Successfully logged in!'
+          response.status = 'success'
+          response.message = {
+            title: 'Signature verified!',
+            text: 'Successfully logged in.'
           }
         } else {
-          return {
-            status: 'error',
-            message: 'Recovered address not equals selectedAddress'
-          }
+          response.message.title = 'Signature verification failed!'
         }
       } catch {
-        return {
-          status: 'error',
-          message: 'Unknown error'
-        }
+        return response
       }
     }
-    return {
-      status: 'error',
-      message: 'Provider not set'
-    }
+    return response
   }
 
   public disconnect = async (): Promise<void> => {
