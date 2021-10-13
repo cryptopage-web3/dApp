@@ -4,13 +4,16 @@ export const shortAddress = (
   endCount = 3,
   delimiter = '...'
 ) => {
-  const start = address.slice(0, startCount)
-  const end = address.slice(address.length - endCount, address.length)
-  return start + delimiter + end
+  if (address) {
+    address = String(address)
+    const start = address.slice(0, startCount)
+    const end = address.slice(address.length - endCount, address.length)
+    return start + delimiter + end
+  }
 }
 
 export const toDecimals = (value, decimals = 18) =>
-  (Number(value) / 10 ** decimals).toFixed(2)
+  Number(value) / 10 ** decimals
 
 export const tokenURItoURI = (uri) => {
   if (uri.startsWith('ipfs://ipfs/')) {
