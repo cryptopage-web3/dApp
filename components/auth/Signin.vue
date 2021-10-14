@@ -14,8 +14,11 @@ export default {
       })
 
       if (response.status === 'success' && this.$route.path === '/') {
+        this.$nuxt.$loading.start()
+
+        /** делаем небольшую задержку, чтобы была возможность прочесть уведомление */
         const address = await this.$store.getters['auth/selectedAddress']
-        this.$router.push(`/${address}`)
+        setTimeout(() => this.$router.push(`/${address}`), 1000)
       }
     }
   }
