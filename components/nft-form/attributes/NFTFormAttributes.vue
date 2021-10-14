@@ -24,15 +24,15 @@
 export default {
   components: {
     'properties-attribute': async () =>
-      await import('@/components/tweet/attributes/TweetAddFormProperties.vue'),
+      await import('@/components/nft-form/attributes/NFTFormProperties.vue'),
     'stats-attribute': async () =>
-      await import('@/components/tweet/attributes/TweetAddFormStats.vue'),
+      await import('@/components/nft-form/attributes/NFTFormStats.vue'),
     'levels-attribute': async () =>
-      await import('@/components/tweet/attributes/TweetAddFormLevels.vue'),
+      await import('@/components/nft-form/attributes/NFTFormLevels.vue'),
     'dates-attribute': async () =>
-      await import('@/components/tweet/attributes/TweetAddFormDates.vue'),
+      await import('@/components/nft-form/attributes/NFTFormDates.vue'),
     'boosts-attribute': async () =>
-      await import('@/components/tweet/attributes/TweetAddFormBoosts.vue')
+      await import('@/components/nft-form/attributes/NFTFormBoosts.vue')
   },
   props: {
     attributes: {

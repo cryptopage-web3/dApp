@@ -29,7 +29,7 @@
 export default {
   components: {
     boost: async () =>
-      await import('@/components/tweet/attributes/TweetAddFormBoost.vue')
+      await import('@/components/nft-form/attributes/NFTFormBoost.vue')
   },
   props: {
     boosts: {

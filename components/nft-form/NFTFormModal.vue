@@ -3,21 +3,19 @@
     <div class="modal-close d-flex align-center">
       <div
         class="modal-close__btn d-flex align-center justify-center"
-        @click="$modal.hide('tweet')"
+        @click="$modal.hide('nft')"
       >
         <icon type="close" />
       </div>
     </div>
-    <TweetAddForm />
+    <nft-form />
   </div>
 </template>
-
 <script>
 export default {
-  name: 'Tweet',
   components: {
-    Icon: async () => await import('@/components/icons/Icon'),
-    TweetAddForm: () => import('@/components/tweet/TweetAddForm.vue')
+    icon: async () => await import('@/components/icons/Icon'),
+    'nft-form': () => import('@/components/nft-form/NFTForm.vue')
   }
 }
 </script>

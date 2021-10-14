@@ -81,7 +81,7 @@
   </div>
 </template>
 <script>
-import ModalTweet from '@/components/modals/TweetAddForm.vue'
+import NFTFormModal from '~/components/nft-form/NFTFormModal.vue'
 
 export default {
   components: {
@@ -109,16 +109,16 @@ export default {
     }
   },
   methods: {
-    modalTweet() {
+    modalNFT() {
       this.$modal.show(
-        ModalTweet,
-        { classes: 'modal--tweet' },
+        NFTFormModal,
+        { classes: 'modal--nft' },
         {
           width: 600,
           height: 'auto',
           adaptive: true,
           shiftY: 0.1,
-          name: 'tweet'
+          name: 'nft'
         }
       )
     },
