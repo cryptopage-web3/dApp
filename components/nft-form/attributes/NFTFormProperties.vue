@@ -32,7 +32,7 @@
 export default {
   components: {
     property: async () =>
-      await import('@/components/tweet/attributes/TweetAddFormProperty.vue')
+      await import('@/components/nft-form/attributes/NFTFormProperty.vue')
   },
   props: {
     properties: {

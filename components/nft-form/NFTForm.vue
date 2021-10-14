@@ -56,13 +56,13 @@ import { validateForm, getAdaptedAttributes } from '@/utils/tweetForm'
 export default {
   components: {
     'text-field': async () =>
-      await import('@/components/tweet/TweetAddFormMessage'),
+      await import('@/components/nft-form/NFTFormMessage'),
     'comment-checkbox': async () =>
-      await import('@/components/tweet/TweetAddFormComment'),
+      await import('@/components/nft-form/NFTFormComment'),
     'upload-image': async () =>
-      await import('@/components/tweet/TweetAddFormImage'),
+      await import('@/components/nft-form/NFTFormImage'),
     attributes: async () =>
-      await import('@/components/tweet/attributes/TweetAddFormAttributes'),
+      await import('@/components/nft-form/attributes/NFTFormAttributes'),
     icon: async () => await import('@/components/icons/Icon')
   },
   data() {

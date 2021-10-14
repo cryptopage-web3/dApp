@@ -1,17 +1,16 @@
 <template>
   <div class="main-center-cont">
     <div v-if="isOwner" class="tweet">
-      <TweetAddForm :settings="settings" />
+      <nft-form :settings="settings" />
     </div>
-    <ProfileBottom :transactions-count="transactionsCount" />
+    <profile-bottom :transactions-count="transactionsCount" />
   </div>
 </template>
 <script>
 export default {
   components: {
-    TweetAddForm: async () =>
-      await import('@/components/tweet/TweetAddForm.vue'),
-    ProfileBottom: async () =>
+    'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
+    'profile-bottom': async () =>
       await import('@/components/profile/ProfileMoreBottom')
   },
   props: {

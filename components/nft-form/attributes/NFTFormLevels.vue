@@ -2,9 +2,9 @@
   <div class="tweet-add__attribute">
     <div class="tweet-add__attribute-header" @click="toggle">
       <div class="tweet-add__attribute-header-icon">
-        <font-awesome-icon :icon="['fas', 'chart-area']" />
+        <font-awesome-icon :icon="['fas', 'star']" />
       </div>
-      <div class="tweet-add__attribute-header-title">Stats</div>
+      <div class="tweet-add__attribute-header-title">Levels</div>
       <div class="tweet-add__attribute-header-arrow">
         <font-awesome-icon
           :icon="['fas', isShow ? 'chevron-up' : 'chevron-down']"
@@ -12,14 +12,14 @@
       </div>
     </div>
     <div v-show="isShow" class="tweet-add__attribute-container">
-      <stat
-        v-for="stat in localStats"
-        :key="stat.id"
-        :stat="stat"
-        @remove="removeStat(stat.id)"
-        @change="statChangeHandler(stat.id, $event)"
+      <level
+        v-for="level in localLevels"
+        :key="level.id"
+        :level="level"
+        @remove="removeLevel(level.id)"
+        @change="levelChangeHandler(level.id, $event)"
       />
-      <div class="tweet-add__stat tweet-add__stat_add" @click="addStat">
+      <div class="tweet-add__level tweet-add__level_add" @click="addLevel">
         <font-awesome-icon :icon="['fas', 'plus-circle']" />
       </div>
     </div>
@@ -28,11 +28,11 @@
 <script>
 export default {
   components: {
-    stat: async () =>
-      await import('@/components/tweet/attributes/TweetAddFormStat.vue')
+    level: async () =>
+      await import('@/components/nft-form/attributes/NFTFormLevel.vue')
   },
   props: {
-    stats: {
+    levels: {
       type: Array,
       default: () => []
     }
@@ -40,23 +40,23 @@ export default {
   data() {
     return {
       isShow: false,
-      localStats: []
+      localLevels: []
     }
   },
   watch: {
-    stats: {
-      handler(stats) {
-        if (JSON.stringify(stats) === JSON.stringify(this.localStats)) {
+    levels: {
+      handler(levels) {
+        if (JSON.stringify(levels) === JSON.stringify(this.localLevels)) {
           return
         }
 
-        this.localStats = stats
+        this.localLevels = levels
       },
       immediate: true
     },
 
-    localStats(stats) {
-      this.$emit('change', stats)
+    localLevels(levels) {
+      this.$emit('change', levels)
     }
   },
   methods: {
@@ -64,19 +64,19 @@ export default {
       this.isShow = !this.isShow
     },
 
-    addStat() {
-      this.localStats.push({
+    addLevel() {
+      this.localLevels.push({
         id: Number(new Date())
       })
     },
 
-    removeStat(statId) {
-      this.localStats = this.localStats.filter(({ id }) => id !== statId)
+    removeLevel(levelId) {
+      this.localLevels = this.localLevels.filter(({ id }) => id !== levelId)
     },
 
-    statChangeHandler(statId, data) {
-      this.localStats = this.localStats.map((item) =>
-        item.id === statId
+    levelChangeHandler(levelId, data) {
+      this.localLevels = this.localLevels.map((item) =>
+        item.id === levelId
           ? {
               ...item,
               type: data.type,
