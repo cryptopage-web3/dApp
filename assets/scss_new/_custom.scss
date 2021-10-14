@@ -114,6 +114,15 @@
   position: absolute;
 }
 
+.connect-wallet-col-body::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 20px;
+  position: absolute;
+  top: -15px;
+}
+
 /* ===== mobile ===== */
 
 @media (max-width: 767px) {
@@ -149,5 +158,9 @@
 
   .connect-wallet-col-body {
     position: static;
+  }
+
+  .connect-wallet-col-body::before {
+    display: none;
   }
 }
