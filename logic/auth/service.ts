@@ -274,6 +274,7 @@ export default class AuthService extends Vue {
     const salt = await this.$sea.work(message, null, null, {
       name: 'SHA-256'
     })
+
     return await this.$sea.work(message, salt, null, {
       name: 'SHA-256'
     })
@@ -302,46 +303,81 @@ export default class AuthService extends Vue {
 
   public signin = async (): Promise<AuthServiceSigninResponseType> => {
     const device = deviceType()
-    const response = {
+
+    const commonError = {
       status: 'error',
       message: {
         title: 'Something wrong!',
         text: 'Please reload page and try again.'
       }
     }
-    if (this.provider) {
-      if (device !== 'desktop' && !this.walletConnectConnected) {
-        response.message.title = 'WalletConnect not connected!'
-      } else if (device === 'desktop' && !this.metamaskInstalled) {
-        response.message.title = 'WalletConnect not connected!'
-      } else if (device === 'desktop' && !this.metamaskConnected) {
-        response.message.title = 'Not authorized in MetaMask!'
-      }
-      try {
-        const signaturePhrase = await this.getSignaturePhrase()
-        const signature = await this.provider.request({
-          method: 'personal_sign',
-          params: [signaturePhrase, this.selectedAddress]
-        })
-        const recoveredAddress = recoverPersonalSignature({
-          data: signaturePhrase,
-          sig: signature
-        })
-        const address = this.$web3.utils.toChecksumAddress(recoveredAddress)
-        if (address === this.selectedAddress) {
-          response.status = 'success'
-          response.message = {
-            title: 'Signature verified!',
-            text: 'Successfully logged in.'
-          }
-        } else {
-          response.message.title = 'Signature verification failed!'
+
+    if (device !== 'desktop' && !this.walletConnectConnected) {
+      return {
+        status: 'error',
+        message: {
+          title: 'WalletConnect not connected',
+          text: 'Please connect to the wallet,<br>reload page and try again'
         }
-      } catch {
-        return response
       }
     }
-    return response
+
+    if (device === 'desktop' && !this.metamaskInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found MetaMask extension',
+          text: 'Please install MetaMask Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    if (device === 'desktop' && !this.metamaskConnected) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not authorized in MetaMask',
+          text: 'Please log in to the MetaMask Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    if (!this.provider) {
+      return commonError
+    }
+
+    try {
+      const signaturePhrase = await this.getSignaturePhrase()
+      const signature = await this.provider.request({
+        method: 'personal_sign',
+        params: [signaturePhrase, this.selectedAddress]
+      })
+      const recoveredAddress = recoverPersonalSignature({
+        data: signaturePhrase,
+        sig: signature
+      })
+      const address = this.$web3.utils.toChecksumAddress(recoveredAddress)
+
+      if (address === this.selectedAddress) {
+        return {
+          status: 'success',
+          message: {
+            title: 'Signature verified!',
+            text: 'Successfully logged in'
+          }
+        }
+      }
+
+      return {
+        status: 'error',
+        message: {
+          title: 'Signature verification failed',
+          text: 'Please reload page and try again'
+        }
+      }
+    } catch {
+      return commonError
+    }
   }
 
   public disconnect = async (): Promise<void> => {
