@@ -9,10 +9,10 @@
     />
     <div
       v-if="fileURL"
-      class="tweet-add__image d-flex justify-center align-start"
+      class="nft-form__image d-flex justify-center align-start"
     >
       <div
-        class="tweet-add__image-delete d-flex justify-center align-center"
+        class="nft-form__image-delete d-flex justify-center align-center"
         @click="fileDeleteHandler"
       >
         <icon type="close" />

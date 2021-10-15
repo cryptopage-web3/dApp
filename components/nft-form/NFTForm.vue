@@ -1,10 +1,10 @@
 <template>
   <div
-    class="tweet-add d-flex align-start justify-space-between"
+    class="nft-form d-flex align-start justify-space-between"
     @drop.prevent="dragFile"
     @dragover.prevent
   >
-    <div class="tweet-add__form d-flex flex-column">
+    <div class="nft-form__form d-flex flex-column">
       <form>
         <text-field
           v-model="title"
@@ -25,8 +25,8 @@
           @change="attributesChangeHandler"
         />
 
-        <div class="tweet-add__buttons">
-          <div class="tweet-add__post-links">
+        <div class="nft-form__buttons">
+          <div class="nft-form__post-links">
             <a class="post-link post-link_blue" @click="uploadImage">
               <div>
                 <icon type="uploadImage" />
@@ -34,7 +34,7 @@
             </a>
             <comment-checkbox v-model="hasComment" />
           </div>
-          <div class="tweet-add__send">
+          <div class="nft-form__send">
             <button
               type="button"
               class="post-follow-top__link btn btn_blue btn_blue--bg"
@@ -268,7 +268,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tweet-add__form {
+.nft-form__form {
   width: 100%;
 }
 </style>

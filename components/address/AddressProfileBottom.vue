@@ -28,26 +28,45 @@
       </router-link>
     </div>
     <div class="profile-form">
-      <div class="profile-form__container"></div>
+      <div class="profile-form__container">
+        <div class="profile-form__container-inner">
+          <nft-form />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
+  components: {
+    'nft-form': async () => await import('@/components/nft-form/NFTForm.vue')
+  },
+  data: () => ({
+    isCreateFormShown: false
+  }),
   computed: {
     isOwner() {
       return (
-        this.$store.getters['transactions/address'] ===
-        this.$store.getters['auth/selectedAddress']
+        String(this.$store.getters['address/address']).toLowerCase() ===
+        String(this.$store.getters['auth/selectedAddress']).toLowerCase()
       )
     },
     isAuth() {
       return this.$store.getters['auth/isAuth']
     }
   },
+  watch: {
+    isCreateFormShown(isShown) {
+      if (isShown) {
+        $('.profile-form__container-inner').slideDown(200)
+      } else {
+        $('.profile-form__container-inner').slideUp(200)
+      }
+    }
+  },
   methods: {
     showCreateForm() {
-      console.log('showCreateForm')
+      this.isCreateFormShown = !this.isCreateFormShown
     },
     showSendNft() {
       console.log('showSendNft')

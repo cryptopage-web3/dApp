@@ -1,17 +1,17 @@
 <template>
-  <div class="tweet-add__attribute">
-    <div class="tweet-add__attribute-header" @click="toggle">
-      <div class="tweet-add__attribute-header-icon">
+  <div class="nft-form__attribute">
+    <div class="nft-form__attribute-header" @click="toggle">
+      <div class="nft-form__attribute-header-icon">
         <font-awesome-icon :icon="['fas', 'tag']" />
       </div>
-      <div class="tweet-add__attribute-header-title">Properties</div>
-      <div class="tweet-add__attribute-header-arrow">
+      <div class="nft-form__attribute-header-title">Properties</div>
+      <div class="nft-form__attribute-header-arrow">
         <font-awesome-icon
           :icon="['fas', isShow ? 'chevron-up' : 'chevron-down']"
         />
       </div>
     </div>
-    <div v-show="isShow" class="tweet-add__attribute-container">
+    <div v-show="isShow" class="nft-form__attribute-container">
       <property
         v-for="property in localProperties"
         :key="property.id"
@@ -20,7 +20,7 @@
         @change="propertyChangeHandler(property.id, $event)"
       />
       <div
-        class="tweet-add__property tweet-add__property_add"
+        class="nft-form__property nft-form__property_add"
         @click="addProperty"
       >
         <font-awesome-icon :icon="['fas', 'plus-circle']" />

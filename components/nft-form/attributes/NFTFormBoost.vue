@@ -1,35 +1,35 @@
 <template>
-  <div class="tweet-add__boost">
-    <div class="tweet-add__boost-remove" @click="$emit('remove')">
+  <div class="nft-form__boost">
+    <div class="nft-form__boost-remove" @click="$emit('remove')">
       <font-awesome-icon :icon="['fas', 'times']" />
     </div>
-    <div class="tweet-add__boost-name">
+    <div class="nft-form__boost-name">
       <input
         v-model="type"
         type="text"
         placeholder="Enter type"
-        class="tweet-add__boost-name-input"
+        class="nft-form__boost-name-input"
       />
     </div>
-    <div class="tweet-add__boost-type">
-      <select v-model="displayType" class="tweet-add__boost-type-input">
+    <div class="nft-form__boost-type">
+      <select v-model="displayType" class="nft-form__boost-type-input">
         <option value="boost_percentage">Percentage</option>
         <option value="boost_number">Number</option>
       </select>
     </div>
-    <div class="tweet-add__boost-progress">
+    <div class="nft-form__boost-progress">
       <Progress
         :value="progress"
         :radius="30"
         :stroke-width="7"
         stroke-color="#1da1f2"
       >
-        <div class="tweet-add__boost-progress-content">
+        <div class="nft-form__boost-progress-content">
           <input
             v-model="value"
             type="text"
             placeholder="XX"
-            class="tweet-add__boost-progress-input"
+            class="nft-form__boost-progress-input"
           />
         </div>
       </Progress>
