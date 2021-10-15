@@ -3,29 +3,19 @@
     <nuxt-link
       v-for="token in tokens"
       :key="token.tokenInfo.address"
-      :to="`/${token.tokenInfo.address}/tokens?address=${$store.getters['address/address']}`"
+      :to="url(token)"
       class="balance"
     >
       <div class="balance-top">
         <div class="balance__thumb">
-          <img :src="`https://ethplorer.io${token.tokenInfo.image}`" alt="" />
+          <img :src="token.tokenInfo.image" alt="" />
         </div>
         <div class="balance-right">
-          <div class="balance__countusdt">
-            {{
-              token.tokenInfo && token.tokenInfo.price
-                ? token.tokenInfo.price.rate.toFixed(2)
-                : 0
-            }}
-            $
-          </div>
-          <div
-            v-if="token.tokenInfo.price && token.tokenInfo.price.diff"
-            class="balance__procent"
-          >
-            {{ token.tokenInfo.price.diff }} %
+          <div class="balance__countusdt">{{ token.rate.toFixed(2) }} $</div>
+          <div class="balance__procent">
+            {{ token.diff }} %
             <img
-              v-if="token.tokenInfo.price.diff > 0"
+              v-if="token.diff > 0"
               src="@/assets/img/balance__procent_img1.png"
               alt=""
             />
@@ -34,20 +24,10 @@
         </div>
       </div>
       <div class="balance-bottom">
-        Balance:
-        {{
-          usdBalance(
-            Number(token.rawBalance),
-            token.tokenInfo.price.rate,
-            token.tokenInfo.decimals
-          )
-        }}
-        $
+        Balance: {{ token.usdBalance.toFixed(2) }} $
         <br />
         <span>
-          {{
-            Number(token.rawBalance) | normalizeAmount(token.tokenInfo.decimals)
-          }}
+          {{ token.balance | convertExponentialToDecimal }}
           {{ token.tokenInfo.symbol }}
         </span>
       </div>
@@ -57,19 +37,21 @@
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import TypedStoreMixin from '~/mixins/typed-store'
-import { EthplorerTokenType } from '~/logic/address/types'
+import { TokenBalanceType } from '~/logic/address/types'
 
 @Component({})
 export default class SidebarRightBalance extends mixins(TypedStoreMixin) {
-  public get tokens(): EthplorerTokenType[] {
+  public get tokens(): TokenBalanceType[] {
     return this.typedStore.address.tokens
   }
 
-  public usdBalance(balance: number, rate: number, decimals: number): string {
-    if (rate > 0) {
-      return String(((balance / 10 ** decimals) * rate).toFixed(2))
+  public url(token: TokenBalanceType): string {
+    const address = this.typedStore.address.address
+    const tokenAddress = token.tokenInfo ? token.tokenInfo.address : ''
+    if (tokenAddress) {
+      return `/${tokenAddress}/tokens?address=${address}`
     }
-    return String(0)
+    return `/${address}`
   }
 }
 </script>
