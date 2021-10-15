@@ -1,33 +1,33 @@
 <template>
-  <div class="tweet-add__stat">
-    <div class="tweet-add__stat-remove" @click="$emit('remove')">
+  <div class="nft-form__stat">
+    <div class="nft-form__stat-remove" @click="$emit('remove')">
       <font-awesome-icon :icon="['fas', 'times']" />
     </div>
-    <div class="tweet-add__stat-fields">
-      <div class="tweet-add__stat-type">
+    <div class="nft-form__stat-fields">
+      <div class="nft-form__stat-type">
         <input
           v-model="type"
           type="text"
           placeholder="Enter stats name"
-          class="tweet-add__stat-input tweet-add__stat-input_type"
+          class="nft-form__stat-input nft-form__stat-input_type"
         />
       </div>
-      <div class="tweet-add__stat-values">
-        <div class="tweet-add__stat-value">
+      <div class="nft-form__stat-values">
+        <div class="nft-form__stat-value">
           <input
             v-model="value"
             type="text"
             placeholder="value"
-            class="tweet-add__stat-input tweet-add__stat-input_value"
+            class="nft-form__stat-input nft-form__stat-input_value"
           />
         </div>
-        <div class="tweet-add__stat-delimiter">of</div>
-        <div class="tweet-add__stat-value">
+        <div class="nft-form__stat-delimiter">of</div>
+        <div class="nft-form__stat-value">
           <input
             v-model="maxValue"
             type="text"
             placeholder="max value"
-            class="tweet-add__stat-input tweet-add__stat-input_value"
+            class="nft-form__stat-input nft-form__stat-input_value"
           />
         </div>
       </div>

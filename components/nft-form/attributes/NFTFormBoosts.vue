@@ -1,17 +1,17 @@
 <template>
-  <div class="tweet-add__attribute">
-    <div class="tweet-add__attribute-header" @click="toggle">
-      <div class="tweet-add__attribute-header-icon">
+  <div class="nft-form__attribute">
+    <div class="nft-form__attribute-header" @click="toggle">
+      <div class="nft-form__attribute-header-icon">
         <font-awesome-icon :icon="['fas', 'bolt']" />
       </div>
-      <div class="tweet-add__attribute-header-title">Boosts</div>
-      <div class="tweet-add__attribute-header-arrow">
+      <div class="nft-form__attribute-header-title">Boosts</div>
+      <div class="nft-form__attribute-header-arrow">
         <font-awesome-icon
           :icon="['fas', isShow ? 'chevron-up' : 'chevron-down']"
         />
       </div>
     </div>
-    <div v-show="isShow" class="tweet-add__attribute-container">
+    <div v-show="isShow" class="nft-form__attribute-container">
       <boost
         v-for="boost in localBoosts"
         :key="boost.id"
@@ -19,7 +19,7 @@
         @remove="removeBoost(boost.id)"
         @change="boostChangeHandler(boost.id, $event)"
       />
-      <div class="tweet-add__boost tweet-add__boost_add" @click="addBoost">
+      <div class="nft-form__boost nft-form__boost_add" @click="addBoost">
         <font-awesome-icon :icon="['fas', 'plus-circle']" />
       </div>
     </div>
