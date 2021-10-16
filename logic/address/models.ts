@@ -78,10 +78,10 @@ export const EthplorerGetAddressInfoResponse = t.type({
 })
 
 export const TokenInfo = t.type({
-  id: t.union([t.number, t.undefined]),
+  address: t.string,
   name: t.string,
-  contractAddress: t.union([t.string, t.undefined]),
+  symbol: t.string,
   totalSupply: t.union([t.string, t.undefined]),
   decimals: t.string,
-  symbol: t.string
+  image: t.union([t.string, t.literal('')])
 })
