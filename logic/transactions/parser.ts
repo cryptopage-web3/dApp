@@ -39,12 +39,12 @@ export default class TransactionParser {
     transaction: EtherscanERC20TransactionType | EtherscanERC721TransactionType
   ): TokenInfoType {
     return {
-      id: undefined,
       totalSupply: undefined,
-      contractAddress: transaction.contractAddress,
+      address: transaction.contractAddress,
       decimals: transaction.tokenDecimal,
       name: transaction.tokenName,
-      symbol: transaction.tokenSymbol
+      symbol: transaction.tokenSymbol,
+      image: ''
     }
   }
 
@@ -100,8 +100,8 @@ export default class TransactionParser {
     if (input && input.name === 'transfer') {
       amount = Number(web3.utils.toBN(input.params[1].value))
     }
-    if (tx.tokenInfo) {
-      decimals = Number(tx.tokenInfo.decimals)
+    if (tx.token) {
+      decimals = Number(tx.token.decimals)
     }
     const divider = 10 ** decimals
     const result = String(amount / divider)
@@ -119,7 +119,7 @@ export default class TransactionParser {
       transactionBody.decodedInput = this.parseInput(transaction)
     }
     if ('tokenSymbol' in transaction) {
-      transactionBody.tokenInfo = this.parseTokenInfo(transaction)
+      transactionBody.token = this.parseTokenInfo(transaction)
     }
     transactionBody.sender = this.parseSender(transactionBody)
     transactionBody.receiver = this.parseReceiver(transactionBody)
