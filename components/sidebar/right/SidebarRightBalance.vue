@@ -48,7 +48,7 @@ export default class SidebarRightBalance extends mixins(TypedStoreMixin) {
   public url(token: TokenBalanceType): string {
     const address = this.typedStore.address.address
     const tokenAddress = token.tokenInfo ? token.tokenInfo.address : ''
-    if (tokenAddress) {
+    if (tokenAddress && address !== tokenAddress) {
       return `/${tokenAddress}/tokens?address=${address}`
     }
     return `/${address}`
