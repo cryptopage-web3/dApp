@@ -10,35 +10,29 @@
           {{ income ? 'Send' : 'Receive' }} ETH
         </div>
         <div class="transactions-link__number">
-          {{ transaction.timeStamp | normalizeDate }} /
+          {{ transaction.timeStamp | humanizeDate }} /
           {{ income ? 'To' : 'From' }} :
           <nuxt-link
             style="color: #a5a5a5"
             :to="`/${income ? transaction.receiver : transaction.sender}`"
           >
-            {{
-              income ? transaction.receiver : transaction.sender | shortAddress
-            }}
+            {{ address | shortAddress(5, 7) }}
           </nuxt-link>
         </div>
       </div>
     </div>
     <div class="transactions-link-right">
       <div class="transactions-link__usdt">
-        {{ income ? '-' : '' }} {{ transaction.amount }} ETH
+        {{ income ? '-' : '' }}
+        {{ transaction.amount | normalizeAmount }} ETH
       </div>
       <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
     </div>
   </a>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import Web3 from 'web3'
-import { Container } from 'vue-typedi'
-import { Component, Prop } from 'nuxt-property-decorator'
-import { TransactionType } from '~/logic/transactions/types'
-import tokens from '~/logic/tokens'
-Component.registerHooks(['fetchOnServer'])
+import { Component, mixins } from 'nuxt-property-decorator'
+import TransactionMixin from '~/mixins/transaction'
 @Component({
   components: {
     token: async () =>
@@ -47,22 +41,5 @@ Component.registerHooks(['fetchOnServer'])
       await import('~/components/transactions/ERC721Transaction.vue')
   }
 })
-export default class Transaction extends Vue {
-  protected get $web3(): Web3 {
-    return Container.get(tokens.WEB3) as Web3
-  }
-
-  @Prop({ required: true }) readonly transaction!: TransactionType
-  protected get income(): boolean {
-    const sender = this.transaction.sender
-    const address = this.$web3.utils.toChecksumAddress(
-      this.$route.params.address
-    )
-    return sender === address
-  }
-
-  fetchOnServer(): boolean {
-    return true
-  }
-}
+export default class Transaction extends mixins(TransactionMixin) {}
 </script>
