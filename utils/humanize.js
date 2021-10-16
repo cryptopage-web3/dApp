@@ -48,7 +48,7 @@ export const humanizeDate = (date) => {
   } else if (secondsAgo < MONTH) {
     return Math.floor(secondsAgo / WEEK) + ' w'
   } else if (secondsAgo < YEAR) {
-    return Math.floor(secondsAgo / MONTH) + ' m'
+    return Math.floor(secondsAgo / MONTH) + ' M'
   } else if (secondsAgo < YEAR * 100) {
     return Math.floor(secondsAgo / YEAR) + ' y'
   } else {
