@@ -1,11 +1,12 @@
 import { AbiItem } from 'web3-utils'
 import * as tPromise from 'io-ts-promise'
 import { Service } from 'vue-typedi'
-import tokens from '~/logic/tokens'
 import { EtherscanABIResponse } from '~/logic/transactions/models'
-import { EthplorerGetAddressInfoResponseType } from '~/logic/address/types'
+import { AddressInfoType } from '~/logic/address/types'
 import { EthplorerGetAddressInfoResponse } from '~/logic/address/models'
 import { APIServiceMixin } from '~/logic/mixins'
+import AddressInfoAdapter from '~/logic/address/adapter'
+import tokens from '~/logic/tokens'
 
 @Service(tokens.ADDRESS_API_SERVICE)
 export default class AddressAPIService extends APIServiceMixin {
@@ -26,11 +27,14 @@ export default class AddressAPIService extends APIServiceMixin {
    * Get address info from Ethpltorer API
    * https://github.com/EverexIO/Ethplorer/wiki/Ethplorer-API
    */
-  public getAddressInfo = async (
-    address: string
-  ): Promise<EthplorerGetAddressInfoResponseType> => {
+  public getAddressInfo = async (address: string): Promise<AddressInfoType> => {
     const URL = `${this.ethplorerBaseURL}getAddressInfo/${address}?apiKey=${this.ethplorerApiKey}`
     const response = await this.$axios.get(URL)
-    return await tPromise.decode(EthplorerGetAddressInfoResponse, response.data)
+    const data = await tPromise.decode(
+      EthplorerGetAddressInfoResponse,
+      response.data
+    )
+    // const adapter = AddressInfoAdapter(data)
+    return AddressInfoAdapter(data).request()
   }
 }
