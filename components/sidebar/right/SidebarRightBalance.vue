@@ -27,7 +27,7 @@
         Balance: {{ token.usdBalance.toFixed(2) }} $
         <br />
         <span>
-          {{ token.balance | convertExponentialToDecimal }}
+          {{ token.balance | normalizeAmount }}
           {{ token.tokenInfo.symbol }}
         </span>
       </div>
