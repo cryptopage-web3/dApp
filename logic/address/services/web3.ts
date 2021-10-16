@@ -15,7 +15,7 @@ export default class AddressWeb3Service {
   /**
    * Get contract name, totalSupply, decimals and symbol from  web3
    */
-  public getTokenInfo = async (
+  public getToken = async (
     address: string
   ): Promise<TokenInfoType | undefined> => {
     try {
@@ -26,7 +26,7 @@ export default class AddressWeb3Service {
       const symbol = await contract.methods.symbol().call()
       return await tPromise.decode(TokenInfo, {
         name,
-        contractAddress: address,
+        address,
         totalSupply,
         decimals,
         symbol
