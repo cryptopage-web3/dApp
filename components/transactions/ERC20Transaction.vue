@@ -8,13 +8,17 @@
           {{ income ? 'Send' : 'Receive' }} {{ transaction.token.symbol }}
         </div>
         <div class="transactions-link__number">
-          {{ transaction.timeStamp | normalizeDate }} /
-          {{ income ? 'To' : 'From' }} :
+          {{ transaction.timeStamp | humanizeDate }} ago
+          {{ income ? 'to' : 'from' }}
           <nuxt-link
             style="color: #a5a5a5"
             :to="`/${income ? transaction.receiver : transaction.sender}`"
           >
-            {{ address | shortAddress }}
+            {{
+              income
+                ? transaction.receiver
+                : transaction.sender | shortAddress(5, 7)
+            }}
           </nuxt-link>
         </div>
       </div>
@@ -22,7 +26,7 @@
     <div class="transactions-link-right">
       <div class="transactions-link__usdt">
         {{ income ? '-' : '' }}
-        {{ transaction.amount }}
+        {{ transaction.amount | normalizeAmount }}
         {{ transaction.token.symbol }}
       </div>
       <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
