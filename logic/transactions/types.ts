@@ -25,7 +25,7 @@ export type DecodedInputType = {
 }
 
 export type ParamsAdaptarType = {
-  tokenInfo?: TokenInfoType
+  token?: TokenInfoType
   nft?: NFTType
   decodedInput?: DecodedInputType | undefined
 }
@@ -58,6 +58,10 @@ export type TransactionType = ParamsAdaptarType & {
   sender?: string
   receiver?: string
   amount?: string
+}
+
+export type TransactionAdapterType = {
+  request: ({ nft, token }: ParamsAdaptarType) => TransactionType
 }
 
 export type EtherscanTransactionType = ts.TypeOf<typeof EtherscanTransaction>
