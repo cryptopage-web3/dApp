@@ -6,7 +6,15 @@
       </a>
       <div class="post-date__text">
         {{ transaction.timeStamp | humanizeDate }} ago
-        {{ income ? ' to' : ' from' }} : {{ address | shortAddress }}
+        {{ income ? ' to' : ' from' }}
+        <nuxt-link
+          style="color: #a5a5a5"
+          :to="`/${income ? transaction.receiver : transaction.sender}`"
+        >
+          {{
+            income ? transaction.receiver : transaction.sender | shortAddress
+          }}
+        </nuxt-link>
       </div>
     </div>
     <div class="white-post-id">
