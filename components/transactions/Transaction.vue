@@ -1,6 +1,6 @@
 <template>
   <nft v-if="transaction.nft" :transaction="transaction" />
-  <token v-else-if="transaction.tokenInfo" :transaction="transaction" />
+  <token v-else-if="transaction.token" :transaction="transaction" />
   <a v-else href="#" class="transactions-link">
     <div class="transactions-link-left">
       <img v-if="income" src="@/assets/img/transactions-link_img1.png" alt="" />
@@ -10,13 +10,17 @@
           {{ income ? 'Send' : 'Receive' }} ETH
         </div>
         <div class="transactions-link__number">
-          {{ transaction.timeStamp | humanizeDate }} /
-          {{ income ? 'To' : 'From' }} :
+          {{ transaction.timeStamp | humanizeDate }} ago
+          {{ income ? 'to' : 'from' }}
           <nuxt-link
             style="color: #a5a5a5"
             :to="`/${income ? transaction.receiver : transaction.sender}`"
           >
-            {{ address | shortAddress(5, 7) }}
+            {{
+              income
+                ? transaction.receiver
+                : transaction.sender | shortAddress(5, 7)
+            }}
           </nuxt-link>
         </div>
       </div>
