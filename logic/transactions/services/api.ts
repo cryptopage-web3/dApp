@@ -68,8 +68,8 @@ export default class TransactionAPIService extends APIServiceMixin {
           const address = transaction.contractAddress
             ? transaction.contractAddress
             : transaction.to
-          const tokenInfo = await this.addressWeb3Service.getTokenInfo(address)
-          return adapter.request({ tokenInfo })
+          const token = await this.addressWeb3Service.getToken(address)
+          return adapter.request({ token })
         }
       )
     )
