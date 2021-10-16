@@ -7,6 +7,21 @@ import { nftDataDecoder, tokenURItoURI } from '~/utils/web3'
 
 const PROJECT_ID = `a925609bdb25477d8039c763faa7b61d`
 
+// function for unsubscribe wss, when chain changes
+let externalData = {
+  subscriptions: []
+}
+
+function runUnsubscribe() {
+  for(let sb in externalData.subscriptions) {
+    sb.unsubscribe()
+  }
+  externalData.subscriptions = []
+}
+
+web3Provider.chainChangeCallbacks.push(runUnsubscribe)
+
+
 /// customWeb3 instance
 
 const networkRpcList = {
@@ -177,6 +192,7 @@ const watchAddressTransactions = ({ address, callback }) => {
         console.log(`ERROR in watchAddressTransactions:`, error) // eslint-disable-line no-console
       }
     })
+    externalData.subscriptions.push(subscription)
 }
 
 const watchTokenTransfers = (

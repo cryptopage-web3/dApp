@@ -67,6 +67,16 @@ class Web3Provider {
   selectedAddress = ''
   selectedChainId = null
 
+  chainChangeCallbacks = []
+
+  runChainChangeCallbacks = () => {
+    for(let fn in this.chainChangeCallbacks) {
+      if (typeof fn === 'function') {
+        fn()
+      }
+    }
+  }
+
   /**
    * Change the provider of web3
    * @param {String} provider - value of provider
@@ -208,6 +218,7 @@ class Web3Provider {
     if (chainId) {
       window.$nuxt.$store._actions['auth/setSelectedChainId'][0](chainId)
       this.selectedChainId = chainId
+      this.runChainChangeCallbacks()
     }
   }
 
