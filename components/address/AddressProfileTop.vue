@@ -16,10 +16,8 @@
         />
       </div>
       <div class="profile-info">
-        <div v-if="$store.getters['address/name']" class="profile-info__title">
-          {{ $store.getters['address/name'] }} ({{
-            $store.getters['address/symbol']
-          }})
+        <div v-if="tokenName" class="profile-info__title">
+          {{ tokenName }}
         </div>
         <div v-else class="profile-info__title">
           {{ $store.getters['address/address'] | shortAddress }}
@@ -43,6 +41,13 @@
 export default {
   data: () => ({
     diameter: $(window).width() > 767 ? 90 : 40
-  })
+  }),
+  computed: {
+    tokenName() {
+      const tokenName = this.$store.getters['address/name']
+      const tokenSymbol = this.$store.getters['address/symbol']
+      return tokenName && tokenSymbol ? `${tokenName} (${tokenSymbol})` : ''
+    }
+  }
 }
 </script>
