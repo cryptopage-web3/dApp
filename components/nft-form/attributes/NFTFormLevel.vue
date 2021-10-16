@@ -1,41 +1,41 @@
 <template>
-  <div class="tweet-add__level">
-    <div class="tweet-add__level-remove" @click="$emit('remove')">
+  <div class="nft-form__level">
+    <div class="nft-form__level-remove" @click="$emit('remove')">
       <font-awesome-icon :icon="['fas', 'times']" />
     </div>
-    <div class="tweet-add__level-fields">
-      <div class="tweet-add__level-type">
+    <div class="nft-form__level-fields">
+      <div class="nft-form__level-type">
         <input
           v-model="type"
           type="text"
           placeholder="Enter level name"
-          class="tweet-add__level-input tweet-add__level-input_type"
+          class="nft-form__level-input nft-form__level-input_type"
         />
       </div>
-      <div class="tweet-add__level-values">
-        <div class="tweet-add__level-value">
+      <div class="nft-form__level-values">
+        <div class="nft-form__level-value">
           <input
             v-model="value"
             type="text"
             placeholder="value"
-            class="tweet-add__level-input tweet-add__level-input_value"
+            class="nft-form__level-input nft-form__level-input_value"
           />
         </div>
-        <div class="tweet-add__level-delimiter">of</div>
-        <div class="tweet-add__level-value">
+        <div class="nft-form__level-delimiter">of</div>
+        <div class="nft-form__level-value">
           <input
             v-model="maxValue"
             type="text"
             placeholder="max value"
-            class="tweet-add__level-input tweet-add__level-input_value"
+            class="nft-form__level-input nft-form__level-input_value"
           />
         </div>
       </div>
     </div>
-    <div class="tweet-add__level-range">
-      <div class="tweet-add__level-range-bar">
+    <div class="nft-form__level-range">
+      <div class="nft-form__level-range-bar">
         <div
-          class="tweet-add__level-range-bar__fill"
+          class="nft-form__level-range-bar__fill"
           :style="{
             width: (maxValue && value ? (value / maxValue) * 100 : 0) + '%'
           }"

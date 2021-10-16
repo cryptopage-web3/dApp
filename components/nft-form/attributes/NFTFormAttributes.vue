@@ -1,14 +1,14 @@
 <template>
-  <div class="tweet-add__attributes">
-    <div class="tweet-add__attributes-toggle" @click="toggle">
-      <div class="tweet-add__attributes-toggle-icon">
+  <div class="nft-form__attributes">
+    <div class="nft-form__attributes-toggle" @click="toggle">
+      <div class="nft-form__attributes-toggle-icon">
         <font-awesome-icon
           :icon="['fas', isShow ? 'caret-up' : 'caret-down']"
         />
       </div>
-      <div class="tweet-add__attributes-toggle-text">Extended fields</div>
+      <div class="nft-form__attributes-toggle-text">Extended fields</div>
     </div>
-    <div v-show="isShow" class="tweet-add__attributes-container">
+    <div v-show="isShow" class="nft-form__attributes-container">
       <properties-attribute
         :properties="properties"
         @change="propertiesChangeHandler"

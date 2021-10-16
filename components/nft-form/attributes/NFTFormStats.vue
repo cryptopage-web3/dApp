@@ -1,17 +1,17 @@
 <template>
-  <div class="tweet-add__attribute">
-    <div class="tweet-add__attribute-header" @click="toggle">
-      <div class="tweet-add__attribute-header-icon">
+  <div class="nft-form__attribute">
+    <div class="nft-form__attribute-header" @click="toggle">
+      <div class="nft-form__attribute-header-icon">
         <font-awesome-icon :icon="['fas', 'chart-area']" />
       </div>
-      <div class="tweet-add__attribute-header-title">Stats</div>
-      <div class="tweet-add__attribute-header-arrow">
+      <div class="nft-form__attribute-header-title">Stats</div>
+      <div class="nft-form__attribute-header-arrow">
         <font-awesome-icon
           :icon="['fas', isShow ? 'chevron-up' : 'chevron-down']"
         />
       </div>
     </div>
-    <div v-show="isShow" class="tweet-add__attribute-container">
+    <div v-show="isShow" class="nft-form__attribute-container">
       <stat
         v-for="stat in localStats"
         :key="stat.id"
@@ -19,7 +19,7 @@
         @remove="removeStat(stat.id)"
         @change="statChangeHandler(stat.id, $event)"
       />
-      <div class="tweet-add__stat tweet-add__stat_add" @click="addStat">
+      <div class="nft-form__stat nft-form__stat_add" @click="addStat">
         <font-awesome-icon :icon="['fas', 'plus-circle']" />
       </div>
     </div>

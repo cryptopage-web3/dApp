@@ -18,6 +18,7 @@ module.exports = {
   ],
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
-    '@typescript-eslint/no-unused-vars': 'error'
+    '@typescript-eslint/no-unused-vars': 'error',
+    'consistent-this': [2, 'self']
   }
 }

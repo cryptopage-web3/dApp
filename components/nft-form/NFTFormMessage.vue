@@ -1,10 +1,10 @@
 <template>
-  <div class="tweet-add__message">
+  <div class="nft-form__message">
     <label v-if="!value">{{ placeholder }}</label>
     <span
       ref="input"
-      class="tweet-add__input"
-      :class="{ 'tweet-add__input_single': isSingleLine }"
+      class="nft-form__input"
+      :class="{ 'nft-form__input_single': isSingleLine }"
       contenteditable="true"
       @input="$emit('input', $event.target.innerHTML)"
     />
@@ -40,11 +40,11 @@ export default {
 }
 </script>
 <style scoped>
-.tweet-add__input {
+.nft-form__input {
   min-height: 100px;
 }
 
-.tweet-add__input_single {
+.nft-form__input_single {
   min-height: 50px;
 }
 </style>

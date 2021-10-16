@@ -1,22 +1,22 @@
 <template>
-  <div class="tweet-add__property">
-    <div class="tweet-add__property-remove" @click="$emit('remove')">
+  <div class="nft-form__property">
+    <div class="nft-form__property-remove" @click="$emit('remove')">
       <font-awesome-icon :icon="['fas', 'times']" />
     </div>
-    <div class="tweet-add__property-field">
+    <div class="nft-form__property-field">
       <input
         v-model="type"
         type="text"
         placeholder="Enter type"
-        class="tweet-add__property-input tweet-add__property-input_type"
+        class="nft-form__property-input nft-form__property-input_type"
       />
     </div>
-    <div class="tweet-add__property-field">
+    <div class="nft-form__property-field">
       <input
         v-model="value"
         type="text"
         placeholder="Enter value"
-        class="tweet-add__property-input tweet-add__property-input_value"
+        class="nft-form__property-input nft-form__property-input_value"
       />
     </div>
   </div>

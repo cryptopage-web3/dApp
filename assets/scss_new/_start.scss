@@ -1,5 +1,5 @@
 .start-page {
-    padding: 50px 0;
+    padding: 100px 0 50px;
     color: #000305;
 }
 
@@ -63,10 +63,6 @@
 }
 
 @media (max-width: 767px) {
-    .start-page {
-        padding-top: 100px;
-    }
-
     .start-page__logo svg {
         width: 150px;
         height: 150px;
