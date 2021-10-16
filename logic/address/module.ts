@@ -90,17 +90,23 @@ export default class AddressModule {
 
   @Getter()
   public get allTransactions(): TransactionType[] {
-    return this.transactions
+    return this.transactions.sort((a, b) =>
+      a.timeStamp > b.timeStamp ? -1 : 1
+    )
   }
 
   @Getter()
   public get ERC20Transactions(): TransactionType[] {
-    return this.transactions.filter((tx: TransactionType) => tx.token)
+    return this.transactions
+      .filter((tx: TransactionType) => tx.token)
+      .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
   }
 
   @Getter()
   public get ERC721Transactions(): TransactionType[] {
-    return this.transactions.filter((tx: TransactionType) => tx.nft)
+    return this.transactions
+      .filter((tx: TransactionType) => tx.nft)
+      .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
   }
 
   // Mutations
