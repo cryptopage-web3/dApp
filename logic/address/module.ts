@@ -3,11 +3,7 @@ import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
 import TransactionAPIService from '~/logic/transactions/services/api'
 import AddressAPIService from '~/logic/address/services/api'
-import {
-  // EthplorerTokenInfoType,
-  EthplorerTokenType,
-  EthplorerGetAddressInfoResponseType
-} from '~/logic/address/types'
+import { TokenBalanceType, AddressInfoType } from '~/logic/address/types'
 import tokens from '~/logic/tokens'
 import {
   ParamsTransactionsType,
@@ -39,7 +35,7 @@ export default class AddressModule {
   public transactions: TransactionType[] = []
 
   @State()
-  public addressInfo: EthplorerGetAddressInfoResponseType | undefined
+  public addressInfo: AddressInfoType | undefined
 
   // Getters
 
@@ -49,12 +45,9 @@ export default class AddressModule {
   }
 
   @Getter()
-  public get tokens(): EthplorerTokenType[] {
-    let tokens: EthplorerTokenType[] = []
-    if (this.addressInfo && 'tokens' in this.addressInfo) {
-      tokens = this.addressInfo.tokens || []
-    }
-    return tokens.sort((a, b) => (a.balance > b.balance ? -1 : 1))
+  public get tokens(): TokenBalanceType[] {
+    const tokens = this.addressInfo ? this.addressInfo.tokens : []
+    return tokens.sort((a, b) => (a.usdBalance > b.usdBalance ? -1 : 1))
   }
 
   @Getter()
@@ -62,8 +55,9 @@ export default class AddressModule {
     return this.addressInfo &&
       this.addressInfo.tokenInfo &&
       this.addressInfo.tokenInfo.image
-      ? 'https://ethplorer.io' + this.addressInfo.tokenInfo.image
+      ? this.addressInfo.tokenInfo.image
       : ''
+    return ''
   }
 
   @Getter()
@@ -91,7 +85,7 @@ export default class AddressModule {
 
   @Getter()
   public get transactionsCount(): number {
-    return this.addressInfo ? this.addressInfo.countTxs : 0
+    return this.addressInfo ? this.addressInfo.transactionsCount : 0
   }
 
   @Getter()
@@ -101,7 +95,7 @@ export default class AddressModule {
 
   @Getter()
   public get ERC20Transactions(): TransactionType[] {
-    return this.transactions.filter((tx: TransactionType) => tx.tokenInfo)
+    return this.transactions.filter((tx: TransactionType) => tx.token)
   }
 
   @Getter()
@@ -117,9 +111,7 @@ export default class AddressModule {
   }
 
   @Mutation()
-  public setAddressInfo(
-    addressInfo: EthplorerGetAddressInfoResponseType
-  ): void {
+  public setAddressInfo(addressInfo: AddressInfoType): void {
     this.addressInfo = addressInfo
   }
 
