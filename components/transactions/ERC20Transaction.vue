@@ -5,7 +5,7 @@
       <img v-else src="@/assets/img/transactions-link_img2.png" alt="" />
       <div class="transactions-link__text">
         <div class="transactions-link__tool">
-          {{ income ? 'Send' : 'Receive' }} {{ transaction.tokenInfo.symbol }}
+          {{ income ? 'Send' : 'Receive' }} {{ transaction.token.symbol }}
         </div>
         <div class="transactions-link__number">
           {{ transaction.timeStamp | normalizeDate }} /
@@ -14,9 +14,7 @@
             style="color: #a5a5a5"
             :to="`/${income ? transaction.receiver : transaction.sender}`"
           >
-            {{
-              income ? transaction.receiver : transaction.sender | shortAddress
-            }}
+            {{ address | shortAddress }}
           </nuxt-link>
         </div>
       </div>
@@ -25,38 +23,15 @@
       <div class="transactions-link__usdt">
         {{ income ? '-' : '' }}
         {{ transaction.amount }}
-        {{ transaction.tokenInfo.symbol }}
+        {{ transaction.token.symbol }}
       </div>
       <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
     </div>
   </a>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import Web3 from 'web3'
-import { Container } from 'vue-typedi'
-import { Component, Prop } from 'nuxt-property-decorator'
-import { TransactionType } from '~/logic/transactions/types'
-import tokens from '~/logic/tokens'
-
-Component.registerHooks(['fetchOnServer'])
+import { Component, mixins } from 'nuxt-property-decorator'
+import TransactionMixin from '~/mixins/transaction'
 @Component({})
-export default class ERC20Transaction extends Vue {
-  protected get $web3(): Web3 {
-    return Container.get(tokens.WEB3) as Web3
-  }
-
-  @Prop({ required: true }) readonly transaction!: TransactionType
-  protected get income(): boolean {
-    const sender = this.transaction.sender
-    const address = this.$web3.utils.toChecksumAddress(
-      this.$route.params.address
-    )
-    return sender === address
-  }
-
-  fetchOnServer(): boolean {
-    return true
-  }
-}
+export default class ERC20Transaction extends mixins(TransactionMixin) {}
 </script>
