@@ -1,6 +1,7 @@
 import {
   TransactionType,
   ParamsAdaptarType,
+  TransactionAdapterType,
   EtherscanTransactionType,
   EtherscanERC20TransactionType,
   EtherscanERC721TransactionType
@@ -12,16 +13,16 @@ const TransactionAdapter = (
     | EtherscanTransactionType
     | EtherscanERC20TransactionType
     | EtherscanERC721TransactionType
-) => {
+): TransactionAdapterType => {
   return {
-    request: ({ nft, tokenInfo }: ParamsAdaptarType): TransactionType => {
+    request: ({ nft, token }: ParamsAdaptarType): TransactionType => {
       const parser = new TransactionParser()
       const data = parser.parse(transaction)
       if (nft) {
         data.nft = nft
       }
-      if (tokenInfo) {
-        data.tokenInfo = tokenInfo
+      if (token) {
+        data.token = token
       }
       data.amount = parser.parseAmount(data)
       return data
