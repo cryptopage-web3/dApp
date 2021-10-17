@@ -12,13 +12,10 @@
       class="nft-form__file"
       :class="{
         'nft-form__file_video': fileType === 'video',
-        'nft-form__file_audio': fileType === 'audio',
+        'nft-form__file_audio': fileType === 'audio'
       }"
     >
-      <div
-        class="nft-form__file-delete"
-        @click="fileDeleteHandler"
-      >
+      <div class="nft-form__file-delete" @click="fileDeleteHandler">
         <icon type="close" />
       </div>
       <video v-if="fileType === 'video'" controls>

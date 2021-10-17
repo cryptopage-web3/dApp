@@ -1,3 +1,13 @@
+/* ===== common ===== */
+
+.tooltip-inner {
+  background-color: #1886ff;
+}
+
+.tooltip .arrow::before {
+  border-top-color: #1886ff;
+}
+
 /* ===== sidebar profile signin ===== */
 
 .sidebar-profile__signin-btn {

@@ -24,16 +24,36 @@
       />
 
       <div class="nft-form__controls">
-        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+        <a
+          href="#"
+          class="nft-form__control"
+          title="Upload audio"
+          @click.prevent="uploadFile"
+        >
           <img src="@/assets/img/creat-post-link_img1.png" alt="" />
         </a>
-        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+        <a
+          href="#"
+          class="nft-form__control"
+          title="Upload image"
+          @click.prevent="uploadFile"
+        >
           <img src="@/assets/img/creat-post-link_img2.png" alt="" />
         </a>
-        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+        <a
+          href="#"
+          class="nft-form__control"
+          title="Upload video"
+          @click.prevent="uploadFile"
+        >
           <img src="@/assets/img/creat-post-link_img3.png" alt="" />
         </a>
-        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+        <a
+          href="#"
+          class="nft-form__control"
+          title="Setting additional fields"
+          @click.prevent="uploadFile"
+        >
           <font-awesome-icon :icon="['fas', 'cog']" />
         </a>
       </div>
@@ -110,6 +130,9 @@ export default {
         this.$nuxt.$loading.finish()
       }
     }
+  },
+  mounted() {
+    $('.nft-form__control').tooltip()
   },
   methods: {
     fileUpdateHandler(file) {
