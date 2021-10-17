@@ -5,6 +5,7 @@
       style="display: none"
       type="file"
       name="file"
+      :accept="accept"
       @change="fileUpdateHandler"
     />
     <div
@@ -12,13 +13,10 @@
       class="nft-form__file"
       :class="{
         'nft-form__file_video': fileType === 'video',
-        'nft-form__file_audio': fileType === 'audio',
+        'nft-form__file_audio': fileType === 'audio'
       }"
     >
-      <div
-        class="nft-form__file-delete"
-        @click="fileDeleteHandler"
-      >
+      <div class="nft-form__file-delete" @click="fileDeleteHandler">
         <icon type="close" />
       </div>
       <video v-if="fileType === 'video'" controls>
@@ -43,7 +41,8 @@ export default {
   },
   data() {
     return {
-      fileURL: null
+      fileURL: null,
+      accept: ''
     }
   },
   computed: {
@@ -60,8 +59,28 @@ export default {
     }
   },
   methods: {
-    upload() {
-      this.$refs.file.click()
+    upload(type = 'image') {
+      switch (type) {
+        case 'image':
+          this.accept = '.jpg, .jpeg, .png, .gif, .svg'
+          break
+
+        case 'video':
+          this.accept = '.mp4, .webm'
+          break
+
+        case 'audio':
+          this.accept = '.mp3, .wav, .webm'
+          break
+
+        default:
+          this.accept = ''
+          break
+      }
+
+      this.$nextTick(() => {
+        this.$refs.file.click()
+      })
     },
 
     fileDeleteHandler() {
