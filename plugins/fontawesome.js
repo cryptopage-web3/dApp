@@ -14,7 +14,7 @@ import {
   faPlusCircle,
   faTimes,
   faCog,
-  faComments,
+  faComments
 } from '@fortawesome/free-solid-svg-icons'
 
 config.autoAddCss = false
