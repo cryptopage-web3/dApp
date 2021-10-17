@@ -1,52 +1,70 @@
 <template>
-  <div
-    class="nft-form d-flex align-start justify-space-between"
-    @drop.prevent="dragFile"
-    @dragover.prevent
-  >
-    <div class="nft-form__form d-flex flex-column">
-      <form>
-        <text-field
+  <div class="nft-form" @drop.prevent="dragFile" @dragover.prevent>
+    <form>
+      <div class="nft-form__field">
+        <input
           v-model="title"
-          :is-single-line="true"
-          :placeholder="'Enter post title'"
+          class="nft-form__text"
+          placeholder="Enter post title"
         />
-        <text-field v-model="text" :placeholder="'Enter post text'" />
+      </div>
 
-        <upload-image
-          ref="upload-image"
-          :file="file"
-          @onFileUpdate="fileUpdateHandler"
-        />
+      <div class="nft-form__field">
+        <textarea
+          v-model="text"
+          class="nft-form__textarea"
+          placeholder="Enter post text"
+        ></textarea>
+      </div>
 
-        <attributes
-          ref="attributes"
-          :attributes="attributes"
-          @change="attributesChangeHandler"
-        />
+      <upload-file
+        ref="upload-file"
+        :file="file"
+        @onFileUpdate="fileUpdateHandler"
+      />
 
-        <div class="nft-form__buttons">
-          <div class="nft-form__post-links">
-            <a class="post-link post-link_blue" @click="uploadImage">
-              <div>
-                <icon type="uploadImage" />
-              </div>
-            </a>
-            <comment-checkbox v-model="hasComment" />
-          </div>
-          <div class="nft-form__send">
-            <button
-              type="button"
-              class="post-follow-top__link btn btn_blue btn_blue--bg"
-              :disabled="loading || !text || !title"
-              @click="submit"
-            >
-              Send crypto-post
-            </button>
-          </div>
+      <div class="nft-form__controls">
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <img src="@/assets/img/creat-post-link_img1.png" alt="" />
+        </a>
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <img src="@/assets/img/creat-post-link_img2.png" alt="" />
+        </a>
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <img src="@/assets/img/creat-post-link_img3.png" alt="" />
+        </a>
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <font-awesome-icon :icon="['fas', 'cog']" />
+        </a>
+      </div>
+
+      <attributes
+        ref="attributes"
+        :attributes="attributes"
+        @change="attributesChangeHandler"
+      />
+
+      <div class="nft-form__buttons">
+        <div class="nft-form__post-links">
+          <a class="post-link post-link_blue" @click="uploadFile">
+            <div>
+              <icon type="uploadImage" />
+            </div>
+          </a>
+          <comment-checkbox v-model="hasComment" />
         </div>
-      </form>
-    </div>
+        <div class="nft-form__send">
+          <button
+            type="button"
+            class="post-follow-top__link btn btn_blue btn_blue--bg"
+            :disabled="loading || !text || !title"
+            @click="submit"
+          >
+            Send crypto-post
+          </button>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -55,12 +73,10 @@ import { validateForm, getAdaptedAttributes } from '@/utils/tweetForm'
 
 export default {
   components: {
-    'text-field': async () =>
-      await import('@/components/nft-form/NFTFormMessage'),
     'comment-checkbox': async () =>
       await import('@/components/nft-form/NFTFormComment'),
-    'upload-image': async () =>
-      await import('@/components/nft-form/NFTFormImage'),
+    'upload-file': async () =>
+      await import('@/components/nft-form/NFTFormFile'),
     attributes: async () =>
       await import('@/components/nft-form/attributes/NFTFormAttributes'),
     icon: async () => await import('@/components/icons/Icon')
@@ -109,8 +125,8 @@ export default {
       this.file = file
     },
 
-    uploadImage() {
-      this.$refs['upload-image'].upload()
+    uploadFile() {
+      this.$refs['upload-file'].upload()
     },
 
     dragFile(event) {
@@ -134,7 +150,7 @@ export default {
         this.$notify({
           type: 'error',
           title: 'Invalid file extension',
-          text: `<div class="notification-content__mt">Please upload only image, audio or video</div>`
+          text: 'Please upload only image, audio or video'
         })
 
         return false
@@ -227,7 +243,7 @@ export default {
     },
 
     sendPostHash(ipfsHash) {
-      const self = this
+      const self = this // eslint-disable-line @typescript-eslint/no-this-alias
       let txHash = ''
 
       this.$sendPostHash({
@@ -243,21 +259,21 @@ export default {
             self.$notify({
               type: 'info',
               title: txHash,
-              text: `<div class="notification-content__mt">Transaction on pending</div>`
+              text: 'Transaction on pending'
             })
           },
           onReceipt() {
             self.$notify({
               type: 'success',
               title: txHash || 'Unknown hash',
-              text: `<div class="notification-content__mt">Transaction completed</div>`
+              text: 'Transaction completed'
             })
           },
           onError() {
             self.$notify({
               type: 'error',
               title: txHash || 'Unknown hash',
-              text: `<div class="notification-content__mt">Transaction has some error</div>`
+              text: 'Transaction has some error'
             })
           }
         }
@@ -266,9 +282,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.nft-form__form {
-  width: 100%;
-}
-</style>

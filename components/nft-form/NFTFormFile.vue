@@ -9,21 +9,25 @@
     />
     <div
       v-if="fileURL"
-      class="nft-form__image d-flex justify-center align-start"
+      class="nft-form__file"
+      :class="{
+        'nft-form__file_video': fileType === 'video',
+        'nft-form__file_audio': fileType === 'audio',
+      }"
     >
       <div
-        class="nft-form__image-delete d-flex justify-center align-center"
+        class="nft-form__file-delete"
         @click="fileDeleteHandler"
       >
         <icon type="close" />
       </div>
-      <video v-if="fileType === 'video'" class="video-block" controls>
+      <video v-if="fileType === 'video'" controls>
         <source :src="fileURL" />
       </video>
-      <audio v-else-if="fileType === 'audio'" class="video-block" controls>
+      <audio v-else-if="fileType === 'audio'" controls>
         <source :src="fileURL" />
       </audio>
-      <img v-else :src="fileURL" class="img-block" />
+      <img v-else :src="fileURL" />
     </div>
   </div>
 </template>
