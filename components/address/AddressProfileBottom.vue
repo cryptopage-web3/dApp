@@ -60,7 +60,7 @@ export default {
       if (isShown) {
         $('.profile-form__container-inner').slideDown(200)
       } else {
-        $('.profile-form__container-inner').slideUp(200)
+        $('.profile-form__container-inner').slideUp(100)
       }
     }
   },

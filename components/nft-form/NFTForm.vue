@@ -17,11 +17,26 @@
         ></textarea>
       </div>
 
-      <upload-image
-        ref="upload-image"
+      <upload-file
+        ref="upload-file"
         :file="file"
         @onFileUpdate="fileUpdateHandler"
       />
+
+      <div class="nft-form__controls">
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <img src="@/assets/img/creat-post-link_img1.png" alt="" />
+        </a>
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <img src="@/assets/img/creat-post-link_img2.png" alt="" />
+        </a>
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <img src="@/assets/img/creat-post-link_img3.png" alt="" />
+        </a>
+        <a href="#" class="nft-form__control" @click.prevent="uploadFile">
+          <font-awesome-icon :icon="['fas', 'cog']" />
+        </a>
+      </div>
 
       <attributes
         ref="attributes"
@@ -31,7 +46,7 @@
 
       <div class="nft-form__buttons">
         <div class="nft-form__post-links">
-          <a class="post-link post-link_blue" @click="uploadImage">
+          <a class="post-link post-link_blue" @click="uploadFile">
             <div>
               <icon type="uploadImage" />
             </div>
@@ -60,8 +75,8 @@ export default {
   components: {
     'comment-checkbox': async () =>
       await import('@/components/nft-form/NFTFormComment'),
-    'upload-image': async () =>
-      await import('@/components/nft-form/NFTFormImage'),
+    'upload-file': async () =>
+      await import('@/components/nft-form/NFTFormFile'),
     attributes: async () =>
       await import('@/components/nft-form/attributes/NFTFormAttributes'),
     icon: async () => await import('@/components/icons/Icon')
@@ -110,8 +125,8 @@ export default {
       this.file = file
     },
 
-    uploadImage() {
-      this.$refs['upload-image'].upload()
+    uploadFile() {
+      this.$refs['upload-file'].upload()
     },
 
     dragFile(event) {
@@ -228,7 +243,7 @@ export default {
     },
 
     sendPostHash(ipfsHash) {
-      const self = this
+      const self = this // eslint-disable-line @typescript-eslint/no-this-alias
       let txHash = ''
 
       this.$sendPostHash({
