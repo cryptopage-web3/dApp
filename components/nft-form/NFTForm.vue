@@ -28,7 +28,7 @@
           href="#"
           class="nft-form__control"
           title="Upload audio"
-          @click.prevent="uploadFile"
+          @click.prevent="uploadFile('audio')"
         >
           <img src="@/assets/img/creat-post-link_img1.png" alt="" />
         </a>
@@ -36,7 +36,7 @@
           href="#"
           class="nft-form__control"
           title="Upload image"
-          @click.prevent="uploadFile"
+          @click.prevent="uploadFile('image')"
         >
           <img src="@/assets/img/creat-post-link_img2.png" alt="" />
         </a>
@@ -44,7 +44,7 @@
           href="#"
           class="nft-form__control"
           title="Upload video"
-          @click.prevent="uploadFile"
+          @click.prevent="uploadFile('video')"
         >
           <img src="@/assets/img/creat-post-link_img3.png" alt="" />
         </a>
@@ -52,7 +52,7 @@
           href="#"
           class="nft-form__control"
           title="Setting additional fields"
-          @click.prevent="uploadFile"
+          @click.prevent="openAttributes"
         >
           <font-awesome-icon :icon="['fas', 'cog']" />
         </a>
@@ -132,7 +132,9 @@ export default {
     }
   },
   mounted() {
-    $('.nft-form__control').tooltip()
+    $('.nft-form__control').tooltip({
+      trigger: 'hover'
+    })
   },
   methods: {
     fileUpdateHandler(file) {
@@ -148,8 +150,12 @@ export default {
       this.file = file
     },
 
-    uploadFile() {
-      this.$refs['upload-file'].upload()
+    openAttributes() {
+      console.log('openAttributes')
+    },
+
+    uploadFile(type) {
+      this.$refs['upload-file'].upload(type)
     },
 
     dragFile(event) {
