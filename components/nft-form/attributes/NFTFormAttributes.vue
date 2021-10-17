@@ -1,23 +1,14 @@
 <template>
-  <div class="nft-form__attributes">
-    <div class="nft-form__attributes-toggle" @click="toggle">
-      <div class="nft-form__attributes-toggle-icon">
-        <font-awesome-icon
-          :icon="['fas', isShow ? 'caret-up' : 'caret-down']"
-        />
-      </div>
-      <div class="nft-form__attributes-toggle-text">Extended fields</div>
-    </div>
-    <div v-show="isShow" class="nft-form__attributes-container">
-      <properties-attribute
-        :properties="properties"
-        @change="propertiesChangeHandler"
-      />
-      <stats-attribute :stats="stats" @change="statsChangeHandler" />
-      <levels-attribute :levels="levels" @change="levelsChangeHandler" />
-      <dates-attribute />
-      <boosts-attribute :boosts="boosts" @change="boostsChangeHandler" />
-    </div>
+  <div ref="attributes" class="nft-form__attributes">
+    <comment-attribute v-model="hasComment" />
+    <properties-attribute
+      :properties="properties"
+      @change="propertiesChangeHandler"
+    />
+    <stats-attribute :stats="stats" @change="statsChangeHandler" />
+    <levels-attribute :levels="levels" @change="levelsChangeHandler" />
+    <dates-attribute />
+    <boosts-attribute :boosts="boosts" @change="boostsChangeHandler" />
   </div>
 </template>
 <script>
@@ -32,7 +23,9 @@ export default {
     'dates-attribute': async () =>
       await import('@/components/nft-form/attributes/NFTFormDates.vue'),
     'boosts-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormBoosts.vue')
+      await import('@/components/nft-form/attributes/NFTFormBoosts.vue'),
+    'comment-attribute': async () =>
+      await import('@/components/nft-form/attributes/NFTFormComment.vue')
   },
   props: {
     attributes: {
@@ -42,7 +35,8 @@ export default {
   },
   data() {
     return {
-      isShow: false,
+      isShown: false,
+      hasComment: false,
       properties: [],
       levels: [],
       stats: [],
@@ -50,12 +44,21 @@ export default {
     }
   },
   watch: {
+    isShown(isShown) {
+      if (isShown) {
+        $(this.$refs.attributes).slideDown(200)
+      } else {
+        $(this.$refs.attributes).slideUp(100)
+      }
+    },
+
     attributes: {
       handler(attributes) {
         const newProperties = attributes.properties || []
         const newLevels = attributes.levels || []
         const newStats = attributes.stats || []
         const newBoosts = attributes.boosts || []
+        const hasComment = attributes.hasComment || false
 
         if (JSON.stringify(newProperties) !== JSON.stringify(this.properties)) {
           this.properties = newProperties
@@ -71,6 +74,10 @@ export default {
 
         if (JSON.stringify(newBoosts) !== JSON.stringify(this.boosts)) {
           this.boosts = newBoosts
+        }
+
+        if (hasComment !== this.hasComment) {
+          this.hasComment = hasComment
         }
       },
       immediate: true
@@ -102,15 +109,26 @@ export default {
         ...this.attributes,
         boosts
       })
+    },
+
+    hasComment(hasComment) {
+      this.$emit('change', {
+        ...this.attributes,
+        hasComment
+      })
     }
   },
   methods: {
     toggle() {
-      this.isShow = !this.isShow
+      this.isShown = !this.isShown
     },
 
     hide() {
-      this.isShow = false
+      this.isShown = false
+    },
+
+    show() {
+      this.isShown = true
     },
 
     propertiesChangeHandler(properties) {

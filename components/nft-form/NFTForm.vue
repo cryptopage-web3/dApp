@@ -64,25 +64,16 @@
         @change="attributesChangeHandler"
       />
 
-      <div class="nft-form__buttons">
-        <div class="nft-form__post-links">
-          <a class="post-link post-link_blue" @click="uploadFile">
-            <div>
-              <icon type="uploadImage" />
-            </div>
-          </a>
-          <comment-checkbox v-model="hasComment" />
-        </div>
-        <div class="nft-form__send">
-          <button
-            type="button"
-            class="post-follow-top__link btn btn_blue btn_blue--bg"
-            :disabled="loading || !text || !title"
-            @click="submit"
-          >
-            Send crypto-post
-          </button>
-        </div>
+      <div class="creat-post-bottom">
+        <button
+          type="button"
+          class="btn btn_blue btn_creat-post"
+          :disabled="loading || !text || !title"
+          @click="submit"
+        >
+          <img src="@/assets/img/btn_creat-post_img.png" alt="" />
+          <span> Create NFT </span>
+        </button>
       </div>
     </form>
   </div>
@@ -93,20 +84,16 @@ import { validateForm, getAdaptedAttributes } from '@/utils/tweetForm'
 
 export default {
   components: {
-    'comment-checkbox': async () =>
-      await import('@/components/nft-form/NFTFormComment'),
     'upload-file': async () =>
       await import('@/components/nft-form/NFTFormFile'),
     attributes: async () =>
-      await import('@/components/nft-form/attributes/NFTFormAttributes'),
-    icon: async () => await import('@/components/icons/Icon')
+      await import('@/components/nft-form/attributes/NFTFormAttributes')
   },
   data() {
     return {
       loading: false,
       text: '',
       title: '',
-      hasComment: false,
       attributes: {},
       file: null
     }
@@ -151,7 +138,7 @@ export default {
     },
 
     openAttributes() {
-      console.log('openAttributes')
+      this.$refs.attributes.toggle()
     },
 
     uploadFile(type) {
@@ -197,7 +184,6 @@ export default {
       this.text = ''
       this.file = null
       this.attributes = {}
-      this.hasComment = false
       this.$refs.attributes.hide()
     },
 
@@ -279,7 +265,7 @@ export default {
         params: {
           from: this.$store.getters['auth/selectedAddress'],
           hash: ipfsHash,
-          comment: this.hasComment
+          comment: this.attributes.hasComment || false
         },
         callbacks: {
           onTransactionHash(hash) {
