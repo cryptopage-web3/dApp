@@ -1,7 +1,11 @@
 <template>
   <div class="nft-form__attribute">
     <div class="nft-form__attribute-header" @click="toggle">
-      <div class="nft-form__attribute-header-icon">
+      <div
+        ref="icon"
+        class="nft-form__attribute-header-icon"
+        title="Percentage traits that show as a progress bar"
+      >
         <font-awesome-icon :icon="['fas', 'bolt']" />
       </div>
       <div class="nft-form__attribute-header-title">Boosts</div>
@@ -58,6 +62,13 @@ export default {
     localBoosts(boosts) {
       this.$emit('change', boosts)
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      $(this.$refs.icon).tooltip({
+        trigger: 'hover'
+      })
+    })
   },
   methods: {
     toggle() {

@@ -1,7 +1,11 @@
 <template>
   <div class="nft-form__attribute" @click="toggle">
     <div class="nft-form__attribute-header">
-      <div class="nft-form__attribute-header-icon">
+      <div
+        ref="icon"
+        class="nft-form__attribute-header-icon"
+        title="Availability to add a comment"
+      >
         <font-awesome-icon :icon="['fas', 'comments']" />
       </div>
       <div class="nft-form__attribute-header-title">Сomments</div>
@@ -20,6 +24,13 @@ export default {
     value: {
       type: Boolean
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      $(this.$refs.icon).tooltip({
+        trigger: 'hover'
+      })
+    })
   },
   methods: {
     toggle() {

@@ -1,7 +1,11 @@
 <template>
   <div class="nft-form__attribute">
     <div class="nft-form__attribute-header" @click="toggle">
-      <div class="nft-form__attribute-header-icon">
+      <div
+        ref="icon"
+        class="nft-form__attribute-header-icon"
+        title="Numerical traits that show as a progress bar"
+      >
         <font-awesome-icon :icon="['fas', 'star']" />
       </div>
       <div class="nft-form__attribute-header-title">Levels</div>
@@ -58,6 +62,13 @@ export default {
     localLevels(levels) {
       this.$emit('change', levels)
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      $(this.$refs.icon).tooltip({
+        trigger: 'hover'
+      })
+    })
   },
   methods: {
     toggle() {
