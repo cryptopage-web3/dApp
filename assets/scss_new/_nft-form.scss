@@ -215,7 +215,7 @@
         height: 16px;
         border-radius: 50%;
         background-color: #ffffff;
-        transition: all;
+        transition: all 0.2s ease;
     }
 
     &_selected {
@@ -276,7 +276,7 @@
 
         &_type {
             color: #15b2e5;
-            font-size: 11px;
+            font-size: 12px;
             line-height: 20px;
             text-transform: uppercase;
         }
