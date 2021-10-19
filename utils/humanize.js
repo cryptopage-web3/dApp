@@ -10,6 +10,11 @@ export const humanizeCount = (count) => {
   }
 }
 
+export const truncate = (str, length) => {
+  const dots = String(str).length > length ? '...' : ''
+  return String(str).substring(0, length) + dots
+}
+
 export const normalizeDate = (timestamp) => {
   const date = new Date(timestamp * 1000)
   let minute = date.getMinutes()
