@@ -1,7 +1,11 @@
 <template>
   <div class="nft-form__attribute">
     <div class="nft-form__attribute-header" @click="toggle">
-      <div class="nft-form__attribute-header-icon">
+      <div
+        ref="icon"
+        class="nft-form__attribute-header-icon"
+        title="Textual traits that show up as rectangles"
+      >
         <font-awesome-icon :icon="['fas', 'tag']" />
       </div>
       <div class="nft-form__attribute-header-title">Properties</div>
@@ -63,6 +67,13 @@ export default {
     localProperties(properties) {
       this.$emit('change', properties)
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      $(this.$refs.icon).tooltip({
+        trigger: 'hover'
+      })
+    })
   },
   methods: {
     toggle() {

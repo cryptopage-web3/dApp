@@ -5,25 +5,27 @@
       style="display: none"
       type="file"
       name="file"
+      :accept="accept"
       @change="fileUpdateHandler"
     />
     <div
       v-if="fileURL"
-      class="nft-form__image d-flex justify-center align-start"
+      class="nft-form__file"
+      :class="{
+        'nft-form__file_video': fileType === 'video',
+        'nft-form__file_audio': fileType === 'audio'
+      }"
     >
-      <div
-        class="nft-form__image-delete d-flex justify-center align-center"
-        @click="fileDeleteHandler"
-      >
+      <div class="nft-form__file-delete" @click="fileDeleteHandler">
         <icon type="close" />
       </div>
-      <video v-if="fileType === 'video'" class="video-block" controls>
+      <video v-if="fileType === 'video'" controls>
         <source :src="fileURL" />
       </video>
-      <audio v-else-if="fileType === 'audio'" class="video-block" controls>
+      <audio v-else-if="fileType === 'audio'" controls>
         <source :src="fileURL" />
       </audio>
-      <img v-else :src="fileURL" class="img-block" />
+      <img v-else :src="fileURL" />
     </div>
   </div>
 </template>
@@ -39,7 +41,8 @@ export default {
   },
   data() {
     return {
-      fileURL: null
+      fileURL: null,
+      accept: ''
     }
   },
   computed: {
@@ -56,8 +59,28 @@ export default {
     }
   },
   methods: {
-    upload() {
-      this.$refs.file.click()
+    upload(type = 'image') {
+      switch (type) {
+        case 'image':
+          this.accept = '.jpg, .jpeg, .png, .gif, .svg'
+          break
+
+        case 'video':
+          this.accept = '.mp4, .webm'
+          break
+
+        case 'audio':
+          this.accept = '.mp3, .wav, .webm'
+          break
+
+        default:
+          this.accept = ''
+          break
+      }
+
+      this.$nextTick(() => {
+        this.$refs.file.click()
+      })
     },
 
     fileDeleteHandler() {

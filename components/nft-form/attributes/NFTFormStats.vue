@@ -1,7 +1,11 @@
 <template>
   <div class="nft-form__attribute">
     <div class="nft-form__attribute-header" @click="toggle">
-      <div class="nft-form__attribute-header-icon">
+      <div
+        ref="icon"
+        class="nft-form__attribute-header-icon"
+        title="Numerical traits that just show as numbers"
+      >
         <font-awesome-icon :icon="['fas', 'chart-area']" />
       </div>
       <div class="nft-form__attribute-header-title">Stats</div>
@@ -58,6 +62,13 @@ export default {
     localStats(stats) {
       this.$emit('change', stats)
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      $(this.$refs.icon).tooltip({
+        trigger: 'hover'
+      })
+    })
   },
   methods: {
     toggle() {
