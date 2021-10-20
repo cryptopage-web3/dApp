@@ -8,9 +8,16 @@ import {
 
 export default class TokenBalanceParser {
   parseETHToken(eth: EthplorerETHType): TokenBalanceType {
+    const price = eth.price || {
+      rate: 0,
+      diff: 0,
+      marketCapUsd: 0,
+      availableSupply: 0,
+      ts: 0
+    }
     const ethToken = {
       balance: eth.balance,
-      rawBalance: eth.rawBalance,
+      rawBalance: eth.rawBalance || `${eth.balance}`,
       totalIn: 0,
       totalOut: 0,
       tokenInfo: {
@@ -23,7 +30,7 @@ export default class TokenBalanceParser {
         twitter: '',
         storageTotalSupply: '',
         publicTags: [''],
-        price: eth.price,
+        price,
         owner: '',
         countOps: 0,
         totalIn: 0,
