@@ -8,12 +8,6 @@ import AddressAPIService from '~/logic/address/services/api'
 
 @Service(tokens.ADDRESS_SERVICE)
 export default class AddressService {
-  private CACHE: { [address: string]: TokenInfoType | null } = {}
-
-  protected get $web3(): Web3 {
-    return Container.get(tokens.WEB3) as Web3
-  }
-
   @Inject(tokens.ADDRESS_IPFS_SERVICE)
   public addressIPFSService!: AddressIPFSService
 
@@ -23,16 +17,18 @@ export default class AddressService {
   @Inject(tokens.ADDRESS_API_SERVICE)
   public addressAPI3Service!: AddressAPIService
 
+  private CACHE: { [address: string]: TokenInfoType | null } = {}
+
+  protected get $web3(): Web3 {
+    return Container.get(tokens.WEB3) as Web3
+  }
+
   private cacheGet = (address: string): TokenInfoType | null => {
     return address in this.CACHE ? this.CACHE[address] : null
   }
 
   private cacheSet = (address: string, value: TokenInfoType | null): void => {
     this.CACHE[address] = value
-  }
-
-  public getAddressInfo(address: string): void {
-    console.log('address', address)
   }
 
   public getTokenInfo = async (
@@ -45,7 +41,7 @@ export default class AddressService {
         tokenInfo = await this.addressIPFSService.getTokenInfo(address)
       }
       if (!tokenInfo) {
-        tokenInfo = await this.addressWEB3Service.getToken(address)
+        tokenInfo = await this.addressWEB3Service.getTokenInfo(address)
       }
       this.cacheSet(address, tokenInfo)
       return tokenInfo
@@ -53,9 +49,5 @@ export default class AddressService {
       this.cacheSet(address, null)
       return null
     }
-  }
-
-  public getBalance(address: string): void {
-    console.log('address', address)
   }
 }
