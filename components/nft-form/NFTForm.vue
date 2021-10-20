@@ -79,221 +79,232 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Watch } from 'nuxt-property-decorator'
+import { Inject } from 'vue-typedi'
 import { validateForm, getAdaptedAttributes } from '@/utils/tweetForm'
+import NFTAPIService from '~/logic/nft/services/api'
+import tokens from '~/logic/tokens'
 
-export default {
+@Component({
   components: {
     'upload-file': async () =>
-      await import('@/components/nft-form/NFTFormFile'),
+      await import('@/components/nft-form/NFTFormFile.vue'),
     attributes: async () =>
-      await import('@/components/nft-form/attributes/NFTFormAttributes')
-  },
-  data() {
-    return {
-      loading: false,
-      text: '',
-      title: '',
-      attributes: {},
-      file: null
-    }
-  },
-  computed: {
-    isMediaFile() {
-      if (!this.file) {
-        return false
-      }
+      await import('@/components/nft-form/attributes/NFTFormAttributes.vue')
+  }
+})
+export default class NFTForm extends Vue {
+  loading = false
+  text = ''
+  title = ''
+  attributes: any = {}
+  file: any = null
 
-      const fileType = this.file.type.split('/')[0]
+  $refs!: {
+    attributes: any
+    'upload-file': any
+  }
 
-      return /(audio|video)/.test(fileType)
+  @Inject(tokens.NFT_API_SERVICE)
+  public nftAPIService!: NFTAPIService
+
+  get isMediaFile(): boolean {
+    if (!this.file) {
+      return false
     }
-  },
-  watch: {
-    loading(loading) {
-      if (loading) {
-        this.$nuxt.$loading.start()
-      } else {
-        this.$nuxt.$loading.finish()
-      }
+
+    const fileType = this.file.type.split('/')[0]
+
+    return /(audio|video)/.test(fileType)
+  }
+
+  @Watch('loading')
+  onLoadingChanged(loading: boolean) {
+    if (loading) {
+      this.$nuxt.$loading.start()
+    } else {
+      this.$nuxt.$loading.finish()
     }
-  },
+  }
+
   mounted() {
-    $('.nft-form__control').tooltip({
+    ;($('.nft-form__control') as any).tooltip({
       trigger: 'hover'
     })
-  },
-  methods: {
-    fileUpdateHandler(file) {
-      if (!file) {
-        this.file = null
-        return
-      }
+  }
 
-      if (!this.validateFileWithNotify(file)) {
-        return
-      }
-
-      this.file = file
-    },
-
-    openAttributes() {
-      this.$refs.attributes.toggle()
-    },
-
-    uploadFile(type) {
-      this.$refs['upload-file'].upload(type)
-    },
-
-    dragFile(event) {
-      const file = event.dataTransfer.files[0]
-
-      if (!this.validateFileWithNotify(file)) {
-        return
-      }
-
-      this.file = file
-    },
-
-    validateFileWithNotify(file) {
-      if (!file) {
-        return false
-      }
-
-      const fileType = file.type.split('/')[0]
-
-      if (!/(image|video|audio)/.test(fileType)) {
-        this.$notify({
-          type: 'error',
-          title: 'Invalid file extension',
-          text: 'Please upload only image, audio or video'
-        })
-
-        return false
-      }
-
-      return true
-    },
-
-    attributesChangeHandler(attributes) {
-      this.attributes = attributes
-    },
-
-    resetForm() {
-      this.title = ''
-      this.text = ''
+  fileUpdateHandler(file: any) {
+    if (!file) {
       this.file = null
-      this.attributes = {}
-      this.$refs.attributes.hide()
-    },
+      return
+    }
 
-    validateFormWithNotify() {
-      const result = validateForm({
-        title: this.title,
-        text: this.text,
-        attributes: this.attributes
-      })
+    if (!this.validateFileWithNotify(file)) {
+      return
+    }
 
-      if (!result.status) {
-        this.$notify({
-          type: 'error',
-          title: result.error || 'Invalid data'
-        })
+    this.file = file
+  }
 
-        return false
-      }
+  openAttributes() {
+    this.$refs.attributes.toggle()
+  }
 
-      return true
-    },
+  uploadFile(type: string) {
+    this.$refs['upload-file'].upload(type)
+  }
 
-    async submit() {
-      if (!this.validateFormWithNotify()) {
-        return
-      }
+  dragFile(event: any) {
+    const file = event.dataTransfer.files[0]
 
-      this.loading = true
+    if (!this.validateFileWithNotify(file)) {
+      return
+    }
 
-      // get ipfs hash
+    this.file = file
+  }
 
-      const ipfsHash = await this.getFormIPFSHash()
+  validateFileWithNotify(file: any) {
+    if (!file) {
+      return false
+    }
 
-      // send to contract
+    const fileType = file.type.split('/')[0]
 
-      this.sendPostHash(ipfsHash)
-
-      // success
-
-      this.loading = false
-      this.resetForm()
-
+    if (!/(image|video|audio)/.test(fileType)) {
       this.$notify({
-        type: 'success',
-        title: `IPFS hash received`
+        type: 'error',
+        title: 'Invalid file extension',
+        text: 'Please upload only image, audio or video'
       })
-    },
 
-    async getFileIPFSHash() {
-      const ipfs = await this.$ipfs
-      const file = await ipfs.add(this.file)
-      await ipfs.pin.add(file.path)
-      return file.path
-    },
+      return false
+    }
 
-    async getFormIPFSHash() {
-      const fileHash = this.file ? await this.getFileIPFSHash() : null
+    return true
+  }
 
-      const nft = {
-        name: this.title,
-        description: this.text,
-        attributes: getAdaptedAttributes(this.attributes),
-        [this.isMediaFile ? 'animation_url' : 'image']:
-          fileHash && `https://ipfs.io/ipfs/${fileHash}`
-      }
+  attributesChangeHandler(attributes: any) {
+    this.attributes = attributes
+  }
 
-      const ipfs = await this.$ipfs
-      const file = await ipfs.add(JSON.stringify(nft))
-      await ipfs.pin.add(file.path)
+  resetForm() {
+    this.title = ''
+    this.text = ''
+    this.file = null
+    this.attributes = {}
+    this.$refs.attributes.hide()
+  }
 
-      return file.path
-    },
+  validateFormWithNotify() {
+    const result = validateForm({
+      title: this.title,
+      text: this.text,
+      attributes: this.attributes
+    })
 
-    sendPostHash(ipfsHash) {
-      const self = this // eslint-disable-line @typescript-eslint/no-this-alias
-      let txHash = ''
+    if (!result.status) {
+      this.$notify({
+        type: 'error',
+        title: result.error || 'Invalid data'
+      })
 
-      this.$sendPostHash({
-        params: {
-          from: this.$store.getters['auth/selectedAddress'],
-          hash: ipfsHash,
-          comment: this.attributes.hasComment || false
-        },
-        callbacks: {
-          onTransactionHash(hash) {
-            txHash = hash
+      return false
+    }
 
-            self.$notify({
+    return true
+  }
+
+  async submit() {
+    if (!this.validateFormWithNotify()) {
+      return
+    }
+
+    this.loading = true
+
+    // get ipfs hash
+
+    const ipfsHash = await this.getFormIPFSHash()
+
+    // send to contract
+
+    this.sendPostHash(ipfsHash)
+
+    // success
+
+    this.loading = false
+    this.resetForm()
+
+    this.$notify({
+      type: 'success',
+      title: `IPFS hash received`
+    })
+  }
+
+  async getFileIPFSHash() {
+    const ipfs = await (this as any).$ipfs
+    const file = await ipfs.add(this.file)
+    await ipfs.pin.add(file.path)
+    return file.path
+  }
+
+  async getFormIPFSHash() {
+    const fileHash = this.file ? await this.getFileIPFSHash() : null
+
+    const nft = {
+      name: this.title,
+      description: this.text,
+      attributes: getAdaptedAttributes(this.attributes),
+      [this.isMediaFile ? 'animation_url' : 'image']:
+        fileHash && `https://ipfs.io/ipfs/${fileHash}`
+    }
+
+    const ipfs = await (this as any).$ipfs
+    const file = await ipfs.add(JSON.stringify(nft))
+    await ipfs.pin.add(file.path)
+
+    return file.path
+  }
+
+  sendPostHash(ipfsHash: string) {
+    this.nftAPIService.sendNFTHash({
+      params: {
+        from: this.$store.getters['auth/selectedAddress'],
+        hash: ipfsHash,
+        comment: this.attributes.hasComment || false
+      },
+      callback: ({ status, txHash }) => {
+        const title = txHash || 'Unknown hash'
+
+        switch (status) {
+          case 'pending':
+            this.$notify({
               type: 'info',
-              title: txHash,
+              title,
               text: 'Transaction on pending'
             })
-          },
-          onReceipt() {
-            self.$notify({
+            break
+
+          case 'success':
+            this.$notify({
               type: 'success',
-              title: txHash || 'Unknown hash',
+              title,
               text: 'Transaction completed'
             })
-          },
-          onError() {
-            self.$notify({
+            break
+
+          case 'error':
+            this.$notify({
               type: 'error',
-              title: txHash || 'Unknown hash',
+              title,
               text: 'Transaction has some error'
             })
-          }
+            break
         }
-      })
-    }
+      }
+    })
   }
 }
 </script>

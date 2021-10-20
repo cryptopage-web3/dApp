@@ -1,7 +1,12 @@
 import { Service, Container } from 'vue-typedi'
 import Web3 from 'web3'
 import { ERC721ABI } from '~/constants/abi-samples'
-import { FetchOneType, ERC721ContractDataType } from '~/logic/nft/types'
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from '~/constants/contract'
+import {
+  FetchOneType,
+  ERC721ContractDataType,
+  ISendNFTWeb3
+} from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
 
 @Service(tokens.NFT_WEB3_SERVICE)
@@ -41,5 +46,19 @@ export default class NFTWeb3Service {
     } catch {
       return { tokenURI: '', owner: '' }
     }
+  }
+
+  /** Send nft to contract */
+  public sendNFTHash = ({ params, callbacks }: ISendNFTWeb3) => {
+    const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
+
+    contract.methods
+      .safeMint(params.hash, params.comment)
+      .send({
+        from: params.from
+      })
+      .on('transactionHash', callbacks.onTransactionHash)
+      .on('receipt', callbacks.onReceipt)
+      .on('error', callbacks.onError)
   }
 }

@@ -36,3 +36,23 @@ export interface ERC721ContractDataType {
   tokenURI: string
   owner: string
 }
+
+export interface ISendNFTParams {
+  from: string
+  hash: string
+  comment: boolean
+}
+
+export interface ISendNFTApi {
+  params: ISendNFTParams
+  callback: (params: { status: string; txHash: string }) => void
+}
+
+export interface ISendNFTWeb3 {
+  params: ISendNFTParams
+  callbacks: {
+    onTransactionHash: (hash: string) => void
+    onReceipt: () => void
+    onError: () => void
+  }
+}

@@ -34,7 +34,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "jest"
+      "jest",
+      "jquery"
     ]
   },
   "exclude": [
