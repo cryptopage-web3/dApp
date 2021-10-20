@@ -31,7 +31,9 @@ export default class TransactionParser {
       gasPrice: transaction.gasPrice,
       gasUsed: transaction.gasUsed,
       timeStamp: transaction.timeStamp,
-      to: transaction.to
+      to: transaction.to,
+      sender: transaction.from,
+      receiver: transaction.to
     }
   }
 
@@ -41,7 +43,7 @@ export default class TransactionParser {
     return {
       totalSupply: undefined,
       address: transaction.contractAddress,
-      decimals: transaction.tokenDecimal,
+      decimals: Number(transaction.tokenDecimal),
       name: transaction.tokenName,
       symbol: transaction.tokenSymbol,
       image: ''
@@ -80,7 +82,7 @@ export default class TransactionParser {
   }
 
   private parseSender(tx: TransactionType): string {
-    return web3.utils.toChecksumAddress(tx.from)
+    return tx.from
   }
 
   private parseReceiver(tx: TransactionType): string {
@@ -89,14 +91,13 @@ export default class TransactionParser {
     if (input && input.name === 'transfer') {
       receiver = input.params[0].value
     }
-    return web3.utils.toChecksumAddress(receiver)
+    return receiver
   }
 
   public parseAmount(tx: TransactionType): string {
     const input = tx.decodedInput
     let amount = Number(tx.value)
     let decimals = 18
-
     if (input && input.name === 'transfer') {
       amount = Number(web3.utils.toBN(input.params[1].value))
     }

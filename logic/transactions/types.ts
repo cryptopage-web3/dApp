@@ -25,8 +25,8 @@ export type DecodedInputType = {
 }
 
 export type ParamsAdaptarType = {
-  token?: TokenInfoType
-  nft?: NFTType
+  token?: TokenInfoType | null
+  nft?: NFTType | null
   decodedInput?: DecodedInputType | undefined
 }
 
@@ -55,8 +55,8 @@ export type TransactionType = ParamsAdaptarType & {
   gasUsed: string
   timeStamp: string
   to: string
-  sender?: string
-  receiver?: string
+  sender: string
+  receiver: string
   amount?: string
 }
 

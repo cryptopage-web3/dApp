@@ -67,7 +67,7 @@ export default class TokenBalanceParser {
       totalSupply: tokenInfo.totalSupply ? tokenInfo.totalSupply : '',
       name: tokenInfo.name ? tokenInfo.name : '',
       symbol: tokenInfo.symbol ? tokenInfo.symbol : '',
-      decimals: tokenInfo.decimals ? tokenInfo.decimals : '',
+      decimals: tokenInfo.decimals ? Number(tokenInfo.decimals) : 18,
       image: this.parseImage(tokenInfo)
     }
   }
