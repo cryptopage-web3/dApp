@@ -108,7 +108,7 @@ export default class NFTAPIService {
   public sendNFTHash = ({ params, callback }: ISendNFTApi) => {
     let txHash = ''
 
-    this.nftWeb3Service.sendNFTHash({
+    this.nftWeb3Service.sendSafeMint({
       params,
       callbacks: {
         onTransactionHash(hash: string) {

@@ -48,8 +48,8 @@ export default class NFTWeb3Service {
     }
   }
 
-  /** Send nft to contract */
-  public sendNFTHash = ({ params, callbacks }: ISendNFTWeb3) => {
+  /** Action safeMint by contract */
+  public sendSafeMint = ({ params, callbacks }: ISendNFTWeb3) => {
     const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
 
     contract.methods
