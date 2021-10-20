@@ -15,9 +15,9 @@ export default class AddressWeb3Service {
   /**
    * Get contract name, totalSupply, decimals and symbol from  web3
    */
-  public getToken = async (
+  public getTokenInfo = async (
     address: string
-  ): Promise<TokenInfoType | undefined> => {
+  ): Promise<TokenInfoType | null> => {
     try {
       const contract = new this.$web3.eth.Contract(ERC20ABI, address)
       const name = await contract.methods.name().call()
@@ -32,7 +32,7 @@ export default class AddressWeb3Service {
         symbol
       })
     } catch {
-      return undefined
+      return null
     }
   }
 
