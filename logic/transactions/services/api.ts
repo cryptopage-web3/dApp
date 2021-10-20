@@ -3,7 +3,7 @@ import * as tPromise from 'io-ts-promise'
 import { Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
 import NFTAPIService from '~/logic/nft/services/api'
-import AddressWeb3Service from '~/logic/address/services/web3'
+import AddressService from '~/logic/address/services/index'
 import TransactionAdapter from '~/logic/transactions/adapter'
 import { APIServiceMixin } from '~/logic/mixins'
 import {
@@ -27,8 +27,8 @@ import {
 
 @Service(tokens.TRANSACTION_API_SERVICE)
 export default class TransactionAPIService extends APIServiceMixin {
-  @Inject(tokens.ADDRESS_WEB3_SERVICE)
-  private addressWeb3Service!: AddressWeb3Service
+  @Inject(tokens.ADDRESS_SERVICE)
+  private addressService!: AddressService
 
   @Inject(tokens.NFT_API_SERVICE)
   public nftAPIService!: NFTAPIService
@@ -65,10 +65,7 @@ export default class TransactionAPIService extends APIServiceMixin {
           transaction: EtherscanTransactionType
         ): Promise<TransactionType> => {
           const adapter = TransactionAdapter(transaction)
-          const address = transaction.contractAddress
-            ? transaction.contractAddress
-            : transaction.to
-          const token = await this.addressWeb3Service.getToken(address)
+          const token = await this.addressService.getTokenInfo(transaction.to)
           return adapter.request({ token })
         }
       )
