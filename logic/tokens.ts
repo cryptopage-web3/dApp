@@ -20,11 +20,15 @@ export default {
   TRANSACTION_API_SERVICE: new Token('transaction-api-service'),
 
   // Address services:
+  ADDRESS_SERVICE: new Token('address-service'),
   ADDRESS_API_SERVICE: new Token('address-api-service'),
   ADDRESS_IPFS_SERVICE: new Token('address-ipfs-service'),
   ADDRESS_WEB3_SERVICE: new Token('address-web3-service'),
 
   AXIOS: new Token('axios'),
+  IPFS: new Token('ipfs'),
   WEB3: new Token('web3'),
-  SEA: new Token('sea')
+  WEB3_HTTPS: new Token('web3-https'),
+  SEA: new Token('sea'),
+  SEARCH: new Token('search')
 }
