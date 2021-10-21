@@ -17,6 +17,7 @@
       <footer-section />
     </template>
     <connect-modal />
+    <nft-form-modal />
   </div>
 </template>
 
@@ -29,7 +30,9 @@ export default {
       await import('@/components/sidebar/right/SidebarRight'),
     'footer-section': async () => await import('@/components/footer/Footer'),
     'connect-modal': async () =>
-      await import('@/components/connect/ConnectModal.vue')
+      await import('@/components/connect/ConnectModal.vue'),
+    'nft-form-modal': async () =>
+      await import('@/components/nft-form/NFTFormModal.vue')
   },
   computed: {
     isReadyStore() {

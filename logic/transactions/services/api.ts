@@ -160,14 +160,14 @@ export default class TransactionAPIService extends APIServiceMixin {
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
-    const response: AxiosResponse<EtherscanERC721TransactionsResponseType> =
-      await this.$axios.get(URL)
-    const data = await tPromise.decode(
-      EtherscanERC721TransactionsResponse,
-      response.data
-    )
-    return await Promise.all(
-      data.result.map(
+    try {
+      const response: AxiosResponse<EtherscanERC721TransactionsResponseType> =
+        await this.$axios.get(URL)
+      const data = await tPromise.decode(
+        EtherscanERC721TransactionsResponse,
+        response.data
+      )
+      const transactions = await data.result.map(
         async (
           transaction: EtherscanERC721TransactionType
         ): Promise<TransactionType> => {
@@ -179,6 +179,11 @@ export default class TransactionAPIService extends APIServiceMixin {
           return adapter.request({ nft })
         }
       )
-    )
+      console.log('transactions', transactions)
+      return transactions
+    } catch (error) {
+      console.log('error in getERC721Transactions', error)
+      return []
+    }
   }
 }

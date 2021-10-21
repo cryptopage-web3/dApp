@@ -31,7 +31,8 @@ export default class AddressWeb3Service {
         decimals,
         symbol
       })
-    } catch {
+    } catch (error) {
+      console.log('error', error)
       return null
     }
   }
@@ -45,5 +46,23 @@ export default class AddressWeb3Service {
     const decimals = await contract.methods.decimals().call()
     const balance = balanceOf / 10 ** decimals
     return balance.toString()
+  }
+
+  public getBalance = async (address: string): Promise<number> => {
+    try {
+      const balance = await this.$web3.eth.getBalance(address)
+      console.log('balance in getBalance', Number(balance))
+      return Number(balance)
+    } catch {
+      return 0
+    }
+  }
+
+  public getTransactionsCount = async (address: string): Promise<number> => {
+    try {
+      return await this.$web3.eth.getTransactionCount(address)
+    } catch {
+      return 0
+    }
   }
 }

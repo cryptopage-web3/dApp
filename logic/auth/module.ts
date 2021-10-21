@@ -26,12 +26,12 @@ export default class AuthModule {
 
   @Getter()
   public get selectedAddress(): string {
-    return this.authService.data.selectedAddress
+    return this.authService.selectedAddress
   }
 
   @Getter()
   public get chainId(): number {
-    return this.authService.data.selectedChainId
+    return this.authService.selectedChainId
   }
 
   @Getter()

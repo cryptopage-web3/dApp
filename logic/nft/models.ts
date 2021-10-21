@@ -35,7 +35,7 @@ export const Property = ts.type({
 export const NFTPayload = ts.partial({
   owner: ts.string,
   title: ts.string,
-  image: ts.string,
+  image: ts.union([ts.string, ts.null]),
   image_data: ts.string,
   image_url: ts.string,
   external_url: ts.string,

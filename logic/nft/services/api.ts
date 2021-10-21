@@ -3,7 +3,12 @@ import * as tPromise from 'io-ts-promise'
 import { Inject, Service, Container } from 'vue-typedi'
 import { NFTPayload } from '~/logic/nft/models'
 import NFTAdapter from '~/logic/nft/adapter'
-import { NFTType, FetchOneType, NFTPayloadType } from '~/logic/nft/types'
+import {
+  NFTType,
+  FetchOneType,
+  NFTPayloadType,
+  ISendNFTApi
+} from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
 
@@ -95,7 +100,37 @@ export default class NFTAPIService {
       const nftPayload = await this.fetchNFTPayloadByTokenURI(tokenURI)
       adaptedNFT = NFTAdapter(nftPayload)
     }
-    const nft = await adaptedNFT.request(owner)
-    return nft
+    return await adaptedNFT.request(owner)
+  }
+
+  /** Send nft to contract via web3 */
+  public sendNFTHash = ({ params, callback }: ISendNFTApi) => {
+    let txHash = ''
+
+    this.nftWeb3Service.sendSafeMint({
+      params,
+      callbacks: {
+        onTransactionHash(hash: string) {
+          txHash = hash
+
+          callback({
+            status: 'pending',
+            txHash
+          })
+        },
+        onReceipt() {
+          callback({
+            status: 'success',
+            txHash
+          })
+        },
+        onError() {
+          callback({
+            status: 'error',
+            txHash
+          })
+        }
+      }
+    })
   }
 }

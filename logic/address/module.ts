@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
 import TransactionAPIService from '~/logic/transactions/services/api'
-import AddressAPIService from '~/logic/address/services/api'
+import AddressService from '~/logic/address/services/index'
 import { TokenBalanceType, AddressInfoType } from '~/logic/address/types'
 import tokens from '~/logic/tokens'
 import {
@@ -23,8 +23,8 @@ export default class AddressModule {
   @Inject(tokens.TRANSACTION_API_SERVICE)
   public transactionAPIService!: TransactionAPIService
 
-  @Inject(tokens.ADDRESS_API_SERVICE)
-  public addressAPIService!: AddressAPIService
+  @Inject(tokens.ADDRESS_SERVICE)
+  public addressService!: AddressService
 
   // State
 
@@ -46,8 +46,16 @@ export default class AddressModule {
 
   @Getter()
   public get tokens(): TokenBalanceType[] {
-    const tokens = this.addressInfo ? this.addressInfo.tokens : []
-    return tokens.sort((a, b) => (a.usdBalance > b.usdBalance ? -1 : 1))
+    let tokens = this.addressInfo ? this.addressInfo.tokens : []
+    const ethToken = tokens.find(
+      (token) => token && token.tokenInfo && token.tokenInfo.symbol === 'ETH'
+    )
+    tokens = tokens.filter(
+      (token) => token && token.tokenInfo && token.tokenInfo.symbol !== 'ETH'
+    )
+    tokens = tokens.sort((a, b) => (a.usdBalance > b.usdBalance ? -1 : 1))
+    tokens = ethToken ? [ethToken, ...tokens] : tokens
+    return tokens
   }
 
   @Getter()
@@ -155,7 +163,7 @@ export default class AddressModule {
   @Action()
   public async updateAddressInfo(address: string): Promise<void> {
     this.setAddress(address)
-    const addressInfo = await this.addressAPIService.getAddressInfo(address)
+    const addressInfo = await this.addressService.getAddressInfo(address)
     this.setAddressInfo(addressInfo)
   }
 

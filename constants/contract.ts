@@ -1,5 +1,7 @@
+import { AbiItem } from 'web3-utils'
+
 export const CONTRACT_ADDRESS = '0xa63F7ecD41b86B5609Da5cb891Eb10065F1364b5'
-export const CONTRACT_ABI = [
+export const CONTRACT_ABI: AbiItem[] = [
   {
     inputs: [
       { internalType: 'address', name: '_PAGE_MINTER', type: 'address' },

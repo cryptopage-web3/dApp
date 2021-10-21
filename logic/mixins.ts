@@ -119,3 +119,16 @@ export class APIServiceMixin {
     return this.ethplorerAPIKey
   }
 }
+
+export class CovalentAPIServiceMixin {
+  protected APIKey = 'ckey_d826382c6f1b430c97ad2521c0d'
+  protected baseURL = `https://api.covalenthq.com/v1/${this.authService.selectedChainId}`
+
+  protected get $axios(): AxiosInstance {
+    return Container.get(tokens.AXIOS) as AxiosInstance
+  }
+
+  protected get authService(): AuthService {
+    return Container.get(tokens.AUTH_SERVICE) as AuthService
+  }
+}

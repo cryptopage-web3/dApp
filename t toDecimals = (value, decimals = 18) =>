@@ -1,0 +1,147 @@
+[1mdiff --git a/logic/address/services/web3.ts b/logic/address/services/web3.ts[m
+[1mindex 954a3fa..07329c9 100644[m
+[1m--- a/logic/address/services/web3.ts[m
+[1m+++ b/logic/address/services/web3.ts[m
+[36m@@ -15,7 +15,7 @@[m [mexport default class AddressWeb3Service {[m
+   /**[m
+    * Get contract name, totalSupply, decimals and symbol from  web3[m
+    */[m
+[31m-  public getTokenInfo = async ([m
+[32m+[m[32m  public getToken = async ([m
+     address: string[m
+   ): Promise<TokenInfoType | undefined> => {[m
+     try {[m
+[36m@@ -26,7 +26,7 @@[m [mexport default class AddressWeb3Service {[m
+       const symbol = await contract.methods.symbol().call()[m
+       return await tPromise.decode(TokenInfo, {[m
+         name,[m
+[31m-        contractAddress: address,[m
+[32m+[m[32m        address,[m
+         totalSupply,[m
+         decimals,[m
+         symbol[m
+[1mdiff --git a/logic/address/types.ts b/logic/address/types.ts[m
+[1mindex a88c2bf..9b0fa71 100644[m
+[1m--- a/logic/address/types.ts[m
+[1m+++ b/logic/address/types.ts[m
+[36m@@ -1,13 +1,34 @@[m
+ import * as ts from 'io-ts'[m
+ import {[m
+   TokenInfo,[m
+[32m+[m[32m  EthplorerETH,[m
+   EthplorerToken,[m
+   EthplorerTokenInfo,[m
+   EthplorerGetAddressInfoResponse[m
+ } from '~/logic/address/models'[m
+ export type TokenInfoType = ts.TypeOf<typeof TokenInfo>[m
+[32m+[m[32mexport type EthplorerETHType = ts.TypeOf<typeof EthplorerETH>[m
+ export type EthplorerTokenType = ts.TypeOf<typeof EthplorerToken>[m
+ export type EthplorerTokenInfoType = ts.TypeOf<typeof EthplorerTokenInfo>[m
+ export type EthplorerGetAddressInfoResponseType = ts.TypeOf<[m
+   typeof EthplorerGetAddressInfoResponse[m
+ >[m
+[32m+[m
+[32m+[m[32mexport type TokenBalanceType = {[m
+[32m+[m[32m  balance: number[m
+[32m+[m[32m  usdBalance: number[m
+[32m+[m[32m  rate: number[m
+[32m+[m[32m  diff?: number[m
+[32m+[m[32m  tokenInfo?: TokenInfoType[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport type AddressInfoType = {[m
+[32m+[m[32m  address: string[m
+[32m+[m[32m  tokenInfo?: TokenInfoType[m
+[32m+[m[32m  tokens: TokenBalanceType[][m
+[32m+[m[32m  transactionsCount: number[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32mexport type AddressInfoAdapterType = {[m
+[32m+[m[32m  request: () => AddressInfoType[m
+[32m+[m[32m}[m
+[1mdiff --git a/logic/transactions/adapter.ts b/logic/transactions/adapter.ts[m
+[1mindex e4be1f9..9f1be67 100644[m
+[1m--- a/logic/transactions/adapter.ts[m
+[1m+++ b/logic/transactions/adapter.ts[m
+[36m@@ -1,6 +1,7 @@[m
+ import {[m
+   TransactionType,[m
+   ParamsAdaptarType,[m
+[32m+[m[32m  TransactionAdapterType,[m
+   EtherscanTransactionType,[m
+   EtherscanERC20TransactionType,[m
+   EtherscanERC721TransactionType[m
+[36m@@ -12,16 +13,16 @@[m [mconst TransactionAdapter = ([m
+     | EtherscanTransactionType[m
+     | EtherscanERC20TransactionType[m
+     | EtherscanERC721TransactionType[m
+[31m-) => {[m
+[32m+[m[32m): TransactionAdapterType => {[m
+   return {[m
+[31m-    request: ({ nft, tokenInfo }: ParamsAdaptarType): TransactionType => {[m
+[32m+[m[32m    request: ({ nft, token }: ParamsAdaptarType): TransactionType => {[m
+       const parser = new TransactionParser()[m
+       const data = parser.parse(transaction)[m
+       if (nft) {[m
+         data.nft = nft[m
+       }[m
+[31m-      if (tokenInfo) {[m
+[31m-        data.tokenInfo = tokenInfo[m
+[32m+[m[32m      if (token) {[m
+[32m+[m[32m        data.token = token[m
+       }[m
+       data.amount = parser.parseAmount(data)[m
+       return data[m
+[1mdiff --git a/logic/transactions/parser.ts b/logic/transactions/parser.ts[m
+[1mindex 6b96263..0c2d6f2 100644[m
+[1m--- a/logic/transactions/parser.ts[m
+[1m+++ b/logic/transactions/parser.ts[m
+[36m@@ -39,12 +39,12 @@[m [mexport default class TransactionParser {[m
+     transaction: EtherscanERC20TransactionType | EtherscanERC721TransactionType[m
+   ): TokenInfoType {[m
+     return {[m
+[31m-      id: undefined,[m
+       totalSupply: undefined,[m
+[31m-      contractAddress: transaction.contractAddress,[m
+[32m+[m[32m      address: transaction.contractAddress,[m
+       decimals: transaction.tokenDecimal,[m
+       name: transaction.tokenName,[m
+[31m-      symbol: transaction.tokenSymbol[m
+[32m+[m[32m      symbol: transaction.tokenSymbol,[m
+[32m+[m[32m      image: ''[m
+     }[m
+   }[m
+ [m
+[36m@@ -100,8 +100,8 @@[m [mexport default class TransactionParser {[m
+     if (input && input.name === 'transfer') {[m
+       amount = Number(web3.utils.toBN(input.params[1].value))[m
+     }[m
+[31m-    if (tx.tokenInfo) {[m
+[31m-      decimals = Number(tx.tokenInfo.decimals)[m
+[32m+[m[32m    if (tx.token) {[m
+[32m+[m[32m      decimals = Number(tx.token.decimals)[m
+     }[m
+     const divider = 10 ** decimals[m
+     const result = String(amount / divider)[m
+[36m@@ -119,7 +119,7 @@[m [mexport default class TransactionParser {[m
+       transactionBody.decodedInput = this.parseInput(transaction)[m
+     }[m
+     if ('tokenSymbol' in transaction) {[m
+[31m-      transactionBody.tokenInfo = this.parseTokenInfo(transaction)[m
+[32m+[m[32m      transactionBody.token = this.parseTokenInfo(transaction)[m
+     }[m
+     transactionBody.sender = this.parseSender(transactionBody)[m
+     transactionBody.receiver = this.parseReceiver(transactionBody)[m
+[1mdiff --git a/utils/humanize.js b/utils/humanize.js[m
+[1mindex 409bd99..3a4e525 100644[m
+[1m--- a/utils/humanize.js[m
+[1m+++ b/utils/humanize.js[m
+[36m@@ -48,7 +48,7 @@[m [mexport const humanizeDate = (date) => {[m
+   } else if (secondsAgo < MONTH) {[m
+     return Math.floor(secondsAgo / WEEK) + ' w'[m
+   } else if (secondsAgo < YEAR) {[m
+[31m-    return Math.floor(secondsAgo / MONTH) + ' m'[m
+[32m+[m[32m    return Math.floor(secondsAgo / MONTH) + ' M'[m
+   } else if (secondsAgo < YEAR * 100) {[m
+     return Math.floor(secondsAgo / YEAR) + ' y'[m
+   } else {[m

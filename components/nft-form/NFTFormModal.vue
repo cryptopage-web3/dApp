@@ -1,14 +1,29 @@
 <template>
-  <div id="__modal">
-    <div class="modal-close d-flex align-center">
-      <div
-        class="modal-close__btn d-flex align-center justify-center"
-        @click="$modal.hide('nft')"
-      >
-        <icon type="close" />
+  <div
+    id="nft-form-modal"
+    ref="modal"
+    class="modal fade nft-form-modal"
+    tabindex="-1"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered nft-form-modal__dialog">
+      <div class="modal-content">
+        <div class="modal-header nft-form-modal__header">
+          <h5 class="modal-title">Create NFT</h5>
+          <button
+            type="button"
+            class="close nft-form-modal__close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <icon type="close_modal" />
+          </button>
+        </div>
+        <div class="modal-body nft-form-modal__body">
+          <nft-form @submited="hide" />
+        </div>
       </div>
     </div>
-    <nft-form />
   </div>
 </template>
 <script>
@@ -16,6 +31,11 @@ export default {
   components: {
     icon: async () => await import('@/components/icons/Icon'),
     'nft-form': () => import('@/components/nft-form/NFTForm.vue')
+  },
+  methods: {
+    hide() {
+      $(this.$refs.modal).modal('hide')
+    }
   }
 }
 </script>

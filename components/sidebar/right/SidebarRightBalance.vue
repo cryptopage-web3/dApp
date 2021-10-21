@@ -39,7 +39,7 @@ import { Component, mixins } from 'nuxt-property-decorator'
 import TypedStoreMixin from '~/mixins/typed-store'
 import { TokenBalanceType } from '~/logic/address/types'
 
-@Component({})
+@Component
 export default class SidebarRightBalance extends mixins(TypedStoreMixin) {
   public get tokens(): TokenBalanceType[] {
     return this.typedStore.address.tokens
@@ -47,7 +47,7 @@ export default class SidebarRightBalance extends mixins(TypedStoreMixin) {
 
   public url(token: TokenBalanceType): string {
     const address = this.typedStore.address.address
-    const tokenAddress = token.tokenInfo ? token.tokenInfo.address : ''
+    const tokenAddress = token && token.tokenInfo ? token.tokenInfo.address : ''
     if (tokenAddress && address !== tokenAddress) {
       return `/${tokenAddress}/tokens?address=${address}`
     }

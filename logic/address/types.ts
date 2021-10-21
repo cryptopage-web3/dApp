@@ -30,7 +30,7 @@ export type TokenBalanceType = {
 
 export type AddressInfoType = {
   address: string
-  tokenInfo?: TokenInfoType
+  tokenInfo?: TokenInfoType | null
   tokens: TokenBalanceType[]
   transactionsCount: number
 }

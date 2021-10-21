@@ -73,7 +73,7 @@
       </li>
     </ul>
     <div v-if="isShowCreateNft" class="sidebar-left__create">
-      <button class="btn btn_blue btn_creat-post" @click.prevent="modalTweet">
+      <button class="btn btn_blue btn_creat-post" @click.prevent="openNFTForm">
         <img src="@/assets/img/btn_creat-post_img.png" alt="" />
         <span>Create NFT</span>
       </button>
@@ -81,8 +81,6 @@
   </div>
 </template>
 <script>
-import NFTFormModal from '~/components/nft-form/NFTFormModal.vue'
-
 export default {
   components: {
     connect: async () => await import('@/components/connect/Connect.vue')
@@ -109,18 +107,8 @@ export default {
     }
   },
   methods: {
-    modalNFT() {
-      this.$modal.show(
-        NFTFormModal,
-        { classes: 'modal--nft' },
-        {
-          width: 600,
-          height: 'auto',
-          adaptive: true,
-          shiftY: 0.1,
-          name: 'nft'
-        }
-      )
+    openNFTForm() {
+      $('#nft-form-modal').modal('show')
     },
 
     showCreateNft() {

@@ -19,6 +19,9 @@ export default {
   // Transaction service:
   TRANSACTION_API_SERVICE: new Token('transaction-api-service'),
 
+  // Token service:
+  TOKEN_API_SERVICE: new Token('token-api-service'),
+
   // Address services:
   ADDRESS_SERVICE: new Token('address-service'),
   ADDRESS_API_SERVICE: new Token('address-api-service'),
