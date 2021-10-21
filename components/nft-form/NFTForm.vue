@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Watch } from 'nuxt-property-decorator'
+import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
 import { validateForm, getAdaptedAttributes } from '@/utils/tweetForm'
 import NFTAPIService from '~/logic/nft/services/api'
@@ -127,6 +127,11 @@ export default class NFTForm extends Vue {
     } else {
       this.$nuxt.$loading.finish()
     }
+  }
+
+  @Emit('submited')
+  onSubmited() {
+    return true
   }
 
   mounted() {
@@ -228,6 +233,11 @@ export default class NFTForm extends Vue {
 
     const ipfsHash = await this.getFormIPFSHash()
 
+    this.$notify({
+      type: 'success',
+      title: `IPFS hash received`
+    })
+
     // send to contract
 
     this.sendPostHash(ipfsHash)
@@ -236,11 +246,7 @@ export default class NFTForm extends Vue {
 
     this.loading = false
     this.resetForm()
-
-    this.$notify({
-      type: 'success',
-      title: `IPFS hash received`
-    })
+    this.onSubmited()
   }
 
   async getFileIPFSHash() {

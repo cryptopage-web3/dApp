@@ -382,6 +382,12 @@ export default {
       $(id).fadeIn(300)
       $(id).addClass('active')
     })
+
+    $('#modal-connect').on('show.bs.modal', function () {
+      setTimeout(() => {
+        $('.modal-backdrop').addClass('modal-backdrop_dark')
+      })
+    })
   }
 }
 </script>
