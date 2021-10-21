@@ -8,7 +8,7 @@
       и участвуй в розыгрыше <br />
       <span>10000 page</span>
     </div>
-    <a href="#" class="btn btn_white btn_banner">
+    <a href="#" class="btn btn_white btn_banner" @click.prevent="openNFTForm">
       <span> Создать NFT </span>
     </a>
   </div>
@@ -18,6 +18,10 @@ export default {
   methods: {
     close(event) {
       $(event.target).closest('.banner').slideUp(300)
+    },
+
+    openNFTForm() {
+      $('#nft-form-modal').modal('show')
     }
   }
 }
