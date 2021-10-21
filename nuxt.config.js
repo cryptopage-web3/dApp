@@ -80,9 +80,9 @@ export default {
       debug: process.env.NODE_ENV === 'development',
       https: true,
       proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
-      progress: true,
+      progress: false,
       proxy: false,
-      retry: true
+      retry: false
     }],
     ['nuxt-vuex-localstorage', {
       localStorage: ['auth']

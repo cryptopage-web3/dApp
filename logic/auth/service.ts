@@ -20,16 +20,15 @@ const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
 export default class AuthService extends Vue {
   constructor() {
     super()
+    Container.set(tokens.WEB3, this.$web3)
     this.init()
   }
 
   /*
    * This is hack for reacive selectedAddress and selectedChainId
    */
-  public data = {
-    selectedAddress: '',
-    selectedChainId: 1
-  }
+  address = ''
+  chainId = 1
 
   protected _PROVIDERS = [
     {
@@ -78,7 +77,9 @@ export default class AuthService extends Vue {
   private webConnected = false
   private metamaskConnected = false
   private walletConnectConnected = false
-  private web3: Web3 = new Web3(Web3.givenProvider)
+  public get $web3(): Web3 {
+    return new Web3(Web3.givenProvider)
+  }
 
   protected get $sea(): any {
     return Container.get(tokens.SEA)
@@ -88,19 +89,14 @@ export default class AuthService extends Vue {
    * Just reacive proxy for simple access
    */
   public get selectedAddress(): string {
-    return this.data.selectedAddress
+    return this.address
   }
 
   /*
    * Just reacive proxy for simple access
    */
   public get selectedChainId(): number {
-    return this.data.selectedChainId
-  }
-
-  public get $web3(): Web3 {
-    Container.set(tokens.WEB3, this.web3)
-    return this.web3
+    return this.chainId
   }
 
   /**
@@ -181,16 +177,8 @@ export default class AuthService extends Vue {
    * @returns {Void}
    */
   private setOrChangeWeb3Data(address: string, chainId: number): void {
-    if (address) {
-      Vue.set(
-        this.data,
-        'selectedAddress',
-        this.$web3.utils.toChecksumAddress(address) // Always set only checksum address
-      )
-    }
-    if (chainId) {
-      Vue.set(this.data, 'selectedChainId', chainId)
-    }
+    if (address) Vue.set(this, 'address', address)
+    if (chainId) Vue.set(this, 'chainId', chainId)
   }
 
   /**
@@ -202,7 +190,6 @@ export default class AuthService extends Vue {
       if (typeof window !== 'undefined' && !this.walletConnectConnected) {
         const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
         const provider = await new WalletConnectProvider({
-          // infuraProjectId,
           rpc: {
             1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
             4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
@@ -212,7 +199,8 @@ export default class AuthService extends Vue {
         })
         await provider.enable()
         this.provider = provider
-        this.web3 = await new Web3(<any>provider)
+        // Need to create web3 node switcher
+        // this.$web3 = await new Web3(<any>provider)
 
         const accounts = await this.$web3.eth.getAccounts()
         const networkId = await this.$web3.eth.net.getId()
@@ -270,7 +258,10 @@ export default class AuthService extends Vue {
   private getSignaturePhrase = async () => {
     const timestamp = new Date().getTime()
     const random = Math.random().toString(16).substr(2, length)
-    const message = this.selectedAddress + timestamp + random
+    const address = this.provider
+      ? this.provider.selectedAddress
+      : this.selectedAddress
+    const message = address + timestamp + random
     const salt = await this.$sea.work(message, null, null, {
       name: 'SHA-256'
     })
@@ -303,6 +294,10 @@ export default class AuthService extends Vue {
 
   public signin = async (): Promise<AuthServiceSigninResponseType> => {
     const device = deviceType()
+
+    if (!this.provider) {
+      await this.init()
+    }
 
     const commonError = {
       status: 'error',
@@ -350,7 +345,7 @@ export default class AuthService extends Vue {
       const signaturePhrase = await this.getSignaturePhrase()
       const signature = await this.provider.request({
         method: 'personal_sign',
-        params: [signaturePhrase, this.selectedAddress]
+        params: [signaturePhrase, this.provider.selectedAddress]
       })
       const recoveredAddress = recoverPersonalSignature({
         data: signaturePhrase,
@@ -358,7 +353,10 @@ export default class AuthService extends Vue {
       })
       const address = this.$web3.utils.toChecksumAddress(recoveredAddress)
 
-      if (address === this.selectedAddress) {
+      if (
+        address ===
+        this.$web3.utils.toChecksumAddress(this.provider.selectedAddress)
+      ) {
         return {
           status: 'success',
           message: {
@@ -375,7 +373,7 @@ export default class AuthService extends Vue {
           text: 'Please reload page and try again'
         }
       }
-    } catch {
+    } catch (error) {
       return commonError
     }
   }

@@ -16,8 +16,7 @@ export const normalizeAmount = (exponentialNumber) => {
   const str = exponentialNumber.toString()
   if (str.includes('e')) {
     const exponent = parseInt(str.split('-')[1], 10)
-    const result = Number(exponentialNumber).toFixed(exponent)
-    return result
+    return Number(exponentialNumber).toFixed(exponent)
   } else {
     return exponentialNumber
   }

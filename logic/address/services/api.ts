@@ -29,12 +29,20 @@ export default class AddressAPIService extends APIServiceMixin {
    */
   public getAddressInfo = async (address: string): Promise<AddressInfoType> => {
     const URL = `${this.ethplorerBaseURL}getAddressInfo/${address}?apiKey=${this.ethplorerApiKey}`
-    const response = await this.$axios.get(URL)
-    const data = await tPromise.decode(
-      EthplorerGetAddressInfoResponse,
-      response.data
-    )
-    // const adapter = AddressInfoAdapter(data)
-    return AddressInfoAdapter(data).request()
+    try {
+      const response = await this.$axios.get(URL)
+      const data = await tPromise.decode(
+        EthplorerGetAddressInfoResponse,
+        response.data
+      )
+      return AddressInfoAdapter(data).request()
+    } catch (error) {
+      return {
+        address,
+        tokenInfo: null,
+        tokens: [],
+        transactionsCount: 0
+      }
+    }
   }
 }

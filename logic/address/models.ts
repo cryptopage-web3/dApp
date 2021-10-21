@@ -41,7 +41,7 @@ export const EthplorerTokenInfo = t.partial({
   storageTotalSupply: t.string,
   name: t.string,
   symbol: t.string,
-  decimals: t.string,
+  decimals: t.union([t.string, t.number]),
   publicTags: t.array(t.string),
   price: t.union([EthplorerPrice, t.boolean]),
   owner: t.string,
@@ -77,6 +77,12 @@ export const EthplorerGetAddressInfoResponse = t.type({
   countTxs: t.number
 })
 
+export const BaseToken = t.type({
+  name: t.string,
+  symbol: t.string,
+  decimals: t.number
+})
+/*
 export const TokenInfo = t.type({
   address: t.string,
   name: t.string,
@@ -84,4 +90,35 @@ export const TokenInfo = t.type({
   totalSupply: t.union([t.string, t.undefined]),
   decimals: t.string,
   image: t.union([t.string, t.literal('')])
+})
+*/
+
+export const TokenInfo = t.intersection([
+  t.type({
+    address: t.string
+  }),
+  t.partial({
+    totalSupply: t.string,
+    image: t.string
+  }),
+  BaseToken
+])
+
+export const IPFSTokensStorageItemImages = t.type({
+  images: t.type({
+    16: t.string,
+    32: t.string,
+    64: t.string,
+    128: t.string
+  })
+})
+
+export const IPFSTokensStorageItem = t.intersection([
+  BaseToken,
+  IPFSTokensStorageItemImages
+])
+
+export const IPFSTokensStorageItemResponse = t.type({
+  remainderPath: t.string,
+  value: IPFSTokensStorageItem
 })

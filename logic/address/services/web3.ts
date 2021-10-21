@@ -15,9 +15,9 @@ export default class AddressWeb3Service {
   /**
    * Get contract name, totalSupply, decimals and symbol from  web3
    */
-  public getToken = async (
+  public getTokenInfo = async (
     address: string
-  ): Promise<TokenInfoType | undefined> => {
+  ): Promise<TokenInfoType | null> => {
     try {
       const contract = new this.$web3.eth.Contract(ERC20ABI, address)
       const name = await contract.methods.name().call()
@@ -32,7 +32,7 @@ export default class AddressWeb3Service {
         symbol
       })
     } catch {
-      return undefined
+      return null
     }
   }
 
@@ -45,5 +45,23 @@ export default class AddressWeb3Service {
     const decimals = await contract.methods.decimals().call()
     const balance = balanceOf / 10 ** decimals
     return balance.toString()
+  }
+
+  public getBalance = async (address: string): Promise<number> => {
+    try {
+      const balance = await this.$web3.eth.getBalance(address)
+      console.log('balance in getBalance', Number(balance))
+      return Number(balance)
+    } catch {
+      return 0
+    }
+  }
+
+  public getTransactionsCount = async (address: string): Promise<number> => {
+    try {
+      return await this.$web3.eth.getTransactionCount(address)
+    } catch {
+      return 0
+    }
   }
 }
