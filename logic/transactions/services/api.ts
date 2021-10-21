@@ -53,23 +53,27 @@ export default class TransactionAPIService extends APIServiceMixin {
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
-    const response: AxiosResponse<EtherscanTransactionsResponseType> =
-      await this.$axios.get(URL)
-    const data = await tPromise.decode(
-      EtherscanTransactionsResponse,
-      response.data
-    )
-    return await Promise.all(
-      data.result.map(
-        async (
-          transaction: EtherscanTransactionType
-        ): Promise<TransactionType> => {
-          const adapter = TransactionAdapter(transaction)
-          const token = await this.addressService.getTokenInfo(transaction.to)
-          return adapter.request({ token })
-        }
+    try {
+      const response: AxiosResponse<EtherscanTransactionsResponseType> =
+        await this.$axios.get(URL)
+      const data = await tPromise.decode(
+        EtherscanTransactionsResponse,
+        response.data
       )
-    )
+      return await Promise.all(
+        data.result.map(
+          async (
+            transaction: EtherscanTransactionType
+          ): Promise<TransactionType> => {
+            const adapter = TransactionAdapter(transaction)
+            const token = await this.addressService.getTokenInfo(transaction.to)
+            return adapter.request({ token })
+          }
+        )
+      )
+    } catch {
+      return []
+    }
   }
 
   public getInternalTransactions = async ({
@@ -88,18 +92,22 @@ export default class TransactionAPIService extends APIServiceMixin {
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
-    const response: AxiosResponse<EtherscanInternalTransactionsResponseType> =
-      await this.$axios.get(URL)
-    const data = await tPromise.decode(
-      EtherscanInternalTransactionsResponse,
-      response.data
-    )
-    return data.result.map(
-      (transaction: EtherscanInternalTransactionType): TransactionType => {
-        const adapter = TransactionAdapter(transaction)
-        return adapter.request({})
-      }
-    )
+    try {
+      const response: AxiosResponse<EtherscanInternalTransactionsResponseType> =
+        await this.$axios.get(URL)
+      const data = await tPromise.decode(
+        EtherscanInternalTransactionsResponse,
+        response.data
+      )
+      return data.result.map(
+        (transaction: EtherscanInternalTransactionType): TransactionType => {
+          const adapter = TransactionAdapter(transaction)
+          return adapter.request({})
+        }
+      )
+    } catch {
+      return []
+    }
   }
 
   /**
@@ -122,22 +130,26 @@ export default class TransactionAPIService extends APIServiceMixin {
       action: 'tokentx'
     }
     if (contractAddress) {
-      Object.assign(options, { contractAddress }) //  options.contractAddress = contractAddress
+      Object.assign(options, { contractAddress })
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
-    const response: AxiosResponse<EtherscanERC20TransactionsResponseType> =
-      await this.$axios.get(URL)
-    const data = await tPromise.decode(
-      EtherscanERC20TransactionsResponse,
-      response.data
-    )
-    return data.result.map(
-      (transaction: EtherscanERC20TransactionType): TransactionType => {
-        const adapter = TransactionAdapter(transaction)
-        return adapter.request({})
-      }
-    )
+    try {
+      const response: AxiosResponse<EtherscanERC20TransactionsResponseType> =
+        await this.$axios.get(URL)
+      const data = await tPromise.decode(
+        EtherscanERC20TransactionsResponse,
+        response.data
+      )
+      return data.result.map(
+        (transaction: EtherscanERC20TransactionType): TransactionType => {
+          const adapter = TransactionAdapter(transaction)
+          return adapter.request({})
+        }
+      )
+    } catch {
+      return []
+    }
   }
 
   /**
@@ -167,22 +179,21 @@ export default class TransactionAPIService extends APIServiceMixin {
         EtherscanERC721TransactionsResponse,
         response.data
       )
-      const transactions = await data.result.map(
-        async (
-          transaction: EtherscanERC721TransactionType
-        ): Promise<TransactionType> => {
-          const adapter = TransactionAdapter(transaction)
-          const nft = await this.nftAPIService.fetchOne({
-            tokenId: transaction.tokenID,
-            contractAddress: transaction.contractAddress
-          })
-          return adapter.request({ nft })
-        }
+      return await Promise.all(
+        data.result.map(
+          async (
+            transaction: EtherscanERC721TransactionType
+          ): Promise<TransactionType> => {
+            const adapter = TransactionAdapter(transaction)
+            const nft = await this.nftAPIService.fetchOne({
+              tokenId: transaction.tokenID,
+              contractAddress: transaction.contractAddress
+            })
+            return adapter.request({ nft })
+          }
+        )
       )
-      console.log('transactions', transactions)
-      return transactions
-    } catch (error) {
-      console.log('error in getERC721Transactions', error)
+    } catch {
       return []
     }
   }
