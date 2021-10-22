@@ -4,7 +4,7 @@ import { TokenBalanceType } from '~/logic/address/types'
 export default class CovalentAPITokenParser {
   parse = (token: CovalentAPITokenType): TokenBalanceType => {
     const balance = Number(token.balance) / 10 ** token.contract_decimals
-    const usdBalance = balance * (token.quote_rate || 0)
+    const usdBalance = token.quote || 0 // balance * (token.quote_rate || 0)
     const rate = token.quote_rate || 0
     const diff = 0
     return {
