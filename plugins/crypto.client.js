@@ -1,7 +1,7 @@
-const Gun = require('gun')
+const Gun = require('gun') // eslint-disable-line @typescript-eslint/no-var-requires
 require('gun/sea')
 const SEA = Gun.SEA
-const gun = Gun('https://gunjs.herokuapp.com/gun')
+const gun = Gun()
 const user = gun.user()
 
 const authUser = (privateKey, publicKey, createIfNotExist = false) => {
@@ -27,7 +27,7 @@ const createUser = (privateKey, publicKey, authIfAlreadyCreated = false) => {
 }
 
 const getKeysByPublicKey = (publicKey) =>
-  gun.user(publicKey).once((data, key) => data)
+  gun.user(publicKey).once((data) => data)
 
 const getKeysByAddress = (address, callback) =>
   gun.get(`~@${address}`).once((data) => {
@@ -42,7 +42,7 @@ const getKeysByAddress = (address, callback) =>
 
 const getPair = (username, password) => {
   // let pair
-  if (gun.get(`~@${username}`).once((data, key) => data)) {
+  if (gun.get(`~@${username}`).once((data) => data)) {
     return authUser(username, password, true)
   } else {
     return createUser(username, password, true)
@@ -95,6 +95,7 @@ const subscribeMessage = (room, callback) => {
   gun.get(room).get('#').map().on(callback)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ app }, inject) => {
   inject('gun', gun)
   inject('sea', SEA)

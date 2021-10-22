@@ -1,4 +1,3 @@
-import docs from './constants/coinmarketcap.json'
 const webpack = require("webpack");
 
 export default {
@@ -34,11 +33,9 @@ export default {
     '~/plugins/directives.client',
     '~/plugins/ipfs.client',
     '~/plugins/crypto.client',
-    '~/plugins/service-worker.client',
     '~/plugins/filters',
     '~/plugins/jazzicon',
     '~/plugins/web3',
-    '~/plugins/lunr.client',
     '~/plugins/modals.client',
     '~/plugins/easy-circular-progress.client',
     '~/plugins/notifications.client',
@@ -86,13 +83,6 @@ export default {
     }],
     ['nuxt-vuex-localstorage', {
       localStorage: ['auth']
-    }],
-    ['@nuxtjs/lunr-module', {
-      includeComponent: false,
-      globalComponent: false,
-      css: false,
-      ref: 'id',
-      fields: ['name', 'slug', 'symbol', 'address', 'logo_url']
     }]
   ],
 
@@ -146,22 +136,6 @@ export default {
     etherscanAPIKey: process.env.NODE_ENV === 'production' ? process.env.ETHERSCAN_API_KEY : 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'    
   },
 
-  hooks: {
-    ready(nuxt) {
-      let documentIndex = 1
-      for (const doc of docs) {
-        nuxt.callHook('lunr:document', {
-          document: {
-            // id: doc.address,
-            id: documentIndex,
-            ...doc
-          },
-          meta: doc
-        })
-        documentIndex++
-      }
-    }
-  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {

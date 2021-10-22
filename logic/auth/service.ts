@@ -305,7 +305,7 @@ export default class AuthService extends Vue {
     }
 
     if (device !== 'desktop' && !this.walletConnectConnected) {
-      await init('walletconnect')
+      await this.init('walletconnect')
       return {
         status: 'error',
         message: {
@@ -326,7 +326,7 @@ export default class AuthService extends Vue {
     }
 
     if (device === 'desktop' && !this.metamaskConnected) {
-      await init('metamask')
+      await this.init('metamask')
       return {
         status: 'error',
         message: {

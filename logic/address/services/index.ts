@@ -41,48 +41,24 @@ export default class AddressService {
     address: string
   ): Promise<TokenInfoType | null> => {
     if (this.cached(address)) return this.cacheGet(address)
-    // console.log('tokenInfo in cache', tokenInfo)
     let tokenInfo = await this.addressIPFSService.getTokenInfo(address)
-    console.log('tokenInfo in ipfs service', tokenInfo)
     if (!tokenInfo) {
       tokenInfo = await this.addressWEB3Service.getTokenInfo(address)
-      console.log('tokenInfo in web3 service', tokenInfo)
     }
-    console.log('tokenInfo', tokenInfo)
     this.cacheSet(address, tokenInfo)
     return tokenInfo
   }
 
   public getAddressInfo = async (address: string): Promise<AddressInfoType> => {
+    const tokenInfo = await this.getTokenInfo(address)
     const tokens = await this.tokenAPIService.getTokens(address)
-    console.log('tokens in getAddressInfo', tokens)
-    const addressInfo = await this.addressAPIService.getAddressInfo(address)
-    if (!addressInfo.tokenInfo) {
-      addressInfo.tokenInfo = await this.getTokenInfo(address)
+    const transactionsCount =
+      await this.addressWEB3Service.getTransactionsCount(address)
+    return {
+      address,
+      tokens,
+      tokenInfo,
+      transactionsCount
     }
-    if (addressInfo.tokens.length === 0) {
-      const balance = await this.addressWEB3Service.getBalance(address)
-      addressInfo.tokens = [
-        {
-          balance: balance / 10 ** 18,
-          usdBalance: 0,
-          rate: 0,
-          diff: 0,
-          tokenInfo: {
-            address,
-            symbol: 'ETH',
-            name: 'Ethereum',
-            decimals: 18,
-            image:
-              'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbitinfocharts.com%2Fimgs33%2Fethereum.png'
-          }
-        }
-      ]
-    }
-    if (!addressInfo.transactionsCount) {
-      addressInfo.transactionsCount =
-        await this.addressWEB3Service.getTransactionsCount(address)
-    }
-    return addressInfo
   }
 }
