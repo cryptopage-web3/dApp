@@ -98,6 +98,34 @@ export const validateForm = ({ title, text, attributes }) => {
     }
   }
 
+  // validate dates
+
+  if (attributes.dates?.length) {
+    let datesError = ''
+
+    attributes.dates.forEach(({ type, value }) => {
+      if (datesError) {
+        return
+      }
+
+      if (!type || !value) {
+        datesError = 'Empty field in dates'
+        return
+      }
+
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        datesError = 'Wrong date format'
+      }
+    })
+
+    if (datesError) {
+      return {
+        status: false,
+        error: datesError
+      }
+    }
+  }
+
   // validate boosts
 
   if (attributes.boosts?.length) {
@@ -156,6 +184,14 @@ export const getAdaptedAttributes = (attributes) => {
     max_value: +stat.maxValue
   }))
 
+  // adapt dates
+
+  const dates = (attributes.dates || []).map((date) => ({
+    display_type: 'date',
+    trait_type: date.type,
+    value: Math.floor(new Date(date.value) / 1000)
+  }))
+
   // adapt boosts
 
   const boosts = (attributes.boosts || []).map((boost) => ({
@@ -164,5 +200,5 @@ export const getAdaptedAttributes = (attributes) => {
     value: +boost.value
   }))
 
-  return [...properties, ...levels, ...stats, ...boosts]
+  return [...properties, ...levels, ...stats, ...dates, ...boosts]
 }
