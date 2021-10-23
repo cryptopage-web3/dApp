@@ -705,6 +705,27 @@
         margin-left: 0;
     }
 
+    /* ====== dates ====== */
+
+    .nft-form__date {
+        height: auto;
+        min-height: 50px;
+    }
+
+    .nft-form__date-fields {
+        display: block;
+        margin-top: 0;
+    }
+
+    .nft-form__date-value {
+        margin-left: 0;
+        margin-top: 3px;
+    }
+
+    .nft-form__date-value .mx-datepicker {
+        width: 100%;
+    }
+
     /* ====== boost ====== */
 
     .nft-form__boost {
