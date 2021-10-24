@@ -19,7 +19,7 @@ export default class AddressIPFSService {
 
   protected sizes: number[] = [16, 32, 64, 128]
   protected $ipfs!: IPFSHTTPClient
-  protected timeout = 100
+  protected timeout = 10
 
   constructor() {
     this.init()
