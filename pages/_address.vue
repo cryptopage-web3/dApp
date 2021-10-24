@@ -9,12 +9,14 @@ export default {
   validate({ params, $web3 }) {
     return $web3.utils.isAddress(params.address)
   },
-  async mounted() {
-    await this.$nextTick(async () => {
-      await this.$store.dispatch(
-        'address/updateAddressInfo',
-        this.$route.params.address
-      )
+  mounted() {
+    this.$nextTick(() => {
+      this.$store.commit('address/setAddressInfo', {
+        address: this.$route.params.address,
+        tokenInfo: null,
+        tokens: [],
+        transactionsCount: 0
+      })
     })
   }
 }
