@@ -1,7 +1,11 @@
 import Web3 from 'web3'
 import { Container, Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
-import { TokenInfoType, AddressInfoType } from '~/logic/address/types'
+import {
+  TokenInfoType,
+  TokenBalanceType,
+  AddressInfoType
+} from '~/logic/address/types'
 import AddressIPFSService from '~/logic/address/services/ipfs'
 import AddressWEB3Service from '~/logic/address/services/web3'
 import AddressAPIService from '~/logic/address/services/api'
@@ -48,6 +52,18 @@ export default class AddressService {
     this.cacheSet(address, tokenInfo)
     return tokenInfo
   }
+
+  public getTokens = async (address: string): Promise<TokenBalanceType[]> => {
+    let tokens = await this.tokenAPIService.getTokens(address)
+    if (tokens.length === 0) {
+      const ethToken = await this.addressWEB3Service.getETHToken(address)
+      tokens = [ethToken]
+    }
+    return tokens
+  }
+
+  public getTransactionsCount = async (address: string): Promise<number> =>
+    await this.addressWEB3Service.getTransactionsCount(address)
 
   public getAddressInfo = async (address: string): Promise<AddressInfoType> => {
     const tokenInfo = await this.getTokenInfo(address)
