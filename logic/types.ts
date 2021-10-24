@@ -11,10 +11,9 @@ import { EthplorerGetAddressInfoResponseType } from '~/logic/address/types'
 export interface StateType {
   // Module:
   auth: {
-    address: string,
-    chain: number
-    loggedIn: boolean,
-    addressInfo: EthplorerGetAddressInfoResponseType
+    selectedAddress: string
+    chainId: number
+    loggedIn: boolean
   },
   transactions: TransactionType[]
 }
