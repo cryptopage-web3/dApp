@@ -8,11 +8,11 @@ export const BaseCovalentAPIResponse = ts.type({
 
 export const CovalentAPITokensResponseDataItem = ts.type({
   balance: ts.string,
-  balance_24h: ts.string,
+  balance_24h: ts.union([ts.string, ts.null]),
   contract_address: ts.string,
   contract_decimals: ts.number,
-  contract_name: ts.string,
-  contract_ticker_symbol: ts.string,
+  contract_name: ts.union([ts.string, ts.null]),
+  contract_ticker_symbol: ts.union([ts.string, ts.null]),
   last_transferred_at: ts.union([ts.string, ts.null]),
   logo_url: ts.string,
   nft_data: ts.union([ts.null, ts.string]),
