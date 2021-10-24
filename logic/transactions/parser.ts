@@ -109,6 +109,10 @@ export default class TransactionParser {
     return result
   }
 
+  public parseGas(tx: TransactionType): string {
+    return String(Number(tx.gas) / 10 ** 18)
+  }
+
   public parse(
     transaction:
       | EtherscanTransactionType
@@ -124,6 +128,7 @@ export default class TransactionParser {
     }
     transactionBody.sender = this.parseSender(transactionBody)
     transactionBody.receiver = this.parseReceiver(transactionBody)
+    transactionBody.gas = this.parseGas(transactionBody)
     return transactionBody
   }
 }
