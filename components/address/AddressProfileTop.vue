@@ -2,16 +2,11 @@
   <div class="profile-top">
     <div class="profile-left">
       <div class="profile__thumb">
-        <img
-          v-if="$store.getters['address/image']"
-          :src="$store.getters['address/image']"
-          :width="diameter"
-          :height="diameter"
-        />
+        <img v-if="image" :src="image" :width="diameter" :height="diameter" />
         <jazzicon
           v-else
           :seed="10211"
-          :address="$store.getters['address/address']"
+          :address="address"
           :diameter="diameter"
         />
       </div>
@@ -20,11 +15,11 @@
           {{ tokenName }}
         </div>
         <div v-else class="profile-info__title">
-          {{ $store.getters['address/address'] | shortAddress }}
+          {{ address | shortAddress }}
         </div>
         <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
         <div class="profile-info__text">
-          {{ $store.getters['address/transactionsCount'] | humanizeCount }}
+          {{ transactionsCount | humanizeCount }}
           transactions<br />
           0 inputs / 0 outputs
         </div>
@@ -43,6 +38,15 @@ export default {
     diameter: $(window).width() > 767 ? 90 : 40
   }),
   computed: {
+    address() {
+      return this.$store.getters['address/address']
+    },
+    image() {
+      return this.$store.getters['address/image']
+    },
+    transactionsCount() {
+      return this.$store.getters['address/transactionsCount']
+    },
     tokenName() {
       const tokenName = this.$store.getters['address/name']
       const tokenSymbol = this.$store.getters['address/symbol']
