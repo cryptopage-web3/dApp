@@ -3,7 +3,11 @@ import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
 import TransactionAPIService from '~/logic/transactions/services/api'
 import AddressService from '~/logic/address/services/index'
-import { TokenBalanceType, AddressInfoType } from '~/logic/address/types'
+import {
+  TokenBalanceType,
+  AddressInfoType,
+  TokenInfoType
+} from '~/logic/address/types'
 import tokens from '~/logic/tokens'
 import {
   ParamsTransactionsType,
@@ -29,19 +33,21 @@ export default class AddressModule {
   // State
 
   @State()
-  public currentAddress = '0x'
+  public addressInfo: AddressInfoType = {
+    address: '',
+    tokenInfo: null,
+    tokens: [],
+    transactionsCount: 0
+  }
 
   @State()
   public transactions: TransactionType[] = []
-
-  @State()
-  public addressInfo: AddressInfoType | undefined
 
   // Getters
 
   @Getter()
   public get address(): string {
-    return this.addressInfo ? this.addressInfo.address : this.currentAddress
+    return this.addressInfo.address
   }
 
   @Getter()
@@ -60,9 +66,7 @@ export default class AddressModule {
 
   @Getter()
   public get image(): string {
-    return this.addressInfo &&
-      this.addressInfo.tokenInfo &&
-      this.addressInfo.tokenInfo.image
+    return this.addressInfo.tokenInfo && this.addressInfo.tokenInfo.image
       ? this.addressInfo.tokenInfo.image
       : ''
     return ''
@@ -70,18 +74,14 @@ export default class AddressModule {
 
   @Getter()
   public get name(): string {
-    return this.addressInfo &&
-      this.addressInfo.tokenInfo &&
-      this.addressInfo.tokenInfo.name
+    return this.addressInfo.tokenInfo && this.addressInfo.tokenInfo.name
       ? this.addressInfo.tokenInfo.name
       : ''
   }
 
   @Getter()
   public get symbol(): string {
-    return this.addressInfo &&
-      this.addressInfo.tokenInfo &&
-      this.addressInfo.tokenInfo.symbol
+    return this.addressInfo.tokenInfo && this.addressInfo.tokenInfo.symbol
       ? this.addressInfo.tokenInfo.symbol
       : ''
   }
@@ -121,12 +121,27 @@ export default class AddressModule {
 
   @Mutation()
   public setAddress(address: string): void {
-    this.currentAddress = address
+    Vue.set(this.addressInfo, 'address', address)
   }
 
   @Mutation()
-  public setAddressInfo(addressInfo: AddressInfoType): void {
-    this.addressInfo = addressInfo
+  public setAddressInfo(addressInfo: AddressInfoType | null): void {
+    Vue.set(this, 'addressInfo', addressInfo)
+  }
+
+  @Mutation()
+  public setTokens(tokens: TokenBalanceType[]): void {
+    Vue.set(this.addressInfo, 'tokens', tokens)
+  }
+
+  @Mutation()
+  public setTransactionsCount(transactionsCount: number): void {
+    Vue.set(this.addressInfo, 'transactionsCount', transactionsCount)
+  }
+
+  @Mutation()
+  public setTokenInfo(tokenInfo: TokenInfoType | null): void {
+    Vue.set(this.addressInfo, 'tokenInfo', tokenInfo)
   }
 
   @Mutation()
@@ -162,9 +177,14 @@ export default class AddressModule {
 
   @Action()
   public async updateAddressInfo(address: string): Promise<void> {
-    this.setAddress(address)
-    const addressInfo = await this.addressService.getAddressInfo(address)
-    this.setAddressInfo(addressInfo)
+    const tokenInfo = await this.addressService.getTokenInfo(address)
+    this.setTokenInfo(tokenInfo)
+    const tokens = await this.addressService.getTokens(address)
+    this.setTokens(tokens)
+    const transactionsCount = await this.addressService.getTransactionsCount(
+      address
+    )
+    this.setTransactionsCount(transactionsCount)
   }
 
   @Action()
