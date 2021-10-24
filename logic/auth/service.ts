@@ -16,19 +16,12 @@ declare const window: Window &
 const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
 
 @Service(tokens.AUTH_SERVICE)
-@Component({})
+@Component
 export default class AuthService extends Vue {
   constructor() {
     super()
-    Container.set(tokens.WEB3, this.$web3)
     this.init()
   }
-
-  /*
-   * This is hack for reacive selectedAddress and selectedChainId
-   */
-  address = ''
-  chainId = 1
 
   protected _PROVIDERS = [
     {
@@ -65,6 +58,20 @@ export default class AuthService extends Vue {
     }
   }
 
+  /*
+   * This is hack for reacive selectedAddress and selectedChainId
+   */
+  data = {
+    address: '',
+    chainId: 1
+  }
+
+  providerName = ''
+  provider: WalletConnectProvider | undefined
+  webConnected = false
+  metamaskConnected = false
+  walletConnectConnected = false
+
   protected get metamaskInstalled(): boolean {
     return (
       typeof window !== 'undefined' &&
@@ -72,31 +79,30 @@ export default class AuthService extends Vue {
     )
   }
 
-  private providerName = ''
-  private provider: WalletConnectProvider | undefined
-  private webConnected = false
-  private metamaskConnected = false
-  private walletConnectConnected = false
-  public get $web3(): Web3 {
-    return new Web3(Web3.givenProvider)
+  protected get $web3(): any {
+    return Container.get(tokens.WEB3)
   }
 
   protected get $sea(): any {
     return Container.get(tokens.SEA)
   }
 
-  /*
+  /**
    * Just reacive proxy for simple access
    */
   public get selectedAddress(): string {
-    return this.address
+    return this.data.address
   }
 
-  /*
+  /**
    * Just reacive proxy for simple access
    */
   public get selectedChainId(): number {
-    return this.chainId
+    return this.data.chainId
+  }
+
+  public changeWeb3(web3: Web3): void {
+    Container.set(tokens.WEB3, web3)
   }
 
   /**
@@ -104,7 +110,7 @@ export default class AuthService extends Vue {
    * @param {String} provider - value of provider
    * @returns {Boolean} - if successfully connected
    */
-  public async changeProvider(providerName: string): Promise<void> {
+  public async changeProviderName(providerName: string): Promise<void> {
     this.providerName = providerName
     if (providerName === 'walletConnect' && this.$web3) {
       const accounts = await this.$web3.eth.getAccounts()
@@ -124,7 +130,7 @@ export default class AuthService extends Vue {
       if (this.metamaskInstalled) {
         const status = await this.addMetamaskEventsListener()
         if (status) {
-          await this.changeProvider(providerName)
+          await this.changeProviderName(providerName)
           connected = 'success'
           window.localStorage.setItem('lastProvider', 'metamask')
         }
@@ -134,7 +140,7 @@ export default class AuthService extends Vue {
     } else if (providerName === 'walletConnect') {
       const status = await this.addWalletConnectEventsListener()
       if (status) {
-        await this.changeProvider(providerName)
+        await this.changeProviderName(providerName)
         connected = 'success'
         window.localStorage.setItem('lastProvider', 'walletConnect')
       }
@@ -177,8 +183,15 @@ export default class AuthService extends Vue {
    * @returns {Void}
    */
   private setOrChangeWeb3Data(address: string, chainId: number): void {
-    if (address) Vue.set(this, 'address', address)
-    if (chainId) Vue.set(this, 'chainId', chainId)
+    if (address) {
+      Vue.set(this.data, 'address', address)
+      this.data.address = address
+    }
+    if (chainId) {
+      Vue.set(this.data, 'chainId', chainId)
+      this.data.chainId = chainId
+    }
+    console.log('data in setOrChangeWeb3Data', address, chainId)
   }
 
   /**
@@ -190,6 +203,7 @@ export default class AuthService extends Vue {
       if (typeof window !== 'undefined' && !this.walletConnectConnected) {
         const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
         const provider = await new WalletConnectProvider({
+          infuraId: infuraProjectId,
           rpc: {
             1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
             4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
@@ -199,9 +213,8 @@ export default class AuthService extends Vue {
         })
         await provider.enable()
         this.provider = provider
-        // Need to create web3 node switcher
-        // this.$web3 = await new Web3(<any>provider)
-
+        const $web3 = await new Web3(<any>provider)
+        this.changeWeb3($web3)
         const accounts = await this.$web3.eth.getAccounts()
         const networkId = await this.$web3.eth.net.getId()
         this.setOrChangeWeb3Data(accounts[0], networkId)
@@ -250,18 +263,15 @@ export default class AuthService extends Vue {
         return true
       }
       return false
-    } catch (e) {
+    } catch {
       return false
     }
   }
 
-  private getSignaturePhrase = async () => {
+  private getSignaturePhrase = async (): Promise<string> => {
     const timestamp = new Date().getTime()
     const random = Math.random().toString(16).substr(2, length)
-    const address = this.provider
-      ? this.provider.selectedAddress
-      : this.selectedAddress
-    const message = address + timestamp + random
+    const message = this.selectedAddress + timestamp + random
     const salt = await this.$sea.work(message, null, null, {
       name: 'SHA-256'
     })
@@ -280,14 +290,11 @@ export default class AuthService extends Vue {
       return false
     }
     const device = deviceType()
-    const lastProvider = window.localStorage.getItem('lastProvider')
-
-    if (device !== 'desktop') {
+    if (device === 'desktop') {
+      providerName = 'metamask'
+    } else {
       providerName = 'walletConnect'
-    } else if (lastProvider) {
-      providerName = lastProvider
     }
-
     const status = await this.switchProvider(providerName)
     return Boolean(status === 'connected')
   }
@@ -326,7 +333,6 @@ export default class AuthService extends Vue {
     }
 
     if (device === 'desktop' && !this.metamaskConnected) {
-      await this.init('metamask')
       return {
         status: 'error',
         message: {
@@ -339,23 +345,19 @@ export default class AuthService extends Vue {
     if (!this.provider) {
       return commonError
     }
-
+    const address = this.$web3.utils.toChecksumAddress(this.selectedAddress)
+    const signaturePhrase = await this.getSignaturePhrase()
+    const signature = await this.provider.request({
+      method: 'personal_sign',
+      params: [signaturePhrase, address]
+    })
     try {
-      const signaturePhrase = await this.getSignaturePhrase()
-      const signature = await this.provider.request({
-        method: 'personal_sign',
-        params: [signaturePhrase, this.provider.selectedAddress]
-      })
-      const recoveredAddress = recoverPersonalSignature({
+      let recoveredAddress = recoverPersonalSignature({
         data: signaturePhrase,
         sig: signature
       })
-      const address = this.$web3.utils.toChecksumAddress(recoveredAddress)
-
-      if (
-        address ===
-        this.$web3.utils.toChecksumAddress(this.provider.selectedAddress)
-      ) {
+      recoveredAddress = this.$web3.utils.toChecksumAddress(recoveredAddress)
+      if (address === recoveredAddress) {
         return {
           status: 'success',
           message: {
@@ -372,7 +374,7 @@ export default class AuthService extends Vue {
           text: 'Please reload page and try again'
         }
       }
-    } catch (error) {
+    } catch {
       return commonError
     }
   }
