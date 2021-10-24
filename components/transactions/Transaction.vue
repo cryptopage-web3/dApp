@@ -26,11 +26,13 @@
       </div>
     </div>
     <div class="transactions-link-right">
-      <div class="transactions-link__usdt">
+      <div class="transactions-link__usdt" style="text-align: right">
         {{ income ? '-' : '' }}
         {{ transaction.amount | normalizeAmount }} ETH
       </div>
-      <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
+      <div class="transactions-link__usd" style="text-align: right">
+        {{ transaction.gas | normalizeAmount }} GAS
+      </div>
     </div>
   </a>
 </template>
