@@ -7,7 +7,7 @@
     />
     <stats-attribute :stats="stats" @change="statsChangeHandler" />
     <levels-attribute :levels="levels" @change="levelsChangeHandler" />
-    <dates-attribute />
+    <dates-attribute :dates="dates" @change="datesChangeHandler" />
     <boosts-attribute :boosts="boosts" @change="boostsChangeHandler" />
   </div>
 </template>
@@ -40,6 +40,7 @@ export default {
       properties: [],
       levels: [],
       stats: [],
+      dates: [],
       boosts: []
     }
   },
@@ -57,6 +58,7 @@ export default {
         const newProperties = attributes.properties || []
         const newLevels = attributes.levels || []
         const newStats = attributes.stats || []
+        const newDates = attributes.dates || []
         const newBoosts = attributes.boosts || []
         const hasComment = attributes.hasComment || false
 
@@ -70,6 +72,10 @@ export default {
 
         if (JSON.stringify(newStats) !== JSON.stringify(this.stats)) {
           this.stats = newStats
+        }
+
+        if (JSON.stringify(newDates) !== JSON.stringify(this.dates)) {
+          this.dates = newDates
         }
 
         if (JSON.stringify(newBoosts) !== JSON.stringify(this.boosts)) {
@@ -101,6 +107,13 @@ export default {
       this.$emit('change', {
         ...this.attributes,
         stats
+      })
+    },
+
+    dates(dates) {
+      this.$emit('change', {
+        ...this.attributes,
+        dates
       })
     },
 
@@ -141,6 +154,10 @@ export default {
 
     statsChangeHandler(stats) {
       this.stats = stats
+    },
+
+    datesChangeHandler(dates) {
+      this.dates = dates
     },
 
     boostsChangeHandler(boosts) {
