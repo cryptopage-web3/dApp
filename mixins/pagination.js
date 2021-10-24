@@ -6,8 +6,8 @@ export const paginationMixin = {
   watch: {
     page: '$fetch',
     pageSize: '$fetch',
-    address: 'addressReset',
-    chainId: 'addressReset'
+    address: 'reset',
+    chainId: 'reset'
   },
   computed: {
     showNext() {
@@ -37,16 +37,11 @@ export const paginationMixin = {
     },
     async reset() {
       await this.$nuxt.$loading.start()
-      this.$store.dispatch('address/clearTransactions')
+      const address = this.$route.params.address
+      await this.$store.dispatch('address/clearTransactions')
+      await this.$store.dispatch('address/updateAddressInfo', address)
       await this.$fetch()
-      await setTimeout(async () => await this.$nuxt.$loading.finish(), 500)
-    },
-    async addressReset() {
-      await this.reset()
-      await this.$store.dispatch(
-        'address/updateAddressInfo',
-        this.$route.params.address
-      )
+      await setTimeout(() => this.$nuxt.$loading.finish(), 500)
     }
   },
   mounted() {
