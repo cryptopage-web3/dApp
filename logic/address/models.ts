@@ -122,3 +122,12 @@ export const IPFSTokensStorageItemResponse = t.type({
   remainderPath: t.string,
   value: IPFSTokensStorageItem
 })
+
+export const IPFSTokensStorageRootValue = t.type({
+  address: IPFSTokensStorageItem
+})
+
+export const IPFSTokensStorageRootResponse = t.type({
+  remainderPath: t.string,
+  value: IPFSTokensStorageRootValue
+})
