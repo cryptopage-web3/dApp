@@ -72,4 +72,31 @@ export default class AddressIPFSService {
     const value = await this.getTokenInfo(address)
     return value && value.image ? value.image : ''
   }
+
+  public getAllTokensAddresses = async (): Promise<string[]> => {
+    try {
+      const result = await this.$ipfs.dag.get(this.cid, {
+        path: '/',
+        timeout: this.timeout
+      })
+      return Object.keys(result.value)
+    } catch {
+      return []
+    }
+  }
+
+  public getAllTokens = async (): Promise<TokenInfoType[]> => {
+    try {
+      const result = await this.$ipfs.dag.get(this.cid, {
+        path: '/',
+        timeout: this.timeout
+      })
+      return Object.keys(result.value).map((address: string): TokenInfoType => {
+        const value = result.value[address]
+        return this.toTokenInfo(address, value)
+      })
+    } catch {
+      return []
+    }
+  }
 }
