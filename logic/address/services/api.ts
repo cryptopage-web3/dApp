@@ -1,4 +1,5 @@
 import { AbiItem } from 'web3-utils'
+import * as ts from 'io-ts'
 import * as tPromise from 'io-ts-promise'
 import { Service } from 'vue-typedi'
 import { EtherscanABIResponse } from '~/logic/transactions/models'
@@ -43,6 +44,59 @@ export default class AddressAPIService extends APIServiceMixin {
         tokens: [],
         transactionsCount: 0
       }
+    }
+  }
+
+  /**
+   * Get ETH / BNB / MATIC Balance for a Single Address
+   * https://docs.bscscan.com/api-endpoints/accounts
+   */
+  public getBalance = async (address: string): Promise<number> => {
+    const options = { address, module: 'address', action: 'balance' }
+    const params = new URLSearchParams(options).toString()
+    const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+    try {
+      const response = await this.$axios.get(URL)
+
+      const data = await tPromise.decode(
+        ts.type({
+          status: ts.string,
+          message: ts.string,
+          result: ts.string
+        }),
+        response.data
+      )
+      return Number(data.result)
+    } catch {
+      return 0
+    }
+  }
+
+  /**
+   * Returns the number of transactions performed by an address.
+   * https://docs.bscscan.com/api-endpoints/geth-parity-proxy
+   */
+  public getTransactionsCount = async (address: string): Promise<number> => {
+    const options = {
+      address,
+      module: 'proxy',
+      action: 'eth_getTransactionCount'
+    }
+    const params = new URLSearchParams(options).toString()
+    const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+    try {
+      const response = await this.$axios.get(URL)
+      const data = await tPromise.decode(
+        ts.type({
+          jsonrpc: ts.string,
+          id: ts.number,
+          result: ts.string
+        }),
+        response.data
+      )
+      return parseInt(data.result, 10)
+    } catch {
+      return 0
     }
   }
 }
