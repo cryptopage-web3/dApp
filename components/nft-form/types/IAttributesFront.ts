@@ -7,10 +7,10 @@ import {
 } from '.'
 
 export interface IAttributesFront {
-  properties: IAttributeProperty[]
-  levels: IAttributeLevel[]
-  stats: IAttributeStat[]
-  dates: IAttributeDate[]
-  boosts: IAttributeBoost[]
-  hasComment: boolean
+  properties?: IAttributeProperty[]
+  levels?: IAttributeLevel[]
+  stats?: IAttributeStat[]
+  dates?: IAttributeDate[]
+  boosts?: IAttributeBoost[]
+  hasComment?: boolean
 }
