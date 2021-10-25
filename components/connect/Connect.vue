@@ -3,17 +3,17 @@
     <div ref="connect" class="connect-wallet-col connect-wallet__link-hover">
       <a
         href="#"
-        data-toggle="modal"
-        data-target="#modal-connect"
         role="button"
         class="connect-wallet__link"
         :class="{ 'connect-wallet__link_connect': !isAuth }"
       >
         <div class="connect-wallet__link-thumb">
-          <img src="@/assets/img/connect-wallet__link_img2.png" alt="" />
+          <img :src="getNetworkIcon" alt="blockchain-icon" />
         </div>
         <div class="connect-wallet__link-text">
-          <div class="connect-wallet__link-tool">Etherum</div>
+          <div class="connect-wallet__link-tool">
+            {{ selectedNetworkName }}
+          </div>
           <div
             v-if="isAuth"
             class="connect-wallet__link-status"
@@ -37,7 +37,7 @@
           <li>
             <router-link :to="`/${address}`">Home page</router-link>
           </li>
-          <li><a href="#">Activate layer 2</a></li>
+          <li><a href="#">Activate layer {{ selectedNetworkLayer }}</a></li>
           <li><a href="#">Copy Address</a></li>
           <li>
             <a
@@ -48,10 +48,18 @@
               Install app
             </a>
           </li>
-          <li><a href="#">Transaction history</a></li>
+          <li>
+            <router-link :to="`/${address}`">Transaction History</router-link>
+          </li>
           <li><a href="#">Claim</a></li>
-          <li><a href="#">Change Wallet</a></li>
-          <li><a href="#" @click.prevent="signout">Disconnect</a></li>
+          <li>
+            <a href="#" data-toggle="modal" data-target="#modal-connect"
+              >Change Wallet</a
+            >
+          </li>
+          <li>
+            <a href="#" @click.prevent="signout">Disconnect</a>
+          </li>
         </ul>
       </div>
       <signin ref="signin" />
@@ -62,6 +70,9 @@
   </div>
 </template>
 <script>
+import ethereumImg from '@/assets/img/modal-content__link_img1.png'
+import bscImg from '@/assets/img/modal-content__link_img2.png'
+import polygonImg from '@/assets/img/modal-content__link_img3.png'
 export default {
   components: {
     signin: async () => await import('@/components/auth/Signin.vue')
@@ -72,6 +83,20 @@ export default {
     },
     address() {
       return this.$store.getters['auth/selectedAddress']
+    },
+    selectedNetworkName() {
+      return this.$store.getters['auth/selectedNetworkName']
+    },
+    selectedNetworkLayer() {
+      return this.$store.getters['auth/selectedNetworkType'] === 'ethereum' ? '1' : '2'
+    },
+    getNetworkIcon() {
+      const icons = {
+        ethereum: ethereumImg,
+        bsc: bscImg,
+        polygon: polygonImg
+      }
+      return icons[this.$store.getters['auth/selectedNetworkType']]
     }
   },
   watch: {

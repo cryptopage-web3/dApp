@@ -18,7 +18,7 @@ export default class TokenService {
 
   public getTokens = async (address: string): Promise<TokenBalanceType[]> => {
     let tokens = await this.tokenAPIService.getTokens(address)
-    if (!tokens) {
+    if (tokens.length === 0) {
       tokens = await this.tokenWeb3Service.getTokens(address)
       const ethToken = await this.getETHToken(address)
       tokens = [ethToken, ...tokens]

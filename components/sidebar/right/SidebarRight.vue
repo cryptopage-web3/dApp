@@ -23,6 +23,7 @@
         <balance />
       </div>
     </div>
+    <connectModal />
   </div>
 </template>
 <script>
@@ -34,7 +35,9 @@ export default {
       await import('@/components/sidebar/right/SidebarRightBanner'),
     balance: async () =>
       await import('@/components/sidebar/right/SidebarRightBalance'),
-    connect: async () => await import('@/components/connect/Connect.vue')
+    connect: async () => await import('@/components/connect/Connect.vue'),
+    connectModal: async () =>
+      await import('@/components/connect/ConnectModal.vue')
   },
   computed: {
     isAuth() {

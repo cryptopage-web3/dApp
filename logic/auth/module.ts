@@ -35,6 +35,21 @@ export default class AuthModule {
   }
 
   @Getter()
+  public get selectedNetworkName(): string {
+    return this.authService.selectedNetworkName
+  }
+
+  @Getter()
+  public get selectedNetworkType(): string {
+    return this.authService.selectedNetworkType
+  }
+
+  @Getter()
+  public get selectedProviderName(): string {
+    return this.authService.selectedProviderName
+  }
+
+  @Getter()
   public get isAuth(): boolean {
     return this.selectedAddress ? this.authenticated : false
   }
@@ -60,5 +75,15 @@ export default class AuthModule {
   @Action()
   public signout(): void {
     this.setIsAuth(false)
+  }
+
+  @Action()
+  public async switchProvider(providerName: string): Promise<void> {
+    await this.authService.switchProvider(providerName)
+  }
+
+  @Action()
+  public async switchChain(type: string): Promise<void> {
+    await this.authService.switchChain(type)
   }
 }

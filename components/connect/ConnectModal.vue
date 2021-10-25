@@ -24,20 +24,29 @@
               <li>
                 <a
                   href="#modal-content1"
-                  class="modal-content__link active fill"
+                  class="modal-content__link fill"
+                  :class="selectedNetworkType === 'ethereum' ? 'active' : ''"
                 >
                   <img src="@/assets/img/modal-content__link_img1.png" alt="" />
                   <span></span>
                 </a>
               </li>
               <li>
-                <a href="#modal-content2" class="modal-content__link fill">
+                <a
+                  href="#modal-content2"
+                  class="modal-content__link fill"
+                  :class="selectedNetworkType === 'bsc' ? 'active' : ''"
+                >
                   <img src="@/assets/img/modal-content__link_img2.png" alt="" />
                   <span></span>
                 </a>
               </li>
               <li>
-                <a href="#modal-content3" class="modal-content__link fill">
+                <a
+                  href="#modal-content3"
+                  class="modal-content__link fill"
+                  :class="selectedNetworkType === 'polygon' ? 'active' : ''"
+                >
                   <img src="@/assets/img/modal-content__link_img3.png" alt="" />
                   <span></span>
                 </a>
@@ -63,10 +72,14 @@
             </ul>
             <div class="modal-content-cont">
               <div id="modal-content1" class="modal-content-wr active">
-                <div class="modal-content-wallet-title">ETH Wallet1</div>
+                <div class="modal-content-wallet-title">Ethereum</div>
                 <ul class="modal-content-wallet-list">
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('ETHEREUM', 'metamask')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
                         alt=""
@@ -75,7 +88,13 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="
+                        switchProvider('ETHEREUM', 'walletConnect')
+                      "
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img2.png"
                         alt=""
@@ -122,10 +141,14 @@
                 </ul>
               </div>
               <div id="modal-content2" class="modal-content-wr">
-                <div class="modal-content-wallet-title">ETH Wallet2</div>
+                <div class="modal-content-wallet-title">BSC</div>
                 <ul class="modal-content-wallet-list">
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('BSC', 'metamask')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
                         alt=""
@@ -134,7 +157,11 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('BSC', 'walletConnect')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img2.png"
                         alt=""
@@ -181,10 +208,14 @@
                 </ul>
               </div>
               <div id="modal-content3" class="modal-content-wr">
-                <div class="modal-content-wallet-title">ETH Wallet3</div>
+                <div class="modal-content-wallet-title">Polygon</div>
                 <ul class="modal-content-wallet-list">
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('POLYGON', 'metamask')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
                         alt=""
@@ -193,7 +224,13 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="
+                        switchProvider('POLYGON', 'walletConnect')
+                      "
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img2.png"
                         alt=""
@@ -366,6 +403,14 @@
 </template>
 <script>
 export default {
+  computed: {
+    selectedProvider() {
+      return this.$store.getters['auth/selectedProviderName']
+    },
+    selectedNetworkType() {
+      return this.$store.getters['auth/selectedNetworkType']
+    }
+  },
   mounted() {
     $('.modal-content__link').on('click', function (event) {
       event.preventDefault()
@@ -388,6 +433,15 @@ export default {
         $('.modal-backdrop').addClass('modal-backdrop_dark')
       })
     })
+  },
+  methods: {
+    switchProvider(type, provider) {
+      if (provider === 'metamask' && provider === this.selectedProvider) {
+        this.$store.dispatch('auth/switchChain', type)
+      } else {
+        this.$store.dispatch('auth/switchProvider', provider)
+      }
+    }
   }
 }
 </script>

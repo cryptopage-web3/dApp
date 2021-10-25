@@ -34,6 +34,18 @@ export default class AuthService extends Vue {
     }
   ]
 
+  protected networksByChain: any = {
+    1: { network: 'ethereum', name: 'Ethereum' },
+    3: { network: 'ethereum', name: 'Ropsten TestNet' },
+    4: { network: 'ethereum', name: 'Rinkeby TestNet' },
+    5: { network: 'ethereum', name: 'Goerly TestNet' },
+    42: { network: 'ethereum', name: 'Kovan TestNet' },
+    56: { network: 'bsc', name: 'BSC Network' },
+    97: { network: 'bsc', name: 'BSC TestNet' },
+    137: { network: 'polygon', name: 'Polygon Mainnet' },
+    80001: { network: 'polygon', name: 'Polygon TestNet' }
+  }
+
   // chainid type is hexadecimal nubers
   protected _CHAINS = {
     [BSC]: {
@@ -66,12 +78,6 @@ export default class AuthService extends Vue {
     chainId: 1
   }
 
-  providerName = ''
-  provider: WalletConnectProvider | undefined
-  webConnected = false
-  metamaskConnected = false
-  walletConnectConnected = false
-
   protected get metamaskInstalled(): boolean {
     return (
       typeof window !== 'undefined' &&
@@ -79,6 +85,11 @@ export default class AuthService extends Vue {
     )
   }
 
+  private providerName = 'metamask'
+  private provider: WalletConnectProvider | undefined
+  private webConnected = false
+  private metamaskConnected = false
+  private walletConnectConnected = false
   protected get $web3(): any {
     return Container.get(tokens.WEB3)
   }
@@ -97,12 +108,41 @@ export default class AuthService extends Vue {
   /**
    * Just reacive proxy for simple access
    */
+  public get selectedProviderName(): string {
+    return this.providerName
+  }
+
+  /*
+   * Just reacive proxy for simple access
+   */
   public get selectedChainId(): number {
     return this.data.chainId
   }
 
   public changeWeb3(web3: Web3): void {
     Container.set(tokens.WEB3, web3)
+  }
+
+  /*
+   * Just reacive proxy for simple access
+   */
+  public get selectedNetworkName(): string {
+    return (
+      (this.networksByChain[this.selectedChainId] &&
+        this.networksByChain[this.selectedChainId].name) ||
+      'unknown network'
+    )
+  }
+
+  /*
+   * Just reacive proxy for simple access
+   */
+  public get selectedNetworkType(): string {
+    return (
+      (this.networksByChain[this.selectedChainId] &&
+        this.networksByChain[this.selectedChainId].network) ||
+      'ethereum'
+    )
   }
 
   /**
@@ -124,7 +164,7 @@ export default class AuthService extends Vue {
    * @param {String} providerName - value of providerName
    * @returns {String} - result of action
    */
-  private switchProvider = async (providerName: string): Promise<string> => {
+  public switchProvider = async (providerName: string): Promise<string> => {
     let connected = 'error'
     if (providerName === 'metamask') {
       if (this.metamaskInstalled) {
@@ -191,7 +231,6 @@ export default class AuthService extends Vue {
       Vue.set(this.data, 'chainId', chainId)
       this.data.chainId = chainId
     }
-    console.log('data in setOrChangeWeb3Data', address, chainId)
   }
 
   /**
