@@ -3,7 +3,7 @@ import Web3 from 'web3'
 import * as tPromise from 'io-ts-promise'
 import { ERC20ABI } from '~/constants/abi-samples'
 import { TokenInfo } from '~/logic/address/models'
-import { TokenInfoType, TokenBalanceType } from '~/logic/address/types'
+import { TokenInfoType } from '~/logic/address/types'
 import tokens from '~/logic/tokens'
 
 @Service(tokens.ADDRESS_WEB3_SERVICE)
@@ -61,24 +61,6 @@ export default class AddressWeb3Service {
       return await this.$web3.eth.getTransactionCount(address)
     } catch {
       return 0
-    }
-  }
-
-  public getETHToken = async (address: string): Promise<TokenBalanceType> => {
-    const balance = await this.getBalance(address)
-    return {
-      balance,
-      usdBalance: 0,
-      rate: 0,
-      diff: 0,
-      tokenInfo: {
-        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-        name: 'Ethereum',
-        symbol: 'ETH',
-        decimals: 18,
-        image:
-          'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbitinfocharts.com%2Fimgs33%2Fethereum.png'
-      }
     }
   }
 }
