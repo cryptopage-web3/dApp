@@ -83,7 +83,7 @@
 import Vue from 'vue'
 import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
-import { validateForm, getAdaptedAttributes } from '@/utils/nftFormHelper'
+import { validateForm, getAdaptedAttributes } from './utils'
 import NFTAPIService from '~/logic/nft/services/api'
 import tokens from '~/logic/tokens'
 

@@ -1,4 +1,10 @@
-export const validateForm = ({ title, text, attributes }) => {
+import { IValidateFormParams, IValidateFormResult } from '../types'
+
+export const validateForm = ({
+  title,
+  text,
+  attributes
+}: IValidateFormParams): IValidateFormResult => {
   // validate title
 
   if (!title) {
@@ -47,7 +53,7 @@ export const validateForm = ({ title, text, attributes }) => {
         return
       }
 
-      if (!isFinite(value) || !isFinite(maxValue)) {
+      if (!isFinite(+value) || !isFinite(+maxValue)) {
         levelError = 'Value is not a number in levels'
         return
       }
@@ -80,7 +86,7 @@ export const validateForm = ({ title, text, attributes }) => {
         return
       }
 
-      if (!isFinite(value) || !isFinite(maxValue)) {
+      if (!isFinite(+value) || !isFinite(+maxValue)) {
         statsError = 'Value is not a number in stats'
         return
       }
@@ -141,7 +147,7 @@ export const validateForm = ({ title, text, attributes }) => {
         return
       }
 
-      if (!isFinite(value)) {
+      if (!isFinite(+value)) {
         boostsError = 'Value is not a number in boosts'
       }
     })
@@ -157,48 +163,4 @@ export const validateForm = ({ title, text, attributes }) => {
   return {
     status: true
   }
-}
-
-export const getAdaptedAttributes = (attributes) => {
-  // adapt properties
-
-  const properties = (attributes.properties || []).map((property) => ({
-    trait_type: property.type,
-    value: property.value
-  }))
-
-  // adapt levels
-
-  const levels = (attributes.levels || []).map((level) => ({
-    trait_type: level.type,
-    value: +level.value,
-    max_value: +level.maxValue
-  }))
-
-  // adapt levels
-
-  const stats = (attributes.stats || []).map((stat) => ({
-    display_type: 'number',
-    trait_type: stat.type,
-    value: +stat.value,
-    max_value: +stat.maxValue
-  }))
-
-  // adapt dates
-
-  const dates = (attributes.dates || []).map((date) => ({
-    display_type: 'date',
-    trait_type: date.type,
-    value: Math.floor(new Date(date.value) / 1000)
-  }))
-
-  // adapt boosts
-
-  const boosts = (attributes.boosts || []).map((boost) => ({
-    display_type: boost.displayType,
-    trait_type: boost.type,
-    value: +boost.value
-  }))
-
-  return [...properties, ...levels, ...stats, ...dates, ...boosts]
 }
