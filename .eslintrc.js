@@ -20,6 +20,8 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-this-alias': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/no-explicit-any': 0,
     'node/no-callback-literal': 0
   }
 }
