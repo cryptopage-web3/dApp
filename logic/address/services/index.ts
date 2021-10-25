@@ -9,7 +9,7 @@ import {
 import AddressIPFSService from '~/logic/address/services/ipfs'
 import AddressWEB3Service from '~/logic/address/services/web3'
 import AddressAPIService from '~/logic/address/services/api'
-import TokenAPIService from '~/logic/tokens/services/api'
+import TokenService from '~/logic/tokens/services'
 
 @Service(tokens.ADDRESS_SERVICE)
 export default class AddressService {
@@ -22,8 +22,8 @@ export default class AddressService {
   @Inject(tokens.ADDRESS_API_SERVICE)
   public addressAPIService!: AddressAPIService
 
-  @Inject(tokens.TOKEN_API_SERVICE)
-  public tokenAPIService!: TokenAPIService
+  @Inject(tokens.TOKEN_SERVICE)
+  public tokenService!: TokenService
 
   private CACHE: { [address: string]: TokenInfoType | null } = {}
 
@@ -54,22 +54,38 @@ export default class AddressService {
   }
 
   public getTokens = async (address: string): Promise<TokenBalanceType[]> => {
-    let tokens = await this.tokenAPIService.getTokens(address)
-    if (tokens.length === 0) {
-      const ethToken = await this.addressWEB3Service.getETHToken(address)
-      tokens = [ethToken]
-    }
-    return tokens
+    return await this.tokenService.getTokens(address)
   }
 
-  public getTransactionsCount = async (address: string): Promise<number> =>
-    await this.addressWEB3Service.getTransactionsCount(address)
+  public getBalance = async (address: string): Promise<number> => {
+    let balance = 0
+    balance = await this.addressWEB3Service.getBalance(address)
+    /*
+    Sometimes addressAPIService.getBalance returns Nan
+    Need to fix it
+    if (!balance) {
+      balance = await this.addressAPIService.getBalance(address)
+    }
+    */
+    return balance
+  }
+
+  public getTransactionsCount = async (address: string): Promise<number> => {
+    let transactionsCount = await this.addressWEB3Service.getTransactionsCount(
+      address
+    )
+    if (!transactionsCount) {
+      transactionsCount = await this.addressAPIService.getTransactionsCount(
+        address
+      )
+    }
+    return transactionsCount
+  }
 
   public getAddressInfo = async (address: string): Promise<AddressInfoType> => {
     const tokenInfo = await this.getTokenInfo(address)
-    const tokens = await this.tokenAPIService.getTokens(address)
-    const transactionsCount =
-      await this.addressWEB3Service.getTransactionsCount(address)
+    const tokens = await this.tokenService.getTokens(address)
+    const transactionsCount = await this.getTransactionsCount(address)
     return {
       address,
       tokens,
