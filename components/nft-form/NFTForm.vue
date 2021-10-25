@@ -84,6 +84,7 @@ import Vue from 'vue'
 import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
 import { validateForm, getAdaptedAttributes } from './utils'
+import { IAttributesFront, INFTServer } from './types'
 import NFTAPIService from '~/logic/nft/services/api'
 import tokens from '~/logic/tokens'
 
@@ -99,8 +100,8 @@ export default class NFTForm extends Vue {
   loading = false
   text = ''
   title = ''
-  attributes: any = {}
-  file: any = null
+  attributes: IAttributesFront = {}
+  file: File | null = null
 
   $refs!: {
     attributes: any
@@ -140,7 +141,7 @@ export default class NFTForm extends Vue {
     })
   }
 
-  fileUpdateHandler(file: any) {
+  fileUpdateHandler(file: File) {
     if (!file) {
       this.file = null
       return
@@ -161,17 +162,17 @@ export default class NFTForm extends Vue {
     this.$refs['upload-file'].upload(type)
   }
 
-  dragFile(event: any) {
-    const file = event.dataTransfer.files[0]
+  dragFile(event: DragEvent) {
+    const file = event.dataTransfer?.files[0]
 
-    if (!this.validateFileWithNotify(file)) {
+    if (!file || !this.validateFileWithNotify(file)) {
       return
     }
 
     this.file = file
   }
 
-  validateFileWithNotify(file: any) {
+  validateFileWithNotify(file: File): boolean {
     if (!file) {
       return false
     }
@@ -191,7 +192,7 @@ export default class NFTForm extends Vue {
     return true
   }
 
-  attributesChangeHandler(attributes: any) {
+  attributesChangeHandler(attributes: IAttributesFront) {
     this.attributes = attributes
   }
 
@@ -203,7 +204,7 @@ export default class NFTForm extends Vue {
     this.$refs.attributes.hide()
   }
 
-  validateFormWithNotify() {
+  validateFormWithNotify(): boolean {
     const result = validateForm({
       title: this.title,
       text: this.text,
@@ -249,7 +250,7 @@ export default class NFTForm extends Vue {
     this.onSubmited()
   }
 
-  async getFileIPFSHash() {
+  async getFileIPFSHash(): Promise<string> {
     const ipfs = await (this as any).$ipfs
     const file = await ipfs.add(this.file)
     await ipfs.pin.add(file.path)
@@ -259,7 +260,7 @@ export default class NFTForm extends Vue {
   async getFormIPFSHash() {
     const fileHash = this.file ? await this.getFileIPFSHash() : null
 
-    const nft = {
+    const nft: INFTServer = {
       name: this.title,
       description: this.text,
       attributes: getAdaptedAttributes(this.attributes),
