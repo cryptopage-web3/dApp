@@ -1,5 +1,7 @@
 import Web3 from 'web3'
 
+import { Container } from 'vue-typedi'
+import tokens from '~/logic/tokens'
 const PROJECT_ID = `a925609bdb25477d8039c763faa7b61d`
 
 const getInfuraProvider = ({ name, type }) => {
@@ -37,6 +39,10 @@ const getInfuraProvider = ({ name, type }) => {
 export const web3 = new Web3(
   getInfuraProvider({ type: 'wss' } || Web3.givenProvider)
 )
+
+// const givenProvider = new Web3(Web3.givenProvider)
+
+Container.set(tokens.WEB3, web3)
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default ({ app }, inject) => {
