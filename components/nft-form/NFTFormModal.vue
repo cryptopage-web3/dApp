@@ -26,16 +26,23 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+
+@Component({
   components: {
-    icon: async () => await import('@/components/icons/Icon'),
+    icon: async () => await import('@/components/icons/Icon.vue'),
     'nft-form': () => import('@/components/nft-form/NFTForm.vue')
-  },
-  methods: {
-    hide() {
-      $(this.$refs.modal).modal('hide')
-    }
+  }
+})
+export default class NFTFormModal extends Vue {
+  $refs!: {
+    modal: HTMLDivElement
+  }
+
+  hide() {
+    ;($(this.$refs.modal) as any).modal('hide')
   }
 }
 </script>

@@ -18,9 +18,9 @@ export const _range = (start: number, stop: number, step: number): number[] => {
 }
 
 export const paginate = (
-  array: object[],
+  array: any[],
   pageNumber = 1,
   pageSize = 10
-): object[] => {
+): any[] => {
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
 }

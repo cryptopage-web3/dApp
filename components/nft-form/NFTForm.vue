@@ -141,7 +141,7 @@ export default class NFTForm extends Vue {
     })
   }
 
-  fileUpdateHandler(file: File) {
+  fileUpdateHandler(file?: File | null) {
     if (!file) {
       this.file = null
       return

@@ -29,74 +29,89 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { EDisplayType, IAttributeBoost, IAttributeBoostFields } from '../types'
+
+@Component({
   components: {
     boost: async () =>
       await import('@/components/nft-form/attributes/NFTFormBoost.vue')
-  },
-  props: {
-    boosts: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      isShow: false,
-      localBoosts: []
-    }
-  },
-  watch: {
-    boosts: {
-      handler(boosts) {
-        if (JSON.stringify(boosts) === JSON.stringify(this.localBoosts)) {
-          return
-        }
+  }
+})
+export default class NFTFormBoosts extends Vue {
+  isShow = false
+  localBoosts: IAttributeBoost[] = []
 
-        this.localBoosts = boosts
-      },
-      immediate: true
-    },
+  $refs!: {
+    icon: HTMLDivElement
+  }
 
-    localBoosts(boosts) {
-      this.$emit('change', boosts)
+  @Prop({ type: Array, default: () => [] })
+  readonly boosts!: IAttributeBoost[]
+
+  // emit
+
+  @Emit('change')
+  emitChangeBoosts(boosts: IAttributeBoost[]) {
+    return boosts
+  }
+
+  // watch
+
+  @Watch('boosts', { immediate: true })
+  onBoostsChanged(boosts: IAttributeBoost[]) {
+    if (JSON.stringify(boosts) === JSON.stringify(this.localBoosts)) {
+      return
     }
-  },
+
+    this.localBoosts = boosts
+  }
+
+  @Watch('localBoosts')
+  onLocalBoostsChanged(boosts: IAttributeBoost[]) {
+    this.emitChangeBoosts(boosts)
+  }
+
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.icon).tooltip({
+      ;($(this.$refs.icon) as any).tooltip({
         trigger: 'hover'
       })
     })
-  },
-  methods: {
-    toggle() {
-      this.isShow = !this.isShow
-    },
+  }
 
-    addBoost() {
-      this.localBoosts.push({
-        id: Number(new Date())
-      })
-    },
+  // methods
 
-    removeBoost(boostId) {
-      this.localBoosts = this.localBoosts.filter(({ id }) => id !== boostId)
-    },
+  toggle() {
+    this.isShow = !this.isShow
+  }
 
-    boostChangeHandler(boostId, data) {
-      this.localBoosts = this.localBoosts.map((item) =>
-        item.id === boostId
-          ? {
-              ...item,
-              displayType: data.displayType,
-              type: data.type,
-              value: data.value
-            }
-          : item
-      )
-    }
+  addBoost() {
+    this.localBoosts.push({
+      id: Number(new Date()),
+      type: '',
+      value: '',
+      displayType: EDisplayType.boostPercentage
+    })
+  }
+
+  removeBoost(boostId: number) {
+    this.localBoosts = this.localBoosts.filter(({ id }) => id !== boostId)
+  }
+
+  boostChangeHandler(boostId: number, data: IAttributeBoostFields) {
+    this.localBoosts = this.localBoosts.map((item) =>
+      item.id === boostId
+        ? {
+            ...item,
+            displayType: data.displayType,
+            type: data.type,
+            value: data.value
+          }
+        : item
+    )
   }
 }
 </script>

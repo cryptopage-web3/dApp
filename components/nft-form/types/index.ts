@@ -1,4 +1,5 @@
 export * from './IAttributeBoost'
+export * from './IAttributeBoostFields'
 export * from './IAttributeDate'
 export * from './IAttributeLevel'
 export * from './IAttributeProperty'
