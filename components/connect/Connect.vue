@@ -37,7 +37,9 @@
           <li>
             <router-link :to="`/${address}`">Home page</router-link>
           </li>
-          <li><a href="#">Activate layer {{ selectedNetworkLayer }}</a></li>
+          <li>
+            <a href="#">Activate layer {{ selectedNetworkLayer }}</a>
+          </li>
           <li><a href="#">Copy Address</a></li>
           <li>
             <a
@@ -88,7 +90,9 @@ export default {
       return this.$store.getters['auth/selectedNetworkName']
     },
     selectedNetworkLayer() {
-      return this.$store.getters['auth/selectedNetworkType'] === 'ethereum' ? '1' : '2'
+      return this.$store.getters['auth/selectedNetworkType'] === 'ethereum'
+        ? '1'
+        : '2'
     },
     getNetworkIcon() {
       const icons = {
