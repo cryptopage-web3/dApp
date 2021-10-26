@@ -86,4 +86,9 @@ export default class AuthModule {
   public async switchChain(type: string): Promise<void> {
     await this.authService.switchChain(type)
   }
+
+  @Action()
+  public async setChainId(chainId: number): Promise<void> {
+    await this.authService.setOrChangeWeb3Data(this.selectedAddress, chainId)
+  }
 }

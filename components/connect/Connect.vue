@@ -35,7 +35,9 @@
       <div v-if="isAuth" class="connect-wallet-col-body">
         <ul class="connect-wallet__list">
           <li>
-            <router-link :to="`/${address}`">Home page</router-link>
+            <router-link :to="`/${networkName}/${address}`"
+              >Home page</router-link
+            >
           </li>
           <li>
             <a href="#">Activate layer {{ selectedNetworkLayer }}</a>
@@ -72,6 +74,7 @@
   </div>
 </template>
 <script>
+import NetworkNameMixin from '@/mixins/networkName'
 import ethereumImg from '@/assets/img/modal-content__link_img1.png'
 import bscImg from '@/assets/img/modal-content__link_img2.png'
 import polygonImg from '@/assets/img/modal-content__link_img3.png'
@@ -79,12 +82,13 @@ export default {
   components: {
     signin: async () => await import('@/components/auth/Signin.vue')
   },
+  mixins: [NetworkNameMixin],
   computed: {
-    isAuth() {
-      return this.$store.getters['auth/isAuth']
-    },
     address() {
       return this.$store.getters['auth/selectedAddress']
+    },
+    isAuth() {
+      return this.$store.getters['auth/isAuth']
     },
     selectedNetworkName() {
       return this.$store.getters['auth/selectedNetworkName']

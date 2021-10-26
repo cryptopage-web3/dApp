@@ -177,6 +177,12 @@ export default class AddressModule {
 
   @Action()
   public async updateAddressInfo(address: string): Promise<void> {
+    this.setAddressInfo({
+      address,
+      tokenInfo: null,
+      tokens: [],
+      transactionsCount: 0
+    })
     const tokenInfo = await this.addressService.getTokenInfo(address)
     this.setTokenInfo(tokenInfo)
     const tokens = await this.addressService.getTokens(address)

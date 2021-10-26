@@ -9,7 +9,9 @@
         {{ income ? ' to' : ' from' }}
         <nuxt-link
           style="color: #a5a5a5"
-          :to="`/${income ? transaction.receiver : transaction.sender}`"
+          :to="`/${networkName}/${
+            income ? transaction.receiver : transaction.sender
+          }`"
         >
           {{
             income ? transaction.receiver : transaction.sender | shortAddress
@@ -25,6 +27,10 @@
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import TransactionMixin from '~/mixins/transaction'
+import NetworkNameMixin from '~/mixins/networkName'
 @Component({})
-export default class PostTop extends mixins(TransactionMixin) {}
+export default class PostTop extends mixins(
+  TransactionMixin,
+  NetworkNameMixin
+) {}
 </script>

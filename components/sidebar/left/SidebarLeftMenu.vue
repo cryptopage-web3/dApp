@@ -3,7 +3,7 @@
     <ul class="header-list">
       <li>
         <router-link
-          :to="`/${$store.getters['auth/selectedAddress']}`"
+          :to="`/${networkName}/${address}`"
           class="header-list__item"
         >
           <div>
@@ -81,13 +81,20 @@
   </div>
 </template>
 <script>
+import NetworkNameMixin from '~/mixins/networkName'
 export default {
   components: {
     connect: async () => await import('@/components/connect/Connect.vue')
   },
+  mixins: [NetworkNameMixin],
   data: () => ({
     isShowCreateNft: false
   }),
+  computed: {
+    address() {
+      return this.$store.getters['auth/selectedAddress']
+    }
+  },
   watch: {
     $route: {
       handler() {
@@ -110,7 +117,6 @@ export default {
     openNFTForm() {
       $('#nft-form-modal').modal('show')
     },
-
     showCreateNft() {
       this.isShowCreateNft = $(window).scrollTop() > 300
     }

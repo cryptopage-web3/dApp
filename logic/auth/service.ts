@@ -222,7 +222,7 @@ export default class AuthService extends Vue {
    * @param {Number} chainId - chainId of current network
    * @returns {Void}
    */
-  private setOrChangeWeb3Data(address: string, chainId: number): void {
+  public setOrChangeWeb3Data(address: string, chainId: number): void {
     if (address) {
       Vue.set(this.data, 'address', address)
       this.data.address = address

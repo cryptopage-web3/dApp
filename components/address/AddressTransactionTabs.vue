@@ -3,9 +3,7 @@
     <ul id="myTab" class="nav nav-tabs transactions-list" role="tablist">
       <li v-for="(tab, index) in tabs" :key="index" class="nav-item">
         <router-link
-          :to="`/${
-            $store.getters['address/address'] + (tab.link ? `/${tab.link}` : '')
-          }`"
+          :to="url(tab.link)"
           exact-active-class="active"
           class="nav-link"
           exact
@@ -17,7 +15,9 @@
   </div>
 </template>
 <script>
+import NetworkNameMixin from '~/mixins/networkName'
 export default {
+  mixins: [NetworkNameMixin],
   data: () => ({
     tabs: [
       {
@@ -37,6 +37,11 @@ export default {
         name: 'Likes'
       }
     ]
-  })
+  }),
+  methods: {
+    url(link) {
+      return `/${this.networkName}/${this.address}/${link}`
+    }
+  }
 }
 </script>

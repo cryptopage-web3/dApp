@@ -14,7 +14,9 @@
           {{ income ? 'to' : 'from' }}
           <nuxt-link
             style="color: #a5a5a5"
-            :to="`/${income ? transaction.receiver : transaction.sender}`"
+            :to="`/${networkName}/${
+              income ? transaction.receiver : transaction.sender
+            }`"
           >
             {{
               income
@@ -39,6 +41,7 @@
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import TransactionMixin from '~/mixins/transaction'
+import NetworkNameMixin from '~/mixins/networkName'
 @Component({
   components: {
     token: async () =>
@@ -47,5 +50,8 @@ import TransactionMixin from '~/mixins/transaction'
       await import('~/components/transactions/ERC721Transaction.vue')
   }
 })
-export default class Transaction extends mixins(TransactionMixin) {}
+export default class Transaction extends mixins(
+  TransactionMixin,
+  NetworkNameMixin
+) {}
 </script>
