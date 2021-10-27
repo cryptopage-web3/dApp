@@ -29,7 +29,7 @@ export default class TokenService {
   public getETHToken = async (address: string): Promise<TokenBalanceType> => {
     const balance = await this.addressService.getBalance(address)
     return {
-      balance,
+      balance: (balance / 10) * 18,
       usdBalance: 0,
       rate: 0,
       diff: 0,

@@ -13,21 +13,17 @@ import {
   EtherscanABIResponse
 } from '~/logic/transactions/models'
 
-export type DecodedInputParamType = {
-  name: string
-  type: string
-  value: string
-}
-
 export type DecodedInputType = {
+  signature: string
   name: string
-  params: DecodedInputParamType[]
+  text: string
+  decoded: { [key: string]: any }
 }
 
 export type ParamsAdaptarType = {
   token?: TokenInfoType | null
   nft?: NFTType | null
-  decodedInput?: DecodedInputType | undefined
+  decodedInput?: DecodedInputType | null
 }
 
 export type ParamsTransactionsType = {
@@ -53,6 +49,7 @@ export type TransactionType = ParamsAdaptarType & {
   from: string
   gasPrice: string
   gasUsed: string
+  fee?: string
   timeStamp: string
   to: string
   sender: string

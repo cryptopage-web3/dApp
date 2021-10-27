@@ -7,7 +7,10 @@
       <img v-else src="@/assets/img/transactions-link_img2.png" alt="" />
       <div class="transactions-link__text">
         <div class="transactions-link__tool">
-          {{ income ? 'Send' : 'Receive' }} ETH
+          {{ income ? 'Send' : 'Receive' }} {{ networkName.toUpperCase() }}
+        </div>
+        <div v-if="transaction.decodedInput" class="transactions-link__number">
+          Method: {{ transaction.decodedInput.name }}
         </div>
         <div class="transactions-link__number">
           {{ transaction.timeStamp | humanizeDate }} ago
@@ -30,10 +33,11 @@
     <div class="transactions-link-right">
       <div class="transactions-link__usdt" style="text-align: right">
         {{ income ? '-' : '' }}
-        {{ transaction.amount | normalizeAmount }} ETH
+        {{ transaction.amount | normalizeAmount }}
+        {{ networkName.toUpperCase() }}
       </div>
       <div class="transactions-link__usd" style="text-align: right">
-        {{ transaction.gas | normalizeAmount }} GAS
+        Fee: {{ transaction.fee }} {{ networkName.toUpperCase() }}
       </div>
     </div>
   </a>

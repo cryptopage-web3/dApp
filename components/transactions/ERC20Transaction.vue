@@ -11,27 +11,38 @@
           {{ transaction.timeStamp | humanizeDate }} ago
           {{ income ? 'to' : 'from' }}
           <nuxt-link
+            v-if="income"
             style="color: #a5a5a5"
-            :to="`/${networkName}/${
-              income ? transaction.receiver : transaction.sender
-            }`"
+            :to="`/${networkName}/${transaction.receiver}`"
           >
-            {{
-              income
-                ? transaction.receiver
-                : transaction.sender | shortAddress(5, 7)
-            }}
+            {{ transaction.receiver | shortAddress(5, 7) }}
+          </nuxt-link>
+          <nuxt-link
+            v-else-if="!income && transaction.token"
+            style="color: #a5a5a5"
+            :to="`/${networkName}/${transaction.sender}`"
+          >
+            {{ transaction.token.name }} ({{ transaction.token.symbol }})
+          </nuxt-link>
+          <nuxt-link
+            v-else-if="!income && !transaction.token"
+            style="color: #a5a5a5"
+            :to="`/${networkName}/${transaction.sender}`"
+          >
+            {{ transaction.sender | shortAddress(5, 7) }}
           </nuxt-link>
         </div>
       </div>
     </div>
     <div class="transactions-link-right">
-      <div class="transactions-link__usdt">
+      <div class="transactions-link__usdt" style="text-align: right">
         {{ income ? '-' : '' }}
         {{ transaction.amount | normalizeAmount }}
         {{ transaction.token.symbol }}
       </div>
-      <!--div class="transactions-link__usd">-$ 1, 185.76 USD</div-->
+      <div class="transactions-link__usd" style="text-align: right">
+        Fee: {{ transaction.fee }} {{ networkName.toUpperCase() }}
+      </div>
     </div>
   </a>
 </template>

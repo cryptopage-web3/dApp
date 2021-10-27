@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="balance-bottom">
-        {{ token.rate.toFixed(2) }} $
+        {{ token.rate | normalizeAmount }} $
         <br />
         <span> Value: {{ token.usdBalance.toFixed(2) }} $ </span>
       </div>

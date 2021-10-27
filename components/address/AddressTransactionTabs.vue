@@ -18,26 +18,29 @@
 import NetworkNameMixin from '~/mixins/networkName'
 export default {
   mixins: [NetworkNameMixin],
-  data: () => ({
-    tabs: [
-      {
-        link: '',
-        name: 'Transactions'
-      },
-      {
-        link: 'nft',
-        name: 'NFT'
-      },
-      {
-        link: 'tokens',
-        name: 'TOKENS (erc20)'
-      },
-      {
-        link: 'likes',
-        name: 'Likes'
-      }
-    ]
-  }),
+  computed: {
+    tabs() {
+      const tokensName = this.networkName === 'bsc' ? 'bep20' : 'erc20'
+      return [
+        {
+          link: '',
+          name: 'Transactions'
+        },
+        {
+          link: 'nft',
+          name: 'NFT'
+        },
+        {
+          link: 'tokens',
+          name: `TOKENS (${tokensName})`
+        },
+        {
+          link: 'likes',
+          name: 'Likes'
+        }
+      ]
+    }
+  },
   methods: {
     url(link) {
       return `/${this.networkName}/${this.address}/${link}`

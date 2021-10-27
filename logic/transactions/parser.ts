@@ -1,16 +1,15 @@
-import { AbiItem } from 'web3-utils'
 import { web3 } from '~/plugins/web3'
-import { ERC20ABI } from '~/constants/abi-samples'
 import {
   TransactionType,
+  DecodedInputType,
   EtherscanTransactionType,
   EtherscanERC20TransactionType,
   EtherscanERC721TransactionType
 } from '~/logic/transactions/types'
 import { TokenInfoType } from '~/logic/address/types'
-import { SignatureType, signatures } from '~/constants/functionSignatures'
+import { signatures } from '~/constants/functionSignatures'
 
-export default class TransactionParser {
+export default class EtherscanTransactionParser {
   private parseTransactionBody(
     transaction:
       | EtherscanTransactionType
@@ -41,7 +40,7 @@ export default class TransactionParser {
     transaction: EtherscanERC20TransactionType | EtherscanERC721TransactionType
   ): TokenInfoType {
     return {
-      totalSupply: undefined,
+      // totalSupply: undefined,
       address: transaction.contractAddress,
       decimals: Number(transaction.tokenDecimal),
       name: transaction.tokenName,
@@ -50,34 +49,31 @@ export default class TransactionParser {
     }
   }
 
-  private parseInput(tx: EtherscanTransactionType) {
+  private parseInput(tx: EtherscanTransactionType): null | DecodedInputType {
     try {
-      const inputSignature = tx.input.slice(0, 10)
-      const signatureObject = signatures.find(
-        (item: SignatureType) => item.signature === inputSignature
-      ) || { name: '' }
-      const abiItem = ERC20ABI.find(
-        (item: AbiItem) => item.name === signatureObject.name
-      )
-      const inputs =
-        abiItem && Array.isArray(abiItem.inputs) ? abiItem.inputs : []
-      if (inputs) {
-        const types = inputs.map((input) => String(input.type))
-        const decoded = web3.eth.abi.decodeParameters(
-          types,
-          '0x' + tx.input.slice(10)
-        )
-        const params = inputs.map((input, index: number) => {
-          const param = Object.assign({ value: '' }, input)
-          param.value = decoded[index]
-          return param
-        })
-        const name = signatureObject ? signatureObject.name : ''
-        return { name, params }
+      const signature = tx.input.slice(0, 10)
+      const signatureObject = signatures[signature]
+      if (signatureObject) {
+        const types = signatureObject.text
+          .split('(')[1]
+          .replace(')', '')
+          .split(',')
+        if (types) {
+          const decoded = web3.eth.abi.decodeParameters(
+            types,
+            '0x' + tx.input.slice(10)
+          )
+          return {
+            signature,
+            name: signatureObject.name,
+            text: signatureObject.text,
+            decoded
+          }
+        }
       }
-      return undefined
+      return null
     } catch {
-      return undefined
+      return null
     }
   }
 
@@ -88,8 +84,14 @@ export default class TransactionParser {
   private parseReceiver(tx: TransactionType): string {
     const input = tx.decodedInput
     let receiver = tx.to
-    if (input && input.name === 'transfer') {
-      receiver = input.params[0].value
+    if (input && input.name === 'Transfer') {
+      receiver = input.decoded[0]
+    }
+    if (input && input.name === 'TransferFrom') {
+      receiver = input.decoded[1]
+    }
+    if (input && input.name === 'Swap') {
+      receiver = input.decoded[1]
     }
     return receiver
   }
@@ -98,8 +100,14 @@ export default class TransactionParser {
     const input = tx.decodedInput
     let amount = Number(tx.value)
     let decimals = 18
-    if (input && input.name === 'transfer') {
-      amount = Number(web3.utils.toBN(input.params[1].value))
+    if (input && input.name === 'Transfer') {
+      amount = Number(web3.utils.toBN(input.decoded[1]))
+    } else if (input && input.name === 'TransferFrom') {
+      amount = Number(web3.utils.toBN(input.decoded[2]))
+    } else if (input && input.name === 'Swap') {
+      amount = Number(web3.utils.toBN(input.decoded[2]))
+    } else if (input && input.name.startsWith('Swap Exact')) {
+      amount = Number(web3.utils.toBN(input.decoded[3]))
     }
     if (tx.token) {
       decimals = Number(tx.token.decimals)
@@ -109,8 +117,8 @@ export default class TransactionParser {
     return result
   }
 
-  public parseGas(tx: TransactionType): string {
-    return String(Number(tx.gas) / 10 ** 18)
+  public parseFee(tx: TransactionType): string {
+    return String((Number(tx.gasPrice) / 10 ** 18) * Number(tx.gasUsed))
   }
 
   public parse(
@@ -128,7 +136,7 @@ export default class TransactionParser {
     }
     transactionBody.sender = this.parseSender(transactionBody)
     transactionBody.receiver = this.parseReceiver(transactionBody)
-    transactionBody.gas = this.parseGas(transactionBody)
+    transactionBody.fee = this.parseFee(transactionBody)
     return transactionBody
   }
 }

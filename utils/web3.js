@@ -12,12 +12,45 @@ export const shortAddress = (
   }
 }
 
-export const normalizeAmount = (exponentialNumber) => {
-  const str = exponentialNumber.toString()
-  if (str.includes('e')) {
-    const exponent = parseInt(str.split('-')[1], 10)
-    return Number(exponentialNumber).toFixed(exponent)
-  } else {
-    return exponentialNumber
+export const normalizeAmount = (exponential) => {
+  let decimal = exponential.toString().toLowerCase()
+
+  if (decimal.includes('e+')) {
+    const exponentialSplitted = decimal.split('e+')
+    let postfix = ''
+    for (
+      let i = 0;
+      i <
+      +exponentialSplitted[1] -
+        (exponentialSplitted[0].includes('.')
+          ? exponentialSplitted[0].split('.')[1].length
+          : 0);
+      i++
+    ) {
+      postfix += '0'
+    }
+    const addSeparator = (text, separator = ' ') => {
+      let j = 3
+      let textLength = text.length
+      while (j < textLength) {
+        text = `${text.slice(0, textLength - j)}${separator}${text.slice(
+          textLength - j,
+          textLength
+        )}`
+        textLength++
+        j += 3 + 1
+      }
+      return text
+    }
+    decimal = addSeparator(exponentialSplitted[0].replace('.', '') + postfix)
   }
+  if (decimal.toLowerCase().includes('e-')) {
+    const exponentialSplitted = decimal.split('e-')
+    let prefix = '0.'
+    for (let i = 0; i < +exponentialSplitted[1] - 1; i++) {
+      prefix += '0'
+    }
+    decimal = prefix + exponentialSplitted[0].replace('.', '')
+  }
+  return decimal
 }

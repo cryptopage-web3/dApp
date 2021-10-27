@@ -141,11 +141,16 @@ export default class TransactionAPIService extends APIServiceMixin {
         EtherscanERC20TransactionsResponse,
         response.data
       )
-      return data.result.map(
-        (transaction: EtherscanERC20TransactionType): TransactionType => {
-          const adapter = TransactionAdapter(transaction)
-          return adapter.request({})
-        }
+      return await Promise.all(
+        data.result.map(
+          async (
+            transaction: EtherscanERC20TransactionType
+          ): Promise<TransactionType> => {
+            const adapter = TransactionAdapter(transaction)
+            const token = await this.addressService.getTokenInfo(transaction.to)
+            return adapter.request({ token })
+          }
+        )
       )
     } catch {
       return []
