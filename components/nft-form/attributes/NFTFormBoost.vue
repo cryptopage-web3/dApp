@@ -36,67 +36,73 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    boost: {
-      type: Object,
-      default: () => ({})
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { EDisplayType, IAttributeBoost, IAttributeBoostFields } from '../types'
+
+@Component({})
+export default class NFTFormBoost extends Vue {
+  type = ''
+  value = ''
+  displayType: EDisplayType = EDisplayType.boostPercentage
+
+  @Prop({ type: Object, default: () => ({}) })
+  readonly boost!: IAttributeBoost
+
+  get progress(): number {
+    return Number(this.value) > 100 ? 100 : Number(this.value)
+  }
+
+  // emit
+
+  @Emit('change')
+  emitBoostChange(fields: IAttributeBoostFields) {
+    return fields
+  }
+
+  // watch
+
+  @Watch('boost', { immediate: true })
+  onBoostChanged(boost: IAttributeBoost) {
+    if (boost.type !== this.type) {
+      this.type = boost.type || ''
     }
-  },
-  data() {
-    return {
-      type: '',
-      value: '',
-      displayType: 'boost_percentage'
+
+    if (boost.value !== this.value) {
+      this.value = boost.value || ''
     }
-  },
-  computed: {
-    progress() {
-      return this.value > 100 ? 100 : this.value
+
+    if (boost.displayType !== this.displayType) {
+      this.displayType = boost.displayType || EDisplayType.boostPercentage
     }
-  },
-  watch: {
-    boost: {
-      handler(boost) {
-        if (boost.type !== this.type) {
-          this.type = boost.type || ''
-        }
+  }
 
-        if (boost.value !== this.value) {
-          this.value = boost.value || ''
-        }
+  @Watch('displayType')
+  onDisplayTypeChanged(displayType: EDisplayType) {
+    this.emitBoostChange({
+      displayType,
+      type: this.type,
+      value: this.value
+    })
+  }
 
-        if (boost.displayType !== this.displayType) {
-          this.displayType = boost.displayType || 'boost_percentage'
-        }
-      },
-      immediate: true
-    },
+  @Watch('type')
+  onTypeChanged(type: string) {
+    this.emitBoostChange({
+      type,
+      value: this.value,
+      displayType: this.displayType
+    })
+  }
 
-    displayType(displayType) {
-      this.$emit('change', {
-        displayType,
-        type: this.type,
-        value: this.value
-      })
-    },
-
-    type(type) {
-      this.$emit('change', {
-        type,
-        value: this.value,
-        displayType: this.displayType
-      })
-    },
-
-    value(value) {
-      this.$emit('change', {
-        value,
-        type: this.type,
-        displayType: this.displayType
-      })
-    }
+  @Watch('value')
+  onValueChanged(value: string) {
+    this.emitBoostChange({
+      value,
+      type: this.type,
+      displayType: this.displayType
+    })
   }
 }
 </script>
