@@ -22,52 +22,58 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import DatePicker from 'vue2-datepicker'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeDate, IAttributeDateFields } from '../types'
 
-export default {
+@Component({
   components: {
     DatePicker
-  },
-  props: {
-    date: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  data() {
-    return {
-      type: '',
-      value: ''
-    }
-  },
-  watch: {
-    date: {
-      handler(date) {
-        if (date.type !== this.type) {
-          this.type = date.type || ''
-        }
+  }
+})
+export default class NFTFormDate extends Vue {
+  type = ''
+  value = ''
 
-        if (date.value !== this.value) {
-          this.value = date.value || ''
-        }
-      },
-      immediate: true
-    },
+  @Prop({ type: Object, default: () => ({}) })
+  readonly date!: IAttributeDate
 
-    type(type) {
-      this.$emit('change', {
-        type,
-        value: this.value
-      })
-    },
+  // emit
 
-    value(value) {
-      this.$emit('change', {
-        value,
-        type: this.type
-      })
+  @Emit('change')
+  emitDateChange(fields: IAttributeDateFields) {
+    return fields
+  }
+
+  // watch
+
+  @Watch('date', { immediate: true })
+  onDateChanged(date: IAttributeDate) {
+    if (date.type !== this.type) {
+      this.type = date.type || ''
     }
+
+    if (date.value !== this.value) {
+      this.value = date.value || ''
+    }
+  }
+
+  @Watch('type')
+  onTypeChanged(type: string) {
+    this.emitDateChange({
+      type,
+      value: this.value
+    })
+  }
+
+  @Watch('value')
+  onValueChanged(value: string) {
+    this.emitDateChange({
+      value,
+      type: this.type
+    })
   }
 }
 </script>

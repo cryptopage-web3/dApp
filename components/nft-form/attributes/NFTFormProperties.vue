@@ -32,77 +32,89 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeProperty, IAttributePropertyFields } from '../types'
+
+@Component({
   components: {
     property: async () =>
       await import('@/components/nft-form/attributes/NFTFormProperty.vue')
-  },
-  props: {
-    properties: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      isShow: false,
-      localProperties: []
-    }
-  },
-  watch: {
-    properties: {
-      handler(properties) {
-        if (
-          JSON.stringify(properties) === JSON.stringify(this.localProperties)
-        ) {
-          return
-        }
+  }
+})
+export default class NFTFormProperties extends Vue {
+  isShow = false
+  localProperties: IAttributeProperty[] = []
 
-        this.localProperties = properties
-      },
-      immediate: true
-    },
+  $refs!: {
+    icon: HTMLDivElement
+  }
 
-    localProperties(properties) {
-      this.$emit('change', properties)
+  @Prop({ type: Array, default: () => [] })
+  readonly properties!: IAttributeProperty[]
+
+  // emit
+
+  @Emit('change')
+  emitChangeProperties(properties: IAttributeProperty[]) {
+    return properties
+  }
+
+  // watch
+
+  @Watch('properties', { immediate: true })
+  onPropertiesChanged(properties: IAttributeProperty[]) {
+    if (JSON.stringify(properties) === JSON.stringify(this.localProperties)) {
+      return
     }
-  },
+
+    this.localProperties = properties
+  }
+
+  @Watch('localProperties')
+  onLocalPropertiesChanged(properties: IAttributeProperty[]) {
+    this.emitChangeProperties(properties)
+  }
+
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.icon).tooltip({
+      ;($(this.$refs.icon) as any).tooltip({
         trigger: 'hover'
       })
     })
-  },
-  methods: {
-    toggle() {
-      this.isShow = !this.isShow
-    },
+  }
 
-    addProperty() {
-      this.localProperties.push({
-        id: Number(new Date())
-      })
-    },
+  // methods
 
-    removeProperty(propertyId) {
-      this.localProperties = this.localProperties.filter(
-        ({ id }) => id !== propertyId
-      )
-    },
+  toggle() {
+    this.isShow = !this.isShow
+  }
 
-    propertyChangeHandler(propertyId, data) {
-      this.localProperties = this.localProperties.map((item) =>
-        item.id === propertyId
-          ? {
-              ...item,
-              type: data.type,
-              value: data.value
-            }
-          : item
-      )
-    }
+  addProperty() {
+    this.localProperties.push({
+      id: Number(new Date()),
+      type: '',
+      value: ''
+    })
+  }
+
+  removeProperty(propertyId: number) {
+    this.localProperties = this.localProperties.filter(
+      ({ id }) => id !== propertyId
+    )
+  }
+
+  propertyChangeHandler(propertyId: number, data: IAttributePropertyFields) {
+    this.localProperties = this.localProperties.map((item) =>
+      item.id === propertyId
+        ? {
+            ...item,
+            type: data.type,
+            value: data.value
+          }
+        : item
+    )
   }
 }
 </script>

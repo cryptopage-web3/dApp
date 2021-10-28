@@ -18,24 +18,34 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    value: {
-      type: Boolean
-    }
-  },
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop } from 'nuxt-property-decorator'
+
+@Component({})
+export default class NFTFormComment extends Vue {
+  @Prop({ type: Boolean })
+  readonly value!: boolean
+
+  $refs!: {
+    icon: HTMLDivElement
+  }
+
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.icon).tooltip({
+      ;($(this.$refs.icon) as any).tooltip({
         trigger: 'hover'
       })
     })
-  },
-  methods: {
-    toggle() {
-      this.$emit('input', !this.value)
-    }
+  }
+
+  toggle() {
+    this.emitInput(!this.value)
+  }
+
+  @Emit('input')
+  emitInput(value: boolean) {
+    return value
   }
 }
 </script>

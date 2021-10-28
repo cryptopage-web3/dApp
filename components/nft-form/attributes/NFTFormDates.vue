@@ -29,73 +29,87 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeDate, IAttributeDateFields } from '../types'
+
+@Component({
   components: {
     date: async () =>
       await import('@/components/nft-form/attributes/NFTFormDate.vue')
-  },
-  props: {
-    dates: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      isShow: false,
-      localDates: []
-    }
-  },
-  watch: {
-    dates: {
-      handler(dates) {
-        if (JSON.stringify(dates) === JSON.stringify(this.localDates)) {
-          return
-        }
+  }
+})
+export default class NFTFormDates extends Vue {
+  isShow = false
+  localDates: IAttributeDate[] = []
 
-        this.localDates = dates
-      },
-      immediate: true
-    },
+  $refs!: {
+    icon: HTMLDivElement
+  }
 
-    localDates(dates) {
-      this.$emit('change', dates)
+  @Prop({ type: Array, default: () => [] })
+  readonly dates!: IAttributeDate[]
+
+  // emit
+
+  @Emit('change')
+  emitChangeDates(dates: IAttributeDate[]) {
+    return dates
+  }
+
+  // watch
+
+  @Watch('dates', { immediate: true })
+  onDatesChanged(dates: IAttributeDate[]) {
+    if (JSON.stringify(dates) === JSON.stringify(this.localDates)) {
+      return
     }
-  },
+
+    this.localDates = dates
+  }
+
+  @Watch('localDates')
+  onLocalDatesChanged(dates: IAttributeDate[]) {
+    this.emitChangeDates(dates)
+  }
+
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.icon).tooltip({
+      ;($(this.$refs.icon) as any).tooltip({
         trigger: 'hover'
       })
     })
-  },
-  methods: {
-    toggle() {
-      this.isShow = !this.isShow
-    },
+  }
 
-    addDate() {
-      this.localDates.push({
-        id: Number(new Date())
-      })
-    },
+  // methods
 
-    removeDate(dateId) {
-      this.localDates = this.localDates.filter(({ id }) => id !== dateId)
-    },
+  toggle() {
+    this.isShow = !this.isShow
+  }
 
-    dateChangeHandler(dateId, data) {
-      this.localDates = this.localDates.map((item) =>
-        item.id === dateId
-          ? {
-              ...item,
-              type: data.type,
-              value: data.value
-            }
-          : item
-      )
-    }
+  addDate() {
+    this.localDates.push({
+      id: Number(new Date()),
+      type: '',
+      value: ''
+    })
+  }
+
+  removeDate(dateId: number) {
+    this.localDates = this.localDates.filter(({ id }) => id !== dateId)
+  }
+
+  dateChangeHandler(dateId: number, data: IAttributeDateFields) {
+    this.localDates = this.localDates.map((item) =>
+      item.id === dateId
+        ? {
+            ...item,
+            type: data.type,
+            value: data.value
+          }
+        : item
+    )
   }
 }
 </script>

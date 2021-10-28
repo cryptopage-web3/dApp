@@ -76,6 +76,7 @@
     "@types/jquery": "^3.5.8",
     "@types/lunr": "^2.3.4",
     "@types/node": "^16.10.1",
+    "@types/vue2-datepicker": "^3.3.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
