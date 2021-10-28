@@ -21,47 +21,53 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    property: {
-      type: Object,
-      default: () => ({})
-    }
-  },
-  data() {
-    return {
-      type: '',
-      value: ''
-    }
-  },
-  watch: {
-    property: {
-      handler(property) {
-        if (property.type !== this.type) {
-          this.type = property.type || ''
-        }
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeProperty, IAttributePropertyFields } from '../types'
 
-        if (property.value !== this.value) {
-          this.value = property.value || ''
-        }
-      },
-      immediate: true
-    },
+@Component({})
+export default class NFTFormProperty extends Vue {
+  type = ''
+  value = ''
 
-    type(type) {
-      this.$emit('change', {
-        type,
-        value: this.value
-      })
-    },
+  @Prop({ type: Object, default: () => ({}) })
+  readonly property!: IAttributeProperty
 
-    value(value) {
-      this.$emit('change', {
-        value,
-        type: this.type
-      })
+  // emit
+
+  @Emit('change')
+  emitPropertyChange(fields: IAttributePropertyFields) {
+    return fields
+  }
+
+  // watch
+
+  @Watch('property', { immediate: true })
+  onPropertyChanged(property: IAttributeProperty) {
+    if (property.type !== this.type) {
+      this.type = property.type || ''
     }
+
+    if (property.value !== this.value) {
+      this.value = property.value || ''
+    }
+  }
+
+  @Watch('type')
+  onTypeChanged(type: string) {
+    this.emitPropertyChange({
+      type,
+      value: this.value
+    })
+  }
+
+  @Watch('value')
+  onValueChanged(value: string) {
+    this.emitPropertyChange({
+      value,
+      type: this.type
+    })
   }
 }
 </script>
