@@ -44,62 +44,69 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    level: {
-      type: Object,
-      default: () => ({})
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeLevel, IAttributeLevelFields } from '../types'
+
+@Component({})
+export default class NFTFormLevel extends Vue {
+  type = ''
+  value = ''
+  maxValue = ''
+
+  @Prop({ type: Object, default: () => ({}) })
+  readonly level!: IAttributeLevel
+
+  // emit
+
+  @Emit('change')
+  emitLevelChange(fields: IAttributeLevelFields) {
+    return fields
+  }
+
+  // watch
+
+  @Watch('level', { immediate: true })
+  onLevelChanged(level: IAttributeLevel) {
+    if (level.type !== this.type) {
+      this.type = level.type || ''
     }
-  },
-  data() {
-    return {
-      type: '',
-      value: '',
-      maxValue: ''
+
+    if (level.value !== this.value) {
+      this.value = level.value || ''
     }
-  },
-  watch: {
-    level: {
-      handler(level) {
-        if (level.type !== this.type) {
-          this.type = level.type || ''
-        }
 
-        if (level.value !== this.value) {
-          this.value = level.value || ''
-        }
-
-        if (level.maxValue !== this.maxValue) {
-          this.maxValue = level.maxValue || ''
-        }
-      },
-      immediate: true
-    },
-
-    type(type) {
-      this.$emit('change', {
-        type,
-        value: this.value,
-        maxValue: this.maxValue
-      })
-    },
-
-    value(value) {
-      this.$emit('change', {
-        value,
-        type: this.type,
-        maxValue: this.maxValue
-      })
-    },
-
-    maxValue(maxValue) {
-      this.$emit('change', {
-        maxValue,
-        type: this.type,
-        value: this.value
-      })
+    if (level.maxValue !== this.maxValue) {
+      this.maxValue = level.maxValue || ''
     }
+  }
+
+  @Watch('type')
+  onTypeChanged(type: string) {
+    this.emitLevelChange({
+      type,
+      value: this.value,
+      maxValue: this.maxValue
+    })
+  }
+
+  @Watch('value')
+  onValueChanged(value: string) {
+    this.emitLevelChange({
+      value,
+      type: this.type,
+      maxValue: this.maxValue
+    })
+  }
+
+  @Watch('maxValue')
+  onMaxValueChanged(maxValue: string) {
+    this.emitLevelChange({
+      maxValue,
+      type: this.type,
+      value: this.value
+    })
   }
 }
 </script>
