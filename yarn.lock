@@ -2205,6 +2205,13 @@
   dependencies:
     source-map "^0.6.1"
 
+"@types/vue2-datepicker@^3.3.1":
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/@types/vue2-datepicker/-/vue2-datepicker-3.3.1.tgz#20da71cd5924e6380a615dc52ae0f02c7620170e"
+  integrity sha512-1fWCfzDcfKVFUrWnSMMMOkejM4n0VFSnXEY2t84pkiz6+wwX3teL62njeZ9CRSfaeZWa0PIPfVi5cEPLRDHyrw==
+  dependencies:
+    vue "^2.5.0"
+
 "@types/webpack-bundle-analyzer@3.9.3":
   version "3.9.3"
   resolved "https://registry.yarnpkg.com/@types/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.9.3.tgz#3a12025eb5d86069c30b47a157e62c0aca6e39a1"
@@ -13189,7 +13196,7 @@ vue2-datepicker@^3.10.2:
   dependencies:
     date-format-parse "^0.2.7"
 
-vue@^2.6.10, vue@^2.6.12:
+vue@^2.5.0, vue@^2.6.10, vue@^2.6.12:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
