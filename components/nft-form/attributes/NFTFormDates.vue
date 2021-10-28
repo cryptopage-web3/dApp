@@ -37,7 +37,7 @@ import { IAttributeDate, IAttributeDateFields } from '../types'
 @Component({
   components: {
     date: async () =>
-      await import('@/components/nft-form/attributes/NFTFormBoost.vue')
+      await import('@/components/nft-form/attributes/NFTFormDate.vue')
   }
 })
 export default class NFTFormDates extends Vue {

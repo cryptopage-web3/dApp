@@ -33,7 +33,7 @@ import { IAttributeDate, IAttributeDateFields } from '../types'
     DatePicker
   }
 })
-export default class NFTFormBoost extends Vue {
+export default class NFTFormDate extends Vue {
   type = ''
   value = ''
 

@@ -29,74 +29,89 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeLevel, IAttributeLevelFields } from '../types'
+
+@Component({
   components: {
     level: async () =>
       await import('@/components/nft-form/attributes/NFTFormLevel.vue')
-  },
-  props: {
-    levels: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      isShow: false,
-      localLevels: []
-    }
-  },
-  watch: {
-    levels: {
-      handler(levels) {
-        if (JSON.stringify(levels) === JSON.stringify(this.localLevels)) {
-          return
-        }
+  }
+})
+export default class NFTFormLevels extends Vue {
+  isShow = false
+  localLevels: IAttributeLevel[] = []
 
-        this.localLevels = levels
-      },
-      immediate: true
-    },
+  $refs!: {
+    icon: HTMLDivElement
+  }
 
-    localLevels(levels) {
-      this.$emit('change', levels)
+  @Prop({ type: Array, default: () => [] })
+  readonly levels!: IAttributeLevel[]
+
+  // emit
+
+  @Emit('change')
+  emitChangeLevels(levels: IAttributeLevel[]) {
+    return levels
+  }
+
+  // watch
+
+  @Watch('levels', { immediate: true })
+  onLevelsChanged(levels: IAttributeLevel[]) {
+    if (JSON.stringify(levels) === JSON.stringify(this.localLevels)) {
+      return
     }
-  },
+
+    this.localLevels = levels
+  }
+
+  @Watch('localLevels')
+  onLocalLevelsChanged(levels: IAttributeLevel[]) {
+    this.emitChangeLevels(levels)
+  }
+
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.icon).tooltip({
+      ;($(this.$refs.icon) as any).tooltip({
         trigger: 'hover'
       })
     })
-  },
-  methods: {
-    toggle() {
-      this.isShow = !this.isShow
-    },
+  }
 
-    addLevel() {
-      this.localLevels.push({
-        id: Number(new Date())
-      })
-    },
+  // methods
 
-    removeLevel(levelId) {
-      this.localLevels = this.localLevels.filter(({ id }) => id !== levelId)
-    },
+  toggle() {
+    this.isShow = !this.isShow
+  }
 
-    levelChangeHandler(levelId, data) {
-      this.localLevels = this.localLevels.map((item) =>
-        item.id === levelId
-          ? {
-              ...item,
-              type: data.type,
-              value: data.value,
-              maxValue: data.maxValue
-            }
-          : item
-      )
-    }
+  addLevel() {
+    this.localLevels.push({
+      id: Number(new Date()),
+      type: '',
+      value: '',
+      maxValue: ''
+    })
+  }
+
+  removeLevel(levelId: number) {
+    this.localLevels = this.localLevels.filter(({ id }) => id !== levelId)
+  }
+
+  levelChangeHandler(levelId: number, data: IAttributeLevelFields) {
+    this.localLevels = this.localLevels.map((item) =>
+      item.id === levelId
+        ? {
+            ...item,
+            type: data.type,
+            value: data.value,
+            maxValue: data.maxValue
+          }
+        : item
+    )
   }
 }
 </script>
