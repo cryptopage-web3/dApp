@@ -29,74 +29,89 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
+import { IAttributeStat, IAttributeStatFields } from '../types'
+
+@Component({
   components: {
     stat: async () =>
       await import('@/components/nft-form/attributes/NFTFormStat.vue')
-  },
-  props: {
-    stats: {
-      type: Array,
-      default: () => []
-    }
-  },
-  data() {
-    return {
-      isShow: false,
-      localStats: []
-    }
-  },
-  watch: {
-    stats: {
-      handler(stats) {
-        if (JSON.stringify(stats) === JSON.stringify(this.localStats)) {
-          return
-        }
+  }
+})
+export default class NFTFormStats extends Vue {
+  isShow = false
+  localStats: IAttributeStat[] = []
 
-        this.localStats = stats
-      },
-      immediate: true
-    },
+  $refs!: {
+    icon: HTMLDivElement
+  }
 
-    localStats(stats) {
-      this.$emit('change', stats)
+  @Prop({ type: Array, default: () => [] })
+  readonly stats!: IAttributeStat[]
+
+  // emit
+
+  @Emit('change')
+  emitChangeStats(stats: IAttributeStat[]) {
+    return stats
+  }
+
+  // watch
+
+  @Watch('stats', { immediate: true })
+  onStatsChanged(stats: IAttributeStat[]) {
+    if (JSON.stringify(stats) === JSON.stringify(this.localStats)) {
+      return
     }
-  },
+
+    this.localStats = stats
+  }
+
+  @Watch('localStats')
+  onLocalStatsChanged(stats: IAttributeStat[]) {
+    this.emitChangeStats(stats)
+  }
+
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.icon).tooltip({
+      ;($(this.$refs.icon) as any).tooltip({
         trigger: 'hover'
       })
     })
-  },
-  methods: {
-    toggle() {
-      this.isShow = !this.isShow
-    },
+  }
 
-    addStat() {
-      this.localStats.push({
-        id: Number(new Date())
-      })
-    },
+  // methods
 
-    removeStat(statId) {
-      this.localStats = this.localStats.filter(({ id }) => id !== statId)
-    },
+  toggle() {
+    this.isShow = !this.isShow
+  }
 
-    statChangeHandler(statId, data) {
-      this.localStats = this.localStats.map((item) =>
-        item.id === statId
-          ? {
-              ...item,
-              type: data.type,
-              value: data.value,
-              maxValue: data.maxValue
-            }
-          : item
-      )
-    }
+  addStat() {
+    this.localStats.push({
+      id: Number(new Date()),
+      type: '',
+      value: '',
+      maxValue: ''
+    })
+  }
+
+  removeStat(statId: number) {
+    this.localStats = this.localStats.filter(({ id }) => id !== statId)
+  }
+
+  statChangeHandler(statId: number, data: IAttributeStatFields) {
+    this.localStats = this.localStats.map((item) =>
+      item.id === statId
+        ? {
+            ...item,
+            type: data.type,
+            value: data.value,
+            maxValue: data.maxValue
+          }
+        : item
+    )
   }
 }
 </script>
