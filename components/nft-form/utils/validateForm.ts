@@ -10,7 +10,7 @@ export const validateForm = ({
   if (!title) {
     return {
       status: false,
-      error: 'Empty title'
+      error: 'Title: empty field'
     }
   }
 
@@ -19,7 +19,7 @@ export const validateForm = ({
   if (!text) {
     return {
       status: false,
-      error: 'Empty text'
+      error: 'Text: empty field'
     }
   }
 
@@ -33,7 +33,7 @@ export const validateForm = ({
     if (hasEmptyField) {
       return {
         status: false,
-        error: 'Empty field in properties'
+        error: 'Properties: has empty fields'
       }
     }
   }
@@ -49,17 +49,17 @@ export const validateForm = ({
       }
 
       if (!type || !value || !maxValue) {
-        levelError = 'Empty field in levels'
+        levelError = 'Levels: has empty fields'
         return
       }
 
       if (!isFinite(+value) || !isFinite(+maxValue)) {
-        levelError = 'Value is not a number in levels'
+        levelError = 'Levels: value is not a number'
         return
       }
 
       if (+maxValue < +value) {
-        levelError = 'Value is greater than maximum in levels'
+        levelError = 'Levels: value is greater than maximum'
       }
     })
 
@@ -82,17 +82,17 @@ export const validateForm = ({
       }
 
       if (!type || !value || !maxValue) {
-        statsError = 'Empty field in stats'
+        statsError = 'Stats: has empty fields'
         return
       }
 
       if (!isFinite(+value) || !isFinite(+maxValue)) {
-        statsError = 'Value is not a number in stats'
+        statsError = 'Stats: value is not a number'
         return
       }
 
       if (+maxValue < +value) {
-        statsError = 'Value is greater than maximum in stats'
+        statsError = 'Stats: value is greater than maximum'
       }
     })
 
@@ -115,12 +115,12 @@ export const validateForm = ({
       }
 
       if (!type || !value) {
-        datesError = 'Empty field in dates'
+        datesError = 'Dates: has empty fields'
         return
       }
 
       if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-        datesError = 'Wrong date format'
+        datesError = 'Dates: wrong date format'
       }
     })
 
@@ -143,12 +143,12 @@ export const validateForm = ({
       }
 
       if (!type || !value || !displayType) {
-        boostsError = 'Empty field in boosts'
+        boostsError = 'Boosts: has empty fields'
         return
       }
 
       if (!isFinite(+value)) {
-        boostsError = 'Value is not a number in boosts'
+        boostsError = 'Boosts: value is not a number'
       }
     })
 
