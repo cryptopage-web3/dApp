@@ -33,11 +33,11 @@
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { IAttributeStat, IAttributeStatFields } from '../types'
+import NFTFormStat from './NFTFormStat.vue'
 
 @Component({
   components: {
-    stat: async () =>
-      await import('@/components/nft-form/attributes/NFTFormStat.vue')
+    stat: NFTFormStat
   }
 })
 export default class NFTFormStats extends Vue {
@@ -86,6 +86,14 @@ export default class NFTFormStats extends Vue {
 
   toggle() {
     this.isShow = !this.isShow
+  }
+
+  hide() {
+    this.isShow = false
+  }
+
+  show() {
+    this.isShow = true
   }
 
   addStat() {

@@ -36,11 +36,11 @@
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { IAttributeProperty, IAttributePropertyFields } from '../types'
+import NFTFormProperty from './NFTFormProperty.vue'
 
 @Component({
   components: {
-    property: async () =>
-      await import('@/components/nft-form/attributes/NFTFormProperty.vue')
+    property: NFTFormProperty
   }
 })
 export default class NFTFormProperties extends Vue {
@@ -89,6 +89,14 @@ export default class NFTFormProperties extends Vue {
 
   toggle() {
     this.isShow = !this.isShow
+  }
+
+  hide() {
+    this.isShow = false
+  }
+
+  show() {
+    this.isShow = true
   }
 
   addProperty() {

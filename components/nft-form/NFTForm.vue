@@ -98,15 +98,15 @@ import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
 import { validateForm, getAdaptedAttributes } from './utils'
 import { IAttributesFront, INFTServer } from './types'
+import NFTFormFile from './NFTFormFile.vue'
+import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
 import NFTAPIService from '~/logic/nft/services/api'
 import tokens from '~/logic/tokens'
 
 @Component({
   components: {
-    'upload-file': async () =>
-      await import('@/components/nft-form/NFTFormFile.vue'),
-    attributes: async () =>
-      await import('@/components/nft-form/attributes/NFTFormAttributes.vue')
+    'upload-file': NFTFormFile,
+    attributes: NFTFormAttributes
   }
 })
 export default class NFTForm extends Vue {
@@ -214,7 +214,7 @@ export default class NFTForm extends Vue {
     this.text = ''
     this.file = null
     this.attributes = {}
-    this.$refs.attributes.hide()
+    this.$refs.attributes.hideAll()
   }
 
   validateFormWithNotify(): boolean {

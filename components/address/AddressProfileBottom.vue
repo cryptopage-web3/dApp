@@ -30,7 +30,7 @@
     <div class="profile-form">
       <div class="profile-form__container">
         <div class="profile-form__container-inner">
-          <nft-form />
+          <nft-form @submited="nftSubmitedHandler" />
         </div>
       </div>
     </div>
@@ -70,6 +70,14 @@ export default {
     },
     showSendNft() {
       console.log('showSendNft')
+    },
+    nftSubmitedHandler() {
+      $('html, body').animate(
+        {
+          scrollTop: 0
+        },
+        100
+      )
     }
   }
 }
