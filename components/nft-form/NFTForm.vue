@@ -68,11 +68,24 @@
         <button
           type="button"
           class="btn btn_blue btn_creat-post"
-          :disabled="loading || !text || !title"
+          :disabled="loading"
           @click="submit"
         >
-          <img src="@/assets/img/btn_creat-post_img.png" alt="" />
-          <span> Create NFT </span>
+          <template v-if="loading">
+            <span
+              class="
+                spinner-border spinner-border-sm
+                creat-post-bottom__spinner
+              "
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span> Creating... </span>
+          </template>
+          <template v-else>
+            <img src="@/assets/img/btn_creat-post_img.png" alt="" />
+            <span> Create NFT </span>
+          </template>
         </button>
       </div>
     </form>
