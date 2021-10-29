@@ -2,7 +2,10 @@
   <div />
 </template>
 <script>
+import NetworkNameMixin from '@/mixins/networkName'
+
 export default {
+  mixins: [NetworkNameMixin],
   methods: {
     async init() {
       const response = await this.$store.dispatch('auth/signin')
@@ -18,7 +21,10 @@ export default {
 
         /** делаем небольшую задержку, чтобы была возможность прочесть уведомление */
         const address = await this.$store.getters['auth/selectedAddress']
-        setTimeout(() => this.$router.push(`/${address}`), 1000)
+        setTimeout(
+          () => this.$router.push(`/${this.networkName}/${address}`),
+          1000
+        )
       }
     }
   }
