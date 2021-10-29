@@ -15,7 +15,11 @@
           {{ tokenName }}
         </div>
         <div v-else class="profile-info__title">
-          <span ref="address" class="profile-info__title-address">
+          <span
+            ref="address"
+            class="profile-info__title-address"
+            @click.prevent="copyAddress"
+          >
             {{ address | shortAddress }}
           </span>
         </div>
@@ -67,10 +71,6 @@ export default {
       $(this.$refs.address).tooltip({
         trigger: 'hover',
         title: 'Click to copy'
-      })
-
-      $(this.$refs.address).on('click', () => {
-        this.copyAddress()
       })
     })
   },
