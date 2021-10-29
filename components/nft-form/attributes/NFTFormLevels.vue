@@ -33,11 +33,11 @@
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { IAttributeLevel, IAttributeLevelFields } from '../types'
+import NFTFormLevel from './NFTFormLevel.vue'
 
 @Component({
   components: {
-    level: async () =>
-      await import('@/components/nft-form/attributes/NFTFormLevel.vue')
+    level: NFTFormLevel
   }
 })
 export default class NFTFormLevels extends Vue {
@@ -86,6 +86,14 @@ export default class NFTFormLevels extends Vue {
 
   toggle() {
     this.isShow = !this.isShow
+  }
+
+  hide() {
+    this.isShow = false
+  }
+
+  show() {
+    this.isShow = true
   }
 
   addLevel() {

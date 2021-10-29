@@ -33,11 +33,11 @@
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { IAttributeDate, IAttributeDateFields } from '../types'
+import NFTFormDate from './NFTFormDate.vue'
 
 @Component({
   components: {
-    date: async () =>
-      await import('@/components/nft-form/attributes/NFTFormDate.vue')
+    date: NFTFormDate
   }
 })
 export default class NFTFormDates extends Vue {
@@ -86,6 +86,14 @@ export default class NFTFormDates extends Vue {
 
   toggle() {
     this.isShow = !this.isShow
+  }
+
+  hide() {
+    this.isShow = false
+  }
+
+  show() {
+    this.isShow = true
   }
 
   addDate() {

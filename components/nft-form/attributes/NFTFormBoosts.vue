@@ -33,11 +33,11 @@
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { EDisplayType, IAttributeBoost, IAttributeBoostFields } from '../types'
+import NFTFormBoost from './NFTFormBoost.vue'
 
 @Component({
   components: {
-    boost: async () =>
-      await import('@/components/nft-form/attributes/NFTFormBoost.vue')
+    boost: NFTFormBoost
   }
 })
 export default class NFTFormBoosts extends Vue {
@@ -86,6 +86,14 @@ export default class NFTFormBoosts extends Vue {
 
   toggle() {
     this.isShow = !this.isShow
+  }
+
+  hide() {
+    this.isShow = false
+  }
+
+  show() {
+    this.isShow = true
   }
 
   addBoost() {

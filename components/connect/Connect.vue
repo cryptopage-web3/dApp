@@ -42,7 +42,9 @@
           <li>
             <a href="#">Activate layer {{ selectedNetworkLayer }}</a>
           </li>
-          <li><a href="#">Copy Address</a></li>
+          <li>
+            <a ref="copy" href="#" @click.prevent="copyAddress">Copy Address</a>
+          </li>
           <li>
             <a
               v-if="$installer.canInstall && !$installer.hasInstalled"
@@ -78,26 +80,34 @@ import NetworkNameMixin from '@/mixins/networkName'
 import ethereumImg from '@/assets/img/modal-content__link_img1.png'
 import bscImg from '@/assets/img/modal-content__link_img2.png'
 import polygonImg from '@/assets/img/modal-content__link_img3.png'
+import { copyToClipboard } from '~/utils/copyToClipboard'
+
 export default {
   components: {
     signin: async () => await import('@/components/auth/Signin.vue')
   },
+
   mixins: [NetworkNameMixin],
+
   computed: {
     address() {
       return this.$store.getters['auth/selectedAddress']
     },
+
     isAuth() {
       return this.$store.getters['auth/isAuth']
     },
+
     selectedNetworkName() {
       return this.$store.getters['auth/selectedNetworkName']
     },
+
     selectedNetworkLayer() {
       return this.$store.getters['auth/selectedNetworkType'] === 'ethereum'
         ? '1'
         : '2'
     },
+
     getNetworkIcon() {
       const icons = {
         ethereum: ethereumImg,
@@ -107,6 +117,7 @@ export default {
       return icons[this.$store.getters['auth/selectedNetworkType']]
     }
   },
+
   watch: {
     isAuth: {
       handler(isAuth) {
@@ -131,10 +142,21 @@ export default {
       immediate: true
     }
   },
+
   methods: {
+    copyAddress() {
+      copyToClipboard(this.address)
+
+      this.$notify({
+        type: 'success',
+        title: 'Address copied to clipboard'
+      })
+    },
+
     signin() {
       this.$refs.signin.init()
     },
+
     signout() {
       this.$store.dispatch('auth/signout')
       this.$router.push('/')

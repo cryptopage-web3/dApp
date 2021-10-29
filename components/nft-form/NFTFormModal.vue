@@ -29,11 +29,12 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import NFTForm from './NFTForm.vue'
 
 @Component({
   components: {
     icon: async () => await import('@/components/icons/Icon.vue'),
-    'nft-form': () => import('@/components/nft-form/NFTForm.vue')
+    'nft-form': NFTForm
   }
 })
 export default class NFTFormModal extends Vue {

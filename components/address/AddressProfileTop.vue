@@ -15,7 +15,13 @@
           {{ tokenName }}
         </div>
         <div v-else class="profile-info__title">
-          {{ address | shortAddress }}
+          <span
+            ref="address"
+            class="profile-info__title-address"
+            @click.prevent="copyAddress"
+          >
+            {{ address | shortAddress }}
+          </span>
         </div>
         <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
         <div class="profile-info__text">
@@ -33,24 +39,52 @@
   </div>
 </template>
 <script>
+import { copyToClipboard } from '~/utils/copyToClipboard'
+
 export default {
   data: () => ({
     diameter: $(window).width() > 767 ? 90 : 40
   }),
+
   computed: {
     address() {
       return this.$store.getters['address/address']
     },
+
     image() {
       return this.$store.getters['address/image']
     },
+
     transactionsCount() {
       return this.$store.getters['address/transactionsCount']
     },
+
     tokenName() {
       const tokenName = this.$store.getters['address/name']
       const tokenSymbol = this.$store.getters['address/symbol']
       return tokenName && tokenSymbol ? `${tokenName} (${tokenSymbol})` : ''
+    }
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      $(this.$refs.address).tooltip({
+        trigger: 'hover',
+        title: 'Click to copy'
+      })
+    })
+  },
+
+  methods: {
+    copyAddress() {
+      copyToClipboard(this.address)
+
+      $(this.$refs.address).tooltip('hide')
+
+      this.$notify({
+        type: 'success',
+        title: 'Address copied to clipboard'
+      })
     }
   }
 }

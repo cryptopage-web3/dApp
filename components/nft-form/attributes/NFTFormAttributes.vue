@@ -2,13 +2,22 @@
   <div ref="attributes" class="nft-form__attributes">
     <comment-attribute v-model="hasComment" />
     <properties-attribute
+      ref="properties"
       :properties="properties"
       @change="propertiesChangeHandler"
     />
-    <stats-attribute :stats="stats" @change="statsChangeHandler" />
-    <levels-attribute :levels="levels" @change="levelsChangeHandler" />
-    <dates-attribute :dates="dates" @change="datesChangeHandler" />
-    <boosts-attribute :boosts="boosts" @change="boostsChangeHandler" />
+    <stats-attribute ref="stats" :stats="stats" @change="statsChangeHandler" />
+    <levels-attribute
+      ref="levels"
+      :levels="levels"
+      @change="levelsChangeHandler"
+    />
+    <dates-attribute ref="dates" :dates="dates" @change="datesChangeHandler" />
+    <boosts-attribute
+      ref="boosts"
+      :boosts="boosts"
+      @change="boostsChangeHandler"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -22,21 +31,21 @@ import {
   IAttributesFront,
   IAttributeStat
 } from '../types'
+import NFTFormProperties from './NFTFormProperties.vue'
+import NFTFormStats from './NFTFormStats.vue'
+import NFTFormLevels from './NFTFormLevels.vue'
+import NFTFormDates from './NFTFormDates.vue'
+import NFTFormBoosts from './NFTFormBoosts.vue'
+import NFTFormComment from './NFTFormComment.vue'
 
 @Component({
   components: {
-    'properties-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormProperties.vue'),
-    'stats-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormStats.vue'),
-    'levels-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormLevels.vue'),
-    'dates-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormDates.vue'),
-    'boosts-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormBoosts.vue'),
-    'comment-attribute': async () =>
-      await import('@/components/nft-form/attributes/NFTFormComment.vue')
+    'properties-attribute': NFTFormProperties,
+    'stats-attribute': NFTFormStats,
+    'levels-attribute': NFTFormLevels,
+    'dates-attribute': NFTFormDates,
+    'boosts-attribute': NFTFormBoosts,
+    'comment-attribute': NFTFormComment
   }
 })
 export default class NFTFormAttributes extends Vue {
@@ -50,6 +59,11 @@ export default class NFTFormAttributes extends Vue {
 
   $refs!: {
     attributes: HTMLDivElement
+    properties: NFTFormProperties
+    stats: NFTFormStats
+    levels: NFTFormLevels
+    dates: NFTFormDates
+    boosts: NFTFormBoosts
   }
 
   @Prop({ type: Object, default: () => ({}) })
@@ -167,6 +181,15 @@ export default class NFTFormAttributes extends Vue {
 
   show() {
     this.isShown = true
+  }
+
+  hideAll() {
+    this.hide()
+    this.$refs.properties.hide()
+    this.$refs.stats.hide()
+    this.$refs.levels.hide()
+    this.$refs.dates.hide()
+    this.$refs.boosts.hide()
   }
 
   propertiesChangeHandler(properties: IAttributeProperty[]) {

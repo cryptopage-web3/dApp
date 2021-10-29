@@ -14,7 +14,8 @@ import {
   faPlusCircle,
   faTimes,
   faCog,
-  faComments
+  faComments,
+  faCopy
 } from '@fortawesome/free-solid-svg-icons'
 
 config.autoAddCss = false
@@ -32,5 +33,6 @@ library.add(faPlusCircle)
 library.add(faTimes)
 library.add(faCog)
 library.add(faComments)
+library.add(faCopy)
 
 Vue.component('FontAwesomeIcon', FontAwesomeIcon)
