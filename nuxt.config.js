@@ -6,7 +6,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'Crypto.page',
+    title: 'Crypto.Page - decentralized cross-chain social network',
     htmlAttrs: {
       lang: 'en'
     },
