@@ -1,17 +1,20 @@
 <template>
   <div class="transactions-body">
     <transaction
-      v-for="transaction in $store.getters['address/ERC721Transactions']"
+      v-for="transaction in transactions"
       :key="transaction.hash"
       :transaction="transaction"
     />
+    <loader v-if="loading" />
   </div>
 </template>
 <script>
 import { paginationMixin } from '@/mixins/pagination'
 export default {
   components: {
-    transaction: () => import('~/components/transactions/ERC721Transaction.vue')
+    transaction: () =>
+      import('~/components/transactions/ERC721Transaction.vue'),
+    loader: () => import('~/components/loaders/GrowLoader.vue')
   },
 
   mixins: [paginationMixin],
@@ -30,6 +33,12 @@ export default {
     })
 
     this.loading = false
+  },
+
+  computed: {
+    transactions() {
+      return this.$store.getters['address/ERC721Transactions']
+    }
   }
 }
 </script>
