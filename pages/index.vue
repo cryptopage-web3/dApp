@@ -27,24 +27,35 @@
     <signin ref="signin" />
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
+import TypedStore from '~/logic/store'
+
+@Component({
+  layout: 'empty',
+  fetchOnServer: false,
+
   components: {
     connect: async () => await import('@/components/connect/Connect.vue'),
     signin: async () => await import('@/components/auth/Signin.vue'),
-    icon: async () => await import('@/components/icons/Icon')
-  },
-  layout: 'empty',
-  fetchOnServer: false,
-  computed: {
-    isAuth() {
-      return this.$store.getters['auth/isAuth']
-    }
-  },
-  methods: {
-    signin() {
-      this.$refs.signin.init()
-    }
+    icon: async () => await import('@/components/icons/Icon.vue')
+  }
+})
+export default class extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
+  $refs!: {
+    signin: any
+  }
+
+  get isAuth(): boolean {
+    return this.typedStore.auth.isAuth
+  }
+
+  signin() {
+    this.$refs.signin.init()
   }
 }
 </script>
