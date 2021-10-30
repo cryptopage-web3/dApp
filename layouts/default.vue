@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageLoadBG v-if="!isReadyStore" />
+    <page-loader v-if="!isReadyStore" />
     <template v-else>
       <section class="main">
         <notifications :duration="10000" />
@@ -24,6 +24,7 @@
 <script>
 export default {
   components: {
+    'page-loader': () => import('@/components/loaders/PageLoadBG.vue'),
     'sidebar-left': async () =>
       await import('@/components/sidebar/left/SidebarLeft'),
     'sidebar-right': async () =>

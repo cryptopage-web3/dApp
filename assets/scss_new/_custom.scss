@@ -114,6 +114,13 @@
   cursor: pointer;
 }
 
+.transactions-body__loading {
+  padding: 40px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* ===== wallet connect ===== */
 
 .connect-wallet__link_connect::after {
