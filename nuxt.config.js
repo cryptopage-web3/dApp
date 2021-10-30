@@ -11,7 +11,7 @@ export default {
       lang: 'en'
     },
     bodyAttrs: {
-      class: 'white',
+      class: 'white'
     },
     meta: [
       { charset: 'utf-8' },
@@ -43,7 +43,7 @@ export default {
     '~/plugins/type-di.ts',
     '~/plugins/bootstrap.js',
     '~/plugins/sticky-sidebar.js',
-    '~/plugins/installer.js',
+    '~/plugins/installer.js'
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading

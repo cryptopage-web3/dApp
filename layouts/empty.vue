@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PageLoadBG v-if="!isReadyStore" />
+    <page-loader v-if="!isReadyStore" />
     <template v-else>
       <notifications width="350" />
       <nuxt />
@@ -12,6 +12,7 @@
 <script>
 export default {
   components: {
+    'page-loader': () => import('@/components/loaders/PageLoadBG.vue'),
     'connect-modal': async () =>
       await import('@/components/connect/ConnectModal.vue')
   },
