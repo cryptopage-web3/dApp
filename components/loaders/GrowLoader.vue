@@ -1,5 +1,5 @@
 <template>
-  <div class="transactions-body__loading">
+  <div class="loader__container">
     <div class="spinner-grow text-secondary" role="status">
       <span class="sr-only">Loading...</span>
     </div>

@@ -43,6 +43,9 @@ export default class AddressModule {
   @State()
   public transactions: TransactionType[] = []
 
+  @State()
+  public loadingInfo = false
+
   // Getters
 
   @Getter()
@@ -173,6 +176,11 @@ export default class AddressModule {
     this.transactions = []
   }
 
+  @Mutation()
+  public setLoadingInfo(loading: boolean): void {
+    this.loadingInfo = loading
+  }
+
   // Actions
 
   @Action()
@@ -183,6 +191,9 @@ export default class AddressModule {
       tokens: [],
       transactionsCount: 0
     })
+
+    this.setLoadingInfo(true)
+
     const tokenInfo = await this.addressService.getTokenInfo(address)
     this.setTokenInfo(tokenInfo)
     const tokens = await this.addressService.getTokens(address)
@@ -191,6 +202,8 @@ export default class AddressModule {
       address
     )
     this.setTransactionsCount(transactionsCount)
+
+    this.setLoadingInfo(false)
   }
 
   @Action()

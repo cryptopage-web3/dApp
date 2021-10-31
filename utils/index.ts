@@ -1,5 +1,6 @@
-export const deviceType = () => {
+export const deviceType = (): string => {
   const ua = navigator.userAgent
+
   if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
     return 'tablet'
   } else if (
@@ -9,5 +10,6 @@ export const deviceType = () => {
   ) {
     return 'mobile'
   }
+
   return 'desktop'
 }

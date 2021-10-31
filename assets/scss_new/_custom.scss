@@ -16,6 +16,14 @@
   opacity: 1;
 }
 
+.loader__container {
+  padding: 40px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
 /* ===== sidebar profile signin ===== */
 
 .sidebar-profile__signin-btn {
@@ -114,11 +122,15 @@
   cursor: pointer;
 }
 
-.transactions-body__loading {
-  padding: 40px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.transactions-body__empty {
+  padding: 40px 15px;
+  text-align: center;
+  background-color: #ffffff;
+  color: #000000;
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 10px;
 }
 
 /* ===== wallet connect ===== */

@@ -1,37 +1,40 @@
 <template>
   <div class="balances">
-    <nuxt-link
-      v-for="token in tokens"
-      :key="token.tokenInfo.address"
-      :to="url(token)"
-      class="balance"
-    >
-      <div class="balance-top">
-        <div class="balance__thumb">
-          <img :src="token.tokenInfo.image" alt="" />
-        </div>
-        <div class="balance-right">
-          <div class="balance__countusdt">
-            {{ token.balance | normalizeAmount | truncate(6) }}
-            {{ token.tokenInfo.symbol }}
+    <loader v-if="loadingInfo" />
+    <template v-else>
+      <nuxt-link
+        v-for="token in tokens"
+        :key="token.tokenInfo.address"
+        :to="url(token)"
+        class="balance"
+      >
+        <div class="balance-top">
+          <div class="balance__thumb">
+            <img :src="token.tokenInfo.image" alt="" />
           </div>
-          <div class="balance__procent">
-            {{ token.diff }} %
-            <img
-              v-if="token.diff > 0"
-              src="@/assets/img/balance__procent_img1.png"
-              alt=""
-            />
-            <img v-else src="@/assets/img/balance__procent_img2.png" alt="" />
+          <div class="balance-right">
+            <div class="balance__countusdt">
+              {{ token.balance | normalizeAmount | truncate(6) }}
+              {{ token.tokenInfo.symbol }}
+            </div>
+            <div class="balance__procent">
+              {{ token.diff }} %
+              <img
+                v-if="token.diff > 0"
+                src="@/assets/img/balance__procent_img1.png"
+                alt=""
+              />
+              <img v-else src="@/assets/img/balance__procent_img2.png" alt="" />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="balance-bottom">
-        {{ token.rate | normalizeAmount }} $
-        <br />
-        <span> Value: {{ token.usdBalance.toFixed(2) }} $ </span>
-      </div>
-    </nuxt-link>
+        <div class="balance-bottom">
+          {{ token.rate | normalizeAmount }} $
+          <br />
+          <span> Value: {{ token.usdBalance.toFixed(2) }} $ </span>
+        </div>
+      </nuxt-link>
+    </template>
   </div>
 </template>
 <script lang="ts">
@@ -40,13 +43,21 @@ import TypedStoreMixin from '~/mixins/typed-store'
 import { TokenBalanceType } from '~/logic/address/types'
 import NetworkNameMixin from '~/mixins/networkName'
 
-@Component
+@Component({
+  components: {
+    loader: () => import('~/components/loaders/GrowLoader.vue')
+  }
+})
 export default class SidebarRightBalance extends mixins(
   TypedStoreMixin,
   NetworkNameMixin
 ) {
   public get tokens(): TokenBalanceType[] {
     return this.typedStore.address.tokens
+  }
+
+  public get loadingInfo(): boolean {
+    return this.typedStore.address.loadingInfo
   }
 
   public url(token: TokenBalanceType): string {
