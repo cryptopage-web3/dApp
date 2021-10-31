@@ -4,12 +4,12 @@
       <img src="@/assets/img/banner__close_img.png" alt="" />
     </a>
     <div class="banner__text">
-      Создай NFT <br />
-      и участвуй в розыгрыше <br />
+      Create NFT <br />
+      and take part in the giveaway
       <span>10000 page</span>
     </div>
     <a href="#" class="btn btn_white btn_banner" @click.prevent="openNFTForm">
-      <span> Создать NFT </span>
+      <span> Create NFT </span>
     </a>
   </div>
 </template>
