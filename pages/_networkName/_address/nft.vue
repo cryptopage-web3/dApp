@@ -5,7 +5,11 @@
       :key="transaction.hash"
       :transaction="transaction"
     />
+
     <loader v-if="loading" />
+    <div v-else-if="!transactions.length" class="transactions-body__empty">
+      No NFT
+    </div>
   </div>
 </template>
 <script>
