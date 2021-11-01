@@ -1,5 +1,4 @@
 import { TransactionType } from '~/logic/transactions/types'
-import { EthplorerGetAddressInfoResponseType } from '~/logic/address/types'
 /**
  * We use this state type to enforce the same structure with `vuex-simple`.
  *
@@ -16,11 +15,4 @@ export interface StateType {
     loggedIn: boolean
   },
   transactions: TransactionType[]
-}
-
-export interface ChainType {
-    networkName: string
-    serviceName: string
-    chainId: number
-    apiURL: string
 }

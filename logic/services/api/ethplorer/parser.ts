@@ -1,12 +1,15 @@
 import {
   EthplorerTokenType,
   EthplorerTokenInfoType,
+  EthplorerETHType
+} from '~/logic/services/api/ethplorer/types'
+
+import {
   TokenInfoType,
   TokenBalanceType,
-  EthplorerETHType
-} from '~/logic/address/types'
+} from '~/logic/tokens/types'
 
-export default class TokenBalanceParser {
+export default class EthplorerTokenBalanceParser {
   parseETHToken(eth: EthplorerETHType): TokenBalanceType {
     const price = eth.price || {
       rate: 0,
@@ -101,19 +104,11 @@ export default class TokenBalanceParser {
   }
 
   parse(token: EthplorerTokenType): TokenBalanceType {
-    if (token.tokenInfo) {
       return {
         balance: this.parseBalance(token),
-        rate: this.parseRate(token.tokenInfo),
         usdBalance: this.parseUSDBalance(token),
         diff: this.parseDiff(token.tokenInfo),
         tokenInfo: this.parseTokenInfo(token.tokenInfo)
       }
-    }
-    return {
-      balance: 0,
-      rate: 0,
-      usdBalance: 0
-    }
   }
 }

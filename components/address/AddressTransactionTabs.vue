@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     url(link) {
-      return `/${this.networkName}/${this.address}/${link}`
+      return `/${this.networkName}/${this.selectedAddress}/${link}`
     }
   }
 }

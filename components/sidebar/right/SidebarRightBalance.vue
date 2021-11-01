@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="balance-bottom">
-          {{ token.rate | normalizeAmount }} $
+          {{ token.tokenInfo.rate.usd | normalizeAmount }} $
           <br />
           <span> Value: {{ token.usdBalance.toFixed(2) }} $ </span>
         </div>
@@ -40,7 +40,7 @@
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import TypedStoreMixin from '~/mixins/typed-store'
-import { TokenBalanceType } from '~/logic/address/types'
+import { TokenBalanceType } from '~/logic/tokens/types'
 import NetworkNameMixin from '~/mixins/networkName'
 
 @Component({

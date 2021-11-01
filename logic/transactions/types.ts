@@ -1,17 +1,5 @@
-import * as ts from 'io-ts'
 import { NFTType } from '~/logic/nft/types'
-import { TokenInfoType } from '~/logic/address/types'
-import {
-  EtherscanTransaction,
-  EtherscanInternalTransaction,
-  EtherscanERC20Transaction,
-  EtherscanERC721Transaction,
-  EtherscanTransactionsResponse,
-  EtherscanInternalTransactionsResponse,
-  EtherscanERC20TransactionsResponse,
-  EtherscanERC721TransactionsResponse,
-  EtherscanABIResponse
-} from '~/logic/transactions/models'
+import { TokenInfoType } from '~/logic/tokens/types'
 
 export type DecodedInputType = {
   signature: string
@@ -20,10 +8,34 @@ export type DecodedInputType = {
   decoded: { [key: string]: any }
 }
 
-export type ParamsAdaptarType = {
+export type TransactionAdaptarParamsType = {
   token?: TokenInfoType | null
   nft?: NFTType | null
+}
+
+/**
+ * Supported currencies for calculatins amount, fee, token price, etc.
+ */
+export type Rate = {
+  [currency: string]: number
+}
+
+export type TransactionAmountType = {
+  value: number
+  decimalsValue: number
+  rate: Rate
+}
+
+export type TransactionFeeType = TransactionAmountType
+
+export type InternalTransactionType = TransactionAdaptarParamsType & {
   decodedInput?: DecodedInputType | null
+  fee?: number
+  USDFee?: number
+  sender: string
+  receiver: string
+  amount?: number
+  USDAmount?: number
 }
 
 export type ParamsTransactionsType = {
@@ -36,7 +48,7 @@ export type ParamsTransactionsType = {
   action?: string
 }
 
-export type TransactionType = ParamsAdaptarType & {
+export type TransactionType = InternalTransactionType & {
   gas: string
   hash: string
   input: string
@@ -49,38 +61,6 @@ export type TransactionType = ParamsAdaptarType & {
   from: string
   gasPrice: string
   gasUsed: string
-  fee?: string
   timeStamp: string
   to: string
-  sender: string
-  receiver: string
-  amount?: string
 }
-
-export type TransactionAdapterType = {
-  request: ({ nft, token }: ParamsAdaptarType) => TransactionType
-}
-
-export type EtherscanTransactionType = ts.TypeOf<typeof EtherscanTransaction>
-export type EtherscanInternalTransactionType = ts.TypeOf<
-  typeof EtherscanInternalTransaction
->
-export type EtherscanERC20TransactionType = ts.TypeOf<
-  typeof EtherscanERC20Transaction
->
-export type EtherscanERC721TransactionType = ts.TypeOf<
-  typeof EtherscanERC721Transaction
->
-export type EtherscanTransactionsResponseType = ts.TypeOf<
-  typeof EtherscanTransactionsResponse
->
-export type EtherscanInternalTransactionsResponseType = ts.TypeOf<
-  typeof EtherscanInternalTransactionsResponse
->
-export type EtherscanERC20TransactionsResponseType = ts.TypeOf<
-  typeof EtherscanERC20TransactionsResponse
->
-export type EtherscanERC721TransactionsResponseType = ts.TypeOf<
-  typeof EtherscanERC721TransactionsResponse
->
-export type EtherscanABIResponseType = ts.TypeOf<typeof EtherscanABIResponse>

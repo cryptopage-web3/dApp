@@ -1,7 +1,7 @@
-import { CovalentAPITokenType } from '~/logic/tokens/types'
-import { TokenBalanceType } from '~/logic/address/types'
+import { TokenBalanceType } from '~/logic/tokens/types'
+import { CovalentAPITokenType } from '~/logic/services/api/covalent/types'
 
-export default class CovalentAPITokenParser {
+export default class CovalentAPITokenBalanceParser {
   parse = (token: CovalentAPITokenType): TokenBalanceType => {
     const balance = Number(token.balance) / 10 ** token.contract_decimals
     const usdBalance = token.quote || 0
@@ -10,7 +10,6 @@ export default class CovalentAPITokenParser {
     return {
       balance,
       usdBalance,
-      rate,
       diff,
       tokenInfo: {
         address: token.contract_address,
@@ -19,7 +18,8 @@ export default class CovalentAPITokenParser {
           ? token.contract_ticker_symbol
           : '',
         image: token.logo_url,
-        decimals: token.contract_decimals
+        decimals: token.contract_decimals,
+        rate: { usd: rate }
       }
     }
   }

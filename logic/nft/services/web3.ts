@@ -25,14 +25,7 @@ export default class NFTWeb3Service {
   }
 
   /**
-   * Fetches NFT from the remote URI (TokenURI).
-   *
-   * Uses runtime type validation to make sure
-   * that types are up-to-date with the any server.
-   *
-   * @see https://github.com/aeirola/io-ts-promise.
-   *
-   * @returns Parsed response data.
+   * Get TokenURI and owner from contract
    */
   public getContractData = async ({
     tokenId,

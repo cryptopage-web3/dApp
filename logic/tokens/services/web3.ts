@@ -1,25 +1,53 @@
+import * as tPromise from 'io-ts-promise'
 import { Service, Inject } from 'vue-typedi'
 import Web3 from 'web3'
-import { BalanceCheckerABI } from '~/constants/abi-samples'
-import { TokenInfoType, TokenBalanceType } from '~/logic/address/types'
-import tokens from '~/logic/tokens'
-import AddressIPFSService from '~/logic/address/services/ipfs'
+import { ERC20ABI, BalanceCheckerABI } from '~/constants/abi-samples'
+import { TokenInfo } from '~/logic/tokens/models'
+import { TokenInfoType, TokenBalanceType } from '~/logic/tokens/types'
+import TokenIPFSService from '~/logic/tokens/services/ipfs'
 import AuthService from '~/logic/auth/service'
+import tokens from '~/logic/tokens'
 
 @Service(tokens.TOKEN_WEB3_SERVICE)
 export default class TokenWeb3Service {
   @Inject(tokens.AUTH_SERVICE)
   public authService!: AuthService
 
-  @Inject(tokens.ADDRESS_IPFS_SERVICE)
-  public addressIPFSService!: AddressIPFSService
+  @Inject(tokens.TOKEN_IPFS_SERVICE)
+  public tokenIPFSService!: TokenIPFSService
 
   @Inject(tokens.WEB3)
   public $web3!: Web3
 
-  public getTokens = async (address: string): Promise<TokenBalanceType[]> => {
+  /**
+   * Get contract name, totalSupply, decimals and symbol from  web3
+   */
+  public getTokenInfo = async (
+    address: string
+  ): Promise<TokenInfoType | null> => {
     try {
-      const tokens = await this.addressIPFSService.getAllTokens()
+      const contract = new this.$web3.eth.Contract(ERC20ABI, address)
+      const name = await contract.methods.name().call()
+      const totalSupply = await contract.methods.totalSupply().call()
+      const decimals = Number(await contract.methods.decimals().call())
+      const symbol = await contract.methods.symbol().call()
+      return await tPromise.decode(TokenInfo, {
+        name,
+        address,
+        totalSupply,
+        decimals,
+        symbol
+      })
+    } catch {
+      return null
+    }
+  }
+
+  public getTokenBalances = async (
+    address: string
+  ): Promise<TokenBalanceType[]> => {
+    try {
+      const tokens = await this.tokenIPFSService.getAllTokens()
       const contractAddresses: string[] = []
       tokens.forEach((token, index) => {
         /**
@@ -55,11 +83,11 @@ export default class TokenWeb3Service {
       const result: TokenBalanceType[] = []
       tokens.forEach((tokenInfo: TokenInfoType, index: number): void => {
         const balance = balances[index] / 10 ** tokenInfo.decimals
+        tokenInfo.rate = { usd: 0 }
         if (Number(balance) > 0) {
           result.push({
             balance,
             usdBalance: 0,
-            rate: 0,
             diff: 0,
             tokenInfo
           })

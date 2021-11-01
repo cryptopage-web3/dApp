@@ -17,18 +17,26 @@ export default {
   NFT_WEB3_SERVICE: new Token('nft-web3-service'),
 
   // Transaction service:
+  TRANSACTION_SERVICE: new Token('transaction-service'),
   TRANSACTION_API_SERVICE: new Token('transaction-api-service'),
 
   // Token services:
   TOKEN_SERVICE: new Token('token-service'),
   TOKEN_API_SERVICE: new Token('token-api-service'),
   TOKEN_WEB3_SERVICE: new Token('token-web3-service'),
+  TOKEN_IPFS_SERVICE: new Token('token-ipfs-service'),
+  TOKEN_CACHE_SERVICE: new Token('token-cache-service'),
 
   // Address services:
   ADDRESS_SERVICE: new Token('address-service'),
   ADDRESS_API_SERVICE: new Token('address-api-service'),
-  ADDRESS_IPFS_SERVICE: new Token('address-ipfs-service'),
+  // ADDRESS_IPFS_SERVICE: new Token('address-ipfs-service'),
   ADDRESS_WEB3_SERVICE: new Token('address-web3-service'),
+
+  // API services
+  ETHERSCAN_API_SERVICE: new Token('etherscan-api-service'),
+  ETHPLORER_API_SERVICE: new Token('ethplorer-api-service'),
+  COVALENT_API_SERVICE: new Token('covalent-api-service'),
 
   // Global dependencies
   AXIOS: new Token('axios'),

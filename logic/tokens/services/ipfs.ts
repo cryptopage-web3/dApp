@@ -2,12 +2,12 @@ import * as tPromise from 'io-ts-promise'
 import { Service, Container } from 'vue-typedi'
 import { create, IPFSHTTPClient } from 'ipfs-http-client'
 import { CID } from 'multiformats/cid'
+import { IPFSTokensStorageItemResponse } from '~/logic/tokens/models'
+import { IPFSTokensStorageItemType, TokenInfoType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
-import { IPFSTokensStorageItemResponse } from '~/logic/address/models'
-import { IPFSTokensStorageItemType, TokenInfoType } from '~/logic/address/types'
 
-@Service(tokens.ADDRESS_IPFS_SERVICE)
-export default class AddressIPFSService {
+@Service(tokens.TOKEN_IPFS_SERVICE)
+export default class TokenIPFSService {
   /*
    * List with public gateways. Need to implement gateway checker and switcher
    * https://ipfs.github.io/public-gateway-checker/gateways.json
@@ -92,8 +92,7 @@ export default class AddressIPFSService {
         timeout: this.timeout
       })
       return Object.keys(result.value).map((address: string): TokenInfoType => {
-        const value = result.value[address]
-        return this.toTokenInfo(address, value)
+        return this.toTokenInfo(address, result.value[address])
       })
     } catch {
       return []

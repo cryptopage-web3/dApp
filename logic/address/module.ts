@@ -1,18 +1,16 @@
 import Vue from 'vue'
 import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
-import TransactionAPIService from '~/logic/transactions/services/api'
-import AddressService from '~/logic/address/services/index'
-import {
-  TokenBalanceType,
-  AddressInfoType,
-  TokenInfoType
-} from '~/logic/address/types'
-import tokens from '~/logic/tokens'
+import { AddressInfoType } from '~/logic/address/types'
+import { TokenBalanceType, TokenInfoType } from '~/logic/tokens/types'
 import {
   ParamsTransactionsType,
   TransactionType
 } from '~/logic/transactions/types'
+import TransactionService from '~/logic/transactions/services'
+import TokenService from '~/logic/tokens/services'
+import AddressService from '~/logic/address/services/index'
+import tokens from '~/logic/tokens'
 
 @Injectable()
 /**
@@ -24,11 +22,14 @@ import {
 export default class AddressModule {
   // Dependencies
 
-  @Inject(tokens.TRANSACTION_API_SERVICE)
-  public transactionAPIService!: TransactionAPIService
+  @Inject(tokens.TRANSACTION_SERVICE)
+  public transactionService!: TransactionService
 
   @Inject(tokens.ADDRESS_SERVICE)
   public addressService!: AddressService
+
+  @Inject(tokens.TOKEN_SERVICE)
+  public tokenService!: TokenService
 
   // State
 
@@ -55,16 +56,7 @@ export default class AddressModule {
 
   @Getter()
   public get tokens(): TokenBalanceType[] {
-    let tokens = this.addressInfo ? this.addressInfo.tokens : []
-    const ethToken = tokens.find(
-      (token) => token && token.tokenInfo && token.tokenInfo.symbol === 'ETH'
-    )
-    tokens = tokens.filter(
-      (token) => token && token.tokenInfo && token.tokenInfo.symbol !== 'ETH'
-    )
-    tokens = tokens.sort((a, b) => (a.usdBalance > b.usdBalance ? -1 : 1))
-    tokens = ethToken ? [ethToken, ...tokens] : tokens
-    return tokens
+    return this.addressInfo ? this.addressInfo.tokens : []
   }
 
   @Getter()
@@ -96,7 +88,14 @@ export default class AddressModule {
 
   @Getter()
   public get transactionsCount(): number {
-    return this.addressInfo ? this.addressInfo.transactionsCount : 0
+    if (this.addressInfo) {
+      if (this.transactions.length > this.addressInfo.transactionsCount) {
+        return this.transactions.length
+      } else {
+        return this.addressInfo.transactionsCount
+      }
+    }
+    return 0
   }
 
   @Getter()
@@ -107,9 +106,19 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get normalTransactions(): TransactionType[] {
+    return this.transactions
+      .filter((tx: TransactionType) => tx.input !== 'deprecated')
+      .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
+  }
+
+  @Getter()
   public get ERC20Transactions(): TransactionType[] {
     return this.transactions
-      .filter((tx: TransactionType) => tx.token)
+      .filter(
+        (tx: TransactionType) =>
+          tx.token && tx.token.address !== this.tokenService.basicToken.address
+      )
       .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
   }
 
@@ -161,10 +170,16 @@ export default class AddressModule {
     )
     if (index > -1) {
       const findedTransaction = this.transactions[index]
+      if (
+        transaction.input === 'deprecated' &&
+        findedTransaction.input.startsWith('0x')
+      ) {
+        transaction.input = findedTransaction.input
+      }
       Vue.set(
         this.transactions,
         index,
-        Object.assign(transaction, findedTransaction)
+        Object.assign(findedTransaction, transaction)
       )
     } else {
       this.transactions = [...this.transactions, transaction]
@@ -191,18 +206,16 @@ export default class AddressModule {
       tokens: [],
       transactionsCount: 0
     })
-
+    // const tokenInfo = await this.tokenService.getTokenInfo(address)
     this.setLoadingInfo(true)
-
-    const tokenInfo = await this.addressService.getTokenInfo(address)
+    const tokenInfo = await this.tokenService.getTokenInfo(address)
     this.setTokenInfo(tokenInfo)
-    const tokens = await this.addressService.getTokens(address)
+    const tokens = await this.tokenService.getTokenBalances(address)
     this.setTokens(tokens)
     const transactionsCount = await this.addressService.getTransactionsCount(
       address
     )
     this.setTransactionsCount(transactionsCount)
-
     this.setLoadingInfo(false)
   }
 
@@ -213,7 +226,24 @@ export default class AddressModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.transactionAPIService.getTransactions({
+    const transactions = await this.transactionService.getTransactions({
+      address,
+      page,
+      offset,
+      sort
+    })
+    this.setTransactions(transactions)
+    return transactions
+  }
+
+  @Action()
+  public async getNormalTransactions({
+    address,
+    page = 1,
+    offset = 10,
+    sort = 'desc'
+  }: ParamsTransactionsType): Promise<TransactionType[]> {
+    const transactions = await this.transactionService.getNormalTransactions({
       address,
       page,
       offset,
@@ -230,13 +260,12 @@ export default class AddressModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions =
-      await this.transactionAPIService.getInternalTransactions({
-        address,
-        page,
-        offset,
-        sort
-      })
+    const transactions = await this.transactionService.getInternalTransactions({
+      address,
+      page,
+      offset,
+      sort
+    })
     this.setTransactions(transactions)
     return transactions
   }
@@ -249,7 +278,7 @@ export default class AddressModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.transactionAPIService.getERC20Transactions({
+    const transactions = await this.transactionService.getERC20Transactions({
       address,
       contractAddress,
       page,
@@ -267,14 +296,12 @@ export default class AddressModule {
     offset = 10,
     sort = 'desc'
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.transactionAPIService.getERC721Transactions(
-      {
-        address,
-        page,
-        offset,
-        sort
-      }
-    )
+    const transactions = await this.transactionService.getERC721Transactions({
+      address,
+      page,
+      offset,
+      sort
+    })
     this.setTransactions(transactions)
     return transactions
   }

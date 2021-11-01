@@ -32,3 +32,10 @@ export default {
   }
 }
 </script>
+<style>
+.fetch-status {
+  text-align: center;
+  margin: 1.5em;
+  font-size: 1.25em;
+}
+</style>

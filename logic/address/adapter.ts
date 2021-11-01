@@ -1,6 +1,6 @@
-import TokenBalanceParser from '~/logic/address/parser'
+import EthplorerTokenBalanceParser from '~/logic/services/api/ethplorer/parser'
+import { EthplorerGetAddressInfoResponseType } from '~/logic/services/api/ethplorer/types'
 import {
-  EthplorerGetAddressInfoResponseType,
   AddressInfoAdapterType,
   AddressInfoType
 } from '~/logic/address/types'
@@ -11,7 +11,7 @@ const AddressInfoAdapter = (
   return {
     request: (): AddressInfoType => {
       const address = addressInfo.address
-      const parser = new TokenBalanceParser()
+      const parser = new EthplorerTokenBalanceParser()
       const ETHToken = parser.parseETHToken(addressInfo.ETH)
       let tokenInfo
       if (addressInfo.tokenInfo) {

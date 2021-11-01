@@ -1,46 +1,158 @@
 import { Service, Inject } from 'vue-typedi'
+import AuthService from '~/logic/auth/service'
 import AddressService from '~/logic/address/services'
+import TokenCacheService from '~/logic/tokens/services/cache'
 import TokenAPIService from '~/logic/tokens/services/api'
+import TokenIPFSService from '~/logic/tokens/services/ipfs'
 import TokenWeb3Service from '~/logic/tokens/services/web3'
-import { TokenBalanceType } from '~/logic/address/types'
+import { TokenBalanceType, TokenInfoType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
 
 @Service(tokens.TOKEN_SERVICE)
 export default class TokenService {
+  @Inject(tokens.AUTH_SERVICE)
+  public authService!: AuthService
+
   @Inject(tokens.ADDRESS_SERVICE)
   public addressService!: AddressService
+
+  @Inject(tokens.TOKEN_CACHE_SERVICE)
+  public tokenCacheService!: TokenCacheService
 
   @Inject(tokens.TOKEN_API_SERVICE)
   public tokenAPIService!: TokenAPIService
 
+  @Inject(tokens.TOKEN_IPFS_SERVICE)
+  public tokenIPFSService!: TokenIPFSService
+
   @Inject(tokens.TOKEN_WEB3_SERVICE)
   public tokenWeb3Service!: TokenWeb3Service
 
-  public getTokens = async (address: string): Promise<TokenBalanceType[]> => {
-    let tokens = await this.tokenAPIService.getTokens(address)
-    if (tokens.length === 0) {
-      tokens = await this.tokenWeb3Service.getTokens(address)
-      const ethToken = await this.getETHToken(address)
-      tokens = [ethToken, ...tokens]
+  public getTokenRate = async (
+    address: string,
+    currency = 'usd'
+  ): Promise<number> => {
+    const tokenInfo = await this.getTokenInfo(address)
+    if (currency === 'usd') {
+      return tokenInfo && tokenInfo.rate && tokenInfo.rate.usd
+        ? tokenInfo.rate.usd
+        : 0
     }
-    return tokens
+    return 0
   }
 
-  public getETHToken = async (address: string): Promise<TokenBalanceType> => {
-    const balance = await this.addressService.getBalance(address)
+  public getTokenInfo = async (
+    address: string
+  ): Promise<TokenInfoType | null> => {
+    if (await this.tokenCacheService.tokenInfoCached(address)) {
+      return await this.tokenCacheService.getTokenInfo(address)
+    } else {
+      let tokenInfo = await this.tokenIPFSService.getTokenInfo(address)
+      if (!tokenInfo) {
+        tokenInfo = await this.tokenWeb3Service.getTokenInfo(address)
+      }
+      this.tokenCacheService.setTokenInfo(address, tokenInfo)
+      return tokenInfo
+    }
+  }
+
+  /**
+   * Returns sorted desc by usdBalance, but at first plase always basicToken
+   */
+  public getTokenBalances = async (
+    address: string
+  ): Promise<TokenBalanceType[]> => {
+    let tokenBalances = await this.tokenAPIService.getTokenBalances(address)
+
+    if (tokenBalances.length > 0) {
+      const basicToken = tokenBalances.find((tokenBalance) => {
+        return tokenBalance.tokenInfo.address === this.basicToken.address
+      })
+      tokenBalances = tokenBalances.filter((tokenBalance) => {
+        return (
+          tokenBalance.tokenInfo.address.toLowerCase() !==
+          this.basicToken.address.toLowerCase()
+        )
+      })
+      /** Sort desc by usdBalance */
+      tokenBalances = tokenBalances.sort((a, b) =>
+        a.usdBalance > b.usdBalance ? -1 : 1
+      )
+      if (basicToken) {
+        tokenBalances.unshift(basicToken)
+      }
+      // tokenBalances = [basicToken, ...tokenBalances]
+    } else {
+      /** Add basic token, because IPFSTokenStorage don't store it  */
+      const basicTokenBalance = await this.getBasicTokenBalance(address)
+      tokenBalances = await this.tokenWeb3Service.getTokenBalances(address)
+      /** Sort desc by usdBalance */
+      tokenBalances = tokenBalances.sort((a, b) =>
+        a.usdBalance > b.usdBalance ? -1 : 1
+      )
+      tokenBalances = [basicTokenBalance, ...tokenBalances]
+    }
+
+    /** Add to cache each token */
+    await tokenBalances.forEach(async (tokenBalance: TokenBalanceType) => {
+      if (tokenBalance.tokenInfo) {
+        await this.tokenCacheService.setTokenInfo(
+          tokenBalance.tokenInfo.address,
+          tokenBalance.tokenInfo
+        )
+      }
+    })
+    return tokenBalances
+  }
+
+  public getBasicTokenBalance = async (
+    address: string
+  ): Promise<TokenBalanceType> => {
+    const rawBalance = await this.addressService.getBalance(address)
+    const tokenInfo = this.basicToken
+    const rate = await this.getTokenRate(tokenInfo.address, 'usd')
+    tokenInfo.rate = { usd: rate }
+    const balance = rawBalance / 10 ** tokenInfo.decimals
+    const usdBalance = balance * Number(tokenInfo.rate ? tokenInfo.rate.usd : 0)
     return {
-      balance: (balance / 10) * 18,
-      usdBalance: 0,
-      rate: 0,
+      balance,
+      usdBalance,
       diff: 0,
-      tokenInfo: {
-        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-        name: 'Ethereum',
-        symbol: 'ETH',
+      tokenInfo
+    }
+  }
+
+  public get basicToken(): TokenInfoType {
+    const chainId = Number(this.authService.selectedChainId)
+    const baseURL =
+      'https://www.covalenthq.com/static/images/icons/display-icons/'
+    let tokenInfo = {
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      name: 'Ethereum coin',
+      symbol: 'ETH',
+      decimals: 18,
+      image: `${baseURL}ethereum-eth-logo.png`,
+      rate: { usd: 0 }
+    }
+    if ([56, 97].includes(chainId)) {
+      tokenInfo = {
+        address: '0xb8c77482e45f1f44de1745f52c74426c631bdd52',
+        name: 'Binance coin',
+        symbol: 'BNB',
         decimals: 18,
-        image:
-          'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fbitinfocharts.com%2Fimgs33%2Fethereum.png'
+        image: `${baseURL}binance-coin-bnb-logo.png`,
+        rate: { usd: 0 }
+      }
+    } else if ([137, 80001].includes(chainId)) {
+      tokenInfo = {
+        address: '0x0000000000000000000000000000000000001010',
+        name: 'Polygon coin',
+        symbol: 'MATIC',
+        decimals: 18,
+        image: `https://logos.covalenthq.com/tokens/1/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0.png`,
+        rate: { usd: 0 }
       }
     }
+    return tokenInfo
   }
 }
