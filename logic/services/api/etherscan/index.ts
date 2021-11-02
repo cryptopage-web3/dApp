@@ -243,10 +243,12 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     try {
       const response: AxiosResponse<EtherscanERC721TransactionsResponseType> =
         await this.$axios.get(URL)
+
       const data = await tPromise.decode(
         EtherscanERC721TransactionsResponse,
         response.data
       )
+
       return await Promise.all(
         data.result.map(
           (transaction: EtherscanERC721TransactionType): TransactionType =>
