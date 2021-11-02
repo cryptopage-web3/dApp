@@ -34,6 +34,14 @@
           <span> Value: {{ token.usdBalance.toFixed(2) }} $ </span>
         </div>
       </nuxt-link>
+      <div
+        v-if="!showAll && typedStore.address.tokens.length > 6"
+        class="mx-auto"
+      >
+        <button class="btn btn-link" @click="showAll = true">
+          Show {{ showAll ? 'less' : 'more' }}
+        </button>
+      </div>
     </template>
   </div>
 </template>
@@ -52,8 +60,12 @@ export default class SidebarRightBalance extends mixins(
   TypedStoreMixin,
   NetworkNameMixin
 ) {
+  public showAll = false
+
   public get tokens(): TokenBalanceType[] {
-    return this.typedStore.address.tokens
+    return !this.showAll
+      ? this.typedStore.address.tokens.slice(0, 6)
+      : this.typedStore.address.tokens
   }
 
   public get loadingInfo(): boolean {
