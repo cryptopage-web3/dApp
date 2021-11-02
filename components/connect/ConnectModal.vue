@@ -121,12 +121,12 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('ETHEREUM', 'coin98')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img5.png"
                         alt=""
                       />
-                      <span> Coin9B Wallet </span>
+                      <span> Coin98 Wallet </span>
                     </a>
                   </li>
                   <li>
@@ -188,12 +188,12 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('BSC', 'coin98')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img5.png"
                         alt=""
                       />
-                      <span> Coin9B Wallet </span>
+                      <span> Coin98 Wallet </span>
                     </a>
                   </li>
                   <li>
@@ -257,12 +257,12 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('POLYGON', 'coin98')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img5.png"
                         alt=""
                       />
-                      <span> Coin9B Wallet </span>
+                      <span> Coin98 Wallet </span>
                     </a>
                   </li>
                   <li>
@@ -436,7 +436,7 @@ export default {
   },
   methods: {
     switchProvider(type, provider) {
-      if (provider === 'metamask' && provider === this.selectedProvider) {
+      if ((provider === 'metamask' || provider === 'coin98') && provider === this.selectedProvider) {
         this.$store.dispatch('auth/switchChain', type)
       } else {
         this.$store.dispatch('auth/switchProvider', provider)

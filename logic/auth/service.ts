@@ -14,23 +14,39 @@ declare const window: Window &
   }
 
 const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
+const [METAMASK, WALLET_CONNECT, COIN98] = [
+  'metamask',
+  'walletConnect',
+  'coin98'
+]
 
 @Service(tokens.AUTH_SERVICE)
 @Component
 export default class AuthService extends Vue {
   constructor() {
     super()
-    this.init()
+    if (typeof window !== 'undefined' && window.ethereum?.isCoin98) {
+      this.defaultEthereumWallet = COIN98
+    }
+    let lastUsedProvider
+    if (typeof window !== 'undefined' && window.localStorage.lastProvider) {
+      lastUsedProvider = window.localStorage.lastProvider
+    }
+    this.init(lastUsedProvider)
   }
 
   protected _PROVIDERS = [
     {
-      value: 'metamask',
+      value: METAMASK,
       name: 'Metamask'
     },
     {
-      value: 'walletConnect',
+      value: WALLET_CONNECT,
       name: 'Wallet Connect'
+    },
+    {
+      value: COIN98,
+      name: 'Coin98'
     }
   ]
 
@@ -85,9 +101,9 @@ export default class AuthService extends Vue {
     )
   }
 
-  private providerName = 'metamask'
+  private providerName = METAMASK
+  private defaultEthereumWallet = METAMASK
   private provider: WalletConnectProvider | undefined
-  private webConnected = false
   private metamaskConnected = false
   private walletConnectConnected = false
   protected get $web3(): any {
@@ -166,13 +182,13 @@ export default class AuthService extends Vue {
    */
   public switchProvider = async (providerName: string): Promise<string> => {
     let connected = 'error'
-    if (providerName === 'metamask') {
+    if (providerName === METAMASK || providerName === COIN98) {
       if (this.metamaskInstalled) {
         const status = await this.addMetamaskEventsListener()
         if (status) {
           await this.changeProviderName(providerName)
           connected = 'success'
-          window.localStorage.setItem('lastProvider', 'metamask')
+          window.localStorage.setItem('lastProvider', providerName)
         }
       } else {
         connected = 'notInstalled'
@@ -197,7 +213,7 @@ export default class AuthService extends Vue {
       throw new Error('Network is not allowed.')
     }
     const chain = this._CHAINS[networkName]
-    if (this.providerName !== 'metamask') return
+    if (this.providerName !== METAMASK && this.providerName !== COIN98) return
     if (!chain) throw new Error('Chain not found.')
     if (!this.provider) throw new Error('Provider not set.')
     try {
@@ -324,13 +340,13 @@ export default class AuthService extends Vue {
    * Initialize web3 provider functionality
    * @param {String} providerName - value of provider
    */
-  public init = async (providerName = 'metamask'): Promise<boolean> => {
+  public init = async (providerName = METAMASK): Promise<boolean> => {
     if (typeof window === 'undefined') {
       return false
     }
     const device = deviceType()
     if (device === 'desktop') {
-      providerName = 'metamask'
+      providerName = providerName || this.defaultEthereumWallet
     } else {
       providerName = 'walletConnect'
     }

@@ -40,9 +40,6 @@
             >
           </li>
           <li>
-            <a href="#">Activate layer {{ selectedNetworkLayer }}</a>
-          </li>
-          <li>
             <a ref="copy" href="#" @click.prevent="copyAddress">Copy Address</a>
           </li>
           <li>
@@ -57,7 +54,6 @@
           <li>
             <router-link :to="`/${address}`">Transaction History</router-link>
           </li>
-          <li><a href="#">Claim</a></li>
           <li>
             <a href="#" data-toggle="modal" data-target="#modal-connect"
               >Change Wallet</a
@@ -88,7 +84,6 @@ export default {
   },
 
   mixins: [NetworkNameMixin],
-
   computed: {
     address() {
       return this.$store.getters['auth/selectedAddress']
@@ -101,13 +96,6 @@ export default {
     selectedNetworkName() {
       return this.$store.getters['auth/selectedNetworkName']
     },
-
-    selectedNetworkLayer() {
-      return this.$store.getters['auth/selectedNetworkType'] === 'ethereum'
-        ? '1'
-        : '2'
-    },
-
     getNetworkIcon() {
       const icons = {
         ethereum: ethereumImg,
