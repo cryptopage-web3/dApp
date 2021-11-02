@@ -16,15 +16,10 @@ export default {
   async beforeCreate() {
     let chainId = 1
     const networkName = this.$route.params.networkName
-    if (networkName === 'eth') {
-      chainId = 1
-    } else if (networkName === 'rinkeby') {
-      chainId = 4
-    } else if (networkName === 'bsc') {
-      chainId = 56
-    } else if (networkName === 'matic') {
-      chainId = 137
-    }
+    if (networkName === 'eth') chainId = 1
+    if (networkName === 'rinkeby') chainId = 4
+    if (networkName === 'bsc') chainId = 56
+    if (networkName === 'matic') chainId = 137
     await this.$store.dispatch('auth/setChainId', chainId)
     await this.$store.dispatch(
       'address/updateAddressInfo',
