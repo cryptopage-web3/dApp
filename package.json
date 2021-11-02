@@ -86,6 +86,7 @@
     "eslint-plugin-vue": "^7.18.0",
     "fibers": "^5.0.0",
     "husky": "^7.0.1",
+    "nuxt-viewport": "^0.0.7",
     "prettier": "^2.3.2",
     "sass": "^1.37.5",
     "sass-loader": "^10.2.0"
