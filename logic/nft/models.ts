@@ -20,11 +20,14 @@ import * as ts from 'io-ts'
 export const Attribute = ts.partial({
   display_type: ts.union([
     ts.literal('boost_number'),
+    ts.literal('boost_percentage'),
     ts.literal('number'),
-    ts.literal('boost_percentage')
+    ts.literal('date'),
+    ts.undefined
   ]),
   trait_type: ts.string,
-  value: ts.union([ts.number, ts.string])
+  value: ts.union([ts.number, ts.string]),
+  max_value: ts.union([ts.number, ts.undefined])
 })
 
 export const Property = ts.type({

@@ -36,7 +36,7 @@ export default class EtherscanTransactionParser {
       hash: transaction.hash,
       input: transaction.input,
       nonce: transaction.nonce,
-      value: transaction.value,
+      value: transaction.value || '',
       blockHash: transaction.blockHash,
       blockNumber: transaction.blockNumber,
       confirmations: transaction.confirmations,
