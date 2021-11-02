@@ -83,7 +83,8 @@ export default {
     }],
     ['nuxt-vuex-localstorage', {
       localStorage: ['auth']
-    }]
+    }],
+    ['nuxt-viewport']
   ],
 
   workbox: {

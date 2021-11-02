@@ -1,6 +1,7 @@
 <template>
   <div class="main-top">
     <address-profile />
+    <sidebar-right-balance v-if="$viewport.isLessThan('desktopMedium')" />
     <address-transaction />
   </div>
 </template>

@@ -35,7 +35,8 @@
       "@types/node",
       "@nuxt/types",
       "jest",
-      "jquery"
+      "jquery",
+      "nuxt-viewport"
     ]
   },
   "exclude": [
