@@ -4396,6 +4396,11 @@ cookie@^0.3.1:
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
   integrity sha1-5+Ch+e9DtMi6klxcWpboBtFoc7s=
 
+cookie@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.1.tgz#afd713fe26ebd21ba95ceb61f9a8116e50a537d1"
+  integrity sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==
+
 cookiejar@^2.1.1:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.3.tgz#fc7a6216e408e74414b90230050842dacda75acc"
@@ -8008,6 +8013,11 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
+js-cookie@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/js-cookie/-/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
+  integrity sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==
+
 js-sha3@0.5.7, js-sha3@^0.5.7:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/js-sha3/-/js-sha3-0.5.7.tgz#0d4ffd8002d5333aabaf4a23eed2f6374c9f28e7"
@@ -9347,6 +9357,15 @@ nuxt-property-decorator@^2.9.1:
     vue-property-decorator "^9.0.0"
     vuex-class "^0.3.2"
     vuex-module-decorators "^1.0.1"
+
+nuxt-viewport@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/nuxt-viewport/-/nuxt-viewport-0.0.7.tgz#cc8217fb7e82400f2fa8e50be849dc7e50e1e5cb"
+  integrity sha512-ykeKK5/Xl9h/GpcmeIFT6IqMif+R7KKZfAFcqBorb39Z3pYE8Kr02ySL4kHhuShXnDiPAoArY5uacrVdQNXlUg==
+  dependencies:
+    cookie "^0.4.1"
+    js-cookie "^2.2.1"
+    ua-parser-js "^0.7.24"
 
 nuxt-vuex-localstorage@^1.3.0:
   version "1.3.0"
