@@ -22,7 +22,9 @@ export default {
       import('~/components/transactions/ERC721Transaction.vue'),
     loader: () => import('~/components/loaders/GrowLoader.vue')
   },
+
   mixins: [paginationMixin],
+
   async fetch() {
     await this.$store.dispatch('address/getERC721Transactions', {
       address: this.$route.params.address,
@@ -30,6 +32,7 @@ export default {
       offset: this.pageSize
     })
   },
+
   computed: {
     transactions() {
       return this.$store.getters['address/ERC721Transactions']
