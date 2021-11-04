@@ -21,7 +21,9 @@ export default {
     transaction: () => import('~/components/transactions/ERC20Transaction.vue'),
     loader: () => import('~/components/loaders/GrowLoader.vue')
   },
+
   mixins: [paginationMixin],
+
   async fetch() {
     const address = this.$route.query.address
       ? this.$route.query.address
@@ -37,6 +39,7 @@ export default {
       offset: this.pageSize
     })
   },
+
   computed: {
     transactions() {
       return this.$store.getters['address/ERC20Transactions']

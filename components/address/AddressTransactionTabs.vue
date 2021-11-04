@@ -2,14 +2,14 @@
   <div class="transactions-top">
     <ul id="myTab" class="nav nav-tabs transactions-list" role="tablist">
       <li v-for="(tab, index) in tabs" :key="index" class="nav-item">
-        <router-link
+        <nuxt-link
           :to="url(tab.link)"
           exact-active-class="active"
           class="nav-link"
           exact
         >
           {{ tab.name }}
-        </router-link>
+        </nuxt-link>
       </li>
     </ul>
   </div>
