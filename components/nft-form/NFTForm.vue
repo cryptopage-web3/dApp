@@ -100,7 +100,7 @@ import { validateForm, getAdaptedAttributes } from './utils'
 import { IAttributesFront, INFTServer } from './types'
 import NFTFormFile from './NFTFormFile.vue'
 import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
-import NFTAPIService from '~/logic/nft/services/api'
+import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 
 @Component({
@@ -122,7 +122,7 @@ export default class NFTForm extends Vue {
   }
 
   @Inject(tokens.NFT_API_SERVICE)
-  public nftAPIService!: NFTAPIService
+  public nftService!: NFTService
 
   get isMediaFile(): boolean {
     if (!this.file) {
@@ -289,7 +289,7 @@ export default class NFTForm extends Vue {
   }
 
   sendPostHash(ipfsHash: string) {
-    this.nftAPIService.sendNFTHash({
+    this.nftService.sendNFTHash({
       params: {
         from: this.$store.getters['auth/selectedAddress'],
         hash: ipfsHash,
