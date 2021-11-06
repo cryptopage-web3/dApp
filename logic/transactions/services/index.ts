@@ -43,19 +43,11 @@ export default class TransactionService {
    * Get a list of 'Normal' Transactions By Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
    */
-  public getNormalTransactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
+  public getNormalTransactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
     const transactions = await this.transactionAPIService.getNormalTransactions(
-      {
-        address,
-        page,
-        offset,
-        sort
-      }
+      params
     )
     return await Promise.all(
       transactions.map(
@@ -68,38 +60,22 @@ export default class TransactionService {
     )
   }
 
-  public getInternalTransactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    return await this.transactionAPIService.getInternalTransactions({
-      address,
-      page,
-      offset,
-      sort
-    })
+  public getInternalTransactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
+    return await this.transactionAPIService.getInternalTransactions(params)
   }
 
   /**
    * Get a list of "ERC20 - Token Transfer Events" by Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
    */
-  public getERC20Transactions = async ({
-    address,
-    contractAddress,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    const transactions = await this.transactionAPIService.getERC20Transactions({
-      address,
-      contractAddress,
-      page,
-      offset,
-      sort
-    })
+  public getERC20Transactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
+    const transactions = await this.transactionAPIService.getERC20Transactions(
+      params
+    )
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
@@ -114,19 +90,11 @@ export default class TransactionService {
    * Get a list of "ERC721 - Token Transfer Events" by Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
    */
-  public getERC721Transactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
+  public getERC721Transactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
     const transactions = await this.transactionAPIService.getERC721Transactions(
-      {
-        address,
-        page,
-        offset,
-        sort
-      }
+      params
     )
     return await Promise.all(
       transactions.map(
