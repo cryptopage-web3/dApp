@@ -1,5 +1,5 @@
 import * as ts from 'io-ts'
-import { Attribute, Property, NFTPayload, ParsedNFT } from '~/logic/nft/models'
+import { Attribute, Property, NFTPayload, ParsedNFT, NFTMedia } from '~/logic/nft/models'
 /**
  * These are inner types, they are only used inside the client.
  *
@@ -12,13 +12,18 @@ export type AttributeType = ts.TypeOf<typeof Attribute>
 export type PropertyType = ts.TypeOf<typeof Property>
 export type NFTPayloadType = ts.TypeOf<typeof NFTPayload>
 export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>
+export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 
 export type NFTType = ParsedNFTType & {
   owner: string
 }
 
+export type NFTAdapterRequestParamsType = NFTMediaType &  {
+  owner: string
+}
+
 export type NFTAdapterType = {
-  request: (owner: string) => NFTType
+  request: (params: NFTAdapterRequestParamsType) => NFTType
 }
 
 export interface FetchOneType {
