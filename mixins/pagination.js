@@ -1,46 +1,75 @@
 export const paginationMixin = {
   data: () => ({
-    page: 1,
-    pageSize: 10
+    scrollListener: null
   }),
-  watch: {
-    page: '$fetch',
-    pageSize: '$fetch',
-    address: 'reset',
-    chainId: 'resetChain'
-  },
+
   computed: {
-    showNext() {
-      return (
-        this.$store.getters['address/transactionsCount'] >=
-        this.page * this.pageSize
-      )
-    },
-    showPrevious() {
-      return this.page >= 2
-    },
     address() {
       return this.$store.getters['address/address']
     },
+
     chainId() {
       return this.$store.getters['auth/chainId']
+    },
+
+    isFetchDisabled() {
+      return (
+        this.isCompleted || this.$fetchState.pending || this.$fetchState.error
+      )
     }
   },
+
+  watch: {
+    address: 'reset',
+    chainId: 'resetChain'
+  },
+
+  mounted() {
+    this.$nextTick(() => {
+      this.scrollListener = this.scrollHandler.bind(this)
+      $(window).on('scroll', this.scrollListener)
+    })
+  },
+
+  beforeDestroy() {
+    $(window).off('scroll', this.scrollListener)
+    this.scrollListener = null
+  },
+
   methods: {
     next() {
-      if (!this.showNext) return
-      this.page += 1
+      /** нельзя вызвать $fetch, если уже получили полный список транзакций,
+       * либо текущий статус запроса pending или error */
+      if (this.isFetchDisabled) return
+      this.$fetch()
     },
-    previous() {
-      if (!this.showPrevious) return
-      this.page -= 1
+
+    reset() {
+      /** очищаем транзакции при смене адреса */
+      this.$store.dispatch('address/clearTransactions')
+
+      /** после очистки нужно запустить $fetch
+       * если $fetch не запущен, то сразу его вызываем
+       * если $fetch выполняется, то необходимо дождаться его завершения, а потом запустить
+       * иначе $fetch не запустится
+       */
+      if (!this.$fetchState.pending) {
+        this.$fetch()
+        return
+      }
+
+      /** ожидаем окончания $fetch, очищаем watcher, запускаем повторно $fetch */
+      const unwatchPending = this.$watch('$fetchState.pending', (pending) => {
+        if (!pending) {
+          unwatchPending()
+
+          this.$nextTick(() => {
+            this.$fetch()
+          })
+        }
+      })
     },
-    async reset() {
-      await this.$nuxt.$loading.start()
-      await this.$store.dispatch('address/clearTransactions')
-      await this.$fetch()
-      await setTimeout(() => this.$nuxt.$loading.finish(), 500)
-    },
+
     async resetChain() {
       await this.$nuxt.$loading.start()
       const params = this.$route.params
@@ -58,18 +87,20 @@ export const paginationMixin = {
       await this.$store.dispatch('auth/setChainId', this.chainId)
       await this.$router.push({ params })
       await setTimeout(() => this.$nuxt.$loading.finish(), 500)
-    }
-  },
-  mounted() {
-    this.$nextTick(() => {
-      window.onscroll = () => {
-        const bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight >=
-          document.documentElement.offsetHeight - 300
-        if (bottomOfWindow) {
-          this.next()
-        }
+    },
+
+    scrollHandler() {
+      /** пагинатор только для транзакций,
+       * если доскролили до низа блока транзакций, то делаем запрос на следующую страницу
+       */
+      const windowHeight = $(window).height()
+      const windowScrollTop = $(window).scrollTop()
+      const elemOffsetTop = $('.transactions-body').offset().top
+      const elemHeight = $('.transactions-body').height()
+
+      if (windowScrollTop + windowHeight > elemOffsetTop + elemHeight) {
+        this.next()
       }
-    })
+    }
   }
 }

@@ -89,19 +89,23 @@ export default class NFTService {
     contractAddress
   }: FetchOneType): Promise<NFTType | null> => {
     try {
-      const { tokenURI, owner } = await this.nftWeb3Service.getContractData({
+      const contractData = await this.nftWeb3Service.getContractData({
         tokenId,
         contractAddress
       })
-      const NFTPayload = await this.fetchNFTPayload(tokenURI)
-      const animationURL = this.parser.parseAnimationURL(NFTPayload)
-      const data = this.parser.parse(NFTPayload)
-      const adapter = NFTAdapter(data)
-      if (animationURL) {
-        const media = await this.fetchMedia(animationURL)
-        return adapter.request({ owner, ...media })
+      if (contractData) {
+        const { owner, tokenURI } = contractData
+        const NFTPayload = await this.fetchNFTPayload(tokenURI)
+        const animationURL = this.parser.parseAnimationURL(NFTPayload)
+        const data = this.parser.parse(NFTPayload)
+        const adapter = NFTAdapter(data)
+        if (animationURL) {
+          const media = await this.fetchMedia(animationURL)
+          return adapter.request({ owner, ...media })
+        }
+        return adapter.request({ owner })
       }
-      return adapter.request({ owner })
+      return null
     } catch {
       return null
     }

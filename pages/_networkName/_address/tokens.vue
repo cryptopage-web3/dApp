@@ -21,8 +21,23 @@ export default {
     transaction: () => import('~/components/transactions/ERC20Transaction.vue'),
     loader: () => import('~/components/loaders/GrowLoader.vue')
   },
+
   mixins: [paginationMixin],
+
   async fetch() {
+    /** не делаем запрос:
+     * если уже получен полный список транзакций,
+     * если сменился адрес, но в сторе адрес еще старый,
+     * поэтому транзакции стора и пагинатор относятся к старому адресу
+     * должен отработать метод reset() в pagination
+     */
+    if (
+      this.isCompleted ||
+      (this.address && this.address !== this.$route.params.address)
+    ) {
+      return
+    }
+
     const address = this.$route.query.address
       ? this.$route.query.address
       : this.$route.params.address
@@ -32,14 +47,17 @@ export default {
 
     await this.$store.dispatch('address/getERC20Transactions', {
       address,
-      contractAddress,
-      page: this.page,
-      offset: this.pageSize
+      contractAddress
     })
   },
+
   computed: {
     transactions() {
       return this.$store.getters['address/ERC20Transactions']
+    },
+
+    isCompleted() {
+      return this.$store.getters['address/isERC20TransactionsCompleted']
     }
   }
 }

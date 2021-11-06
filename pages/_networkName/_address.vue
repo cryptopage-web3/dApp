@@ -13,6 +13,7 @@ export default {
     const isValid = validNetworkNames.includes(networkName)
     return isValid && $web3.utils.isAddress(params.address)
   },
+
   async beforeCreate() {
     let chainId = 1
     const networkName = this.$route.params.networkName
