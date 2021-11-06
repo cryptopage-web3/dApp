@@ -50,8 +50,16 @@ export const NFTPayload = ts.partial({
   youtube_url: ts.string
 })
 
-export const ParsedNFT = ts.type({
-  title: ts.string,
-  description: ts.string,
-  image: ts.string
+export const NFTMedia = ts.partial({
+  image: ts.string,
+  audio: ts.string,
+  video: ts.string
 })
+
+export const ParsedNFT = ts.intersection([
+  ts.type({
+    title: ts.string,
+    description: ts.string
+  }),
+  NFTMedia
+])
