@@ -1,8 +1,8 @@
 import { Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
 import TokenService from '~/logic/tokens/services'
+import NFTService from '~/logic/nft/services'
 import TransactionAPIService from '~/logic/transactions/services/api'
-import NFTAPIService from '~/logic/nft/services/api'
 import TransactionAdapter from '~/logic/transactions/adapter'
 import {
   TransactionType,
@@ -14,8 +14,8 @@ export default class TransactionService {
   @Inject(tokens.TOKEN_SERVICE)
   public tokenService!: TokenService
 
-  @Inject(tokens.NFT_API_SERVICE)
-  public nftAPIService!: NFTAPIService
+  @Inject(tokens.NFT_SERVICE)
+  public nftService!: NFTService
 
   @Inject(tokens.TRANSACTION_API_SERVICE)
   public transactionAPIService!: TransactionAPIService
@@ -104,12 +104,6 @@ export default class TransactionService {
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
           const adapter = new TransactionAdapter(transaction)
-          if (transaction.token) {
-            const token = await this.tokenService.getTokenInfo(
-              transaction.token.address
-            )
-            return adapter.request({ token })
-          }
           return await adapter.request({})
         }
       )
@@ -139,7 +133,7 @@ export default class TransactionService {
         async (transaction: TransactionType): Promise<TransactionType> => {
           const adapter = new TransactionAdapter(transaction)
           if (transaction.token && transaction.token.id) {
-            const nft = await this.nftAPIService.fetchOne({
+            const nft = await this.nftService.fetchOne({
               tokenId: String(transaction.token.id),
               contractAddress: transaction.token.address
             })
