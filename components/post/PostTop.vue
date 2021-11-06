@@ -6,11 +6,11 @@
       </a>
       <div class="post-date__text">
         {{ transaction.timeStamp | humanizeDate }} ago
-        {{ income ? ' to' : ' from' }}
+        {{ income ? 'from' : 'to' }}
         <nuxt-link
           style="color: #a5a5a5"
           :to="`/${networkName}/${
-            income ? transaction.receiver : transaction.sender
+            income ? transaction.sender : transaction.receiver
           }`"
         >
           {{
