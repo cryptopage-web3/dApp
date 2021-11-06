@@ -1,28 +1,25 @@
 export const paginationMixin = {
   data: () => ({
-    page: 1,
-    pageSize: 10,
     scrollListener: null
   }),
 
   computed: {
-    showNext() {
-      return (
-        this.$store.getters['address/transactionsCount'] >=
-        this.page * this.pageSize
-      )
-    },
     address() {
       return this.$store.getters['address/address']
     },
+
     chainId() {
       return this.$store.getters['auth/chainId']
+    },
+
+    isFetchDisabled() {
+      return (
+        this.isCompleted || this.$fetchState.pending || this.$fetchState.error
+      )
     }
   },
 
   watch: {
-    page: '$fetch',
-    pageSize: '$fetch',
     address: 'reset',
     chainId: 'resetChain'
   },
@@ -41,18 +38,36 @@ export const paginationMixin = {
 
   methods: {
     next() {
-      if (!this.showNext) return
-      this.page += 1
+      /** нельзя вызвать $fetch, если уже получили полный список транзакций,
+       * либо текущий статус запроса pending или error */
+      if (this.isFetchDisabled) return
+      this.$fetch()
     },
 
-    async reset() {
-      await this.$nuxt.$loading.start()
+    reset() {
+      /** очищаем транзакции при смене адреса */
+      this.$store.dispatch('address/clearTransactions')
 
-      this.page = 1
-      await this.$store.dispatch('address/clearTransactions')
-      await this.$fetch()
+      /** после очистки нужно запустить $fetch
+       * если $fetch не запущен, то сразу его вызываем
+       * если $fetch выполняется, то необходимо дождаться его завершения, а потом запустить
+       * иначе $fetch не запустится
+       */
+      if (!this.$fetchState.pending) {
+        this.$fetch()
+        return
+      }
 
-      await setTimeout(() => this.$nuxt.$loading.finish(), 500)
+      /** ожидаем окончания $fetch, очищаем watcher, запускаем повторно $fetch */
+      const unwatchPending = this.$watch('$fetchState.pending', (pending) => {
+        if (!pending) {
+          unwatchPending()
+
+          this.$nextTick(() => {
+            this.$fetch()
+          })
+        }
+      })
     },
 
     async resetChain() {

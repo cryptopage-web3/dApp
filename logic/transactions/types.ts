@@ -64,3 +64,22 @@ export type TransactionType = InternalTransactionType & {
   timeStamp: string
   to: string
 }
+
+export type TransactionPagination = {
+  pageSize: number
+  sort: string
+  page: number
+  isCompleted: boolean
+}
+
+export enum ETransactionPaginationType {
+  normal = 'normal',
+  ERC721 = 'ERC721',
+  ERC20 = 'ERC20'
+}
+
+export type ParamsSetTransactionPagination = {
+  type: ETransactionPaginationType
+  page: number
+  isCompleted?: boolean
+}
