@@ -13,8 +13,10 @@ export default {
   AUTH_SERVICE: new Token('auth-service'),
 
   // NFT services:
+  NFT_SERVICE: new Token('nft-service'),
   NFT_API_SERVICE: new Token('nft-api-service'),
   NFT_WEB3_SERVICE: new Token('nft-web3-service'),
+  NFT_IPFS_SERVICE: new Token('nft-ipfs-service'),
 
   // Transaction service:
   TRANSACTION_SERVICE: new Token('transaction-service'),
