@@ -26,16 +26,31 @@ export default {
   mixins: [paginationMixin],
 
   async fetch() {
+    /** не делаем запрос:
+     * если уже получен полный список транзакций,
+     * если сменился адрес, но в сторе адрес еще старый,
+     * поэтому транзакции стора и пагинатор относятся к старому адресу
+     * должен отработать метод reset() в pagination
+     */
+    if (
+      this.isCompleted ||
+      (this.address && this.address !== this.$route.params.address)
+    ) {
+      return
+    }
+
     await this.$store.dispatch('address/getERC721Transactions', {
-      address: this.$route.params.address,
-      page: this.page,
-      offset: this.pageSize
+      address: this.$route.params.address
     })
   },
 
   computed: {
     transactions() {
       return this.$store.getters['address/ERC721Transactions']
+    },
+
+    isCompleted() {
+      return this.$store.getters['address/isERC721TransactionsCompleted']
     }
   }
 }
