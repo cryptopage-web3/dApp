@@ -2,13 +2,7 @@ import { AxiosInstance } from 'axios'
 import * as tPromise from 'io-ts-promise'
 import { Inject, Service, Container } from 'vue-typedi'
 import { NFTPayload } from '~/logic/nft/models'
-import NFTAdapter from '~/logic/nft/adapter'
-import {
-  NFTType,
-  FetchOneType,
-  NFTPayloadType,
-  ISendNFTApi
-} from '~/logic/nft/types'
+import { NFTPayloadType, NFTMediaType } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
 
@@ -38,99 +32,50 @@ export default class NFTAPIService {
   @Inject(tokens.NFT_WEB3_SERVICE)
   public nftWeb3Service!: NFTWeb3Service
 
-  private fetchBase64NFTPayloadByTokenURI = async (
-    tokenURI: string
-  ): Promise<NFTPayloadType> => {
-    const base64 = tokenURI.split(';base64,')[1]
+  public IPFSHashToURI = (IPFSHash: string): string => {
+    if (IPFSHash.startsWith('ipfs://ipfs/')) {
+      return IPFSHash.replace('ipfs://', 'https://ipfs.io/')
+    } else if (IPFSHash.startsWith('ipfs://')) {
+      return IPFSHash.replace('ipfs://', 'https://ipfs.io/ipfs/')
+    } else if (IPFSHash.startsWith('https://ipfs.io/ipfs/')) {
+      return IPFSHash
+    }
+    return `https://ipfs.io/ipfs/${IPFSHash}`
+  }
+
+  public fetchMedia = async (URI: string): Promise<NFTMediaType | null> => {
     try {
-      const response = await JSON.parse(atob(base64))
-      return tPromise.decode(NFTPayload, response)
-    } catch (error) {
+      const response = await this.$axios(URI, { responseType: 'blob' })
+      return await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          const result = String(reader.result)
+          const type = result.split('/')[0].split('data:')[1]
+          if (type === 'audio') {
+            return resolve({ audio: result })
+          } else if (type === 'video') {
+            return resolve({ video: result })
+          } else if (type === 'image') {
+            return resolve({ image: result })
+          } else {
+            return resolve({})
+          }
+        }
+        reader.readAsDataURL(response.data)
+      })
+    } catch {
       return {}
     }
   }
 
-  private fetchHTTPSNFTPayloadByTokenURI = async (
+  public fetchNFTPayload = async (
     tokenURI: string
   ): Promise<NFTPayloadType> => {
     try {
       const response = await this.$axios.get(tokenURI)
       return tPromise.decode(NFTPayload, response.data)
-    } catch (error) {
+    } catch {
       return {}
     }
-  }
-
-  private fetchNFTPayloadByTokenURI = async (
-    tokenURI: string
-  ): Promise<NFTPayloadType> => {
-    if (tokenURI.startsWith('data:') && tokenURI.includes(';base64,')) {
-      return await this.fetchBase64NFTPayloadByTokenURI(tokenURI)
-    } else if (tokenURI.startsWith('ipfs://ipfs/')) {
-      tokenURI = tokenURI.replace('ipfs://', 'https://ipfs.io/')
-      return await this.fetchHTTPSNFTPayloadByTokenURI(tokenURI)
-    } else if (tokenURI.startsWith('ipfs://')) {
-      tokenURI = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/')
-      return await this.fetchHTTPSNFTPayloadByTokenURI(tokenURI)
-    } else {
-      return await this.fetchHTTPSNFTPayloadByTokenURI(tokenURI)
-    }
-  }
-
-  /**
-   * Fetches NFT from the remote URI (TokenURI).
-   *
-   * Uses runtime type validation to make sure
-   * that types are up-to-date with the any server.
-   *
-   * @see https://github.com/aeirola/io-ts-promise.
-   *
-   * @returns Parsed response data.
-   */
-  public fetchOne = async ({
-    tokenId,
-    contractAddress
-  }: FetchOneType): Promise<NFTType> => {
-    const { tokenURI, owner } = await this.nftWeb3Service.getContractData({
-      tokenId,
-      contractAddress
-    })
-    let adaptedNFT = NFTAdapter()
-    if (tokenURI) {
-      const nftPayload = await this.fetchNFTPayloadByTokenURI(tokenURI)
-      adaptedNFT = NFTAdapter(nftPayload)
-    }
-    return await adaptedNFT.request(owner)
-  }
-
-  /** Send nft to contract via web3 */
-  public sendNFTHash = ({ params, callback }: ISendNFTApi) => {
-    let txHash = ''
-
-    this.nftWeb3Service.sendSafeMint({
-      params,
-      callbacks: {
-        onTransactionHash(hash: string) {
-          txHash = hash
-
-          callback({
-            status: 'pending',
-            txHash
-          })
-        },
-        onReceipt() {
-          callback({
-            status: 'success',
-            txHash
-          })
-        },
-        onError() {
-          callback({
-            status: 'error',
-            txHash
-          })
-        }
-      }
-    })
   }
 }
