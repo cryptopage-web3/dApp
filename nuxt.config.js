@@ -19,7 +19,12 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    script: [
+      {
+        src: 'https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/js/green-audio-player.min.js'
+      }
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

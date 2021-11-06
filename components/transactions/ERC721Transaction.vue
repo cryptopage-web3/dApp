@@ -1,13 +1,9 @@
 <template>
-  <div class="post post-image">
-    <top :transaction="transaction" />
-    <a
-      href="#"
-      :style="{ backgroundImage: `url(${transaction.nft.image})` }"
-      class="post-image__link"
-    />
-    <text-block :text="transaction.nft.description" />
-    <bottom />
+  <div style="padding: 1em 0">
+    <image-post v-if="transaction.nft.image" :transaction="transaction" />
+    <audio-post v-else-if="transaction.nft.audio" :transaction="transaction" />
+    <video-post v-else-if="transaction.nft.video" :transaction="transaction" />
+    <text-block v-else :text="transaction.nft.description" />
   </div>
 </template>
 <script lang="ts">
@@ -16,9 +12,10 @@ import TransactionMixin from '~/mixins/transaction'
 
 @Component({
   components: {
-    top: async () => await import('@/components/post/PostTop.vue'),
-    textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
-    bottom: async () => await import('@/components/post/PostBottom.vue')
+    imagePost: async () => await import('@/components/post/Image.vue'),
+    audioPost: async () => await import('@/components/post/Audio.vue'),
+    videoPost: async () => await import('@/components/post/Video.vue'),
+    textBlock: async () => await import('@/components/post/PostTextBlock.vue')
   }
 })
 export default class ERC721Transaction extends mixins(TransactionMixin) {}

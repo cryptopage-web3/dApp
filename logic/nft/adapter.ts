@@ -1,21 +1,18 @@
-import NFTParser from '~/logic/nft/parser'
-import {
-  NFTType,
-  NFTAdapterType,
-  NFTPayloadType,
-  ParsedNFTType
-} from '~/logic/nft/types'
+import { NFTType, NFTAdapterType, ParsedNFTType } from '~/logic/nft/types'
 
-const NFTAdapter = (NFTPayload?: NFTPayloadType): NFTAdapterType => {
-  const parser = new NFTParser()
-
-  const data: ParsedNFTType = NFTPayload
-    ? parser.parse(NFTPayload)
-    : parser.default
+const NFTAdapter = (parsedNFT: ParsedNFTType): NFTAdapterType => {
   return {
-    request: (owner: string): NFTType => {
-      const NFT: NFTType = { owner, ...data }
-      return NFT
+    request: ({ owner, image, audio, video }): NFTType => {
+      if (image) {
+        return { owner, image, ...parsedNFT }
+      }
+      if (audio) {
+        return { owner, audio, ...parsedNFT }
+      }
+      if (video) {
+        return { owner, video, ...parsedNFT }
+      }
+      return { owner, ...parsedNFT }
     }
   }
 }

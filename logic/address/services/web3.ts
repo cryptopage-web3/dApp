@@ -12,12 +12,16 @@ export default class AddressWeb3Service {
   public getBalanceOf = async (
     address: string,
     contractAddress: string
-  ): Promise<string> => {
-    const contract = new this.$web3.eth.Contract(ERC20ABI, contractAddress)
-    const balanceOf = await contract.methods.balanceOf(address).call()
-    const decimals = await contract.methods.decimals().call()
-    const balance = balanceOf / 10 ** decimals
-    return balance.toString()
+  ): Promise<number> => {
+    try {
+      const contract = new this.$web3.eth.Contract(ERC20ABI, contractAddress)
+      const balanceOf = await contract.methods.balanceOf(address).call()
+      const decimals = await contract.methods.decimals().call()
+      const balance = balanceOf / 10 ** decimals
+      return balance
+    } catch {
+      return 0
+    }
   }
 
   public getBalance = async (address: string): Promise<number> => {

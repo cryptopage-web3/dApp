@@ -63,9 +63,10 @@ export default class TokenService {
     address: string
   ): Promise<TokenBalanceType[]> => {
     let tokenBalances = await this.tokenAPIService.getTokenBalances(address)
+    const pageTokenBalance = await this.getPageTokenBalance(address)
 
     if (tokenBalances.length > 0) {
-      const basicToken = tokenBalances.find((tokenBalance) => {
+      const basicTokenBalance = tokenBalances.find((tokenBalance) => {
         return tokenBalance.tokenInfo.address === this.basicToken.address
       })
       tokenBalances = tokenBalances.filter((tokenBalance) => {
@@ -78,8 +79,9 @@ export default class TokenService {
       tokenBalances = tokenBalances.sort((a, b) =>
         a.usdBalance > b.usdBalance ? -1 : 1
       )
-      if (basicToken) {
-        tokenBalances.unshift(basicToken)
+      if (basicTokenBalance) {
+        tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]
+        // tokenBalances.unshift(basicToken)
       }
       // tokenBalances = [basicToken, ...tokenBalances]
     } else {
@@ -90,7 +92,7 @@ export default class TokenService {
       tokenBalances = tokenBalances.sort((a, b) =>
         a.usdBalance > b.usdBalance ? -1 : 1
       )
-      tokenBalances = [basicTokenBalance, ...tokenBalances]
+      tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]
     }
 
     /** Add to cache each token */
@@ -119,6 +121,36 @@ export default class TokenService {
       usdBalance,
       diff: 0,
       tokenInfo
+    }
+  }
+
+  public getPageTokenBalance = async (
+    address: string
+  ): Promise<TokenBalanceType> => {
+    const tokenInfo = this.pageToken
+    const balance = await this.addressService.addressWEB3Service.getBalanceOf(
+      address,
+      tokenInfo.address
+    )
+    const rate = await this.getTokenRate(tokenInfo.address, 'usd')
+    tokenInfo.rate = { usd: rate }
+    const usdBalance = balance * Number(tokenInfo.rate ? tokenInfo.rate.usd : 0)
+    return {
+      balance,
+      usdBalance,
+      diff: 0,
+      tokenInfo
+    }
+  }
+
+  public get pageToken(): TokenInfoType {
+    return {
+      address: '0x65a2e2e489fde1857e12163a9f2f7640c0d0f403',
+      name: 'Crypto Page',
+      symbol: 'PAGE',
+      decimals: 18,
+      image: `/_nuxt/assets/img/header-logo_img.png`,
+      rate: { usd: 0 }
     }
   }
 
