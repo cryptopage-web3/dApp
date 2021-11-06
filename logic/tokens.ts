@@ -32,7 +32,6 @@ export default {
   // Address services:
   ADDRESS_SERVICE: new Token('address-service'),
   ADDRESS_API_SERVICE: new Token('address-api-service'),
-  // ADDRESS_IPFS_SERVICE: new Token('address-ipfs-service'),
   ADDRESS_WEB3_SERVICE: new Token('address-web3-service'),
 
   // API services
