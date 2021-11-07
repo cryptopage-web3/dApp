@@ -121,7 +121,11 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('ETHEREUM', 'coin98')">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('ETHEREUM', 'coin98')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img5.png"
                         alt=""
@@ -188,7 +192,11 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('BSC', 'coin98')">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('BSC', 'coin98')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img5.png"
                         alt=""
@@ -257,7 +265,11 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('POLYGON', 'coin98')">
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('POLYGON', 'coin98')"
+                    >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img5.png"
                         alt=""
@@ -436,11 +448,17 @@ export default {
   },
   methods: {
     switchProvider(type, provider) {
-      if ((provider === 'metamask' || provider === 'coin98') && provider === this.selectedProvider) {
+      if (
+        (provider === 'metamask' || provider === 'coin98') &&
+        provider === this.selectedProvider
+      ) {
         this.$store.dispatch('auth/switchChain', type)
       } else {
         this.$store.dispatch('auth/switchProvider', provider)
       }
+
+      /** close modal on switch */
+      $('#modal-connect').modal('hide')
     }
   }
 }
