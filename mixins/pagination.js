@@ -70,10 +70,15 @@ export const paginationMixin = {
       })
     },
 
-    async resetChain() {
-      await this.$nuxt.$loading.start()
+    async resetChain(newChain, oldChain) {
+      /** проверяем, что chain изменился вне зависимости от типа: string, number */
+      if (Number(newChain) === Number(oldChain)) {
+        return
+      }
+
       const params = this.$route.params
       const chainId = Number(this.chainId)
+
       if (chainId === 1) {
         params.networkName = 'eth'
       } else if (chainId === 4) {
@@ -83,10 +88,9 @@ export const paginationMixin = {
       } else if (chainId === 137) {
         params.networkName = 'matic'
       }
+
       await this.$store.dispatch('address/clearTransactions')
-      await this.$store.dispatch('auth/setChainId', this.chainId)
       await this.$router.push({ params })
-      await setTimeout(() => this.$nuxt.$loading.finish(), 500)
     },
 
     scrollHandler() {
