@@ -465,7 +465,7 @@ body{
 	-ms-flex: 1;
 	flex: 1;
 	height: 50px;
-	padding: 0 35px 0 15px;
+	padding: 0 0 0 15px;
 	background-color: #1f2127;
 	border-radius: 15px;
 	-webkit-transition: background-color 0.5s;
@@ -783,6 +783,47 @@ body{
 .connect-wallet__list li a:hover {
 	color: #2a91ff;
 }
+
+.change-network-col-body {
+	margin-top: 15px;
+	width: 100%;
+	z-index: 2;
+	background-color: #1f2127;
+	border-radius: 15px;
+}
+
+.change-network__list {
+	margin: 0;
+	padding: 20px 15px;
+}
+.change-network__list li {
+	margin-bottom: 20px;
+}
+.change-network__list li:last-child {
+	margin-bottom: 0;
+}
+.change-network__list li a {
+	display: inline-block;
+	font-family: "Myriad Pro";
+	font-size: 14px;
+	font-weight: 400;
+	color: white;
+	line-height: 1;
+	-webkit-transition: color 0.5s;
+	-o-transition: color 0.5s;
+	transition: color 0.5s;
+}
+.change-network__list li a:hover {
+	color: #2a91ff;
+}
+
+.change-network__list li a img {
+	width: 30px;
+	height: 20px;
+	padding-right: 10px;
+	object-fit: contain;
+}
+
 @media (min-width: 1200px) { 
 	.header-list {
 		display: block !important;
@@ -1845,10 +1886,19 @@ body{
 .white .connect-wallet-col-body {
 	background-color: #f5f9fd;
 }
+.white .change-network-col-body {
+	background-color: #f5f9fd;
+}
 .white .connect-wallet__list li a {
 	color: #4d4d4d;
 }
+.white .change-network__list li a {
+	color: #4d4d4d;
+}
 .white .connect-wallet__list li a:hover {
+	color: #ef201b;
+}
+.white .change-network__list li a:hover {
 	color: #ef201b;
 }
 .white .footer {
@@ -1858,6 +1908,9 @@ body{
 	border: none;
 }
 .connect-wallet-col-body {
+	display: none;
+}
+.change-network-col-body {
 	display: none;
 }
 .connect-wallet__link-hover.active {
@@ -1950,6 +2003,10 @@ body{
 		position: static;
 		margin-top: 10px;
 	}
+	.change-network-col-body {
+		position: static;
+		margin-top: 10px;
+	}
 	.connect-wallet-wr {
 		-webkit-box-align: start;
 		-ms-flex-align: start;
@@ -1959,6 +2016,9 @@ body{
 		margin-top: 12px;
 	}
 	.connect-wallet__list {
+		padding: 20px 42px;
+	}
+	.change-network__list {
 		padding: 20px 42px;
 	}
 	.header-list-wr {
@@ -2117,6 +2177,9 @@ body{
 		margin-bottom: 10px;
 	}
 	.connect-wallet-col-body {
+		border-radius: 5px;
+	}
+	.change-network-col-body {
 		border-radius: 5px;
 	}
 	.main-top {
@@ -2403,4 +2466,10 @@ body{
 		justify-content: flex-end;
 	}
 
+}
+
+.change-network-col {
+	width: 20px;
+	height: 20px;
+	background-color: red;
 }
