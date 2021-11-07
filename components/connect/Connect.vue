@@ -156,13 +156,13 @@ export default {
                     .find('.connect-wallet-col-body')
                     .slideUp(300)
                 }, 300)
-                window.timeout = timeout
+                window.__timeout = timeout
               }
             )
 
             $(this.$refs.connect_list).hover(
               function () {
-                clearTimeout(window.timeout)
+                clearTimeout(window.__timeout)
               },
               function () {
                 $('.connect-wallet-col-body').slideUp(300)
