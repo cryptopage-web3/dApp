@@ -30,14 +30,14 @@ export default class NFTWeb3Service {
   public getContractData = async ({
     tokenId,
     contractAddress
-  }: FetchOneType): Promise<ERC721ContractDataType> => {
+  }: FetchOneType): Promise<ERC721ContractDataType | null> => {
     try {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
       return { tokenURI, owner }
     } catch {
-      return { tokenURI: '', owner: '' }
+      return null
     }
   }
 

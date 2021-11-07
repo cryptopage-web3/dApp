@@ -30,12 +30,14 @@ export default class NFTParser {
   }
 
   private extractImage(NFTPayload: NFTPayloadType): string {
-    return (
-      NFTPayload.image ||
-      NFTPayload.image_url ||
-      NFTPayload.image_data ||
-      this.default.image
-    )
+    const image =
+      NFTPayload.image_url || NFTPayload.image_data || NFTPayload.image
+    if (!image) return ''
+    return image
+  }
+
+  public parseAnimationURL(NFTPayload: NFTPayloadType): string {
+    return NFTPayload.animation_url ? NFTPayload.animation_url : ''
   }
 
   private extractTitle(NFTPayload: NFTPayloadType): string {

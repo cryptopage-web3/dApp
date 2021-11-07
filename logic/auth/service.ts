@@ -171,7 +171,7 @@ export default class AuthService extends Vue {
     if (providerName === 'walletConnect' && this.$web3) {
       const accounts = await this.$web3.eth.getAccounts()
       const networkId = await this.$web3.eth.net.getId()
-      this.setOrChangeWeb3Data(accounts[0], networkId)
+      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
     }
   }
 
@@ -272,13 +272,13 @@ export default class AuthService extends Vue {
         this.changeWeb3($web3)
         const accounts = await this.$web3.eth.getAccounts()
         const networkId = await this.$web3.eth.net.getId()
-        this.setOrChangeWeb3Data(accounts[0], networkId)
+        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
 
         provider.on('accountsChanged', (accounts: string[]) => {
-          this.setOrChangeWeb3Data(accounts[0], networkId)
+          this.setOrChangeWeb3Data(accounts[0], Number(networkId))
         })
         provider.on('chainChanged', (chainId: number) => {
-          this.setOrChangeWeb3Data(accounts[0], chainId)
+          this.setOrChangeWeb3Data(accounts[0], Number(chainId))
         })
         provider.on('close', async () => {
           await this.kill()
@@ -302,7 +302,7 @@ export default class AuthService extends Vue {
         setTimeout(() => {
           this.setOrChangeWeb3Data(
             window.ethereum.selectedAddress,
-            window.ethereum.networkVersion
+            Number(window.ethereum.networkVersion)
           )
         }, 300)
       }

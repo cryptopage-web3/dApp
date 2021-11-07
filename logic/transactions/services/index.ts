@@ -1,8 +1,8 @@
 import { Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
 import TokenService from '~/logic/tokens/services'
+import NFTService from '~/logic/nft/services'
 import TransactionAPIService from '~/logic/transactions/services/api'
-import NFTAPIService from '~/logic/nft/services/api'
 import TransactionAdapter from '~/logic/transactions/adapter'
 import {
   TransactionType,
@@ -14,8 +14,8 @@ export default class TransactionService {
   @Inject(tokens.TOKEN_SERVICE)
   public tokenService!: TokenService
 
-  @Inject(tokens.NFT_API_SERVICE)
-  public nftAPIService!: NFTAPIService
+  @Inject(tokens.NFT_SERVICE)
+  public nftService!: NFTService
 
   @Inject(tokens.TRANSACTION_API_SERVICE)
   public transactionAPIService!: TransactionAPIService
@@ -43,19 +43,11 @@ export default class TransactionService {
    * Get a list of 'Normal' Transactions By Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
    */
-  public getNormalTransactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
+  public getNormalTransactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
     const transactions = await this.transactionAPIService.getNormalTransactions(
-      {
-        address,
-        page,
-        offset,
-        sort
-      }
+      params
     )
     return await Promise.all(
       transactions.map(
@@ -68,48 +60,26 @@ export default class TransactionService {
     )
   }
 
-  public getInternalTransactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    return await this.transactionAPIService.getInternalTransactions({
-      address,
-      page,
-      offset,
-      sort
-    })
+  public getInternalTransactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
+    return await this.transactionAPIService.getInternalTransactions(params)
   }
 
   /**
    * Get a list of "ERC20 - Token Transfer Events" by Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
    */
-  public getERC20Transactions = async ({
-    address,
-    contractAddress,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    const transactions = await this.transactionAPIService.getERC20Transactions({
-      address,
-      contractAddress,
-      page,
-      offset,
-      sort
-    })
+  public getERC20Transactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
+    const transactions = await this.transactionAPIService.getERC20Transactions(
+      params
+    )
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
           const adapter = new TransactionAdapter(transaction)
-          if (transaction.token) {
-            const token = await this.tokenService.getTokenInfo(
-              transaction.token.address
-            )
-            return adapter.request({ token })
-          }
           return await adapter.request({})
         }
       )
@@ -120,26 +90,18 @@ export default class TransactionService {
    * Get a list of "ERC721 - Token Transfer Events" by Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
    */
-  public getERC721Transactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = 'desc'
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
+  public getERC721Transactions = async (
+    params: ParamsTransactionsType
+  ): Promise<TransactionType[]> => {
     const transactions = await this.transactionAPIService.getERC721Transactions(
-      {
-        address,
-        page,
-        offset,
-        sort
-      }
+      params
     )
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
           const adapter = new TransactionAdapter(transaction)
           if (transaction.token && transaction.token.id) {
-            const nft = await this.nftAPIService.fetchOne({
+            const nft = await this.nftService.fetchOne({
               tokenId: String(transaction.token.id),
               contractAddress: transaction.token.address
             })
