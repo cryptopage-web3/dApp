@@ -35,7 +35,25 @@ export default class NFTWeb3Service {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
-      return { tokenURI, owner }
+      let comments = null
+
+      /** если NFT создана через наш контракт, то получаем его комментарии */
+      if (contractAddress.toLowerCase() === CONTRACT_ADDRESS.toLowerCase()) {
+        const ownContract = new this.$web3.eth.Contract(
+          CONTRACT_ABI,
+          CONTRACT_ADDRESS
+        )
+
+        /**
+         * если запрос возвращает исключение,
+         * то предполагаем, что комментарии не были включены при создании NFT
+         */
+        try {
+          comments = await ownContract.methods.tokenComments(tokenId).call()
+        } catch {}
+      }
+
+      return { tokenURI, owner, comments }
     } catch {
       return null
     }
