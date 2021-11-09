@@ -1,13 +1,6 @@
 <template>
-  <div class="post post-image">
+  <div class="post">
     <top :transaction="transaction" />
-    <loader v-if="loading" />
-    <a
-      v-if="transaction.nft.image"
-      href="#"
-      :style="{ backgroundImage: `url(${transaction.nft.image})` }"
-      class="post-image__link"
-    />
     <text-block :text="transaction.nft.description" />
     <bottom v-if="transaction.nft.commentsEnabled" />
   </div>
@@ -19,17 +12,9 @@ Component.registerHooks(['mounted'])
 @Component({
   components: {
     top: async () => await import('@/components/post/PostTop.vue'),
-    loader: () => import('~/components/loaders/GrowLoader.vue'),
     textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
     bottom: async () => await import('@/components/post/PostBottom.vue')
   }
 })
-export default class ERC721TransactionImage extends mixins(TransactionMixin) {
-  loading = true
-  mounted() {
-    this.$nextTick(() => {
-      setTimeout(() => (this.loading = false), 1000)
-    })
-  }
-}
+export default class ERC721TransactionImage extends mixins(TransactionMixin) {}
 </script>

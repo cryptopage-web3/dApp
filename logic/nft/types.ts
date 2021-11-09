@@ -1,5 +1,11 @@
 import * as ts from 'io-ts'
-import { Attribute, Property, NFTPayload, ParsedNFT, NFTMedia } from '~/logic/nft/models'
+import {
+  Attribute,
+  Property,
+  NFTPayload,
+  ParsedNFT,
+  NFTMedia
+} from '~/logic/nft/models'
 /**
  * These are inner types, they are only used inside the client.
  *
@@ -16,10 +22,12 @@ export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 
 export type NFTType = ParsedNFTType & {
   owner: string
+  commentsEnabled: boolean
 }
 
-export type NFTAdapterRequestParamsType = NFTMediaType &  {
+export type NFTAdapterRequestParamsType = NFTMediaType & {
   owner: string
+  commentsEnabled: boolean
 }
 
 export type NFTAdapterType = {
@@ -37,9 +45,16 @@ export interface FetchManyType {
   pageSize: number
 }
 
+interface ERC721CommentsType {
+  comments: string
+  likes: string
+  dislakes: string
+}
+
 export interface ERC721ContractDataType {
   tokenURI: string
   owner: string
+  comments: ERC721CommentsType | null
 }
 
 export interface ISendNFTParams {
