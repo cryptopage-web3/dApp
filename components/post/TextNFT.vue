@@ -2,7 +2,7 @@
   <div class="post">
     <top :transaction="transaction" />
     <text-block :text="transaction.nft.description" />
-    <bottom />
+    <bottom v-if="transaction.nft.commentsEnabled" />
   </div>
 </template>
 <script lang="ts">
