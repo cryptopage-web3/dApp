@@ -10,7 +10,8 @@ import {
   FetchOneType,
   NFTPayloadType,
   NFTMediaType,
-  ISendNFTApi
+  ISendNFTApi,
+  NFTAdapterRequestParamsType
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
@@ -94,16 +95,23 @@ export default class NFTService {
         contractAddress
       })
       if (contractData) {
-        const { owner, tokenURI } = contractData
+        const { owner, tokenURI, comments } = contractData
         const NFTPayload = await this.fetchNFTPayload(tokenURI)
         const animationURL = this.parser.parseAnimationURL(NFTPayload)
         const data = this.parser.parse(NFTPayload)
         const adapter = NFTAdapter(data)
+
+        const params: NFTAdapterRequestParamsType = {
+          owner,
+          commentsEnabled: Boolean(comments)
+        }
+
         if (animationURL) {
           const media = await this.fetchMedia(animationURL)
-          return adapter.request({ owner, ...media })
+          Object.assign(params, media)
         }
-        return adapter.request({ owner })
+
+        return adapter.request(params)
       }
       return null
     } catch {

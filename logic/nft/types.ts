@@ -22,10 +22,12 @@ export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 
 export type NFTType = ParsedNFTType & {
   owner: string
+  commentsEnabled: boolean
 }
 
 export type NFTAdapterRequestParamsType = NFTMediaType & {
   owner: string
+  commentsEnabled: boolean
 }
 
 export type NFTAdapterType = {
