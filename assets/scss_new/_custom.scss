@@ -24,6 +24,26 @@
   width: 100%;
 }
 
+.loader-skeleton {
+  width: 100%;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.11);
+  animation: skeleton 1s ease-in-out infinite;
+}
+
+@keyframes skeleton {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* ===== sidebar profile signin ===== */
 
 .sidebar-profile__signin-btn {
@@ -131,6 +151,14 @@
   font-size: 16px;
   font-weight: 400;
   border-radius: 10px;
+}
+
+.transactions-body__post {
+  margin-bottom: 50px;
+}
+
+.transactions-body__post:last-child {
+  margin-bottom: 0;
 }
 
 /* ===== wallet connect ===== */
