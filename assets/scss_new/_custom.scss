@@ -161,6 +161,19 @@
   margin-bottom: 0;
 }
 
+.post-comment__close {
+  cursor: pointer;
+  padding-right: 10px;
+  padding-top: 2px;
+  color: #2a91ff;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+.post-comment__close:hover {
+  opacity: 1;
+}
+
 /* ===== wallet connect ===== */
 
 .connect-wallet__link_connect::after {
