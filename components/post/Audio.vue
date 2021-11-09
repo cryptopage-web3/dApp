@@ -3,7 +3,11 @@
     <top :transaction="transaction" />
     <div class="post-audio-wr">
       <loader v-if="loading" />
-      <div :id="transaction.hash" class="post-audio-item green-audio-player">
+      <div
+        v-show="!loading"
+        :id="transaction.hash"
+        class="post-audio-item green-audio-player"
+      >
         <audio crossorigin="" preload="none">
           <source :src="transaction.nft.audio" type="audio/mpeg" />
         </audio>
@@ -18,7 +22,7 @@ import TransactionMixin from '~/mixins/transaction'
 export default {
   components: {
     top: async () => await import('@/components/post/PostTop.vue'),
-    loader: () => import('~/components/loaders/GrowLoader.vue'),
+    loader: () => import('~/components/loaders/Skeleton.vue'),
     textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
     bottom: async () => await import('@/components/post/PostBottom.vue')
   },

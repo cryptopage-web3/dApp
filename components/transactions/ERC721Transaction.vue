@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 1em 0">
+  <div class="transactions-body__post">
     <image-post v-if="transaction.nft.image" :transaction="transaction" />
     <audio-post v-else-if="transaction.nft.audio" :transaction="transaction" />
     <video-post v-else-if="transaction.nft.video" :transaction="transaction" />
