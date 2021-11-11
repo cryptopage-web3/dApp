@@ -1,5 +1,5 @@
 <template>
-  <div class="post-bottom">
+  <div ref="root" class="post-bottom">
     <div class="post-like-dis">
       <a href="#" class="post-like" @click.prevent="onLike">
         <img src="@/assets/img/post-like_img1.png" alt="" />
@@ -10,7 +10,7 @@
         <span> 0 </span>
       </a>
     </div>
-    <div class="post-comment">
+    <div ref="comment" class="post-comment">
       <form>
         <div class="post-comment-wr">
           <input
@@ -50,32 +50,65 @@ export default {
   data: () => ({
     loading: false,
     comment: '',
-    like: true
+    like: true,
+    clickOutsideListener: null
   }),
 
+  mounted() {
+    this.$nextTick(() => {
+      this.clickOutsideListener = this.clickOutsideHandler.bind(this)
+      $(document).on('click', this.clickOutsideListener)
+    })
+  },
+
+  beforeDestroy() {
+    $(document).off('click', this.clickOutsideListener)
+    this.clickOutsideListener = null
+  },
+
   methods: {
-    onLike(event) {
+    onLike() {
       this.like = true
 
-      const targetEl = event.target
-      $(targetEl).closest('.post-like-dis').find('.post-dis').fadeOut(0)
-      $(targetEl).closest('.post-bottom').find('.post-comment').fadeIn(300)
-      $(targetEl).closest('.post-bottom').addClass('active')
+      setTimeout(() => {
+        $(this.$refs.root).find('.post-dis').fadeOut(0)
+        $(this.$refs.root).find('.post-comment').fadeIn(300)
+        $(this.$refs.root).addClass('active')
+      })
     },
 
-    onDislike(event) {
+    onDislike() {
       this.like = false
 
-      const targetEl = event.target
-      $(targetEl).closest('.post-bottom').find('.post-comment').fadeIn(300)
-      $(targetEl).closest('.post-bottom').addClass('active')
+      setTimeout(() => {
+        $(this.$refs.root).find('.post-comment').fadeIn(300)
+        $(this.$refs.root).addClass('active')
+      })
     },
 
-    close(event) {
-      const targetEl = event.target
-      $(targetEl).closest('.post-bottom').removeClass('active')
-      $(targetEl).closest('.post-bottom').find('.post-comment').fadeOut(300)
-      $(targetEl).closest('.post-bottom').find('.post-dis').fadeIn(300)
+    close() {
+      $(this.$refs.root).removeClass('active')
+      $(this.$refs.root).find('.post-comment').fadeOut(300)
+      $(this.$refs.root).find('.post-dis').fadeIn(300)
+
+      // reset form
+
+      this.resetForm()
+    },
+
+    clickOutsideHandler(event) {
+      if (
+        !$(event.target).closest('.post-comment-wr').length &&
+        $(this.$refs.comment).is(':visible') &&
+        !this.loading
+      ) {
+        this.close()
+      }
+    },
+
+    resetForm() {
+      this.comment = ''
+      this.like = true
     },
 
     submit() {
@@ -88,8 +121,6 @@ export default {
       }
 
       this.loading = true
-      // console.log(this.comment)
-      // debugger
     }
   }
 }
