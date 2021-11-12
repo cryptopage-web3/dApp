@@ -3,11 +3,11 @@
     <div class="post-like-dis">
       <a href="#" class="post-like" @click.prevent="onLike">
         <img src="@/assets/img/post-like_img1.png" alt="" />
-        <span> 0 </span>
+        <span> {{ likes }} </span>
       </a>
       <a href="#" class="post-dis" @click.prevent="onDislike">
         <img src="@/assets/img/post-like_img2.png" alt="" />
-        <span> 0 </span>
+        <span> {{ dislikes }} </span>
       </a>
     </div>
     <div ref="comment" class="post-comment">
@@ -69,6 +69,14 @@ export default class PostBottom extends Vue {
 
   @Inject(tokens.NFT_SERVICE)
   public nftService!: NFTService
+
+  get likes(): number {
+    return Number(this.transaction.nft?.comments?.likes)
+  }
+
+  get dislikes(): number {
+    return Number(this.transaction.nft?.comments?.dislakes)
+  }
 
   mounted() {
     this.$nextTick(() => {

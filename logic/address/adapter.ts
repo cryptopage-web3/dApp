@@ -1,9 +1,6 @@
 import EthplorerTokenBalanceParser from '~/logic/services/api/ethplorer/parser'
 import { EthplorerGetAddressInfoResponseType } from '~/logic/services/api/ethplorer/types'
-import {
-  AddressInfoAdapterType,
-  AddressInfoType
-} from '~/logic/address/types'
+import { AddressInfoAdapterType, AddressInfoType } from '~/logic/address/types'
 
 const AddressInfoAdapter = (
   addressInfo: EthplorerGetAddressInfoResponseType

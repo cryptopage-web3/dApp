@@ -99,12 +99,13 @@ export default class NFTService {
         const { owner, tokenURI, comments } = contractData
         const NFTPayload = await this.fetchNFTPayload(tokenURI)
         const animationURL = this.parser.parseAnimationURL(NFTPayload)
+        const parsedComments = this.parser.parseComments(comments)
         const data = this.parser.parse(NFTPayload)
         const adapter = NFTAdapter(data)
 
         const params: NFTAdapterRequestParamsType = {
           owner,
-          commentsEnabled: Boolean(comments)
+          comments: parsedComments
         }
 
         if (animationURL) {

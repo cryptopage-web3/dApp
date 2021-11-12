@@ -20,14 +20,20 @@ export type NFTPayloadType = ts.TypeOf<typeof NFTPayload>
 export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>
 export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 
+export type NFTCommentsType = {
+  comments: string
+  likes: string
+  dislakes: string
+}
+
 export type NFTType = ParsedNFTType & {
   owner: string
-  commentsEnabled: boolean
+  comments: NFTCommentsType | null
 }
 
 export type NFTAdapterRequestParamsType = NFTMediaType & {
   owner: string
-  commentsEnabled: boolean
+  comments: NFTCommentsType | null
 }
 
 export type NFTAdapterType = {
@@ -45,7 +51,7 @@ export interface FetchManyType {
   pageSize: number
 }
 
-interface ERC721CommentsType {
+export interface ERC721CommentsType {
   comments: string
   likes: string
   dislakes: string

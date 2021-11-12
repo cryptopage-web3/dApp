@@ -2,8 +2,8 @@ import { NFTType, NFTAdapterType, ParsedNFTType } from '~/logic/nft/types'
 
 const NFTAdapter = (parsedNFT: ParsedNFTType): NFTAdapterType => {
   return {
-    request: ({ owner, commentsEnabled, image, audio, video }): NFTType => {
-      const nft = { owner, commentsEnabled, ...parsedNFT }
+    request: ({ owner, comments, image, audio, video }): NFTType => {
+      const nft = { owner, comments, ...parsedNFT }
 
       if (image) {
         nft.image = image
