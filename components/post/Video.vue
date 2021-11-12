@@ -197,7 +197,7 @@
       </div>
     </div>
     <text-block :text="transaction.nft.description" />
-    <bottom v-if="transaction.nft.commentsEnabled" />
+    <bottom v-if="transaction.nft.commentsEnabled" :transaction="transaction" />
   </div>
 </template>
 <script lang="ts">

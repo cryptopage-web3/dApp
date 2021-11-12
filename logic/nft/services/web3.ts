@@ -5,7 +5,8 @@ import { CONTRACT_ABI, CONTRACT_ADDRESS } from '~/constants/contract'
 import {
   FetchOneType,
   ERC721ContractDataType,
-  ISendNFTWeb3
+  ISendNFTWeb3,
+  ISendNFTCommentWeb3
 } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
 
@@ -65,6 +66,20 @@ export default class NFTWeb3Service {
 
     contract.methods
       .safeMint(params.hash, params.comment)
+      .send({
+        from: params.from
+      })
+      .on('transactionHash', callbacks.onTransactionHash)
+      .on('receipt', callbacks.onReceipt)
+      .on('error', callbacks.onError)
+  }
+
+  /** Action comment by contract */
+  public sendComment = ({ params, callbacks }: ISendNFTCommentWeb3) => {
+    const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
+
+    contract.methods
+      .comment(params.tokenId, params.comment, params.like)
       .send({
         from: params.from
       })

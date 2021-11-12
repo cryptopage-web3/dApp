@@ -76,3 +76,24 @@ export interface ISendNFTWeb3 {
     onError: () => void
   }
 }
+
+export interface ISendNFTCommentParams {
+  from: string
+  tokenId: string
+  comment: string
+  like: boolean
+}
+
+export interface ISendNFTComment {
+  params: ISendNFTCommentParams
+  callback: (params: { status: string; txHash: string }) => void
+}
+
+export interface ISendNFTCommentWeb3 {
+  params: ISendNFTCommentParams
+  callbacks: {
+    onTransactionHash: (hash: string) => void
+    onReceipt: () => void
+    onError: () => void
+  }
+}
