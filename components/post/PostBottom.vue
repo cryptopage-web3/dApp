@@ -45,83 +45,94 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  data: () => ({
-    loading: false,
-    comment: '',
-    like: true,
-    clickOutsideListener: null
-  }),
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+
+@Component({})
+export default class PostBottom extends Vue {
+  loading = false
+  comment = ''
+  like = true
+  clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
+
+  $refs!: {
+    root: HTMLDivElement
+    comment: HTMLDivElement
+  }
 
   mounted() {
     this.$nextTick(() => {
       this.clickOutsideListener = this.clickOutsideHandler.bind(this)
       $(document).on('click', this.clickOutsideListener)
     })
-  },
+  }
 
   beforeDestroy() {
+    if (!this.clickOutsideListener) {
+      return
+    }
+
     $(document).off('click', this.clickOutsideListener)
     this.clickOutsideListener = null
-  },
+  }
 
-  methods: {
-    onLike() {
-      this.like = true
+  // methods
 
-      setTimeout(() => {
-        $(this.$refs.root).find('.post-dis').fadeOut(0)
-        $(this.$refs.root).find('.post-comment').fadeIn(300)
-        $(this.$refs.root).addClass('active')
-      })
-    },
+  onLike() {
+    this.like = true
 
-    onDislike() {
-      this.like = false
+    setTimeout(() => {
+      $(this.$refs.root).find('.post-dis').fadeOut(0)
+      $(this.$refs.root).find('.post-comment').fadeIn(300)
+      $(this.$refs.root).addClass('active')
+    })
+  }
 
-      setTimeout(() => {
-        $(this.$refs.root).find('.post-comment').fadeIn(300)
-        $(this.$refs.root).addClass('active')
-      })
-    },
+  onDislike() {
+    this.like = false
 
-    close() {
-      $(this.$refs.root).removeClass('active')
-      $(this.$refs.root).find('.post-comment').fadeOut(300)
-      $(this.$refs.root).find('.post-dis').fadeIn(300)
+    setTimeout(() => {
+      $(this.$refs.root).find('.post-comment').fadeIn(300)
+      $(this.$refs.root).addClass('active')
+    })
+  }
 
-      // reset form
+  close() {
+    $(this.$refs.root).removeClass('active')
+    $(this.$refs.root).find('.post-comment').fadeOut(300)
+    $(this.$refs.root).find('.post-dis').fadeIn(300)
 
-      this.resetForm()
-    },
+    // reset form
 
-    clickOutsideHandler(event) {
-      if (
-        !$(event.target).closest('.post-comment-wr').length &&
-        $(this.$refs.comment).is(':visible') &&
-        !this.loading
-      ) {
-        this.close()
-      }
-    },
+    this.resetForm()
+  }
 
-    resetForm() {
-      this.comment = ''
-      this.like = true
-    },
-
-    submit() {
-      if (!this.comment) {
-        this.$notify({
-          type: 'error',
-          title: 'Empty comment'
-        })
-        return
-      }
-
-      this.loading = true
+  clickOutsideHandler(event: JQuery.ClickEvent) {
+    if (
+      !$(event.target).closest('.post-comment-wr').length &&
+      $(this.$refs.comment).is(':visible') &&
+      !this.loading
+    ) {
+      this.close()
     }
+  }
+
+  resetForm() {
+    this.comment = ''
+    this.like = true
+  }
+
+  submit() {
+    if (!this.comment) {
+      this.$notify({
+        type: 'error',
+        title: 'Empty comment'
+      })
+      return
+    }
+
+    this.loading = true
   }
 }
 </script>
