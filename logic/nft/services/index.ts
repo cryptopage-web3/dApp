@@ -11,7 +11,8 @@ import {
   NFTPayloadType,
   NFTMediaType,
   ISendNFTApi,
-  NFTAdapterRequestParamsType
+  NFTAdapterRequestParamsType,
+  ISendNFTComment
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
@@ -124,6 +125,37 @@ export default class NFTService {
     let txHash = ''
 
     this.nftWeb3Service.sendSafeMint({
+      params,
+      callbacks: {
+        onTransactionHash(hash: string) {
+          txHash = hash
+
+          callback({
+            status: 'pending',
+            txHash
+          })
+        },
+        onReceipt() {
+          callback({
+            status: 'success',
+            txHash
+          })
+        },
+        onError() {
+          callback({
+            status: 'error',
+            txHash
+          })
+        }
+      }
+    })
+  }
+
+  /** Send comment to contract via web3 */
+  public sendNFTComment = ({ params, callback }: ISendNFTComment) => {
+    let txHash = ''
+
+    this.nftWeb3Service.sendComment({
       params,
       callbacks: {
         onTransactionHash(hash: string) {

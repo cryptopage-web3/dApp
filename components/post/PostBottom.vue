@@ -47,7 +47,11 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'nuxt-property-decorator'
+import { Component, Prop } from 'nuxt-property-decorator'
+import { Inject } from 'vue-typedi'
+import { TransactionType } from '~/logic/transactions/types'
+import NFTService from '~/logic/nft/services'
+import tokens from '~/logic/tokens'
 
 @Component({})
 export default class PostBottom extends Vue {
@@ -60,6 +64,11 @@ export default class PostBottom extends Vue {
     root: HTMLDivElement
     comment: HTMLDivElement
   }
+
+  @Prop({ required: true }) readonly transaction!: TransactionType
+
+  @Inject(tokens.NFT_SERVICE)
+  public nftService!: NFTService
 
   mounted() {
     this.$nextTick(() => {
@@ -132,7 +141,61 @@ export default class PostBottom extends Vue {
       return
     }
 
+    if (!this.transaction.token?.id) {
+      this.$notify({
+        type: 'error',
+        title: 'Incorrect NFT token',
+        text: 'Please reload page'
+      })
+      return
+    }
+
     this.loading = true
+
+    // send comment
+
+    this.nftService.sendNFTComment({
+      params: {
+        from: this.$store.getters['auth/selectedAddress'],
+        tokenId: String(this.transaction.token.id),
+        comment: this.comment,
+        like: this.like
+      },
+      callback: ({ status, txHash }) => {
+        const title = txHash || 'Unknown hash'
+
+        switch (status) {
+          case 'pending':
+            this.$notify({
+              type: 'info',
+              title,
+              text: 'Transaction on pending'
+            })
+            break
+
+          case 'success':
+            this.$notify({
+              type: 'success',
+              title,
+              text: 'Transaction completed'
+            })
+            break
+
+          case 'error':
+            this.$notify({
+              type: 'error',
+              title,
+              text: 'Transaction has some error'
+            })
+            break
+        }
+
+        if (status !== 'pending') {
+          this.loading = false
+          this.close()
+        }
+      }
+    })
   }
 }
 </script>
