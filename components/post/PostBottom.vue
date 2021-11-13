@@ -187,6 +187,13 @@ export default class PostBottom extends Vue {
               title,
               text: 'Transaction completed'
             })
+
+            /** обновляем данные по NFT для получения актуальной статистики по комментам */
+
+            this.$store.dispatch(
+              'address/refreshERC721Transaction',
+              this.transaction.hash
+            )
             break
 
           case 'error':
