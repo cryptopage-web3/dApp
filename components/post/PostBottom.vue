@@ -102,6 +102,7 @@ export default class PostBottom extends Vue {
     setTimeout(() => {
       $(this.$refs.root).find('.post-dis').fadeOut(0)
       $(this.$refs.root).find('.post-comment').fadeIn(300)
+      $(this.$refs.root).find('.post-comment__input')[0].focus()
       $(this.$refs.root).addClass('active')
     })
   }
@@ -111,6 +112,7 @@ export default class PostBottom extends Vue {
 
     setTimeout(() => {
       $(this.$refs.root).find('.post-comment').fadeIn(300)
+      $(this.$refs.root).find('.post-comment__input')[0].focus()
       $(this.$refs.root).addClass('active')
     })
   }
