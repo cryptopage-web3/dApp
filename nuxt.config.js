@@ -1,4 +1,6 @@
-const webpack = require("webpack");
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable nuxt/no-cjs-in-config */
+const webpack = require('webpack')
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -30,7 +32,7 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@fortawesome/fontawesome-svg-core/styles.css',
-    '@/assets/scss_new/main.scss'
+    '@/assets/styles/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -64,12 +66,15 @@ export default {
   buildModules: [
     ['@nuxtjs/eslint-module'],
     ['@nuxtjs/pwa'],
-    ['@nuxt/typescript-build', {
-      'typeCheck': true,
-      'eslint': {
-        'files': './**/*.{ts,js,vue}'
+    [
+      '@nuxt/typescript-build',
+      {
+        typeCheck: true,
+        eslint: {
+          files: './**/*.{ts,js,vue}'
+        }
       }
-    }]
+    ]
   ],
 
   eslint: {
@@ -78,68 +83,86 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    ['@nuxtjs/axios', {
-      debug: process.env.NODE_ENV === 'development',
-      https: true,
-      proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
-      progress: false,
-      proxy: false,
-      retry: false
-    }],
-    ['nuxt-vuex-localstorage', {
-      localStorage: ['auth']
-    }],
+    [
+      '@nuxtjs/axios',
+      {
+        debug: process.env.NODE_ENV === 'development',
+        https: true,
+        proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
+        progress: false,
+        proxy: false,
+        retry: false
+      }
+    ],
+    [
+      'nuxt-vuex-localstorage',
+      {
+        localStorage: ['auth']
+      }
+    ],
     ['nuxt-viewport']
   ],
 
   workbox: {
-     runtimeCaching: [
-       {
-         urlPattern: 'https://*.etherscan.io/*',
-         strategyOptions: {
-           cacheName: 'etherscan-cache',
-         },
-         strategyPlugins: [{
+    runtimeCaching: [
+      {
+        urlPattern: 'https://*.etherscan.io/*',
+        strategyOptions: {
+          cacheName: 'etherscan-cache'
+        },
+        strategyPlugins: [
+          {
             use: 'Expiration',
             config: {
               maxEntries: 10,
               maxAgeSeconds: 30
             }
-          }]
-       },
-       {
-         urlPattern: 'https://*.ethplorer.io/*',
-         strategyOptions: {
-           cacheName: 'ethplorer-cache',
-         },
-         strategyPlugins: [{
+          }
+        ]
+      },
+      {
+        urlPattern: 'https://*.ethplorer.io/*',
+        strategyOptions: {
+          cacheName: 'ethplorer-cache'
+        },
+        strategyPlugins: [
+          {
             use: 'Expiration',
             config: {
               maxEntries: 10,
               maxAgeSeconds: 30
             }
-          }]
-       },
-       {
-         urlPattern: 'https://ipfs.io/ipfs/*',
-         strategyOptions: {
-           cacheName: 'ipfs-cache',
-         },
-         strategyPlugins: [{
+          }
+        ]
+      },
+      {
+        urlPattern: 'https://ipfs.io/ipfs/*',
+        strategyOptions: {
+          cacheName: 'ipfs-cache'
+        },
+        strategyPlugins: [
+          {
             use: 'Expiration',
             config: {
               maxEntries: 10,
               maxAgeSeconds: 30
             }
-          }]
-       }
-     ]
+          }
+        ]
+      }
+    ]
   },
 
   publicRuntimeConfig: {},
   privateRuntimeConfig: {
-    infuraProjectId: process.env.NODE_ENV === 'production' ? process.env.INFURA_PROJECT_ID : 'a925609bdb25477d8039c763faa7b61d',
-    etherscanAPIKey: process.env.NODE_ENV === 'production' ? process.env.ETHERSCAN_API_KEY : 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'
+    infuraProjectId:
+      process.env.NODE_ENV === 'production'
+        ? process.env.INFURA_PROJECT_ID
+        : 'a925609bdb25477d8039c763faa7b61d',
+    etherscanAPIKey:
+      process.env.NODE_ENV === 'production'
+        ? process.env.ETHERSCAN_API_KEY
+        : 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -147,16 +170,16 @@ export default {
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
-    vendor: ["jquery", "bootstrap"],
+    vendor: ['jquery', 'bootstrap'],
     plugins: [
       new webpack.ProvidePlugin({
-        $: "jquery",
+        $: 'jquery',
         jQuery: 'jquery',
         jquery: 'jquery',
         'window.jQuery': 'jquery'
       })
     ],
-    extend (config, { isDev, isClient }) {
+    extend(config) {
       config.node = {
         fs: 'empty'
       }
