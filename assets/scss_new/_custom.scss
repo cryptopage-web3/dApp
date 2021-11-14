@@ -174,6 +174,10 @@
   opacity: 1;
 }
 
+.post-comment__input {
+  color: #000000;
+}
+
 /* ===== wallet connect ===== */
 
 .connect-wallet__link_connect::after {
@@ -280,6 +284,14 @@
 
   .profile-form {
     padding-top: 15px;
+  }
+
+  .profile-form__container {
+    border-top: none;
+  }
+  
+  .profile-form__container-inner {
+    border-bottom: none;
   }
 
   .nav-tabs.transactions-list {
