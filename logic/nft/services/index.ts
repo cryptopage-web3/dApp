@@ -10,7 +10,9 @@ import {
   FetchOneType,
   NFTPayloadType,
   NFTMediaType,
-  ISendNFTApi
+  ISendNFTApi,
+  NFTAdapterRequestParamsType,
+  ISendNFTComment
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
@@ -94,16 +96,24 @@ export default class NFTService {
         contractAddress
       })
       if (contractData) {
-        const { owner, tokenURI } = contractData
+        const { owner, tokenURI, comments } = contractData
         const NFTPayload = await this.fetchNFTPayload(tokenURI)
         const animationURL = this.parser.parseAnimationURL(NFTPayload)
+        const parsedComments = this.parser.parseComments(comments)
         const data = this.parser.parse(NFTPayload)
         const adapter = NFTAdapter(data)
+
+        const params: NFTAdapterRequestParamsType = {
+          owner,
+          comments: parsedComments
+        }
+
         if (animationURL) {
           const media = await this.fetchMedia(animationURL)
-          return adapter.request({ owner, ...media })
+          Object.assign(params, media)
         }
-        return adapter.request({ owner })
+
+        return adapter.request(params)
       }
       return null
     } catch {
@@ -116,6 +126,37 @@ export default class NFTService {
     let txHash = ''
 
     this.nftWeb3Service.sendSafeMint({
+      params,
+      callbacks: {
+        onTransactionHash(hash: string) {
+          txHash = hash
+
+          callback({
+            status: 'pending',
+            txHash
+          })
+        },
+        onReceipt() {
+          callback({
+            status: 'success',
+            txHash
+          })
+        },
+        onError() {
+          callback({
+            status: 'error',
+            txHash
+          })
+        }
+      }
+    })
+  }
+
+  /** Send comment to contract via web3 */
+  public sendNFTComment = ({ params, callback }: ISendNFTComment) => {
+    let txHash = ''
+
+    this.nftWeb3Service.sendComment({
       params,
       callbacks: {
         onTransactionHash(hash: string) {

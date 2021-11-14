@@ -113,4 +113,24 @@ export default class TransactionService {
       )
     )
   }
+
+  /** refresh NFT data */
+  public refreshERC721Transaction = async (
+    transaction: TransactionType
+  ): Promise<TransactionType> => {
+    const actualTransaction = { ...transaction }
+
+    if (!actualTransaction?.token?.id) {
+      return actualTransaction
+    }
+
+    const adapter = new TransactionAdapter(actualTransaction)
+
+    const nft = await this.nftService.fetchOne({
+      tokenId: String(actualTransaction.token.id),
+      contractAddress: actualTransaction.token.address
+    })
+
+    return adapter.request({ nft })
+  }
 }

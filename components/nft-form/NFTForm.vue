@@ -121,7 +121,7 @@ export default class NFTForm extends Vue {
     'upload-file': any
   }
 
-  @Inject(tokens.NFT_API_SERVICE)
+  @Inject(tokens.NFT_SERVICE)
   public nftService!: NFTService
 
   get isMediaFile(): boolean {

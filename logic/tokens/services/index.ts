@@ -149,7 +149,7 @@ export default class TokenService {
       name: 'Crypto Page',
       symbol: 'PAGE',
       decimals: 18,
-      image: `/_nuxt/assets/img/header-logo_img.png`,
+      image: require('@/assets/img/header-logo_img.png'),
       rate: { usd: 0 }
     }
   }

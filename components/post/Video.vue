@@ -197,7 +197,7 @@
       </div>
     </div>
     <text-block :text="transaction.nft.description" />
-    <bottom />
+    <bottom v-if="transaction.nft.comments" :transaction="transaction" />
   </div>
 </template>
 <script lang="ts">
@@ -206,9 +206,9 @@ import TransactionMixin from '~/mixins/transaction'
 
 @Component({
   components: {
-    top: async () => await import('@/components/post/PostTop.vue'),
-    textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
-    bottom: async () => await import('@/components/post/PostBottom.vue')
+    top: async () => await import('~/components/post/PostTop.vue'),
+    textBlock: async () => await import('~/components/post/PostTextBlock.vue'),
+    bottom: async () => await import('~/components/post/PostBottom.vue')
   }
 })
 export default class ERC721TransactionVideo extends mixins(TransactionMixin) {}

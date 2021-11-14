@@ -409,6 +409,22 @@ export default class AddressModule {
   }
 
   @Action()
+  public async refreshERC721Transaction(txHash: string) {
+    const transaction = this.transactions.find(
+      (tx: TransactionType) => tx.hash === txHash
+    )
+
+    if (!transaction?.token?.id) {
+      return
+    }
+
+    const actualTransaction =
+      await this.transactionService.refreshERC721Transaction(transaction)
+
+    this.setTransaction(actualTransaction)
+  }
+
+  @Action()
   public clearTransactions(): void {
     this.removeTransactions()
 

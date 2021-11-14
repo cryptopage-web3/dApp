@@ -1,5 +1,11 @@
 import * as ts from 'io-ts'
-import { Attribute, Property, NFTPayload, ParsedNFT, NFTMedia } from '~/logic/nft/models'
+import {
+  Attribute,
+  Property,
+  NFTPayload,
+  ParsedNFT,
+  NFTMedia
+} from '~/logic/nft/models'
 /**
  * These are inner types, they are only used inside the client.
  *
@@ -14,12 +20,20 @@ export type NFTPayloadType = ts.TypeOf<typeof NFTPayload>
 export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>
 export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 
-export type NFTType = ParsedNFTType & {
-  owner: string
+export type NFTCommentsType = {
+  comments: string
+  likes: string
+  dislikes: string
 }
 
-export type NFTAdapterRequestParamsType = NFTMediaType &  {
+export type NFTType = ParsedNFTType & {
   owner: string
+  comments: NFTCommentsType | null
+}
+
+export type NFTAdapterRequestParamsType = NFTMediaType & {
+  owner: string
+  comments: NFTCommentsType | null
 }
 
 export type NFTAdapterType = {
@@ -37,9 +51,16 @@ export interface FetchManyType {
   pageSize: number
 }
 
+export interface ERC721CommentsType {
+  comments: string
+  likes: string
+  dislakes: string
+}
+
 export interface ERC721ContractDataType {
   tokenURI: string
   owner: string
+  comments: ERC721CommentsType | null
 }
 
 export interface ISendNFTParams {
@@ -55,6 +76,27 @@ export interface ISendNFTApi {
 
 export interface ISendNFTWeb3 {
   params: ISendNFTParams
+  callbacks: {
+    onTransactionHash: (hash: string) => void
+    onReceipt: () => void
+    onError: () => void
+  }
+}
+
+export interface ISendNFTCommentParams {
+  from: string
+  tokenId: string
+  comment: string
+  like: boolean
+}
+
+export interface ISendNFTComment {
+  params: ISendNFTCommentParams
+  callback: (params: { status: string; txHash: string }) => void
+}
+
+export interface ISendNFTCommentWeb3 {
+  params: ISendNFTCommentParams
   callbacks: {
     onTransactionHash: (hash: string) => void
     onReceipt: () => void

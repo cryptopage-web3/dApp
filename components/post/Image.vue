@@ -3,13 +3,14 @@
     <top :transaction="transaction" />
     <loader v-if="loading" />
     <a
+      v-show="!loading"
       v-if="transaction.nft.image"
       href="#"
       :style="{ backgroundImage: `url(${transaction.nft.image})` }"
       class="post-image__link"
     />
     <text-block :text="transaction.nft.description" />
-    <bottom />
+    <bottom v-if="transaction.nft.comments" :transaction="transaction" />
   </div>
 </template>
 <script lang="ts">
@@ -19,7 +20,7 @@ Component.registerHooks(['mounted'])
 @Component({
   components: {
     top: async () => await import('@/components/post/PostTop.vue'),
-    loader: () => import('~/components/loaders/GrowLoader.vue'),
+    loader: () => import('~/components/loaders/Skeleton.vue'),
     textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
     bottom: async () => await import('@/components/post/PostBottom.vue')
   }

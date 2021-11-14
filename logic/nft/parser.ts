@@ -1,4 +1,9 @@
-import { NFTPayloadType, ParsedNFTType } from '~/logic/nft/types'
+import {
+  ERC721CommentsType,
+  NFTCommentsType,
+  NFTPayloadType,
+  ParsedNFTType
+} from '~/logic/nft/types'
 
 /**
  * See more about this standard: https://docs.opensea.io/docs/metadata-standards
@@ -52,6 +57,20 @@ export default class NFTParser {
     if (image.startsWith('ipfs')) image = this.URIParser(image)
     else if (image.startsWith('<svg')) image = this.SVGToBase64(image)
     return image
+  }
+
+  public parseComments(
+    comments: ERC721CommentsType | null
+  ): NFTCommentsType | null {
+    if (!comments) {
+      return null
+    }
+
+    return {
+      comments: comments.comments,
+      likes: comments.likes,
+      dislikes: comments.dislakes
+    }
   }
 
   public parse(NFTPayload: NFTPayloadType): ParsedNFTType {
