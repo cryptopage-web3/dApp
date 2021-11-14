@@ -164,6 +164,19 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('BSC', 'bscWallet')"
+                    >
+                      <img
+                        src="@/assets/img/modal-content-wallet__link_bsc.png"
+                        alt=""
+                      />
+                      <span> BSC Wallet </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
                       @click.prevent="switchProvider('BSC', 'walletConnect')"
                     >
                       <img
@@ -455,6 +468,9 @@ export default {
         this.$store.dispatch('auth/switchChain', type)
       } else {
         this.$store.dispatch('auth/switchProvider', provider)
+        if (type !== this.selectedNetworkType) {
+          this.$store.dispatch('auth/switchChain', type)
+        }
       }
 
       /** close modal on switch */
