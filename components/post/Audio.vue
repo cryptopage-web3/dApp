@@ -17,28 +17,33 @@
     <bottom v-if="transaction.nft.comments" :transaction="transaction" />
   </div>
 </template>
-<script>
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
 import TransactionMixin from '~/mixins/transaction'
-export default {
+
+@Component({
   components: {
-    top: async () => await import('@/components/post/PostTop.vue'),
+    top: async () => await import('~/components/post/PostTop.vue'),
     loader: () => import('~/components/loaders/Skeleton.vue'),
-    textBlock: async () => await import('@/components/post/PostTextBlock.vue'),
-    bottom: async () => await import('@/components/post/PostBottom.vue')
-  },
-  mixins: [TransactionMixin],
-  data: () => ({
-    player: null,
-    loading: true
-  }),
+    textBlock: async () => await import('~/components/post/PostTextBlock.vue'),
+    bottom: async () => await import('~/components/post/PostBottom.vue')
+  }
+})
+export default class ERC721TransactionAudio extends mixins(TransactionMixin) {
+  player = null
+  loading = true
+
   mounted() {
     this.$nextTick(() => {
       if (!this.player) {
-        this.player = new GreenAudioPlayer(`[id="${this.transaction.hash}"]`, {
-          showTooltips: true,
-          showDownloadButton: false,
-          enableKeystrokes: true
-        })
+        this.player = new (window as any).GreenAudioPlayer(
+          `[id="${this.transaction.hash}"]`,
+          {
+            showTooltips: true,
+            showDownloadButton: false,
+            enableKeystrokes: true
+          }
+        )
       }
       this.loading = false
     })
