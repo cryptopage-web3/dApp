@@ -69,7 +69,7 @@ export default class NFTParser {
     return {
       comments: comments.comments,
       likes: comments.likes,
-      dislakes: comments.dislakes
+      dislikes: comments.dislakes
     }
   }
 

@@ -75,7 +75,7 @@ export default class PostBottom extends Vue {
   }
 
   get dislikes(): number {
-    return Number(this.transaction.nft?.comments?.dislakes)
+    return Number(this.transaction.nft?.comments?.dislikes)
   }
 
   mounted() {

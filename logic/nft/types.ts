@@ -23,7 +23,7 @@ export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 export type NFTCommentsType = {
   comments: string
   likes: string
-  dislakes: string
+  dislikes: string
 }
 
 export type NFTType = ParsedNFTType & {
