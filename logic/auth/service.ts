@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import WalletConnectProvider from '@walletconnect/web3-provider'
+import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
 import { Service, Container } from 'vue-typedi'
 import { recoverPersonalSignature } from 'eth-sig-util'
@@ -11,14 +12,20 @@ import tokens from '~/logic/tokens'
 declare const window: Window &
   typeof globalThis & {
     ethereum: any
+    BinanceChain: any
   }
 
 const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
-const [METAMASK, WALLET_CONNECT, COIN98] = [
+const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET] = [
   'metamask',
   'walletConnect',
-  'coin98'
+  'coin98',
+  'bscWallet'
 ]
+
+const bsc = new BscConnector({
+  supportedChainIds: [56, 97]
+})
 
 @Service(tokens.AUTH_SERVICE)
 @Component
@@ -101,10 +108,18 @@ export default class AuthService extends Vue {
     )
   }
 
+  protected get bscInstalled(): boolean {
+    return (
+      typeof window !== 'undefined' &&
+      typeof window?.BinanceChain?.on === 'function'
+    )
+  }
+
   private providerName = METAMASK
   private defaultEthereumWallet = METAMASK
   private provider: WalletConnectProvider | undefined
   private metamaskConnected = false
+  private bscConnected = false
   private walletConnectConnected = false
   protected get $web3(): any {
     return Container.get(tokens.WEB3)
@@ -199,6 +214,17 @@ export default class AuthService extends Vue {
         await this.changeProviderName(providerName)
         connected = 'success'
         window.localStorage.setItem('lastProvider', 'walletConnect')
+      }
+    } else if (providerName === BSC_WALLET) {
+      if (this.bscInstalled) {
+        const status = await this.addBSCEventsListener()
+        if (status) {
+          await this.changeProviderName(providerName)
+          connected = 'success'
+          window.localStorage.setItem('lastProvider', providerName)
+        }
+      } else {
+        connected = 'notInstalled'
       }
     }
     return connected
@@ -302,7 +328,7 @@ export default class AuthService extends Vue {
         setTimeout(() => {
           this.setOrChangeWeb3Data(
             window.ethereum.selectedAddress,
-            Number(window.ethereum.networkVersion)
+            Number(window.ethereum.chainId)
           )
         }, 300)
       }
@@ -315,6 +341,36 @@ export default class AuthService extends Vue {
         }
         this.provider = window.ethereum
         setMetamaskData()
+        return true
+      }
+      return false
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Adding event listener for binance wallet
+   * @returns {Boolean}
+   */
+  private addBSCEventsListener = async (): Promise<boolean> => {
+    try {
+      const setBSCData = () => {
+        setTimeout(async () => {
+          const address: any = await bsc.getAccount()
+          const chainId = await bsc.getChainId()
+          this.setOrChangeWeb3Data(address, Number(chainId))
+        }, 300)
+      }
+      if (this.bscInstalled) {
+        if (!this.bscConnected) {
+          await bsc.activate()
+          window.BinanceChain.on('chainChanged', setBSCData)
+          window.BinanceChain.on('accountsChanged', setBSCData)
+          this.bscConnected = true
+        }
+        this.provider = window.BinanceChain
+        setBSCData()
         return true
       }
       return false
@@ -397,6 +453,26 @@ export default class AuthService extends Vue {
       }
     }
 
+    if (device === 'desktop' && !this.bscInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found Binance Wallet extension',
+          text: 'Please install Binance Wallet Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    if (device === 'desktop' && !this.bscConnected) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not authorized in Binance Wallet',
+          text: 'Please log in to the Binance Wallet Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
     if (!this.provider) {
       return commonError
     }
@@ -444,6 +520,8 @@ export default class AuthService extends Vue {
       this.walletConnectConnected = false
     } else if (this.metamaskConnected) {
       this.metamaskConnected = false
+    } else if (this.bscConnected) {
+      this.bscConnected = false
     }
   }
 
@@ -457,6 +535,8 @@ export default class AuthService extends Vue {
       this.walletConnectConnected = false
     } else if (this.metamaskConnected) {
       this.metamaskConnected = false
+    } else if (this.bscConnected) {
+      this.bscConnected = false
     }
   }
 
