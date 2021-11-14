@@ -192,10 +192,13 @@ export default class PostBottom extends Vue {
 
             /** обновляем данные по NFT для получения актуальной статистики по комментам */
 
-            this.$store.dispatch(
-              'address/refreshERC721Transaction',
-              this.transaction.hash
-            )
+            setTimeout(() => {
+              this.$store.dispatch(
+                'address/refreshERC721Transaction',
+                this.transaction.hash
+              )
+            }, 500)
+
             break
 
           case 'error':
