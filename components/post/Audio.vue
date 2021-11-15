@@ -5,7 +5,7 @@
       <loader v-if="loading" />
       <div
         v-show="!loading"
-        :id="transaction.hash"
+        ref="audio"
         class="post-audio-item green-audio-player"
       >
         <audio crossorigin="" preload="none">
@@ -33,17 +33,18 @@ export default class ERC721TransactionAudio extends mixins(TransactionMixin) {
   player = null
   loading = true
 
+  $refs!: {
+    audio: HTMLDivElement
+  }
+
   mounted() {
     this.$nextTick(() => {
       if (!this.player) {
-        this.player = new (window as any).GreenAudioPlayer(
-          `[id="${this.transaction.hash}"]`,
-          {
-            showTooltips: true,
-            showDownloadButton: false,
-            enableKeystrokes: true
-          }
-        )
+        this.player = new (window as any).GreenAudioPlayer(this.$refs.audio, {
+          showTooltips: true,
+          showDownloadButton: false,
+          enableKeystrokes: true
+        })
       }
       this.loading = false
     })
