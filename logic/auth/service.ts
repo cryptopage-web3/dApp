@@ -453,26 +453,6 @@ export default class AuthService extends Vue {
       }
     }
 
-    if (device === 'desktop' && !this.bscInstalled) {
-      return {
-        status: 'error',
-        message: {
-          title: 'Not found Binance Wallet extension',
-          text: 'Please install Binance Wallet Ext.,<br>reload page and try again'
-        }
-      }
-    }
-
-    if (device === 'desktop' && !this.bscConnected) {
-      return {
-        status: 'error',
-        message: {
-          title: 'Not authorized in Binance Wallet',
-          text: 'Please log in to the Binance Wallet Ext.,<br>reload page and try again'
-        }
-      }
-    }
-
     if (!this.provider) {
       return commonError
     }
