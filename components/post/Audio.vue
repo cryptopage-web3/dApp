@@ -2,12 +2,7 @@
   <div class="post post-audio">
     <top :transaction="transaction" />
     <div class="post-audio-wr">
-      <loader v-if="loading" />
-      <div
-        v-show="!loading"
-        ref="audio"
-        class="post-audio-item green-audio-player"
-      >
+      <div ref="audio" class="post-audio-item green-audio-player">
         <audio crossorigin="" preload="none">
           <source :src="transaction.nft.audio" type="audio/mpeg" />
         </audio>
@@ -31,7 +26,6 @@ import TransactionMixin from '~/mixins/transaction'
 })
 export default class ERC721TransactionAudio extends mixins(TransactionMixin) {
   player = null
-  loading = true
 
   $refs!: {
     audio: HTMLDivElement
@@ -46,7 +40,6 @@ export default class ERC721TransactionAudio extends mixins(TransactionMixin) {
           enableKeystrokes: true
         })
       }
-      this.loading = false
     })
   }
 }

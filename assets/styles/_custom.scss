@@ -44,6 +44,23 @@
   }
 }
 
+.loading-bg {
+  background-color: rgba(0, 0, 0, 0.11);
+  animation: animLoadingBg 1s ease-in-out infinite;
+}
+
+@keyframes animLoadingBg {
+  0% {
+    background-color: rgba(0, 0, 0, 0.11);
+  }
+  50% {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0.11);
+  }
+}
+
 /* ===== sidebar profile signin ===== */
 
 .sidebar-profile__signin-btn {
@@ -176,6 +193,22 @@
 
 .post-comment__input {
   color: #000000;
+}
+
+.post-image__link {
+  overflow: hidden;
+  position: relative;
+}
+
+.post-image__link-img {
+  display: block;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
 }
 
 /* ===== wallet connect ===== */
