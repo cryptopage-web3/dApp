@@ -14,7 +14,7 @@ export const paginationMixin = {
 
     isFetchDisabled() {
       return (
-        this.isCompleted || this.$fetchState.pending || this.$fetchState.error
+        this.hasAllPages || this.$fetchState.pending || this.$fetchState.error
       )
     }
   },

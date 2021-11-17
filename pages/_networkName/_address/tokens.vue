@@ -32,7 +32,7 @@ export default {
      * должен отработать метод reset() в pagination
      */
     if (
-      this.isCompleted ||
+      this.hasAllPages ||
       (this.address && this.address !== this.$route.params.address)
     ) {
       return
@@ -56,8 +56,8 @@ export default {
       return this.$store.getters['address/ERC20Transactions']
     },
 
-    isCompleted() {
-      return this.$store.getters['address/isERC20TransactionsCompleted']
+    hasAllPages() {
+      return this.$store.getters['address/hasAllERC20TransactionsPages']
     }
   }
 }
