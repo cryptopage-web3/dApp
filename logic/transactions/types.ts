@@ -69,7 +69,7 @@ export type TransactionPagination = {
   pageSize: number
   sort: string
   page: number
-  isCompleted: boolean
+  hasAllPages: boolean
 }
 
 export enum ETransactionPaginationType {
@@ -81,5 +81,5 @@ export enum ETransactionPaginationType {
 export type ParamsSetTransactionPagination = {
   type: ETransactionPaginationType
   page: number
-  isCompleted?: boolean
+  hasAllPages?: boolean
 }

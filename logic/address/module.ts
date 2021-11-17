@@ -19,7 +19,7 @@ const defaultPagination: TransactionPagination = {
   pageSize: 10,
   sort: 'desc',
   page: 0,
-  isCompleted: false
+  hasAllPages: false
 }
 
 @Injectable()
@@ -138,8 +138,8 @@ export default class AddressModule {
   }
 
   @Getter()
-  public get isNormalTransactionsCompleted(): boolean {
-    return this.normalTransactionPagination.isCompleted
+  public get hasAllNormalTransactionsPages(): boolean {
+    return this.normalTransactionPagination.hasAllPages
   }
 
   @Getter()
@@ -153,8 +153,8 @@ export default class AddressModule {
   }
 
   @Getter()
-  public get isERC20TransactionsCompleted(): boolean {
-    return this.ERC20TransactionPagination.isCompleted
+  public get hasAllERC20TransactionsPages(): boolean {
+    return this.ERC20TransactionPagination.hasAllPages
   }
 
   @Getter()
@@ -165,8 +165,8 @@ export default class AddressModule {
   }
 
   @Getter()
-  public get isERC721TransactionsCompleted(): boolean {
-    return this.ERC721TransactionPagination.isCompleted
+  public get hasAllERC721TransactionsPages(): boolean {
+    return this.ERC721TransactionPagination.hasAllPages
   }
 
   // Mutations
@@ -240,14 +240,14 @@ export default class AddressModule {
   public setTransactionPagination({
     type,
     page,
-    isCompleted = false
+    hasAllPages = false
   }: ParamsSetTransactionPagination): void {
     switch (type) {
       case ETransactionPaginationType.normal:
         this.normalTransactionPagination = {
           ...this.normalTransactionPagination,
           page,
-          isCompleted
+          hasAllPages
         }
         return
 
@@ -255,7 +255,7 @@ export default class AddressModule {
         this.ERC721TransactionPagination = {
           ...this.ERC721TransactionPagination,
           page,
-          isCompleted
+          hasAllPages
         }
         return
 
@@ -263,7 +263,7 @@ export default class AddressModule {
         this.ERC20TransactionPagination = {
           ...this.ERC20TransactionPagination,
           page,
-          isCompleted
+          hasAllPages
         }
     }
   }
@@ -329,7 +329,7 @@ export default class AddressModule {
     this.setTransactionPagination({
       type: ETransactionPaginationType.normal,
       page,
-      isCompleted: transactions.length === 0
+      hasAllPages: transactions.length === 0
     })
 
     return transactions
@@ -375,7 +375,7 @@ export default class AddressModule {
     this.setTransactionPagination({
       type: ETransactionPaginationType.ERC20,
       page,
-      isCompleted: transactions.length === 0
+      hasAllPages: transactions.length === 0
     })
 
     return transactions
@@ -402,7 +402,7 @@ export default class AddressModule {
     this.setTransactionPagination({
       type: ETransactionPaginationType.ERC721,
       page,
-      isCompleted: transactions.length === 0
+      hasAllPages: transactions.length === 0
     })
 
     return transactions
