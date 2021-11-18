@@ -103,3 +103,22 @@ export interface ISendNFTCommentWeb3 {
     onError: () => void
   }
 }
+
+export interface IActivateCommentsParams {
+  from: string
+  tokenId: string
+}
+
+export interface IActivateComments {
+  params: IActivateCommentsParams
+  callback: (params: { status: string; txHash: string }) => void
+}
+
+export interface IActivateCommentsWeb3 {
+  params: IActivateCommentsParams
+  callbacks: {
+    onTransactionHash: (hash: string) => void
+    onReceipt: () => void
+    onError: () => void
+  }
+}

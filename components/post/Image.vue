@@ -9,7 +9,7 @@
       <img :src="transaction.nft.image" class="post-image__link-img" />
     </a>
     <text-block :text="transaction.nft.description" />
-    <bottom v-if="transaction.nft.comments" :transaction="transaction" />
+    <bottom :transaction="transaction" />
   </div>
 </template>
 <script lang="ts">
