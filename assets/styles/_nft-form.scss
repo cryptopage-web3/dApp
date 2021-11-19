@@ -143,10 +143,21 @@
 
 .creat-post-bottom {
     padding-top: 15px;
+    display: flex;
+    align-items: center;
 }
 
 .creat-post-bottom__spinner {
     margin-right: 10px;
+}
+
+.creat-post-bottom__continue {
+    cursor: pointer;
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    color: #1886ff;
 }
 
 /* ======= attributes ======== */

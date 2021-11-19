@@ -87,6 +87,13 @@
             <span> Create NFT </span>
           </template>
         </button>
+        <div
+          v-if="loading"
+          class="creat-post-bottom__continue"
+          @click="createNext"
+        >
+          Create next
+        </div>
       </div>
     </form>
   </div>
@@ -217,6 +224,12 @@ export default class NFTForm extends Vue {
     this.$refs.attributes.hideAll()
   }
 
+  createNext() {
+    this.loading = false
+    this.resetForm()
+    this.onSubmited()
+  }
+
   validateFormWithNotify(): boolean {
     const result = validateForm({
       title: this.title,
@@ -255,12 +268,6 @@ export default class NFTForm extends Vue {
     // send to contract
 
     this.sendPostHash(ipfsHash)
-
-    // success
-
-    this.loading = false
-    this.resetForm()
-    this.onSubmited()
   }
 
   async getFileIPFSHash(): Promise<string> {
@@ -313,6 +320,12 @@ export default class NFTForm extends Vue {
               title,
               text: 'Transaction completed'
             })
+
+            if (this.loading) {
+              this.loading = false
+              this.resetForm()
+              this.onSubmited()
+            }
             break
 
           case 'error':
@@ -321,6 +334,8 @@ export default class NFTForm extends Vue {
               title,
               text: 'Transaction has some error'
             })
+
+            this.loading = false
             break
         }
       }
