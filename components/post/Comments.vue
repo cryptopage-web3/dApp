@@ -197,19 +197,7 @@ export default class Comments extends Vue {
 
             /** обновляем данные по NFT для получения актуальной статистики по комментам */
 
-            setTimeout(() => {
-              this.$store.dispatch(
-                'address/refreshERC721Transaction',
-                this.transaction.hash
-              )
-
-              this.$notify({
-                type: 'info',
-                title,
-                text: 'Refreshing NFT'
-              })
-            }, 500)
-
+            this.refreshNft()
             break
 
           case 'error':
@@ -218,15 +206,42 @@ export default class Comments extends Vue {
               title,
               text: 'Transaction has some error'
             })
-            break
-        }
 
-        if (status !== 'pending') {
-          this.loading = false
-          this.close()
+            this.loading = false
+            this.close()
+            break
         }
       }
     })
+  }
+
+  refreshNft() {
+    this.$notify({
+      type: 'info',
+      title: 'Refreshing NFT'
+    })
+
+    setTimeout(async () => {
+      try {
+        await this.$store.dispatch(
+          'address/refreshERC721Transaction',
+          this.transaction.hash
+        )
+
+        this.$notify({
+          type: 'success',
+          title: 'NFT successfully updated'
+        })
+      } catch {
+        this.$notify({
+          type: 'error',
+          title: 'NFT update error'
+        })
+      } finally {
+        this.loading = false
+        this.close()
+      }
+    }, 1000)
   }
 }
 </script>
