@@ -235,7 +235,8 @@ export default class Comments extends Vue {
       } catch {
         this.$notify({
           type: 'error',
-          title: 'NFT update error'
+          title: 'NFT update error',
+          text: 'Please reload page'
         })
       } finally {
         this.loading = false
