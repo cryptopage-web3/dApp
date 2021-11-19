@@ -1,4 +1,3 @@
-import * as ts from 'io-ts'
 import { TokenInfoType, TokenBalanceType } from '~/logic/tokens/types'
 
 export type AddressInfoType = {

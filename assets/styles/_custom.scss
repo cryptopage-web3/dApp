@@ -294,32 +294,32 @@
   padding-bottom: 30px;
 }
 
-/* ===== enable comments ===== */
+/* ===== activate comments ===== */
 
-.post-enable-comments {
+.post-activate-comments {
   display: flex;
   align-items: center;
   cursor: pointer;
   opacity: 0.5;
 }
 
-.post-enable-comments:hover {
+.post-activate-comments:hover {
   opacity: 1;
 }
 
-.post-enable-comments_loading {
+.post-activate-comments_loading {
   opacity: 0.5 !important;
   cursor: not-allowed;
 }
 
-.post-enable-comments__label {
+.post-activate-comments__label {
   padding-top: 1px;
   font-size: 13px;
   color: #838181;
   margin-right: 10px;
 }
 
-.post-enable-comments__switch {
+.post-activate-comments__switch {
   width: 35px;
   height: 20px;
   border-radius: 10px;
@@ -347,7 +347,7 @@
   }
 }
 
-.post-enable-comments__spinner {
+.post-activate-comments__spinner {
   margin-left: 10px;
 }
 

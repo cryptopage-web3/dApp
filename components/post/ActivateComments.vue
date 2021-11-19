@@ -1,20 +1,20 @@
 <template>
   <div
-    class="post-enable-comments"
-    :class="{ 'post-enable-comments_loading': loading }"
+    class="post-activate-comments"
+    :class="{ 'post-activate-comments_loading': loading }"
     @click="toggle"
   >
-    <div class="post-enable-comments__label">Enable comments</div>
+    <div class="post-activate-comments__label">Activate comments</div>
     <div
-      class="post-enable-comments__switch"
-      :class="{ 'post-enable-comments__switch_selected': enabled }"
+      class="post-activate-comments__switch"
+      :class="{ 'post-activate-comments__switch_selected': activated }"
     />
     <span
       v-if="loading"
       class="
         spinner-border spinner-border-sm
         text-primary
-        post-enable-comments__spinner
+        post-activate-comments__spinner
       "
       role="status"
       aria-hidden="true"
@@ -30,8 +30,8 @@ import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 
 @Component({})
-export default class EnableComments extends Vue {
-  enabled = false
+export default class ActivateComments extends Vue {
+  activated = false
   loading = false
 
   @Prop({ required: true }) readonly transaction!: TransactionType
@@ -55,7 +55,7 @@ export default class EnableComments extends Vue {
       return
     }
 
-    this.enabled = true
+    this.activated = true
     this.loading = true
 
     // activate comments
