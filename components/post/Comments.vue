@@ -12,7 +12,12 @@
     </div>
     <div ref="comment" class="post-comment">
       <form>
-        <div class="post-comment-wr">
+        <div
+          class="post-comment-wr"
+          :class="{
+            'post-comment-wr_loading': loading
+          }"
+        >
           <input
             v-model="comment"
             :disabled="loading"
