@@ -215,6 +215,14 @@
   z-index: 2;
 }
 
+.post-text__title {
+  margin-bottom: 10px;
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #4d4d4d;
+}
+
 /* ===== wallet connect ===== */
 
 .connect-wallet__link_connect::after {

@@ -8,7 +8,7 @@
     >
       <img :src="transaction.nft.image" class="post-image__link-img" />
     </a>
-    <text-block :text="transaction.nft.description" />
+    <text-block :transaction="transaction" />
     <bottom :transaction="transaction" />
   </div>
 </template>

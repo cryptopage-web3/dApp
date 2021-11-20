@@ -1,7 +1,7 @@
 <template>
   <div class="post">
     <top :transaction="transaction" />
-    <text-block :text="transaction.nft.description" />
+    <text-block :transaction="transaction" />
     <bottom :transaction="transaction" />
   </div>
 </template>

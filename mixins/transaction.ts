@@ -16,6 +16,7 @@ export default class TransactionMixin extends mixins(NetworkNameMixin) {
   }
 
   @Prop({ required: true }) readonly transaction!: TransactionType
+
   protected get income(): boolean {
     const address = this.$web3.utils.toChecksumAddress(
       this.$route.query.address

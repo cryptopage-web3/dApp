@@ -8,7 +8,7 @@
         </audio>
       </div>
     </div>
-    <text-block :text="transaction.nft.description" />
+    <text-block :transaction="transaction" />
     <bottom :transaction="transaction" />
   </div>
 </template>
