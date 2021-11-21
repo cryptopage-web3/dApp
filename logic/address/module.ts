@@ -89,7 +89,6 @@ export default class AddressModule {
     return this.addressInfo.tokenInfo && this.addressInfo.tokenInfo.image
       ? this.addressInfo.tokenInfo.image
       : ''
-    return ''
   }
 
   @Getter()
