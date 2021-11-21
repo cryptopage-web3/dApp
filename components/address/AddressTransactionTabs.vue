@@ -14,37 +14,36 @@
     </ul>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
-export default {
-  mixins: [NetworkNameMixin],
-  computed: {
-    tabs() {
-      const tokensName = this.networkName === 'bsc' ? 'bep20' : 'erc20'
-      return [
-        {
-          link: '',
-          name: 'Transactions'
-        },
-        {
-          link: 'nft',
-          name: 'NFT'
-        },
-        {
-          link: 'tokens',
-          name: `TOKENS (${tokensName})`
-        },
-        {
-          link: 'likes',
-          name: 'Likes'
-        }
-      ]
-    }
-  },
-  methods: {
-    url(link) {
-      return `/${this.networkName}/${this.selectedAddress}/${link}`
-    }
+
+@Component({})
+export default class SidebarRightBalance extends mixins(NetworkNameMixin) {
+  get tabs() {
+    const tokensName = this.networkName === 'bsc' ? 'bep20' : 'erc20'
+    return [
+      {
+        link: '',
+        name: 'Transactions'
+      },
+      {
+        link: 'nft',
+        name: 'NFT'
+      },
+      {
+        link: 'tokens',
+        name: `TOKENS (${tokensName})`
+      },
+      {
+        link: 'likes',
+        name: 'Likes'
+      }
+    ]
+  }
+
+  url(link: string) {
+    return `/${this.networkName}/${this.selectedAddress}/${link}`
   }
 }
 </script>
