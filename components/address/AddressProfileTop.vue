@@ -23,7 +23,7 @@
             {{ address | shortAddress }}
           </span>
         </div>
-        <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
+        <profile-status />
         <div class="profile-info__text">
           {{ transactionsCount | humanizeCount }}
           transactions<br />
@@ -43,7 +43,13 @@ import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
-@Component({})
+@Component({
+  components: {
+    'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
+    'profile-status': async () =>
+      await import('@/components/address/AddressProfileStatus.vue')
+  }
+})
 export default class AddressProfileTop extends Vue {
   diameter = Number($(window).width()) > 767 ? 90 : 40
 
