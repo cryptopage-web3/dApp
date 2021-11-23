@@ -1,10 +1,10 @@
 <template>
   <div class="profile-status__container">
-    <div v-if="!isEdit" class="profile-status">
-      Status: <a href="#" @click.prevent="showEdit">Hello, World!</a>
+    <div v-show="!isEdit" class="profile-status">
+      Status: <a href="#" @click.prevent="showEdit">{{ status }}</a>
     </div>
     <div
-      v-else
+      v-show="isEdit"
       class="profile-status__edit"
       :class="{
         'profile-status__edit_loading': loading
@@ -53,10 +53,10 @@ export default class AddressProfileStatus extends Vue {
   clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
 
   mounted() {
-    // this.$nextTick(() => {
-    //   this.clickOutsideListener = this.clickOutsideHandler.bind(this)
-    //   $(document).on('click', this.clickOutsideListener)
-    // })
+    this.$nextTick(() => {
+      this.clickOutsideListener = this.clickOutsideHandler.bind(this)
+      $(document).on('click', this.clickOutsideListener)
+    })
   }
 
   beforeDestroy() {
@@ -99,6 +99,13 @@ export default class AddressProfileStatus extends Vue {
     }
 
     this.loading = true
+
+    setTimeout(() => {
+      this.status = this.localStatus
+
+      this.loading = false
+      this.closeEdit()
+    }, 1000)
   }
 }
 </script>
