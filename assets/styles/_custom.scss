@@ -376,6 +376,8 @@
 
 .profile-status {
   margin-right: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .profile-status a:hover {
@@ -384,18 +386,18 @@
 }
 
 .profile-status__edit {
-	display: -webkit-box;
-	display: -ms-flexbox;
-	display: flex;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   margin: 5px 0;
-	height: 27px;
-	border-radius: 5px;
-	overflow: hidden;
-	background-color: #ffffff;
-	width: 100%;
+  height: 27px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #ffffff;
+  width: 100%;
 }
 
 .profile-status__edit_loading {
@@ -403,30 +405,30 @@
 }
 
 .profile-status__edit-btn {
-	height: 100%;
-	padding: 0 10px;
-	background: transparent;
-	border: none;
-	color: #2a91ff;
-	font-family: "Myriad Pro";
-	font-size: 12px;
-	font-weight: 300;
-	line-height: 1;
-	width: 45px;
+  height: 100%;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  color: #2a91ff;
+  font-family: "Myriad Pro";
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1;
+  width: 45px;
 }
 
 .profile-status__edit-input {
-	height: 100%;
-	-webkit-box-flex: 1;
-	-ms-flex: 1;
-	flex: 1;
-	color: #000000;
-	font-family: "Myriad Pro";
-	font-size: 12px;
-	font-weight: 300;
-	background: transparent;
-	border: none;
-	padding-left: 10px;
+  height: 100%;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  color: #000000;
+  font-family: "Myriad Pro";
+  font-size: 12px;
+  font-weight: 300;
+  background: transparent;
+  border: none;
+  padding-left: 10px;
 }
 
 .profile-status__edit-input::-webkit-input-placeholder {opacity: 1;color: #8f9294;}
@@ -444,6 +446,102 @@
 }
 
 .profile-status__edit-close:hover {
+  opacity: 1;
+}
+
+/* ===== profile name ===== */
+
+.profile-name__container {
+  margin-right: 20px;
+  margin-bottom: 5px;
+  max-width: 300px;
+}
+
+.profile-name {
+  font-family: "Myriad Pro";
+  font-size: 24px;
+  color: #4d4d4d;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-name a {
+  display: inline-block;
+  color: #1886ff;
+  border-bottom: 1px dashed #1886ff;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.profile-name a:hover {
+  color: #1886ff;
+  opacity: 0.7;
+  border-bottom-color: transparent;
+}
+
+.profile-name__edit {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 45px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #ffffff;
+  width: 100%;
+}
+
+.profile-name__edit_loading {
+  opacity: 0.6;
+}
+
+.profile-name__edit-btn {
+  height: 100%;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  color: #2a91ff;
+  font-family: "Myriad Pro";
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1;
+  width: 50px;
+  flex-shrink: 0;
+}
+
+.profile-name__edit-input {
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  color: #000000;
+  font-family: "Myriad Pro";
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  padding-left: 10px;
+}
+
+.profile-name__edit-input::-webkit-input-placeholder {opacity: 1;color: #8f9294;}
+.profile-name__edit-input::-moz-placeholder 			{opacity: 1;color: #8f9294;}
+.profile-name__edit-input:-moz-placeholder 			{opacity: 1;color: #8f9294;}
+.profile-name__edit-input:-ms-input-placeholder 		{opacity: 1;color: #8f9294;}
+
+.profile-name__edit-close {
+  cursor: pointer;
+  padding-right: 10px;
+  padding-top: 2px;
+  color: #2a91ff;
+  font-size: 15px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.profile-name__edit-close:hover {
   opacity: 1;
 }
 
@@ -466,6 +564,11 @@
     margin-right: 5px;
     width: 50px;
     height: 50px;
+  }
+
+  .profile-name {
+    font-size: 14px;
+    margin-right: 10px;
   }
 
   .profile-form {
