@@ -11,6 +11,7 @@
         />
       </div>
       <div class="profile-info">
+        <profile-name v-if="!tokenName" />
         <div v-if="tokenName" class="profile-info__title">
           {{ tokenName }}
         </div>
@@ -23,7 +24,7 @@
             {{ address | shortAddress }}
           </span>
         </div>
-        <profile-status />
+        <profile-status v-if="!tokenName" />
         <div class="profile-info__text">
           {{ transactionsCount | humanizeCount }}
           transactions<br />
@@ -47,7 +48,9 @@ import { copyToClipboard } from '~/utils/copyToClipboard'
   components: {
     'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
     'profile-status': async () =>
-      await import('@/components/address/AddressProfileStatus.vue')
+      await import('@/components/address/AddressProfileStatus.vue'),
+    'profile-name': async () =>
+      await import('@/components/address/AddressProfileName.vue')
   }
 })
 export default class AddressProfileTop extends Vue {

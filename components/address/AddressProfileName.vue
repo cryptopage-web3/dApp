@@ -1,28 +1,28 @@
 <template>
-  <div class="profile-status__container">
-    <div v-if="!isOwner" class="profile-status">Status: {{ status }}</div>
+  <div class="profile-name__container">
+    <div v-if="!isOwner" class="profile-name">{{ name }}</div>
     <template v-else>
-      <div v-show="!isEdit" class="profile-status">
-        Status: <a href="#" @click.prevent="showEdit">{{ status }}</a>
+      <div v-show="!isEdit" class="profile-name">
+        <a href="#" @click.prevent="showEdit">{{ name }}</a>
       </div>
       <form v-show="isEdit">
         <div
-          class="profile-status__edit"
+          class="profile-name__edit"
           :class="{
-            'profile-status__edit_loading': loading
+            'profile-name__edit_loading': loading
           }"
         >
           <input
             ref="input"
-            v-model="localStatus"
+            v-model="localName"
             :disabled="loading"
             type="text"
-            placeholder="Your status"
-            class="profile-status__edit-input"
+            placeholder="Your name"
+            class="profile-name__edit-input"
           />
           <button
             :disabled="loading"
-            class="profile-status__edit-btn"
+            class="profile-name__edit-btn"
             @click.prevent="submit"
           >
             <span
@@ -35,7 +35,7 @@
           </button>
           <div
             v-if="!loading"
-            class="profile-status__edit-close"
+            class="profile-name__edit-close"
             @click.prevent="closeEdit"
           >
             <font-awesome-icon :icon="['fas', 'times']" />
@@ -50,11 +50,11 @@ import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
 
 @Component({})
-export default class AddressProfileStatus extends Vue {
+export default class AddressProfileName extends Vue {
   isEdit = false
   loading = false
-  status = 'Hello, World!'
-  localStatus = ''
+  name = 'John Wick'
+  localName = ''
   clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
 
   $refs!: {
@@ -88,7 +88,7 @@ export default class AddressProfileStatus extends Vue {
 
   clickOutsideHandler(event: JQuery.ClickEvent) {
     if (
-      !$(event.target).closest('.profile-status__container').length &&
+      !$(event.target).closest('.profile-name__container').length &&
       this.isEdit &&
       !this.loading
     ) {
@@ -98,7 +98,7 @@ export default class AddressProfileStatus extends Vue {
 
   showEdit() {
     this.isEdit = true
-    this.localStatus = this.status
+    this.localName = this.name
 
     this.$nextTick(() => {
       this.$refs.input.focus()
@@ -110,10 +110,10 @@ export default class AddressProfileStatus extends Vue {
   }
 
   submit() {
-    if (!this.localStatus) {
+    if (!this.localName) {
       this.$notify({
         type: 'error',
-        title: 'Empty status'
+        title: 'Empty name'
       })
       return
     }
@@ -121,7 +121,7 @@ export default class AddressProfileStatus extends Vue {
     this.loading = true
 
     setTimeout(() => {
-      this.status = this.localStatus
+      this.name = this.localName
 
       this.loading = false
       this.closeEdit()
