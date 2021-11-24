@@ -453,14 +453,14 @@
 
 .profile-name__container {
   margin-right: 20px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   max-width: 300px;
 }
 
 .profile-name {
   font-family: "Myriad Pro";
   font-size: 24px;
-  color: #4d4d4d;
+  color: #000000;
   line-height: 1;
   white-space: nowrap;
   overflow: hidden;
@@ -566,9 +566,30 @@
     height: 50px;
   }
 
+  .profile-name__container {
+    max-width: 200px;
+  }
+
   .profile-name {
-    font-size: 14px;
+    font-size: 16px;
     margin-right: 10px;
+  }
+
+  .profile-name__edit {
+    height: 32px;
+  }
+
+  .profile-name__edit-btn {
+    font-size: 12px;
+    width: 45px;
+  }
+
+  .profile-name__edit-input {
+    font-size: 16px;
+  }
+
+  .profile-name__edit-close {
+    font-size: 13px;
   }
 
   .profile-form {

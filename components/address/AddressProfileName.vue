@@ -53,7 +53,7 @@ import { Component } from 'nuxt-property-decorator'
 export default class AddressProfileName extends Vue {
   isEdit = false
   loading = false
-  name = 'Hello, World!'
+  name = 'John Wick'
   localName = ''
   clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
 
