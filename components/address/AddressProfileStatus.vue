@@ -1,43 +1,47 @@
 <template>
   <div class="profile-status__container">
-    <div v-show="!isEdit" class="profile-status">
-      Status: <a href="#" @click.prevent="showEdit">{{ status }}</a>
-    </div>
-    <div
-      v-show="isEdit"
-      class="profile-status__edit"
-      :class="{
-        'profile-status__edit_loading': loading
-      }"
-    >
-      <input
-        v-model="localStatus"
-        :disabled="loading"
-        type="text"
-        placeholder="Your status"
-        class="profile-status__edit-input"
-      />
-      <button
-        :disabled="loading"
-        class="profile-status__edit-btn"
-        @click.prevent="submit"
-      >
-        <span
-          v-if="loading"
-          class="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        />
-        <template v-else>Save</template>
-      </button>
-      <div
-        v-if="!loading"
-        class="profile-status__edit-close"
-        @click.prevent="closeEdit"
-      >
-        <font-awesome-icon :icon="['fas', 'times']" />
+    <div v-if="!isOwner" class="profile-status">Status: {{ status }}</div>
+    <template v-else>
+      <div v-show="!isEdit" class="profile-status">
+        Status: <a href="#" @click.prevent="showEdit">{{ status }}</a>
       </div>
-    </div>
+      <form v-show="isEdit">
+        <div
+          class="profile-status__edit"
+          :class="{
+            'profile-status__edit_loading': loading
+          }"
+        >
+          <input
+            v-model="localStatus"
+            :disabled="loading"
+            type="text"
+            placeholder="Your status"
+            class="profile-status__edit-input"
+          />
+          <button
+            :disabled="loading"
+            class="profile-status__edit-btn"
+            @click.prevent="submit"
+          >
+            <span
+              v-if="loading"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            />
+            <template v-else>Save</template>
+          </button>
+          <div
+            v-if="!loading"
+            class="profile-status__edit-close"
+            @click.prevent="closeEdit"
+          >
+            <font-awesome-icon :icon="['fas', 'times']" />
+          </div>
+        </div>
+      </form>
+    </template>
   </div>
 </template>
 <script lang="ts">
@@ -51,6 +55,13 @@ export default class AddressProfileStatus extends Vue {
   status = 'Hello, World!'
   localStatus = ''
   clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
+
+  get isOwner(): boolean {
+    return (
+      String(this.$store.getters['address/address']).toLowerCase() ===
+      String(this.$store.getters['auth/selectedAddress']).toLowerCase()
+    )
+  }
 
   mounted() {
     this.$nextTick(() => {
