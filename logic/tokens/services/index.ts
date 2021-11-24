@@ -149,7 +149,7 @@ export default class TokenService {
       name: 'Crypto Page',
       symbol: 'PAGE',
       decimals: 18,
-      image: require('@/assets/img/header-logo_img.png'),
+      image: require('@/assets/img/logo.svg'),
       rate: { usd: 0 }
     }
   }

@@ -23,7 +23,7 @@
             {{ address | shortAddress }}
           </span>
         </div>
-        <profile-status />
+        <profile-status v-if="!tokenName" />
         <div class="profile-info__text">
           {{ transactionsCount | humanizeCount }}
           transactions<br />
