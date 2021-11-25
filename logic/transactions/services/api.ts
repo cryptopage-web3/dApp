@@ -2,6 +2,7 @@ import { Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
 import EtherscanAPIService from '~/logic/services/api/etherscan'
 import {
+  ESortDirectionType,
   TransactionType,
   ParamsTransactionsType
 } from '~/logic/transactions/types'
@@ -19,7 +20,7 @@ export default class TransactionAPIService {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     return await this.etherscanAPIService.getNormalTransactions({
       address,
@@ -33,7 +34,7 @@ export default class TransactionAPIService {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     return await this.etherscanAPIService.getInternalTransactions({
       address,
@@ -52,7 +53,7 @@ export default class TransactionAPIService {
     contractAddress,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     return await this.etherscanAPIService.getERC20Transactions({
       address,
@@ -71,7 +72,7 @@ export default class TransactionAPIService {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     return await this.etherscanAPIService.getERC721Transactions({
       address,
