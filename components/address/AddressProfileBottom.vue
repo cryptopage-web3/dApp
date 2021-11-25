@@ -36,49 +36,59 @@
     </div>
   </div>
 </template>
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Watch } from 'nuxt-property-decorator'
+
+@Component({
   components: {
     'nft-form': async () => await import('@/components/nft-form/NFTForm.vue')
-  },
-  data: () => ({
-    isCreateFormShown: false
-  }),
-  computed: {
-    isOwner() {
-      return (
-        String(this.$store.getters['address/address']).toLowerCase() ===
-        String(this.$store.getters['auth/selectedAddress']).toLowerCase()
-      )
-    },
-    isAuth() {
-      return this.$store.getters['auth/isAuth']
+  }
+})
+export default class AddressProfileBottom extends Vue {
+  isCreateFormShown = false
+
+  // computed
+
+  get isOwner(): boolean {
+    return (
+      String(this.$store.getters['address/address']).toLowerCase() ===
+      String(this.$store.getters['auth/selectedAddress']).toLowerCase()
+    )
+  }
+
+  get isAuth(): boolean {
+    return this.$store.getters['auth/isAuth']
+  }
+
+  // watch
+
+  @Watch('isCreateFormShown')
+  onIsCreateFormShownChanged(isShown: boolean) {
+    if (isShown) {
+      $('.profile-form__container-inner').slideDown(200)
+    } else {
+      $('.profile-form__container-inner').slideUp(100)
     }
-  },
-  watch: {
-    isCreateFormShown(isShown) {
-      if (isShown) {
-        $('.profile-form__container-inner').slideDown(200)
-      } else {
-        $('.profile-form__container-inner').slideUp(100)
-      }
-    }
-  },
-  methods: {
-    showCreateForm() {
-      this.isCreateFormShown = !this.isCreateFormShown
-    },
-    showSendNft() {
-      console.log('showSendNft')
-    },
-    nftSubmitedHandler() {
-      $('html, body').animate(
-        {
-          scrollTop: 0
-        },
-        100
-      )
-    }
+  }
+
+  // methods
+
+  showCreateForm() {
+    this.isCreateFormShown = !this.isCreateFormShown
+  }
+
+  showSendNft() {
+    console.log('showSendNft')
+  }
+
+  nftSubmitedHandler() {
+    $('html, body').animate(
+      {
+        scrollTop: 0
+      },
+      100
+    )
   }
 }
 </script>

@@ -11,6 +11,7 @@
         />
       </div>
       <div class="profile-info">
+        <profile-name v-if="!tokenName" />
         <div v-if="tokenName" class="profile-info__title">
           {{ tokenName }}
         </div>
@@ -23,7 +24,7 @@
             {{ address | shortAddress }}
           </span>
         </div>
-        <div class="profile-status">Status: <a href="#">Hello, World!</a></div>
+        <profile-status v-if="!tokenName" />
         <div class="profile-info__text">
           {{ transactionsCount | humanizeCount }}
           transactions<br />
@@ -38,54 +39,64 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
-export default {
-  data: () => ({
-    diameter: $(window).width() > 767 ? 90 : 40
-  }),
+@Component({
+  components: {
+    'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
+    'profile-status': async () =>
+      await import('@/components/address/AddressProfileStatus.vue'),
+    'profile-name': async () =>
+      await import('@/components/address/AddressProfileName.vue')
+  }
+})
+export default class AddressProfileTop extends Vue {
+  diameter = Number($(window).width()) > 767 ? 90 : 40
 
-  computed: {
-    address() {
-      return this.$store.getters['address/address']
-    },
+  $refs!: {
+    address: HTMLSpanElement
+  }
 
-    image() {
-      return this.$store.getters['address/image']
-    },
+  get address(): string {
+    return this.$store.getters['address/address']
+  }
 
-    transactionsCount() {
-      return this.$store.getters['address/transactionsCount']
-    },
+  get image(): string {
+    return this.$store.getters['address/image']
+  }
 
-    tokenName() {
-      const tokenName = this.$store.getters['address/name']
-      const tokenSymbol = this.$store.getters['address/symbol']
-      return tokenName && tokenSymbol ? `${tokenName} (${tokenSymbol})` : ''
-    }
-  },
+  get transactionsCount(): number {
+    return this.$store.getters['address/transactionsCount']
+  }
+
+  get tokenName(): string {
+    const tokenName = this.$store.getters['address/name']
+    const tokenSymbol = this.$store.getters['address/symbol']
+    return tokenName && tokenSymbol ? `${tokenName} (${tokenSymbol})` : ''
+  }
 
   mounted() {
     this.$nextTick(() => {
-      $(this.$refs.address).tooltip({
+      ;($(this.$refs.address) as any).tooltip({
         trigger: 'hover',
         title: 'Click to copy'
       })
     })
-  },
+  }
 
-  methods: {
-    copyAddress() {
-      copyToClipboard(this.address)
+  // methods
 
-      $(this.$refs.address).tooltip('hide')
+  copyAddress() {
+    copyToClipboard(this.address)
+    ;($(this.$refs.address) as any).tooltip('hide')
 
-      this.$notify({
-        type: 'success',
-        title: 'Address copied to clipboard'
-      })
-    }
+    this.$notify({
+      type: 'success',
+      title: 'Address copied to clipboard'
+    })
   }
 }
 </script>
