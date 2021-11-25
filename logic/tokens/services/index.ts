@@ -127,7 +127,11 @@ export default class TokenService {
   public getPageTokenBalance = async (
     address: string
   ): Promise<TokenBalanceType> => {
+    const contractABI = await import(
+      `../../../contracts/${this.authService.selectedNetworkSlug}/PageToken.json`
+    )
     const tokenInfo = this.pageToken
+    tokenInfo.address = contractABI.address
     const balance = await this.addressService.addressWEB3Service.getBalanceOf(
       address,
       tokenInfo.address
@@ -145,7 +149,7 @@ export default class TokenService {
 
   public get pageToken(): TokenInfoType {
     return {
-      address: '0x65a2e2e489fde1857e12163a9f2f7640c0d0f403',
+      address: '0x1F33CF88A6D824650FF4b58d377B4D62604495B7',
       name: 'Crypto Page',
       symbol: 'PAGE',
       decimals: 18,
