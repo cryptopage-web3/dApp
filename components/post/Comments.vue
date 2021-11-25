@@ -51,18 +51,19 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'nuxt-property-decorator'
+import { Component, Prop, mixins } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
+import TypedStoreMixin from '~/mixins/typed-store'
 import { TransactionType } from '~/logic/transactions/types'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 
 @Component({})
-export default class Comments extends Vue {
+export default class Comments extends mixins(TypedStoreMixin) {
   loading = false
   comment = ''
   like = true
+  nftContractAddress = ''
   clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
 
   $refs!: {
@@ -83,10 +84,13 @@ export default class Comments extends Vue {
     return Number(this.transaction.nft?.comments?.dislikes)
   }
 
-  mounted() {
-    this.$nextTick(() => {
+  async mounted() {
+    await this.$nextTick(async () => {
       this.clickOutsideListener = this.clickOutsideHandler.bind(this)
       $(document).on('click', this.clickOutsideListener)
+      const slug = this.typedStore.auth.selectedNetworkSlug
+      const contract = await import(`../../contracts/${slug}/PageNFT.json`)
+      this.nftContractAddress = contract.address
     })
   }
 
@@ -172,6 +176,7 @@ export default class Comments extends Vue {
     this.nftService.sendNFTComment({
       params: {
         from: this.$store.getters['auth/selectedAddress'],
+        nftContractAddress: this.nftContractAddress,
         tokenId: String(this.transaction.token.id),
         comment: this.comment,
         like: this.like
