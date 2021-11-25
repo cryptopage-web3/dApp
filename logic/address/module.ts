@@ -8,7 +8,8 @@ import {
   ParamsSetTransactionPagination,
   ParamsTransactionsType,
   TransactionPagination,
-  TransactionType
+  TransactionType,
+  ESortDirectionType
 } from '~/logic/transactions/types'
 import TransactionService from '~/logic/transactions/services'
 import TokenService from '~/logic/tokens/services'
@@ -296,13 +297,17 @@ export default class AddressModule {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc,
+    transactionType,
+    serviceTypes
   }: ParamsTransactionsType): Promise<TransactionType[]> {
     const transactions = await this.transactionService.getTransactions({
       address,
       page,
       offset,
-      sort
+      sort,
+      transactionType,
+      serviceTypes
     })
     this.setTransactions(transactions)
     return transactions
@@ -314,8 +319,8 @@ export default class AddressModule {
   }: ParamsTransactionsType): Promise<TransactionType[]> {
     const {
       page: currentPage,
-      pageSize: offset,
-      sort
+      pageSize: offset
+      // sort
     } = this.normalTransactionPagination
     const page = currentPage + 1
 
@@ -323,7 +328,7 @@ export default class AddressModule {
       address,
       page,
       offset,
-      sort
+      sort: ESortDirectionType.desc
     })
     this.setTransactions(transactions)
     this.setTransactionPagination({
@@ -340,7 +345,7 @@ export default class AddressModule {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> {
     const transactions = await this.transactionService.getInternalTransactions({
       address,
@@ -359,8 +364,8 @@ export default class AddressModule {
   }: ParamsTransactionsType): Promise<TransactionType[]> {
     const {
       page: currentPage,
-      pageSize: offset,
-      sort
+      pageSize: offset
+      // sort
     } = this.ERC20TransactionPagination
     const page = currentPage + 1
 
@@ -369,7 +374,7 @@ export default class AddressModule {
       contractAddress,
       page,
       offset,
-      sort
+      sort: ESortDirectionType.desc
     })
     this.setTransactions(transactions)
     this.setTransactionPagination({
@@ -387,8 +392,8 @@ export default class AddressModule {
   }: ParamsTransactionsType): Promise<TransactionType[]> {
     const {
       page: currentPage,
-      pageSize: offset,
-      sort
+      pageSize: offset
+      // sort
     } = this.ERC721TransactionPagination
     const page = currentPage + 1
 
@@ -396,7 +401,7 @@ export default class AddressModule {
       address,
       page,
       offset,
-      sort
+      sort: ESortDirectionType.desc
     })
     this.setTransactions(transactions)
     this.setTransactionPagination({
