@@ -58,15 +58,28 @@ export default class AuthService extends Vue {
   ]
 
   protected networksByChain: any = {
-    1: { network: 'ethereum', name: 'Ethereum' },
-    3: { network: 'ethereum', name: 'Ropsten TestNet' },
-    4: { network: 'ethereum', name: 'Rinkeby TestNet' },
-    5: { network: 'ethereum', name: 'Goerly TestNet' },
-    42: { network: 'ethereum', name: 'Kovan TestNet' },
-    56: { network: 'bsc', name: 'BSC Network' },
-    97: { network: 'bsc', name: 'BSC TestNet' },
-    137: { network: 'polygon', name: 'Polygon Mainnet' },
-    80001: { network: 'polygon', name: 'Polygon TestNet' }
+    1: { network: 'ethereum', name: 'Ethereum', slug: 'eth' },
+    3: { network: 'ethereum', name: 'Ropsten TestNet', slug: 'ropsten' },
+    4: { network: 'ethereum', name: 'Rinkeby TestNet', slug: 'rinkeby' },
+    5: { network: 'ethereum', name: 'Goerly TestNet', slug: 'goerly' },
+    42: { network: 'ethereum', name: 'Kovan TestNet', slug: 'kovan' },
+    56: { network: 'bsc', name: 'BSC Network', slug: 'bsc' },
+    97: { network: 'bsc', name: 'BSC TestNet', slug: 'bsc-testnet' },
+    137: {
+      network: 'polygon',
+      name: 'Polygon Mainnet',
+      slug: 'polygon'
+    },
+    80001: {
+      network: 'polygon',
+      name: 'Polygon TestNet',
+      slug: 'polygon-testnet'
+    },
+    1337: {
+      network: 'ganache',
+      name: 'Ganache',
+      slug: 'ganache'
+    }
   }
 
   // chainid type is hexadecimal nubers
@@ -162,6 +175,17 @@ export default class AuthService extends Vue {
       (this.networksByChain[this.selectedChainId] &&
         this.networksByChain[this.selectedChainId].name) ||
       'unknown network'
+    )
+  }
+
+  /*
+   * Just reacive proxy for simple access
+   */
+  public get selectedNetworkSlug(): string {
+    return (
+      (this.networksByChain[this.selectedChainId] &&
+        this.networksByChain[this.selectedChainId].slug) ||
+      'unknown'
     )
   }
 
