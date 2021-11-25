@@ -22,15 +22,15 @@
   </div>
 </template>
 <script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'nuxt-property-decorator'
+import { Component, Prop, mixins } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
 import { TransactionType } from '~/logic/transactions/types'
+import TypedStoreMixin from '~/mixins/typed-store'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 
 @Component({})
-export default class ActivateComments extends Vue {
+export default class ActivateComments extends mixins(TypedStoreMixin) {
   activated = false
   loading = false
 
@@ -38,6 +38,14 @@ export default class ActivateComments extends Vue {
 
   @Inject(tokens.NFT_SERVICE)
   public nftService!: NFTService
+
+  public nftContractAddress = ''
+
+  async mounted() {
+    const slug = this.typedStore.auth.selectedNetworkSlug
+    const contract = await import(`../../contracts/${slug}/PageNFT.json`)
+    this.nftContractAddress = contract.address
+  }
 
   // methods
 
@@ -62,6 +70,7 @@ export default class ActivateComments extends Vue {
 
     this.nftService.activateComments({
       params: {
+        nftContractAddress: this.nftContractAddress,
         from: this.$store.getters['auth/selectedAddress'],
         tokenId: String(this.transaction.token.id)
       },
