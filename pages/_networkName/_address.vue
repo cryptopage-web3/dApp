@@ -9,23 +9,45 @@
 export default {
   validate({ params, $web3 }) {
     const networkName = params.networkName
-    const validNetworkNames = ['eth', 'rinkeby', 'bsc', 'matic']
+    const validNetworkNames = [
+      'eth',
+      'ropsten',
+      'rinkeby',
+      'goerly',
+      'kovan',
+      'bsc',
+      'bsc-testnet',
+      'polygon',
+      'polygon-testnet',
+      'ganache'
+    ]
     const isValid = validNetworkNames.includes(networkName)
     return isValid && $web3.utils.isAddress(params.address)
   },
-
+  data: () => ({
+    validNetworks: null
+  }),
   async beforeCreate() {
-    let chainId = 1
     const networkName = this.$route.params.networkName
-    if (networkName === 'eth') chainId = 1
-    if (networkName === 'rinkeby') chainId = 4
-    if (networkName === 'bsc') chainId = 56
-    if (networkName === 'matic') chainId = 137
-    await this.$store.dispatch('auth/setChainId', chainId)
-    await this.$store.dispatch(
-      'address/updateAddressInfo',
-      this.$route.params.address
-    )
+    const validNetworks = {
+      eth: 1,
+      ropsten: 3,
+      rinkeby: 4,
+      goerly: 5,
+      kovan: 42,
+      bsc: 56,
+      'bsc-testnet': 97,
+      polygon: 137,
+      'polygon-testnet': 80001
+    }
+    const chainId = validNetworks[networkName]
+    if (chainId) {
+      await this.$store.dispatch('auth/setChainId', chainId)
+      await this.$store.dispatch(
+        'address/updateAddressInfo',
+        this.$route.params.address
+      )
+    }
   }
 }
 </script>

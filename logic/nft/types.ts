@@ -21,7 +21,7 @@ export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>
 export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
 
 export type NFTCommentsType = {
-  comments: string
+  total: string
   likes: string
   dislikes: string
 }
@@ -52,9 +52,9 @@ export interface FetchManyType {
 }
 
 export interface ERC721CommentsType {
-  comments: string
+  total: string
   likes: string
-  dislakes: string
+  dislikes: string
 }
 
 export interface ERC721ContractDataType {
@@ -85,6 +85,7 @@ export interface ISendNFTWeb3 {
 
 export interface ISendNFTCommentParams {
   from: string
+  nftContractAddress: string
   tokenId: string
   comment: string
   like: boolean
@@ -106,6 +107,7 @@ export interface ISendNFTCommentWeb3 {
 
 export interface IActivateCommentsParams {
   from: string
+  nftContractAddress: string
   tokenId: string
 }
 

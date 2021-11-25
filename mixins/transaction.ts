@@ -24,10 +24,12 @@ export default class TransactionMixin extends mixins(NetworkNameMixin) {
         : `${this.$route.params.address}`
     )
     const sender = this.$web3.utils.toChecksumAddress(
-      `${this.transaction.sender}`
+      `${this.transaction.sender}` ||
+        '0x0000000000000000000000000000000000000000'
     )
     const receiver = this.$web3.utils.toChecksumAddress(
-      `${this.transaction.receiver}`
+      `${this.transaction.receiver}` ||
+        '0x0000000000000000000000000000000000000000'
     )
     if (sender === address) {
       return false

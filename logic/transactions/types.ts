@@ -38,12 +38,41 @@ export type InternalTransactionType = TransactionAdaptarParamsType & {
   USDAmount?: number
 }
 
+export enum ESortDirectionType {
+  asc = 'asc',
+  desc = 'desc'
+}
+
+export enum ESortFieldType {
+  timestamp = 'timestamp',
+  value = 'value'
+}
+
+export enum EServiceType {
+  all = 'all',
+  api = 'api',
+  web3 = 'web3',
+  ipfs = 'ipfs',
+  cache = 'cache'
+}
+
+export enum ETransactionStoreType {
+  all = 'all',
+  normal = 'normal',
+  internal = 'internal',
+  erc20 = 'erc20',
+  erc721 = 'erc721'
+}
+
 export type ParamsTransactionsType = {
   address: string
   contractAddress?: string
   page?: number
   offset?: number
-  sort?: string
+  sort?: ESortDirectionType
+  sortField?: ESortFieldType
+  serviceTypes?: EServiceType[]
+  transactionType?: ETransactionStoreType
   module?: string
   action?: string
 }

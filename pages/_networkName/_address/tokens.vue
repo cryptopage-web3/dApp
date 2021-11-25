@@ -45,9 +45,10 @@ export default {
       ? this.$route.params.address
       : ''
 
-    await this.$store.dispatch('address/getERC20Transactions', {
+    await this.$store.dispatch('address/getTransactions', {
       address,
-      contractAddress
+      contractAddress,
+      transactionType: 'erc20'
     })
   },
 

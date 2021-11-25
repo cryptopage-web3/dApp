@@ -79,6 +79,20 @@ export const paginationMixin = {
       const params = this.$route.params
       const chainId = Number(this.chainId)
 
+      const validNetworks = {
+        1: 'eth',
+        3: 'ropsten',
+        4: 'rinkeby',
+        5: 'goerly',
+        42: 'kovan',
+        56: 'bsc',
+        97: 'bsc-testnet',
+        137: 'polygon',
+        80001: 'polygon-testnet'
+      }
+      const networkName = validNetworks[chainId]
+      if (networkName) params.networkName = networkName
+      /*
       if (chainId === 1) {
         params.networkName = 'eth'
       } else if (chainId === 4) {
@@ -88,7 +102,7 @@ export const paginationMixin = {
       } else if (chainId === 137) {
         params.networkName = 'matic'
       }
-
+      */
       await this.$store.dispatch('address/clearTransactions')
       await this.$router.push({ params })
     },

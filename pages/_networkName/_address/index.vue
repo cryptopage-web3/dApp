@@ -39,8 +39,9 @@ export default {
       return
     }
 
-    await this.$store.dispatch('address/getNormalTransactions', {
-      address: this.$route.params.address
+    await this.$store.dispatch('address/getTransactions', {
+      address: this.$route.params.address,
+      transactionType: 'normal'
     })
   },
 

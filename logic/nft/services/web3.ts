@@ -1,7 +1,6 @@
 import { Service, Container } from 'vue-typedi'
 import Web3 from 'web3'
 import { ERC721ABI } from '~/constants/abi-samples'
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from '~/constants/contract'
 import {
   FetchOneType,
   ERC721ContractDataType,
@@ -26,6 +25,23 @@ export default class NFTWeb3Service {
     return Container.get(tokens.WEB3) as Web3
   }
 
+  private getNetworkName = (): Promise<string> => {
+    return this.$web3.eth.getChainId().then((chainId: number) => {
+      const networks: { [chainId: number]: string } = {
+        1: 'eth',
+        3: 'ropsten',
+        4: 'rinkeby',
+        5: 'goerly',
+        42: 'kovan',
+        56: 'bsc',
+        97: 'bsc-testnet',
+        137: 'polygon',
+        80001: 'polygon-testnet'
+      }
+      return networks[chainId]
+    })
+  }
+
   /**
    * Get TokenURI and owner from contract
    */
@@ -37,13 +53,25 @@ export default class NFTWeb3Service {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
+      let hasComments = false
       let comments = null
-
       /** если NFT создана через наш контракт, то получаем его комментарии */
-      if (contractAddress.toLowerCase() === CONTRACT_ADDRESS.toLowerCase()) {
-        const ownContract = new this.$web3.eth.Contract(
-          CONTRACT_ABI,
-          CONTRACT_ADDRESS
+      const networkName = await this.getNetworkName()
+      const NFT_CONTRACT = await import(
+        `../../../contracts/${networkName}/PageNFT.json`
+      )
+      const COMMENT_CONTRACT = await import(
+        `../../../contracts/${networkName}/PageComment.json`
+      )
+      const COMMENT_MINTER_CONTRACT = await import(
+        `../../../contracts/${networkName}/PageCommentMinter.json`
+      )
+      if (
+        contractAddress.toLowerCase() === NFT_CONTRACT.address.toLowerCase()
+      ) {
+        const commentMinterContract = new this.$web3.eth.Contract(
+          COMMENT_MINTER_CONTRACT.abi,
+          COMMENT_MINTER_CONTRACT.address
         )
 
         /**
@@ -51,7 +79,20 @@ export default class NFTWeb3Service {
          * то предполагаем, что комментарии не были включены при создании NFT
          */
         try {
-          comments = await ownContract.methods.tokenComments(tokenId).call()
+          hasComments = await commentMinterContract.methods
+            .hasComments(NFT_CONTRACT.address, tokenId)
+            .call()
+          if (hasComments) {
+            const commentContractAddress = await commentMinterContract.methods
+              .getContract(NFT_CONTRACT.address, tokenId)
+              .call()
+
+            const commentContract = new this.$web3.eth.Contract(
+              COMMENT_CONTRACT.abi,
+              commentContractAddress
+            )
+            comments = await commentContract.methods.getStatistic().call()
+          }
         } catch {}
       }
 
@@ -63,43 +104,74 @@ export default class NFTWeb3Service {
 
   /** Action safeMint by contract */
   public sendSafeMint = ({ params, callbacks }: ISendNFTWeb3) => {
-    const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
-
-    contract.methods
-      .safeMint(params.hash, params.comment)
-      .send({
-        from: params.from
-      })
-      .on('transactionHash', callbacks.onTransactionHash)
-      .on('receipt', callbacks.onReceipt)
-      .on('error', callbacks.onError)
+    this.getNetworkName().then((networkName: string) => {
+      import(`../../../contracts/${networkName}/PageNFT.json`).then(
+        (CONTRACT) => {
+          console.log('PageNFT CONTRACT.address', CONTRACT.address)
+          const contract = new this.$web3.eth.Contract(
+            CONTRACT.abi,
+            CONTRACT.address
+          )
+          contract.methods
+            .safeMint(params.hash, params.comment)
+            .send({
+              from: params.from
+            })
+            .on('transactionHash', callbacks.onTransactionHash)
+            .on('receipt', callbacks.onReceipt)
+            .on('error', callbacks.onError)
+        }
+      )
+    })
   }
 
   /** Action comment by contract */
   public sendComment = ({ params, callbacks }: ISendNFTCommentWeb3) => {
-    const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
+    this.getNetworkName().then((networkName) => {
+      import(`../../../contracts/${networkName}/PageContractMinter.json`).then(
+        (CONTRACT) => {
+          const contract = new this.$web3.eth.Contract(
+            CONTRACT.abi,
+            CONTRACT.address
+          )
 
-    contract.methods
-      .comment(params.tokenId, params.comment, params.like)
-      .send({
-        from: params.from
-      })
-      .on('transactionHash', callbacks.onTransactionHash)
-      .on('receipt', callbacks.onReceipt)
-      .on('error', callbacks.onError)
+          contract.methods
+            .createComment(
+              params.nftContractAddress,
+              params.tokenId,
+              params.comment,
+              params.like
+            )
+            .send({
+              from: params.from
+            })
+            .on('transactionHash', callbacks.onTransactionHash)
+            .on('receipt', callbacks.onReceipt)
+            .on('error', callbacks.onError)
+        }
+      )
+    })
   }
 
   /** Action commentActivate by contract */
   public activateComments = ({ params, callbacks }: IActivateCommentsWeb3) => {
-    const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
-
-    contract.methods
-      .commentActivate(params.tokenId)
-      .send({
-        from: params.from
-      })
-      .on('transactionHash', callbacks.onTransactionHash)
-      .on('receipt', callbacks.onReceipt)
-      .on('error', callbacks.onError)
+    this.getNetworkName().then((networkName: string) => {
+      import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
+        (CONTRACT) => {
+          const contract = new this.$web3.eth.Contract(
+            CONTRACT.abi,
+            CONTRACT.address
+          )
+          contract.methods
+            .activateComments(params.nftContractAddress, params.tokenId)
+            .send({
+              from: params.from
+            })
+            .on('transactionHash', callbacks.onTransactionHash)
+            .on('receipt', callbacks.onReceipt)
+            .on('error', callbacks.onError)
+        }
+      )
+    })
   }
 }
