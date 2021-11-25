@@ -74,11 +74,6 @@ export default class AuthService extends Vue {
       network: 'polygon',
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
-    },
-    1337: {
-      network: 'ganache',
-      name: 'Ganache',
-      slug: 'ganache'
     }
   }
 
