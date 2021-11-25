@@ -37,11 +37,6 @@ export interface FetchManyType {
   pageSize: number
 }
 
-export interface ERC721ContractDataType {
-  tokenURI: string
-  owner: string
-}
-
 export interface ISendNFTParams {
   from: string
   hash: string
@@ -55,6 +50,15 @@ export interface ISendNFTApi {
 
 export interface ISendNFTWeb3 {
   params: ISendNFTParams
+  callbacks: {
+    onTransactionHash: (hash: string) => void
+    onReceipt: () => void
+    onError: () => void
+  }
+}
+
+export type BurnParamsType {
+  params: { tokenId: string, from: string },
   callbacks: {
     onTransactionHash: (hash: string) => void
     onReceipt: () => void

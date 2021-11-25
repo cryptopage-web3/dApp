@@ -8,7 +8,10 @@
       :style="{ backgroundImage: `url(${transaction.nft.image})` }"
       class="post-image__link"
     />
-    <text-block :text="transaction.nft.description" />
+    <text-block
+      :text="transaction.nft.description"
+      :transaction="transaction"
+    />
     <bottom />
   </div>
 </template>

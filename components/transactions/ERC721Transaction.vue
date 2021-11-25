@@ -3,7 +3,11 @@
     <image-post v-if="transaction.nft.image" :transaction="transaction" />
     <audio-post v-else-if="transaction.nft.audio" :transaction="transaction" />
     <video-post v-else-if="transaction.nft.video" :transaction="transaction" />
-    <text-block v-else :text="transaction.nft.description" />
+    <text-block
+      v-else
+      :text="transaction.nft.description"
+      :transaction="transaction"
+    />
   </div>
 </template>
 <script lang="ts">

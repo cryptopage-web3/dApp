@@ -10,7 +10,8 @@ import {
   FetchOneType,
   NFTPayloadType,
   NFTMediaType,
-  ISendNFTApi
+  ISendNFTApi,
+  BurnParamsType
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
@@ -28,7 +29,7 @@ export default class NFTService {
   @Inject(tokens.NFT_IPFS_SERVICE)
   public nftIPFSService!: NFTIPFSService
 
-  public serviceByURI(
+  public getServiceByURI(
     URI: string
   ): NFTAPIService | NFTWeb3Service | NFTIPFSService {
     if (URI.startsWith('https://ipfs.io/')) return this.nftIPFSService
@@ -89,12 +90,12 @@ export default class NFTService {
     contractAddress
   }: FetchOneType): Promise<NFTType | null> => {
     try {
-      const contractData = await this.nftWeb3Service.getContractData({
+      const contractData = await this.nftWeb3Service.getTokenURIAndOwner({
         tokenId,
         contractAddress
       })
       if (contractData) {
-        const { owner, tokenURI } = contractData
+        const { tokenURI, owner } = contractData
         const NFTPayload = await this.fetchNFTPayload(tokenURI)
         const animationURL = this.parser.parseAnimationURL(NFTPayload)
         const data = this.parser.parse(NFTPayload)
@@ -111,11 +112,20 @@ export default class NFTService {
     }
   }
 
+  public delete = async ({
+    params,
+    callbacks
+  }: BurnParamsType): Promise<void> => {
+    console.log('params in delete', params)
+    console.log('callbacks in delete', callbacks)
+    await this.nftWeb3Service.burn({ params, callbacks })
+  }
+
   /** Send nft to contract via web3 */
   public sendNFTHash = ({ params, callback }: ISendNFTApi) => {
     let txHash = ''
 
-    this.nftWeb3Service.sendSafeMint({
+    this.nftWeb3Service.safeMint({
       params,
       callbacks: {
         onTransactionHash(hash: string) {

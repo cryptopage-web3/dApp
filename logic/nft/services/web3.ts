@@ -2,11 +2,7 @@ import { Service, Container } from 'vue-typedi'
 import Web3 from 'web3'
 import { ERC721ABI } from '~/constants/abi-samples'
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from '~/constants/contract'
-import {
-  FetchOneType,
-  ERC721ContractDataType,
-  ISendNFTWeb3
-} from '~/logic/nft/types'
+import { FetchOneType, ISendNFTWeb3, BurnParamsType } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
 
 @Service(tokens.NFT_WEB3_SERVICE)
@@ -27,10 +23,10 @@ export default class NFTWeb3Service {
   /**
    * Get TokenURI and owner from contract
    */
-  public getContractData = async ({
+  public getTokenURIAndOwner = async ({
     tokenId,
     contractAddress
-  }: FetchOneType): Promise<ERC721ContractDataType | null> => {
+  }: FetchOneType): Promise<{ tokenURI: string; owner: string } | null> => {
     try {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
@@ -42,11 +38,25 @@ export default class NFTWeb3Service {
   }
 
   /** Action safeMint by contract */
-  public sendSafeMint = ({ params, callbacks }: ISendNFTWeb3) => {
+  public safeMint = ({ params, callbacks }: ISendNFTWeb3) => {
     const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
 
     contract.methods
       .safeMint(params.hash, params.comment)
+      .send({
+        from: params.from
+      })
+      .on('transactionHash', callbacks.onTransactionHash)
+      .on('receipt', callbacks.onReceipt)
+      .on('error', callbacks.onError)
+  }
+
+  /** Action safeMint by contract */
+  public burn = ({ params, callbacks }: BurnParamsType) => {
+    console.log('params', params)
+    const contract = new this.$web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS)
+    contract.methods
+      .burn(params.tokenId)
       .send({
         from: params.from
       })
