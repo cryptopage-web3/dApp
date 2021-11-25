@@ -21,6 +21,7 @@ export default {
   // Transaction service:
   TRANSACTION_SERVICE: new Token('transaction-service'),
   TRANSACTION_API_SERVICE: new Token('transaction-api-service'),
+  TRANSACTION_WEB3_SERVICE: new Token('transaction-web3-service'),
 
   // Token services:
   TOKEN_SERVICE: new Token('token-service'),
