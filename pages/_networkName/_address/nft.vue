@@ -39,8 +39,9 @@ export default {
       return
     }
 
-    await this.$store.dispatch('address/getERC721Transactions', {
-      address: this.$route.params.address
+    await this.$store.dispatch('address/getTransactions', {
+      address: this.$route.params.address,
+      transactionType: 'erc721'
     })
   },
 
