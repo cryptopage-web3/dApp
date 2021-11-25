@@ -46,11 +46,11 @@ export default class NFTParser {
   }
 
   private extractTitle(NFTPayload: NFTPayloadType): string {
-    return NFTPayload.title || NFTPayload.name || this.default.title
+    return NFTPayload.title || NFTPayload.name || ''
   }
 
   private extractDescription(NFTPayload: NFTPayloadType): string {
-    return NFTPayload.description || this.default.description
+    return NFTPayload.description || ''
   }
 
   private prepareImage(image: string): string {

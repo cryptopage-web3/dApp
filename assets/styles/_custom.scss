@@ -227,6 +227,28 @@
   color: #4d4d4d;
 }
 
+.post-empty-block {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #a5a5a5;
+  opacity: 0.6;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border-radius: 15px;
+}
+
+.post-empty-block__title {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.post-empty-block__subtitle {
+  font-size: 14px;
+}
+
 /* ===== wallet connect ===== */
 
 .connect-wallet__link_connect::after {
@@ -460,6 +482,7 @@
 .profile-name {
   font-family: "Myriad Pro";
   font-size: 24px;
+  font-weight: bold;
   color: #000000;
   line-height: 1;
   white-space: nowrap;
