@@ -40,6 +40,11 @@ export default class AuthModule {
   }
 
   @Getter()
+  public get selectedNetworkSlug(): string {
+    return this.authService.selectedNetworkSlug
+  }
+
+  @Getter()
   public get selectedNetworkType(): string {
     return this.authService.selectedNetworkType
   }

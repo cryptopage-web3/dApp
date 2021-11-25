@@ -8,6 +8,7 @@ import tokens from '~/logic/tokens'
 import NFTAPIService from '~/logic/nft/services/api'
 import TokenService from '~/logic/tokens/services'
 import {
+  ESortDirectionType,
   TransactionType,
   ParamsTransactionsType
 } from '~/logic/transactions/types'
@@ -116,7 +117,7 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     const options = {
       address,
@@ -150,7 +151,7 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     const options = {
       address,
@@ -187,7 +188,7 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     contractAddress,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     const options = {
       address,
@@ -228,7 +229,7 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     address,
     page = 1,
     offset = 10,
-    sort = 'desc'
+    sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     const options = {
       address,
