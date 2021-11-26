@@ -129,7 +129,7 @@ export default class NFTWeb3Service {
   /** Action createComment by contract */
   public sendComment = ({ params, callbacks }: ISendNFTCommentWeb3) => {
     this.getNetworkName().then((networkName) => {
-      import(`../../../contracts/${networkName}/PageContractMinter.json`).then(
+      import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
         (CONTRACT) => {
           const contract = new this.$web3.eth.Contract(
             CONTRACT.abi,
@@ -140,6 +140,7 @@ export default class NFTWeb3Service {
             .createComment(
               params.nftContractAddress,
               params.tokenId,
+              params.from,
               params.comment,
               params.like
             )
