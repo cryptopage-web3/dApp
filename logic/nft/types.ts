@@ -117,7 +117,16 @@ export interface IActivateComments {
 }
 
 export interface IActivateCommentsWeb3 {
-  params: IActivateCommentsParams
+  params: IActivateCommentsParams,
+  callbacks: {
+    onTransactionHash: (hash: string) => void
+    onReceipt: () => void
+    onError: () => void
+  }
+}
+
+export type IBurnParamsType = {
+  params: { tokenId: string, from: string },
   callbacks: {
     onTransactionHash: (hash: string) => void
     onReceipt: () => void

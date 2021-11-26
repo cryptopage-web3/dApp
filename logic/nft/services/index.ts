@@ -13,7 +13,8 @@ import {
   ISendNFTApi,
   NFTAdapterRequestParamsType,
   ISendNFTComment,
-  IActivateComments
+  IActivateComments,
+  IBurnParamsType
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
@@ -31,7 +32,7 @@ export default class NFTService {
   @Inject(tokens.NFT_IPFS_SERVICE)
   public nftIPFSService!: NFTIPFSService
 
-  public serviceByURI(
+  public getServiceByURI(
     URI: string
   ): NFTAPIService | NFTWeb3Service | NFTIPFSService {
     if (URI.startsWith('https://ipfs.io/')) return this.nftIPFSService
@@ -92,7 +93,7 @@ export default class NFTService {
     contractAddress
   }: FetchOneType): Promise<NFTType | null> => {
     try {
-      const contractData = await this.nftWeb3Service.getContractData({
+      const contractData = await this.nftWeb3Service.getTokenURIAndOwner({
         tokenId,
         contractAddress
       })
@@ -120,6 +121,13 @@ export default class NFTService {
     } catch {
       return null
     }
+  }
+
+  public delete = async ({
+    params,
+    callbacks
+  }: IBurnParamsType): Promise<void> => {
+    await this.nftWeb3Service.burn({ params, callbacks })
   }
 
   /** Send nft to contract via web3 */

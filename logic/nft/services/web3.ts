@@ -6,7 +6,8 @@ import {
   ERC721ContractDataType,
   ISendNFTWeb3,
   ISendNFTCommentWeb3,
-  IActivateCommentsWeb3
+  IActivateCommentsWeb3,
+  IBurnParamsType
 } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
 
@@ -45,7 +46,7 @@ export default class NFTWeb3Service {
   /**
    * Get TokenURI and owner from contract
    */
-  public getContractData = async ({
+  public getTokenURIAndOwner = async ({
     tokenId,
     contractAddress
   }: FetchOneType): Promise<ERC721ContractDataType | null> => {
@@ -125,7 +126,7 @@ export default class NFTWeb3Service {
     })
   }
 
-  /** Action comment by contract */
+  /** Action createComment by contract */
   public sendComment = ({ params, callbacks }: ISendNFTCommentWeb3) => {
     this.getNetworkName().then((networkName) => {
       import(`../../../contracts/${networkName}/PageContractMinter.json`).then(
@@ -164,6 +165,28 @@ export default class NFTWeb3Service {
           )
           contract.methods
             .activateComments(params.nftContractAddress, params.tokenId)
+            .send({
+              from: params.from
+            })
+            .on('transactionHash', callbacks.onTransactionHash)
+            .on('receipt', callbacks.onReceipt)
+            .on('error', callbacks.onError)
+        }
+      )
+    })
+  }
+
+  /** Action burn by contract */
+  public burn = ({ params, callbacks }: IBurnParamsType) => {
+    this.getNetworkName().then((networkName: string) => {
+      import(`../../../contracts/${networkName}/PageNFT.json`).then(
+        (CONTRACT) => {
+          const contract = new this.$web3.eth.Contract(
+            CONTRACT.abi,
+            CONTRACT.address
+          )
+          contract.methods
+            .burn(params.tokenId)
             .send({
               from: params.from
             })

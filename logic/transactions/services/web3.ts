@@ -1,4 +1,4 @@
-import { Block, Transaction } from 'web3-eth/types'
+import { Transaction } from 'web3-eth/types'
 import { Service, Inject } from 'vue-typedi'
 import Web3 from 'web3'
 import tokens from '~/logic/tokens'
@@ -22,7 +22,7 @@ export default class TransactionWeb3Service {
     const offset = Number(params.offset || 10)
     const transactions: TransactionType[] = []
     const lastBlock = await this.$web3.eth.getBlockNumber()
-    let block: Block = await this.$web3.eth.getBlock(lastBlock, true)
+    let block = await this.$web3.eth.getBlock(lastBlock, true)
     while (transactions.length <= offset) {
       block.transactions.forEach((transaction: Transaction | string) => {
         if (
