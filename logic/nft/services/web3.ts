@@ -105,97 +105,113 @@ export default class NFTWeb3Service {
 
   /** Action safeMint by contract */
   public sendSafeMint = ({ params, callbacks }: ISendNFTWeb3) => {
-    this.getNetworkName().then((networkName: string) => {
-      import(`../../../contracts/${networkName}/PageNFT.json`).then(
-        (CONTRACT) => {
-          console.log('PageNFT CONTRACT.address', CONTRACT.address)
-          const contract = new this.$web3.eth.Contract(
-            CONTRACT.abi,
-            CONTRACT.address
-          )
-          contract.methods
-            .safeMint(params.hash, params.comment)
-            .send({
-              from: params.from
-            })
-            .on('transactionHash', callbacks.onTransactionHash)
-            .on('receipt', callbacks.onReceipt)
-            .on('error', callbacks.onError)
-        }
-      )
-    })
+    try {
+      this.getNetworkName().then((networkName: string) => {
+        import(`../../../contracts/${networkName}/PageNFT.json`).then(
+          (CONTRACT) => {
+            console.log('PageNFT CONTRACT.address', CONTRACT.address)
+            const contract = new this.$web3.eth.Contract(
+              CONTRACT.abi,
+              CONTRACT.address
+            )
+            contract.methods
+              .safeMint(params.hash, params.comment)
+              .send({
+                from: params.from
+              })
+              .on('transactionHash', callbacks.onTransactionHash)
+              .on('receipt', callbacks.onReceipt)
+              .on('error', callbacks.onError)
+          }
+        )
+      })
+    } catch {
+      callbacks.onError()
+    }
   }
 
   /** Action createComment by contract */
   public sendComment = ({ params, callbacks }: ISendNFTCommentWeb3) => {
-    this.getNetworkName().then((networkName) => {
-      import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
-        (CONTRACT) => {
-          const contract = new this.$web3.eth.Contract(
-            CONTRACT.abi,
-            CONTRACT.address
-          )
-
-          contract.methods
-            .createComment(
-              params.nftContractAddress,
-              params.tokenId,
-              params.from,
-              params.comment,
-              params.like
+    try {
+      this.getNetworkName().then((networkName) => {
+        import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
+          (CONTRACT) => {
+            const contract = new this.$web3.eth.Contract(
+              CONTRACT.abi,
+              CONTRACT.address
             )
-            .send({
-              from: params.from
-            })
-            .on('transactionHash', callbacks.onTransactionHash)
-            .on('receipt', callbacks.onReceipt)
-            .on('error', callbacks.onError)
-        }
-      )
-    })
+
+            contract.methods
+              .createComment(
+                params.nftContractAddress,
+                params.tokenId,
+                params.from,
+                params.comment,
+                params.like
+              )
+              .send({
+                from: params.from
+              })
+              .on('transactionHash', callbacks.onTransactionHash)
+              .on('receipt', callbacks.onReceipt)
+              .on('error', callbacks.onError)
+          }
+        )
+      })
+    } catch {
+      callbacks.onError()
+    }
   }
 
   /** Action commentActivate by contract */
   public activateComments = ({ params, callbacks }: IActivateCommentsWeb3) => {
-    this.getNetworkName().then((networkName: string) => {
-      import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
-        (CONTRACT) => {
-          const contract = new this.$web3.eth.Contract(
-            CONTRACT.abi,
-            CONTRACT.address
-          )
-          contract.methods
-            .activateComments(params.nftContractAddress, params.tokenId)
-            .send({
-              from: params.from
-            })
-            .on('transactionHash', callbacks.onTransactionHash)
-            .on('receipt', callbacks.onReceipt)
-            .on('error', callbacks.onError)
-        }
-      )
-    })
+    try {
+      this.getNetworkName().then((networkName: string) => {
+        import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
+          (CONTRACT) => {
+            const contract = new this.$web3.eth.Contract(
+              CONTRACT.abi,
+              CONTRACT.address
+            )
+            contract.methods
+              .activateComments(params.nftContractAddress, params.tokenId)
+              .send({
+                from: params.from
+              })
+              .on('transactionHash', callbacks.onTransactionHash)
+              .on('receipt', callbacks.onReceipt)
+              .on('error', callbacks.onError)
+          }
+        )
+      })
+    } catch {
+      callbacks.onError()
+    }
   }
 
   /** Action burn by contract */
   public burn = ({ params, callbacks }: IBurnParamsType) => {
-    this.getNetworkName().then((networkName: string) => {
-      import(`../../../contracts/${networkName}/PageNFT.json`).then(
-        (CONTRACT) => {
-          const contract = new this.$web3.eth.Contract(
-            CONTRACT.abi,
-            CONTRACT.address
-          )
-          contract.methods
-            .burn(params.tokenId)
-            .send({
-              from: params.from
-            })
-            .on('transactionHash', callbacks.onTransactionHash)
-            .on('receipt', callbacks.onReceipt)
-            .on('error', callbacks.onError)
-        }
-      )
-    })
+    try {
+      this.getNetworkName().then((networkName: string) => {
+        import(`../../../contracts/${networkName}/PageNFT.json`).then(
+          (CONTRACT) => {
+            const contract = new this.$web3.eth.Contract(
+              CONTRACT.abi,
+              CONTRACT.address
+            )
+            contract.methods
+              .burn(params.tokenId)
+              .send({
+                from: params.from
+              })
+              .on('transactionHash', callbacks.onTransactionHash)
+              .on('receipt', callbacks.onReceipt)
+              .on('error', callbacks.onError)
+          }
+        )
+      })
+    } catch {
+      callbacks.onError()
+    }
   }
 }
