@@ -127,23 +127,33 @@ export default class TokenService {
   public getPageTokenBalance = async (
     address: string
   ): Promise<TokenBalanceType> => {
-    const contractABI = await import(
-      `../../../contracts/${this.authService.selectedNetworkSlug}/PageToken.json`
-    )
     const tokenInfo = this.pageToken
-    tokenInfo.address = contractABI.address
-    const balance = await this.addressService.addressWEB3Service.getBalanceOf(
-      address,
-      tokenInfo.address
-    )
-    const rate = await this.getTokenRate(tokenInfo.address, 'usd')
-    tokenInfo.rate = { usd: rate }
-    const usdBalance = balance * Number(tokenInfo.rate ? tokenInfo.rate.usd : 0)
-    return {
-      balance,
-      usdBalance,
-      diff: 0,
-      tokenInfo
+    try {
+      const contractABI = await import(
+        `../../../contracts/${this.authService.selectedNetworkSlug}/PageToken.json`
+      )
+      tokenInfo.address = contractABI.address
+      const balance = await this.addressService.addressWEB3Service.getBalanceOf(
+        address,
+        tokenInfo.address
+      )
+      const rate = await this.getTokenRate(tokenInfo.address, 'usd')
+      tokenInfo.rate = { usd: rate }
+      const usdBalance =
+        balance * Number(tokenInfo.rate ? tokenInfo.rate.usd : 0)
+      return {
+        balance,
+        usdBalance,
+        diff: 0,
+        tokenInfo
+      }
+    } catch {
+      return {
+        balance: 0,
+        usdBalance: 0,
+        diff: 0,
+        tokenInfo
+      }
     }
   }
 
