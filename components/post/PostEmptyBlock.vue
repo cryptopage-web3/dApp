@@ -2,7 +2,7 @@
   <div class="post-empty-block">
     <div class="post-empty-block__title">Empty NTF data</div>
     <div class="post-empty-block__subtitle">
-      Failed to get nft data for transaction
+      Failed to get nft data from transaction
       {{ transaction.hash | shortAddress(5, 7) }}
     </div>
   </div>
