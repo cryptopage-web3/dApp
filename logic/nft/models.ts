@@ -56,10 +56,51 @@ export const NFTMedia = ts.partial({
   video: ts.string
 })
 
+export const NFTAttributeProperty = ts.partial({
+  type: ts.string,
+  value: ts.string
+})
+
+export const NFTAttributeLevel = ts.partial({
+  type: ts.string,
+  value: ts.number,
+  maxValue: ts.number
+})
+
+export const NFTAttributeStat = ts.partial({
+  type: ts.string,
+  value: ts.number,
+  maxValue: ts.number
+})
+
+export const NFTAttributeDate = ts.partial({
+  type: ts.string,
+  value: ts.number
+})
+
+export const NFTAttributeBoost = ts.partial({
+  type: ts.string,
+  value: ts.number,
+  displayType: ts.union([
+    ts.literal('boost_number'),
+    ts.literal('boost_percentage'),
+    ts.undefined
+  ])
+})
+
+export const NFTAttributes = ts.type({
+  properties: ts.array(NFTAttributeProperty),
+  levels: ts.array(NFTAttributeLevel),
+  stats: ts.array(NFTAttributeStat),
+  dates: ts.array(NFTAttributeDate),
+  boosts: ts.array(NFTAttributeBoost)
+})
+
 export const ParsedNFT = ts.intersection([
   ts.type({
     title: ts.string,
-    description: ts.string
+    description: ts.string,
+    attributes: NFTAttributes
   }),
   NFTMedia
 ])
