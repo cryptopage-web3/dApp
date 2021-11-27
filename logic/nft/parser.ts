@@ -1,5 +1,6 @@
 import {
   ERC721CommentsType,
+  NFTAttributesType,
   NFTCommentsType,
   NFTPayloadType,
   ParsedNFTType
@@ -9,13 +10,6 @@ import {
  * See more about this standard: https://docs.opensea.io/docs/metadata-standards
  */
 export default class NFTParser {
-  default: ParsedNFTType = {
-    image:
-      'https://jago.co.nz/assets/camaleon_cms/image-not-found-4a963b95bf081c3ea02923dceaeb3f8085e1a654fc54840aac61a57a60903fef.png',
-    title: 'Default title',
-    description: 'Default description'
-  }
-
   private URIParser(URI: string): string {
     if (URI.startsWith('ipfs://ipfs/')) {
       return URI.replace('ipfs://', 'https://ipfs.io/')
@@ -53,6 +47,81 @@ export default class NFTParser {
     return NFTPayload.description || ''
   }
 
+  private extractAttributes(NFTPayload: NFTPayloadType): NFTAttributesType {
+    const attributes: NFTAttributesType = {
+      properties: [],
+      levels: [],
+      stats: [],
+      dates: [],
+      boosts: []
+    }
+
+    if (!NFTPayload.attributes) {
+      return attributes
+    }
+
+    NFTPayload.attributes.forEach((item) => {
+      // parse stats
+
+      if (item.display_type === 'number') {
+        attributes.stats.push({
+          type: item.trait_type,
+          value: Number(item.value),
+          maxValue: item.max_value
+        })
+
+        return
+      }
+
+      // parse dates
+
+      if (item.display_type === 'date') {
+        attributes.dates.push({
+          type: item.trait_type,
+          value: Number(item.value)
+        })
+
+        return
+      }
+
+      // parse boosts
+
+      if (
+        item.display_type === 'boost_percentage' ||
+        item.display_type === 'boost_number'
+      ) {
+        attributes.boosts.push({
+          type: item.trait_type,
+          value: Number(item.value),
+          displayType: item.display_type
+        })
+
+        return
+      }
+
+      // parse levels
+
+      if (item.max_value) {
+        attributes.levels.push({
+          type: item.trait_type,
+          value: Number(item.value),
+          maxValue: item.max_value
+        })
+
+        return
+      }
+
+      // parse properties
+
+      attributes.properties.push({
+        type: item.trait_type,
+        value: String(item.value)
+      })
+    })
+
+    return attributes
+  }
+
   private prepareImage(image: string): string {
     if (image.startsWith('ipfs')) image = this.URIParser(image)
     else if (image.startsWith('<svg')) image = this.SVGToBase64(image)
@@ -77,7 +146,8 @@ export default class NFTParser {
     return {
       image: this.prepareImage(this.extractImage(NFTPayload)),
       title: this.extractTitle(NFTPayload),
-      description: this.extractDescription(NFTPayload)
+      description: this.extractDescription(NFTPayload),
+      attributes: this.extractAttributes(NFTPayload)
     }
   }
 }

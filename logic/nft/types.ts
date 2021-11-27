@@ -4,7 +4,8 @@ import {
   Property,
   NFTPayload,
   ParsedNFT,
-  NFTMedia
+  NFTMedia,
+  NFTAttributes
 } from '~/logic/nft/models'
 /**
  * These are inner types, they are only used inside the client.
@@ -19,6 +20,7 @@ export type PropertyType = ts.TypeOf<typeof Property>
 export type NFTPayloadType = ts.TypeOf<typeof NFTPayload>
 export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>
 export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
+export type NFTAttributesType = ts.TypeOf<typeof NFTAttributes>
 
 export type NFTCommentsType = {
   total: string
