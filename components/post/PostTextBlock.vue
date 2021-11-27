@@ -1,6 +1,13 @@
 <template>
   <div class="post-text-block">
-    <div class="post-text">{{ transaction.nft.description }}</div>
+    <div class="post-text">
+      <div v-if="title" class="post-text__title">
+        {{ title }}
+      </div>
+      <div v-if="description" class="post-text__description">
+        {{ description }}
+      </div>
+    </div>
     <div v-if="show" class="post-text-right">
       <div
         class="post-text__link"
@@ -23,6 +30,14 @@ import { TransactionType } from '~/logic/transactions/types'
 export default class PostTextBlock extends mixins(TransactionMixin) {
   @Inject(tokens.NFT_SERVICE)
   public nftService!: NFTService
+
+  get title(): string {
+    return this.transaction.nft?.title || ''
+  }
+
+  get description(): string {
+    return this.transaction.nft?.description || ''
+  }
 
   public get show() {
     if (this.transaction) {
@@ -75,7 +90,9 @@ export default class PostTextBlock extends mixins(TransactionMixin) {
           break
       }
     }
+
     let txHash: string
+
     await this.nftService.delete({
       params: { tokenId, from },
       callbacks: {

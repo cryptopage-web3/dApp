@@ -1,7 +1,11 @@
 <template>
   <div class="post post-image">
     <top :transaction="transaction" />
-    <a v-if="transaction.nft.image" href="#">
+    <a
+      v-if="transaction.nft.image"
+      href="#"
+      class="post-image__link loading-bg"
+    >
       <img :src="transaction.nft.image" class="post-image__link-img" />
     </a>
     <text-block :transaction="transaction" />

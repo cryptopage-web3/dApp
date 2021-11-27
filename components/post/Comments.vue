@@ -88,6 +88,7 @@ export default class Comments extends mixins(TypedStoreMixin) {
     await this.$nextTick(async () => {
       this.clickOutsideListener = this.clickOutsideHandler.bind(this)
       $(document).on('click', this.clickOutsideListener)
+
       const slug = this.typedStore.auth.selectedNetworkSlug
       const contract = await import(`../../contracts/${slug}/PageNFT.json`)
       this.nftContractAddress = contract.address
