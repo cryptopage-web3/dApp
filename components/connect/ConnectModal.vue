@@ -134,7 +134,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('ETHEREUM', 'okex')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
                         alt=""
@@ -218,7 +218,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('BSC', 'coin98')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
                         alt=""
@@ -291,7 +291,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('POLYGON', 'okex')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
                         alt=""
@@ -462,7 +462,7 @@ export default {
   methods: {
     switchProvider(type, provider) {
       if (
-        (provider === 'metamask' || provider === 'coin98') &&
+        (provider === 'metamask' || provider === 'coin98' || provider === 'okex') &&
         provider === this.selectedProvider
       ) {
         this.$store.dispatch('auth/switchChain', type)
