@@ -13,14 +13,16 @@ declare const window: Window &
   typeof globalThis & {
     ethereum: any
     BinanceChain: any
+    okexchain: any
   }
 
 const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
-const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET] = [
+const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX] = [
   'metamask',
   'walletConnect',
   'coin98',
-  'bscWallet'
+  'bscWallet',
+  'okex'
 ]
 
 const bsc = new BscConnector({
@@ -123,10 +125,18 @@ export default class AuthService extends Vue {
     )
   }
 
+  protected get okexInstalled(): boolean {
+    return (
+      typeof window !== 'undefined' &&
+      typeof window?.okexchain?.on === 'function'
+    )
+  }
+
   private providerName = METAMASK
   private defaultEthereumWallet = METAMASK
   private provider: WalletConnectProvider | undefined
   private metamaskConnected = false
+  private okexConnected = false
   private bscConnected = false
   private walletConnectConnected = false
   protected get $web3(): any {
@@ -245,6 +255,17 @@ export default class AuthService extends Vue {
       } else {
         connected = 'notInstalled'
       }
+    } else if (providerName === OKEX) {
+      if (this.okexInstalled) {
+        const status = await this.addOKEXEventsListener()
+        if (status) {
+          await this.changeProviderName(providerName)
+          connected = 'success'
+          window.localStorage.setItem('lastProvider', providerName)
+        }
+      } else {
+        connected = 'notInstalled'
+      }
     }
     return connected
   }
@@ -258,7 +279,12 @@ export default class AuthService extends Vue {
       throw new Error('Network is not allowed.')
     }
     const chain = this._CHAINS[networkName]
-    if (this.providerName !== METAMASK && this.providerName !== COIN98) return
+    if (
+      this.providerName !== METAMASK &&
+      this.providerName !== COIN98 &&
+      this.providerName !== OKEX
+    )
+      return
     if (!chain) throw new Error('Chain not found.')
     if (!this.provider) throw new Error('Provider not set.')
     try {
@@ -390,6 +416,37 @@ export default class AuthService extends Vue {
         }
         this.provider = window.BinanceChain
         setBSCData()
+        return true
+      }
+      return false
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Adding event listener for okex
+   * @returns {Boolean}
+   */
+  private addOKEXEventsListener = async (): Promise<boolean> => {
+    try {
+      const setOKEXData = () => {
+        setTimeout(() => {
+          this.setOrChangeWeb3Data(
+            window.okexchain.selectedAddress,
+            Number(window.okexchain.chainId)
+          )
+        }, 300)
+      }
+      if (this.okexInstalled) {
+        if (!this.okexConnected) {
+          await window.okexchain.send('eth_requestAccounts')
+          window.okexchain.on('chainChanged', setOKEXData)
+          window.okexchain.on('accountsChanged', setOKEXData)
+          this.okexConnected = true
+        }
+        this.provider = window.okexchain
+        setOKEXData()
         return true
       }
       return false
