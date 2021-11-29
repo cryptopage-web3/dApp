@@ -124,6 +124,37 @@ export default class TokenService {
     }
   }
 
+  public subscribePageTokenBalance = async (
+    address: string
+    // callback?: (tokenBalance: TokenBalanceType) => {}
+  ) => {
+    try {
+      const CONTRACT = await import(
+        `../../../contracts/${this.authService.selectedNetworkSlug}/PageToken.json`
+      )
+      const contract = new this.tokenWeb3Service.$web3.eth.Contract(
+        CONTRACT.abi,
+        CONTRACT.address
+      )
+      const options = {
+        filter: {
+          address: [address]
+        },
+        fromBlock: 0
+      }
+      contract.events
+        .Transfer(options)
+        .on('data', (event: string) => console.log(event))
+        .on('changed', (changed: string) => console.log(changed))
+        .on('error', (err: string) => {
+          throw err
+        })
+        .on('connected', (str: string) => console.log(str))
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
   public getPageTokenBalance = async (
     address: string
   ): Promise<TokenBalanceType> => {
