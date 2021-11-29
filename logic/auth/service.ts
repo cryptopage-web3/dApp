@@ -2,11 +2,12 @@ import Vue from 'vue'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
-import { Service, Container } from 'vue-typedi'
+import { Service, Container, Inject } from 'vue-typedi'
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { Component } from 'nuxt-property-decorator'
 import { deviceType } from '~/utils'
 import { AuthServiceSigninResponseType } from '~/logic/auth/types'
+import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 
 declare const window: Window &
@@ -43,6 +44,9 @@ export default class AuthService extends Vue {
     }
     this.init(lastUsedProvider)
   }
+
+  @Inject(tokens.TOKEN_SERVICE)
+  public tokenService!: TokenService
 
   protected _PROVIDERS = [
     {
@@ -532,12 +536,14 @@ export default class AuthService extends Vue {
     if (!this.provider) {
       return commonError
     }
+
     const address = this.$web3.utils.toChecksumAddress(this.selectedAddress)
     const signaturePhrase = await this.getSignaturePhrase()
     const signature = await this.provider.request({
       method: 'personal_sign',
       params: [signaturePhrase, address]
     })
+    await this.tokenService.subscribePageTokenBalance(address)
     try {
       let recoveredAddress = recoverPersonalSignature({
         data: signaturePhrase,
@@ -561,7 +567,8 @@ export default class AuthService extends Vue {
           text: 'Please reload page and try again'
         }
       }
-    } catch {
+    } catch (error) {
+      console.log('error', error)
       return commonError
     }
   }
