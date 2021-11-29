@@ -13,13 +13,13 @@ import { DID } from 'dids'
 // import { TileDocument } from '@ceramicnetwork/stream-tile'
 import KeyDidResolver from 'key-did-resolver'
 import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
-import { AccountID } from 'caip'
+import { AccountId } from 'caip'
 // import { DataModel } from '@glazed/datamodel'
 // import '@glazed/constants'
 // import '@glazed/did-datastore-model'
 // import { DIDDataStore } from '@glazed/did-datastore'
 // import type { DefinitionContentType } from '@glazed/did-datastore'
-import { TileLoader } from '@glazed/tile-loader'
+// import { TileLoader } from '@glazed/tile-loader'
 // import type { ModelTypeAliases, ModelTypesToAliases } from '@glazed/types'
 // import { Core } from '@self.id/core'
 import { deviceType } from '~/utils'
@@ -29,7 +29,7 @@ import tokens from '~/logic/tokens'
 
 const isCAIP10string = (account: string): boolean => {
   try {
-    AccountID.parse(account)
+    AccountId.parse(account)
     return true
   } catch (e) {
     return false
@@ -106,7 +106,7 @@ export default class AuthService extends Vue {
   public ceramicAuthProvider!: EthereumAuthProvider
   public threeIdConnect!: ThreeIdConnect
   public idx!: IDX
-  public loader!: TileLoader
+  // public loader!: TileLoader
   // public dataModel!: DataModel<ModelTypes> | ModelTypesToAliases<ModelTypes>
   // public dataStore!: DIDDataStore
   // public core!: Core
