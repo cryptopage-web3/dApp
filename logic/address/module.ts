@@ -4,12 +4,12 @@ import { Action, Mutation, State, Getter } from 'vuex-simple'
 import { AddressInfoType } from '~/logic/address/types'
 import { TokenBalanceType, TokenInfoType } from '~/logic/tokens/types'
 import {
-  ETransactionPaginationType,
   ParamsSetTransactionPagination,
   ParamsTransactionsType,
   TransactionPagination,
   TransactionType,
-  ESortDirectionType
+  ESortDirectionType,
+  ETransactionStoreType
 } from '~/logic/transactions/types'
 import TransactionService from '~/logic/transactions/services'
 import TokenService from '~/logic/tokens/services'
@@ -208,14 +208,17 @@ export default class AddressModule {
     const index: number = this.transactions.findIndex(
       (tx: TransactionType) => tx.hash === transaction.hash
     )
+
     if (index > -1) {
       const findedTransaction = this.transactions[index]
+
       if (
         transaction.input === 'deprecated' &&
         findedTransaction.input.startsWith('0x')
       ) {
         transaction.input = findedTransaction.input
       }
+
       Vue.set(
         this.transactions,
         index,
@@ -243,7 +246,7 @@ export default class AddressModule {
     hasAllPages = false
   }: ParamsSetTransactionPagination): void {
     switch (type) {
-      case ETransactionPaginationType.normal:
+      case ETransactionStoreType.normal:
         this.normalTransactionPagination = {
           ...this.normalTransactionPagination,
           page,
@@ -251,7 +254,7 @@ export default class AddressModule {
         }
         return
 
-      case ETransactionPaginationType.ERC721:
+      case ETransactionStoreType.erc721:
         this.ERC721TransactionPagination = {
           ...this.ERC721TransactionPagination,
           page,
@@ -259,7 +262,7 @@ export default class AddressModule {
         }
         return
 
-      case ETransactionPaginationType.ERC20:
+      case ETransactionStoreType.erc20:
         this.ERC20TransactionPagination = {
           ...this.ERC20TransactionPagination,
           page,
@@ -278,44 +281,62 @@ export default class AddressModule {
       tokens: [],
       transactionsCount: 0
     })
+
     // const tokenInfo = await this.tokenService.getTokenInfo(address)
     this.setLoadingInfo(true)
+
     const tokenInfo = await this.tokenService.getTokenInfo(address)
     this.setTokenInfo(tokenInfo)
+
     const tokens = await this.tokenService.getTokenBalances(address)
     this.setTokens(tokens)
+
     const transactionsCount = await this.addressService.getTransactionsCount(
       address
     )
     this.setTransactionsCount(transactionsCount)
+
     this.setLoadingInfo(false)
   }
 
   @Action()
   public async getTransactions({
     address,
-    page = 1,
-    offset = 10,
-    sort = ESortDirectionType.desc,
     transactionType,
-    serviceTypes
+    /** для ERC20 */
+    contractAddress
   }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.transactionService.getTransactions({
-      address,
-      page,
-      offset,
-      sort,
-      transactionType,
-      serviceTypes
-    })
-    this.setTransactions(transactions)
-    return transactions
-  }
+    /** Если не указан тип транзакций, то ничего не делаем */
 
-  @Action()
-  public async getNormalTransactions({
-    address
-  }: ParamsTransactionsType): Promise<TransactionType[]> {
+    if (!transactionType) {
+      return []
+    }
+
+    /** Получаем текущий статус пагинации
+     * Если нет пагинации с данным типом,
+     * то выкидываем исключение, т.к. это некорректно
+     */
+
+    let pagination: TransactionPagination | null = null
+
+    switch (transactionType) {
+      case ETransactionStoreType.normal:
+        pagination = this.normalTransactionPagination
+        break
+
+      case ETransactionStoreType.erc20:
+        pagination = this.ERC20TransactionPagination
+        break
+
+      case ETransactionStoreType.erc721:
+        pagination = this.ERC721TransactionPagination
+        break
+    }
+
+    if (!pagination) {
+      throw new Error(`No pagination for type - ${transactionType}`)
+    }
+
     const {
       page: currentPage,
       pageSize: offset
@@ -323,88 +344,24 @@ export default class AddressModule {
     } = this.normalTransactionPagination
     const page = currentPage + 1
 
-    const transactions = await this.transactionService.getNormalTransactions({
+    /** Получаем транзакции по типу */
+
+    const transactions = await this.transactionService.getTransactions({
       address,
       page,
       offset,
-      sort: ESortDirectionType.desc
+      sort: ESortDirectionType.desc,
+      transactionType,
+      /** для ERC20 */
+      contractAddress
     })
+
     this.setTransactions(transactions)
+
+    /** Обновляем пагинацию */
+
     this.setTransactionPagination({
-      type: ETransactionPaginationType.normal,
-      page,
-      hasAllPages: transactions.length === 0
-    })
-
-    return transactions
-  }
-
-  @Action()
-  public async getInternalTransactions({
-    address,
-    page = 1,
-    offset = 10,
-    sort = ESortDirectionType.desc
-  }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const transactions = await this.transactionService.getInternalTransactions({
-      address,
-      page,
-      offset,
-      sort
-    })
-    this.setTransactions(transactions)
-    return transactions
-  }
-
-  @Action()
-  public async getERC20Transactions({
-    address,
-    contractAddress
-  }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const {
-      page: currentPage,
-      pageSize: offset
-      // sort
-    } = this.ERC20TransactionPagination
-    const page = currentPage + 1
-
-    const transactions = await this.transactionService.getERC20Transactions({
-      address,
-      contractAddress,
-      page,
-      offset,
-      sort: ESortDirectionType.desc
-    })
-    this.setTransactions(transactions)
-    this.setTransactionPagination({
-      type: ETransactionPaginationType.ERC20,
-      page,
-      hasAllPages: transactions.length === 0
-    })
-
-    return transactions
-  }
-
-  @Action()
-  public async getERC721Transactions({
-    address
-  }: ParamsTransactionsType): Promise<TransactionType[]> {
-    const {
-      page: currentPage,
-      pageSize: offset
-      // sort
-    } = this.ERC721TransactionPagination
-    const page = currentPage + 1
-
-    const transactions = await this.transactionService.getERC721Transactions({
-      address,
-      page,
-      offset,
-      sort: ESortDirectionType.desc
-    })
-    this.setTransactions(transactions)
-    this.setTransactionPagination({
-      type: ETransactionPaginationType.ERC721,
+      type: transactionType,
       page,
       hasAllPages: transactions.length === 0
     })
@@ -434,15 +391,15 @@ export default class AddressModule {
 
     /** Сбрасываем пагинатор у всех транзакций */
     this.setTransactionPagination({
-      type: ETransactionPaginationType.normal,
+      type: ETransactionStoreType.normal,
       page: 0
     })
     this.setTransactionPagination({
-      type: ETransactionPaginationType.ERC20,
+      type: ETransactionStoreType.erc20,
       page: 0
     })
     this.setTransactionPagination({
-      type: ETransactionPaginationType.ERC721,
+      type: ETransactionStoreType.erc721,
       page: 0
     })
   }

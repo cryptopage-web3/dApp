@@ -101,14 +101,8 @@ export type TransactionPagination = {
   hasAllPages: boolean
 }
 
-export enum ETransactionPaginationType {
-  normal = 'normal',
-  ERC721 = 'ERC721',
-  ERC20 = 'ERC20'
-}
-
 export type ParamsSetTransactionPagination = {
-  type: ETransactionPaginationType
+  type: ETransactionStoreType
   page: number
   hasAllPages?: boolean
 }
