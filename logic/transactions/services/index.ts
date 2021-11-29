@@ -12,7 +12,6 @@ import {
   ETransactionStoreType,
   ParamsTransactionsType
 } from '~/logic/transactions/types'
-// import { EtherscanABIResponse } from '~/logic/services/api/etherscan/models'
 
 @Service(tokens.TRANSACTION_SERVICE)
 export default class TransactionService {
@@ -48,7 +47,6 @@ export default class TransactionService {
     type: ETransactionStoreType
   ): (params: ParamsTransactionsType) => Promise<TransactionType[]> {
     /** Метод для всех транзакции */
-
     if (type === ETransactionStoreType.all) {
       return async (
         params: ParamsTransactionsType
@@ -91,22 +89,19 @@ export default class TransactionService {
     if (type === ETransactionStoreType.erc721) {
       return this.getERC721Transactions
     }
-
     /** По умолчанию */
-
     return this.getNormalTransactions
   }
 
   public getTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    const transactionType = params.transactionType || ETransactionStoreType.all
+    let transactions: TransactionType[] = []
+    const transactionType = params.transactionType
+      ? params.transactionType
+      : ETransactionStoreType.all
     const method = this.getMethodByType(transactionType)
-
-    const transactions: TransactionType[] = await method(params)
-
-    console.log('Response transactions', params, transactions)
-
+    transactions = await method(params)
     if (params.sort) {
       if (!params.sortField || params.sortField === ESortFieldType.timestamp) {
         return transactions.sort((a, b) =>
@@ -125,13 +120,12 @@ export default class TransactionService {
   public getNormalTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getNormalTransactions', params)
-
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] = await service.getNormalTransactions(
-      params
-    )
-
+    let transactions: TransactionType[] = []
+    const serviceTypes = params.serviceTypes
+      ? params.serviceTypes
+      : [EServiceType.api]
+    const service = this.getServiceByType(serviceTypes[0])
+    transactions = await service.getNormalTransactions(params)
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
@@ -146,12 +140,12 @@ export default class TransactionService {
   public getInternalTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getInternalTransactions', params)
-
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] =
-      await service.getInternalTransactions(params)
-
+    let transactions: TransactionType[] = []
+    const serviceTypes = params.serviceTypes
+      ? params.serviceTypes
+      : [EServiceType.api]
+    const service = this.getServiceByType(serviceTypes[0])
+    transactions = await service.getInternalTransactions(params)
     return transactions
   }
 
@@ -162,13 +156,12 @@ export default class TransactionService {
   public getERC20Transactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getERC20Transactions', params)
-
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] = await service.getERC20Transactions(
-      params
-    )
-
+    let transactions: TransactionType[] = []
+    const serviceTypes = params.serviceTypes
+      ? params.serviceTypes
+      : [EServiceType.api]
+    const service = this.getServiceByType(serviceTypes[0])
+    transactions = await service.getERC20Transactions(params)
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
@@ -186,13 +179,12 @@ export default class TransactionService {
   public getERC721Transactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getERC721Transactions', params)
-
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] = await service.getERC721Transactions(
-      params
-    )
-
+    let transactions: TransactionType[] = []
+    const serviceTypes = params.serviceTypes
+      ? params.serviceTypes
+      : [EServiceType.api]
+    const service = this.getServiceByType(serviceTypes[0])
+    transactions = await service.getERC721Transactions(params)
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {

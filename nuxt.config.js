@@ -153,7 +153,9 @@ export default {
     ]
   },
 
-  publicRuntimeConfig: {},
+  publicRuntimeConfig: {
+    ceramicAPIURL: process.env.NODE_ENV === 'production' ? process.env.CERAMIC_API_URL : 'http://localhost:7007'
+  },
   privateRuntimeConfig: {
     infuraProjectId:
       process.env.NODE_ENV === 'production'
@@ -164,13 +166,39 @@ export default {
         ? process.env.ETHERSCAN_API_KEY
         : 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'
   },
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    // transpile: [({ isLegacy }) => isLegacy && "rope-sequence"],
+    // transpile: ['primevue'],
+    transpile: [
+      'primevue',
+      'dids',
+      'did-jwt',
+      // '@self.id/',
+      // '@self.id',
+      // '@glazed',
+      // '@glazed/',
+      '@self.id/core',
+      '@glazed/tile-loader',
+      '@glazed/constants',
+      '@glazed/did-datastore',
+      '@glazed/datamodel',
+      '@ceramicnetwork/streamid',
+      // '@glazed/did-datastore/dist/lib.mjs',
+      // '@glazed/datamodel/dist/lib.cjs',
+    ],
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
-    vendor: ['jquery', 'bootstrap'],
+    vendor: [
+      'jquery',
+      'bootstrap',
+      // '@glazed/datamodel',
+      // '@glazed/did-datastore',
+      // '@glazed/tile-loader',
+      // '@self.id/core',
+      // '@ceramicnetwork/streamid'
+    ],
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',
@@ -183,6 +211,16 @@ export default {
       config.node = {
         fs: 'empty'
       }
+      config.module.rules.push({
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto",
+      })
+      config.module.rules.push({
+        test: /\.сjs$/,
+        include: /node_modules/,
+        type: "javascript/auto",
+      })
     }
   }
 }

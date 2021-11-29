@@ -2,12 +2,39 @@ import Vue from 'vue'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
+import { Caip10Link } from '@ceramicnetwork/stream-caip10-link'
 import { Service, Container } from 'vue-typedi'
 import { recoverPersonalSignature } from 'eth-sig-util'
 import { Component } from 'nuxt-property-decorator'
+import { ThreeIdConnect, EthereumAuthProvider } from '@3id/connect'
+import { CeramicClient } from '@ceramicnetwork/http-client'
+import { IDX } from '@ceramicstudio/idx'
+import { DID } from 'dids'
+// import { TileDocument } from '@ceramicnetwork/stream-tile'
+import KeyDidResolver from 'key-did-resolver'
+import ThreeIdResolver from '@ceramicnetwork/3id-did-resolver'
+import { AccountID } from 'caip'
+// import { DataModel } from '@glazed/datamodel'
+// import '@glazed/constants'
+// import '@glazed/did-datastore-model'
+// import { DIDDataStore } from '@glazed/did-datastore'
+// import type { DefinitionContentType } from '@glazed/did-datastore'
+import { TileLoader } from '@glazed/tile-loader'
+// import type { ModelTypeAliases, ModelTypesToAliases } from '@glazed/types'
+// import { Core } from '@self.id/core'
 import { deviceType } from '~/utils'
 import { AuthServiceSigninResponseType } from '~/logic/auth/types'
 import tokens from '~/logic/tokens'
+// export { isDIDstring } from '@glazed/did-datastore'
+
+const isCAIP10string = (account: string): boolean => {
+  try {
+    AccountID.parse(account)
+    return true
+  } catch (e) {
+    return false
+  }
+}
 
 declare const window: Window &
   typeof globalThis & {
@@ -28,7 +55,12 @@ const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX] = [
 const bsc = new BscConnector({
   supportedChainIds: [56, 97]
 })
-
+/*
+export type DefinitionContentType<
+  ModelTypes extends ModelTypeAliases,
+  Alias extends keyof ModelTypes['definitions']
+> = ModelTypes['schemas'][ModelTypes['definitions'][Alias]]
+*/
 @Service(tokens.AUTH_SERVICE)
 @Component
 export default class AuthService extends Vue {
@@ -41,8 +73,43 @@ export default class AuthService extends Vue {
     if (typeof window !== 'undefined' && window.localStorage.lastProvider) {
       lastUsedProvider = window.localStorage.lastProvider
     }
+
     this.init(lastUsedProvider)
+
+    this.ceramic = new CeramicClient(
+      'https://gateway-clay.ceramic.network'
+      // process.env.ceramicAPIURL ||
+      // 'https://ceramic-clay.3boxlabs.com' || 'http://localhost:7007'
+    )
+    // this.core = new Core({ ceramic: 'https://gateway-clay.ceramic.network' })
+    /*
+    this.loader = new TileLoader({
+      ceramic: this.ceramic
+    })
+    
+    this.dataModel = new DataModel({
+      autopin: true,
+      loader: this.loader,
+      model: null
+    })
+
+    this.dataStore = new DIDDataStore({
+      autopin: true,
+      ceramic: this.ceramic,
+      loader: this.loader,
+      model: this.dataModel
+    })
+    */
   }
+
+  public ceramic!: CeramicClient
+  public ceramicAuthProvider!: EthereumAuthProvider
+  public threeIdConnect!: ThreeIdConnect
+  public idx!: IDX
+  public loader!: TileLoader
+  // public dataModel!: DataModel<ModelTypes> | ModelTypesToAliases<ModelTypes>
+  // public dataStore!: DIDDataStore
+  // public core!: Core
 
   protected _PROVIDERS = [
     {
@@ -545,6 +612,7 @@ export default class AuthService extends Vue {
       })
       recoveredAddress = this.$web3.utils.toChecksumAddress(recoveredAddress)
       if (address === recoveredAddress) {
+        await this.signinCeramic()
         return {
           status: 'success',
           message: {
@@ -563,6 +631,63 @@ export default class AuthService extends Vue {
       }
     } catch {
       return commonError
+    }
+  }
+
+  public signinCeramic = async () => {
+    try {
+      this.ceramicAuthProvider = new EthereumAuthProvider(
+        this.provider,
+        this.selectedAddress
+      )
+      this.threeIdConnect = new ThreeIdConnect()
+      await this.threeIdConnect.connect(this.ceramicAuthProvider)
+      const provider = this.threeIdConnect.getDidProvider()
+      const resolver = {
+        ...KeyDidResolver.getResolver(),
+        ...ThreeIdResolver.getResolver(this.ceramic)
+      }
+      const did = new DID({
+        provider,
+        resolver
+      })
+      this.ceramic.did = did
+      this.idx = new IDX({ ceramic: this.ceramic })
+
+      console.log('this.idx', this.idx)
+      const getAccountDID = async (account: string): Promise<string> => {
+        const link = await Caip10Link.fromAccount(this.ceramic, account)
+        if (link.did == null) {
+          throw new Error(`No DID found for ${account}`)
+        }
+        return link.did
+      }
+
+      const toDID = async (accountOrDID: string): Promise<string> => {
+        return isCAIP10string(accountOrDID)
+          ? await getAccountDID(accountOrDID)
+          : accountOrDID
+      }
+      const addressDid = await toDID(`${this.selectedAddress}@eip155:42`)
+      console.log('addressDid', addressDid)
+      await this.ceramic.did.authenticate()
+      const basicProfile = await this.idx.get('basicProfile')
+      console.log('basicProfile', basicProfile)
+
+      const AccountDid = await toDID(addressDid)
+      console.log('AccountDid', AccountDid)
+      /*
+      const value = await this.dataStore.get('basicProfile', addressDid)
+      console.log('value', value)
+      
+      const profile = await this.core.get(
+        'basicProfile',
+        `did:42:${this.selectedAddress}`
+      )
+      */
+      // console.log('profile', profile)
+    } catch (error) {
+      console.log('error', error)
     }
   }
 

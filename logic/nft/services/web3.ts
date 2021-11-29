@@ -109,7 +109,6 @@ export default class NFTWeb3Service {
       this.getNetworkName().then((networkName: string) => {
         import(`../../../contracts/${networkName}/PageNFT.json`).then(
           (CONTRACT) => {
-            console.log('PageNFT CONTRACT.address', CONTRACT.address)
             const contract = new this.$web3.eth.Contract(
               CONTRACT.abi,
               CONTRACT.address
