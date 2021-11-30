@@ -43,7 +43,7 @@ import TypedStore from '~/logic/store'
     icon: async () => await import('@/components/icons/Icon.vue')
   }
 })
-export default class extends Vue {
+export default class IndexPage extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
 
   $refs!: {

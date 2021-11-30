@@ -5,9 +5,15 @@
     <address-transaction />
   </div>
 </template>
-<script>
-export default {
-  validate({ params, $web3 }) {
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+
+@Component({})
+export default class AddressPage extends Vue {
+  validNetworks: Record<string, number> | null = null
+
+  validate({ params, $web3 }: any) {
     const networkName = params.networkName
     const validNetworkNames = [
       'eth',
@@ -23,13 +29,11 @@ export default {
     ]
     const isValid = validNetworkNames.includes(networkName)
     return isValid && $web3.utils.isAddress(params.address)
-  },
-  data: () => ({
-    validNetworks: null
-  }),
+  }
+
   async beforeCreate() {
     const networkName = this.$route.params.networkName
-    const validNetworks = {
+    const validNetworks: Record<string, number> = {
       eth: 1,
       ropsten: 3,
       rinkeby: 4,
@@ -40,7 +44,9 @@ export default {
       polygon: 137,
       'polygon-testnet': 80001
     }
+
     const chainId = validNetworks[networkName]
+
     if (chainId) {
       await this.$store.dispatch('auth/setChainId', chainId)
       await this.$store.dispatch(
