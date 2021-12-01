@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import { paginationMixin } from '@/mixins/pagination'
+import { paginationMixin } from '~/mixins/pagination'
 export default {
   components: {
     transaction: () => import('~/components/transactions/ERC20Transaction.vue'),
