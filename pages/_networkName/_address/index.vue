@@ -29,7 +29,7 @@ import {
     loader: () => import('~/components/loaders/GrowLoader.vue')
   }
 })
-export default class NormalTransactionTab extends mixins(PaginationMixin) {
+export default class NormalTransactionsTab extends mixins(PaginationMixin) {
   get transactions(): TransactionType[] {
     return this.$store.getters['address/normalTransactions']
   }
