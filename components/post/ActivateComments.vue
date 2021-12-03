@@ -11,11 +11,7 @@
     />
     <span
       v-if="loading"
-      class="
-        spinner-border spinner-border-sm
-        text-primary
-        post-activate-comments__spinner
-      "
+      class="spinner-border spinner-border-sm text-primary post-activate-comments__spinner"
       role="status"
       aria-hidden="true"
     ></span>
