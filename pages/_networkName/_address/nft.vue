@@ -14,16 +14,29 @@
     </div>
   </div>
 </template>
-<script>
-import { paginationMixin } from '@/mixins/pagination'
-export default {
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
+import PaginationMixin from '~/mixins/pagination'
+import {
+  ETransactionStoreType,
+  TransactionType
+} from '~/logic/transactions/types'
+
+@Component({
   components: {
     transaction: () =>
       import('~/components/transactions/ERC721Transaction.vue'),
     loader: () => import('~/components/loaders/GrowLoader.vue')
-  },
+  }
+})
+export default class ERC721TransactionsTab extends mixins(PaginationMixin) {
+  get transactions(): TransactionType[] {
+    return this.$store.getters['address/ERC721Transactions']
+  }
 
-  mixins: [paginationMixin],
+  get hasAllPages(): boolean {
+    return this.$store.getters['address/hasAllERC721TransactionsPages']
+  }
 
   async fetch() {
     /** не делаем запрос:
@@ -41,18 +54,8 @@ export default {
 
     await this.$store.dispatch('address/getTransactions', {
       address: this.$route.params.address,
-      transactionType: 'erc721'
+      transactionType: ETransactionStoreType.erc721
     })
-  },
-
-  computed: {
-    transactions() {
-      return this.$store.getters['address/ERC721Transactions']
-    },
-
-    hasAllPages() {
-      return this.$store.getters['address/hasAllERC721TransactionsPages']
-    }
   }
 }
 </script>
