@@ -3,7 +3,8 @@
     <top :transaction="transaction" />
     <a
       v-if="transaction.nft.image"
-      href="#"
+      ref="imageLink"
+      :href="transaction.nft.image"
       class="post-image__link loading-bg"
     >
       <img :src="transaction.nft.image" class="post-image__link-img" />
@@ -14,8 +15,11 @@
 </template>
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
+import { Fancybox } from '@fancyapps/ui'
 import TransactionMixin from '~/mixins/transaction'
+
 Component.registerHooks(['mounted'])
+
 @Component({
   components: {
     top: async () => await import('@/components/post/PostTop.vue'),
@@ -23,5 +27,22 @@ Component.registerHooks(['mounted'])
     bottom: async () => await import('@/components/post/PostBottom.vue')
   }
 })
-export default class ERC721TransactionImage extends mixins(TransactionMixin) {}
+export default class ERC721TransactionImage extends mixins(TransactionMixin) {
+  $refs!: {
+    imageLink: HTMLAnchorElement
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      Fancybox.bind('.post-image__link', {
+        Toolbar: {
+          display: [
+            { id: 'zoom', position: 'left' },
+            { id: 'close', position: 'right' }
+          ]
+        }
+      })
+    })
+  }
+}
 </script>
