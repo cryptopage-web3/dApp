@@ -341,7 +341,7 @@ export default class AddressModule {
       page: currentPage,
       pageSize: offset
       // sort
-    } = this.normalTransactionPagination
+    } = pagination
     const page = currentPage + 1
 
     /** Получаем транзакции по типу */

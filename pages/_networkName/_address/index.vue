@@ -14,23 +14,36 @@
     </div>
   </div>
 </template>
-<script>
-import { paginationMixin } from '@/mixins/pagination'
-export default {
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
+import PaginationMixin from '~/mixins/pagination'
+import {
+  ETransactionStoreType,
+  TransactionType
+} from '~/logic/transactions/types'
+
+@Component({
   components: {
     transaction: () =>
       import('~/components/transactions/NormalTransaction.vue'),
     loader: () => import('~/components/loaders/GrowLoader.vue')
-  },
+  }
+})
+export default class NormalTransactionsTab extends mixins(PaginationMixin) {
+  get transactions(): TransactionType[] {
+    return this.$store.getters['address/normalTransactions']
+  }
 
-  mixins: [paginationMixin],
+  get hasAllPages(): boolean {
+    return this.$store.getters['address/hasAllNormalTransactionsPages']
+  }
 
   async fetch() {
     /** не делаем запрос:
      * если уже получен полный список транзакций,
      * если сменился адрес, но в сторе адрес еще старый,
-     * поэтому транзакции стора и пагинатор относятся к старому адресу
-     * должен отработать метод reset() в pagination
+     * из-за этого транзакции стора и пагинатор относятся еще к старому адресу
+     * должен отработать метод reset() в pagination перед fetch
      */
     if (
       this.hasAllPages ||
@@ -41,18 +54,8 @@ export default {
 
     await this.$store.dispatch('address/getTransactions', {
       address: this.$route.params.address,
-      transactionType: 'normal'
+      transactionType: ETransactionStoreType.normal
     })
-  },
-
-  computed: {
-    transactions() {
-      return this.$store.getters['address/normalTransactions']
-    },
-
-    hasAllPages() {
-      return this.$store.getters['address/hasAllNormalTransactionsPages']
-    }
   }
 }
 </script>
