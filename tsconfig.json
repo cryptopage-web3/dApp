@@ -39,6 +39,7 @@
       "nuxt-viewport"
     ]
   },
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": [
     "node_modules"
   ]
