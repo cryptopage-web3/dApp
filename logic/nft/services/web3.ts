@@ -81,7 +81,7 @@ export default class NFTWeb3Service {
          */
         try {
           hasComments = await commentMinterContract.methods
-            .hasComments(NFT_CONTRACT.address, tokenId)
+            .isActive(NFT_CONTRACT.address, tokenId)
             .call()
           if (hasComments) {
             const commentContractAddress = await commentMinterContract.methods
