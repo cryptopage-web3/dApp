@@ -84,8 +84,6 @@ export default class PostTextBlock extends mixins(TransactionMixin) {
       status: string
       txHash: string
     }) => {
-      console.log('status', status)
-      console.log('txHash', txHash)
       const title = txHash || 'Unknown hash'
 
       switch (status) {

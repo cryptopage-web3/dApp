@@ -151,7 +151,6 @@ export default class TokenService {
         })
         .on('connected', (str: string) => console.log(str))
     } catch (error) {
-      console.log('error', error)
     }
   }
 

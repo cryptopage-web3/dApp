@@ -567,7 +567,6 @@ export default class AuthService extends Vue {
         }
       }
     } catch (error) {
-      console.log('error', error)
       return commonError
     }
   }
