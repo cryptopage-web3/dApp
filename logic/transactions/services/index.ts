@@ -104,9 +104,6 @@ export default class TransactionService {
     const method = this.getMethodByType(transactionType)
 
     const transactions: TransactionType[] = await method(params)
-
-    console.log('Response transactions', params, transactions)
-
     if (params.sort) {
       if (!params.sortField || params.sortField === ESortFieldType.timestamp) {
         return transactions.sort((a, b) =>
@@ -125,8 +122,6 @@ export default class TransactionService {
   public getNormalTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getNormalTransactions', params)
-
     const service = this.getServiceByType(EServiceType.api)
     const transactions: TransactionType[] = await service.getNormalTransactions(
       params
@@ -146,8 +141,6 @@ export default class TransactionService {
   public getInternalTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getInternalTransactions', params)
-
     const service = this.getServiceByType(EServiceType.api)
     const transactions: TransactionType[] =
       await service.getInternalTransactions(params)
@@ -162,8 +155,6 @@ export default class TransactionService {
   public getERC20Transactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getERC20Transactions', params)
-
     const service = this.getServiceByType(EServiceType.api)
     const transactions: TransactionType[] = await service.getERC20Transactions(
       params
@@ -186,8 +177,6 @@ export default class TransactionService {
   public getERC721Transactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    console.log('getERC721Transactions', params)
-
     const service = this.getServiceByType(EServiceType.api)
     const transactions: TransactionType[] = await service.getERC721Transactions(
       params

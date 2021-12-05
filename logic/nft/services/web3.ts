@@ -81,7 +81,7 @@ export default class NFTWeb3Service {
          */
         try {
           hasComments = await commentMinterContract.methods
-            .hasComments(NFT_CONTRACT.address, tokenId)
+            .isActive(NFT_CONTRACT.address, tokenId)
             .call()
           if (hasComments) {
             const commentContractAddress = await commentMinterContract.methods
@@ -109,7 +109,6 @@ export default class NFTWeb3Service {
       this.getNetworkName().then((networkName: string) => {
         import(`../../../contracts/${networkName}/PageNFT.json`).then(
           (CONTRACT) => {
-            console.log('PageNFT CONTRACT.address', CONTRACT.address)
             const contract = new this.$web3.eth.Contract(
               CONTRACT.abi,
               CONTRACT.address
