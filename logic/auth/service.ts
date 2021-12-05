@@ -543,7 +543,6 @@ export default class AuthService extends Vue {
       method: 'personal_sign',
       params: [signaturePhrase, address]
     })
-    await this.tokenService.subscribePageTokenBalance(address)
     try {
       let recoveredAddress = recoverPersonalSignature({
         data: signaturePhrase,
