@@ -17,12 +17,13 @@ declare const window: Window &
   }
 
 const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
-const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX] = [
+const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, SAFEPAL] = [
   'metamask',
   'walletConnect',
   'coin98',
   'bscWallet',
-  'okex'
+  'okex',
+  'safepal'
 ]
 
 const bsc = new BscConnector({
@@ -114,6 +115,13 @@ export default class AuthService extends Vue {
   protected get metamaskInstalled(): boolean {
     return (
       typeof window !== 'undefined' &&
+      window?.ethereum?.isMetamask
+    )
+  }
+
+  protected get ethereumInstalled(): boolean {
+    return (
+      typeof window !== 'undefined' &&
       typeof window?.ethereum?.on === 'function'
     )
   }
@@ -135,7 +143,7 @@ export default class AuthService extends Vue {
   private providerName = METAMASK
   private defaultEthereumWallet = METAMASK
   private provider: WalletConnectProvider | undefined
-  private metamaskConnected = false
+  private ethereumConnected = false
   private okexConnected = false
   private bscConnected = false
   private walletConnectConnected = false
@@ -226,9 +234,9 @@ export default class AuthService extends Vue {
    */
   public switchProvider = async (providerName: string): Promise<string> => {
     let connected = 'error'
-    if (providerName === METAMASK || providerName === COIN98) {
-      if (this.metamaskInstalled) {
-        const status = await this.addMetamaskEventsListener()
+    if (providerName === METAMASK || providerName === COIN98 || providerName === SAFEPAL) {
+      if (this.ethereumInstalled) {
+        const status = await this.addEthereumEventsListener()
         if (status) {
           await this.changeProviderName(providerName)
           connected = 'success'
@@ -282,7 +290,8 @@ export default class AuthService extends Vue {
     if (
       this.providerName !== METAMASK &&
       this.providerName !== COIN98 &&
-      this.providerName !== OKEX
+      this.providerName !== OKEX &&
+      this.providerName !== SAFEPAL
     )
       return
     if (!chain) throw new Error('Chain not found.')
@@ -367,9 +376,9 @@ export default class AuthService extends Vue {
    * Adding event listener for metamask
    * @returns {Boolean}
    */
-  private addMetamaskEventsListener = async (): Promise<boolean> => {
+  private addEthereumEventsListener = async (): Promise<boolean> => {
     try {
-      const setMetamaskData = () => {
+      const setEthereumData = () => {
         setTimeout(() => {
           this.setOrChangeWeb3Data(
             window.ethereum.selectedAddress,
@@ -377,15 +386,15 @@ export default class AuthService extends Vue {
           )
         }, 300)
       }
-      if (this.metamaskInstalled) {
-        if (!this.metamaskConnected) {
+      if (this.ethereumInstalled) {
+        if (!this.ethereumConnected) {
           await window.ethereum.send('eth_requestAccounts')
-          window.ethereum.on('chainChanged', setMetamaskData)
-          window.ethereum.on('accountsChanged', setMetamaskData)
-          this.metamaskConnected = true
+          window.ethereum.on('chainChanged', setEthereumData)
+          window.ethereum.on('accountsChanged', setEthereumData)
+          this.ethereumConnected = true
         }
         this.provider = window.ethereum
-        setMetamaskData()
+        setEthereumData()
         return true
       }
       return false
@@ -519,7 +528,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    if (device === 'desktop' && !this.metamaskConnected) {
+    if (device === 'desktop' && !this.ethereumConnected) {
       return {
         status: 'error',
         message: {
@@ -574,8 +583,8 @@ export default class AuthService extends Vue {
     ) {
       await this.provider.disconnect()
       this.walletConnectConnected = false
-    } else if (this.metamaskConnected) {
-      this.metamaskConnected = false
+    } else if (this.ethereumConnected) {
+      this.ethereumConnected = false
     } else if (this.bscConnected) {
       this.bscConnected = false
     }
@@ -589,8 +598,8 @@ export default class AuthService extends Vue {
     ) {
       await this.provider.close()
       this.walletConnectConnected = false
-    } else if (this.metamaskConnected) {
-      this.metamaskConnected = false
+    } else if (this.ethereumConnected) {
+      this.ethereumConnected = false
     } else if (this.bscConnected) {
       this.bscConnected = false
     }

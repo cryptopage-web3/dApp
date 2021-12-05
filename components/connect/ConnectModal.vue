@@ -112,7 +112,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('ETHEREUM', 'safepal')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img4.png"
                         alt=""
@@ -200,7 +200,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link" @click.prevent="switchProvider('BSC', 'safepal')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img4.png"
                         alt=""
@@ -225,7 +225,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'coin98')"
+                      @click.prevent="switchProvider('BSC', 'okex')"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -277,7 +277,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
+                    <a href="#" class="modal-content-wallet__link"  @click.prevent="switchProvider('POLYGON', 'safepal')">
                       <img
                         src="@/assets/img/modal-content-wallet__link_img4.png"
                         alt=""
@@ -474,7 +474,7 @@ export default {
   methods: {
     switchProvider(type, provider) {
       if (
-        (provider === 'metamask' || provider === 'coin98') &&
+        (provider === 'metamask' || provider === 'coin98' || provider === 'safepal') &&
         provider === this.selectedProvider
       ) {
         this.$store.dispatch('auth/switchChain', type)
