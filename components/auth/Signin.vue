@@ -1,31 +1,33 @@
 <template>
   <div />
 </template>
-<script>
-import NetworkNameMixin from '@/mixins/networkName'
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
+import NetworkNameMixin from '~/mixins/networkName'
+import { INotifyParams } from '~/types'
 
-export default {
-  mixins: [NetworkNameMixin],
-  methods: {
-    async init() {
-      const response = await this.$store.dispatch('auth/signin')
+@Component({})
+export default class Signin extends mixins(NetworkNameMixin) {
+  $notify!: (params: INotifyParams) => void
 
-      this.$notify({
-        type: response.status,
-        title: response.message.title,
-        text: response.message.text
-      })
+  async init() {
+    const response = await this.$store.dispatch('auth/signin')
 
-      if (response.status === 'success' && this.$route.path === '/') {
-        this.$nuxt.$loading.start()
+    this.$notify({
+      type: response.status,
+      title: response.message.title,
+      text: response.message.text
+    })
 
-        /** делаем небольшую задержку, чтобы была возможность прочесть уведомление */
-        const address = await this.$store.getters['auth/selectedAddress']
-        setTimeout(
-          () => this.$router.push(`/${this.networkName}/${address}`),
-          1000
-        )
-      }
+    if (response.status === 'success' && this.$route.path === '/') {
+      this.$nuxt.$loading.start()
+
+      /** делаем небольшую задержку, чтобы была возможность прочесть уведомление */
+      const address = await this.$store.getters['auth/selectedAddress']
+      setTimeout(
+        () => this.$router.push(`/${this.networkName}/${address}`),
+        1000
+      )
     }
   }
 }
