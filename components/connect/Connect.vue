@@ -23,9 +23,7 @@
           </div>
           <div
             v-else
-            class="
-              connect-wallet__link-status connect-wallet__link-status_connect
-            "
+            class="connect-wallet__link-status connect-wallet__link-status_connect"
             @click.prevent.stop="signin"
           >
             Connect wallet

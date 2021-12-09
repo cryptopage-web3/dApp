@@ -73,10 +73,7 @@
         >
           <template v-if="loading">
             <span
-              class="
-                spinner-border spinner-border-sm
-                creat-post-bottom__spinner
-              "
+              class="spinner-border spinner-border-sm creat-post-bottom__spinner"
               role="status"
               aria-hidden="true"
             ></span>
