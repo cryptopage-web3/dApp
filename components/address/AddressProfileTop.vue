@@ -43,6 +43,7 @@
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
 import { copyToClipboard } from '~/utils/copyToClipboard'
+import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -56,6 +57,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard'
 export default class AddressProfileTop extends Vue {
   diameter = Number($(window).width()) > 767 ? 90 : 40
 
+  $notify!: (params: INotifyParams) => void
   $refs!: {
     address: HTMLSpanElement
   }

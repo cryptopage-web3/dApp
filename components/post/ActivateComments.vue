@@ -24,11 +24,14 @@ import { TransactionType } from '~/logic/transactions/types'
 import TypedStoreMixin from '~/mixins/typed-store'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
+import { INotifyParams } from '~/types'
 
 @Component({})
 export default class ActivateComments extends mixins(TypedStoreMixin) {
   activated = false
   loading = false
+
+  $notify!: (params: INotifyParams) => void
 
   @Prop({ required: true }) readonly transaction!: TransactionType
 

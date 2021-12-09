@@ -282,22 +282,28 @@ export default class AuthService extends Vue {
     if (!Object.keys(this._CHAINS).includes(networkName)) {
       throw new Error('Network is not allowed.')
     }
+
     const chain = this._CHAINS[networkName]
+
     if (
       this.providerName !== METAMASK &&
       this.providerName !== COIN98 &&
       this.providerName !== OKEX
-    )
+    ) {
       return
+    }
+
     if (!chain) throw new Error('Chain not found.')
     if (!this.provider) throw new Error('Provider not set.')
+
     try {
       await this.provider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: chain.chainId }]
       })
-    } catch (switchError) {
+    } catch (switchError: any) {
       const CHAIN_NOT_FOUND_CODE = 4902
+
       if (switchError.code === CHAIN_NOT_FOUND_CODE) {
         await this.provider.request({
           method: 'wallet_addEthereumChain',
@@ -543,12 +549,14 @@ export default class AuthService extends Vue {
       method: 'personal_sign',
       params: [signaturePhrase, address]
     })
+
     try {
       let recoveredAddress = recoverPersonalSignature({
         data: signaturePhrase,
         sig: signature
       })
       recoveredAddress = this.$web3.utils.toChecksumAddress(recoveredAddress)
+
       if (address === recoveredAddress) {
         return {
           status: 'success',
