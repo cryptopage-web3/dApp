@@ -7,7 +7,7 @@
         class="connect-wallet__link"
         :class="{ 'connect-wallet__link_connect': !isAuth }"
       >
-        <div ref="change_network" class="connect-wallet__link-thumb">
+        <div ref="changeNetwork" class="connect-wallet__link-thumb">
           <img :src="getNetworkIcon" alt="blockchain-icon" />
         </div>
         <div ref="connect" class="connect-wallet__link-text">
@@ -23,16 +23,14 @@
           </div>
           <div
             v-else
-            class="
-              connect-wallet__link-status connect-wallet__link-status_connect
-            "
+            class="connect-wallet__link-status connect-wallet__link-status_connect"
             @click.prevent.stop="signin"
           >
             Connect wallet
           </div>
         </div>
       </a>
-      <div v-if="isAuth" ref="connect_list" class="connect-wallet-col-body">
+      <div v-if="isAuth" ref="connectList" class="connect-wallet-col-body">
         <ul class="connect-wallet__list">
           <li>
             <router-link :to="`/${networkName}/${address}`"
@@ -66,7 +64,7 @@
       </div>
       <div
         v-if="isAuth"
-        ref="change_network_list"
+        ref="changeNetworkList"
         class="change-network-col-body"
       >
         <ul class="change-network__list">
@@ -97,129 +95,151 @@
     </a>
   </div>
 </template>
-<script>
-import NetworkNameMixin from '@/mixins/networkName'
-import ethereumImg from '@/assets/img/modal-content__link_img1.png'
-import bscImg from '@/assets/img/modal-content__link_img2.png'
-import polygonImg from '@/assets/img/modal-content__link_img3.png'
+<script lang="ts">
+import { Component, mixins, Watch } from 'nuxt-property-decorator'
+import NetworkNameMixin from '~/mixins/networkName'
+import { INotifyParams } from '~/types'
 import { copyToClipboard } from '~/utils/copyToClipboard'
+import Signin from '~/components/auth/Signin.vue'
 
-export default {
+@Component({
   components: {
-    signin: async () => await import('@/components/auth/Signin.vue')
-  },
+    signin: Signin
+  }
+})
+export default class Connect extends mixins(NetworkNameMixin) {
+  connectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+  networkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 
-  mixins: [NetworkNameMixin],
+  $notify!: (params: INotifyParams) => void
+  $refs!: {
+    connect: HTMLDivElement
+    connectList: HTMLDivElement
+    changeNetwork: HTMLDivElement
+    changeNetworkList: HTMLDivElement
+    signin: Signin
+  }
 
-  computed: {
-    address() {
-      return this.$store.getters['auth/selectedAddress']
-    },
+  // computed
 
-    isAuth() {
-      return this.$store.getters['auth/isAuth']
-    },
+  get address(): string {
+    return this.$store.getters['auth/selectedAddress']
+  }
 
-    selectedNetworkName() {
-      return this.$store.getters['auth/selectedNetworkName']
-    },
-    selectedProvider() {
-      return this.$store.getters['auth/selectedProviderName']
-    },
-    getNetworkIcon() {
-      const icons = {
-        ethereum: ethereumImg,
-        bsc: bscImg,
-        polygon: polygonImg
-      }
-      return icons[this.$store.getters['auth/selectedNetworkType']]
+  get isAuth(): boolean {
+    return this.$store.getters['auth/isAuth']
+  }
+
+  get selectedNetworkName(): string {
+    return this.$store.getters['auth/selectedNetworkName']
+  }
+
+  get selectedProvider(): string {
+    return this.$store.getters['auth/selectedProviderName']
+  }
+
+  get getNetworkIcon(): string {
+    const icons: Record<string, string> = {
+      ethereum: require('@/assets/img/modal-content__link_img1.png'),
+      bsc: require('@/assets/img/modal-content__link_img2.png'),
+      polygon: require('@/assets/img/modal-content__link_img3.png')
     }
-  },
 
-  watch: {
-    isAuth: {
-      handler(isAuth) {
-        if (isAuth) {
-          this.$nextTick(() => {
-            $(this.$refs.connect).hover(
-              function () {
-                $(this).addClass('active')
-                $('.connect-wallet-col')
-                  .find('.connect-wallet-col-body')
-                  .stop(true, true)
-                  .slideDown(300)
-              },
-              function () {
-                const timeout = setTimeout(() => {
-                  $(this).removeClass('active')
-                  $('.connect-wallet-col')
-                    .find('.connect-wallet-col-body')
-                    .slideUp(300)
-                }, 300)
-                window.__timeout = timeout
-              }
-            )
+    return icons[this.$store.getters['auth/selectedNetworkType']]
+  }
 
-            $(this.$refs.connect_list).hover(
-              function () {
-                clearTimeout(window.__timeout)
-              },
-              function () {
-                $('.connect-wallet-col-body').slideUp(300)
-              }
-            )
+  // watch
 
-            $(this.$refs.change_network).hover(
-              function () {
-                $(this).addClass('active')
-                $('.change-network-col-body').stop(true, true).slideDown(300)
-              },
-              function () {
-                const timeout = setTimeout(() => {
-                  $(this).removeClass('active')
-                  $('.change-network-col-body').slideUp(300)
-                }, 300)
-                window.timeout = timeout
-              }
-            )
+  @Watch('isAuth', { immediate: true })
+  onIsAuthChanged(isAuth: boolean) {
+    if (!isAuth) {
+      return
+    }
 
-            $(this.$refs.change_network_list).hover(
-              function () {
-                clearTimeout(window.timeout)
-              },
-              function () {
-                $('.change-network-col-body').slideUp(300)
-              }
-            )
-          })
+    this.$nextTick(() => {
+      const self = this
+
+      $(this.$refs.connect).hover(
+        function () {
+          $(this).addClass('active')
+          $('.connect-wallet-col')
+            .find('.connect-wallet-col-body')
+            .stop(true, true)
+            .slideDown(300)
+        },
+        function () {
+          self.connectDropdownTimeout = setTimeout(() => {
+            $(this).removeClass('active')
+            $('.connect-wallet-col')
+              .find('.connect-wallet-col-body')
+              .slideUp(300)
+          }, 300)
         }
-      },
-      immediate: true
-    }
-  },
+      )
 
-  methods: {
-    copyAddress() {
-      copyToClipboard(this.address)
+      $(this.$refs.connectList).hover(
+        function () {
+          if (!self.connectDropdownTimeout) {
+            return
+          }
 
-      this.$notify({
-        type: 'success',
-        title: 'Address copied to clipboard'
-      })
-    },
+          clearTimeout(self.connectDropdownTimeout)
+        },
+        function () {
+          $('.connect-wallet-col-body').slideUp(300)
+        }
+      )
 
-    signin() {
-      this.$refs.signin.init()
-    },
+      $(this.$refs.changeNetwork).hover(
+        function () {
+          $(this).addClass('active')
+          $('.change-network-col-body').stop(true, true).slideDown(300)
+        },
+        function () {
+          self.networkDropdownTimeout = setTimeout(() => {
+            $(this).removeClass('active')
+            $('.change-network-col-body').slideUp(300)
+          }, 300)
+        }
+      )
 
-    signout() {
-      this.$store.dispatch('auth/signout')
-      this.$router.push('/')
-    },
+      $(this.$refs.changeNetworkList).hover(
+        function () {
+          if (!self.networkDropdownTimeout) {
+            return
+          }
 
-    switchChain(type) {
-      this.$store.dispatch('auth/switchChain', type)
-    }
+          clearTimeout(self.networkDropdownTimeout)
+        },
+        function () {
+          $('.change-network-col-body').slideUp(300)
+        }
+      )
+    })
+  }
+
+  // methods
+
+  copyAddress() {
+    copyToClipboard(this.address)
+
+    this.$notify({
+      type: 'success',
+      title: 'Address copied to clipboard'
+    })
+  }
+
+  signin() {
+    this.$refs.signin.init()
+  }
+
+  signout() {
+    this.$store.dispatch('auth/signout')
+    this.$router.push('/')
+  }
+
+  switchChain(type: string) {
+    this.$store.dispatch('auth/switchChain', type)
   }
 }
 </script>

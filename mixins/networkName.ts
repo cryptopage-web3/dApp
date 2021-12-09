@@ -3,7 +3,7 @@ import TypedStoreMixin from '~/mixins/typed-store'
 
 Component.registerHooks(['fetchOnServer'])
 @Component({})
-export default class networkName extends mixins(TypedStoreMixin) {
+export default class NetworkName extends mixins(TypedStoreMixin) {
   get selectedAddress(): string {
     return this.typedStore.address.address
   }

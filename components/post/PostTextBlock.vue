@@ -29,6 +29,7 @@ import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 import { TransactionType } from '~/logic/transactions/types'
 import { NFTAttributesType } from '~/logic/nft/types'
+import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -36,6 +37,8 @@ import { NFTAttributesType } from '~/logic/nft/types'
   }
 })
 export default class PostTextBlock extends mixins(TransactionMixin) {
+  $notify!: (params: INotifyParams) => void
+
   @Inject(tokens.NFT_SERVICE)
   public nftService!: NFTService
 

@@ -48,6 +48,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { INotifyParams } from '~/types'
 
 @Component({})
 export default class AddressProfileName extends Vue {
@@ -57,6 +58,7 @@ export default class AddressProfileName extends Vue {
   localName = ''
   clickOutsideListener: ((event: JQuery.ClickEvent) => void) | null = null
 
+  $notify!: (params: INotifyParams) => void
   $refs!: {
     input: HTMLInputElement
   }

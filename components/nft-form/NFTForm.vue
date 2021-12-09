@@ -73,10 +73,7 @@
         >
           <template v-if="loading">
             <span
-              class="
-                spinner-border spinner-border-sm
-                creat-post-bottom__spinner
-              "
+              class="spinner-border spinner-border-sm creat-post-bottom__spinner"
               role="status"
               aria-hidden="true"
             ></span>
@@ -109,6 +106,7 @@ import NFTFormFile from './NFTFormFile.vue'
 import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
+import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -123,6 +121,7 @@ export default class NFTForm extends Vue {
   attributes: IAttributesFront = {}
   file: File | null = null
 
+  $notify!: (params: INotifyParams) => void
   $refs!: {
     attributes: any
     'upload-file': any
