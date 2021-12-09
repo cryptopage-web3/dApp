@@ -27,8 +27,19 @@
         <profile-status v-if="!tokenName" />
         <div class="profile-info__text">
           {{ transactionsCount | humanizeCount }}
-          transactions<br />
-          0 inputs / 0 outputs
+          total transactions<br />
+          <span
+            title="Number of unique addresses from which transactions got. Checked only loaded transactions from all tabs."
+          >
+            {{ inputAddressesCount | humanizeCount }} inputs
+          </span>
+          /
+          <span
+            title="Number of unique addresses to which transactions sent. Checked only loaded transactions from all tabs."
+          >
+            {{ outputAddressesCount | humanizeCount }} outputs
+          </span>
+          from {{ loadedTransactionsCount }} loaded transactions
         </div>
       </div>
     </div>
@@ -74,6 +85,18 @@ export default class AddressProfileTop extends Vue {
     return this.$store.getters['address/transactionsCount']
   }
 
+  get loadedTransactionsCount(): number {
+    return this.$store.getters['address/allTransactions'].length
+  }
+
+  get inputAddressesCount(): number {
+    return this.$store.getters['address/inputAddressesCount']
+  }
+
+  get outputAddressesCount(): number {
+    return this.$store.getters['address/outputAddressesCount']
+  }
+
   get tokenName(): string {
     const tokenName = this.$store.getters['address/name']
     const tokenSymbol = this.$store.getters['address/symbol']
@@ -82,9 +105,15 @@ export default class AddressProfileTop extends Vue {
 
   mounted() {
     this.$nextTick(() => {
+      /** tooltip копирование адреса */
       ;($(this.$refs.address) as any).tooltip({
         trigger: 'hover',
         title: 'Click to copy'
+      })
+
+      /** tooltip количества уникальных адресов */
+      ;($('.profile-info__text span') as any).tooltip({
+        trigger: 'hover'
       })
     })
   }

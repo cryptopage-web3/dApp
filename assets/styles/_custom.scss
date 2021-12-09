@@ -168,6 +168,18 @@
   cursor: pointer;
 }
 
+.profile-info__text {
+  margin-top: 5px;
+}
+
+.profile-info__text span {
+  cursor: pointer;
+}
+
+.profile-info__text span:hover {
+  font-weight: 600;
+}
+
 .transactions-body__empty {
   padding: 40px 15px;
   text-align: center;

@@ -124,6 +124,24 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get inputAddressesCount(): number {
+    return new Set(
+      this.transactions
+        .filter((tx: TransactionType) => tx.to === this.addressInfo.address)
+        .map((tx: TransactionType) => tx.from)
+    ).size
+  }
+
+  @Getter()
+  public get outputAddressesCount(): number {
+    return new Set(
+      this.transactions
+        .filter((tx: TransactionType) => tx.from === this.addressInfo.address)
+        .map((tx: TransactionType) => tx.to)
+    ).size
+  }
+
+  @Getter()
   public get allTransactions(): TransactionType[] {
     return this.transactions.sort((a, b) =>
       a.timeStamp > b.timeStamp ? -1 : 1
