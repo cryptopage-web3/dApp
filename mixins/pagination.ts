@@ -40,6 +40,16 @@ export default class PaginationMixin extends Vue {
     this.resetChain(newChain, oldChain)
   }
 
+  /** в момент получения новых транзакций необходим триггер скролла
+   * чтобы обновилось положение сайдбаров
+   */
+  @Watch('transactions')
+  onTransactionsChanged() {
+    this.$nextTick(() => {
+      $(window).trigger('scroll')
+    })
+  }
+
   // lifecycle hooks
 
   mounted() {
