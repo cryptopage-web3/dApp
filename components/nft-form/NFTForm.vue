@@ -297,6 +297,7 @@ export default class NFTForm extends Vue {
   sendPostHash(ipfsHash: string) {
     this.nftService.sendNFTHash({
       params: {
+        address: this.$store.getters['address/address'],
         from: this.$store.getters['auth/selectedAddress'],
         hash: ipfsHash,
         comment: this.attributes.hasComment || false
