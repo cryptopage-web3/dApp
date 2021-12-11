@@ -54,7 +54,7 @@ export default class NFTWeb3Service {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
-      let hasComments = false
+      let isExists = false
       let comments = null
       /** если NFT создана через наш контракт, то получаем его комментарии */
       const networkName = await this.getNetworkName()
@@ -80,10 +80,10 @@ export default class NFTWeb3Service {
          * то предполагаем, что комментарии не были включены при создании NFT
          */
         try {
-          hasComments = await commentMinterContract.methods
-            .isActive(NFT_CONTRACT.address, tokenId)
+          isExists = await commentMinterContract.methods
+            .isExists(NFT_CONTRACT.address, tokenId)
             .call()
-          if (hasComments) {
+          if (isExists) {
             const commentContractAddress = await commentMinterContract.methods
               .getContract(NFT_CONTRACT.address, tokenId)
               .call()
@@ -114,7 +114,7 @@ export default class NFTWeb3Service {
               CONTRACT.address
             )
             contract.methods
-              .safeMint(params.hash, params.comment)
+              .safeMint(params.address, params.hash)
               .send({
                 from: params.from
               })
