@@ -86,6 +86,12 @@
               Polygon Mainnet
             </a>
           </li>
+          <li>
+          <a href="#" @click.prevent="switchChain('TRON')">
+              <img src="@/assets/img/modal-content__link_img4.png" alt="" />
+              Tron Mainnet
+            </a>
+          </li>
         </ul>
       </div>
       <signin ref="signin" />
@@ -142,7 +148,8 @@ export default class Connect extends mixins(NetworkNameMixin) {
     const icons: Record<string, string> = {
       ethereum: require('@/assets/img/modal-content__link_img1.png'),
       bsc: require('@/assets/img/modal-content__link_img2.png'),
-      polygon: require('@/assets/img/modal-content__link_img3.png')
+      polygon: require('@/assets/img/modal-content__link_img3.png'),
+      tron: require('@/assets/img/modal-content__link_img4.png'),
     }
 
     return icons[this.$store.getters['auth/selectedNetworkType']]

@@ -39,6 +39,7 @@ export default {
   ETHERSCAN_API_SERVICE: new Token('etherscan-api-service'),
   ETHPLORER_API_SERVICE: new Token('ethplorer-api-service'),
   COVALENT_API_SERVICE: new Token('covalent-api-service'),
+  TRONGRID_API_SERVICE: new Token('trongrid-api-service'),
 
   // Global dependencies
   AXIOS: new Token('axios'),
