@@ -66,6 +66,7 @@ export interface ERC721ContractDataType {
 }
 
 export interface ISendNFTParams {
+  address: string
   from: string
   hash: string
   comment: boolean
