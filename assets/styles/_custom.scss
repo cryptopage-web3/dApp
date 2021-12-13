@@ -120,13 +120,29 @@
 }
 
 .header_fixed {
+  overflow-y: auto;
   position: fixed;
   top: 20px;
+  max-height: calc(100% - 20px);
+}
+
+.header_fixed .balances {
+  padding-bottom: 13px;
+}
+
+.header_fixed .banner {
+  margin-right: 15px;
+  transition: .2s;
 }
 
 .header_bottom {
   position: absolute;
   bottom: 0;
+}
+
+.header_bottom .banner {
+  margin-right: 15px;
+  transition: .2s;
 }
 
 /* ===== address profile ===== */
