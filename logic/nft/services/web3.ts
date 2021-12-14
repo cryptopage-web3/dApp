@@ -67,39 +67,34 @@ export default class NFTWeb3Service {
         `../../../contracts/${networkName}/PageCommentMinter.json`
       )
 
-      /** если NFT создана через наш контракт, то получаем его комментарии */
+      /** получаем комментарии */
+      const commentMinterContract = new this.$web3.eth.Contract(
+        COMMENT_MINTER_CONTRACT.abi,
+        COMMENT_MINTER_CONTRACT.address
+      )
 
-      if (
-        contractAddress.toLowerCase() === NFT_CONTRACT.address.toLowerCase()
-      ) {
-        const commentMinterContract = new this.$web3.eth.Contract(
-          COMMENT_MINTER_CONTRACT.abi,
-          COMMENT_MINTER_CONTRACT.address
-        )
+      /**
+       * проверяем есть ли контракт комментов у NFT,
+       * если да, то получаем текущую статистику
+       */
+      try {
+        const isExists = await commentMinterContract.methods
+          .isExists(NFT_CONTRACT.address, tokenId)
+          .call()
 
-        /**
-         * проверяем есть ли контракт комментов у NFT,
-         * если да, то получаем текущую статистику
-         */
-        try {
-          const isExists = await commentMinterContract.methods
-            .isExists(NFT_CONTRACT.address, tokenId)
+        if (isExists) {
+          const commentContractAddress = await commentMinterContract.methods
+            .getContract(NFT_CONTRACT.address, tokenId)
             .call()
 
-          if (isExists) {
-            const commentContractAddress = await commentMinterContract.methods
-              .getContract(NFT_CONTRACT.address, tokenId)
-              .call()
+          const commentContract = new this.$web3.eth.Contract(
+            COMMENT_CONTRACT.abi,
+            commentContractAddress
+          )
 
-            const commentContract = new this.$web3.eth.Contract(
-              COMMENT_CONTRACT.abi,
-              commentContractAddress
-            )
-
-            comments = await commentContract.methods.getStatistic().call()
-          }
-        } catch {}
-      }
+          comments = await commentContract.methods.getStatistic().call()
+        }
+      } catch {}
 
       return { tokenURI, owner, comments }
     } catch {
