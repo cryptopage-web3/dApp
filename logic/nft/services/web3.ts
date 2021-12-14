@@ -54,10 +54,10 @@ export default class NFTWeb3Service {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
-      let isExists = false
+
       let comments = null
-      /** если NFT создана через наш контракт, то получаем его комментарии */
       const networkName = await this.getNetworkName()
+
       const NFT_CONTRACT = await import(
         `../../../contracts/${networkName}/PageNFT.json`
       )
@@ -67,6 +67,9 @@ export default class NFTWeb3Service {
       const COMMENT_MINTER_CONTRACT = await import(
         `../../../contracts/${networkName}/PageCommentMinter.json`
       )
+
+      /** если NFT создана через наш контракт, то получаем его комментарии */
+
       if (
         contractAddress.toLowerCase() === NFT_CONTRACT.address.toLowerCase()
       ) {
@@ -76,13 +79,14 @@ export default class NFTWeb3Service {
         )
 
         /**
-         * если запрос возвращает исключение,
-         * то предполагаем, что комментарии не были включены при создании NFT
+         * проверяем есть ли контракт комментов у NFT,
+         * если да, то получаем текущую статистику
          */
         try {
-          isExists = await commentMinterContract.methods
+          const isExists = await commentMinterContract.methods
             .isExists(NFT_CONTRACT.address, tokenId)
             .call()
+
           if (isExists) {
             const commentContractAddress = await commentMinterContract.methods
               .getContract(NFT_CONTRACT.address, tokenId)
@@ -92,6 +96,7 @@ export default class NFTWeb3Service {
               COMMENT_CONTRACT.abi,
               commentContractAddress
             )
+
             comments = await commentContract.methods.getStatistic().call()
           }
         } catch {}
