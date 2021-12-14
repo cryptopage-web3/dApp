@@ -1,6 +1,6 @@
 <template>
   <div class="main-right">
-    <div id="right-sidebar">
+    <div id="right-sidebar" class="main-right__container">
       <div class="main-right-item">
         <connect />
       </div>
