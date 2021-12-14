@@ -13,6 +13,6 @@ export interface StateType {
     selectedAddress: string
     chainId: number
     loggedIn: boolean
-  },
+  }
   transactions: TransactionType[]
 }

@@ -1,14 +1,14 @@
 export type CurrencyType = {
-  name: string,
-  symbol: string,
+  name: string
+  symbol: string
   decimals: string
-} 
+}
 
 export type ChainType = {
-	chainId: string,
-	rpcUrls: string[],
-  chainName: string,
-  nativeCurrency: CurrencyType,
+  chainId: string
+  rpcUrls: string[]
+  chainName: string
+  nativeCurrency: CurrencyType
   blockExplorerUrls: string[]
 }
 
@@ -22,7 +22,7 @@ export type EventType = {
   data: EventDataType
 }
 
-export type CallbackType =  { (object: EventType): void }
+export type CallbackType = { (object: EventType): void }
 
 export type AuthServiceSigninResponseType = {
   status: string

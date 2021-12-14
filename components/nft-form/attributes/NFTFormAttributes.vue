@@ -1,6 +1,5 @@
 <template>
   <div ref="attributes" class="nft-form__attributes">
-    <comment-attribute v-model="hasComment" />
     <properties-attribute
       ref="properties"
       :properties="properties"
@@ -36,7 +35,6 @@ import NFTFormStats from './NFTFormStats.vue'
 import NFTFormLevels from './NFTFormLevels.vue'
 import NFTFormDates from './NFTFormDates.vue'
 import NFTFormBoosts from './NFTFormBoosts.vue'
-import NFTFormComment from './NFTFormComment.vue'
 
 @Component({
   components: {
@@ -44,13 +42,11 @@ import NFTFormComment from './NFTFormComment.vue'
     'stats-attribute': NFTFormStats,
     'levels-attribute': NFTFormLevels,
     'dates-attribute': NFTFormDates,
-    'boosts-attribute': NFTFormBoosts,
-    'comment-attribute': NFTFormComment
+    'boosts-attribute': NFTFormBoosts
   }
 })
 export default class NFTFormAttributes extends Vue {
   isShown = false
-  hasComment = false
   properties: IAttributeProperty[] = []
   levels: IAttributeLevel[] = []
   stats: IAttributeStat[] = []
@@ -94,7 +90,6 @@ export default class NFTFormAttributes extends Vue {
     const newStats = attributes.stats || []
     const newDates = attributes.dates || []
     const newBoosts = attributes.boosts || []
-    const hasComment = attributes.hasComment || false
 
     if (JSON.stringify(newProperties) !== JSON.stringify(this.properties)) {
       this.properties = newProperties
@@ -114,10 +109,6 @@ export default class NFTFormAttributes extends Vue {
 
     if (JSON.stringify(newBoosts) !== JSON.stringify(this.boosts)) {
       this.boosts = newBoosts
-    }
-
-    if (hasComment !== this.hasComment) {
-      this.hasComment = hasComment
     }
   }
 
@@ -158,14 +149,6 @@ export default class NFTFormAttributes extends Vue {
     this.emitChangeAttributes({
       ...this.attributes,
       boosts
-    })
-  }
-
-  @Watch('hasComment')
-  onHasCommentChanged(hasComment: boolean) {
-    this.emitChangeAttributes({
-      ...this.attributes,
-      hasComment
     })
   }
 

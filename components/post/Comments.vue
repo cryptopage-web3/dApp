@@ -80,11 +80,11 @@ export default class Comments extends mixins(TypedStoreMixin) {
   public nftService!: NFTService
 
   get likes(): number {
-    return Number(this.transaction.nft?.comments?.likes)
+    return Number(this.transaction.nft?.comments?.likes || 0)
   }
 
   get dislikes(): number {
-    return Number(this.transaction.nft?.comments?.dislikes)
+    return Number(this.transaction.nft?.comments?.dislikes || 0)
   }
 
   async mounted() {
