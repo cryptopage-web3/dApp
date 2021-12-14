@@ -1,7 +1,7 @@
 import * as ts from 'io-ts'
 
-import { TokenInfo } from '~/logic/tokens/models'
 import {
+  TokenInfo,
   IPFSTokensStorageItem,
   IPFSTokensStorageItemResponse
 } from '~/logic/tokens/models'
@@ -18,4 +18,4 @@ export type IPFSTokensStorageItemResponseType = ts.TypeOf<
   typeof IPFSTokensStorageItemResponse
 >
 
-export type IPFSTokensStorageItemType = ts.TypeOf< typeof IPFSTokensStorageItem> 
+export type IPFSTokensStorageItemType = ts.TypeOf<typeof IPFSTokensStorageItem>

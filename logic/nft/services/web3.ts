@@ -6,7 +6,6 @@ import {
   ERC721ContractDataType,
   ISendNFTWeb3,
   ISendNFTCommentWeb3,
-  IActivateCommentsWeb3,
   IBurnParamsType
 } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
@@ -153,32 +152,6 @@ export default class NFTWeb3Service {
                 params.comment,
                 params.like
               )
-              .send({
-                from: params.from
-              })
-              .on('transactionHash', callbacks.onTransactionHash)
-              .on('receipt', callbacks.onReceipt)
-              .on('error', callbacks.onError)
-          }
-        )
-      })
-    } catch {
-      callbacks.onError()
-    }
-  }
-
-  /** Action commentActivate by contract */
-  public activateComments = ({ params, callbacks }: IActivateCommentsWeb3) => {
-    try {
-      this.getNetworkName().then((networkName: string) => {
-        import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
-          (CONTRACT) => {
-            const contract = new this.$web3.eth.Contract(
-              CONTRACT.abi,
-              CONTRACT.address
-            )
-            contract.methods
-              .activateComments(params.nftContractAddress, params.tokenId)
               .send({
                 from: params.from
               })

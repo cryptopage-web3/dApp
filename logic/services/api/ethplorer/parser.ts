@@ -4,10 +4,7 @@ import {
   EthplorerETHType
 } from '~/logic/services/api/ethplorer/types'
 
-import {
-  TokenInfoType,
-  TokenBalanceType,
-} from '~/logic/tokens/types'
+import { TokenInfoType, TokenBalanceType } from '~/logic/tokens/types'
 
 export default class EthplorerTokenBalanceParser {
   parseETHToken(eth: EthplorerETHType): TokenBalanceType {
@@ -104,11 +101,11 @@ export default class EthplorerTokenBalanceParser {
   }
 
   parse(token: EthplorerTokenType): TokenBalanceType {
-      return {
-        balance: this.parseBalance(token),
-        usdBalance: this.parseUSDBalance(token),
-        diff: this.parseDiff(token.tokenInfo),
-        tokenInfo: this.parseTokenInfo(token.tokenInfo)
-      }
+    return {
+      balance: this.parseBalance(token),
+      usdBalance: this.parseUSDBalance(token),
+      diff: this.parseDiff(token.tokenInfo),
+      tokenInfo: this.parseTokenInfo(token.tokenInfo)
+    }
   }
 }

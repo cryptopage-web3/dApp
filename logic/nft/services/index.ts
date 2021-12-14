@@ -13,7 +13,6 @@ import {
   ISendNFTApi,
   NFTAdapterRequestParamsType,
   ISendNFTComment,
-  IActivateComments,
   IBurnParamsType
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
@@ -166,37 +165,6 @@ export default class NFTService {
     let txHash = ''
 
     this.nftWeb3Service.sendComment({
-      params,
-      callbacks: {
-        onTransactionHash(hash: string) {
-          txHash = hash
-
-          callback({
-            status: 'pending',
-            txHash
-          })
-        },
-        onReceipt() {
-          callback({
-            status: 'success',
-            txHash
-          })
-        },
-        onError() {
-          callback({
-            status: 'error',
-            txHash
-          })
-        }
-      }
-    })
-  }
-
-  /** Activate comments to contract via web3 */
-  public activateComments = ({ params, callback }: IActivateComments) => {
-    let txHash = ''
-
-    this.nftWeb3Service.activateComments({
       params,
       callbacks: {
         onTransactionHash(hash: string) {
