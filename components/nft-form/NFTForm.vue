@@ -77,11 +77,11 @@
               role="status"
               aria-hidden="true"
             ></span>
-            <span> Creating... </span>
+            <span> {{ isSendTo ? 'Sending...' : 'Creating...' }} </span>
           </template>
           <template v-else>
             <img src="@/assets/img/btn_creat-post_img.png" alt="" />
-            <span> Create NFT </span>
+            <span> {{ isSendTo ? 'Send NFT' : 'Create NFT' }} </span>
           </template>
         </button>
         <div
@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Emit, Watch } from 'nuxt-property-decorator'
+import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
 import { validateForm, getAdaptedAttributes } from './utils'
 import { IAttributesFront, INFTServer } from './types'
@@ -120,6 +120,9 @@ export default class NFTForm extends Vue {
   title = ''
   attributes: IAttributesFront = {}
   file: File | null = null
+
+  @Prop({ type: Boolean, default: false })
+  readonly isSendTo!: boolean
 
   $notify!: (params: INotifyParams) => void
   $refs!: {
@@ -297,7 +300,9 @@ export default class NFTForm extends Vue {
   sendPostHash(ipfsHash: string) {
     this.nftService.sendNFTHash({
       params: {
-        address: this.$store.getters['address/address'],
+        address: this.isSendTo
+          ? this.$store.getters['address/address']
+          : this.$store.getters['auth/selectedAddress'],
         from: this.$store.getters['auth/selectedAddress'],
         hash: ipfsHash
       },
