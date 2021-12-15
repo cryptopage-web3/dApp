@@ -69,7 +69,6 @@ export interface ISendNFTParams {
   address: string
   from: string
   hash: string
-  comment: boolean
 }
 
 export interface ISendNFTApi {
@@ -101,26 +100,6 @@ export interface ISendNFTComment {
 
 export interface ISendNFTCommentWeb3 {
   params: ISendNFTCommentParams
-  callbacks: {
-    onTransactionHash: (hash: string) => void
-    onReceipt: () => void
-    onError: () => void
-  }
-}
-
-export interface IActivateCommentsParams {
-  from: string
-  nftContractAddress: string
-  tokenId: string
-}
-
-export interface IActivateComments {
-  params: IActivateCommentsParams
-  callback: (params: { status: string; txHash: string }) => void
-}
-
-export interface IActivateCommentsWeb3 {
-  params: IActivateCommentsParams
   callbacks: {
     onTransactionHash: (hash: string) => void
     onReceipt: () => void

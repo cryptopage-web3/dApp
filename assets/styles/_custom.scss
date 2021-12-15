@@ -115,6 +115,10 @@
   position: relative;
 }
 
+.main-right__container {
+  padding-right: 15px;
+}
+
 .sidebar-left__create {
   padding-top: 40px;
 }
@@ -126,23 +130,13 @@
   max-height: calc(100% - 20px);
 }
 
-.header_fixed .balances {
+.balances .btn-link {
   padding-bottom: 13px;
-}
-
-.header_fixed .banner {
-  margin-right: 15px;
-  transition: .2s;
 }
 
 .header_bottom {
   position: absolute;
   bottom: 0;
-}
-
-.header_bottom .banner {
-  margin-right: 15px;
-  transition: .2s;
 }
 
 /* ===== address profile ===== */

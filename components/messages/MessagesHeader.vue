@@ -1,10 +1,7 @@
 <template>
   <div id="profile-other" class="profile-other">
     <div class="profile-other-left">
-      <img
-        class="menu-mobile-avatar"
-        src="post-logo_img6.jpg"
-      />
+      <img class="menu-mobile-avatar" src="post-logo_img6.jpg" />
       <jazzicon
         :seed="10211"
         :diameter="35"
