@@ -73,7 +73,7 @@ export default {
     text: ''
   }),
   methods: {
-    handleInput(e) {
+    handleInput() {
       if (this.count >= this.maxCount) {
         this.count = 0
       }
