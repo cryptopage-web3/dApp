@@ -6,7 +6,11 @@ import { Service, Container } from 'vue-typedi'
 import { IPFSHTTPClient } from 'ipfs-http-client'
 import fileType from 'file-type'
 import { NFTPayload } from '~/logic/nft/models'
-import { NFTPayloadType, NFTMediaType } from '~/logic/nft/types'
+import {
+  NFTPayloadType,
+  NFTMediaType,
+  INFTDataToCreate
+} from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
 
 @Service(tokens.NFT_IPFS_SERVICE)
@@ -70,5 +74,17 @@ export default class NFTIPFSService {
     } catch {
       return {}
     }
+  }
+
+  public saveFile = async (file: File): Promise<string> => {
+    const data = await this.$ipfs.add(file)
+    await this.$ipfs.pin.add(data.path)
+    return data.path
+  }
+
+  public saveNFT = async (nft: INFTDataToCreate): Promise<string> => {
+    const data = await this.$ipfs.add(JSON.stringify(nft))
+    await this.$ipfs.pin.add(data.path)
+    return data.path
   }
 }

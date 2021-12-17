@@ -39,13 +39,14 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
-import { EDisplayType, IAttributeBoost, IAttributeBoostFields } from '../types'
+import { IAttributeBoost, IAttributeBoostFields } from '../types'
+import { EAttributeDisplayType } from '~/logic/nft/types'
 
 @Component({})
 export default class NFTFormBoost extends Vue {
   type = ''
   value = ''
-  displayType: EDisplayType = EDisplayType.boostPercentage
+  displayType: EAttributeDisplayType = EAttributeDisplayType.boostPercentage
 
   @Prop({ type: Object, default: () => ({}) })
   readonly boost!: IAttributeBoost
@@ -74,12 +75,13 @@ export default class NFTFormBoost extends Vue {
     }
 
     if (boost.displayType !== this.displayType) {
-      this.displayType = boost.displayType || EDisplayType.boostPercentage
+      this.displayType =
+        boost.displayType || EAttributeDisplayType.boostPercentage
     }
   }
 
   @Watch('displayType')
-  onDisplayTypeChanged(displayType: EDisplayType) {
+  onDisplayTypeChanged(displayType: EAttributeDisplayType) {
     this.emitBoostChange({
       displayType,
       type: this.type,

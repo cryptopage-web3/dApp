@@ -101,7 +101,7 @@ import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
 import { validateForm, getAdaptedAttributes } from './utils'
-import { IAttributesFront, INFTServer } from './types'
+import { IAttributesFront } from './types'
 import NFTFormFile from './NFTFormFile.vue'
 import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
 import NFTService from '~/logic/nft/services'
@@ -251,77 +251,62 @@ export default class NFTForm extends Vue {
     return true
   }
 
-  async submit() {
+  submit() {
     if (!this.validateFormWithNotify()) {
       return
     }
 
-    this.loading = true
+    // create NFT
 
-    // get ipfs hash
-
-    const ipfsHash = await this.getFormIPFSHash()
-
-    this.$notify({
-      type: 'success',
-      title: `IPFS hash received`
-    })
-
-    // send to contract
-
-    this.sendPostHash(ipfsHash)
-  }
-
-  async getFileIPFSHash(): Promise<string> {
-    const ipfs = await (this as any).$ipfs
-    const file = await ipfs.add(this.file)
-    await ipfs.pin.add(file.path)
-    return file.path
-  }
-
-  async getFormIPFSHash() {
-    const fileHash = this.file ? await this.getFileIPFSHash() : null
-
-    const nft: INFTServer = {
+    const nft = {
       name: this.title,
       description: this.text,
-      attributes: getAdaptedAttributes(this.attributes),
-      [this.isMediaFile ? 'animation_url' : 'image']:
-        fileHash && `https://ipfs.io/ipfs/${fileHash}`
+      file: this.file,
+      attributes: getAdaptedAttributes(this.attributes)
     }
 
-    const ipfs = await (this as any).$ipfs
-    const file = await ipfs.add(JSON.stringify(nft))
-    await ipfs.pin.add(file.path)
+    this.loading = true
 
-    return file.path
-  }
-
-  sendPostHash(ipfsHash: string) {
-    this.nftService.sendNFTHash({
+    this.nftService.createNFT({
       params: {
+        nft,
         address: this.isSendTo
           ? this.$store.getters['address/address']
           : this.$store.getters['auth/selectedAddress'],
-        from: this.$store.getters['auth/selectedAddress'],
-        hash: ipfsHash
+        from: this.$store.getters['auth/selectedAddress']
       },
-      callback: ({ status, txHash }) => {
-        const title = txHash || 'Unknown hash'
+      callback: ({ status, message, txHash }) => {
+        const titleTx = txHash || 'Unknown hash'
 
         switch (status) {
           case 'pending':
             this.$notify({
               type: 'info',
-              title,
+              title: message
+            })
+            break
+
+          case 'error':
+            this.$notify({
+              type: 'error',
+              title: message
+            })
+
+            this.loading = false
+            break
+
+          case 'pendingTx':
+            this.$notify({
+              type: 'info',
+              title: titleTx,
               text: 'Transaction on pending'
             })
             break
 
-          case 'success':
+          case 'successTx':
             this.$notify({
               type: 'success',
-              title,
+              title: titleTx,
               text: 'Transaction completed'
             })
 
@@ -332,10 +317,10 @@ export default class NFTForm extends Vue {
             }
             break
 
-          case 'error':
+          case 'errorTx':
             this.$notify({
               type: 'error',
-              title,
+              title: titleTx,
               text: 'Transaction has some error'
             })
 

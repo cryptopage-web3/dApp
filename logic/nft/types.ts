@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import * as ts from 'io-ts'
 import {
   Attribute,
@@ -65,15 +66,52 @@ export interface ERC721ContractDataType {
   comments: ERC721CommentsType | null
 }
 
+/** Create NFT */
+
+export enum EAttributeDisplayType {
+  number = 'number',
+  date = 'date',
+  boostPercentage = 'boost_percentage',
+  boostNumber = 'boost_number'
+}
+
+export interface INFTAttributesDataToCreate {
+  trait_type: string
+  value: string | number
+  max_value?: number
+  display_type?: EAttributeDisplayType
+}
+
+export interface INFTDataToCreate {
+  name: string
+  description: string
+  /** get link after save file */
+  animation_url?: string | null
+  image?: string | null
+  /** get from form */
+  file?: File | null
+  attributes: INFTAttributesDataToCreate[]
+}
+
+export interface ICreateNFTParams {
+  nft: INFTDataToCreate
+  address: string
+  from: string
+}
+
+export interface ICreateNFT {
+  params: ICreateNFTParams
+  callback: (params: {
+    status: string
+    txHash?: string
+    message?: string
+  }) => void
+}
+
 export interface ISendNFTParams {
   address: string
   from: string
   hash: string
-}
-
-export interface ISendNFTApi {
-  params: ISendNFTParams
-  callback: (params: { status: string; txHash: string }) => void
 }
 
 export interface ISendNFTWeb3 {
@@ -84,6 +122,8 @@ export interface ISendNFTWeb3 {
     onError: () => void
   }
 }
+
+/** Send comment */
 
 export interface ISendNFTCommentParams {
   from: string
@@ -106,6 +146,8 @@ export interface ISendNFTCommentWeb3 {
     onError: () => void
   }
 }
+
+/** Burn */
 
 export type IBurnParamsType = {
   params: { tokenId: string; from: string }
