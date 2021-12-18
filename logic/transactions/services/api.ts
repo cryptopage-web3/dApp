@@ -1,6 +1,7 @@
 import { Service, Inject } from 'vue-typedi'
 import tokens from '~/logic/tokens'
 import EtherscanAPIService from '~/logic/services/api/etherscan'
+import TronGridAPIService from '~/logic/services/api/trongrid'
 import {
   ESortDirectionType,
   TransactionType,
@@ -12,6 +13,9 @@ export default class TransactionAPIService {
   @Inject(tokens.ETHERSCAN_API_SERVICE)
   public etherscanAPIService!: EtherscanAPIService
 
+  @Inject(tokens.TRONGRID_API_SERVICE)
+  public tronGridAPIService!: TronGridAPIService
+
   /**
    * Get a list of 'Normal' Transactions By Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
@@ -22,6 +26,15 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
+    if (!address.match('^0x[a-fA-F0-9]{40}$')) {
+      // if not evm related blockchain, actually it is tron
+      return await this.tronGridAPIService.getNormalTransactions({
+        address,
+        page,
+        offset,
+        sort
+      })
+    }
     return await this.etherscanAPIService.getNormalTransactions({
       address,
       page,

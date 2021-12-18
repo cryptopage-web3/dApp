@@ -82,6 +82,10 @@ export class TronGridAPIServiceMixin extends BaseAPIServiceMixin {
     return 'https://apilist.tronscan.org/api/'
   }
 
+  protected get transactionsURL(): string {
+    return 'https://api.trongrid.io/v1/'
+  }
+
   protected get symbol(): string {
     return 'TRX'
   }

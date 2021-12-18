@@ -176,7 +176,7 @@ export default class AuthService extends Vue {
   /*
    * Just reacive proxy for simple access
    */
-  public get selectedChainId(): number {
+  public get selectedChainId(): any {
     return this.data.chainId
   }
 
@@ -497,7 +497,7 @@ export default class AuthService extends Vue {
       const setTronata = () => {
         setTimeout(async () => {
           await window.tronLink.request({ method: 'tron_requestAccounts' })
-          const address = window.tronLink.tronWeb.defaultAddress.base58
+          const address = window.tronLink.tronWeb.defaultAddress?.base58
           this.setOrChangeWeb3Data(address, 'tron')
         }, 300)
       }

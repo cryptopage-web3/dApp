@@ -198,7 +198,7 @@ export default class TokenService {
   }
 
   public get basicToken(): TokenInfoType {
-    const chainId = Number(this.authService.selectedChainId)
+    const chainId = this.authService.selectedChainId
     const baseURL =
       'https://www.covalenthq.com/static/images/icons/display-icons/'
     let tokenInfo = {
@@ -209,7 +209,7 @@ export default class TokenService {
       image: `${baseURL}ethereum-eth-logo.png`,
       rate: { usd: 0 }
     }
-    if ([56, 97].includes(chainId)) {
+    if ([56, 97].includes(Number(chainId))) {
       tokenInfo = {
         address: '0xb8c77482e45f1f44de1745f52c74426c631bdd52',
         name: 'Binance coin',
@@ -218,13 +218,22 @@ export default class TokenService {
         image: `${baseURL}binance-coin-bnb-logo.png`,
         rate: { usd: 0 }
       }
-    } else if ([137, 80001].includes(chainId)) {
+    } else if ([137, 80001].includes(Number(chainId))) {
       tokenInfo = {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Polygon coin',
         symbol: 'MATIC',
         decimals: 18,
         image: `https://logos.covalenthq.com/tokens/1/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0.png`,
+        rate: { usd: 0 }
+      }
+    } else if (chainId === 'tron') {
+      tokenInfo = {
+        address: '0xe1be5d3f34e89de342ee97e6e90d405884da6c67',
+        name: 'Tron',
+        symbol: 'TRX',
+        decimals: 6,
+        image: `https://etherscan.io/token/images/trontrx_32.png`,
         rate: { usd: 0 }
       }
     }

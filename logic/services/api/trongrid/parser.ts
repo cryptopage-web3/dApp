@@ -1,7 +1,11 @@
 import { TokenBalanceType } from '~/logic/tokens/types'
-import { TronGridAPITokenType } from '~/logic/services/api/trongrid/types'
+// import { TransactionType } from '~/logic/transactions/types'
+import {
+  TronGridAPITokenType,
+  TronGridAPITransactionType
+} from '~/logic/services/api/trongrid/types'
 
-export default class TronGridAPITokenBalanceParser {
+export class TronGridAPITokenBalanceParser {
   parse = (token: TronGridAPITokenType): TokenBalanceType => {
     const balance = Number(token.balance) / 10 ** token.tokenDecimal
     const usdBalance = 0
@@ -23,13 +27,23 @@ export default class TronGridAPITokenBalanceParser {
   }
 }
 
-// amount: "44350110.275358"
-// balance: "44350110275358"
-// tokenAbbr: "trx"
-// tokenCanShow: 1
-// tokenDecimal: 6
-// tokenId: "_"
-// tokenLogo: "https://coin.top/production/logo/trx.png"
-// tokenName: "trx"
-// tokenPriceInTrx: 1
-// tokenType: "trc10"
+export class TronGridAPITransactionParser {
+  parse = (tx: TronGridAPITransactionType): any => {
+    return {
+      gas: tx.energy_usage,
+      hash: tx.txID,
+      nonce: '',
+      input: '',
+      value: '',
+      blockHash: '',
+      blockNumber: tx.blockNumber,
+      confirmations: '',
+      cumulativeGasUsed: tx.energy_usage_total,
+      from: '',
+      gasPrice: tx.energy_fee,
+      gasUsed: tx.net_usage,
+      timeStamp: tx.block_timestamp,
+      to: ''
+    }
+  }
+}
