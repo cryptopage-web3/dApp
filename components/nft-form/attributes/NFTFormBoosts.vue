@@ -32,8 +32,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
-import { EDisplayType, IAttributeBoost, IAttributeBoostFields } from '../types'
+import { IAttributeBoost, IAttributeBoostFields } from '../types'
 import NFTFormBoost from './NFTFormBoost.vue'
+import { EAttributeDisplayType } from '~/logic/nft/types'
 
 @Component({
   components: {
@@ -101,7 +102,7 @@ export default class NFTFormBoosts extends Vue {
       id: Number(new Date()),
       type: '',
       value: '',
-      displayType: EDisplayType.boostPercentage
+      displayType: EAttributeDisplayType.boostPercentage
     })
   }
 

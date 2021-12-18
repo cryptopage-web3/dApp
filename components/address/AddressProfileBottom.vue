@@ -5,7 +5,7 @@
         v-if="isOwner"
         href="#"
         class="profile__add btn_profile btn btn_blue"
-        @click.prevent="showCreateForm"
+        @click.prevent="showForm"
       >
         <img src="@/assets/img/profile__add_img.png" alt="" />
         <span> Create NFT </span>
@@ -14,7 +14,7 @@
         v-else
         href="#"
         class="profile__add btn_profile btn btn_blue"
-        @click.prevent="showSendNft"
+        @click.prevent="showForm"
       >
         <img src="@/assets/img/profile__add_img.png" alt="" />
         <span> Send NFT </span>
@@ -30,7 +30,7 @@
     <div class="profile-form">
       <div class="profile-form__container">
         <div class="profile-form__container-inner">
-          <nft-form @submited="nftSubmitedHandler" />
+          <nft-form :is-send-to="!isOwner" @submited="nftSubmitedHandler" />
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@ import { Component, Watch } from 'nuxt-property-decorator'
   }
 })
 export default class AddressProfileBottom extends Vue {
-  isCreateFormShown = false
+  isFormShown = false
 
   // computed
 
@@ -63,8 +63,8 @@ export default class AddressProfileBottom extends Vue {
 
   // watch
 
-  @Watch('isCreateFormShown')
-  onIsCreateFormShownChanged(isShown: boolean) {
+  @Watch('isFormShown')
+  onIsFormShownChanged(isShown: boolean) {
     if (isShown) {
       $('.profile-form__container-inner').slideDown(200)
     } else {
@@ -74,12 +74,8 @@ export default class AddressProfileBottom extends Vue {
 
   // methods
 
-  showCreateForm() {
-    this.isCreateFormShown = !this.isCreateFormShown
-  }
-
-  showSendNft() {
-    console.log('showSendNft')
+  showForm() {
+    this.isFormShown = !this.isFormShown
   }
 
   nftSubmitedHandler() {

@@ -1,8 +1,12 @@
-import { EDisplayType, IAttributeServer, IAttributesFront } from '../types'
+import { IAttributesFront } from '../types'
+import {
+  EAttributeDisplayType,
+  INFTAttributesDataToCreate
+} from '~/logic/nft/types'
 
 export const getAdaptedAttributes = (
   attributes: IAttributesFront
-): IAttributeServer[] => {
+): INFTAttributesDataToCreate[] => {
   // adapt properties
 
   const properties = (attributes.properties || []).map((property) => ({
@@ -21,7 +25,7 @@ export const getAdaptedAttributes = (
   // adapt levels
 
   const stats = (attributes.stats || []).map((stat) => ({
-    display_type: EDisplayType.number,
+    display_type: EAttributeDisplayType.number,
     trait_type: stat.type,
     value: +stat.value,
     max_value: +stat.maxValue
@@ -30,7 +34,7 @@ export const getAdaptedAttributes = (
   // adapt dates
 
   const dates = (attributes.dates || []).map((date) => ({
-    display_type: EDisplayType.date,
+    display_type: EAttributeDisplayType.date,
     trait_type: date.type,
     value: Math.floor(Number(new Date(date.value)) / 1000)
   }))

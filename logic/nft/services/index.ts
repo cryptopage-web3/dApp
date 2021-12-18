@@ -10,11 +10,12 @@ import {
   FetchOneType,
   NFTPayloadType,
   NFTMediaType,
-  ISendNFTApi,
   NFTAdapterRequestParamsType,
   ISendNFTComment,
-  IActivateComments,
-  IBurnParamsType
+  IBurnParamsType,
+  ICreateNFT,
+  INFTDataToCreate,
+  ISendNFTParams
 } from '~/logic/nft/types'
 import NFTWeb3Service from '~/logic/nft/services/web3'
 import tokens from '~/logic/tokens'
@@ -130,30 +131,89 @@ export default class NFTService {
     await this.nftWeb3Service.burn({ params, callbacks })
   }
 
-  /** Send nft to contract via web3 */
-  public sendNFTHash = ({ params, callback }: ISendNFTApi) => {
+  /** Create NFT */
+  public createNFT = async ({ params, callback }: ICreateNFT) => {
+    const { nft, address, from } = params
+
+    const nftSaveData: INFTDataToCreate = {
+      name: nft.name,
+      description: nft.description,
+      attributes: nft.attributes
+    }
+
+    /** save upload file to IPFS */
+
+    if (nft.file) {
+      try {
+        const isMediaFile = /(audio|video)/.test(nft.file.type.split('/')[0])
+        const fileHash = await this.nftIPFSService.saveFile(nft.file)
+
+        nftSaveData[isMediaFile ? 'animation_url' : 'image'] =
+          fileHash && `https://ipfs.io/ipfs/${fileHash}`
+
+        callback({
+          status: 'pending',
+          message: 'Got file hash from IPFS'
+        })
+      } catch {
+        callback({
+          status: 'error',
+          message: 'Failed to save file into IPFS'
+        })
+
+        return
+      }
+    }
+
+    /** save NFT to IPFS */
+
+    let nftHash = ''
+
+    try {
+      nftHash = await this.nftIPFSService.saveNFT(nftSaveData)
+
+      callback({
+        status: 'pending',
+        message: 'Got NFT hash from IPFS'
+      })
+    } catch {
+      callback({
+        status: 'error',
+        message: 'Failed to save NFT into IPFS'
+      })
+
+      return
+    }
+
+    /** Send nft to contract via web3 */
+
+    const nftHashParams: ISendNFTParams = {
+      address,
+      from,
+      hash: nftHash
+    }
     let txHash = ''
 
     this.nftWeb3Service.sendSafeMint({
-      params,
+      params: nftHashParams,
       callbacks: {
         onTransactionHash(hash: string) {
           txHash = hash
 
           callback({
-            status: 'pending',
+            status: 'pendingTx',
             txHash
           })
         },
         onReceipt() {
           callback({
-            status: 'success',
+            status: 'successTx',
             txHash
           })
         },
         onError() {
           callback({
-            status: 'error',
+            status: 'errorTx',
             txHash
           })
         }
@@ -166,37 +226,6 @@ export default class NFTService {
     let txHash = ''
 
     this.nftWeb3Service.sendComment({
-      params,
-      callbacks: {
-        onTransactionHash(hash: string) {
-          txHash = hash
-
-          callback({
-            status: 'pending',
-            txHash
-          })
-        },
-        onReceipt() {
-          callback({
-            status: 'success',
-            txHash
-          })
-        },
-        onError() {
-          callback({
-            status: 'error',
-            txHash
-          })
-        }
-      }
-    })
-  }
-
-  /** Activate comments to contract via web3 */
-  public activateComments = ({ params, callback }: IActivateComments) => {
-    let txHash = ''
-
-    this.nftWeb3Service.activateComments({
       params,
       callbacks: {
         onTransactionHash(hash: string) {

@@ -1,7 +1,7 @@
-import { EDisplayType } from '.'
+import { EAttributeDisplayType } from '~/logic/nft/types'
 
 export interface IAttributeBoostFields {
   type: string
   value: string
-  displayType: EDisplayType
+  displayType: EAttributeDisplayType
 }

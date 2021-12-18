@@ -150,8 +150,7 @@ export default class TokenService {
           throw err
         })
         .on('connected', (str: string) => console.log(str))
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   public getPageTokenBalance = async (

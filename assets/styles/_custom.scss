@@ -115,13 +115,23 @@
   position: relative;
 }
 
+.main-right__container {
+  padding-right: 15px;
+}
+
 .sidebar-left__create {
   padding-top: 40px;
 }
 
 .header_fixed {
+  overflow-y: auto;
   position: fixed;
   top: 20px;
+  max-height: calc(100% - 20px);
+}
+
+.balances .btn-link {
+  padding-bottom: 13px;
 }
 
 .header_bottom {

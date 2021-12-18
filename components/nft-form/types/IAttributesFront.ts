@@ -12,5 +12,4 @@ export interface IAttributesFront {
   stats?: IAttributeStat[]
   dates?: IAttributeDate[]
   boosts?: IAttributeBoost[]
-  hasComment?: boolean
 }

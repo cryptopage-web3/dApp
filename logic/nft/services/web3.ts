@@ -6,7 +6,6 @@ import {
   ERC721ContractDataType,
   ISendNFTWeb3,
   ISendNFTCommentWeb3,
-  IActivateCommentsWeb3,
   IBurnParamsType
 } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
@@ -54,10 +53,10 @@ export default class NFTWeb3Service {
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
-      let hasComments = false
+
       let comments = null
-      /** если NFT создана через наш контракт, то получаем его комментарии */
       const networkName = await this.getNetworkName()
+
       const NFT_CONTRACT = await import(
         `../../../contracts/${networkName}/PageNFT.json`
       )
@@ -67,35 +66,35 @@ export default class NFTWeb3Service {
       const COMMENT_MINTER_CONTRACT = await import(
         `../../../contracts/${networkName}/PageCommentMinter.json`
       )
-      if (
-        contractAddress.toLowerCase() === NFT_CONTRACT.address.toLowerCase()
-      ) {
-        const commentMinterContract = new this.$web3.eth.Contract(
-          COMMENT_MINTER_CONTRACT.abi,
-          COMMENT_MINTER_CONTRACT.address
-        )
 
-        /**
-         * если запрос возвращает исключение,
-         * то предполагаем, что комментарии не были включены при создании NFT
-         */
-        try {
-          hasComments = await commentMinterContract.methods
-            .isActive(NFT_CONTRACT.address, tokenId)
+      /** получаем комментарии */
+      const commentMinterContract = new this.$web3.eth.Contract(
+        COMMENT_MINTER_CONTRACT.abi,
+        COMMENT_MINTER_CONTRACT.address
+      )
+
+      /**
+       * проверяем есть ли контракт комментов у NFT,
+       * если да, то получаем текущую статистику
+       */
+      try {
+        const isExists = await commentMinterContract.methods
+          .isExists(NFT_CONTRACT.address, tokenId)
+          .call()
+
+        if (isExists) {
+          const commentContractAddress = await commentMinterContract.methods
+            .getContract(NFT_CONTRACT.address, tokenId)
             .call()
-          if (hasComments) {
-            const commentContractAddress = await commentMinterContract.methods
-              .getContract(NFT_CONTRACT.address, tokenId)
-              .call()
 
-            const commentContract = new this.$web3.eth.Contract(
-              COMMENT_CONTRACT.abi,
-              commentContractAddress
-            )
-            comments = await commentContract.methods.getStatistic().call()
-          }
-        } catch {}
-      }
+          const commentContract = new this.$web3.eth.Contract(
+            COMMENT_CONTRACT.abi,
+            commentContractAddress
+          )
+
+          comments = await commentContract.methods.getStatistic().call()
+        }
+      } catch {}
 
       return { tokenURI, owner, comments }
     } catch {
@@ -114,7 +113,7 @@ export default class NFTWeb3Service {
               CONTRACT.address
             )
             contract.methods
-              .safeMint(params.hash, params.comment)
+              .safeMint(params.address, params.hash)
               .send({
                 from: params.from
               })
@@ -148,32 +147,6 @@ export default class NFTWeb3Service {
                 params.comment,
                 params.like
               )
-              .send({
-                from: params.from
-              })
-              .on('transactionHash', callbacks.onTransactionHash)
-              .on('receipt', callbacks.onReceipt)
-              .on('error', callbacks.onError)
-          }
-        )
-      })
-    } catch {
-      callbacks.onError()
-    }
-  }
-
-  /** Action commentActivate by contract */
-  public activateComments = ({ params, callbacks }: IActivateCommentsWeb3) => {
-    try {
-      this.getNetworkName().then((networkName: string) => {
-        import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
-          (CONTRACT) => {
-            const contract = new this.$web3.eth.Contract(
-              CONTRACT.abi,
-              CONTRACT.address
-            )
-            contract.methods
-              .activateComments(params.nftContractAddress, params.tokenId)
               .send({
                 from: params.from
               })

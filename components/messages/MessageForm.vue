@@ -21,13 +21,7 @@
             />
           </div>
           <div
-            class="
-              tweet-add__buttons
-              d-flex
-              align-center
-              justify-start
-              flex-wrap
-            "
+            class="tweet-add__buttons d-flex align-center justify-start flex-wrap"
           >
             <div class="tweet-add__send d-flex align-center">
               <button
@@ -79,7 +73,7 @@ export default {
     text: ''
   }),
   methods: {
-    handleInput(e) {
+    handleInput() {
       if (this.count >= this.maxCount) {
         this.count = 0
       }

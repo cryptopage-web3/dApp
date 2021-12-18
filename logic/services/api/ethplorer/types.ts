@@ -3,7 +3,7 @@ import {
   EthplorerETH,
   EthplorerToken,
   EthplorerTokenInfo,
-  EthplorerGetAddressInfoResponse,
+  EthplorerGetAddressInfoResponse
 } from '~/logic/services/api/ethplorer/models'
 export type EthplorerETHType = ts.TypeOf<typeof EthplorerETH>
 export type EthplorerTokenType = ts.TypeOf<typeof EthplorerToken>
