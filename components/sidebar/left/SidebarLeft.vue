@@ -2,7 +2,7 @@
   <div class="main-left">
     <header id="left-sidebar" class="header">
       <div class="header__top">
-        <router-link to="/" class="header-logo">
+        <router-link :to="homeLink" class="header-logo">
           <img src="@/assets/img/header-logo_img.png" />
           <div class="header-logo__text"><span>Crypto.</span>page</div>
         </router-link>
@@ -32,6 +32,18 @@ export default class SidebarLeft extends Vue {
 
   get isAuth(): boolean {
     return this.typedStore.auth.isAuth
+  }
+
+  get address(): string {
+    return this.typedStore.auth.selectedAddress
+  }
+
+  get networkName(): string {
+    return this.typedStore.auth.selectedNetworkSlug
+  }
+
+  get homeLink(): string {
+    return this.isAuth ? `/${this.networkName}/${this.address}` : '/'
   }
 
   mounted() {
