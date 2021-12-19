@@ -80,46 +80,43 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
+import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
-export default {
+
+@Component({
   components: {
-    connect: async () => await import('@/components/connect/Connect.vue')
-  },
-  mixins: [NetworkNameMixin],
-  data: () => ({
-    isShowCreateNft: false
-  }),
-  computed: {
-    address() {
-      return this.$store.getters['auth/selectedAddress']
-    }
-  },
-  watch: {
-    $route: {
-      handler() {
-        this.$nextTick(() => {
-          $(window).unbind('scroll', this.showCreateNft)
+    connect: async () => await import('~/components/connect/Connect.vue')
+  }
+})
+export default class SidebarLeftMenu extends mixins(NetworkNameMixin) {
+  isShowCreateNft = false
 
-          if (!this.$route.params.address) {
-            this.isShowCreateNft = true
-            return
-          }
+  get address(): string {
+    return this.typedStore.auth.selectedAddress
+  }
 
-          this.showCreateNft()
-          $(window).bind('scroll', this.showCreateNft)
-        })
-      },
-      immediate: true
-    }
-  },
-  methods: {
-    openNFTForm() {
-      $('#nft-form-modal').modal('show')
-    },
-    showCreateNft() {
-      this.isShowCreateNft = $(window).scrollTop() > 300
-    }
+  @Watch('$route', { immediate: true })
+  onRouteChanged() {
+    this.$nextTick(() => {
+      $(window).unbind('scroll', this.showCreateNft)
+
+      if (!this.$route.params.address) {
+        this.isShowCreateNft = true
+        return
+      }
+
+      this.showCreateNft()
+      $(window).bind('scroll', this.showCreateNft)
+    })
+  }
+
+  openNFTForm() {
+    ;($('#nft-form-modal') as any).modal('show')
+  }
+
+  showCreateNft() {
+    this.isShowCreateNft = Number($(window).scrollTop()) > 300
   }
 }
 </script>
