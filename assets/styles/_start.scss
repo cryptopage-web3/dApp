@@ -62,6 +62,24 @@
     width: 240px;
 }
 
+.start-page__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: #ffffff;
+}
+
+.start-page__loading .spinner-border {
+    width: 100px;
+    height: 100px;
+}
+
 @media (max-width: 767px) {
     .start-page__logo svg {
         width: 150px;
@@ -94,5 +112,10 @@
     .start-page__signin-title {
         margin-top: 15px;
         font-size: 16px;
+    }
+
+    .start-page__loading .spinner-border {
+        width: 80px;
+        height: 80px;
     }
 }

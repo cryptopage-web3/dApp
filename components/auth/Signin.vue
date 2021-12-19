@@ -2,13 +2,23 @@
   <div />
 </template>
 <script lang="ts">
-import { Component, mixins } from 'nuxt-property-decorator'
+import { Component, Emit, mixins } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
 import { INotifyParams } from '~/types'
 
 @Component({})
 export default class Signin extends mixins(NetworkNameMixin) {
   $notify!: (params: INotifyParams) => void
+
+  @Emit('success')
+  emitSuccess() {
+    return true
+  }
+
+  @Emit('error')
+  emitError() {
+    return true
+  }
 
   async init() {
     const response = await this.$store.dispatch('auth/signin')
@@ -19,15 +29,10 @@ export default class Signin extends mixins(NetworkNameMixin) {
       text: response.message.text
     })
 
-    if (response.status === 'success' && this.$route.path === '/') {
-      this.$nuxt.$loading.start()
-
-      /** делаем небольшую задержку, чтобы была возможность прочесть уведомление */
-      const address = await this.$store.getters['auth/selectedAddress']
-      setTimeout(
-        () => this.$router.push(`/${this.networkName}/${address}`),
-        1000
-      )
+    if (response.status === 'success') {
+      this.emitSuccess()
+    } else {
+      this.emitError()
     }
   }
 }
