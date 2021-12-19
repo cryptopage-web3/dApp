@@ -1,12 +1,12 @@
-const updateMoveWidth = (moveElem, containerElem) => {
-  $(moveElem).width($(containerElem).width())
+const updateMoveWidth = (moveElem: string, containerElem: string) => {
+  $(moveElem).width($(containerElem).width() || 0)
 }
 
-const updatePosition = (moveElem, containerElem) => {
-  const containerOffsetTop = $(containerElem).offset().top
-  const containerHeight = $(containerElem).height()
-  const moveHeight = $(moveElem).height()
-  const scrollTop = $(window).scrollTop()
+const updatePosition = (moveElem: string, containerElem: string) => {
+  const containerOffsetTop = $(containerElem).offset()?.top || 0
+  const containerHeight = $(containerElem).height() || 0
+  const moveHeight = $(moveElem).height() || 0
+  const scrollTop = $(window).scrollTop() || 0
 
   if (containerOffsetTop - 20 > scrollTop || containerHeight === moveHeight) {
     $(moveElem).removeClass('header_fixed header_bottom')
@@ -25,7 +25,7 @@ const updatePosition = (moveElem, containerElem) => {
   $(moveElem).addClass('header_fixed')
 }
 
-export const init = (moveElem, containerElem) => {
+export const init = (moveElem: string, containerElem: string) => {
   $(window).on('scroll', () => {
     updatePosition(moveElem, containerElem)
   })
