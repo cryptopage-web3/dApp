@@ -1,5 +1,5 @@
 input::-ms-clear {
- display: none;
+  display: none;
 }
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -55,6 +55,10 @@ button, label {
 @media (min-width: 1200px) { 
   .container {
     max-width: 1230px;
+    width: 100%;
+  }
+  .main > .container {
+    max-width: 1320px;
     width: 100%;
   }
 }
