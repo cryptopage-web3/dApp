@@ -58,7 +58,7 @@
             <form>
               <div class="search-wr">
                 <button class="search__btn">
-                  <img src="@/assets/img/search__btn_img2.png" alt="" />
+                  <img src="@/assets/img/search__btn_img2.svg" alt="" />
                 </button>
                 <input
                   type="text"
@@ -73,8 +73,8 @@
       </li>
     </ul>
     <div v-if="isShowCreateNft" class="sidebar-left__create">
-      <button class="btn btn_blue btn_creat-post" @click.prevent="openNFTForm">
-        <img src="@/assets/img/btn_creat-post_img.png" alt="" />
+      <button class="btn btn_blue btn_profile" @click.prevent="openNFTForm">
+        <img src="@/assets/img/profile__add_img.svg" alt="" />
         <span>Create NFT</span>
       </button>
     </div>
