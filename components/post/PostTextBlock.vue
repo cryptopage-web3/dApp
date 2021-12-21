@@ -1,9 +1,6 @@
 <template>
   <div class="post-text-block">
     <div class="post-text">
-      <div v-if="hasAttributes" class="post-text__attributes">
-        <attributes :attributes="attributes" />
-      </div>
       <div v-if="title" class="post-text__title">
         {{ title }}
       </div>
@@ -28,14 +25,9 @@ import TransactionMixin from '~/mixins/transaction'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 import { TransactionType } from '~/logic/transactions/types'
-import { NFTAttributesType } from '~/logic/nft/types'
 import { INotifyParams } from '~/types'
 
-@Component({
-  components: {
-    attributes: async () => await import('~/components/post/Attributes.vue')
-  }
-})
+@Component({})
 export default class PostTextBlock extends mixins(TransactionMixin) {
   $notify!: (params: INotifyParams) => void
 
@@ -48,22 +40,6 @@ export default class PostTextBlock extends mixins(TransactionMixin) {
 
   get description(): string {
     return this.transaction.nft?.description || ''
-  }
-
-  get attributes(): NFTAttributesType | undefined {
-    return this.transaction.nft?.attributes
-  }
-
-  get hasAttributes(): boolean {
-    const { properties, levels, stats, dates, boosts } = this.attributes || {}
-
-    return Boolean(
-      properties?.length ||
-        levels?.length ||
-        stats?.length ||
-        dates?.length ||
-        boosts?.length
-    )
   }
 
   public get show() {
