@@ -57,6 +57,10 @@ button, label {
     max-width: 1230px;
     width: 100%;
   }
+  .main > .container {
+    max-width: 1320px;
+    width: 100%;
+  }
 }
 @media (max-width: 1199.5px) { 
   .container {
