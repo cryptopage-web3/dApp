@@ -157,12 +157,8 @@
   margin-top: 5px;
 }
 
-.profile-info__text span {
+.profile-info__text strong {
   cursor: pointer;
-}
-
-.profile-info__text span:hover {
-  font-weight: 600;
 }
 
 .transactions-body__empty {
@@ -383,13 +379,32 @@
 
 .profile-status__container {
   margin-right: 20px;
-  width: 200px;
+  max-width: 200px;
 }
 
 .profile-status {
+  height: 25px;
   margin-right: 0;
+  display: flex;
+  align-items: center;
   white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-status span {
+  color: #000000;
+  margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-status a {
+  margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .profile-status a:hover {
@@ -404,12 +419,10 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  margin: 5px 0;
-  height: 27px;
+  height: 25px;
   border-radius: 5px;
   overflow: hidden;
   background-color: #ffffff;
-  width: 100%;
 }
 
 .profile-status__edit_loading {
@@ -418,13 +431,13 @@
 
 .profile-status__edit-btn {
   height: 100%;
-  padding: 0 10px;
+  padding: 0 5px;
   background: transparent;
   border: none;
-  color: #2a91ff;
+  color: #1886FF;
   font-family: "Myriad Pro";
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1;
   width: 45px;
 }
@@ -436,11 +449,13 @@
   flex: 1;
   color: #000000;
   font-family: "Myriad Pro";
-  font-size: 12px;
-  font-weight: 300;
+  font-size: 14px;
+  font-weight: 400;
   background: transparent;
   border: none;
+  padding-top: 2px;
   padding-left: 10px;
+  width: 120px;
 }
 
 .profile-status__edit-input::-webkit-input-placeholder {opacity: 1;color: #8f9294;}
@@ -451,14 +466,7 @@
 .profile-status__edit-close {
   cursor: pointer;
   padding-right: 10px;
-  padding-top: 2px;
   color: #2a91ff;
-  font-size: 13px;
-  opacity: 0.6;
-}
-
-.profile-status__edit-close:hover {
-  opacity: 1;
 }
 
 /* ===== mobile ===== */
@@ -491,6 +499,20 @@
     margin-right: 5px;
     width: 50px;
     height: 50px;
+  }
+
+  .profile-top {
+    display: block;
+  }
+
+  .profile-right {
+    justify-content: flex-start;
+    padding-left: 55px;
+    margin-top: 5px;
+  }
+
+  .profile-status__edit-input {
+    font-size: 12px;
   }
 
   .nav-tabs.transactions-list {
