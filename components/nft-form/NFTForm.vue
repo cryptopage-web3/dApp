@@ -1,95 +1,102 @@
 <template>
   <div class="nft-form" @drop.prevent="dragFile" @dragover.prevent>
     <form>
-      <div class="nft-form__field">
-        <input
-          v-model="title"
-          class="nft-form__text"
-          placeholder="Enter post title"
-        />
-      </div>
+      <input
+        v-model="title"
+        type="text"
+        placeholder="Enter post title"
+        class="creat-post-form__title"
+      />
 
-      <div class="nft-form__field">
+      <div class="creat-post-form__cont">
         <textarea
           v-model="text"
-          class="nft-form__textarea"
+          class="creat-post-form__text"
           placeholder="Enter post text"
         ></textarea>
-      </div>
 
-      <upload-file
-        ref="upload-file"
-        :file="file"
-        @onFileUpdate="fileUpdateHandler"
-      />
+        <upload-file
+          ref="upload-file"
+          :file="file"
+          @onFileUpdate="fileUpdateHandler"
+        />
 
-      <div class="nft-form__controls">
-        <a
-          href="#"
-          class="nft-form__control"
-          title="Upload audio"
-          @click.prevent="uploadFile('audio')"
-        >
-          <img src="@/assets/img/creat-post-link_img1.png" alt="" />
-        </a>
-        <a
-          href="#"
-          class="nft-form__control"
-          title="Upload image"
-          @click.prevent="uploadFile('image')"
-        >
-          <img src="@/assets/img/creat-post-link_img2.png" alt="" />
-        </a>
-        <a
-          href="#"
-          class="nft-form__control"
-          title="Upload video"
-          @click.prevent="uploadFile('video')"
-        >
-          <img src="@/assets/img/creat-post-link_img3.png" alt="" />
-        </a>
-        <a
-          href="#"
-          class="nft-form__control"
-          title="Setting additional fields"
-          @click.prevent="openAttributes"
-        >
-          <font-awesome-icon :icon="['fas', 'cog']" />
-        </a>
-      </div>
+        <attributes
+          ref="attributes"
+          :attributes="attributes"
+          @change="attributesChangeHandler"
+        />
 
-      <attributes
-        ref="attributes"
-        :attributes="attributes"
-        @change="attributesChangeHandler"
-      />
-
-      <div class="creat-post-bottom">
-        <button
-          type="button"
-          class="btn btn_blue btn_creat-post"
-          :disabled="loading"
-          @click="submit"
-        >
-          <template v-if="loading">
-            <span
-              class="spinner-border spinner-border-sm creat-post-bottom__spinner"
-              role="status"
-              aria-hidden="true"
-            ></span>
-            <span> {{ isSendTo ? 'Sending...' : 'Creating...' }} </span>
-          </template>
-          <template v-else>
-            <img src="@/assets/img/btn_creat-post_img.png" alt="" />
-            <span> {{ isSendTo ? 'Send NFT' : 'Create NFT' }} </span>
-          </template>
-        </button>
-        <div
-          v-if="loading"
-          class="creat-post-bottom__continue"
-          @click="createNext"
-        >
-          Create next
+        <div class="creat-post-form__bottom">
+          <div class="creat-post-form__icons">
+            <a
+              href="#"
+              class="creat-post-form__icon"
+              title="Upload audio"
+              @click.prevent="uploadFile('audio')"
+            >
+              <icon type="upload_audio" />
+            </a>
+            <a
+              href="#"
+              class="creat-post-form__icon"
+              title="Upload image"
+              @click.prevent="uploadFile('image')"
+            >
+              <icon type="upload_image" />
+            </a>
+            <a
+              href="#"
+              class="creat-post-form__icon"
+              title="Upload video"
+              @click.prevent="uploadFile('video')"
+            >
+              <icon type="upload_video" />
+            </a>
+            <a
+              href="#"
+              class="creat-post-form__icon"
+              title="Setting additional fields"
+              @click.prevent="openAttributes"
+            >
+              <font-awesome-icon :icon="['fas', 'cog']" />
+            </a>
+          </div>
+          <div class="creat-post-form__btns">
+            <a
+              href="#"
+              class="creat-post-form__cancel"
+              @click.prevent="onCanceled"
+            >
+              Cancel
+            </a>
+            <button
+              type="button"
+              class="profile__add btn_profile btn btn_blue"
+              :disabled="loading"
+              @click="submit"
+            >
+              <template v-if="loading">
+                <span
+                  class="spinner-border spinner-border-sm creat-post-bottom__spinner"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span> {{ isSendTo ? 'Sending...' : 'Creating...' }} </span>
+              </template>
+              <template v-else>
+                <img src="@/assets/img/profile__add_img.svg" alt="" />
+                <span> {{ isSendTo ? 'Send' : 'Create' }} </span>
+              </template>
+            </button>
+            <div
+              v-if="loading"
+              class="creat-post-bottom__continue"
+              @click="createNext"
+            >
+              Create next
+            </div>
+          </div>
         </div>
       </div>
     </form>
@@ -104,6 +111,7 @@ import { validateForm, getAdaptedAttributes } from './utils'
 import { IAttributesFront } from './types'
 import NFTFormFile from './NFTFormFile.vue'
 import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
+import Icon from '~/components/icons/Icon.vue'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 import { INotifyParams } from '~/types'
@@ -111,7 +119,8 @@ import { INotifyParams } from '~/types'
 @Component({
   components: {
     'upload-file': NFTFormFile,
-    attributes: NFTFormAttributes
+    attributes: NFTFormAttributes,
+    icon: Icon
   }
 })
 export default class NFTForm extends Vue {
@@ -154,6 +163,11 @@ export default class NFTForm extends Vue {
 
   @Emit('submited')
   onSubmited() {
+    return true
+  }
+
+  @Emit('canceled')
+  onCanceled() {
     return true
   }
 
