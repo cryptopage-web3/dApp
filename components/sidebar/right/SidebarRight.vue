@@ -8,7 +8,7 @@
         <form>
           <div class="search-wr">
             <button class="search__btn">
-              <img src="@/assets/img/search__btn_img2.png" alt="" />
+              <img src="@/assets/img/search__btn_img2.svg" alt="" />
             </button>
             <input
               type="text"
