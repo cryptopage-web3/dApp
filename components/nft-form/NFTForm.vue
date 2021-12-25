@@ -59,7 +59,7 @@
               title="Setting additional fields"
               @click.prevent="openAttributes"
             >
-              <font-awesome-icon :icon="['fas', 'cog']" />
+              <icon type="attributes" />
             </a>
           </div>
           <div class="creat-post-form__btns">
