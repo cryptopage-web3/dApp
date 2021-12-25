@@ -1,8 +1,18 @@
 <template>
-  <div class="main-top">
-    <address-profile />
-    <sidebar-right-balance v-if="$viewport.isLessThan('desktopMedium')" />
-    <address-transaction />
+  <div>
+    <div class="main-top">
+      <address-profile />
+      <sidebar-right-balance v-if="$viewport.isLessThan('desktopMedium')" />
+      <address-transaction-tabs />
+    </div>
+
+    <div class="main-bottom">
+      <div class="tab-content">
+        <div class="tab-pane fade show active">
+          <nuxt-child />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script lang="ts">

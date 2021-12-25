@@ -145,6 +145,10 @@
 
 /* ===== address profile ===== */
 
+.main-top {
+  margin-bottom: 20px;
+}
+
 .profile__thumb {
   background-color: #ffffff;
 }
@@ -161,6 +165,10 @@
   cursor: pointer;
 }
 
+.transactions-top {
+  margin-bottom: 7px;
+}
+
 .transactions-body__empty {
   padding: 40px 15px;
   text-align: center;
@@ -170,6 +178,10 @@
   font-size: 16px;
   font-weight: 400;
   border-radius: 10px;
+}
+
+.transactions-list li {
+  margin-right: 30px !important;
 }
 
 .post-comment__input {

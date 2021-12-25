@@ -20,7 +20,7 @@
           </button>
         </div>
         <div class="modal-body nft-form-modal__body">
-          <nft-form @submited="hide" />
+          <nft-form @canceled="hide" @submited="hide" />
         </div>
       </div>
     </div>
