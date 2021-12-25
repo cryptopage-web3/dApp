@@ -58,9 +58,7 @@ import { INotifyParams } from '~/types'
   components: {
     'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
     'profile-status': async () =>
-      await import('@/components/address/AddressProfileStatus.vue'),
-    'profile-name': async () =>
-      await import('@/components/address/AddressProfileName.vue')
+      await import('@/components/address/AddressProfileStatus.vue')
   }
 })
 export default class AddressProfileTop extends Vue {
