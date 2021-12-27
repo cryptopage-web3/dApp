@@ -13,7 +13,7 @@
         class="post-text__link"
         @click="deleteNFT(transaction, selectedAddress)"
       >
-        <img src="@/assets/img/post-text__link_img1_2.png" alt="" />
+        <img src="@/assets/img/post-text__link_img1_2.svg" alt="" />
       </div>
     </div>
   </div>

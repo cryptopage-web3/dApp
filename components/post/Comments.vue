@@ -2,49 +2,52 @@
   <div ref="root" class="post-bottom">
     <div class="post-like-dis">
       <a href="#" class="post-like" @click.prevent="onLike">
-        <img src="@/assets/img/post-like_img1.png" alt="" />
+        <img src="@/assets/img/post-like_img1.svg" alt="" />
         <span> {{ likes }} </span>
       </a>
       <a href="#" class="post-dis" @click.prevent="onDislike">
-        <img src="@/assets/img/post-like_img2.png" alt="" />
+        <img src="@/assets/img/post-like_img2.svg" alt="" />
         <span> {{ dislikes }} </span>
       </a>
     </div>
     <div ref="comment" class="post-comment">
       <form>
-        <div
-          class="post-comment-wr"
-          :class="{
-            'post-comment-wr_loading': loading
-          }"
-        >
-          <input
-            v-model="comment"
-            :disabled="loading"
-            type="text"
-            placeholder="Your comment text"
-            class="post-comment__input"
-          />
-          <button
-            :disabled="loading"
-            class="post-comment__btn"
-            @click.prevent="submit"
-          >
-            <span
-              v-if="loading"
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            />
-            <template v-else>Send</template>
-          </button>
+        <div class="post-comment-parent">
           <div
+            class="post-comment-wr"
+            :class="{
+              'post-comment-wr_loading': loading
+            }"
+          >
+            <input
+              v-model="comment"
+              :disabled="loading"
+              type="text"
+              placeholder="Your comment text"
+              class="post-comment__input"
+            />
+            <button
+              :disabled="loading"
+              class="post-comment__btn"
+              @click.prevent="submit"
+            >
+              <span
+                v-if="loading"
+                class="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
+              <template v-else>Send</template>
+            </button>
+          </div>
+          <a
             v-if="!loading"
+            href="#"
             class="post-comment__close"
             @click.prevent="close"
           >
-            <font-awesome-icon :icon="['fas', 'times']" />
-          </div>
+            <img src="@/assets/img/post-comment__close.svg" alt="" />
+          </a>
         </div>
       </form>
     </div>
