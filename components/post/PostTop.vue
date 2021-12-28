@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="white-post-id">
-      {{ tokenSymbol }}:
+      {{ tokenSymbol | ucFirstLetter }}:
       <a href="#">{{ transaction.hash | shortAddress(5, 7) }}</a>
     </div>
   </div>

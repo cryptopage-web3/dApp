@@ -69,3 +69,11 @@ export const humanizeDate = (date) => {
 export const shortMonthAndDay = (timestamp) => {
   return moment(timestamp, 'X').format('MMM D')
 }
+
+export const ucFirstLetter = (str) => {
+  if (!str) {
+    return ''
+  }
+
+  return str[0].toUpperCase() + str.slice(1).toLowerCase()
+}
