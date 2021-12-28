@@ -3,7 +3,7 @@
     <header id="left-sidebar" class="header">
       <div class="header__top">
         <router-link :to="homeLink" class="header-logo">
-          <img src="@/assets/img/header-logo_img.png" />
+          <img src="@/assets/img/header-logo_img@x2.png" />
         </router-link>
         <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
           <img src="@/assets/img/nav_bg2.svg" />
