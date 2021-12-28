@@ -560,4 +560,17 @@
   .change-network-col-body::before {
     display: none;
   }
+
+  .creat-post-form {
+    margin-bottom: 0;
+  }
+
+  .creat-post-form__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .creat-post-form__btns {
+    margin-top: 15px;
+  }
 }
