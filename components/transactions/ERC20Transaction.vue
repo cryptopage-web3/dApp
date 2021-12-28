@@ -17,6 +17,10 @@
             {{ income ? 'From' : 'To' }}:
             {{ address | shortAddress(5, 7) }}
           </div>
+          <div class="transactions-link__number transactions-link__number_hash">
+            Txn Hash:
+            <a href="#">{{ transaction.hash | shortAddress(5, 7) }}</a>
+          </div>
         </div>
       </div>
       <div class="transactions-link-right">
