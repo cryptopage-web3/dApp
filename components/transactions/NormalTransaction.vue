@@ -26,7 +26,7 @@
             </template>
             <template v-else>{{ address | shortAddress }}</template>
           </div>
-          <div class="transactions-link__number transactions-link__number_hash">
+          <div class="transactions-link__number">
             Txn Hash:
             <a href="#">{{ transaction.hash | shortAddress(5, 7) }}</a>
           </div>
