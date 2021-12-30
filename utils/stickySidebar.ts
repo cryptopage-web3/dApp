@@ -27,7 +27,9 @@ const updatePosition = (moveElem: string, containerElem: string) => {
 
 export const init = (moveElem: string, containerElem: string) => {
   $(window).on('scroll', () => {
-    updatePosition(moveElem, containerElem)
+    setTimeout(() => {
+      updatePosition(moveElem, containerElem)
+    })
   })
 
   setTimeout(() => {
