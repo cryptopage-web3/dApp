@@ -1,5 +1,8 @@
+/*start fonts*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/*end fonts*/
 input::-ms-clear {
-  display: none;
+ display: none;
 }
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
@@ -119,4 +122,36 @@ button, label {
   font-weight: 700;
   line-height: 1;
   display: inline-block;
+}
+.btn_green {
+  background-color: #14F195;
+  border-radius: 54px;
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.22em;
+  color: #000000;
+  -webkit-transition: background-color 0.5s;
+  -o-transition: background-color 0.5s;
+  transition: background-color 0.5s;
+}
+.btn_green:hover {
+  background-color: #00ff95;
+  color: #000000;
+}
+.btn_green-transparent {
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.22em;
+  color: #14F195;
+  border: 3px solid #14F195;
+  border-radius: 54px;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.btn_green-transparent:hover {
+  background-color: #14F195;
+  color: #fff;
 }
