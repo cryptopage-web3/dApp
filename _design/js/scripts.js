@@ -159,6 +159,32 @@ $(function(){
 		});
 	}
 
+	if($('.filtr-checkbox').is('.filtr-checkbox')) {
+		$('.filtr-checkbox .checkbox').styler();
+	}
+
+	if($('.main-page-sliders').is('.main-page-sliders')) {
+		var main_page_sliders = new Swiper('.main-page-sliders .swiper', {
+			loop: true,
+			slidesPerView: 3,
+			spaceBetween: 23,
+			navigation: {
+				nextEl: '.main-page-sliders .swiper-button-next',
+				prevEl: '.main-page-sliders .swiper-button-prev',
+			},
+			breakpoints: {
+				360: {
+					slidesPerView: 1,
+					spaceBetween: 0,
+				},
+				767: {
+					slidesPerView: 3,
+					spaceBetween: 23,
+				},
+			}
+		});
+	}
+
 });
 
 /*audio init*/
