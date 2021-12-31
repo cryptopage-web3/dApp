@@ -317,7 +317,10 @@ export default class AuthService extends Vue {
     }
 
     if (!chain) throw new Error('Chain not found.')
-    if (!this.provider) throw new Error('Provider not set.')
+    if (!this.provider) {
+      this.switchProvider(METAMASK)
+      return
+    }
 
     try {
       await this.provider.request({
