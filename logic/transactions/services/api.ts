@@ -28,6 +28,7 @@ export default class TransactionAPIService {
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
     if (!address.match('^0x[a-fA-F0-9]{40}$')) {
       // if not evm related blockchain, actually it is tron
+      // @todo add address checker
       return await this.tronGridAPIService.getNormalTransactions({
         address,
         page,
@@ -68,6 +69,16 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
+    if (!address.match('^0x[a-fA-F0-9]{40}$')) {
+      // if not evm related blockchain, actually it is tron
+      // @todo add address checker
+      return await this.tronGridAPIService.getERC20Transactions({
+        address,
+        page,
+        offset,
+        sort
+      })
+    }
     return await this.etherscanAPIService.getERC20Transactions({
       address,
       contractAddress,

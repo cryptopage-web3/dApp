@@ -33,7 +33,10 @@
     <div class="transactions-link-right">
       <div class="transactions-link__usdt" style="text-align: right">
         {{ income ? '' : '-' }}
-        {{ (transaction.value / 10 ** 18) | normalizeAmount }}
+        {{
+          (transaction.value / 10 ** (transaction.type === 'tron' ? 6 : 18))
+            | normalizeAmount
+        }}
         {{ tokenSymbol }}
       </div>
       <div class="transactions-link__usd" style="text-align: right">

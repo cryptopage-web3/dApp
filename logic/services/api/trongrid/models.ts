@@ -39,13 +39,26 @@ export const TronGridAPITokensResponse = ts.intersection([
 
 export const TronGridAPITransactionsResponseDataItem = ts.type({
   blockNumber: ts.string,
-  block_timestamp: ts.string,
+  block_timestamp: ts.number,
   energy_fee: ts.string,
   energy_usage: ts.string,
   energy_usage_total: ts.string,
   net_fee: ts.string,
   net_usage: ts.string,
+  raw_data: ts.any,
   raw_data_hex: ts.string,
   signature: ts.string,
   txID: ts.string
+})
+
+const TronGricTRC20 = ts.type({
+  contractAddress: ts.string,
+  tokenDecimal: ts.string,
+  tokenName: ts.string,
+  tokenSymbol: ts.string
+})
+
+export const TronGridTRC20Transaction = ts.type({
+  TronGricTRC20,
+  TronGridAPITransactionsResponseDataItem
 })

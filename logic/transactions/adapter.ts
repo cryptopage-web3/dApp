@@ -43,7 +43,7 @@ export default class TransactionAdapter {
       amount = Number(web3.utils.toBN(input.decoded[2]))
     } else if (input && input.name === 'Swap') {
       amount = Number(web3.utils.toBN(input.decoded[2]))
-    } else if (input && input.name.startsWith('Swap Exact')) {
+    } else if (input && input.name?.startsWith('Swap Exact')) {
       amount = Number(web3.utils.toBN(input.decoded[3]))
     }
     if (tx.token) {
@@ -115,7 +115,7 @@ export default class TransactionAdapter {
     if (params && params.token) {
       this.transaction.token = params.token
     }
-    if (this.transaction.input.startsWith('0x')) {
+    if (this.transaction.input?.startsWith('0x')) {
       this.transaction.decodedInput = this.calculateInput()
     }
     this.transaction.sender = this.calculateSender()
