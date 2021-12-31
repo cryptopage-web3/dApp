@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import { Component, Watch } from 'nuxt-property-decorator'
 
+declare let window: any
+
 @Component({})
 export default class PaginationMixin extends Vue {
   scrollListener: null | (() => void) = null
@@ -18,7 +20,11 @@ export default class PaginationMixin extends Vue {
     return this.$store.getters['address/address']
   }
 
-  get chainId(): number {
+  get selectedAddress(): string {
+    return this.$store.getters['auth/selectedAddress']
+  }
+
+  get chainId(): number | string {
     return this.$store.getters['auth/chainId']
   }
 
@@ -35,8 +41,13 @@ export default class PaginationMixin extends Vue {
     this.reset()
   }
 
+  @Watch('selectedAddress')
+  onSelectedAddressChanged(newAddress: string, oldAddress: string) {
+    this.resetAddress(newAddress, oldAddress)
+  }
+
   @Watch('chainId')
-  onChainIdChanged(newChain: number, oldChain: number) {
+  onChainIdChanged(newChain: number | string, oldChain: number | string) {
     this.resetChain(newChain, oldChain)
   }
 
@@ -86,6 +97,7 @@ export default class PaginationMixin extends Vue {
      * если $fetch выполняется, то необходимо дождаться его завершения, а потом запустить
      * иначе $fetch не запустится
      */
+
     if (!this.$fetchState.pending) {
       this.$fetch()
       return
@@ -103,7 +115,16 @@ export default class PaginationMixin extends Vue {
     })
   }
 
-  async resetChain(newChain: number, oldChain: number) {
+  async resetAddress(newAddress: string, oldAddress: string) {
+    if (newAddress === oldAddress) return
+    const params = this.$route.params
+    const selectedAddress = this.selectedAddress
+    if (selectedAddress) params.address = selectedAddress
+    await this.$store.dispatch('address/clearTransactions')
+    await this.$router.push({ params })
+  }
+
+  async resetChain(newChain: number | string, oldChain: number | string) {
     /** проверяем, что chain изменился вне зависимости от типа: string, number
      * TODO: в какой момент приходит строка, нужно сделать приведение типа и хранить всегда в number
      */
@@ -112,9 +133,9 @@ export default class PaginationMixin extends Vue {
     }
 
     const params = this.$route.params
-    const chainId = Number(this.chainId)
+    const chainId = this.chainId
 
-    const validNetworks: Record<number, string> = {
+    const validNetworks: Record<number | string, string> = {
       1: 'eth',
       3: 'ropsten',
       4: 'rinkeby',
@@ -123,7 +144,8 @@ export default class PaginationMixin extends Vue {
       56: 'bsc',
       97: 'bsc-testnet',
       137: 'polygon',
-      80001: 'polygon-testnet'
+      80001: 'polygon-testnet',
+      tron: 'tron'
     }
     const networkName = validNetworks[chainId]
     if (networkName) params.networkName = networkName

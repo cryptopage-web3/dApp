@@ -18,25 +18,29 @@ export default class TransactionMixin extends mixins(NetworkNameMixin) {
   @Prop({ required: true }) readonly transaction!: TransactionType
 
   protected get income(): boolean {
-    const address = this.$web3.utils.toChecksumAddress(
-      this.$route.query.address
-        ? `${this.$route.query.address}`
-        : `${this.$route.params.address}`
-    )
-    const sender = this.$web3.utils.toChecksumAddress(
-      `${this.transaction.sender}` ||
-        '0x0000000000000000000000000000000000000000'
-    )
-    const receiver = this.$web3.utils.toChecksumAddress(
-      `${this.transaction.receiver}` ||
-        '0x0000000000000000000000000000000000000000'
-    )
-    if (sender === address) {
+    try {
+      const address = this.$web3.utils.toChecksumAddress(
+        this.$route.query.address
+          ? `${this.$route.query.address}`
+          : `${this.$route.params.address}`
+      )
+      const sender = this.$web3.utils.toChecksumAddress(
+        `${this.transaction.sender}` ||
+          '0x0000000000000000000000000000000000000000'
+      )
+      const receiver = this.$web3.utils.toChecksumAddress(
+        `${this.transaction.receiver}` ||
+          '0x0000000000000000000000000000000000000000'
+      )
+      if (sender === address) {
+        return false
+      } else if (receiver === address) {
+        return true
+      }
       return false
-    } else if (receiver === address) {
-      return true
+    } catch (e) {
+      return false
     }
-    return false
   }
 
   /**

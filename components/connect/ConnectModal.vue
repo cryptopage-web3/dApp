@@ -54,7 +54,8 @@
               <li>
                 <a
                   href="#modal-content4"
-                  class="modal-content__link modal-content__link_disabled"
+                  class="modal-content__link fill"
+                  :class="selectedNetworkType === 'tron' ? 'active' : ''"
                 >
                   <img src="@/assets/img/modal-content__link_img4.png" alt="" />
                   <span></span>
@@ -302,7 +303,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('POLYGON', 'okex')"
+                      @click.prevent="switchProvider('ETHEREUM', 'okex')"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -314,60 +315,16 @@
                 </ul>
               </div>
               <div id="modal-content4" class="modal-content-wr">
-                <div class="modal-content-wallet-title">ETH Wallet4</div>
+                <div class="modal-content-wallet-title">Tron</div>
                 <ul class="modal-content-wallet-list">
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img1.png"
-                        alt=""
-                      />
-                      <span> MetaMask </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img2.png"
-                        alt=""
-                      />
-                      <span> WalletConnect </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img3.png"
-                        alt=""
-                      />
-                      <span> Trust Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img4.png"
-                        alt=""
-                      />
-                      <span> SafePal wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img5.png"
-                        alt=""
-                      />
-                      <span> Coin9B Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img6.png"
-                        alt=""
-                      />
-                      <span> OKEx Wallet </span>
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('TRON', 'tron')"
+                    >
+                      <img src="@/assets/img/tronLink.png" alt="" />
+                      <span> TronLink </span>
                     </a>
                   </li>
                 </ul>
@@ -480,7 +437,7 @@ export default {
         this.$store.dispatch('auth/switchChain', type)
       } else {
         this.$store.dispatch('auth/switchProvider', provider)
-        if (type !== this.selectedNetworkType) {
+        if (type !== this.selectedNetworkType && type !== 'TRON') {
           this.$store.dispatch('auth/switchChain', type)
         }
       }

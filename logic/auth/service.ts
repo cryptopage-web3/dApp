@@ -15,15 +15,17 @@ declare const window: Window &
     ethereum: any
     BinanceChain: any
     okexchain: any
+    tronLink: any
   }
 
-const [ETHEREUM, BSC, POLYGON] = ['ETHEREUM', 'BSC', 'POLYGON']
-const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX] = [
+const [ETHEREUM, BSC, POLYGON, TRON] = ['ETHEREUM', 'BSC', 'POLYGON', 'TRON']
+const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, TRON_LINK] = [
   'metamask',
   'walletConnect',
   'coin98',
   'bscWallet',
-  'okex'
+  'okex',
+  'tron'
 ]
 
 const bsc = new BscConnector({
@@ -80,7 +82,8 @@ export default class AuthService extends Vue {
       network: 'polygon',
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
-    }
+    },
+    tron: { network: 'tron', name: 'Tron Mainnet', slug: 'tron' }
   }
 
   // chainid type is hexadecimal nubers
@@ -110,7 +113,7 @@ export default class AuthService extends Vue {
   /*
    * This is hack for reacive selectedAddress and selectedChainId
    */
-  data = {
+  data: any = {
     address: '',
     chainId: 1
   }
@@ -136,6 +139,10 @@ export default class AuthService extends Vue {
     )
   }
 
+  protected get tronInstalled(): boolean {
+    return typeof window !== 'undefined' && typeof window?.tronLink === 'object'
+  }
+
   private providerName = METAMASK
   private defaultEthereumWallet = METAMASK
   private provider: WalletConnectProvider | undefined
@@ -143,6 +150,7 @@ export default class AuthService extends Vue {
   private okexConnected = false
   private bscConnected = false
   private walletConnectConnected = false
+  private tronLinkConnected = false
   protected get $web3(): any {
     return Container.get(tokens.WEB3)
   }
@@ -168,7 +176,7 @@ export default class AuthService extends Vue {
   /*
    * Just reacive proxy for simple access
    */
-  public get selectedChainId(): number {
+  public get selectedChainId(): any {
     return this.data.chainId
   }
 
@@ -270,6 +278,17 @@ export default class AuthService extends Vue {
       } else {
         connected = 'notInstalled'
       }
+    } else if (providerName === TRON_LINK) {
+      if (this.tronInstalled) {
+        const status = this.addTronLinkEventsListener()
+        if (status) {
+          await this.changeProviderName(providerName)
+          connected = 'success'
+          window.localStorage.setItem('lastProvider', providerName)
+        }
+      } else {
+        connected = 'notInstalled'
+      }
     }
     return connected
   }
@@ -279,6 +298,10 @@ export default class AuthService extends Vue {
    * @param {String} networkName - name of the network blockchain, example ethereum, bsc, polygon
    */
   switchChain = async (networkName: string): Promise<void> => {
+    if (networkName === TRON) {
+      this.switchProvider(TRON_LINK)
+      return
+    }
     if (!Object.keys(this._CHAINS).includes(networkName)) {
       throw new Error('Network is not allowed.')
     }
@@ -294,7 +317,10 @@ export default class AuthService extends Vue {
     }
 
     if (!chain) throw new Error('Chain not found.')
-    if (!this.provider) throw new Error('Provider not set.')
+    if (!this.provider) {
+      this.switchProvider(METAMASK)
+      return
+    }
 
     try {
       await this.provider.request({
@@ -319,7 +345,7 @@ export default class AuthService extends Vue {
    * @param {Number} chainId - chainId of current network
    * @returns {Void}
    */
-  public setOrChangeWeb3Data(address: string, chainId: number): void {
+  public setOrChangeWeb3Data(address: string, chainId: number | string): void {
     if (address) {
       Vue.set(this.data, 'address', address)
       this.data.address = address
@@ -465,6 +491,33 @@ export default class AuthService extends Vue {
     }
   }
 
+  /**
+   * Adding event listener for tronlink
+   * @returns {Boolean}
+   */
+  private addTronLinkEventsListener = (): boolean => {
+    try {
+      const setTronata = () => {
+        setTimeout(async () => {
+          await window.tronLink.request({ method: 'tron_requestAccounts' })
+          const address = window.tronLink.tronWeb.defaultAddress?.base58
+          this.setOrChangeWeb3Data(address, 'tron')
+        }, 300)
+      }
+      if (this.tronInstalled) {
+        if (!this.tronLinkConnected) {
+          this.tronLinkConnected = true
+        }
+        this.provider = window.tronLink.tronWeb
+        setTronata()
+        return true
+      }
+      return false
+    } catch {
+      return false
+    }
+  }
+
   private getSignaturePhrase = async (): Promise<string> => {
     const timestamp = new Date().getTime()
     const random = Math.random().toString(16).substr(2, length)
@@ -591,6 +644,8 @@ export default class AuthService extends Vue {
       this.metamaskConnected = false
     } else if (this.bscConnected) {
       this.bscConnected = false
+    } else if (this.tronLinkConnected) {
+      this.tronLinkConnected = false
     }
   }
 
@@ -606,6 +661,8 @@ export default class AuthService extends Vue {
       this.metamaskConnected = false
     } else if (this.bscConnected) {
       this.bscConnected = false
+    } else if (this.tronLinkConnected) {
+      this.tronLinkConnected = false
     }
   }
 

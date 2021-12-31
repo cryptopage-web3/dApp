@@ -13,7 +13,7 @@ class BaseAPIServiceMixin {
     return Container.get(tokens.AUTH_SERVICE) as AuthService
   }
 
-  protected get chainId(): number {
+  protected get chainId(): any {
     return Number(this.authService.selectedChainId)
   }
 }
@@ -22,7 +22,7 @@ export class EtherscanAPIServiceMixin extends BaseAPIServiceMixin {
   protected etherscanAPIKey = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.ETHERSCAN_API_KEY
   protected bscscanAPIKey = 'TQDPK4XAU4BZT8WQNN6IETRRXXDI37W64Y'
   protected polygonscanAPIKey = '4DCKF5U2YGR1HNG1KHWP8DSK47AH85W28Z'
-  protected apiURLMap: { [chainId: number]: string } = {
+  protected apiURLMap: { [chainId in string | number]: string } = {
     1: 'https://api.etherscan.io/api?',
     3: 'https://api-ropsten.etherscan.io/api?',
     4: 'https://api-rinkeby.etherscan.io/api?',
@@ -74,5 +74,19 @@ export class CovalentAPIServiceMixin extends BaseAPIServiceMixin {
 
   protected get baseURL(): string {
     return `https://api.covalenthq.com/v1/${this.chainId}`
+  }
+}
+
+export class TronGridAPIServiceMixin extends BaseAPIServiceMixin {
+  protected get baseURL(): string {
+    return 'https://apilist.tronscan.org/api/'
+  }
+
+  protected get transactionsURL(): string {
+    return 'https://api.trongrid.io/v1/'
+  }
+
+  protected get symbol(): string {
+    return 'TRX'
   }
 }
