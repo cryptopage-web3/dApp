@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const humanizeCount = (count) => {
   if (count >= 1000 && count <= 1000000) {
     return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
@@ -62,4 +64,16 @@ export const humanizeDate = (date) => {
       month: 'short'
     })
   }
+}
+
+export const shortMonthAndDay = (timestamp) => {
+  return moment(timestamp, 'X').format('MMM D')
+}
+
+export const ucFirstLetter = (str) => {
+  if (!str) {
+    return ''
+  }
+
+  return str[0].toUpperCase() + str.slice(1).toLowerCase()
 }

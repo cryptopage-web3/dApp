@@ -2,25 +2,15 @@
   <div class="white-post-top">
     <div class="post-date">
       <a href="#" class="post-date__link">
-        <img src="@/assets/img/post-date__link_img.png" alt="" />
+        <img src="@/assets/img/post-date__link_img2.svg" alt="" />
       </a>
       <div class="post-date__text">
-        {{ transaction.timeStamp | humanizeDate }} ago
-        {{ income ? 'from' : 'to' }}
-        <nuxt-link
-          style="color: #a5a5a5"
-          :to="`/${networkName}/${
-            income ? transaction.sender : transaction.receiver
-          }`"
-        >
-          {{
-            income ? transaction.receiver : transaction.sender | shortAddress
-          }}
-        </nuxt-link>
+        {{ transaction.timeStamp | normalizeDate }}
       </div>
     </div>
     <div class="white-post-id">
-      Txn Hash: {{ transaction.hash | shortAddress(5, 7) }}
+      {{ tokenSymbol | ucFirstLetter }}:
+      <a href="#">{{ transaction.hash | shortAddress(5, 7) }}</a>
     </div>
   </div>
 </template>

@@ -7,8 +7,8 @@
         class="profile__add btn_profile btn btn_blue"
         @click.prevent="showForm"
       >
-        <img src="@/assets/img/profile__add_img.png" alt="" />
-        <span> Create NFT </span>
+        <img src="@/assets/img/profile__add_img.svg" alt="" />
+        <span> Create </span>
       </a>
       <a
         v-else
@@ -16,23 +16,23 @@
         class="profile__add btn_profile btn btn_blue"
         @click.prevent="showForm"
       >
-        <img src="@/assets/img/profile__add_img.png" alt="" />
-        <span> Send NFT </span>
+        <img src="@/assets/img/profile__add_img.svg" alt="" />
+        <span> Send </span>
       </a>
       <router-link
         to="/messages"
         class="profile__send btn_profile btn btn_blue"
       >
-        <img src="@/assets/img/profile__send_img.png" alt="" />
+        <img src="@/assets/img/profile__send_img.svg" alt="" />
         <span> Send message </span>
       </router-link>
     </div>
-    <div class="profile-form">
-      <div class="profile-form__container">
-        <div class="profile-form__container-inner">
-          <nft-form :is-send-to="!isOwner" @submited="nftSubmitedHandler" />
-        </div>
-      </div>
+    <div class="creat-post-form">
+      <nft-form
+        :is-send-to="!isOwner"
+        @canceled="closeForm"
+        @submited="nftSubmitedHandler"
+      />
     </div>
   </div>
 </template>
@@ -66,16 +66,22 @@ export default class AddressProfileBottom extends Vue {
   @Watch('isFormShown')
   onIsFormShownChanged(isShown: boolean) {
     if (isShown) {
-      $('.profile-form__container-inner').slideDown(200)
+      $('.profile-bottom').slideUp()
+      $('.creat-post-form').slideDown(300)
     } else {
-      $('.profile-form__container-inner').slideUp(100)
+      $('.creat-post-form').slideUp()
+      $('.profile-bottom').slideDown(300)
     }
   }
 
   // methods
 
   showForm() {
-    this.isFormShown = !this.isFormShown
+    this.isFormShown = true
+  }
+
+  closeForm() {
+    this.isFormShown = false
   }
 
   nftSubmitedHandler() {

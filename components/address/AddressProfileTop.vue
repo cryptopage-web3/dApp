@@ -11,11 +11,7 @@
         />
       </div>
       <div class="profile-info">
-        <profile-name v-if="!tokenName" />
-        <div v-if="tokenName" class="profile-info__title">
-          {{ tokenName }}
-        </div>
-        <div v-else class="profile-info__title">
+        <div class="profile-info__title">
           <span
             ref="address"
             class="profile-info__title-address"
@@ -23,29 +19,31 @@
           >
             {{ address | shortAddress }}
           </span>
+          <mark>({{ tokenName || 'Vitalik Buterin' }})</mark>
         </div>
-        <profile-status v-if="!tokenName" />
         <div class="profile-info__text">
-          {{ transactionsCount | humanizeCount }}
-          total transactions<br />
-          <span
+          <strong title="Total transactions">286</strong> total transactions<br />
+          <strong
             title="Number of unique addresses from which transactions got. Checked only loaded transactions from all tabs."
+            >{{ inputAddressesCount | humanizeCount }}</strong
           >
-            {{ inputAddressesCount | humanizeCount }} inputs
-          </span>
-          /
-          <span
+          inputs /
+          <strong
             title="Number of unique addresses to which transactions sent. Checked only loaded transactions from all tabs."
+            >{{ outputAddressesCount | humanizeCount }}</strong
           >
-            {{ outputAddressesCount | humanizeCount }} outputs
-          </span>
-          from {{ loadedTransactionsCount }} loaded transactions
+          outputs from
+          <strong title="Number of loaded transactions in the transactions tab">
+            {{ loadedTransactionsCount }}
+          </strong>
+          loaded transactions
         </div>
       </div>
     </div>
     <div class="profile-right">
-      <a href="#" class="profile-ring active">
-        <img src="@/assets/img/profile-ring_img2.png" alt="" />
+      <profile-status v-if="!tokenName" />
+      <a href="#" class="profile-ring">
+        <img src="@/assets/img/profile-ring_img2.svg" alt="" />
       </a>
     </div>
   </div>
@@ -60,13 +58,11 @@ import { INotifyParams } from '~/types'
   components: {
     'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
     'profile-status': async () =>
-      await import('@/components/address/AddressProfileStatus.vue'),
-    'profile-name': async () =>
-      await import('@/components/address/AddressProfileName.vue')
+      await import('@/components/address/AddressProfileStatus.vue')
   }
 })
 export default class AddressProfileTop extends Vue {
-  diameter = Number($(window).width()) > 767 ? 90 : 40
+  diameter = Number($(window).width()) > 767 ? 90 : 50
 
   $notify!: (params: INotifyParams) => void
   $refs!: {
@@ -112,7 +108,7 @@ export default class AddressProfileTop extends Vue {
       })
 
       /** tooltip количества уникальных адресов */
-      ;($('.profile-info__text span') as any).tooltip({
+      ;($('.profile-info__text strong') as any).tooltip({
         trigger: 'hover'
       })
     })

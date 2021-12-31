@@ -1,9 +1,12 @@
 <template>
   <div class="profile-status__container">
-    <div v-if="!isOwner" class="profile-status">Status: {{ status }}</div>
+    <div v-if="!isOwner" class="profile-status" :title="status">
+      Status: <span>{{ status }}</span>
+    </div>
     <template v-else>
       <div v-show="!isEdit" class="profile-status">
-        Status: <a href="#" @click.prevent="showEdit">{{ status }}</a>
+        Status:
+        <a href="#" :title="status" @click.prevent="showEdit">{{ status }}</a>
       </div>
       <form v-show="isEdit">
         <div
@@ -38,7 +41,7 @@
             class="profile-status__edit-close"
             @click.prevent="closeEdit"
           >
-            <font-awesome-icon :icon="['fas', 'times']" />
+            <img src="@/assets/img/post-comment__close.svg" alt="" />
           </div>
         </div>
       </form>

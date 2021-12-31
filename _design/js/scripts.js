@@ -1,5 +1,33 @@
 $(function(){
 
+	/*post-comment__close*/
+	if($('.post-comment__close').is('.post-comment__close')) {
+		$('.post-comment__close').on('click', function(){
+			event.preventDefault();
+			$(this).closest('.post-bottom').find('.post-dis').slideDown(300);
+			$(this).closest('.post-bottom').find('.post-like').slideDown(300);
+			$(this).closest('.post-bottom').removeClass('active');
+			$(this).closest('.post-comment').slideUp(300);
+		});
+	}
+
+	/*creat post*/
+	if($('.profile-bottom .profile__add').is('.profile-bottom .profile__add')) {
+		$('.profile-bottom .profile__add').on('click', function(){
+			event.preventDefault();
+			$(this).closest('.profile-bottom').slideUp();
+			$(this).closest('.profile').find('.creat-post-form').slideDown(300);
+		});
+	}
+
+	if($('.creat-post-form .creat-post-form__cancel').is('.creat-post-form .creat-post-form__cancel')) {
+		$('.creat-post-form .creat-post-form__cancel').on('click', function(){
+			event.preventDefault();
+			$(this).closest('.creat-post-form').slideUp();
+			$(this).closest('.profile').find('.profile-bottom').slideDown(300);
+		});
+	}
+
 	/*select2*/
 	if($('.select2').is('.select2')) {
 		$('.select-parent').each(function(){
@@ -121,6 +149,39 @@ $(function(){
 			event.preventDefault();
 			$(this).closest('.post-bottom').find('.post-comment').fadeIn(300);
 			$(this).closest('.post-bottom').addClass('active');
+		});
+	}
+
+	if($('.main').is('.main')) {
+		new ResizeSensor($('.main-center'), function(){ 
+			var height_main_right = $('#right-sidebar').height() + 50;
+			$('.main-center').css('min-height', height_main_right + 'px');
+		});
+	}
+
+	if($('.filtr-checkbox').is('.filtr-checkbox')) {
+		$('.filtr-checkbox .checkbox').styler();
+	}
+
+	if($('.main-page-sliders').is('.main-page-sliders')) {
+		var main_page_sliders = new Swiper('.main-page-sliders .swiper', {
+			loop: true,
+			slidesPerView: 3,
+			spaceBetween: 23,
+			navigation: {
+				nextEl: '.main-page-sliders .swiper-button-next',
+				prevEl: '.main-page-sliders .swiper-button-prev',
+			},
+			breakpoints: {
+				360: {
+					slidesPerView: 1,
+					spaceBetween: 0,
+				},
+				767: {
+					slidesPerView: 3,
+					spaceBetween: 23,
+				},
+			}
 		});
 	}
 

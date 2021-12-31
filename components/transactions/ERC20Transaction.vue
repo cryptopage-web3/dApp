@@ -1,32 +1,40 @@
 <template>
-  <a href="#" class="transactions-link">
-    <div class="transactions-link-left">
-      <img v-if="income" src="@/assets/img/transactions-link_img2.png" alt="" />
-      <img v-else src="@/assets/img/transactions-link_img1.png" alt="" />
-      <div class="transactions-link__text">
-        <div class="transactions-link__tool">
-          {{ income ? 'Receive' : 'Send' }} {{ transaction.token.symbol }}
-        </div>
-        <div class="transactions-link__number">
-          {{ transaction.timeStamp | humanizeDate }} ago
-          {{ income ? 'from' : 'to' }}
-          <nuxt-link style="color: #a5a5a5" :to="`/${networkName}/${address}`">
+  <div class="main-item">
+    <a href="#" class="transactions-link">
+      <div class="transactions-link-left">
+        <img
+          v-if="income"
+          src="@/assets/img/transactions-link_img2.svg"
+          alt=""
+        />
+        <img v-else src="@/assets/img/transactions-link_img1.svg" alt="" />
+        <div class="transactions-link__text">
+          <div class="transactions-link__tool">
+            {{ income ? 'Receive' : 'Send' }} {{ transaction.token.symbol }}
+          </div>
+          <div class="transactions-link__number">
+            {{ transaction.timeStamp | shortMonthAndDay }} /
+            {{ income ? 'From' : 'To' }}:
             {{ address | shortAddress(5, 7) }}
-          </nuxt-link>
+          </div>
+          <div class="transactions-link__number">
+            Txn Hash:
+            <a href="#">{{ transaction.hash | shortAddress(5, 7) }}</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="transactions-link-right">
-      <div class="transactions-link__usdt" style="text-align: right">
-        {{ income ? '' : '-' }}
-        {{ transaction.amount | normalizeAmount }}
-        {{ transaction.token.symbol }}
+      <div class="transactions-link-right">
+        <div class="transactions-link__usdt">
+          {{ income ? '' : '-' }}
+          {{ transaction.amount | normalizeAmount }}
+          {{ transaction.token.symbol }}
+        </div>
+        <div class="transactions-link__usd">
+          Fee: {{ transaction.fee | normalizeAmount }} {{ tokenSymbol }}
+        </div>
       </div>
-      <div class="transactions-link__usd" style="text-align: right">
-        Fee: {{ transaction.fee | normalizeAmount }} {{ tokenSymbol }}
-      </div>
-    </div>
-  </a>
+    </a>
+  </div>
 </template>
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'

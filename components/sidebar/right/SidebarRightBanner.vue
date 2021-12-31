@@ -6,7 +6,7 @@
     <div class="banner__text">
       Create NFT <br />
       and take part in the giveaway
-      <span>10000 page</span>
+      <span>10 000 PAGE</span>
     </div>
     <a href="#" class="btn btn_white btn_banner" @click.prevent="openNFTForm">
       <span> Create NFT </span>

@@ -1,20 +1,18 @@
 <template>
   <div class="no-style" v-html="icon"></div>
 </template>
-<script>
-import iconList from '@/constants/icons'
-export default {
-  props: {
-    type: {
-      type: String,
-      default: () => ''
-    }
-  },
-  data: () => ({}),
-  computed: {
-    icon() {
-      return iconList[this.type] || ''
-    }
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Prop } from 'nuxt-property-decorator'
+import iconList from '~/constants/icons'
+
+@Component({})
+export default class Icon extends Vue {
+  @Prop({ type: String, default: '' })
+  readonly type!: string
+
+  get icon(): string {
+    return iconList[this.type] || ''
   }
 }
 </script>

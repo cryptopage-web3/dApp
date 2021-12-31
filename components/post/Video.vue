@@ -1,5 +1,6 @@
 <template>
   <div class="post post-video-wr">
+    <top :transaction="transaction" />
     <div class="post-videos">
       <div class="post-video">
         <div class="video">
