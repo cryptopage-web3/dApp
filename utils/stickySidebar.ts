@@ -8,7 +8,11 @@ const updatePosition = (moveElem: string, containerElem: string) => {
   const moveHeight = $(moveElem).height() || 0
   const scrollTop = $(window).scrollTop() || 0
 
-  if (containerOffsetTop - 20 > scrollTop || moveHeight >= containerHeight) {
+  if (
+    containerOffsetTop - 20 >= scrollTop ||
+    scrollTop === 0 ||
+    moveHeight >= containerHeight
+  ) {
     $(moveElem).removeClass('header_fixed header_bottom')
 
     return
