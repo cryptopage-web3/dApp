@@ -42,6 +42,58 @@ export default class NFTWeb3Service {
     })
   }
 
+  public getComments = async ({
+    tokenId
+  }: FetchOneType): Promise<ERC721ContractDataType | null> => {
+    let comments = null
+    const networkName = await this.getNetworkName()
+
+    const NFT_CONTRACT = await import(
+      `../../../contracts/${networkName}/PageNFT.json`
+    )
+    const COMMENT_CONTRACT = await import(
+      `../../../contracts/${networkName}/PageComment.json`
+    )
+    const COMMENT_MINTER_CONTRACT = await import(
+      `../../../contracts/${networkName}/PageCommentMinter.json`
+    )
+
+    /** получаем комментарии */
+    const commentMinterContract = new this.$web3.eth.Contract(
+      COMMENT_MINTER_CONTRACT.abi,
+      COMMENT_MINTER_CONTRACT.address
+    )
+
+    /**
+     * проверяем есть ли контракт комментов у NFT,
+     * если да, то получаем текущую статистику
+     */
+    try {
+      const isExists = await commentMinterContract.methods
+        .isExists(NFT_CONTRACT.address, tokenId)
+        .call()
+
+      if (isExists) {
+        const commentContractAddress = await commentMinterContract.methods
+          .getContract(NFT_CONTRACT.address, tokenId)
+          .call()
+
+        const commentContract = new this.$web3.eth.Contract(
+          COMMENT_CONTRACT.abi,
+          commentContractAddress
+        )
+
+        comments = await commentContract.methods
+          .getStatisticWithComments()
+          .call()
+        return { tokenURI: '', owner: '', comments }
+      }
+      return null
+    } catch {
+      return null
+    }
+  }
+
   /**
    * Get TokenURI and owner from contract
    */
@@ -50,52 +102,17 @@ export default class NFTWeb3Service {
     contractAddress
   }: FetchOneType): Promise<ERC721ContractDataType | null> => {
     try {
+      let comments = null
       const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
-
-      let comments = null
-      const networkName = await this.getNetworkName()
-
-      const NFT_CONTRACT = await import(
-        `../../../contracts/${networkName}/PageNFT.json`
-      )
-      const COMMENT_CONTRACT = await import(
-        `../../../contracts/${networkName}/PageComment.json`
-      )
-      const COMMENT_MINTER_CONTRACT = await import(
-        `../../../contracts/${networkName}/PageCommentMinter.json`
-      )
-
-      /** получаем комментарии */
-      const commentMinterContract = new this.$web3.eth.Contract(
-        COMMENT_MINTER_CONTRACT.abi,
-        COMMENT_MINTER_CONTRACT.address
-      )
-
-      /**
-       * проверяем есть ли контракт комментов у NFT,
-       * если да, то получаем текущую статистику
-       */
-      try {
-        const isExists = await commentMinterContract.methods
-          .isExists(NFT_CONTRACT.address, tokenId)
-          .call()
-
-        if (isExists) {
-          const commentContractAddress = await commentMinterContract.methods
-            .getContract(NFT_CONTRACT.address, tokenId)
-            .call()
-
-          const commentContract = new this.$web3.eth.Contract(
-            COMMENT_CONTRACT.abi,
-            commentContractAddress
-          )
-
-          comments = await commentContract.methods.getStatistic().call()
-        }
-      } catch {}
-
+      const statisticWithComments = await this.getComments({
+        tokenId,
+        contractAddress
+      })
+      if (statisticWithComments) {
+        comments = statisticWithComments.comments
+      }
       return { tokenURI, owner, comments }
     } catch {
       return null
