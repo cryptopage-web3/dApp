@@ -46,7 +46,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, mixins } from 'nuxt-property-decorator'
+import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import TypedStoreMixin from '~/mixins/typed-store'
 import { TokenBalanceType } from '~/logic/tokens/types'
 import NetworkNameMixin from '~/mixins/networkName'
@@ -70,6 +70,23 @@ export default class SidebarRightBalance extends mixins(
 
   public get loadingInfo(): boolean {
     return this.typedStore.address.loadingInfo
+  }
+
+  /** в момент изменения количества токенов необходим триггер скролла
+   * чтобы обновилось положение сайдбаров
+   */
+  @Watch('tokens')
+  onTokensChanged() {
+    setTimeout(() => {
+      $(window).trigger('scroll')
+    })
+  }
+
+  @Watch('loadingInfo')
+  onLoadingInfoChanged() {
+    setTimeout(() => {
+      $(window).trigger('scroll')
+    })
   }
 
   public url(token: TokenBalanceType): string {
