@@ -33,7 +33,10 @@ export default class TransactionAdapter {
   }
 
   public calculateAmount(): number {
-    const tx = this.transaction
+    const tx: any = this.transaction
+    if (tx.type === 'tron') {
+      return tx.amount
+    }
     const input = tx.decodedInput
     let amount = Number(tx.value)
     let decimals = 18

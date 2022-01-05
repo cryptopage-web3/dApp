@@ -246,6 +246,13 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   switchChain(type: string) {
+    if (type === 'TRON' && !window.tronLink.tronWeb.defaultAddress?.base58) {
+      this.$notify({
+        type: 'error',
+        title: 'Please login to TronLink'
+      })
+      return
+    }
     this.$store.dispatch('auth/switchChain', type)
   }
 }
