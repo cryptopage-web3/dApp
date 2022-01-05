@@ -430,6 +430,13 @@ export default {
   },
   methods: {
     switchProvider(type, provider) {
+      if (type === 'TRON' && !window.tronLink.tronWeb.defaultAddress?.base58) {
+        this.$notify({
+          type: 'error',
+          title: 'Please login to TronLink'
+        })
+        return
+      }
       if (
         (provider === 'metamask' || provider === 'coin98') &&
         provider === this.selectedProvider

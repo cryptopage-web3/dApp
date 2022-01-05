@@ -54,7 +54,7 @@ export default class TronGridAPIService extends TronGridAPIServiceMixin {
       action: 'txlist'
     }
     const params = new URLSearchParams(options).toString()
-    const URL = `${this.transactionsURL}accounts/${address}/transactions${params}`
+    const URL = `${this.transactionsURL}accounts/${address}/transactions?${params}`
     try {
       const response = await this.$axios.get(URL)
       const parser = new TronGridAPITransactionParser()
@@ -90,7 +90,7 @@ export default class TronGridAPIService extends TronGridAPIServiceMixin {
       Object.assign(options, { contractAddress })
     }
     const params = new URLSearchParams(options).toString()
-    const URL = `${this.transactionsURL}accounts/${address}/transactions${params}`
+    const URL = `${this.transactionsURL}accounts/${address}/transactions?${params}`
     try {
       const response = await this.$axios.get(URL)
       const parser = new TronGridApiTRC20Parser()
@@ -100,7 +100,7 @@ export default class TronGridAPIService extends TronGridAPIServiceMixin {
       const transactions = await Promise.all(
         list.map((transaction: any): any => parser.parse(transaction))
       )
-      return transactions
+      return transactions.filter((e: any) => e.token.symbol)
     } catch (err) {
       return []
     }
