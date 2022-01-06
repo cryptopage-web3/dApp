@@ -25,6 +25,9 @@ export default {
     script: [
       {
         src: 'https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/js/green-audio-player.min.js'
+      },
+      {
+        src: 'https://unpkg.com/swiper@7/swiper-bundle.min.js'
       }
     ]
   },
@@ -49,6 +52,7 @@ export default {
     '~/plugins/fontawesome.js',
     '~/plugins/type-di.ts',
     '~/plugins/bootstrap.js',
+    '~/plugins/formstyler.js',
     '~/plugins/sticky-sidebar.js',
     '~/plugins/installer.js'
   ],
@@ -170,7 +174,11 @@ export default {
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
-    vendor: ['jquery', 'bootstrap'],
+    vendor: [
+      'jquery',
+      'bootstrap',
+      'jquery-form-styler/dist/jquery.formstyler'
+    ],
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',

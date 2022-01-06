@@ -141,5 +141,28 @@ import slidersThumbPath from '~/assets/img/main-page-sliders_thumb.jpg'
 })
 export default class StartTopImages extends Vue {
   slidersThumbUrl = slidersThumbPath
+  swiper: any = null
+
+  mounted() {
+    this.swiper = new (window as any).Swiper('.main-page-sliders .swiper', {
+      loop: true,
+      slidesPerView: 3,
+      spaceBetween: 23,
+      navigation: {
+        nextEl: '.main-page-sliders .swiper-button-next',
+        prevEl: '.main-page-sliders .swiper-button-prev'
+      },
+      breakpoints: {
+        360: {
+          slidesPerView: 1,
+          spaceBetween: 0
+        },
+        767: {
+          slidesPerView: 3,
+          spaceBetween: 23
+        }
+      }
+    })
+  }
 }
 </script>

@@ -336,5 +336,11 @@ import { Component } from 'nuxt-property-decorator'
     icon: async () => await import('@/components/icons/Icon.vue')
   }
 })
-export default class StartSidebarLeft extends Vue {}
+export default class StartSidebarLeft extends Vue {
+  mounted() {
+    this.$nextTick(() => {
+      ;($('.filtr-checkbox .checkbox') as any).styler()
+    })
+  }
+}
 </script>
