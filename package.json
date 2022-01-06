@@ -51,6 +51,7 @@
     "reflect-metadata": "^0.1.13",
     "select2": "^4.1.0-rc.0",
     "sticky-sidebar": "^3.3.1",
+    "swiper": "^7.4.1",
     "typedi": "^0.10.0",
     "vue-class-component": "^7.2.6",
     "vue-jazzicon": "^0.1.3",
