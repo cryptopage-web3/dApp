@@ -174,11 +174,7 @@ export default {
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]]
     },
-    vendor: [
-      'jquery',
-      'bootstrap',
-      'jquery-form-styler/dist/jquery.formstyler'
-    ],
+    vendor: ['jquery', 'bootstrap'],
     plugins: [
       new webpack.ProvidePlugin({
         $: 'jquery',

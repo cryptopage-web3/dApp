@@ -1,3 +1,3 @@
 if (process.browser) {
-  require('jquery-form-styler/dist/jquery.formstyler')
+  require('../assets/libs/jquery.formstyler.min.js')
 }
