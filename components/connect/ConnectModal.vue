@@ -53,6 +53,7 @@
               </li>
               <li>
                 <a
+                  id="modal-content-tron"
                   href="#modal-content4"
                   class="modal-content__link fill"
                   :class="selectedNetworkType === 'tron' ? 'active' : ''"
@@ -430,7 +431,7 @@ export default {
   },
   methods: {
     switchProvider(type, provider) {
-      if (type === 'TRON' && !window.tronLink.tronWeb.defaultAddress?.base58) {
+      if (type === 'TRON' && !window.tronLink?.tronWeb?.defaultAddress?.base58) {
         this.$notify({
           type: 'error',
           title: 'Please login to TronLink'
