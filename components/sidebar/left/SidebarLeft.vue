@@ -2,7 +2,7 @@
   <div class="main-left">
     <header id="left-sidebar" class="header">
       <div class="header__top">
-        <router-link :to="homeLink" class="header-logo">
+        <router-link to="/" class="header-logo">
           <img src="@/assets/img/header-logo_img@x2.png" />
         </router-link>
         <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
@@ -39,10 +39,6 @@ export default class SidebarLeft extends Vue {
 
   get networkName(): string {
     return this.typedStore.auth.selectedNetworkSlug
-  }
-
-  get homeLink(): string {
-    return this.isAuth ? `/${this.networkName}/${this.address}` : '/'
   }
 
   mounted() {

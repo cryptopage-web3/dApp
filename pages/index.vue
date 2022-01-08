@@ -1,24 +1,8 @@
 <template>
   <div class="start-page">
-    <div class="start-page__logo">
-      <icon type="logo" />
-    </div>
-    <div class="start-page__header">
-      <div class="start-page__header-title">Welcome to Crypto.Page</div>
-      <div class="start-page__header-subtitle">The Best crypto app</div>
-    </div>
-    <div class="start-page__signin">
-      <div class="start-page__signin-control">
-        <button
-          class="start-page__signin-btn btn_blue"
-          type="button"
-          @click="signin"
-        >
-          Sign in
-        </button>
-      </div>
-      <div class="start-page__signin-title">Join Crypto.Page now!</div>
-    </div>
+    <top-images />
+    <hot-collections />
+    <top-collections-bar />
     <div v-if="!isMounted || loading" class="start-page__loading">
       <div class="spinner-border text-primary" role="status">
         <span class="sr-only">Loading...</span>
@@ -34,12 +18,17 @@ import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
 
 @Component({
-  layout: 'empty',
+  layout: 'start',
   fetchOnServer: false,
 
   components: {
     signin: async () => await import('@/components/auth/Signin.vue'),
-    icon: async () => await import('@/components/icons/Icon.vue')
+    'top-images': async () =>
+      await import('@/components/start/StartTopImages.vue'),
+    'hot-collections': async () =>
+      await import('@/components/start/StartHotCollections.vue'),
+    'top-collections-bar': async () =>
+      await import('@/components/start/StartTopCollectionsBar.vue')
   }
 })
 export default class IndexPage extends Vue {

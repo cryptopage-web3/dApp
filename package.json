@@ -43,6 +43,7 @@
     "io-ts-promise": "^2.0.2",
     "ipfs-http-client": "^52.0.0",
     "jquery": "^3.6.0",
+    "jquery-form-styler": "^2.0.2",
     "moment": "^2.29.1",
     "nuxt": "2.15.2",
     "nuxt-property-decorator": "^2.9.1",
