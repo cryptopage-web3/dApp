@@ -1,6 +1,6 @@
 <template>
   <div class="main-left">
-    <header id="left-sidebar" class="header">
+    <header id="start-left-sidebar" class="header">
       <div class="header__top">
         <a href="#" class="header-logo">
           <img src="@/assets/img/header-logo_img@x2.png" />
@@ -341,6 +341,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { init as stickySidebarInit } from '~/utils/stickySidebar'
 
 @Component({
   components: {
@@ -349,6 +350,10 @@ import { Component } from 'nuxt-property-decorator'
 })
 export default class StartSidebarLeft extends Vue {
   mounted() {
+    if (Number($(window).width()) > 767) {
+      stickySidebarInit('#start-left-sidebar', '.main-left')
+    }
+
     this.$nextTick(() => {
       ;($('.filtr-checkbox .checkbox') as any).styler()
     })

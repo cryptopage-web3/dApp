@@ -1,6 +1,6 @@
 <template>
   <div class="main-right">
-    <div id="right-sidebar">
+    <div id="start-right-sidebar">
       <div class="main-right-item">
         <connect />
       </div>
@@ -140,6 +140,7 @@
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
 import collectionBarPath from '~/assets/img/collection-bar_bg.jpg'
+import { init as stickySidebarInit } from '~/utils/stickySidebar'
 
 @Component({
   components: {
@@ -150,5 +151,11 @@ import collectionBarPath from '~/assets/img/collection-bar_bg.jpg'
 })
 export default class StartSidebarRight extends Vue {
   collectionBarUrl = collectionBarPath
+
+  mounted() {
+    if (Number($(window).width()) > 767) {
+      stickySidebarInit('#start-right-sidebar', '.main-right')
+    }
+  }
 }
 </script>
