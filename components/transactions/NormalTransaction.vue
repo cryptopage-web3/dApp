@@ -28,7 +28,9 @@
           </div>
           <div class="transactions-link__number">
             Txn Hash:
-            <a href="#">{{ transaction.hash | shortAddress(5, 7) }}</a>
+            <a ref="hash" href="#" @click.prevent="copyHash">{{
+              transaction.hash | shortAddress(5, 7)
+            }}</a>
           </div>
         </div>
       </div>
@@ -51,6 +53,33 @@
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import TransactionMixin from '~/mixins/transaction'
+import { copyToClipboard } from '~/utils/copyToClipboard'
+import { INotifyParams } from '~/types'
+
 @Component({})
-export default class Transaction extends mixins(TransactionMixin) {}
+export default class Transaction extends mixins(TransactionMixin) {
+  $notify!: (params: INotifyParams) => void
+  $refs!: {
+    hash: HTMLAnchorElement
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      ;($(this.$refs.hash) as any).tooltip({
+        trigger: 'hover',
+        title: 'Click to copy'
+      })
+    })
+  }
+
+  copyHash() {
+    copyToClipboard(this.transaction.hash)
+    ;($(this.$refs.hash) as any).tooltip('hide')
+
+    this.$notify({
+      type: 'success',
+      title: 'Transaction Hash copied to clipboard'
+    })
+  }
+}
 </script>
