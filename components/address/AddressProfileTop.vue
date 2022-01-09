@@ -19,7 +19,7 @@
           >
             {{ address | shortAddress }}
           </span>
-          <mark>({{ tokenName || 'Vitalik Buterin' }})</mark>
+          <mark v-if="tokenName">({{ tokenName }})</mark>
         </div>
         <div class="profile-info__text">
           <strong title="Total transactions">286</strong> total transactions<br />
