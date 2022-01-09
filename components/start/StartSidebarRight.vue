@@ -2,7 +2,7 @@
   <div class="main-right">
     <div id="start-right-sidebar">
       <div class="main-right-item">
-        <connect />
+        <connect @success-login="successLogin" />
       </div>
       <div class="main-right-item">
         <form>
@@ -139,8 +139,10 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
 import collectionBarPath from '~/assets/img/collection-bar_bg.jpg'
 import { init as stickySidebarInit } from '~/utils/stickySidebar'
+import TypedStore from '~/logic/store'
 
 @Component({
   components: {
@@ -150,12 +152,20 @@ import { init as stickySidebarInit } from '~/utils/stickySidebar'
   }
 })
 export default class StartSidebarRight extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
   collectionBarUrl = collectionBarPath
 
   mounted() {
     if (Number($(window).width()) > 767) {
       stickySidebarInit('#start-right-sidebar', '.main-right')
     }
+  }
+
+  successLogin() {
+    const address = this.typedStore.auth.selectedAddress
+    const network = this.typedStore.auth.selectedNetworkSlug
+
+    this.$router.push(`/${network}/${address}`)
   }
 }
 </script>
