@@ -53,7 +53,11 @@
             <router-link :to="`/${address}`">Transaction History</router-link>
           </li>
           <li>
-            <a href="#" data-toggle="modal" data-target="#modal-connect"
+            <a
+              id="modal-opener"
+              href="#"
+              data-toggle="modal"
+              data-target="#modal-connect"
               >Change Wallet</a
             >
           </li>
@@ -140,6 +144,10 @@ export default class Connect extends mixins(NetworkNameMixin) {
     return this.$store.getters['auth/selectedNetworkName']
   }
 
+  get selectedNetworkType(): string {
+    return this.$store.getters['auth/selectedNetworkType']
+  }
+
   get selectedProvider(): string {
     return this.$store.getters['auth/selectedProviderName']
   }
@@ -152,7 +160,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
       tron: require('@/assets/img/modal-content__link_img4.png')
     }
 
-    return icons[this.$store.getters['auth/selectedNetworkType']]
+    return icons[this.selectedNetworkType]
   }
 
   // watch
@@ -246,12 +254,14 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   switchChain(type: string) {
-    if (type === 'TRON' && !window.tronLink.tronWeb.defaultAddress?.base58) {
-      this.$notify({
-        type: 'error',
-        title: 'Please login to TronLink'
-      })
+    const win: any = window
+    if (type === 'TRON' && !win.tronLink?.tronWeb?.defaultAddress?.base58) {
+      $('#modal-opener').click()
+      $('#modal-content-tron').click()
       return
+    }
+    if (this.selectedNetworkType === 'tron') {
+      this.$store.dispatch('auth/switchProvider', 'metamask')
     }
     this.$store.dispatch('auth/switchChain', type)
   }
