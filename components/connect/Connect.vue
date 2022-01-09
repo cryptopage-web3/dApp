@@ -94,7 +94,7 @@
           </li>
         </ul>
       </div>
-      <signin ref="signin" />
+      <signin ref="signin" @success="$emit('success-login')" />
     </div>
     <a href="#" class="dark-white">
       <img src="@/assets/img/dark-white_img2.png" alt="" />
