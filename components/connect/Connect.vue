@@ -33,7 +33,7 @@
       <div v-if="isAuth" ref="connectList" class="connect-wallet-col-body">
         <ul class="connect-wallet__list">
           <li>
-            <router-link :to="`/${networkName}/${address}`"
+            <router-link :to="`/${networkName}/${address}/nft`"
               >Home page</router-link
             >
           </li>
@@ -50,7 +50,9 @@
             </a>
           </li>
           <li>
-            <router-link :to="`/${address}`">Transaction History</router-link>
+            <router-link :to="`/${networkName}/${address}/transactions`"
+              >Transaction History</router-link
+            >
           </li>
           <li>
             <a

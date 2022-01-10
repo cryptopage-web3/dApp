@@ -23,11 +23,11 @@
             {{ income ? 'From' : 'To' }}:
             <nuxt-link
               v-if="transaction.token"
-              :to="`/${networkName}/${address}`"
+              :to="`/${networkName}/${address}/nft`"
             >
               {{ transaction.token.name }} ({{ transaction.token.symbol }})
             </nuxt-link>
-            <nuxt-link v-else :to="`/${networkName}/${address}`">
+            <nuxt-link v-else :to="`/${networkName}/${address}/nft`">
               {{ address | shortAddress }}
             </nuxt-link>
           </div>

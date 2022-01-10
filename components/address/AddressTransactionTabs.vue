@@ -26,12 +26,12 @@ export default class SidebarRightBalance extends mixins(NetworkNameMixin) {
     const tokensName = this.networkName === 'bsc' ? 'bep20' : 'erc20'
     return [
       {
-        link: '',
-        name: 'Transactions'
-      },
-      {
         link: 'nft',
         name: 'NFT'
+      },
+      {
+        link: 'transactions',
+        name: 'Transactions'
       },
       {
         link: 'tokens',

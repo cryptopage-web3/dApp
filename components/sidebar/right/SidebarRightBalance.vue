@@ -95,7 +95,7 @@ export default class SidebarRightBalance extends mixins(
     if (tokenAddress && address !== tokenAddress) {
       return `/${this.networkName}/${tokenAddress}/tokens?address=${address}`
     }
-    return `/${this.networkName}/${address}`
+    return `/${this.networkName}/${address}/nft`
   }
 }
 </script>

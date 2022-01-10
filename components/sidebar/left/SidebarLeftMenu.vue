@@ -3,7 +3,7 @@
     <ul class="header-list">
       <li>
         <router-link
-          :to="`/${networkName}/${address}`"
+          :to="`/${networkName}/${address}/nft`"
           class="header-list__item"
         >
           <div>

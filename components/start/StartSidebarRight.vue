@@ -165,7 +165,7 @@ export default class StartSidebarRight extends Vue {
     const address = this.typedStore.auth.selectedAddress
     const network = this.typedStore.auth.selectedNetworkSlug
 
-    this.$router.push(`/${network}/${address}`)
+    this.$router.push(`/${network}/${address}/nft`)
   }
 }
 </script>
