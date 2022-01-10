@@ -431,7 +431,10 @@ export default {
   },
   methods: {
     switchProvider(type, provider) {
-      if (type === 'TRON' && !window.tronLink?.tronWeb?.defaultAddress?.base58) {
+      if (
+        type === 'TRON' &&
+        !window.tronLink?.tronWeb?.defaultAddress?.base58
+      ) {
         this.$notify({
           type: 'error',
           title: 'Please login to TronLink'

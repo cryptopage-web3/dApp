@@ -2,9 +2,9 @@
   <div class="main-left">
     <header id="start-left-sidebar" class="header">
       <div class="header__top">
-        <a href="#" class="header-logo">
+        <router-link to="/" class="header-logo">
           <img src="@/assets/img/header-logo_img@x2.png" />
-        </a>
+        </router-link>
         <a href="#" class="header-toggle d-xl-none" @click.prevent="toggleMenu">
           <img src="@/assets/img/nav_bg2.svg" alt="" />
         </a>
