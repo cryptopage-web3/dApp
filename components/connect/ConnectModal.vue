@@ -431,8 +431,16 @@ export default {
   },
   methods: {
     switchProvider(type, provider) {
+      if (type === 'TRON' && !window.tronLink?.tronWeb) {
+        this.$notify({
+          type: 'error',
+          title: 'Please download TronLink extension'
+        })
+        return
+      }
       if (
         type === 'TRON' &&
+        window.tronLink?.tronWeb &&
         !window.tronLink?.tronWeb?.defaultAddress?.base58
       ) {
         this.$notify({

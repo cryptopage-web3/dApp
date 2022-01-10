@@ -18,12 +18,13 @@
 </template>
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
+import tokenNames from '~/constants/tokenNames'
 import NetworkNameMixin from '~/mixins/networkName'
 
 @Component({})
 export default class SidebarRightBalance extends mixins(NetworkNameMixin) {
   get tabs() {
-    const tokensName = this.networkName === 'bsc' ? 'bep20' : 'erc20'
+    const tokensName = tokenNames[this.networkName]
     return [
       {
         link: 'nft',
