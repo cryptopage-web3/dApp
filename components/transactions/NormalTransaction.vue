@@ -21,10 +21,15 @@
           <div class="transactions-link__number">
             {{ transaction.timeStamp | shortMonthAndDay }} /
             {{ income ? 'From' : 'To' }}:
-            <template v-if="transaction.token">
+            <nuxt-link
+              v-if="transaction.token"
+              :to="`/${networkName}/${address}`"
+            >
               {{ transaction.token.name }} ({{ transaction.token.symbol }})
-            </template>
-            <template v-else>{{ address | shortAddress }}</template>
+            </nuxt-link>
+            <nuxt-link v-else :to="`/${networkName}/${address}`">
+              {{ address | shortAddress }}
+            </nuxt-link>
           </div>
           <div class="transactions-link__number">
             Txn Hash:

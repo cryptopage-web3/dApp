@@ -15,7 +15,9 @@
           <div class="transactions-link__number">
             {{ transaction.timeStamp | shortMonthAndDay }} /
             {{ income ? 'From' : 'To' }}:
-            {{ address | shortAddress(5, 7) }}
+            <nuxt-link :to="`/${networkName}/${address}`">
+              {{ address | shortAddress(5, 7) }}
+            </nuxt-link>
           </div>
           <div class="transactions-link__number">
             Txn Hash:
