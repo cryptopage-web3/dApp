@@ -1,62 +1,65 @@
 <template>
-  <footer class="footer">
+  <footer class="main-new-footer">
     <div class="container">
-      <div class="footer-wr">
-        <div class="footer-left">
-          <a href="#" class="footer-logo d-xl-inline-block d-none">
-            <img src="@/assets/img/footer-logo_img.png" alt="" />
+      <div class="wrap">
+        <div class="left">
+          <a href="https://crypto.page/" class="main-new-footer__logo">
+            <img
+              src="@/assets/img/footer/main-new-footer__logo_img@2x.png"
+              alt=""
+            />
           </a>
-          <div class="footer-coperite">
-            2021 @ Cryptohub OÜ <br />
-            AS Reg.number 16221045 Address: Harju maakond, Tallinn, <br />
-            Kesklinna linnaosa, Roseni tn 13, 10111
-          </div>
-        </div>
-        <div class="footer-right">
-          <a href="#" class="footer-logo d-xl-none">
-            <img src="@/assets/img/footer-logo_img.png" alt="" />
-          </a>
-          <div class="footer-search">
-            <form>
-              <div class="search-wr">
-                <button class="search__btn">
-                  <img src="@/assets/img/search__btn_img2.png" alt="" />
-                </button>
-                <input
-                  type="text"
-                  placeholder="Search items, collections"
-                  class="search__input"
+          <ul class="main-new-footer__soc">
+            <li>
+              <a href="https://bitbucket.org/crypto_page/contracts-bsc">
+                <img
+                  src="@/assets/img/footer/main-new-footer__soc_img1.svg"
+                  alt=""
                 />
-              </div>
-            </form>
-          </div>
-          <ul class="footer-list">
-            <li>
-              <a href="#">Privacy Policy </a>
-            </li>
-            <li>
-              <a href="#" class="active">Terms of Use</a>
-            </li>
-            <li>
-              <a href="#">Terms of Exchange </a>
-            </li>
-            <li>
-              <a href="#">Cookie Policy</a>
-            </li>
-          </ul>
-          <ul class="footer-stores">
-            <li>
-              <a href="#">
-                <img src="@/assets/img/footer-stores_img1.png" alt="" />
               </a>
             </li>
             <li>
-              <a href="#">
-                <img src="@/assets/img/footer-stores_img2.png" alt="" />
+              <a href="https://t.me/crypto_page_social">
+                <img
+                  src="@/assets/img/footer/main-new-footer__soc_img2.svg"
+                  alt=""
+                />
+              </a>
+            </li>
+            <li>
+              <a href="https://discord.gg/SUjWmXrM">
+                <img
+                  src="@/assets/img/footer/main-new-footer__soc_img3.svg"
+                  alt=""
+                />
               </a>
             </li>
           </ul>
         </div>
+        <div class="right">
+          <ul class="main-new-footer__list main-new-footer__list1">
+            <li><a href="/">Create NFT</a></li>
+            <li><a href="/">Explore</a></li>
+            <li><a href="#">Earn PAGE</a></li>
+          </ul>
+          <ul class="main-new-footer__list main-new-footer__list2">
+            <li>
+              <a href="https://crypto.page/page-token.html">PAGE token</a>
+            </li>
+            <li><a href="#">Buy PAGE</a></li>
+            <li>
+              <a href="https://crypto.page/white_paper.html">White paper</a>
+            </li>
+          </ul>
+          <ul class="main-new-footer__list main-new-footer__list3">
+            <li><a href="#">Get involved</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="main-new-footer__copiryte">
+        Reg.number: 16221045<br />
+        Cryptohub OÜ<br />
+        Copyright 2022 Crypto.Page. All right reserved.
       </div>
     </div>
   </footer>
