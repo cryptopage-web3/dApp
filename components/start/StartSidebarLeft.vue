@@ -211,21 +211,40 @@
               <div class="main-header-list__body">
                 <div class="filtr-checkboxs">
                   <div class="filtr-checkbox">
-                    <input id="checkbox4" type="checkbox" class="checkbox" />
-                    <label for="checkbox4"> Ethereum </label>
-                  </div>
-                  <div class="filtr-checkbox">
-                    <input id="checkbox5" type="checkbox" class="checkbox" />
-                    <label for="checkbox5"> Polygon </label>
-                  </div>
-                  <div class="filtr-checkbox">
                     <input
-                      id="checkbox6"
-                      checked
+                      id="chain-avalanche"
                       type="checkbox"
                       class="checkbox"
                     />
-                    <label for="checkbox6"> Klaytn </label>
+                    <label for="chain-avalanche"> Avalanche </label>
+                  </div>
+                  <div class="filtr-checkbox">
+                    <input id="chain-bsc" type="checkbox" class="checkbox" />
+                    <label for="chain-bsc"> Bsc </label>
+                  </div>
+                  <div class="filtr-checkbox">
+                    <input
+                      id="chain-ethereum"
+                      type="checkbox"
+                      class="checkbox"
+                    />
+                    <label for="chain-ethereum"> Ethereum </label>
+                  </div>
+                  <div class="filtr-checkbox">
+                    <input
+                      id="chain-polygon"
+                      type="checkbox"
+                      class="checkbox"
+                    />
+                    <label for="chain-polygon"> Polygon </label>
+                  </div>
+                  <div class="filtr-checkbox">
+                    <input id="chain-solana" type="checkbox" class="checkbox" />
+                    <label for="chain-solana"> Solana </label>
+                  </div>
+                  <div class="filtr-checkbox">
+                    <input id="chain-tron" type="checkbox" class="checkbox" />
+                    <label for="chain-tron"> Tron </label>
                   </div>
                 </div>
               </div>
@@ -274,8 +293,17 @@
                     <label for="radio10"> Collectibles </label>
                   </div>
                   <div class="filtr-radio">
-                    <input id="radio11" checked type="radio" name="radio3" />
+                    <input id="radio11" type="radio" name="radio3" />
                     <label for="radio11"> Domain Names </label>
+                  </div>
+                  <div class="filtr-radio">
+                    <input
+                      id="category-transactions"
+                      checked
+                      type="radio"
+                      name="radio3"
+                    />
+                    <label for="category-transactions"> Transactions </label>
                   </div>
                 </div>
               </div>

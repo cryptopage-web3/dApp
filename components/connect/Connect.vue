@@ -77,7 +77,7 @@
           <li>
             <a href="#" @click.prevent="switchChain('ETHEREUM')">
               <img src="@/assets/img/modal-content__link_img1.png" alt="" />
-              Ethereum Mainnet
+              Ethereum
             </a>
           </li>
           <li>
@@ -89,13 +89,13 @@
           <li>
             <a href="#" @click.prevent="switchChain('POLYGON')">
               <img src="@/assets/img/modal-content__link_img3.png" alt="" />
-              Polygon Mainnet
+              Polygon
             </a>
           </li>
           <li>
             <a href="#" @click.prevent="switchChain('TRON')">
               <img src="@/assets/img/modal-content__link_img4.png" alt="" />
-              Tron Mainnet
+              Tron
             </a>
           </li>
         </ul>
