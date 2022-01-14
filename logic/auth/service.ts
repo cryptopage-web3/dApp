@@ -3,7 +3,6 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
 import { Service, Container, Inject } from 'vue-typedi'
-import { recoverPersonalSignature } from 'eth-sig-util'
 import { Component } from 'nuxt-property-decorator'
 import { deviceType } from '~/utils'
 import { AuthServiceSigninResponseType } from '~/logic/auth/types'
@@ -518,19 +517,6 @@ export default class AuthService extends Vue {
     }
   }
 
-  private getSignaturePhrase = async (): Promise<string> => {
-    const timestamp = new Date().getTime()
-    const random = Math.random().toString(16).substr(2, length)
-    const message = this.selectedAddress + timestamp + random
-    const salt = await this.$sea.work(message, null, null, {
-      name: 'SHA-256'
-    })
-
-    return await this.$sea.work(message, salt, null, {
-      name: 'SHA-256'
-    })
-  }
-
   /**
    * Initialize web3 provider functionality
    * @param {String} providerName - value of provider
@@ -596,39 +582,8 @@ export default class AuthService extends Vue {
       return commonError
     }
 
-    const address = this.$web3.utils.toChecksumAddress(this.selectedAddress)
-    const signaturePhrase = await this.getSignaturePhrase()
-    const signature = await this.provider.request({
-      method: 'personal_sign',
-      params: [signaturePhrase, address]
-    })
-
-    try {
-      let recoveredAddress = recoverPersonalSignature({
-        data: signaturePhrase,
-        sig: signature
-      })
-      recoveredAddress = this.$web3.utils.toChecksumAddress(recoveredAddress)
-
-      if (address === recoveredAddress) {
-        return {
-          status: 'success',
-          message: {
-            title: 'Signature verified!',
-            text: 'Successfully logged in'
-          }
-        }
-      }
-
-      return {
-        status: 'error',
-        message: {
-          title: 'Signature verification failed',
-          text: 'Please reload page and try again'
-        }
-      }
-    } catch (error) {
-      return commonError
+    return {
+      status: 'success'
     }
   }
 

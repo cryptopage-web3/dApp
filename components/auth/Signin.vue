@@ -23,15 +23,15 @@ export default class Signin extends mixins(NetworkNameMixin) {
   async init() {
     const response = await this.$store.dispatch('auth/signin')
 
-    this.$notify({
-      type: response.status,
-      title: response.message.title,
-      text: response.message.text
-    })
-
     if (response.status === 'success') {
       this.emitSuccess()
     } else {
+      this.$notify({
+        type: response.status,
+        title: response.message?.title,
+        text: response.message?.text
+      })
+
       this.emitError()
     }
   }

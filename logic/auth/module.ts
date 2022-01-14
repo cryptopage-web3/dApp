@@ -71,9 +71,11 @@ export default class AuthModule {
   @Action()
   public signin = async (): Promise<AuthServiceSigninResponseType> => {
     const response = await this.authService.signin()
+
     if (response.status === 'success') {
       this.setIsAuth(true)
     }
+
     return response
   }
 
