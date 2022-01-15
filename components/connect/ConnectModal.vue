@@ -24,8 +24,7 @@
               <li>
                 <a
                   href="#modal-content1"
-                  class="modal-content__link fill"
-                  :class="selectedNetworkType === 'ethereum' ? 'active' : ''"
+                  class="modal-content__link modal-content__link_ethereum fill"
                 >
                   <img src="@/assets/img/modal-content__link_img1.png" alt="" />
                   <span></span>
@@ -34,8 +33,7 @@
               <li>
                 <a
                   href="#modal-content2"
-                  class="modal-content__link fill"
-                  :class="selectedNetworkType === 'bsc' ? 'active' : ''"
+                  class="modal-content__link modal-content__link_bsc fill"
                 >
                   <img src="@/assets/img/modal-content__link_img2.png" alt="" />
                   <span></span>
@@ -44,8 +42,7 @@
               <li>
                 <a
                   href="#modal-content3"
-                  class="modal-content__link fill"
-                  :class="selectedNetworkType === 'polygon' ? 'active' : ''"
+                  class="modal-content__link modal-content__link_polygon fill"
                 >
                   <img src="@/assets/img/modal-content__link_img3.png" alt="" />
                   <span></span>
@@ -55,8 +52,7 @@
                 <a
                   id="modal-content-tron"
                   href="#modal-content4"
-                  class="modal-content__link fill"
-                  :class="selectedNetworkType === 'tron' ? 'active' : ''"
+                  class="modal-content__link modal-content__link_tron fill"
                 >
                   <img src="@/assets/img/modal-content__link_img4.png" alt="" />
                   <span></span>
@@ -73,7 +69,10 @@
               </li>
             </ul>
             <div class="modal-content-cont">
-              <div id="modal-content1" class="modal-content-wr active">
+              <div
+                id="modal-content1"
+                class="modal-content-wr modal-content-wr_ethereum"
+              >
                 <div class="modal-content-wallet-title">Ethereum</div>
                 <ul class="modal-content-wallet-list">
                   <li>
@@ -150,7 +149,10 @@
                   </li>
                 </ul>
               </div>
-              <div id="modal-content2" class="modal-content-wr">
+              <div
+                id="modal-content2"
+                class="modal-content-wr modal-content-wr_bsc"
+              >
                 <div class="modal-content-wallet-title">BSC</div>
                 <ul class="modal-content-wallet-list">
                   <li>
@@ -238,7 +240,10 @@
                   </li>
                 </ul>
               </div>
-              <div id="modal-content3" class="modal-content-wr">
+              <div
+                id="modal-content3"
+                class="modal-content-wr modal-content-wr_polygon"
+              >
                 <div class="modal-content-wallet-title">Polygon</div>
                 <ul class="modal-content-wallet-list">
                   <li>
@@ -315,7 +320,10 @@
                   </li>
                 </ul>
               </div>
-              <div id="modal-content4" class="modal-content-wr">
+              <div
+                id="modal-content4"
+                class="modal-content-wr modal-content-wr_tron"
+              >
                 <div class="modal-content-wallet-title">Tron</div>
                 <ul class="modal-content-wallet-list">
                   <li>
@@ -407,6 +415,8 @@ export default {
     }
   },
   mounted() {
+    /** выбор сети */
+
     $('.modal-content__link').on('click', function (event) {
       event.preventDefault()
 
@@ -423,7 +433,19 @@ export default {
       $(id).addClass('active')
     })
 
-    $('#modal-connect').on('show.bs.modal', function () {
+    /** открытие модалки */
+
+    $('#modal-connect').on('show.bs.modal', () => {
+      $('.modal-content__link').removeClass('active')
+      $('.modal-content-wr').removeClass('active')
+      $('.modal-content-wr').hide()
+
+      if (this.selectedNetworkType) {
+        $(`.modal-content__link_${this.selectedNetworkType}`).addClass('active')
+        $(`.modal-content-wr_${this.selectedNetworkType}`).addClass('active')
+        $(`.modal-content-wr_${this.selectedNetworkType}`).show()
+      }
+
       setTimeout(() => {
         $('.modal-backdrop').addClass('modal-backdrop_dark')
       })

@@ -245,7 +245,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   signin() {
-    this.$refs.signin.init()
+    ;($('#modal-connect') as any).modal('show')
   }
 
   signout() {
@@ -254,15 +254,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   switchChain(type: string) {
-    const win: any = window
-    if (type === 'TRON' && !win.tronLink?.tronWeb?.defaultAddress?.base58) {
-      $('#modal-opener').click()
-      $('#modal-content-tron').click()
-      return
-    }
-    if (this.selectedNetworkType === 'tron') {
-      this.$store.dispatch('auth/switchProvider', 'metamask')
-    }
     this.$store.dispatch('auth/switchChain', type)
   }
 }

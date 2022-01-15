@@ -94,7 +94,7 @@ export default class AuthService extends Vue {
     97: { network: 'bsc', name: 'BSC TestNet', slug: 'bsc-testnet' },
     137: {
       network: 'polygon',
-      name: 'Polygon Mainnet',
+      name: 'Polygon',
       slug: 'polygon'
     },
     80001: {
@@ -102,7 +102,7 @@ export default class AuthService extends Vue {
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
     },
-    tron: { network: 'tron', name: 'Tron Mainnet', slug: 'tron' }
+    tron: { network: 'tron', name: 'Tron', slug: 'tron' }
   }
 
   // chainid type is hexadecimal nubers
@@ -126,6 +126,9 @@ export default class AuthService extends Vue {
     },
     [ETHEREUM]: {
       chainId: '0x1'
+    },
+    [TRON]: {
+      chainId: 'tron'
     }
   }
 
@@ -352,6 +355,7 @@ export default class AuthService extends Vue {
       this.switchProvider(TRON_LINK)
       return
     }
+
     if (!Object.keys(this._CHAINS).includes(networkName)) {
       throw new Error('Network is not allowed.')
     }
@@ -387,6 +391,19 @@ export default class AuthService extends Vue {
         })
       }
     }
+  }
+
+  /**
+   * Если изменили сеть через клиент, то выполняем logout и запоминаем выбранную сеть
+   * логика из https://openocean.finance/
+   **/
+  clientSwitchChain = (network: string): void => {
+    /** указываем chainId от network */
+    const chain = this._CHAINS[network]
+    this.setOrChangeWeb3Data(
+      '',
+      network === TRON ? chain.chainId : Number(chain.chainId)
+    )
   }
 
   /**

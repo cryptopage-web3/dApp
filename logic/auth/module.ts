@@ -90,8 +90,9 @@ export default class AuthModule {
   }
 
   @Action()
-  public async switchChain(type: string): Promise<void> {
-    await this.authService.switchChain(type)
+  public switchChain(type: string): void {
+    this.authService.clientSwitchChain(type)
+    this.setIsAuth(false)
   }
 
   @Action()
