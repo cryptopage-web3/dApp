@@ -34,20 +34,40 @@ const bsc = new BscConnector({
 @Service(tokens.AUTH_SERVICE)
 @Component
 export default class AuthService extends Vue {
-  constructor() {
-    super()
-    if (typeof window !== 'undefined' && window.ethereum?.isCoin98) {
-      this.defaultEthereumWallet = COIN98
-    }
-    let lastUsedProvider
-    if (typeof window !== 'undefined' && window.localStorage.lastProvider) {
-      lastUsedProvider = window.localStorage.lastProvider
-    }
-    this.init(lastUsedProvider)
-  }
-
   @Inject(tokens.TOKEN_SERVICE)
   public tokenService!: TokenService
+
+  constructor() {
+    super()
+
+    /** получаем localStorage, где хранится статус авторизации и последний провайдер */
+
+    const localStorage = typeof window !== 'undefined' && window.localStorage
+
+    if (!localStorage) {
+      return
+    }
+
+    /** если пользователь не авторизован, то не подключаемся к провайдеру */
+
+    const auth = localStorage.getItem('auth')
+    const { authenticated }: Record<string, any> = auth ? JSON.parse(auth) : {}
+
+    if (!authenticated) {
+      return
+    }
+
+    /** получаем провайдера и пробуем подключиться */
+
+    const lastUsedProvider = localStorage.getItem('lastProvider')
+
+    if (!lastUsedProvider) {
+      this.logout()
+      return
+    }
+
+    this.init(lastUsedProvider)
+  }
 
   protected _PROVIDERS = [
     {
@@ -143,7 +163,6 @@ export default class AuthService extends Vue {
   }
 
   private providerName = METAMASK
-  private defaultEthereumWallet = METAMASK
   private provider: WalletConnectProvider | undefined
   private metamaskConnected = false
   private okexConnected = false
@@ -223,9 +242,11 @@ export default class AuthService extends Vue {
    */
   public async changeProviderName(providerName: string): Promise<void> {
     this.providerName = providerName
+
     if (providerName === 'walletConnect' && this.$web3) {
       const accounts = await this.$web3.eth.getAccounts()
       const networkId = await this.$web3.eth.net.getId()
+
       this.setOrChangeWeb3Data(accounts[0], Number(networkId))
     }
   }
@@ -236,60 +257,90 @@ export default class AuthService extends Vue {
    * @returns {String} - result of action
    */
   public switchProvider = async (providerName: string): Promise<string> => {
-    let connected = 'error'
+    /** подключение к metamask */
+
     if (providerName === METAMASK || providerName === COIN98) {
-      if (this.metamaskInstalled) {
-        const status = await this.addMetamaskEventsListener()
-        if (status) {
-          await this.changeProviderName(providerName)
-          connected = 'success'
-          window.localStorage.setItem('lastProvider', providerName)
-        }
-      } else {
-        connected = 'notInstalled'
+      if (!this.metamaskInstalled) {
+        return 'notInstalled'
       }
-    } else if (providerName === 'walletConnect') {
-      const status = await this.addWalletConnectEventsListener()
+
+      const status = await this.addMetamaskEventsListener()
+
       if (status) {
         await this.changeProviderName(providerName)
-        connected = 'success'
-        window.localStorage.setItem('lastProvider', 'walletConnect')
-      }
-    } else if (providerName === BSC_WALLET) {
-      if (this.bscInstalled) {
-        const status = await this.addBSCEventsListener()
-        if (status) {
-          await this.changeProviderName(providerName)
-          connected = 'success'
-          window.localStorage.setItem('lastProvider', providerName)
-        }
-      } else {
-        connected = 'notInstalled'
-      }
-    } else if (providerName === OKEX) {
-      if (this.okexInstalled) {
-        const status = await this.addOKEXEventsListener()
-        if (status) {
-          await this.changeProviderName(providerName)
-          connected = 'success'
-          window.localStorage.setItem('lastProvider', providerName)
-        }
-      } else {
-        connected = 'notInstalled'
-      }
-    } else if (providerName === TRON_LINK) {
-      if (this.tronInstalled) {
-        const status = this.addTronLinkEventsListener()
-        if (status) {
-          await this.changeProviderName(providerName)
-          connected = 'success'
-          window.localStorage.setItem('lastProvider', providerName)
-        }
-      } else {
-        connected = 'notInstalled'
+        window.localStorage.setItem('lastProvider', providerName)
+
+        return 'success'
       }
     }
-    return connected
+
+    /** подключение к walletConnect */
+
+    if (providerName === 'walletConnect') {
+      const status = await this.addWalletConnectEventsListener()
+
+      if (status) {
+        await this.changeProviderName(providerName)
+        window.localStorage.setItem('lastProvider', 'walletConnect')
+
+        return 'success'
+      }
+    }
+
+    /** подключение к bsc_wallet */
+
+    if (providerName === BSC_WALLET) {
+      if (!this.bscInstalled) {
+        return 'notInstalled'
+      }
+
+      const status = await this.addBSCEventsListener()
+
+      if (status) {
+        await this.changeProviderName(providerName)
+        window.localStorage.setItem('lastProvider', providerName)
+
+        return 'success'
+      }
+    }
+
+    /** подключение к okex */
+
+    if (providerName === OKEX) {
+      if (!this.okexInstalled) {
+        return 'notInstalled'
+      }
+
+      const status = await this.addOKEXEventsListener()
+
+      if (status) {
+        await this.changeProviderName(providerName)
+        window.localStorage.setItem('lastProvider', providerName)
+
+        return 'success'
+      }
+    }
+
+    /** подключение к tron_link */
+
+    if (providerName === TRON_LINK) {
+      if (!this.tronInstalled) {
+        return 'notInstalled'
+      }
+
+      const status = this.addTronLinkEventsListener()
+
+      if (status) {
+        await this.changeProviderName(providerName)
+        window.localStorage.setItem('lastProvider', providerName)
+
+        return 'success'
+      }
+    }
+
+    /** остальное не поддерживаем */
+
+    return 'error'
   }
 
   /**
@@ -404,25 +455,40 @@ export default class AuthService extends Vue {
    */
   private addMetamaskEventsListener = async (): Promise<boolean> => {
     try {
+      /** получаем selectedAddress и chainId с задержкой */
+
       const setMetamaskData = () => {
-        setTimeout(() => {
-          this.setOrChangeWeb3Data(
-            window.ethereum.selectedAddress,
-            Number(window.ethereum.chainId)
-          )
-        }, 300)
+        return new Promise<void>((resolve) => {
+          setTimeout(() => {
+            this.setOrChangeWeb3Data(
+              window.ethereum.selectedAddress,
+              Number(window.ethereum.chainId)
+            )
+
+            resolve()
+          }, 300)
+        })
       }
+
+      /** запрос на подключение к metamask, привязка к событиям */
+
       if (this.metamaskInstalled) {
         if (!this.metamaskConnected) {
           await window.ethereum.send('eth_requestAccounts')
+
           window.ethereum.on('chainChanged', setMetamaskData)
           window.ethereum.on('accountsChanged', setMetamaskData)
+
           this.metamaskConnected = true
         }
+
         this.provider = window.ethereum
-        setMetamaskData()
+
+        await setMetamaskData()
+
         return true
       }
+
       return false
     } catch {
       return false
@@ -525,13 +591,14 @@ export default class AuthService extends Vue {
     if (typeof window === 'undefined') {
       return false
     }
+
     const device = deviceType()
-    if (device === 'desktop') {
-      providerName = providerName || this.defaultEthereumWallet
-    } else {
+    if (device !== 'desktop') {
       providerName = 'walletConnect'
     }
+
     const status = await this.switchProvider(providerName)
+
     return Boolean(status === 'connected')
   }
 
@@ -621,12 +688,22 @@ export default class AuthService extends Vue {
     }
   }
 
+  public logout = () => {
+    const auth = {
+      authenticated: false,
+      status: true
+    }
+
+    window.localStorage.setItem('auth', JSON.stringify(auth))
+  }
+
   /**
    * Remove connections of provider and localstorage data
    */
   public kill = async (): Promise<void> => {
     await this.disconnect()
     await this.close()
+    this.logout()
     this.provider = undefined
     this.providerName = ''
     window.localStorage.removeItem('lastProvider')
