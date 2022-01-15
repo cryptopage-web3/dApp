@@ -400,6 +400,7 @@ export default class AuthService extends Vue {
       Vue.set(this.data, 'address', address)
       this.data.address = address
     }
+
     if (chainId) {
       Vue.set(this.data, 'chainId', chainId)
       this.data.chainId = chainId
@@ -412,38 +413,46 @@ export default class AuthService extends Vue {
    */
   private addWalletConnectEventsListener = async (): Promise<boolean> => {
     try {
-      if (typeof window !== 'undefined' && !this.walletConnectConnected) {
-        const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
-        const provider = await new WalletConnectProvider({
-          infuraId: infuraProjectId,
-          rpc: {
-            1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
-            4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
-            56: 'https://bsc-dataseed.binance.org',
-            137: 'https://rpc-mainnet.maticvigil.com'
-          }
-        })
-        await provider.enable()
-        this.provider = provider
-        const $web3 = await new Web3(<any>provider)
-        this.changeWeb3($web3)
-        const accounts = await this.$web3.eth.getAccounts()
-        const networkId = await this.$web3.eth.net.getId()
-        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-
-        provider.on('accountsChanged', (accounts: string[]) => {
-          this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-        })
-        provider.on('chainChanged', (chainId: number) => {
-          this.setOrChangeWeb3Data(accounts[0], Number(chainId))
-        })
-        provider.on('close', async () => {
-          await this.kill()
-        })
-        this.walletConnectConnected = true
-        return true
+      if (typeof window === 'undefined' || this.walletConnectConnected) {
+        return false
       }
-      return false
+
+      const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
+      const provider = await new WalletConnectProvider({
+        infuraId: infuraProjectId,
+        rpc: {
+          1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
+          4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
+          56: 'https://bsc-dataseed.binance.org',
+          137: 'https://rpc-mainnet.maticvigil.com'
+        }
+      })
+
+      await provider.enable()
+      this.provider = provider
+
+      const $web3 = await new Web3(<any>provider)
+      this.changeWeb3($web3)
+
+      const accounts = await this.$web3.eth.getAccounts()
+      const networkId = await this.$web3.eth.net.getId()
+      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+
+      provider.on('accountsChanged', (accounts: string[]) => {
+        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+      })
+
+      provider.on('chainChanged', (chainId: number) => {
+        this.setOrChangeWeb3Data(accounts[0], Number(chainId))
+      })
+
+      provider.on('close', async () => {
+        await this.kill()
+      })
+
+      this.walletConnectConnected = true
+
+      return true
     } catch {
       return false
     }
