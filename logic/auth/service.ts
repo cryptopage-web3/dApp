@@ -15,17 +15,26 @@ declare const window: Window &
     BinanceChain: any
     okexchain: any
     tronLink: any
+    solana: any
   }
 
-const [ETHEREUM, BSC, POLYGON, TRON] = ['ETHEREUM', 'BSC', 'POLYGON', 'TRON']
-const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, TRON_LINK] = [
-  'metamask',
-  'walletConnect',
-  'coin98',
-  'bscWallet',
-  'okex',
-  'tron'
+const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = [
+  'ETHEREUM',
+  'BSC',
+  'POLYGON',
+  'TRON',
+  'SOLANA'
 ]
+const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
+  [
+    'metamask',
+    'walletConnect',
+    'coin98',
+    'bscWallet',
+    'okex',
+    'tron',
+    'phantom'
+  ]
 
 const bsc = new BscConnector({
   supportedChainIds: [56, 97]
@@ -102,7 +111,8 @@ export default class AuthService extends Vue {
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
     },
-    tron: { network: 'tron', name: 'Tron Mainnet', slug: 'tron' }
+    tron: { network: 'tron', name: 'Tron Mainnet', slug: 'tron' },
+    solana: { network: 'solana', name: 'Solana Mainnet', slug: 'solana' }
   }
 
   // chainid type is hexadecimal nubers
@@ -162,6 +172,10 @@ export default class AuthService extends Vue {
     return typeof window !== 'undefined' && typeof window?.tronLink === 'object'
   }
 
+  protected get solanaInstalled(): boolean {
+    return typeof window !== 'undefined' && typeof window?.solana === 'object'
+  }
+
   private providerName = METAMASK
   private provider: WalletConnectProvider | undefined
   private metamaskConnected = false
@@ -169,6 +183,7 @@ export default class AuthService extends Vue {
   private bscConnected = false
   private walletConnectConnected = false
   private tronLinkConnected = false
+  private phantomConnected = false
   protected get $web3(): any {
     return Container.get(tokens.WEB3)
   }
@@ -338,6 +353,23 @@ export default class AuthService extends Vue {
       }
     }
 
+    /** подключение к tron_link */
+
+    if (providerName === PHANTOM) {
+      if (!this.solanaInstalled) {
+        return 'notInstalled'
+      }
+
+      const status = this.addPhantomEventsListener()
+
+      if (status) {
+        await this.changeProviderName(providerName)
+        window.localStorage.setItem('lastProvider', providerName)
+
+        return 'success'
+      }
+    }
+
     /** остальное не поддерживаем */
 
     return 'error'
@@ -350,6 +382,10 @@ export default class AuthService extends Vue {
   switchChain = async (networkName: string): Promise<void> => {
     if (networkName === TRON) {
       this.switchProvider(TRON_LINK)
+      return
+    }
+    if (networkName === SOLANA) {
+      this.switchProvider(PHANTOM)
       return
     }
     if (!Object.keys(this._CHAINS).includes(networkName)) {
@@ -417,42 +453,42 @@ export default class AuthService extends Vue {
         return false
       }
 
-      const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
-      const provider = await new WalletConnectProvider({
-        infuraId: infuraProjectId,
-        rpc: {
-          1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
-          4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
-          56: 'https://bsc-dataseed.binance.org',
-          137: 'https://rpc-mainnet.maticvigil.com'
-        }
-      })
+        const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
+        const provider = await new WalletConnectProvider({
+          infuraId: infuraProjectId,
+          rpc: {
+            1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
+            4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
+            56: 'https://bsc-dataseed.binance.org',
+            137: 'https://rpc-mainnet.maticvigil.com'
+          }
+        })
 
-      await provider.enable()
-      this.provider = provider
+        await provider.enable()
+        this.provider = provider
 
-      const $web3 = await new Web3(<any>provider)
-      this.changeWeb3($web3)
+        const $web3 = await new Web3(<any>provider)
+        this.changeWeb3($web3)
 
-      const accounts = await this.$web3.eth.getAccounts()
-      const networkId = await this.$web3.eth.net.getId()
-      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-
-      provider.on('accountsChanged', (accounts: string[]) => {
+        const accounts = await this.$web3.eth.getAccounts()
+        const networkId = await this.$web3.eth.net.getId()
         this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-      })
 
-      provider.on('chainChanged', (chainId: number) => {
-        this.setOrChangeWeb3Data(accounts[0], Number(chainId))
-      })
+        provider.on('accountsChanged', (accounts: string[]) => {
+          this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+        })
 
-      provider.on('close', async () => {
-        await this.kill()
-      })
+        provider.on('chainChanged', (chainId: number) => {
+          this.setOrChangeWeb3Data(accounts[0], Number(chainId))
+        })
 
-      this.walletConnectConnected = true
+        provider.on('close', async () => {
+          await this.kill()
+        })
 
-      return true
+        this.walletConnectConnected = true
+
+        return true
     } catch {
       return false
     }
@@ -462,7 +498,7 @@ export default class AuthService extends Vue {
    * Adding event listener for metamask
    * @returns {Boolean}
    */
-  private addMetamaskEventsListener = async (): Promise<boolean> => {
+   private addMetamaskEventsListener = async (): Promise<boolean> => {
     try {
       /** получаем selectedAddress и chainId с задержкой */
 
@@ -571,7 +607,7 @@ export default class AuthService extends Vue {
    */
   private addTronLinkEventsListener = (): boolean => {
     try {
-      const setTronata = () => {
+      const setTronData = () => {
         setTimeout(async () => {
           await window.tronLink.request({ method: 'tron_requestAccounts' })
           const address = window.tronLink.tronWeb.defaultAddress?.base58
@@ -583,7 +619,34 @@ export default class AuthService extends Vue {
           this.tronLinkConnected = true
         }
         this.provider = window.tronLink.tronWeb
-        setTronata()
+        setTronData()
+        return true
+      }
+      return false
+    } catch {
+      return false
+    }
+  }
+
+  /**
+   * Adding event listener for phantom
+   * @returns {Boolean}
+   */
+  private addPhantomEventsListener = (): boolean => {
+    try {
+      const setSolanaData = () => {
+        setTimeout(async () => {
+          const result = await window.solana.connect()
+          const address = result?.publicKey?.toString()
+          this.setOrChangeWeb3Data(address, 'solana')
+        }, 300)
+      }
+      if (this.solanaInstalled) {
+        if (!this.phantomConnected) {
+          this.phantomConnected = true
+        }
+        this.provider = window.solana
+        setSolanaData()
         return true
       }
       return false
@@ -596,7 +659,7 @@ export default class AuthService extends Vue {
    * Initialize web3 provider functionality
    * @param {String} providerName - value of provider
    */
-  public init = async (providerName = METAMASK): Promise<boolean> => {
+   public init = async (providerName = METAMASK): Promise<boolean> => {
     if (typeof window === 'undefined') {
       return false
     }
@@ -658,9 +721,9 @@ export default class AuthService extends Vue {
       return commonError
     }
 
-    return {
-      status: 'success'
-    }
+      return {
+        status: 'success'
+      }
   }
 
   public disconnect = async (): Promise<void> => {
@@ -677,6 +740,8 @@ export default class AuthService extends Vue {
       this.bscConnected = false
     } else if (this.tronLinkConnected) {
       this.tronLinkConnected = false
+    } else if (this.phantomConnected) {
+      this.phantomConnected = false
     }
   }
 
@@ -694,6 +759,8 @@ export default class AuthService extends Vue {
       this.bscConnected = false
     } else if (this.tronLinkConnected) {
       this.tronLinkConnected = false
+    } else if (this.phantomConnected) {
+      this.phantomConnected = false
     }
   }
 
