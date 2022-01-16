@@ -8,7 +8,8 @@ const tokenNames: Record<string, string> = {
   'bsc-testnet': 'bep20',
   polygon: 'erc20',
   'polygon-testnet': 'erc20',
-  tron: 'trc20'
+  tron: 'trc20',
+  solana: 'sol20'
 }
 
 export default tokenNames

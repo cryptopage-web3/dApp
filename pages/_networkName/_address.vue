@@ -36,10 +36,11 @@ export default class AddressPage extends Vue {
       'polygon',
       'polygon-testnet',
       'ganache',
-      'tron'
+      'tron',
+      'solana'
     ]
     const isValid = validNetworkNames.includes(networkName)
-    return isValid && networkName === 'tron'
+    return isValid && (networkName === 'tron' || networkName === 'solana')
       ? true
       : $web3.utils.isAddress(params.address)
   }
@@ -56,7 +57,8 @@ export default class AddressPage extends Vue {
       'bsc-testnet': 97,
       polygon: 137,
       'polygon-testnet': 80001,
-      tron: 'tron'
+      tron: 'tron',
+      solana: 'solana'
     }
 
     const chainId = validNetworks[networkName]
