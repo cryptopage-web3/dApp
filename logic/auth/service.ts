@@ -5,7 +5,10 @@ import Web3 from 'web3'
 import { Service, Container, Inject } from 'vue-typedi'
 import { Component } from 'nuxt-property-decorator'
 import { deviceType } from '~/utils'
-import { AuthServiceSigninResponseType } from '~/logic/auth/types'
+import {
+  AuthServiceSigninResponseType,
+  ConnectResponseType
+} from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 
@@ -239,19 +242,37 @@ export default class AuthService extends Vue {
   }
 
   /**
+   * Set or Change web3 data into instance.
+   * @param {String} address - address of current wallet
+   * @param {Number} chainId - chainId of current network
+   * @returns {Void}
+   */
+  public setOrChangeWeb3Data(address: string, chainId: number | string): void {
+    if (address) {
+      Vue.set(this.data, 'address', address)
+      this.data.address = address
+    }
+
+    if (chainId) {
+      Vue.set(this.data, 'chainId', chainId)
+      this.data.chainId = chainId
+    }
+  }
+
+  /**
    * Change the provider of web3
    * @param {String} provider - value of provider
    * @returns {Boolean} - if successfully connected
    */
-  public async changeProviderName(providerName: string): Promise<void> {
+  public changeProviderName(providerName: string): void {
     this.providerName = providerName
 
-    if (providerName === 'walletConnect' && this.$web3) {
-      const accounts = await this.$web3.eth.getAccounts()
-      const networkId = await this.$web3.eth.net.getId()
+    // if (providerName === 'walletConnect' && this.$web3) {
+    //   const accounts = await this.$web3.eth.getAccounts()
+    //   const networkId = await this.$web3.eth.net.getId()
 
-      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-    }
+    //   this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+    // }
   }
 
   /**
@@ -259,52 +280,25 @@ export default class AuthService extends Vue {
    * @param {String} providerName - value of providerName
    * @returns {String} - result of action
    */
-  public switchProvider = async (providerName: string): Promise<string> => {
+  public switchProvider = async (
+    providerName: string
+  ): Promise<string | ConnectResponseType> => {
     /** подключение к metamask */
 
-    if (providerName === METAMASK || providerName === COIN98) {
-      if (!this.metamaskInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = await this.addMetamaskEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
+    if (providerName === METAMASK) {
+      return await this.connectToMetamask()
     }
 
     /** подключение к walletConnect */
 
     if (providerName === 'walletConnect') {
-      const status = await this.addWalletConnectEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', 'walletConnect')
-
-        return 'success'
-      }
+      return await this.connectToWalletConnect()
     }
 
     /** подключение к bsc_wallet */
 
     if (providerName === BSC_WALLET) {
-      if (!this.bscInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = await this.addBSCEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
+      return await this.connectToBscWallet()
     }
 
     /** подключение к okex */
@@ -407,20 +401,113 @@ export default class AuthService extends Vue {
   }
 
   /**
-   * Set or Change web3 data into instance.
-   * @param {String} address - address of current wallet
-   * @param {Number} chainId - chainId of current network
-   * @returns {Void}
+   * ======== METAMASK ========
+   *
+   * подключение к metamask
    */
-  public setOrChangeWeb3Data(address: string, chainId: number | string): void {
-    if (address) {
-      Vue.set(this.data, 'address', address)
-      this.data.address = address
+  public connectToMetamask = async (): Promise<ConnectResponseType> => {
+    if (!this.metamaskInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found MetaMask extension',
+          text: 'Please install MetaMask Ext.,<br>reload page and try again'
+        }
+      }
     }
 
-    if (chainId) {
-      Vue.set(this.data, 'chainId', chainId)
-      this.data.chainId = chainId
+    const status = await this.addMetamaskEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to MetaMask',
+          text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(METAMASK)
+    window.localStorage.setItem('lastProvider', METAMASK)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
+   * Adding event listener for metamask
+   * @returns {Boolean}
+   */
+  private addMetamaskEventsListener = async (): Promise<boolean> => {
+    try {
+      /** получаем selectedAddress и chainId с задержкой */
+
+      const setMetamaskData = () => {
+        return new Promise<void>((resolve) => {
+          setTimeout(() => {
+            this.setOrChangeWeb3Data(
+              window.ethereum.selectedAddress,
+              Number(window.ethereum.chainId)
+            )
+
+            resolve()
+          }, 300)
+        })
+      }
+
+      /** запрос на подключение к metamask, привязка к событиям */
+
+      if (this.metamaskInstalled) {
+        if (!this.metamaskConnected) {
+          await window.ethereum.send('eth_requestAccounts')
+
+          window.ethereum.on('chainChanged', setMetamaskData)
+          window.ethereum.on('accountsChanged', setMetamaskData)
+
+          this.metamaskConnected = true
+        }
+
+        this.provider = window.ethereum
+
+        await setMetamaskData()
+
+        return true
+      }
+
+      return false
+    } catch {
+      return false
+    }
+  }
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== WALLET_CONNECT ========
+   *
+   * подключение к walletConnect
+   */
+  public connectToWalletConnect = async (): Promise<ConnectResponseType> => {
+    const status = await this.addWalletConnectEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'WalletConnect not connected',
+          text: 'Please connect to the wallet,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(WALLET_CONNECT)
+    window.localStorage.setItem('lastProvider', WALLET_CONNECT)
+
+    return {
+      status: 'success'
     }
   }
 
@@ -474,50 +561,43 @@ export default class AuthService extends Vue {
       return false
     }
   }
+  /**
+   * ========================
+   */
 
   /**
-   * Adding event listener for metamask
-   * @returns {Boolean}
+   * ======== BSC_WALLET ========
+   *
+   * подключение к bsc_wallet
    */
-  private addMetamaskEventsListener = async (): Promise<boolean> => {
-    try {
-      /** получаем selectedAddress и chainId с задержкой */
-
-      const setMetamaskData = () => {
-        return new Promise<void>((resolve) => {
-          setTimeout(() => {
-            this.setOrChangeWeb3Data(
-              window.ethereum.selectedAddress,
-              Number(window.ethereum.chainId)
-            )
-
-            resolve()
-          }, 300)
-        })
-      }
-
-      /** запрос на подключение к metamask, привязка к событиям */
-
-      if (this.metamaskInstalled) {
-        if (!this.metamaskConnected) {
-          await window.ethereum.send('eth_requestAccounts')
-
-          window.ethereum.on('chainChanged', setMetamaskData)
-          window.ethereum.on('accountsChanged', setMetamaskData)
-
-          this.metamaskConnected = true
+  public connectToBscWallet = async (): Promise<ConnectResponseType> => {
+    if (!this.bscInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found Binance Wallet extension',
+          text: 'Please install Binance Wallet Ext.,<br>reload page and try again'
         }
-
-        this.provider = window.ethereum
-
-        await setMetamaskData()
-
-        return true
       }
+    }
 
-      return false
-    } catch {
-      return false
+    const status = await this.addBSCEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to Binance Wallet',
+          text: 'Please accept connect in the Binance Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(BSC_WALLET)
+    window.localStorage.setItem('lastProvider', BSC_WALLET)
+
+    return {
+      status: 'success'
     }
   }
 
@@ -527,29 +607,47 @@ export default class AuthService extends Vue {
    */
   private addBSCEventsListener = async (): Promise<boolean> => {
     try {
+      /** получаем selectedAddress и chainId с задержкой */
+
       const setBSCData = () => {
-        setTimeout(async () => {
-          const address: any = await bsc.getAccount()
-          const chainId = await bsc.getChainId()
-          this.setOrChangeWeb3Data(address, Number(chainId))
-        }, 300)
+        return new Promise<void>((resolve) => {
+          setTimeout(async () => {
+            const address: any = await bsc.getAccount()
+            const chainId = await bsc.getChainId()
+            this.setOrChangeWeb3Data(address, Number(chainId))
+
+            resolve()
+          }, 300)
+        })
       }
+
+      /** запрос на подключение к binance wallet, привязка к событиям */
+
       if (this.bscInstalled) {
         if (!this.bscConnected) {
           await bsc.activate()
+
           window.BinanceChain.on('chainChanged', setBSCData)
           window.BinanceChain.on('accountsChanged', setBSCData)
+
           this.bscConnected = true
         }
+
         this.provider = window.BinanceChain
-        setBSCData()
+
+        await setBSCData()
+
         return true
       }
+
       return false
     } catch {
       return false
     }
   }
+  /**
+   * ========================
+   */
 
   /**
    * Adding event listener for okex

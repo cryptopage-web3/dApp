@@ -404,16 +404,27 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  computed: {
-    selectedProvider() {
-      return this.$store.getters['auth/selectedProviderName']
-    },
-    selectedNetworkType() {
-      return this.$store.getters['auth/selectedNetworkType']
-    }
-  },
+
+<script lang="ts">
+import Vue from 'vue'
+import { Component, Emit, mixins } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
+import NetworkNameMixin from '~/mixins/networkName'
+import { INotifyParams } from '~/types'
+import TypedStore from '~/logic/store'
+
+@Component({})
+export default class ConnectModal extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
+  get selectedProvider(): string {
+    return this.typedStore.auth.selectedProviderName
+  }
+
+  get selectedNetworkType(): string {
+    return this.typedStore.auth.selectedNetworkType
+  }
+
   mounted() {
     /** выбор сети */
 
@@ -424,7 +435,7 @@ export default {
         return
       }
 
-      const id = $(this).attr('href')
+      const id = $(this).attr('href') || ''
       $('.modal-content__link').removeClass('active')
       $(this).addClass('active')
       $('.modal-content-wr').removeClass('active')
@@ -450,42 +461,45 @@ export default {
         $('.modal-backdrop').addClass('modal-backdrop_dark')
       })
     })
-  },
-  methods: {
-    switchProvider(type, provider) {
-      if (type === 'TRON' && !window.tronLink?.tronWeb) {
-        this.$notify({
-          type: 'error',
-          title: 'Please download TronLink extension'
-        })
-        return
-      }
-      if (
-        type === 'TRON' &&
-        window.tronLink?.tronWeb &&
-        !window.tronLink?.tronWeb?.defaultAddress?.base58
-      ) {
-        this.$notify({
-          type: 'error',
-          title: 'Please login to TronLink'
-        })
-        return
-      }
-      if (
-        (provider === 'metamask' || provider === 'coin98') &&
-        provider === this.selectedProvider
-      ) {
-        this.$store.dispatch('auth/switchChain', type)
-      } else {
-        this.$store.dispatch('auth/switchProvider', provider)
-        if (type !== this.selectedNetworkType && type !== 'TRON') {
-          this.$store.dispatch('auth/switchChain', type)
-        }
-      }
+  }
 
-      /** close modal on switch */
-      $('#modal-connect').modal('hide')
-    }
+  // methods
+
+  async switchProvider(type, provider) {
+    const response = await this.$store.dispatch('auth/switchProvider', provider)
+
+    // if (type === 'TRON' && !window.tronLink?.tronWeb) {
+    //   this.$notify({
+    //     type: 'error',
+    //     title: 'Please download TronLink extension'
+    //   })
+    //   return
+    // }
+    // if (
+    //   type === 'TRON' &&
+    //   window.tronLink?.tronWeb &&
+    //   !window.tronLink?.tronWeb?.defaultAddress?.base58
+    // ) {
+    //   this.$notify({
+    //     type: 'error',
+    //     title: 'Please login to TronLink'
+    //   })
+    //   return
+    // }
+    // if (
+    //   (provider === 'metamask' || provider === 'coin98') &&
+    //   provider === this.selectedProvider
+    // ) {
+    //   this.$store.dispatch('auth/switchChain', type)
+    // } else {
+    //   this.$store.dispatch('auth/switchProvider', provider)
+    //   if (type !== this.selectedNetworkType && type !== 'TRON') {
+    //     this.$store.dispatch('auth/switchChain', type)
+    //   }
+    // }
+
+    /** close modal on switch */
+    ;($('#modal-connect') as any).modal('hide')
   }
 }
 </script>

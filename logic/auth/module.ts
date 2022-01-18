@@ -1,7 +1,10 @@
 import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
 import AuthService from '~/logic/auth/service'
-import { AuthServiceSigninResponseType } from '~/logic/auth/types'
+import {
+  AuthServiceSigninResponseType,
+  ConnectResponseType
+} from '~/logic/auth/types'
 import tokens from '~/logic/tokens'
 
 @Injectable()
@@ -85,8 +88,10 @@ export default class AuthModule {
   }
 
   @Action()
-  public async switchProvider(providerName: string): Promise<void> {
-    await this.authService.switchProvider(providerName)
+  public async switchProvider(
+    providerName: string
+  ): Promise<string | ConnectResponseType> {
+    return await this.authService.switchProvider(providerName)
   }
 
   @Action()
