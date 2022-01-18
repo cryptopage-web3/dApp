@@ -304,18 +304,7 @@ export default class AuthService extends Vue {
     /** подключение к okex */
 
     if (providerName === OKEX) {
-      if (!this.okexInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = await this.addOKEXEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
+      return await this.connectToOkex()
     }
 
     /** подключение к tron_link */
@@ -650,35 +639,89 @@ export default class AuthService extends Vue {
    */
 
   /**
+   * ======== OKEX ========
+   *
+   * подключение к okex
+   */
+  public connectToOkex = async (): Promise<ConnectResponseType> => {
+    if (!this.okexInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found MetaX extension',
+          text: 'Please install MetaX Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    const status = await this.addOKEXEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to MetaX',
+          text: 'Please accept connect in the MetaX Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(OKEX)
+    window.localStorage.setItem('lastProvider', OKEX)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
    * Adding event listener for okex
    * @returns {Boolean}
    */
   private addOKEXEventsListener = async (): Promise<boolean> => {
     try {
+      /** получаем selectedAddress и chainId с задержкой */
+
       const setOKEXData = () => {
-        setTimeout(() => {
-          this.setOrChangeWeb3Data(
-            window.okexchain.selectedAddress,
-            Number(window.okexchain.chainId)
-          )
-        }, 300)
+        return new Promise<void>((resolve) => {
+          setTimeout(() => {
+            this.setOrChangeWeb3Data(
+              window.okexchain.selectedAddress,
+              Number(window.okexchain.chainId)
+            )
+
+            resolve()
+          }, 300)
+        })
       }
+
+      /** запрос на подключение к okex, привязка к событиям */
+
       if (this.okexInstalled) {
         if (!this.okexConnected) {
           await window.okexchain.send('eth_requestAccounts')
+
           window.okexchain.on('chainChanged', setOKEXData)
           window.okexchain.on('accountsChanged', setOKEXData)
+
           this.okexConnected = true
         }
+
         this.provider = window.okexchain
-        setOKEXData()
+
+        await setOKEXData()
+
         return true
       }
+
       return false
     } catch {
       return false
     }
   }
+  /**
+   * ========================
+   */
 
   /**
    * Adding event listener for tronlink
