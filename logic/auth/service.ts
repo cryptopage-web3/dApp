@@ -764,9 +764,7 @@ export default class AuthService extends Vue {
 
       const setTronata = () => {
         return new Promise<void>((resolve) => {
-          setTimeout(async () => {
-            await window.tronLink.request({ method: 'tron_requestAccounts' })
-
+          setTimeout(() => {
             const address = window.tronLink.tronWeb.defaultAddress?.base58
             this.setOrChangeWeb3Data(address, 'tron')
 
@@ -779,6 +777,8 @@ export default class AuthService extends Vue {
 
       if (this.tronInstalled) {
         if (!this.tronLinkConnected) {
+          await window.tronLink.request({ method: 'tron_requestAccounts' })
+
           this.tronLinkConnected = true
         }
 
