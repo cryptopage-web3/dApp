@@ -328,21 +328,10 @@ export default class AuthService extends Vue {
       return await this.connectToTronLink()
     }
 
-    /** подключение к tron_link */
+    /** подключение к phantom */
 
     if (providerName === PHANTOM) {
-      if (!this.solanaInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = this.addPhantomEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
+      return await this.connectToPhantom()
     }
 
     /** остальное не поддерживаем */
@@ -836,31 +825,85 @@ export default class AuthService extends Vue {
    */
 
   /**
+   * ======== PHANTOM ========
+   *
+   * подключение к phantom
+   */
+  public connectToPhantom = async (): Promise<ConnectResponseType> => {
+    if (!this.solanaInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found Phantom extension',
+          text: 'Please install Phantom Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    const status = await this.addPhantomEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to Phantom',
+          text: 'Please accept connect in the Phantom Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(PHANTOM)
+    window.localStorage.setItem('lastProvider', PHANTOM)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
    * Adding event listener for phantom
    * @returns {Boolean}
    */
-  private addPhantomEventsListener = (): boolean => {
+  private addPhantomEventsListener = async (): Promise<boolean> => {
     try {
+      /** получаем selectedAddress и chainId с задержкой */
+
       const setSolanaData = () => {
-        setTimeout(async () => {
-          const result = await window.solana.connect()
-          const address = result?.publicKey?.toString()
-          this.setOrChangeWeb3Data(address, 'solana')
-        }, 300)
+        return new Promise<void>((resolve) => {
+          setTimeout(async () => {
+            const result = await window.solana.connect()
+            const address = result?.publicKey?.toString()
+            this.setOrChangeWeb3Data(address, 'solana')
+
+            resolve()
+          }, 300)
+        })
       }
+
+      /** запрос на подключение к phantom, привязка к событиям */
+
       if (this.solanaInstalled) {
         if (!this.phantomConnected) {
+          await window.solana.connect()
+
           this.phantomConnected = true
         }
+
         this.provider = window.solana
-        setSolanaData()
+
+        await setSolanaData()
+
         return true
       }
+
       return false
     } catch {
       return false
     }
   }
+  /**
+   * ========================
+   */
 
   /**
    * Initialize web3 provider functionality
