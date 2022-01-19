@@ -282,7 +282,7 @@ export default class AuthService extends Vue {
    */
   public switchProvider = async (
     providerName: string
-  ): Promise<string | ConnectResponseType> => {
+  ): Promise<ConnectResponseType> => {
     /** подключение к metamask */
 
     if (providerName === METAMASK) {
@@ -310,23 +310,18 @@ export default class AuthService extends Vue {
     /** подключение к tron_link */
 
     if (providerName === TRON_LINK) {
-      if (!this.tronInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = this.addTronLinkEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
+      return await this.connectToTronLink()
     }
 
     /** остальное не поддерживаем */
 
-    return 'error'
+    return {
+      status: 'error',
+      message: {
+        title: 'This provider is not available',
+        text: 'Please try another provider'
+      }
+    }
   }
 
   /**
@@ -724,31 +719,84 @@ export default class AuthService extends Vue {
    */
 
   /**
+   * ======== TRON_LINK ========
+   *
+   * подключение к tron_link
+   */
+  public connectToTronLink = async (): Promise<ConnectResponseType> => {
+    if (!this.tronInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found TronLink extension',
+          text: 'Please install TronLink Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    const status = await this.addTronLinkEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to TronLink',
+          text: 'Please accept connect in the TronLink Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(TRON_LINK)
+    window.localStorage.setItem('lastProvider', TRON_LINK)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
    * Adding event listener for tronlink
    * @returns {Boolean}
    */
-  private addTronLinkEventsListener = (): boolean => {
+  private addTronLinkEventsListener = async (): Promise<boolean> => {
     try {
+      /** получаем selectedAddress и chainId с задержкой */
+
       const setTronata = () => {
-        setTimeout(async () => {
-          await window.tronLink.request({ method: 'tron_requestAccounts' })
-          const address = window.tronLink.tronWeb.defaultAddress?.base58
-          this.setOrChangeWeb3Data(address, 'tron')
-        }, 300)
+        return new Promise<void>((resolve) => {
+          setTimeout(async () => {
+            await window.tronLink.request({ method: 'tron_requestAccounts' })
+
+            const address = window.tronLink.tronWeb.defaultAddress?.base58
+            this.setOrChangeWeb3Data(address, 'tron')
+
+            resolve()
+          }, 300)
+        })
       }
+
+      /** запрос на подключение к tron, привязка к событиям */
+
       if (this.tronInstalled) {
         if (!this.tronLinkConnected) {
           this.tronLinkConnected = true
         }
+
         this.provider = window.tronLink.tronWeb
-        setTronata()
+
+        await setTronata()
+
         return true
       }
+
       return false
     } catch {
       return false
     }
   }
+  /**
+   * ========================
+   */
 
   /**
    * Initialize web3 provider functionality
@@ -766,7 +814,7 @@ export default class AuthService extends Vue {
 
     const status = await this.switchProvider(providerName)
 
-    return Boolean(status === 'connected')
+    return status.status === 'success'
   }
 
   public signin = async (): Promise<AuthServiceSigninResponseType> => {

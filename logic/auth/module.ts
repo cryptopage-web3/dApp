@@ -90,7 +90,7 @@ export default class AuthModule {
   @Action()
   public async switchProvider(
     providerName: string
-  ): Promise<string | ConnectResponseType> {
+  ): Promise<ConnectResponseType> {
     return await this.authService.switchProvider(providerName)
   }
 
