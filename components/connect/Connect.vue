@@ -68,7 +68,10 @@
           </li>
         </ul>
       </div>
-      <div ref="changeNetworkList" class="change-network-col-body">
+      <div
+        ref="changeNetworkList"
+        class="change-network-col-body"
+      >
         <ul class="change-network__list">
           <li>
             <a href="#" @click.prevent="switchChain('ETHEREUM')">
@@ -92,6 +95,12 @@
             <a href="#" @click.prevent="switchChain('TRON')">
               <img src="@/assets/img/modal-content__link_img4.png" alt="" />
               Tron
+            </a>
+          </li>
+          <li>
+            <a href="#" @click.prevent="switchChain('SOLANA')">
+              <img src="@/assets/img/modal-content__link_img5.png" alt="" />
+              Solana
             </a>
           </li>
         </ul>
@@ -155,7 +164,8 @@ export default class Connect extends mixins(NetworkNameMixin) {
       ethereum: require('@/assets/img/modal-content__link_img1.png'),
       bsc: require('@/assets/img/modal-content__link_img2.png'),
       polygon: require('@/assets/img/modal-content__link_img3.png'),
-      tron: require('@/assets/img/modal-content__link_img4.png')
+      tron: require('@/assets/img/modal-content__link_img4.png'),
+      solana: require('@/assets/img/modal-content__link_img5.png')
     }
 
     return icons[this.selectedNetworkType]
@@ -171,37 +181,37 @@ export default class Connect extends mixins(NetworkNameMixin) {
       /** dropdown авторизованного кошелька */
 
       if (isAuth) {
-        $(this.$refs.connect).hover(
-          function () {
-            $(this).addClass('active')
+      $(this.$refs.connect).hover(
+        function () {
+          $(this).addClass('active')
+          $('.connect-wallet-col')
+            .find('.connect-wallet-col-body')
+            .stop(true, true)
+            .slideDown(300)
+        },
+        function () {
+          self.connectDropdownTimeout = setTimeout(() => {
+            $(this).removeClass('active')
             $('.connect-wallet-col')
               .find('.connect-wallet-col-body')
-              .stop(true, true)
-              .slideDown(300)
-          },
-          function () {
-            self.connectDropdownTimeout = setTimeout(() => {
-              $(this).removeClass('active')
-              $('.connect-wallet-col')
-                .find('.connect-wallet-col-body')
-                .slideUp(300)
-            }, 300)
-          }
-        )
+              .slideUp(300)
+          }, 300)
+        }
+      )
 
-        $(this.$refs.connectList).hover(
-          function () {
-            if (!self.connectDropdownTimeout) {
-              return
+      $(this.$refs.connectList).hover(
+        function () {
+          if (!self.connectDropdownTimeout) {
+            return
+          }
+
+          clearTimeout(self.connectDropdownTimeout)
+        },
+        function () {
+          $('.connect-wallet-col-body').slideUp(300)
+        }
+      )
             }
-
-            clearTimeout(self.connectDropdownTimeout)
-          },
-          function () {
-            $('.connect-wallet-col-body').slideUp(300)
-          }
-        )
-      }
 
       /** dropdown смены сетей */
 

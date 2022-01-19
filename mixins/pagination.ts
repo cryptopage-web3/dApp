@@ -145,7 +145,8 @@ export default class PaginationMixin extends Vue {
       97: 'bsc-testnet',
       137: 'polygon',
       80001: 'polygon-testnet',
-      tron: 'tron'
+      tron: 'tron',
+      solana: 'solana'
     }
     const networkName = validNetworks[chainId]
     if (networkName) params.networkName = networkName

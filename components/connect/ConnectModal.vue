@@ -60,8 +60,10 @@
               </li>
               <li>
                 <a
+                  id="modal-content-solana"
                   href="#modal-content5"
-                  class="modal-content__link modal-content__link_disabled"
+                  class="modal-content__link fill"
+                  :class="selectedNetworkType === 'solana' ? 'active' : ''"
                 >
                   <img src="@/assets/img/modal-content__link_img5.png" alt="" />
                   <span></span>
@@ -339,60 +341,16 @@
                 </ul>
               </div>
               <div id="modal-content5" class="modal-content-wr">
-                <div class="modal-content-wallet-title">ETH Wallet5</div>
+                <div class="modal-content-wallet-title">Solana</div>
                 <ul class="modal-content-wallet-list">
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img1.png"
-                        alt=""
-                      />
-                      <span> MetaMask </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img2.png"
-                        alt=""
-                      />
-                      <span> WalletConnect </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img3.png"
-                        alt=""
-                      />
-                      <span> Trust Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img4.png"
-                        alt=""
-                      />
-                      <span> SafePal wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img5.png"
-                        alt=""
-                      />
-                      <span> Coin9B Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img6.png"
-                        alt=""
-                      />
-                      <span> OKEx Wallet </span>
+                    <a
+                      href="#"
+                      class="modal-content-wallet__link"
+                      @click.prevent="switchProvider('SOLANA', 'phantom')"
+                    >
+                      <img src="@/assets/img/phantom_.png" alt="" />
+                      <span> Phantom </span>
                     </a>
                   </li>
                 </ul>
@@ -483,6 +441,13 @@ export default class ConnectModal extends Vue {
     //   this.$notify({
     //     type: 'error',
     //     title: 'Please login to TronLink'
+    //   })
+    //   return
+    // }
+    // if (type === 'SOLANA' && !window.solana?.isPhantom) {
+    //   this.$notify({
+    //     type: 'error',
+    //     title: 'Please login to Phantom'
     //   })
     //   return
     // }

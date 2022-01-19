@@ -18,17 +18,26 @@ declare const window: Window &
     BinanceChain: any
     okexchain: any
     tronLink: any
+    solana: any
   }
 
-const [ETHEREUM, BSC, POLYGON, TRON] = ['ETHEREUM', 'BSC', 'POLYGON', 'TRON']
-const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, TRON_LINK] = [
-  'metamask',
-  'walletConnect',
-  'coin98',
-  'bscWallet',
-  'okex',
-  'tron'
+const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = [
+  'ETHEREUM',
+  'BSC',
+  'POLYGON',
+  'TRON',
+  'SOLANA'
 ]
+const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
+  [
+    'metamask',
+    'walletConnect',
+    'coin98',
+    'bscWallet',
+    'okex',
+    'tron',
+    'phantom'
+  ]
 
 const bsc = new BscConnector({
   supportedChainIds: [56, 97]
@@ -105,7 +114,8 @@ export default class AuthService extends Vue {
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
     },
-    tron: { network: 'tron', name: 'Tron', slug: 'tron' }
+    tron: { network: 'tron', name: 'Tron', slug: 'tron' },
+    solana: { network: 'solana', name: 'Solana', slug: 'solana' }
   }
 
   // chainid type is hexadecimal nubers
@@ -168,6 +178,10 @@ export default class AuthService extends Vue {
     return typeof window !== 'undefined' && typeof window?.tronLink === 'object'
   }
 
+  protected get solanaInstalled(): boolean {
+    return typeof window !== 'undefined' && typeof window?.solana === 'object'
+  }
+
   private providerName = METAMASK
   private provider: WalletConnectProvider | undefined
   private metamaskConnected = false
@@ -175,6 +189,7 @@ export default class AuthService extends Vue {
   private bscConnected = false
   private walletConnectConnected = false
   private tronLinkConnected = false
+  private phantomConnected = false
   protected get $web3(): any {
     return Container.get(tokens.WEB3)
   }
@@ -313,6 +328,23 @@ export default class AuthService extends Vue {
       return await this.connectToTronLink()
     }
 
+    /** подключение к tron_link */
+
+    if (providerName === PHANTOM) {
+      if (!this.solanaInstalled) {
+        return 'notInstalled'
+      }
+
+      const status = this.addPhantomEventsListener()
+
+      if (status) {
+        await this.changeProviderName(providerName)
+        window.localStorage.setItem('lastProvider', providerName)
+
+        return 'success'
+      }
+    }
+
     /** остальное не поддерживаем */
 
     return {
@@ -331,6 +363,11 @@ export default class AuthService extends Vue {
   switchChain = async (networkName: string): Promise<void> => {
     if (networkName === TRON) {
       this.switchProvider(TRON_LINK)
+      return
+    }
+
+    if (networkName === SOLANA) {
+      this.switchProvider(PHANTOM)
       return
     }
 
@@ -799,6 +836,33 @@ export default class AuthService extends Vue {
    */
 
   /**
+   * Adding event listener for phantom
+   * @returns {Boolean}
+   */
+  private addPhantomEventsListener = (): boolean => {
+    try {
+      const setSolanaData = () => {
+        setTimeout(async () => {
+          const result = await window.solana.connect()
+          const address = result?.publicKey?.toString()
+          this.setOrChangeWeb3Data(address, 'solana')
+        }, 300)
+      }
+      if (this.solanaInstalled) {
+        if (!this.phantomConnected) {
+          this.phantomConnected = true
+        }
+        this.provider = window.solana
+        setSolanaData()
+        return true
+      }
+      return false
+    } catch {
+      return false
+    }
+  }
+
+  /**
    * Initialize web3 provider functionality
    * @param {String} providerName - value of provider
    */
@@ -883,6 +947,8 @@ export default class AuthService extends Vue {
       this.bscConnected = false
     } else if (this.tronLinkConnected) {
       this.tronLinkConnected = false
+    } else if (this.phantomConnected) {
+      this.phantomConnected = false
     }
   }
 
@@ -900,6 +966,8 @@ export default class AuthService extends Vue {
       this.bscConnected = false
     } else if (this.tronLinkConnected) {
       this.tronLinkConnected = false
+    } else if (this.phantomConnected) {
+      this.phantomConnected = false
     }
   }
 
