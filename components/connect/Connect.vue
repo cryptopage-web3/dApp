@@ -68,10 +68,7 @@
           </li>
         </ul>
       </div>
-      <div
-        ref="changeNetworkList"
-        class="change-network-col-body"
-      >
+      <div ref="changeNetworkList" class="change-network-col-body">
         <ul class="change-network__list">
           <li>
             <a href="#" @click.prevent="switchChain('ETHEREUM')">
@@ -181,37 +178,37 @@ export default class Connect extends mixins(NetworkNameMixin) {
       /** dropdown авторизованного кошелька */
 
       if (isAuth) {
-      $(this.$refs.connect).hover(
-        function () {
-          $(this).addClass('active')
-          $('.connect-wallet-col')
-            .find('.connect-wallet-col-body')
-            .stop(true, true)
-            .slideDown(300)
-        },
-        function () {
-          self.connectDropdownTimeout = setTimeout(() => {
-            $(this).removeClass('active')
+        $(this.$refs.connect).hover(
+          function () {
+            $(this).addClass('active')
             $('.connect-wallet-col')
               .find('.connect-wallet-col-body')
-              .slideUp(300)
-          }, 300)
-        }
-      )
-
-      $(this.$refs.connectList).hover(
-        function () {
-          if (!self.connectDropdownTimeout) {
-            return
+              .stop(true, true)
+              .slideDown(300)
+          },
+          function () {
+            self.connectDropdownTimeout = setTimeout(() => {
+              $(this).removeClass('active')
+              $('.connect-wallet-col')
+                .find('.connect-wallet-col-body')
+                .slideUp(300)
+            }, 300)
           }
+        )
 
-          clearTimeout(self.connectDropdownTimeout)
-        },
-        function () {
-          $('.connect-wallet-col-body').slideUp(300)
-        }
-      )
+        $(this.$refs.connectList).hover(
+          function () {
+            if (!self.connectDropdownTimeout) {
+              return
             }
+
+            clearTimeout(self.connectDropdownTimeout)
+          },
+          function () {
+            $('.connect-wallet-col-body').slideUp(300)
+          }
+        )
+      }
 
       /** dropdown смены сетей */
 

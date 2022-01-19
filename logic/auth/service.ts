@@ -799,7 +799,7 @@ export default class AuthService extends Vue {
     try {
       /** получаем selectedAddress и chainId с задержкой */
 
-      const setTronata = () => {
+      const setTronData = () => {
         return new Promise<void>((resolve) => {
           setTimeout(() => {
             const address = window.tronLink.tronWeb.defaultAddress?.base58
@@ -821,7 +821,7 @@ export default class AuthService extends Vue {
 
         this.provider = window.tronLink.tronWeb
 
-        await setTronata()
+        await setTronData()
 
         return true
       }

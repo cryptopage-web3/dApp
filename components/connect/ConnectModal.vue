@@ -62,8 +62,7 @@
                 <a
                   id="modal-content-solana"
                   href="#modal-content5"
-                  class="modal-content__link fill"
-                  :class="selectedNetworkType === 'solana' ? 'active' : ''"
+                  class="modal-content__link modal-content__link_solana fill"
                 >
                   <img src="@/assets/img/modal-content__link_img5.png" alt="" />
                   <span></span>
@@ -340,7 +339,10 @@
                   </li>
                 </ul>
               </div>
-              <div id="modal-content5" class="modal-content-wr">
+              <div
+                id="modal-content5"
+                class="modal-content-wr modal-content-wr_solana"
+              >
                 <div class="modal-content-wallet-title">Solana</div>
                 <ul class="modal-content-wallet-list">
                   <li>
@@ -365,10 +367,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Emit, mixins } from 'nuxt-property-decorator'
+import { Component } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
-import NetworkNameMixin from '~/mixins/networkName'
-import { INotifyParams } from '~/types'
 import TypedStore from '~/logic/store'
 
 @Component({})
@@ -423,7 +423,7 @@ export default class ConnectModal extends Vue {
 
   // methods
 
-  async switchProvider(type, provider) {
+  async switchProvider(type: string, provider: string) {
     const response = await this.$store.dispatch('auth/switchProvider', provider)
 
     // if (type === 'TRON' && !window.tronLink?.tronWeb) {

@@ -40,9 +40,12 @@ export default class AddressPage extends Vue {
       'solana'
     ]
     const isValid = validNetworkNames.includes(networkName)
-    return isValid && (networkName === 'tron' || networkName === 'solana')
-      ? true
-      : $web3.utils.isAddress(params.address)
+    return (
+      isValid &&
+      (networkName === 'tron' || networkName === 'solana'
+        ? true
+        : $web3.utils.isAddress(params.address))
+    )
   }
 
   async beforeCreate() {
