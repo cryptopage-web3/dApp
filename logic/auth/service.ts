@@ -4,7 +4,6 @@ import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
 import { Service, Container, Inject } from 'vue-typedi'
 import { Component } from 'nuxt-property-decorator'
-import { deviceType } from '~/utils'
 import { ConnectResponseType } from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
@@ -281,13 +280,6 @@ export default class AuthService extends Vue {
    */
   public changeProviderName(providerName: string): void {
     this.providerName = providerName
-
-    // if (providerName === 'walletConnect' && this.$web3) {
-    //   const accounts = await this.$web3.eth.getAccounts()
-    //   const networkId = await this.$web3.eth.net.getId()
-
-    //   this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-    // }
   }
 
   /**
@@ -997,14 +989,9 @@ export default class AuthService extends Vue {
    * Initialize web3 provider functionality
    * @param {String} providerName - value of provider
    */
-  public init = async (providerName = METAMASK): Promise<boolean> => {
+  public init = async (providerName: string): Promise<boolean> => {
     if (typeof window === 'undefined') {
       return false
-    }
-
-    const device = deviceType()
-    if (device !== 'desktop') {
-      providerName = 'walletConnect'
     }
 
     const status = await this.switchProvider(providerName)
