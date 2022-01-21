@@ -387,6 +387,18 @@
   opacity: 1;
 }
 
+.modal-content-body {
+  align-items: stretch;
+}
+
+.modal-content-wr {
+  min-height: 100%;
+}
+
+.modal-content-wr_solana.active {
+  border-radius: 10px 10px 10px 0;
+}
+
 .modal-content__link_disabled {
   background-color: transparent !important;
   cursor: default;

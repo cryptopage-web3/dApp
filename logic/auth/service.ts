@@ -4,8 +4,7 @@ import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
 import { Service, Container, Inject } from 'vue-typedi'
 import { Component } from 'nuxt-property-decorator'
-import { deviceType } from '~/utils'
-import { AuthServiceSigninResponseType } from '~/logic/auth/types'
+import { ConnectResponseType } from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 
@@ -103,7 +102,7 @@ export default class AuthService extends Vue {
     97: { network: 'bsc', name: 'BSC TestNet', slug: 'bsc-testnet' },
     137: {
       network: 'polygon',
-      name: 'Polygon Mainnet',
+      name: 'Polygon',
       slug: 'polygon'
     },
     80001: {
@@ -111,8 +110,8 @@ export default class AuthService extends Vue {
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
     },
-    tron: { network: 'tron', name: 'Tron Mainnet', slug: 'tron' },
-    solana: { network: 'solana', name: 'Solana Mainnet', slug: 'solana' }
+    tron: { network: 'tron', name: 'Tron', slug: 'tron' },
+    solana: { network: 'solana', name: 'Solana', slug: 'solana' }
   }
 
   // chainid type is hexadecimal nubers
@@ -136,6 +135,12 @@ export default class AuthService extends Vue {
     },
     [ETHEREUM]: {
       chainId: '0x1'
+    },
+    [TRON]: {
+      chainId: 'tron'
+    },
+    [SOLANA]: {
+      chainId: 'solana'
     }
   }
 
@@ -251,181 +256,6 @@ export default class AuthService extends Vue {
   }
 
   /**
-   * Change the provider of web3
-   * @param {String} provider - value of provider
-   * @returns {Boolean} - if successfully connected
-   */
-  public async changeProviderName(providerName: string): Promise<void> {
-    this.providerName = providerName
-
-    if (providerName === 'walletConnect' && this.$web3) {
-      const accounts = await this.$web3.eth.getAccounts()
-      const networkId = await this.$web3.eth.net.getId()
-
-      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-    }
-  }
-
-  /**
-   * Change current providerName
-   * @param {String} providerName - value of providerName
-   * @returns {String} - result of action
-   */
-  public switchProvider = async (providerName: string): Promise<string> => {
-    /** подключение к metamask */
-
-    if (providerName === METAMASK || providerName === COIN98) {
-      if (!this.metamaskInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = await this.addMetamaskEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
-    }
-
-    /** подключение к walletConnect */
-
-    if (providerName === 'walletConnect') {
-      const status = await this.addWalletConnectEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', 'walletConnect')
-
-        return 'success'
-      }
-    }
-
-    /** подключение к bsc_wallet */
-
-    if (providerName === BSC_WALLET) {
-      if (!this.bscInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = await this.addBSCEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
-    }
-
-    /** подключение к okex */
-
-    if (providerName === OKEX) {
-      if (!this.okexInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = await this.addOKEXEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
-    }
-
-    /** подключение к tron_link */
-
-    if (providerName === TRON_LINK) {
-      if (!this.tronInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = this.addTronLinkEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
-    }
-
-    /** подключение к tron_link */
-
-    if (providerName === PHANTOM) {
-      if (!this.solanaInstalled) {
-        return 'notInstalled'
-      }
-
-      const status = this.addPhantomEventsListener()
-
-      if (status) {
-        await this.changeProviderName(providerName)
-        window.localStorage.setItem('lastProvider', providerName)
-
-        return 'success'
-      }
-    }
-
-    /** остальное не поддерживаем */
-
-    return 'error'
-  }
-
-  /**
-   * Change current network
-   * @param {String} networkName - name of the network blockchain, example ethereum, bsc, polygon
-   */
-  switchChain = async (networkName: string): Promise<void> => {
-    if (networkName === TRON) {
-      this.switchProvider(TRON_LINK)
-      return
-    }
-    if (networkName === SOLANA) {
-      this.switchProvider(PHANTOM)
-      return
-    }
-    if (!Object.keys(this._CHAINS).includes(networkName)) {
-      throw new Error('Network is not allowed.')
-    }
-
-    const chain = this._CHAINS[networkName]
-
-    if (
-      this.providerName !== METAMASK &&
-      this.providerName !== COIN98 &&
-      this.providerName !== OKEX
-    ) {
-      return
-    }
-
-    if (!chain) throw new Error('Chain not found.')
-    if (!this.provider) {
-      this.switchProvider(METAMASK)
-      return
-    }
-
-    try {
-      await this.provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chain.chainId }]
-      })
-    } catch (switchError: any) {
-      const CHAIN_NOT_FOUND_CODE = 4902
-
-      if (switchError.code === CHAIN_NOT_FOUND_CODE) {
-        await this.provider.request({
-          method: 'wallet_addEthereumChain',
-          params: [chain]
-        })
-      }
-    }
-  }
-
-  /**
    * Set or Change web3 data into instance.
    * @param {String} address - address of current wallet
    * @param {Number} chainId - chainId of current network
@@ -444,53 +274,255 @@ export default class AuthService extends Vue {
   }
 
   /**
-   * Adding event listener for walletconnect
-   * @returns {Boolean}
+   * Change the provider of web3
+   * @param {String} provider - value of provider
+   * @returns {Boolean} - if successfully connected
    */
-  private addWalletConnectEventsListener = async (): Promise<boolean> => {
-    try {
-      if (typeof window === 'undefined' || this.walletConnectConnected) {
-        return false
+  public changeProviderName(providerName: string): void {
+    this.providerName = providerName
+  }
+
+  /**
+   * Change current providerName
+   * @param {String} providerName - value of providerName
+   * @returns {String} - result of action
+   */
+  public switchProvider = async (
+    providerName: string
+  ): Promise<ConnectResponseType> => {
+    /** подключение к metamask */
+
+    if (providerName === METAMASK) {
+      return await this.connectToMetamask()
+    }
+
+    /** подключение к walletConnect */
+
+    if (providerName === 'walletConnect') {
+      return await this.connectToWalletConnect()
+    }
+
+    /** подключение к bsc_wallet */
+
+    if (providerName === BSC_WALLET) {
+      return await this.connectToBscWallet()
+    }
+
+    /** подключение к okex */
+
+    if (providerName === OKEX) {
+      return await this.connectToOkex()
+    }
+
+    /** подключение к tron_link */
+
+    if (providerName === TRON_LINK) {
+      return await this.connectToTronLink()
+    }
+
+    /** подключение к phantom */
+
+    if (providerName === PHANTOM) {
+      return await this.connectToPhantom()
+    }
+
+    /** остальное не поддерживаем */
+
+    return {
+      status: 'error',
+      message: {
+        title: 'This provider is not available',
+        text: 'Please try another provider'
+      }
+    }
+  }
+
+  /**
+   * Change current network
+   * @param {String} networkName - name of the network blockchain, example ethereum, bsc, polygon
+   */
+  switchChain = async (networkName: string): Promise<ConnectResponseType> => {
+    /** проверяем поддерживаем ли данную сеть */
+
+    const chain = this._CHAINS[networkName]
+
+    if (!chain) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Network is not allowed',
+          text: 'Please try another network'
+        }
+      }
+    }
+
+    /** проверяем наличие активного провайдера
+     * т.к. подключение к провайдеру должно быть раньше, чем к сети
+     */
+
+    if (!this.provider) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Provider is not connected',
+          text: 'Please reload page and try again'
+        }
+      }
+    }
+
+    /** TRON поддерживается только провайдером TRON_LINK */
+
+    if (networkName === TRON) {
+      if (this.providerName === TRON_LINK) {
+        return {
+          status: 'success'
+        }
       }
 
-        const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
-        const provider = await new WalletConnectProvider({
-          infuraId: infuraProjectId,
-          rpc: {
-            1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
-            4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
-            56: 'https://bsc-dataseed.binance.org',
-            137: 'https://rpc-mainnet.maticvigil.com'
+      return {
+        status: 'error',
+        message: {
+          title: 'Wrong provider for Tron',
+          text: 'Please install and connect TronLink Ext.'
+        }
+      }
+    }
+
+    /** SOLANA поддерживается только провайдером PHANTOM */
+
+    if (networkName === SOLANA) {
+      if (this.providerName === PHANTOM) {
+        return {
+          status: 'success'
+        }
+      }
+
+      return {
+        status: 'error',
+        message: {
+          title: 'Wrong provider for Solana',
+          text: 'Please install and connect Phantom Ext.'
+        }
+      }
+    }
+
+    /** Провайдер BSC_WALLET поддерживает только сеть BSC */
+
+    if (this.providerName === BSC_WALLET && networkName === BSC) {
+      return {
+        status: 'success'
+      }
+    }
+
+    /** В metamask пробуем выставить выбранную сеть, какой бы она не была  */
+
+    if (this.providerName === METAMASK) {
+      try {
+        /** пробуем переключиться на сеть */
+
+        await this.provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chain.chainId }]
+        })
+
+        return {
+          status: 'success'
+        }
+      } catch (switchError: any) {
+        const CHAIN_NOT_FOUND_CODE = 4902
+
+        /** если это не ошибка отсутствия сети, то возвращаем ошибку */
+
+        if (switchError.code !== CHAIN_NOT_FOUND_CODE) {
+          return {
+            status: 'error',
+            message: {
+              title: `Not connected to ${networkName}`,
+              text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+            }
           }
-        })
+        }
 
-        await provider.enable()
-        this.provider = provider
+        /** пробуем добавить сеть */
 
-        const $web3 = await new Web3(<any>provider)
-        this.changeWeb3($web3)
+        try {
+          await this.provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [chain]
+          })
 
-        const accounts = await this.$web3.eth.getAccounts()
-        const networkId = await this.$web3.eth.net.getId()
-        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+          return {
+            status: 'success'
+          }
+        } catch {
+          return {
+            status: 'error',
+            message: {
+              title: `Not connected to ${networkName}`,
+              text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+            }
+          }
+        }
+      }
+    }
 
-        provider.on('accountsChanged', (accounts: string[]) => {
-          this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-        })
+    /** в остальных случаях показываем ошибку */
 
-        provider.on('chainChanged', (chainId: number) => {
-          this.setOrChangeWeb3Data(accounts[0], Number(chainId))
-        })
+    return {
+      status: 'error',
+      message: {
+        title: `Not connected to ${networkName}`,
+        text: 'Please try with another network or provider'
+      }
+    }
+  }
 
-        provider.on('close', async () => {
-          await this.kill()
-        })
+  /**
+   * Если изменили сеть через клиент, то выполняем logout и запоминаем выбранную сеть
+   * логика из https://openocean.finance/
+   **/
+  clientSwitchChain = (network: string): void => {
+    /** указываем chainId от network */
+    const chain = this._CHAINS[network]
+    this.setOrChangeWeb3Data(
+      '',
+      [TRON, SOLANA].includes(network) ? chain.chainId : Number(chain.chainId)
+    )
+  }
 
-        this.walletConnectConnected = true
+  /**
+   * ======== METAMASK ========
+   *
+   * подключение к metamask
+   */
+  public connectToMetamask = async (): Promise<ConnectResponseType> => {
+    if (!this.metamaskInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found MetaMask extension',
+          text: 'Please install MetaMask Ext.,<br>reload page and try again'
+        }
+      }
+    }
 
-        return true
-    } catch {
-      return false
+    const status = await this.addMetamaskEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to MetaMask',
+          text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(METAMASK)
+    window.localStorage.setItem('lastProvider', METAMASK)
+
+    return {
+      status: 'success'
     }
   }
 
@@ -498,7 +530,7 @@ export default class AuthService extends Vue {
    * Adding event listener for metamask
    * @returns {Boolean}
    */
-   private addMetamaskEventsListener = async (): Promise<boolean> => {
+  private addMetamaskEventsListener = async (): Promise<boolean> => {
     try {
       /** получаем selectedAddress и chainId с задержкой */
 
@@ -539,155 +571,19 @@ export default class AuthService extends Vue {
       return false
     }
   }
+  /**
+   * ========================
+   */
 
   /**
-   * Adding event listener for binance wallet
-   * @returns {Boolean}
+   * ======== WALLET_CONNECT ========
+   *
+   * подключение к walletConnect
    */
-  private addBSCEventsListener = async (): Promise<boolean> => {
-    try {
-      const setBSCData = () => {
-        setTimeout(async () => {
-          const address: any = await bsc.getAccount()
-          const chainId = await bsc.getChainId()
-          this.setOrChangeWeb3Data(address, Number(chainId))
-        }, 300)
-      }
-      if (this.bscInstalled) {
-        if (!this.bscConnected) {
-          await bsc.activate()
-          window.BinanceChain.on('chainChanged', setBSCData)
-          window.BinanceChain.on('accountsChanged', setBSCData)
-          this.bscConnected = true
-        }
-        this.provider = window.BinanceChain
-        setBSCData()
-        return true
-      }
-      return false
-    } catch {
-      return false
-    }
-  }
+  public connectToWalletConnect = async (): Promise<ConnectResponseType> => {
+    const status = await this.addWalletConnectEventsListener()
 
-  /**
-   * Adding event listener for okex
-   * @returns {Boolean}
-   */
-  private addOKEXEventsListener = async (): Promise<boolean> => {
-    try {
-      const setOKEXData = () => {
-        setTimeout(() => {
-          this.setOrChangeWeb3Data(
-            window.okexchain.selectedAddress,
-            Number(window.okexchain.chainId)
-          )
-        }, 300)
-      }
-      if (this.okexInstalled) {
-        if (!this.okexConnected) {
-          await window.okexchain.send('eth_requestAccounts')
-          window.okexchain.on('chainChanged', setOKEXData)
-          window.okexchain.on('accountsChanged', setOKEXData)
-          this.okexConnected = true
-        }
-        this.provider = window.okexchain
-        setOKEXData()
-        return true
-      }
-      return false
-    } catch {
-      return false
-    }
-  }
-
-  /**
-   * Adding event listener for tronlink
-   * @returns {Boolean}
-   */
-  private addTronLinkEventsListener = (): boolean => {
-    try {
-      const setTronData = () => {
-        setTimeout(async () => {
-          await window.tronLink.request({ method: 'tron_requestAccounts' })
-          const address = window.tronLink.tronWeb.defaultAddress?.base58
-          this.setOrChangeWeb3Data(address, 'tron')
-        }, 300)
-      }
-      if (this.tronInstalled) {
-        if (!this.tronLinkConnected) {
-          this.tronLinkConnected = true
-        }
-        this.provider = window.tronLink.tronWeb
-        setTronData()
-        return true
-      }
-      return false
-    } catch {
-      return false
-    }
-  }
-
-  /**
-   * Adding event listener for phantom
-   * @returns {Boolean}
-   */
-  private addPhantomEventsListener = (): boolean => {
-    try {
-      const setSolanaData = () => {
-        setTimeout(async () => {
-          const result = await window.solana.connect()
-          const address = result?.publicKey?.toString()
-          this.setOrChangeWeb3Data(address, 'solana')
-        }, 300)
-      }
-      if (this.solanaInstalled) {
-        if (!this.phantomConnected) {
-          this.phantomConnected = true
-        }
-        this.provider = window.solana
-        setSolanaData()
-        return true
-      }
-      return false
-    } catch {
-      return false
-    }
-  }
-
-  /**
-   * Initialize web3 provider functionality
-   * @param {String} providerName - value of provider
-   */
-   public init = async (providerName = METAMASK): Promise<boolean> => {
-    if (typeof window === 'undefined') {
-      return false
-    }
-
-    const device = deviceType()
-    if (device !== 'desktop') {
-      providerName = 'walletConnect'
-    }
-
-    const status = await this.switchProvider(providerName)
-
-    return Boolean(status === 'connected')
-  }
-
-  public signin = async (): Promise<AuthServiceSigninResponseType> => {
-    const device = deviceType()
-    await this.init()
-
-    const commonError = {
-      status: 'error',
-      message: {
-        title: 'Something wrong!',
-        text: 'Please reload page and try again.'
-      }
-    }
-
-    if (device !== 'desktop' && !this.walletConnectConnected) {
-      await this.init('walletconnect')
+    if (!status) {
       return {
         status: 'error',
         message: {
@@ -697,33 +593,410 @@ export default class AuthService extends Vue {
       }
     }
 
-    if (device === 'desktop' && !this.metamaskInstalled) {
+    await this.changeProviderName(WALLET_CONNECT)
+    window.localStorage.setItem('lastProvider', WALLET_CONNECT)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
+   * Adding event listener for walletconnect
+   * @returns {Boolean}
+   */
+  private addWalletConnectEventsListener = async (): Promise<boolean> => {
+    try {
+      if (typeof window === 'undefined' || this.walletConnectConnected) {
+        return false
+      }
+
+      const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
+      const provider = await new WalletConnectProvider({
+        infuraId: infuraProjectId,
+        rpc: {
+          1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
+          4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
+          56: 'https://bsc-dataseed.binance.org',
+          137: 'https://rpc-mainnet.maticvigil.com'
+        }
+      })
+
+      await provider.enable()
+      this.provider = provider
+
+      const $web3 = await new Web3(<any>provider)
+      this.changeWeb3($web3)
+
+      const accounts = await this.$web3.eth.getAccounts()
+      const networkId = await this.$web3.eth.net.getId()
+      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+
+      provider.on('accountsChanged', (accounts: string[]) => {
+        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+      })
+
+      provider.on('chainChanged', (chainId: number) => {
+        this.setOrChangeWeb3Data(accounts[0], Number(chainId))
+      })
+
+      provider.on('close', async () => {
+        await this.kill()
+      })
+
+      this.walletConnectConnected = true
+
+      return true
+    } catch {
+      return false
+    }
+  }
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== BSC_WALLET ========
+   *
+   * подключение к bsc_wallet
+   */
+  public connectToBscWallet = async (): Promise<ConnectResponseType> => {
+    if (!this.bscInstalled) {
       return {
         status: 'error',
         message: {
-          title: 'Not found MetaMask extension',
-          text: 'Please install MetaMask Ext.,<br>reload page and try again'
+          title: 'Not found Binance Wallet extension',
+          text: 'Please install Binance Wallet Ext.,<br>reload page and try again'
         }
       }
     }
 
-    if (device === 'desktop' && !this.metamaskConnected) {
+    const status = await this.addBSCEventsListener()
+
+    if (!status) {
       return {
         status: 'error',
         message: {
-          title: 'Not authorized in MetaMask',
-          text: 'Please log in to the MetaMask Ext.,<br>reload page and try again'
+          title: 'Not connected to Binance Wallet',
+          text: 'Please accept connect in the Binance Ext.,<br>reload page and try again'
         }
       }
     }
 
-    if (!this.provider) {
-      return commonError
+    await this.changeProviderName(BSC_WALLET)
+    window.localStorage.setItem('lastProvider', BSC_WALLET)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
+   * Adding event listener for binance wallet
+   * @returns {Boolean}
+   */
+  private addBSCEventsListener = async (): Promise<boolean> => {
+    try {
+      /** получаем selectedAddress и chainId с задержкой */
+
+      const setBSCData = () => {
+        return new Promise<void>((resolve) => {
+          setTimeout(async () => {
+            const address: any = await bsc.getAccount()
+            const chainId = await bsc.getChainId()
+            this.setOrChangeWeb3Data(address, Number(chainId))
+
+            resolve()
+          }, 300)
+        })
+      }
+
+      /** запрос на подключение к binance wallet, привязка к событиям */
+
+      if (this.bscInstalled) {
+        if (!this.bscConnected) {
+          await bsc.activate()
+
+          window.BinanceChain.on('chainChanged', setBSCData)
+          window.BinanceChain.on('accountsChanged', setBSCData)
+
+          this.bscConnected = true
+        }
+
+        this.provider = window.BinanceChain
+
+        await setBSCData()
+
+        return true
+      }
+
+      return false
+    } catch {
+      return false
+    }
+  }
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== OKEX ========
+   *
+   * подключение к okex
+   */
+  public connectToOkex = async (): Promise<ConnectResponseType> => {
+    if (!this.okexInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found MetaX extension',
+          text: 'Please install MetaX Ext.,<br>reload page and try again'
+        }
+      }
     }
 
+    const status = await this.addOKEXEventsListener()
+
+    if (!status) {
       return {
-        status: 'success'
+        status: 'error',
+        message: {
+          title: 'Not connected to MetaX',
+          text: 'Please accept connect in the MetaX Ext.,<br>reload page and try again'
+        }
       }
+    }
+
+    await this.changeProviderName(OKEX)
+    window.localStorage.setItem('lastProvider', OKEX)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
+   * Adding event listener for okex
+   * @returns {Boolean}
+   */
+  private addOKEXEventsListener = async (): Promise<boolean> => {
+    try {
+      /** получаем selectedAddress и chainId с задержкой */
+
+      const setOKEXData = () => {
+        return new Promise<void>((resolve) => {
+          setTimeout(() => {
+            this.setOrChangeWeb3Data(
+              window.okexchain.selectedAddress,
+              Number(window.okexchain.chainId)
+            )
+
+            resolve()
+          }, 300)
+        })
+      }
+
+      /** запрос на подключение к okex, привязка к событиям */
+
+      if (this.okexInstalled) {
+        if (!this.okexConnected) {
+          await window.okexchain.send('eth_requestAccounts')
+
+          window.okexchain.on('chainChanged', setOKEXData)
+          window.okexchain.on('accountsChanged', setOKEXData)
+
+          this.okexConnected = true
+        }
+
+        this.provider = window.okexchain
+
+        await setOKEXData()
+
+        return true
+      }
+
+      return false
+    } catch {
+      return false
+    }
+  }
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== TRON_LINK ========
+   *
+   * подключение к tron_link
+   */
+  public connectToTronLink = async (): Promise<ConnectResponseType> => {
+    if (!this.tronInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found TronLink extension',
+          text: 'Please install TronLink Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    const status = await this.addTronLinkEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to TronLink',
+          text: 'Please accept connect in the TronLink Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(TRON_LINK)
+    window.localStorage.setItem('lastProvider', TRON_LINK)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
+   * Adding event listener for tronlink
+   * @returns {Boolean}
+   */
+  private addTronLinkEventsListener = async (): Promise<boolean> => {
+    try {
+      /** получаем selectedAddress и chainId с задержкой */
+
+      const setTronData = () => {
+        return new Promise<void>((resolve) => {
+          setTimeout(() => {
+            const address = window.tronLink.tronWeb.defaultAddress?.base58
+            this.setOrChangeWeb3Data(address, 'tron')
+
+            resolve()
+          }, 300)
+        })
+      }
+
+      /** запрос на подключение к tron, привязка к событиям */
+
+      if (this.tronInstalled) {
+        if (!this.tronLinkConnected) {
+          await window.tronLink.request({ method: 'tron_requestAccounts' })
+
+          this.tronLinkConnected = true
+        }
+
+        this.provider = window.tronLink.tronWeb
+
+        await setTronData()
+
+        return true
+      }
+
+      return false
+    } catch {
+      return false
+    }
+  }
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== PHANTOM ========
+   *
+   * подключение к phantom
+   */
+  public connectToPhantom = async (): Promise<ConnectResponseType> => {
+    if (!this.solanaInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found Phantom extension',
+          text: 'Please install Phantom Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    const status = await this.addPhantomEventsListener()
+
+    if (!status) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to Phantom',
+          text: 'Please accept connect in the Phantom Ext.,<br>reload page and try again'
+        }
+      }
+    }
+
+    await this.changeProviderName(PHANTOM)
+    window.localStorage.setItem('lastProvider', PHANTOM)
+
+    return {
+      status: 'success'
+    }
+  }
+
+  /**
+   * Adding event listener for phantom
+   * @returns {Boolean}
+   */
+  private addPhantomEventsListener = async (): Promise<boolean> => {
+    try {
+      /** получаем selectedAddress и chainId с задержкой */
+
+      const setSolanaData = () => {
+        return new Promise<void>((resolve) => {
+          setTimeout(async () => {
+            const result = await window.solana.connect()
+            const address = result?.publicKey?.toString()
+            this.setOrChangeWeb3Data(address, 'solana')
+
+            resolve()
+          }, 300)
+        })
+      }
+
+      /** запрос на подключение к phantom, привязка к событиям */
+
+      if (this.solanaInstalled) {
+        if (!this.phantomConnected) {
+          await window.solana.connect()
+
+          this.phantomConnected = true
+        }
+
+        this.provider = window.solana
+
+        await setSolanaData()
+
+        return true
+      }
+
+      return false
+    } catch {
+      return false
+    }
+  }
+  /**
+   * ========================
+   */
+
+  /**
+   * Initialize web3 provider functionality
+   * @param {String} providerName - value of provider
+   */
+  public init = async (providerName: string): Promise<boolean> => {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    const status = await this.switchProvider(providerName)
+
+    return status.status === 'success'
   }
 
   public disconnect = async (): Promise<void> => {

@@ -31,3 +31,16 @@ export type AuthServiceSigninResponseType = {
     text: string
   }
 }
+
+export type ConnectResponseType = {
+  status: string
+  message?: {
+    title: string
+    text: string
+  }
+}
+
+export type SwitchProviderParamsType = {
+  providerName: string
+  network: string
+}

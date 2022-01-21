@@ -68,10 +68,7 @@
           </li>
         </ul>
       </div>
-      <div
-        ref="changeNetworkList"
-        class="change-network-col-body"
-      >
+      <div ref="changeNetworkList" class="change-network-col-body">
         <ul class="change-network__list">
           <li>
             <a href="#" @click.prevent="switchChain('ETHEREUM')">
@@ -105,7 +102,6 @@
           </li>
         </ul>
       </div>
-      <signin ref="signin" @success="$emit('success-login')" />
     </div>
     <a href="#" class="dark-white">
       <img src="@/assets/img/dark-white_img2.png" alt="" />
@@ -117,13 +113,8 @@ import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
 import { INotifyParams } from '~/types'
 import { copyToClipboard } from '~/utils/copyToClipboard'
-import Signin from '~/components/auth/Signin.vue'
 
-@Component({
-  components: {
-    signin: Signin
-  }
-})
+@Component({})
 export default class Connect extends mixins(NetworkNameMixin) {
   connectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
   networkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
@@ -134,7 +125,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
     connectList: HTMLDivElement
     changeNetwork: HTMLDivElement
     changeNetworkList: HTMLDivElement
-    signin: Signin
   }
 
   // computed
@@ -181,37 +171,37 @@ export default class Connect extends mixins(NetworkNameMixin) {
       /** dropdown авторизованного кошелька */
 
       if (isAuth) {
-      $(this.$refs.connect).hover(
-        function () {
-          $(this).addClass('active')
-          $('.connect-wallet-col')
-            .find('.connect-wallet-col-body')
-            .stop(true, true)
-            .slideDown(300)
-        },
-        function () {
-          self.connectDropdownTimeout = setTimeout(() => {
-            $(this).removeClass('active')
+        $(this.$refs.connect).hover(
+          function () {
+            $(this).addClass('active')
             $('.connect-wallet-col')
               .find('.connect-wallet-col-body')
-              .slideUp(300)
-          }, 300)
-        }
-      )
-
-      $(this.$refs.connectList).hover(
-        function () {
-          if (!self.connectDropdownTimeout) {
-            return
+              .stop(true, true)
+              .slideDown(300)
+          },
+          function () {
+            self.connectDropdownTimeout = setTimeout(() => {
+              $(this).removeClass('active')
+              $('.connect-wallet-col')
+                .find('.connect-wallet-col-body')
+                .slideUp(300)
+            }, 300)
           }
+        )
 
-          clearTimeout(self.connectDropdownTimeout)
-        },
-        function () {
-          $('.connect-wallet-col-body').slideUp(300)
-        }
-      )
+        $(this.$refs.connectList).hover(
+          function () {
+            if (!self.connectDropdownTimeout) {
+              return
             }
+
+            clearTimeout(self.connectDropdownTimeout)
+          },
+          function () {
+            $('.connect-wallet-col-body').slideUp(300)
+          }
+        )
+      }
 
       /** dropdown смены сетей */
 
@@ -255,7 +245,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   signin() {
-    this.$refs.signin.init()
+    ;($('#modal-connect') as any).modal('show')
   }
 
   signout() {
@@ -264,25 +254,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   switchChain(type: string) {
-    const win: any = window
-    if (type === 'TRON' && !win.tronLink?.tronWeb?.defaultAddress?.base58) {
-      $('#modal-opener').click()
-      $('#modal-content-tron').click()
-      return
-    }
-    if (type === 'SOLANA' && !win.solana?.isPhantom) {
-      $('#modal-opener').click()
-      $('#modal-content-solana').click()
-      return
-    }
-    if (
-      (this.selectedNetworkType === 'tron' ||
-        this.selectedNetworkType === 'solana') &&
-      type !== 'TRON' &&
-      type !== 'SOLANA'
-    ) {
-      this.$store.dispatch('auth/switchProvider', 'metamask')
-    }
     this.$store.dispatch('auth/switchChain', type)
   }
 }

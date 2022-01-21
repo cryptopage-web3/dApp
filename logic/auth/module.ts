@@ -1,7 +1,10 @@
 import { Inject, Injectable } from 'vue-typedi'
 import { Action, Mutation, State, Getter } from 'vuex-simple'
 import AuthService from '~/logic/auth/service'
-import { AuthServiceSigninResponseType } from '~/logic/auth/types'
+import {
+  ConnectResponseType,
+  SwitchProviderParamsType
+} from '~/logic/auth/types'
 import tokens from '~/logic/tokens'
 
 @Injectable()
@@ -69,14 +72,8 @@ export default class AuthModule {
   // Actions
 
   @Action()
-  public signin = async (): Promise<AuthServiceSigninResponseType> => {
-    const response = await this.authService.signin()
-
-    if (response.status === 'success') {
-      this.setIsAuth(true)
-    }
-
-    return response
+  public signin(): void {
+    this.setIsAuth(true)
   }
 
   @Action()
@@ -85,13 +82,29 @@ export default class AuthModule {
   }
 
   @Action()
-  public async switchProvider(providerName: string): Promise<void> {
-    await this.authService.switchProvider(providerName)
+  public async switchProvider({
+    providerName,
+    network
+  }: SwitchProviderParamsType): Promise<ConnectResponseType> {
+    /** подключаемся к провайдеру */
+
+    const providerResponse = await this.authService.switchProvider(providerName)
+
+    if (providerResponse.status === 'error') {
+      return providerResponse
+    }
+
+    /** меняем сеть в провайдере */
+
+    const networkResponse = await this.authService.switchChain(network)
+
+    return networkResponse
   }
 
   @Action()
-  public async switchChain(type: string): Promise<void> {
-    await this.authService.switchChain(type)
+  public switchChain(type: string): void {
+    this.authService.clientSwitchChain(type)
+    this.setIsAuth(false)
   }
 
   @Action()
