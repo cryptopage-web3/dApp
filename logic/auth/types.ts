@@ -39,3 +39,8 @@ export type ConnectResponseType = {
     text: string
   }
 }
+
+export type SwitchProviderParamsType = {
+  providerName: string
+  network: string
+}

@@ -367,13 +367,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'nuxt-property-decorator'
+import { Component, Emit } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
+import { INotifyParams } from '~/types'
 
 @Component({})
 export default class ConnectModal extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
+
+  $notify!: (params: INotifyParams) => void
 
   get selectedProvider(): string {
     return this.typedStore.auth.selectedProviderName
@@ -381,6 +384,10 @@ export default class ConnectModal extends Vue {
 
   get selectedNetworkType(): string {
     return this.typedStore.auth.selectedNetworkType
+  }
+
+  get isAuth(): boolean {
+    return this.typedStore.auth.isAuth
   }
 
   mounted() {
@@ -421,47 +428,54 @@ export default class ConnectModal extends Vue {
     })
   }
 
+  @Emit('error')
+  emitError() {
+    return true
+  }
+
+  @Emit('success')
+  emitSuccess() {
+    return true
+  }
+
+  @Emit('success-login')
+  emitSuccessLogin() {
+    return true
+  }
+
   // methods
 
   async switchProvider(type: string, provider: string) {
-    const response = await this.$store.dispatch('auth/switchProvider', provider)
+    const response = await this.$store.dispatch('auth/switchProvider', {
+      providerName: provider,
+      network: type
+    })
 
-    // if (type === 'TRON' && !window.tronLink?.tronWeb) {
-    //   this.$notify({
-    //     type: 'error',
-    //     title: 'Please download TronLink extension'
-    //   })
-    //   return
-    // }
-    // if (
-    //   type === 'TRON' &&
-    //   window.tronLink?.tronWeb &&
-    //   !window.tronLink?.tronWeb?.defaultAddress?.base58
-    // ) {
-    //   this.$notify({
-    //     type: 'error',
-    //     title: 'Please login to TronLink'
-    //   })
-    //   return
-    // }
-    // if (type === 'SOLANA' && !window.solana?.isPhantom) {
-    //   this.$notify({
-    //     type: 'error',
-    //     title: 'Please login to Phantom'
-    //   })
-    //   return
-    // }
-    // if (
-    //   (provider === 'metamask' || provider === 'coin98') &&
-    //   provider === this.selectedProvider
-    // ) {
-    //   this.$store.dispatch('auth/switchChain', type)
-    // } else {
-    //   this.$store.dispatch('auth/switchProvider', provider)
-    //   if (type !== this.selectedNetworkType && type !== 'TRON') {
-    //     this.$store.dispatch('auth/switchChain', type)
-    //   }
-    // }
+    if (response.status === 'error') {
+      this.$notify({
+        type: response.status,
+        title: response.message?.title,
+        text: response.message?.text
+      })
+
+      this.emitError()
+      return
+    }
+
+    this.$notify({
+      type: 'success',
+      title: 'Connected successfully'
+    })
+
+    this.emitSuccess()
+
+    /** авторизация */
+
+    if (!this.isAuth) {
+      this.typedStore.auth.signin()
+
+      this.emitSuccessLogin()
+    }
 
     /** close modal on switch */
     ;($('#modal-connect') as any).modal('hide')

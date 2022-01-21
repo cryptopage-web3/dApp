@@ -102,7 +102,6 @@
           </li>
         </ul>
       </div>
-      <signin ref="signin" @success="$emit('success-login')" />
     </div>
     <a href="#" class="dark-white">
       <img src="@/assets/img/dark-white_img2.png" alt="" />
@@ -114,13 +113,8 @@ import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
 import { INotifyParams } from '~/types'
 import { copyToClipboard } from '~/utils/copyToClipboard'
-import Signin from '~/components/auth/Signin.vue'
 
-@Component({
-  components: {
-    signin: Signin
-  }
-})
+@Component({})
 export default class Connect extends mixins(NetworkNameMixin) {
   connectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
   networkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
@@ -131,7 +125,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
     connectList: HTMLDivElement
     changeNetwork: HTMLDivElement
     changeNetworkList: HTMLDivElement
-    signin: Signin
   }
 
   // computed

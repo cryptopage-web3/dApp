@@ -2,7 +2,7 @@
   <div class="main-right">
     <div id="start-right-sidebar">
       <div class="main-right-item">
-        <connect @success-login="successLogin" />
+        <connect />
       </div>
       <div class="main-right-item">
         <form>
@@ -133,7 +133,7 @@
         </div>
       </div>
     </div>
-    <connectModal />
+    <connectModal @success-login="successLogin" />
   </div>
 </template>
 <script lang="ts">

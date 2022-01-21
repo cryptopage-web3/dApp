@@ -5,10 +5,7 @@ import Web3 from 'web3'
 import { Service, Container, Inject } from 'vue-typedi'
 import { Component } from 'nuxt-property-decorator'
 import { deviceType } from '~/utils'
-import {
-  AuthServiceSigninResponseType,
-  ConnectResponseType
-} from '~/logic/auth/types'
+import { ConnectResponseType } from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 
@@ -142,6 +139,9 @@ export default class AuthService extends Vue {
     },
     [TRON]: {
       chainId: 'tron'
+    },
+    [SOLANA]: {
+      chainId: 'solana'
     }
   }
 
@@ -349,50 +349,138 @@ export default class AuthService extends Vue {
    * Change current network
    * @param {String} networkName - name of the network blockchain, example ethereum, bsc, polygon
    */
-  switchChain = async (networkName: string): Promise<void> => {
-    if (networkName === TRON) {
-      this.switchProvider(TRON_LINK)
-      return
-    }
-
-    if (networkName === SOLANA) {
-      this.switchProvider(PHANTOM)
-      return
-    }
-
-    if (!Object.keys(this._CHAINS).includes(networkName)) {
-      throw new Error('Network is not allowed.')
-    }
+  switchChain = async (networkName: string): Promise<ConnectResponseType> => {
+    /** проверяем поддерживаем ли данную сеть */
 
     const chain = this._CHAINS[networkName]
 
-    if (
-      this.providerName !== METAMASK &&
-      this.providerName !== COIN98 &&
-      this.providerName !== OKEX
-    ) {
-      return
+    if (!chain) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Network is not allowed',
+          text: 'Please try another network'
+        }
+      }
     }
 
-    if (!chain) throw new Error('Chain not found.')
+    /** проверяем наличие активного провайдера
+     * т.к. подключение к провайдеру должно быть раньше, чем к сети
+     */
+
     if (!this.provider) {
-      this.switchProvider(METAMASK)
-      return
+      return {
+        status: 'error',
+        message: {
+          title: 'Provider is not connected',
+          text: 'Please reload page and try again'
+        }
+      }
     }
 
-    try {
-      await this.provider.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: chain.chainId }]
-      })
-    } catch (switchError: any) {
-      const CHAIN_NOT_FOUND_CODE = 4902
+    /** TRON поддерживается только провайдером TRON_LINK */
 
-      if (switchError.code === CHAIN_NOT_FOUND_CODE) {
+    if (networkName === TRON) {
+      if (this.providerName === TRON_LINK) {
+        return {
+          status: 'success'
+        }
+      }
+
+      return {
+        status: 'error',
+        message: {
+          title: 'Wrong provider for Tron',
+          text: 'Please install and connect TronLink Ext.'
+        }
+      }
+    }
+
+    /** SOLANA поддерживается только провайдером PHANTOM */
+
+    if (networkName === SOLANA) {
+      if (this.providerName === PHANTOM) {
+        return {
+          status: 'success'
+        }
+      }
+
+      return {
+        status: 'error',
+        message: {
+          title: 'Wrong provider for Solana',
+          text: 'Please install and connect Phantom Ext.'
+        }
+      }
+    }
+
+    /** Провайдер BSC_WALLET поддерживает только сеть BSC */
+
+    if (this.providerName === BSC_WALLET && networkName === BSC) {
+      return {
+        status: 'success'
+      }
+    }
+
+    /** В metamask пробуем выставить выбранную сеть, какой бы она не была  */
+
+    if (this.providerName === METAMASK) {
+      try {
+        /** пробуем переключиться на сеть */
+
         await this.provider.request({
-          method: 'wallet_addEthereumChain',
-          params: [chain]
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chain.chainId }]
         })
+
+        return {
+          status: 'success'
+        }
+      } catch (switchError: any) {
+        const CHAIN_NOT_FOUND_CODE = 4902
+
+        /** если это не ошибка отсутствия сети, то возвращаем ошибку */
+
+        if (switchError.code !== CHAIN_NOT_FOUND_CODE) {
+          return {
+            status: 'error',
+            message: {
+              title: `Not connected to ${networkName}`,
+              text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+            }
+          }
+        }
+
+        /** пробуем добавить сеть */
+
+        try {
+          await this.provider.request({
+            method: 'wallet_addEthereumChain',
+            params: [chain]
+          })
+
+          return {
+            status: 'success'
+          }
+        } catch {
+          return {
+            status: 'error',
+            message: {
+              title: `Not connected to ${networkName}`,
+              text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+            }
+          }
+        }
+      }
+    }
+
+    /** в остальных случаях показываем ошибку */
+
+    return {
+      status: 'error',
+      message: {
+        title: `Not connected to ${networkName}`,
+        text: 'Please try with another network or provider'
       }
     }
   }
@@ -406,7 +494,7 @@ export default class AuthService extends Vue {
     const chain = this._CHAINS[network]
     this.setOrChangeWeb3Data(
       '',
-      network === TRON ? chain.chainId : Number(chain.chainId)
+      [TRON, SOLANA].includes(network) ? chain.chainId : Number(chain.chainId)
     )
   }
 
@@ -922,58 +1010,6 @@ export default class AuthService extends Vue {
     const status = await this.switchProvider(providerName)
 
     return status.status === 'success'
-  }
-
-  public signin = async (): Promise<AuthServiceSigninResponseType> => {
-    const device = deviceType()
-    await this.init()
-
-    const commonError = {
-      status: 'error',
-      message: {
-        title: 'Something wrong!',
-        text: 'Please reload page and try again.'
-      }
-    }
-
-    if (device !== 'desktop' && !this.walletConnectConnected) {
-      await this.init('walletconnect')
-      return {
-        status: 'error',
-        message: {
-          title: 'WalletConnect not connected',
-          text: 'Please connect to the wallet,<br>reload page and try again'
-        }
-      }
-    }
-
-    if (device === 'desktop' && !this.metamaskInstalled) {
-      return {
-        status: 'error',
-        message: {
-          title: 'Not found MetaMask extension',
-          text: 'Please install MetaMask Ext.,<br>reload page and try again'
-        }
-      }
-    }
-
-    if (device === 'desktop' && !this.metamaskConnected) {
-      return {
-        status: 'error',
-        message: {
-          title: 'Not authorized in MetaMask',
-          text: 'Please log in to the MetaMask Ext.,<br>reload page and try again'
-        }
-      }
-    }
-
-    if (!this.provider) {
-      return commonError
-    }
-
-    return {
-      status: 'success'
-    }
   }
 
   public disconnect = async (): Promise<void> => {
