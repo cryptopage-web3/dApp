@@ -262,24 +262,15 @@ export default class AuthService extends Vue {
    * @returns {Void}
    */
   public setOrChangeWeb3Data(address: string, chainId: number | string): void {
-    if (address) {
-      Vue.set(this.data, 'address', address)
-      this.data.address = address
-    }
+    /** даже если значение пустое, то мы должны установить,
+     * иначе будет показываться корректно предыдущий адрес */
+    Vue.set(this.data, 'address', address || '')
+    this.data.address = address || ''
 
-    if (chainId) {
-      Vue.set(this.data, 'chainId', chainId)
-      this.data.chainId = chainId
-    }
-  }
-
-  /**
-   * Change the provider of web3
-   * @param {String} provider - value of provider
-   * @returns {Boolean} - if successfully connected
-   */
-  public changeProviderName(providerName: string): void {
-    this.providerName = providerName
+    /** даже если значение пустое, то мы должны установить,
+     * иначе будет показываться корректно предыдущая сеть */
+    Vue.set(this.data, 'chainId', chainId || 0)
+    this.data.chainId = chainId || 0
   }
 
   /**
@@ -408,9 +399,34 @@ export default class AuthService extends Vue {
 
     /** Провайдер BSC_WALLET поддерживает только сеть BSC */
 
-    if (this.providerName === BSC_WALLET && networkName === BSC) {
-      return {
-        status: 'success'
+    if (this.providerName === BSC_WALLET) {
+      if (networkName !== BSC) {
+        return {
+          status: 'error',
+          message: {
+            title: `Wrong provider for ${networkName}`,
+            text: 'Please connect to another provider'
+          }
+        }
+      }
+
+      try {
+        /** в провайдере BSC_WALLET пытаемся переключить сеть на BSC
+         * т.к. в расширении можно выбрать другие сети
+         */
+        await this.provider.switchNetwork('bsc-mainnet')
+
+        return {
+          status: 'success'
+        }
+      } catch {
+        return {
+          status: 'error',
+          message: {
+            title: `Not connected to ${networkName}`,
+            text: 'Please accept connect in the Binance Wallet Ext.'
+          }
+        }
       }
     }
 
@@ -438,7 +454,7 @@ export default class AuthService extends Vue {
             status: 'error',
             message: {
               title: `Not connected to ${networkName}`,
-              text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+              text: 'Please accept connect in the MetaMask Ext.'
             }
           }
         }
@@ -459,7 +475,7 @@ export default class AuthService extends Vue {
             status: 'error',
             message: {
               title: `Not connected to ${networkName}`,
-              text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+              text: 'Please accept connect in the MetaMask Ext.'
             }
           }
         }
@@ -518,7 +534,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    await this.changeProviderName(METAMASK)
+    this.providerName = METAMASK
     window.localStorage.setItem('lastProvider', METAMASK)
 
     return {
@@ -593,7 +609,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    await this.changeProviderName(WALLET_CONNECT)
+    this.providerName = WALLET_CONNECT
     window.localStorage.setItem('lastProvider', WALLET_CONNECT)
 
     return {
@@ -683,7 +699,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    await this.changeProviderName(BSC_WALLET)
+    this.providerName = BSC_WALLET
     window.localStorage.setItem('lastProvider', BSC_WALLET)
 
     return {
@@ -767,7 +783,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    await this.changeProviderName(OKEX)
+    this.providerName = OKEX
     window.localStorage.setItem('lastProvider', OKEX)
 
     return {
@@ -852,7 +868,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    await this.changeProviderName(TRON_LINK)
+    this.providerName = TRON_LINK
     window.localStorage.setItem('lastProvider', TRON_LINK)
 
     return {
@@ -932,7 +948,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    await this.changeProviderName(PHANTOM)
+    this.providerName = PHANTOM
     window.localStorage.setItem('lastProvider', PHANTOM)
 
     return {
