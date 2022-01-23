@@ -2,8 +2,6 @@
   <div class="connect-wallet-wr">
     <div class="connect-wallet-col connect-wallet__link-hover">
       <a
-        href="#"
-        role="button"
         class="connect-wallet__link"
         :class="{ 'connect-wallet__link_connect': !isAuth }"
       >
@@ -116,8 +114,8 @@ import { copyToClipboard } from '~/utils/copyToClipboard'
 
 @Component({})
 export default class Connect extends mixins(NetworkNameMixin) {
-  connectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
-  networkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+  hideConnectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
+  hideNetworkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 
   $notify!: (params: INotifyParams) => void
   $refs!: {
@@ -171,65 +169,66 @@ export default class Connect extends mixins(NetworkNameMixin) {
       /** dropdown авторизованного кошелька */
 
       if (isAuth) {
-        $(this.$refs.connect).hover(
-          function () {
+        $(this.$refs.connect)
+          .off('mouseenter mouseleave')
+          .on('mouseenter', function () {
+            self.hideConnectDropdownTimeout &&
+              clearTimeout(self.hideConnectDropdownTimeout)
+
             $(this).addClass('active')
-            $('.connect-wallet-col')
-              .find('.connect-wallet-col-body')
-              .stop(true, true)
-              .slideDown(300)
-          },
-          function () {
-            self.connectDropdownTimeout = setTimeout(() => {
+            $('.connect-wallet-col-body').stop().slideDown(300)
+          })
+          .on('mouseleave', function () {
+            self.hideConnectDropdownTimeout = setTimeout(() => {
               $(this).removeClass('active')
-              $('.connect-wallet-col')
-                .find('.connect-wallet-col-body')
-                .slideUp(300)
-            }, 300)
-          }
-        )
+              $('.connect-wallet-col-body').slideUp(200)
+            }, 100)
+          })
 
-        $(this.$refs.connectList).hover(
-          function () {
-            if (!self.connectDropdownTimeout) {
-              return
-            }
-
-            clearTimeout(self.connectDropdownTimeout)
-          },
-          function () {
-            $('.connect-wallet-col-body').slideUp(300)
-          }
-        )
+        $(this.$refs.connectList)
+          .off('mouseenter mouseleave')
+          .on('mouseenter', function () {
+            self.hideConnectDropdownTimeout &&
+              clearTimeout(self.hideConnectDropdownTimeout)
+          })
+          .on('mouseleave', function () {
+            self.hideConnectDropdownTimeout = setTimeout(() => {
+              $(self.$refs.connect).removeClass('active')
+              $('.connect-wallet-col-body').slideUp(200)
+            }, 100)
+          })
       }
 
       /** dropdown смены сетей */
 
-      $(this.$refs.changeNetwork).hover(
-        function () {
+      $(this.$refs.changeNetwork)
+        .off('mouseenter mouseleave')
+        .on('mouseenter', function () {
+          self.hideNetworkDropdownTimeout &&
+            clearTimeout(self.hideNetworkDropdownTimeout)
+
           $(this).addClass('active')
-          $('.change-network-col-body').stop(true, true).slideDown(300)
-        },
-        function () {
-          self.networkDropdownTimeout = setTimeout(() => {
+          $('.change-network-col-body').stop().slideDown(300)
+        })
+        .on('mouseleave', function () {
+          self.hideNetworkDropdownTimeout = setTimeout(() => {
             $(this).removeClass('active')
-            $('.change-network-col-body').slideUp(300)
-          }, 300)
-        }
-      )
+            $('.change-network-col-body').slideUp(200)
+          }, 100)
+        })
 
-      $(this.$refs.changeNetworkList).hover(
-        function () {
-          if (!self.networkDropdownTimeout) {
-            return
-          }
-
-          clearTimeout(self.networkDropdownTimeout)
-        },
-        function () {
-          $('.change-network-col-body').slideUp(300)
-        }
-      )
+      $(this.$refs.changeNetworkList)
+        .off('mouseenter mouseleave')
+        .on('mouseenter', function () {
+          self.hideNetworkDropdownTimeout &&
+            clearTimeout(self.hideNetworkDropdownTimeout)
+        })
+        .on('mouseleave', function () {
+          self.hideNetworkDropdownTimeout = setTimeout(() => {
+            $(self.$refs.changeNetwork).removeClass('active')
+            $('.change-network-col-body').slideUp(200)
+          }, 100)
+        })
     })
   }
 
@@ -254,6 +253,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   switchChain(type: string) {
+    this.$router.push('/')
     this.$store.dispatch('auth/switchChain', type)
   }
 }
