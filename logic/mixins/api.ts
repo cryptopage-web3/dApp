@@ -90,3 +90,12 @@ export class TronGridAPIServiceMixin extends BaseAPIServiceMixin {
     return 'TRX'
   }
 }
+export class SolScanAPIServiceMixin extends BaseAPIServiceMixin {
+  protected get baseURL(): string {
+    return 'https://public-api.solscan.io/account/'
+  }
+
+  protected get symbol(): string {
+    return 'SOL'
+  }
+}

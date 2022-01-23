@@ -71,8 +71,8 @@ export default class TokenService {
       })
       tokenBalances = tokenBalances.filter((tokenBalance) => {
         return (
-          tokenBalance.tokenInfo.address.toLowerCase() !==
-          this.basicToken.address.toLowerCase()
+          tokenBalance.tokenInfo.address?.toLowerCase() !==
+          this.basicToken.address?.toLowerCase()
         )
       })
       /** Sort desc by usdBalance */
@@ -229,11 +229,20 @@ export default class TokenService {
       }
     } else if (chainId === 'tron') {
       tokenInfo = {
-        address: '0xe1be5d3f34e89de342ee97e6e90d405884da6c67',
+        address: '0x0000000000000000000000000000000000001010',
         name: 'Tron',
         symbol: 'TRX',
         decimals: 6,
         image: `https://etherscan.io/token/images/trontrx_32.png`,
+        rate: { usd: 0 }
+      }
+    } else if (chainId === 'solana') {
+      tokenInfo = {
+        address: '0x0000000000000000000000000000000000001010',
+        name: 'Solana',
+        symbol: 'SOL',
+        decimals: 18,
+        image: `https://s2.coinmarketcap.com/static/img/coins/64x64/5426.png`,
         rate: { usd: 0 }
       }
     }
