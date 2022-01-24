@@ -368,14 +368,11 @@
 
 .connect-wallet__link {
   padding: 0 0 0 15px;
+  cursor: default;
 }
 
 .connect-wallet__link_connect::after {
   display: none;
-}
-
-.connect-wallet__link-status {
-  cursor: default;
 }
 
 .connect-wallet__link-status_connect {
@@ -409,12 +406,12 @@
 }
 
 .connect-wallet-col-body::before {
-  content: '';
+  content: "";
   display: block;
   width: 100%;
-  height: 20px;
+  height: 30px;
   position: absolute;
-  top: -15px;
+  top: -26px;
 }
 
 .change-network-col-body {
@@ -427,12 +424,12 @@
 }
 
 .change-network-col-body::before {
-  content: '';
+  content: "";
   display: block;
   width: 100%;
-  height: 20px;
+  height: 30px;
   position: absolute;
-  top: -15px;
+  top: -26px;
 }
 
 .change-network__list {

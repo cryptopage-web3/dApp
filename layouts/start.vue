@@ -16,7 +16,6 @@
       </section>
       <footer-section />
     </template>
-    <connect-modal />
   </div>
 </template>
 
@@ -31,10 +30,7 @@ import { Component, Watch } from 'nuxt-property-decorator'
       await import('@/components/start/StartSidebarLeft.vue'),
     'sidebar-right': async () =>
       await import('@/components/start/StartSidebarRight.vue'),
-    'footer-section': async () =>
-      await import('@/components/footer/Footer.vue'),
-    'connect-modal': async () =>
-      await import('@/components/connect/ConnectModal.vue')
+    'footer-section': async () => await import('@/components/footer/Footer.vue')
   }
 })
 export default class StartLayout extends Vue {

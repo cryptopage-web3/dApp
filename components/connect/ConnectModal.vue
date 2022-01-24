@@ -426,6 +426,13 @@ export default class ConnectModal extends Vue {
         $('.modal-backdrop').addClass('modal-backdrop_dark')
       })
     })
+
+    /** проверяем наличие параметра openConnect */
+
+    if (this.$route.query.openConnect) {
+      ;($('#modal-connect') as any).modal('show')
+      this.$router.replace({ query: undefined })
+    }
   }
 
   @Emit('error')
