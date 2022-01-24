@@ -16,7 +16,6 @@
       </section>
       <footer-section />
     </template>
-    <connect-modal />
     <nft-form-modal />
   </div>
 </template>
@@ -34,8 +33,6 @@ import { Component, Watch } from 'nuxt-property-decorator'
       await import('@/components/sidebar/right/SidebarRight.vue'),
     'footer-section': async () =>
       await import('@/components/footer/Footer.vue'),
-    'connect-modal': async () =>
-      await import('@/components/connect/ConnectModal.vue'),
     'nft-form-modal': async () =>
       await import('@/components/nft-form/NFTFormModal.vue')
   }

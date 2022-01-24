@@ -253,8 +253,14 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   switchChain(type: string) {
-    this.$router.push('/')
+    const isAuth = this.isAuth
     this.$store.dispatch('auth/switchChain', type)
+
+    if (isAuth) {
+      setTimeout(() => {
+        this.$router.push({ path: '/', query: { openConnect: '1' } })
+      })
+    }
   }
 }
 </script>
