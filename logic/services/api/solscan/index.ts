@@ -1,8 +1,6 @@
 import { Service } from 'vue-typedi'
 import { SolScanAPIServiceMixin } from '~/logic/mixins/api'
-import {
-  SolScanAPITokenType
-} from '~/logic/services/api/solscan/types'
+import { SolScanAPITokenType } from '~/logic/services/api/solscan/types'
 import {
   SolScanAPISolBalanceParser,
   SolScanAPITokenBalanceParser
@@ -35,5 +33,4 @@ export default class SolScanAPIService extends SolScanAPIServiceMixin {
       return []
     }
   }
-
 }

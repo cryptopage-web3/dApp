@@ -1,7 +1,5 @@
 import { TokenBalanceType } from '~/logic/tokens/types'
-import {
-  SolScanAPITokenType
-} from '~/logic/services/api/solscan/types'
+import { SolScanAPITokenType } from '~/logic/services/api/solscan/types'
 
 export class SolScanAPISolBalanceParser {
   parse = (token: any): TokenBalanceType => {
