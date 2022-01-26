@@ -230,7 +230,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'coin98')"
+                      @click.prevent="switchProvider('BSC', 'okex')"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -310,7 +310,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('ETHEREUM', 'okex')"
+                      @click.prevent="switchProvider('POLYGON', 'okex')"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"

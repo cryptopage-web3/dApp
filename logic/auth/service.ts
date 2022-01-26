@@ -433,9 +433,13 @@ export default class AuthService extends Vue {
       }
     }
 
-    /** В metamask пробуем выставить выбранную сеть, какой бы она не была  */
+    /** METAMASK и OKEX - api полностью совпадают
+     * пробуем выставить выбранную сеть в расширении, какой бы она не была  */
 
-    if (this.providerName === METAMASK) {
+    if (this.providerName === METAMASK || this.providerName === OKEX) {
+      const providerTitle =
+        this.providerName === OKEX ? 'MetaX Ext.' : 'MetaMask Ext.'
+
       try {
         /** пробуем переключиться на сеть */
 
@@ -457,7 +461,7 @@ export default class AuthService extends Vue {
             status: 'error',
             message: {
               title: `Not connected to ${networkName}`,
-              text: 'Please accept connect in the MetaMask Ext.'
+              text: `Please accept connect in the ${providerTitle}`
             }
           }
         }
@@ -478,7 +482,7 @@ export default class AuthService extends Vue {
             status: 'error',
             message: {
               title: `Not connected to ${networkName}`,
-              text: 'Please accept connect in the MetaMask Ext.'
+              text: `Please accept connect in the ${providerTitle}`
             }
           }
         }
