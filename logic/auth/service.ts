@@ -6,7 +6,7 @@ import { Service, Container, Inject } from 'vue-typedi'
 import { Component } from 'nuxt-property-decorator'
 import {
   ConnectResponseType,
-  TronRequestAccountsResponse
+  TronRequestAccountsResponseType
 } from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
@@ -902,7 +902,7 @@ export default class AuthService extends Vue {
 
       if (this.tronInstalled) {
         if (!this.tronLinkConnected) {
-          const response: TronRequestAccountsResponse =
+          const response: TronRequestAccountsResponseType =
             await window.tronLink.request({ method: 'tron_requestAccounts' })
 
           if (response.code !== 200) {

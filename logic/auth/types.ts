@@ -40,7 +40,7 @@ export type ConnectResponseType = {
   }
 }
 
-export type TronRequestAccountsResponse = {
+export type TronRequestAccountsResponseType = {
   code: number
   message: string
 }
