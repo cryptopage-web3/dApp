@@ -4,7 +4,10 @@ import { BscConnector } from '@binance-chain/bsc-connector'
 import Web3 from 'web3'
 import { Service, Container, Inject } from 'vue-typedi'
 import { Component } from 'nuxt-property-decorator'
-import { ConnectResponseType } from '~/logic/auth/types'
+import {
+  ConnectResponseType,
+  TronRequestAccountsResponse
+} from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 
@@ -899,7 +902,12 @@ export default class AuthService extends Vue {
 
       if (this.tronInstalled) {
         if (!this.tronLinkConnected) {
-          await window.tronLink.request({ method: 'tron_requestAccounts' })
+          const response: TronRequestAccountsResponse =
+            await window.tronLink.request({ method: 'tron_requestAccounts' })
+
+          if (response.code !== 200) {
+            throw new Error('Request denied by TronLink Ext.')
+          }
 
           this.tronLinkConnected = true
         }

@@ -40,6 +40,11 @@ export type ConnectResponseType = {
   }
 }
 
+export type TronRequestAccountsResponse = {
+  code: number
+  message: string
+}
+
 export type SwitchProviderParamsType = {
   providerName: string
   network: string
