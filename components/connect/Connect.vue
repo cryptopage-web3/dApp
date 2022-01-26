@@ -261,6 +261,10 @@ export default class Connect extends mixins(NetworkNameMixin) {
         this.$router.push({ path: '/', query: { openConnect: '1' } })
       })
     }
+
+    /** закрываем дропдаун сетей */
+
+    $('.change-network-col-body').slideUp(100)
   }
 }
 </script>
