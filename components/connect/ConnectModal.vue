@@ -105,37 +105,6 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img3.png"
-                        alt=""
-                      />
-                      <span> Trust Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img4.png"
-                        alt=""
-                      />
-                      <span> SafePal wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('ETHEREUM', 'coin98')"
-                    >
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img5.png"
-                        alt=""
-                      />
-                      <span> Coin98 Wallet </span>
-                    </a>
-                  </li>
-                  <li>
                     <a
                       href="#"
                       class="modal-content-wallet__link"
@@ -196,37 +165,6 @@
                     </a>
                   </li>
                   <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img3.png"
-                        alt=""
-                      />
-                      <span> Trust Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img4.png"
-                        alt=""
-                      />
-                      <span> SafePal wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'coin98')"
-                    >
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img5.png"
-                        alt=""
-                      />
-                      <span> Coin98 Wallet </span>
-                    </a>
-                  </li>
-                  <li>
                     <a
                       href="#"
                       class="modal-content-wallet__link"
@@ -273,37 +211,6 @@
                         alt=""
                       />
                       <span> WalletConnect </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img3.png"
-                        alt=""
-                      />
-                      <span> Trust Wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" class="modal-content-wallet__link">
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img4.png"
-                        alt=""
-                      />
-                      <span> SafePal wallet </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('POLYGON', 'coin98')"
-                    >
-                      <img
-                        src="@/assets/img/modal-content-wallet__link_img5.png"
-                        alt=""
-                      />
-                      <span> Coin98 Wallet </span>
                     </a>
                   </li>
                   <li>

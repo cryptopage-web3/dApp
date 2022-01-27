@@ -27,16 +27,14 @@ const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = [
   'TRON',
   'SOLANA'
 ]
-const [METAMASK, WALLET_CONNECT, COIN98, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
-  [
-    'metamask',
-    'walletConnect',
-    'coin98',
-    'bscWallet',
-    'okex',
-    'tron',
-    'phantom'
-  ]
+const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] = [
+  'metamask',
+  'walletConnect',
+  'bscWallet',
+  'okex',
+  'tron',
+  'phantom'
+]
 
 const bsc = new BscConnector({
   supportedChainIds: [56, 97]
@@ -88,10 +86,6 @@ export default class AuthService extends Vue {
     {
       value: WALLET_CONNECT,
       name: 'Wallet Connect'
-    },
-    {
-      value: COIN98,
-      name: 'Coin98'
     }
   ]
 
@@ -292,7 +286,7 @@ export default class AuthService extends Vue {
 
     /** подключение к walletConnect */
 
-    if (providerName === 'walletConnect') {
+    if (providerName === WALLET_CONNECT) {
       return await this.connectToWalletConnect()
     }
 
