@@ -51,7 +51,7 @@ export const TronGridAPITransactionsResponseDataItem = ts.type({
   txID: ts.string
 })
 
-const TronGricTRC20 = ts.type({
+const TronGridTRC20 = ts.type({
   contractAddress: ts.string,
   tokenDecimal: ts.string,
   tokenName: ts.string,
@@ -59,6 +59,6 @@ const TronGricTRC20 = ts.type({
 })
 
 export const TronGridTRC20Transaction = ts.type({
-  TronGricTRC20,
+  TronGridTRC20,
   TronGridAPITransactionsResponseDataItem
 })

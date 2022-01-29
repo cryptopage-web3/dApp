@@ -31,3 +31,24 @@ export const SolScanAPITokensResponse = ts.intersection([
     data: SolScanAPITokensResponseData
   })
 ])
+
+export const SolScanAPITransactionsResponseDataItem = ts.type({
+  blockTime: ts.number,
+  fee: ts.number,
+  lamport: ts.number,
+  signer: ts.any,
+  parsedInstruction: ts.any,
+  txHash: ts.string
+})
+
+const SolScanSOL20 = ts.type({
+  contractAddress: ts.string,
+  tokenDecimal: ts.string,
+  tokenName: ts.string,
+  tokenSymbol: ts.string
+})
+
+export const SolScanSOL20Transaction = ts.type({
+  SolScanSOL20,
+  SolScanAPITransactionsResponseDataItem
+})
