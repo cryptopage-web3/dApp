@@ -71,7 +71,7 @@ export default class AuthService extends Vue {
     const lastUsedProvider = localStorage.getItem('lastProvider')
 
     if (!lastUsedProvider) {
-      this.logout()
+      this.kill()
       return
     }
 
@@ -358,6 +358,14 @@ export default class AuthService extends Vue {
       }
     }
 
+    /** WALLET_CONNECT сам устанавливает выбранную сеть */
+
+    if (this.providerName === WALLET_CONNECT) {
+      return {
+        status: 'success'
+      }
+    }
+
     /** TRON поддерживается только провайдером TRON_LINK */
 
     if (networkName === TRON) {
@@ -507,6 +515,11 @@ export default class AuthService extends Vue {
     )
   }
 
+  /** Если пользователь делает disconnect, то сбрасываем все подключения */
+  clientDisconnect = async () => {
+    await this.kill()
+  }
+
   /**
    * ======== METAMASK ========
    *
@@ -647,6 +660,7 @@ export default class AuthService extends Vue {
 
       const accounts = await this.$web3.eth.getAccounts()
       const networkId = await this.$web3.eth.net.getId()
+
       this.setOrChangeWeb3Data(accounts[0], Number(networkId))
 
       provider.on('accountsChanged', (accounts: string[]) => {
@@ -657,8 +671,8 @@ export default class AuthService extends Vue {
         this.setOrChangeWeb3Data(accounts[0], Number(chainId))
       })
 
-      provider.on('close', async () => {
-        await this.kill()
+      provider.on('close', () => {
+        this.walletConnectConnected = false
       })
 
       this.walletConnectConnected = true
@@ -1022,41 +1036,17 @@ export default class AuthService extends Vue {
   }
 
   public disconnect = async (): Promise<void> => {
-    if (
-      this.walletConnectConnected &&
-      this.provider &&
-      typeof this.provider.disconnect === 'function'
-    ) {
-      await this.provider.disconnect()
-      this.walletConnectConnected = false
-    } else if (this.metamaskConnected) {
-      this.metamaskConnected = false
-    } else if (this.bscConnected) {
-      this.bscConnected = false
-    } else if (this.tronLinkConnected) {
-      this.tronLinkConnected = false
-    } else if (this.phantomConnected) {
-      this.phantomConnected = false
+    if (this.walletConnectConnected && this.provider) {
+      this.provider.disconnect && (await this.provider.disconnect())
+      this.provider.close && (await this.provider.close())
     }
-  }
 
-  public close = async (): Promise<void> => {
-    if (
-      this.walletConnectConnected &&
-      this.provider &&
-      typeof this.provider.close === 'function'
-    ) {
-      await this.provider.close()
-      this.walletConnectConnected = false
-    } else if (this.metamaskConnected) {
-      this.metamaskConnected = false
-    } else if (this.bscConnected) {
-      this.bscConnected = false
-    } else if (this.tronLinkConnected) {
-      this.tronLinkConnected = false
-    } else if (this.phantomConnected) {
-      this.phantomConnected = false
-    }
+    this.metamaskConnected = false
+    this.okexConnected = false
+    this.bscConnected = false
+    this.walletConnectConnected = false
+    this.tronLinkConnected = false
+    this.phantomConnected = false
   }
 
   public logout = () => {
@@ -1073,7 +1063,6 @@ export default class AuthService extends Vue {
    */
   public kill = async (): Promise<void> => {
     await this.disconnect()
-    await this.close()
     this.logout()
     this.provider = undefined
     this.providerName = ''

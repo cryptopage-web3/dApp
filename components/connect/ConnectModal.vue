@@ -376,11 +376,6 @@ export default class ConnectModal extends Vue {
       return
     }
 
-    this.$notify({
-      type: 'success',
-      title: 'Connected successfully'
-    })
-
     this.emitSuccess()
 
     /** авторизация */
@@ -390,6 +385,28 @@ export default class ConnectModal extends Vue {
 
       this.emitSuccessLogin()
     }
+
+    /** показ успешной авторизации с задержкой
+     * т.к. происходит редирект
+     */
+    setTimeout(() => {
+      /** WalletConnect устанавливает свою сеть при подключении
+       * но не ту, которую выбрал пользователь
+       */
+      if (provider === 'walletConnect') {
+        this.$notify({
+          type: 'info',
+          title: 'WalletConnect set own chain'
+        })
+      }
+
+      /** общее сообщение о подключении */
+
+      this.$notify({
+        type: 'success',
+        title: 'Connected successfully'
+      })
+    }, 200)
 
     /** close modal on switch */
     ;($('#modal-connect') as any).modal('hide')
