@@ -34,7 +34,7 @@ export default class TransactionAdapter {
 
   public calculateAmount(): number {
     const tx: any = this.transaction
-    if (tx.type === 'tron') {
+    if (tx.type === 'tron' || tx.type === 'solana') {
       return tx.amount
     }
     const input = tx.decodedInput
