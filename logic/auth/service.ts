@@ -641,7 +641,8 @@ export default class AuthService extends Vue {
         return false
       }
 
-      const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
+      /** created by Nail M. at https://infura.io/ */
+      const infuraProjectId = '4409ed526a3e48ffa540c25ff4e1015f'
       const provider = await new WalletConnectProvider({
         infuraId: infuraProjectId,
         rpc: {
