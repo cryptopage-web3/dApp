@@ -52,7 +52,7 @@
               >Transaction History</router-link
             >
           </li>
-          <li>
+          <li class="connect-wallet__item_change">
             <a
               id="modal-opener"
               href="#"
@@ -107,7 +107,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, mixins, Watch } from 'nuxt-property-decorator'
+import { Component, Emit, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
 import { INotifyParams } from '~/types'
 import { copyToClipboard } from '~/utils/copyToClipboard'
@@ -232,6 +232,13 @@ export default class Connect extends mixins(NetworkNameMixin) {
     })
   }
 
+  // emit
+
+  @Emit('success-mobile-login')
+  emitSuccessLogin() {
+    return true
+  }
+
   // methods
 
   copyAddress() {
@@ -244,6 +251,16 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   signin() {
+    /** для мобилки делаем подключение к провайдеру WalletConnect */
+
+    if (Number($(window).width()) < 1199) {
+      this.connectToWalletConnect()
+
+      return
+    }
+
+    /** для десктопа открываем модалку ConnectModal и в ней делаем подключение */
+
     ;($('#modal-connect') as any).modal('show')
   }
 
@@ -265,6 +282,45 @@ export default class Connect extends mixins(NetworkNameMixin) {
     /** закрываем дропдаун сетей */
 
     $('.change-network-col-body').slideUp(100)
+  }
+
+  async connectToWalletConnect() {
+    /** отдельно для мобилки делаем подключение к провайдеру WalletConnect */
+    /** TODO: сделать единую логику с ConnectModal */
+
+    const response = await this.$store.dispatch('auth/switchProvider', {
+      providerName: 'walletConnect',
+      network: 'ETHEREUM'
+    })
+
+    if (response.status === 'error') {
+      this.$notify({
+        type: response.status,
+        title: response.message?.title,
+        text: response.message?.text
+      })
+
+      return
+    }
+
+    /** авторизация */
+
+    if (!this.isAuth) {
+      this.$store.dispatch('auth/signin')
+
+      this.emitSuccessLogin()
+    }
+
+    /** показ успешной авторизации с задержкой
+     * т.к. происходит редирект
+     */
+    setTimeout(() => {
+      this.$notify({
+        type: 'success',
+        title: 'Connected successfully'
+      })
+    }, 200)
+    /** TODO: конец */
   }
 }
 </script>

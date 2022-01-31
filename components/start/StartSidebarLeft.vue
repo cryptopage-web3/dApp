@@ -361,6 +361,9 @@
               </div>
             </div>
           </li>
+          <li class="card start-connect-mobile">
+            <connect @success-mobile-login="successLogin" />
+          </li>
         </ul>
       </div>
     </header>
@@ -369,14 +372,19 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
 import { init as stickySidebarInit } from '~/utils/stickySidebar'
+import TypedStore from '~/logic/store'
 
 @Component({
   components: {
-    icon: async () => await import('@/components/icons/Icon.vue')
+    icon: async () => await import('@/components/icons/Icon.vue'),
+    connect: async () => await import('~/components/connect/Connect.vue')
   }
 })
 export default class StartSidebarLeft extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
   mounted() {
     if (Number($(window).width()) > 767) {
       stickySidebarInit('#start-left-sidebar', '.main-left')
@@ -410,6 +418,13 @@ export default class StartSidebarLeft extends Vue {
     } else {
       $('.header-list').slideDown(300)
     }
+  }
+
+  successLogin() {
+    const address = this.typedStore.auth.selectedAddress
+    const network = this.typedStore.auth.selectedNetworkSlug
+
+    this.$router.push(`/${network}/${address}/nft`)
   }
 }
 </script>
