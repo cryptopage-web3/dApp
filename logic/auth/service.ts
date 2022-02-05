@@ -62,9 +62,19 @@ export default class AuthService extends Vue {
     /** если пользователь не авторизован, то не подключаемся к провайдеру */
 
     const auth = localStorage.getItem('auth')
-    const { authenticated }: Record<string, any> = auth ? JSON.parse(auth) : {}
 
-    if (!authenticated) {
+    if (!auth) {
+      return
+    }
+
+    try {
+      const { authenticated }: Record<string, any> = JSON.parse(auth)
+
+      if (!authenticated) {
+        return
+      }
+    } catch {
+      this.kill()
       return
     }
 
