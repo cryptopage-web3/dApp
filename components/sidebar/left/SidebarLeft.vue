@@ -42,9 +42,7 @@ export default class SidebarLeft extends Vue {
   }
 
   mounted() {
-    if (Number($(window).width()) > 767) {
-      stickySidebarInit('#left-sidebar', '.main-left')
-    }
+    stickySidebarInit('#left-sidebar', '.main-left')
 
     // Hide mobile menu
 

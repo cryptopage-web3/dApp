@@ -386,9 +386,7 @@ export default class StartSidebarLeft extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
 
   mounted() {
-    if (Number($(window).width()) > 767) {
-      stickySidebarInit('#start-left-sidebar', '.main-left')
-    }
+    stickySidebarInit('#start-left-sidebar', '.main-left')
 
     this.$nextTick(() => {
       ;($('.filtr-checkbox .checkbox') as any).styler()

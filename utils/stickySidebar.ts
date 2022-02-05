@@ -1,5 +1,8 @@
 const updateMoveWidth = (moveElem: string, containerElem: string) => {
-  $(moveElem).width($(containerElem).width() || 0)
+  const width =
+    Number($(window).width()) > 1199 ? $(containerElem).width() || 0 : ''
+
+  $(moveElem).width(width)
 }
 
 const updatePosition = (moveElem: string, containerElem: string) => {
@@ -11,7 +14,8 @@ const updatePosition = (moveElem: string, containerElem: string) => {
   if (
     containerOffsetTop - 20 >= scrollTop ||
     scrollTop === 0 ||
-    moveHeight >= containerHeight
+    moveHeight >= containerHeight ||
+    Number($(window).width()) < 1199
   ) {
     $(moveElem).removeClass('header_fixed header_bottom')
 
@@ -29,6 +33,11 @@ const updatePosition = (moveElem: string, containerElem: string) => {
   $(moveElem).addClass('header_fixed')
 }
 
+const refreshInit = (moveElem: string, containerElem: string) => {
+  updateMoveWidth(moveElem, containerElem)
+  updatePosition(moveElem, containerElem)
+}
+
 export const init = (moveElem: string, containerElem: string) => {
   $(window).on('scroll', () => {
     setTimeout(() => {
@@ -36,8 +45,13 @@ export const init = (moveElem: string, containerElem: string) => {
     })
   })
 
+  $(window).on('resize', () => {
+    setTimeout(() => {
+      refreshInit(moveElem, containerElem)
+    })
+  })
+
   setTimeout(() => {
-    updateMoveWidth(moveElem, containerElem)
-    updatePosition(moveElem, containerElem)
+    refreshInit(moveElem, containerElem)
   }, 200)
 }
