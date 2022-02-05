@@ -765,7 +765,7 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'Not connected to Binance Wallet',
-          text: 'Please accept connect in the Binance Ext.,<br>reload page and try again'
+          text: 'Please choose supported chain in the Binance Ext.<br>and accept connect'
         }
       }
     }
@@ -787,10 +787,19 @@ export default class AuthService extends Vue {
       /** получаем selectedAddress и chainId с задержкой */
 
       const setBSCData = () => {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
           setTimeout(async () => {
             const address: any = await bsc.getAccount()
             const chainId = await bsc.getChainId()
+
+            if (!this.isSupportedByProvider(Number(chainId), BSC_WALLET)) {
+              this.setUnknownChain(true)
+              this.kill()
+              reject(ERROR_UNKNOWN_NETWORK)
+
+              return
+            }
+
             this.setOrChangeWeb3Data(address, Number(chainId))
 
             resolve()
