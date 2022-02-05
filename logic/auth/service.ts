@@ -268,7 +268,7 @@ export default class AuthService extends Vue {
   }
 
   public setUnknownChain(isUnknown: boolean) {
-    this.data.isUnknownChain = isUnknown
+    this.data && (this.data.isUnknownChain = isUnknown)
   }
 
   public get isUnknownChain(): boolean {
@@ -582,7 +582,7 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'Not connected to MetaMask',
-          text: 'Please set Ethereum in the MetaMask Ext. and accept connect'
+          text: 'Please choose supported chain in the MetaMask Ext.<br>and accept connect'
         }
       }
     }
@@ -610,6 +610,7 @@ export default class AuthService extends Vue {
 
             if (!this.isSupportedByProvider(chainId, METAMASK)) {
               this.setUnknownChain(true)
+              this.kill()
               reject(ERROR_UNKNOWN_NETWORK)
 
               return
@@ -663,7 +664,7 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'WalletConnect not connected',
-          text: 'Please connect to the wallet,<br>reload page and try again'
+          text: 'Please choose supported chain in the wallet<br>and accept connect'
         }
       }
     }
@@ -686,6 +687,23 @@ export default class AuthService extends Vue {
         return false
       }
 
+      /** получаем selectedAddress и chainId из WalletConnect */
+
+      const setWalletConnectData = async () => {
+        const accounts = await this.$web3.eth.getAccounts()
+        const networkId = await this.$web3.eth.net.getId()
+        const address = accounts?.[0] || ''
+        const chainId = Number(networkId)
+
+        if (!this.isSupportedByProvider(chainId, WALLET_CONNECT)) {
+          this.setUnknownChain(true)
+          this.kill()
+          throw new Error(ERROR_UNKNOWN_NETWORK)
+        }
+
+        this.setOrChangeWeb3Data(address, chainId)
+      }
+
       /** created by Nail M. at https://infura.io/ */
       const infuraProjectId = '4409ed526a3e48ffa540c25ff4e1015f'
       const provider = await new WalletConnectProvider({
@@ -704,18 +722,10 @@ export default class AuthService extends Vue {
       const $web3 = await new Web3(<any>provider)
       this.changeWeb3($web3)
 
-      const accounts = await this.$web3.eth.getAccounts()
-      const networkId = await this.$web3.eth.net.getId()
+      await setWalletConnectData()
 
-      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-
-      provider.on('accountsChanged', (accounts: string[]) => {
-        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-      })
-
-      provider.on('chainChanged', (chainId: number) => {
-        this.setOrChangeWeb3Data(accounts[0], Number(chainId))
-      })
+      provider.on('accountsChanged', setWalletConnectData)
+      provider.on('chainChanged', setWalletConnectData)
 
       provider.on('close', () => {
         this.walletConnectConnected = false
@@ -1082,7 +1092,7 @@ export default class AuthService extends Vue {
   }
 
   public disconnect = async (): Promise<void> => {
-    if (this.walletConnectConnected && this.provider) {
+    if (this.provider) {
       this.provider.disconnect && (await this.provider.disconnect())
       this.provider.close && (await this.provider.close())
     }
