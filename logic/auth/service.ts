@@ -858,7 +858,7 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'Not connected to MetaX',
-          text: 'Please accept connect in the MetaX Ext.,<br>reload page and try again'
+          text: 'Please choose supported chain in the MetaX Ext.<br>and accept connect'
         }
       }
     }
@@ -880,12 +880,19 @@ export default class AuthService extends Vue {
       /** получаем selectedAddress и chainId с задержкой */
 
       const setOKEXData = () => {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
           setTimeout(() => {
-            this.setOrChangeWeb3Data(
-              window.okexchain.selectedAddress,
-              Number(window.okexchain.chainId)
-            )
+            const chainId = Number(window.okexchain.chainId)
+
+            if (!this.isSupportedByProvider(chainId, OKEX)) {
+              this.setUnknownChain(true)
+              this.kill()
+              reject(ERROR_UNKNOWN_NETWORK)
+
+              return
+            }
+
+            this.setOrChangeWeb3Data(window.okexchain.selectedAddress, chainId)
 
             resolve()
           }, 300)
