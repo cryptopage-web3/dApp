@@ -114,6 +114,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard'
 
 @Component({})
 export default class Connect extends mixins(NetworkNameMixin) {
+  hasUnknownNotify = false
   hideConnectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
   hideNetworkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 
@@ -145,6 +146,10 @@ export default class Connect extends mixins(NetworkNameMixin) {
 
   get selectedProvider(): string {
     return this.$store.getters['auth/selectedProviderName']
+  }
+
+  get isUnknownChain(): boolean {
+    return this.$store.getters['auth/isUnknownChain']
   }
 
   get getNetworkIcon(): string {
@@ -230,6 +235,28 @@ export default class Connect extends mixins(NetworkNameMixin) {
           }, 100)
         })
     })
+  }
+
+  @Watch('isUnknownChain')
+  onIsUnknownChainChanged(isUnknown: boolean) {
+    /** Если есть подключенный провайдер и получили неизвестную сеть,
+     * то значит пользователь выбрал ее в провайдере.
+     * Для таких случаев делаем disconnect
+     */
+    if (isUnknown && this.selectedProvider && !this.hasUnknownNotify) {
+      this.hasUnknownNotify = true
+      const selectedProvider = this.selectedProvider
+
+      this.$store.dispatch('auth/signout')
+      this.$router.push('/')
+
+      setTimeout(() => {
+        this.$notify({
+          type: 'error',
+          title: `${selectedProvider}'s chain is changed`
+        })
+      }, 200)
+    }
   }
 
   // emit

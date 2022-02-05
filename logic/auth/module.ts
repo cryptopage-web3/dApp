@@ -62,6 +62,11 @@ export default class AuthModule {
     return this.selectedAddress ? this.authenticated : false
   }
 
+  @Getter()
+  public get isUnknownChain(): boolean {
+    return this.authService.isUnknownChain
+  }
+
   // Mutations
 
   @Mutation()
