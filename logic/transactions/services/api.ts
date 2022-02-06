@@ -30,8 +30,17 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    if (!address.match('^0x[a-fA-F0-9]{40}$')) {
-      // if not evm related blockchain, actually it is tron
+    if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 44) {
+      // if not evm related blockchain and length is 44, actually it is solana
+      return await this.solScanAPIService.getNormalTransactions({
+        address,
+        page,
+        offset,
+        sort
+      })
+    }
+    if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 34) {
+      // if not evm related blockchain and length is 34, actually it is tron
       // @todo add address checker
       return await this.tronGridAPIService.getNormalTransactions({
         address,
