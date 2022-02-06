@@ -62,6 +62,11 @@ export default class AuthModule {
     return this.selectedAddress ? this.authenticated : false
   }
 
+  @Getter()
+  public get isUnknownChain(): boolean {
+    return this.authService.isUnknownChain
+  }
+
   // Mutations
 
   @Mutation()
@@ -79,6 +84,7 @@ export default class AuthModule {
   @Action()
   public signout(): void {
     this.setIsAuth(false)
+    this.authService.clientDisconnect()
   }
 
   @Action()
@@ -103,8 +109,9 @@ export default class AuthModule {
 
   @Action()
   public switchChain(type: string): void {
-    this.authService.clientSwitchChain(type)
     this.setIsAuth(false)
+    this.authService.clientDisconnect()
+    this.authService.clientSwitchChain(type)
   }
 
   @Action()

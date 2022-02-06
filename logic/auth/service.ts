@@ -36,6 +36,8 @@ const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] = [
   'phantom'
 ]
 
+const ERROR_UNKNOWN_NETWORK = 'UNKNOWN_NETWORK'
+
 const bsc = new BscConnector({
   supportedChainIds: [56, 97]
 })
@@ -60,9 +62,19 @@ export default class AuthService extends Vue {
     /** если пользователь не авторизован, то не подключаемся к провайдеру */
 
     const auth = localStorage.getItem('auth')
-    const { authenticated }: Record<string, any> = auth ? JSON.parse(auth) : {}
 
-    if (!authenticated) {
+    if (!auth) {
+      return
+    }
+
+    try {
+      const { authenticated }: Record<string, any> = JSON.parse(auth)
+
+      if (!authenticated) {
+        return
+      }
+    } catch {
+      this.kill()
       return
     }
 
@@ -71,23 +83,12 @@ export default class AuthService extends Vue {
     const lastUsedProvider = localStorage.getItem('lastProvider')
 
     if (!lastUsedProvider) {
-      this.logout()
+      this.kill()
       return
     }
 
     this.init(lastUsedProvider)
   }
-
-  protected _PROVIDERS = [
-    {
-      value: METAMASK,
-      name: 'Metamask'
-    },
-    {
-      value: WALLET_CONNECT,
-      name: 'Wallet Connect'
-    }
-  ]
 
   protected networksByChain: any = {
     1: { network: 'ethereum', name: 'Ethereum', slug: 'eth' },
@@ -109,6 +110,15 @@ export default class AuthService extends Vue {
     },
     tron: { network: 'tron', name: 'Tron', slug: 'tron' },
     solana: { network: 'solana', name: 'Solana', slug: 'solana' }
+  }
+
+  protected chainsByProviders: any = {
+    [METAMASK]: [1, 3, 4, 5, 42, 56, 137],
+    [BSC_WALLET]: [56, 97],
+    [OKEX]: [1, 3, 4, 5, 42, 56, 137],
+    [TRON_LINK]: ['tron'],
+    [PHANTOM]: ['solana'],
+    [WALLET_CONNECT]: [1, 3, 4, 5, 42, 56, 137]
   }
 
   // chainid type is hexadecimal nubers
@@ -146,7 +156,9 @@ export default class AuthService extends Vue {
    */
   data: any = {
     address: '',
-    chainId: 1
+    chainId: 1,
+    isUnknownChain: false,
+    providerName: ''
   }
 
   protected get metamaskInstalled(): boolean {
@@ -178,7 +190,6 @@ export default class AuthService extends Vue {
     return typeof window !== 'undefined' && typeof window?.solana === 'object'
   }
 
-  private providerName = METAMASK
   private provider: WalletConnectProvider | undefined
   private metamaskConnected = false
   private okexConnected = false
@@ -186,6 +197,7 @@ export default class AuthService extends Vue {
   private walletConnectConnected = false
   private tronLinkConnected = false
   private phantomConnected = false
+
   protected get $web3(): any {
     return Container.get(tokens.WEB3)
   }
@@ -205,7 +217,7 @@ export default class AuthService extends Vue {
    * Just reacive proxy for simple access
    */
   public get selectedProviderName(): string {
-    return this.providerName
+    return this.data.providerName
   }
 
   /*
@@ -252,6 +264,27 @@ export default class AuthService extends Vue {
     )
   }
 
+  /*
+   * Проверяем поддерживаемость сети
+   * У провайдеров пользователь мог поменять сеть на ту, которую мы не поддерживаем
+   * В результате подписки на смену сети, мы можем установить неизвестную для нас сеть в качестве активной
+   * Для исключения этого в Connect проверяется isUnknownChain. В случае true делаем logout
+   */
+  public isSupportedByProvider(
+    chainId: string | number,
+    provider: string
+  ): boolean {
+    return this.chainsByProviders[provider].includes(chainId)
+  }
+
+  public setUnknownChain(isUnknown: boolean) {
+    this.data && (this.data.isUnknownChain = isUnknown)
+  }
+
+  public get isUnknownChain(): boolean {
+    return this.data.isUnknownChain
+  }
+
   /**
    * Set or Change web3 data into instance.
    * @param {String} address - address of current wallet
@@ -271,6 +304,15 @@ export default class AuthService extends Vue {
   }
 
   /**
+   * Change provider name
+   * @param providerName
+   * @returns
+   */
+  public setProviderName(providerName: string) {
+    this.data.providerName = providerName
+  }
+
+  /**
    * Change current providerName
    * @param {String} providerName - value of providerName
    * @returns {String} - result of action
@@ -278,6 +320,10 @@ export default class AuthService extends Vue {
   public switchProvider = async (
     providerName: string
   ): Promise<ConnectResponseType> => {
+    /** сбрасываем флаг неизвестной сети  */
+
+    this.setUnknownChain(false)
+
     /** подключение к metamask */
 
     if (providerName === METAMASK) {
@@ -358,10 +404,18 @@ export default class AuthService extends Vue {
       }
     }
 
+    /** WALLET_CONNECT сам устанавливает выбранную сеть */
+
+    if (this.selectedProviderName === WALLET_CONNECT) {
+      return {
+        status: 'success'
+      }
+    }
+
     /** TRON поддерживается только провайдером TRON_LINK */
 
     if (networkName === TRON) {
-      if (this.providerName === TRON_LINK) {
+      if (this.selectedProviderName === TRON_LINK) {
         return {
           status: 'success'
         }
@@ -379,7 +433,7 @@ export default class AuthService extends Vue {
     /** SOLANA поддерживается только провайдером PHANTOM */
 
     if (networkName === SOLANA) {
-      if (this.providerName === PHANTOM) {
+      if (this.selectedProviderName === PHANTOM) {
         return {
           status: 'success'
         }
@@ -396,7 +450,7 @@ export default class AuthService extends Vue {
 
     /** Провайдер BSC_WALLET поддерживает только сеть BSC */
 
-    if (this.providerName === BSC_WALLET) {
+    if (this.selectedProviderName === BSC_WALLET) {
       if (networkName !== BSC) {
         return {
           status: 'error',
@@ -430,9 +484,12 @@ export default class AuthService extends Vue {
     /** METAMASK и OKEX - api полностью совпадают
      * пробуем выставить выбранную сеть в расширении, какой бы она не была  */
 
-    if (this.providerName === METAMASK || this.providerName === OKEX) {
+    if (
+      this.selectedProviderName === METAMASK ||
+      this.selectedProviderName === OKEX
+    ) {
       const providerTitle =
-        this.providerName === OKEX ? 'MetaX Ext.' : 'MetaMask Ext.'
+        this.selectedProviderName === OKEX ? 'MetaX Ext.' : 'MetaMask Ext.'
 
       try {
         /** пробуем переключиться на сеть */
@@ -507,6 +564,11 @@ export default class AuthService extends Vue {
     )
   }
 
+  /** Если пользователь делает disconnect, то сбрасываем все подключения */
+  clientDisconnect = async () => {
+    await this.kill()
+  }
+
   /**
    * ======== METAMASK ========
    *
@@ -530,12 +592,12 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'Not connected to MetaMask',
-          text: 'Please accept connect in the MetaMask Ext.,<br>reload page and try again'
+          text: 'Please choose supported chain in the MetaMask Ext.<br>and accept connect'
         }
       }
     }
 
-    this.providerName = METAMASK
+    this.setProviderName(METAMASK)
     window.localStorage.setItem('lastProvider', METAMASK)
 
     return {
@@ -552,12 +614,19 @@ export default class AuthService extends Vue {
       /** получаем selectedAddress и chainId с задержкой */
 
       const setMetamaskData = () => {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
           setTimeout(() => {
-            this.setOrChangeWeb3Data(
-              window.ethereum.selectedAddress,
-              Number(window.ethereum.chainId)
-            )
+            const chainId = Number(window.ethereum.chainId)
+
+            if (!this.isSupportedByProvider(chainId, METAMASK)) {
+              this.setUnknownChain(true)
+              this.kill()
+              reject(ERROR_UNKNOWN_NETWORK)
+
+              return
+            }
+
+            this.setOrChangeWeb3Data(window.ethereum.selectedAddress, chainId)
 
             resolve()
           }, 300)
@@ -605,12 +674,12 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'WalletConnect not connected',
-          text: 'Please connect to the wallet,<br>reload page and try again'
+          text: 'Please choose supported chain in the wallet<br>and accept connect'
         }
       }
     }
 
-    this.providerName = WALLET_CONNECT
+    this.setProviderName(WALLET_CONNECT)
     window.localStorage.setItem('lastProvider', WALLET_CONNECT)
 
     return {
@@ -628,7 +697,25 @@ export default class AuthService extends Vue {
         return false
       }
 
-      const infuraProjectId = 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S' // process.env.INFURA_PROJECT_ID
+      /** получаем selectedAddress и chainId из WalletConnect */
+
+      const setWalletConnectData = async () => {
+        const accounts = await this.$web3.eth.getAccounts()
+        const networkId = await this.$web3.eth.net.getId()
+        const address = accounts?.[0] || ''
+        const chainId = Number(networkId)
+
+        if (!this.isSupportedByProvider(chainId, WALLET_CONNECT)) {
+          this.setUnknownChain(true)
+          this.kill()
+          throw new Error(ERROR_UNKNOWN_NETWORK)
+        }
+
+        this.setOrChangeWeb3Data(address, chainId)
+      }
+
+      /** created by Nail M. at https://infura.io/ */
+      const infuraProjectId = '4409ed526a3e48ffa540c25ff4e1015f'
       const provider = await new WalletConnectProvider({
         infuraId: infuraProjectId,
         rpc: {
@@ -645,20 +732,13 @@ export default class AuthService extends Vue {
       const $web3 = await new Web3(<any>provider)
       this.changeWeb3($web3)
 
-      const accounts = await this.$web3.eth.getAccounts()
-      const networkId = await this.$web3.eth.net.getId()
-      this.setOrChangeWeb3Data(accounts[0], Number(networkId))
+      await setWalletConnectData()
 
-      provider.on('accountsChanged', (accounts: string[]) => {
-        this.setOrChangeWeb3Data(accounts[0], Number(networkId))
-      })
+      provider.on('accountsChanged', setWalletConnectData)
+      provider.on('chainChanged', setWalletConnectData)
 
-      provider.on('chainChanged', (chainId: number) => {
-        this.setOrChangeWeb3Data(accounts[0], Number(chainId))
-      })
-
-      provider.on('close', async () => {
-        await this.kill()
+      provider.on('close', () => {
+        this.walletConnectConnected = false
       })
 
       this.walletConnectConnected = true
@@ -695,12 +775,12 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'Not connected to Binance Wallet',
-          text: 'Please accept connect in the Binance Ext.,<br>reload page and try again'
+          text: 'Please choose supported chain in the Binance Ext.<br>and accept connect'
         }
       }
     }
 
-    this.providerName = BSC_WALLET
+    this.setProviderName(BSC_WALLET)
     window.localStorage.setItem('lastProvider', BSC_WALLET)
 
     return {
@@ -717,10 +797,19 @@ export default class AuthService extends Vue {
       /** получаем selectedAddress и chainId с задержкой */
 
       const setBSCData = () => {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
           setTimeout(async () => {
             const address: any = await bsc.getAccount()
             const chainId = await bsc.getChainId()
+
+            if (!this.isSupportedByProvider(Number(chainId), BSC_WALLET)) {
+              this.setUnknownChain(true)
+              this.kill()
+              reject(ERROR_UNKNOWN_NETWORK)
+
+              return
+            }
+
             this.setOrChangeWeb3Data(address, Number(chainId))
 
             resolve()
@@ -779,12 +868,12 @@ export default class AuthService extends Vue {
         status: 'error',
         message: {
           title: 'Not connected to MetaX',
-          text: 'Please accept connect in the MetaX Ext.,<br>reload page and try again'
+          text: 'Please choose supported chain in the MetaX Ext.<br>and accept connect'
         }
       }
     }
 
-    this.providerName = OKEX
+    this.setProviderName(OKEX)
     window.localStorage.setItem('lastProvider', OKEX)
 
     return {
@@ -801,12 +890,19 @@ export default class AuthService extends Vue {
       /** получаем selectedAddress и chainId с задержкой */
 
       const setOKEXData = () => {
-        return new Promise<void>((resolve) => {
+        return new Promise<void>((resolve, reject) => {
           setTimeout(() => {
-            this.setOrChangeWeb3Data(
-              window.okexchain.selectedAddress,
-              Number(window.okexchain.chainId)
-            )
+            const chainId = Number(window.okexchain.chainId)
+
+            if (!this.isSupportedByProvider(chainId, OKEX)) {
+              this.setUnknownChain(true)
+              this.kill()
+              reject(ERROR_UNKNOWN_NETWORK)
+
+              return
+            }
+
+            this.setOrChangeWeb3Data(window.okexchain.selectedAddress, chainId)
 
             resolve()
           }, 300)
@@ -869,7 +965,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    this.providerName = TRON_LINK
+    this.setProviderName(TRON_LINK)
     window.localStorage.setItem('lastProvider', TRON_LINK)
 
     return {
@@ -954,7 +1050,7 @@ export default class AuthService extends Vue {
       }
     }
 
-    this.providerName = PHANTOM
+    this.setProviderName(PHANTOM)
     window.localStorage.setItem('lastProvider', PHANTOM)
 
     return {
@@ -1022,41 +1118,17 @@ export default class AuthService extends Vue {
   }
 
   public disconnect = async (): Promise<void> => {
-    if (
-      this.walletConnectConnected &&
-      this.provider &&
-      typeof this.provider.disconnect === 'function'
-    ) {
-      await this.provider.disconnect()
-      this.walletConnectConnected = false
-    } else if (this.metamaskConnected) {
-      this.metamaskConnected = false
-    } else if (this.bscConnected) {
-      this.bscConnected = false
-    } else if (this.tronLinkConnected) {
-      this.tronLinkConnected = false
-    } else if (this.phantomConnected) {
-      this.phantomConnected = false
+    if (this.provider) {
+      this.provider.disconnect && (await this.provider.disconnect())
+      this.provider.close && (await this.provider.close())
     }
-  }
 
-  public close = async (): Promise<void> => {
-    if (
-      this.walletConnectConnected &&
-      this.provider &&
-      typeof this.provider.close === 'function'
-    ) {
-      await this.provider.close()
-      this.walletConnectConnected = false
-    } else if (this.metamaskConnected) {
-      this.metamaskConnected = false
-    } else if (this.bscConnected) {
-      this.bscConnected = false
-    } else if (this.tronLinkConnected) {
-      this.tronLinkConnected = false
-    } else if (this.phantomConnected) {
-      this.phantomConnected = false
-    }
+    this.metamaskConnected = false
+    this.okexConnected = false
+    this.bscConnected = false
+    this.walletConnectConnected = false
+    this.tronLinkConnected = false
+    this.phantomConnected = false
   }
 
   public logout = () => {
@@ -1073,10 +1145,10 @@ export default class AuthService extends Vue {
    */
   public kill = async (): Promise<void> => {
     await this.disconnect()
-    await this.close()
     this.logout()
+    this.setUnknownChain(false)
     this.provider = undefined
-    this.providerName = ''
+    this.setProviderName('')
     window.localStorage.removeItem('lastProvider')
   }
 }

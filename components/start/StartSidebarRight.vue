@@ -156,9 +156,7 @@ export default class StartSidebarRight extends Vue {
   collectionBarUrl = collectionBarPath
 
   mounted() {
-    if (Number($(window).width()) > 767) {
-      stickySidebarInit('#start-right-sidebar', '.main-right')
-    }
+    stickySidebarInit('#start-right-sidebar', '.main-right')
   }
 
   successLogin() {

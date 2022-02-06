@@ -274,7 +274,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Emit } from 'nuxt-property-decorator'
+import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
 import { INotifyParams } from '~/types'
@@ -296,6 +296,39 @@ export default class ConnectModal extends Vue {
   get isAuth(): boolean {
     return this.typedStore.auth.isAuth
   }
+
+  // emit
+
+  @Emit('error')
+  emitError() {
+    return true
+  }
+
+  @Emit('success')
+  emitSuccess() {
+    return true
+  }
+
+  @Emit('success-login')
+  emitSuccessLogin() {
+    return true
+  }
+
+  // watch
+
+  @Watch('$route', { immediate: true })
+  onRouteChanged() {
+    this.$nextTick(() => {
+      /** проверяем наличие параметра openConnect */
+
+      if (this.$route.query.openConnect) {
+        ;($('#modal-connect') as any).modal('show')
+        this.$router.replace({ query: undefined })
+      }
+    })
+  }
+
+  // methods
 
   mounted() {
     /** выбор сети */
@@ -333,31 +366,7 @@ export default class ConnectModal extends Vue {
         $('.modal-backdrop').addClass('modal-backdrop_dark')
       })
     })
-
-    /** проверяем наличие параметра openConnect */
-
-    if (this.$route.query.openConnect) {
-      ;($('#modal-connect') as any).modal('show')
-      this.$router.replace({ query: undefined })
-    }
   }
-
-  @Emit('error')
-  emitError() {
-    return true
-  }
-
-  @Emit('success')
-  emitSuccess() {
-    return true
-  }
-
-  @Emit('success-login')
-  emitSuccessLogin() {
-    return true
-  }
-
-  // methods
 
   async switchProvider(type: string, provider: string) {
     const response = await this.$store.dispatch('auth/switchProvider', {
@@ -376,11 +385,6 @@ export default class ConnectModal extends Vue {
       return
     }
 
-    this.$notify({
-      type: 'success',
-      title: 'Connected successfully'
-    })
-
     this.emitSuccess()
 
     /** авторизация */
@@ -390,6 +394,28 @@ export default class ConnectModal extends Vue {
 
       this.emitSuccessLogin()
     }
+
+    /** показ успешной авторизации с задержкой
+     * т.к. происходит редирект
+     */
+    setTimeout(() => {
+      /** WalletConnect устанавливает свою сеть при подключении
+       * но не ту, которую выбрал пользователь
+       */
+      if (provider === 'walletConnect') {
+        this.$notify({
+          type: 'info',
+          title: 'WalletConnect set own chain'
+        })
+      }
+
+      /** общее сообщение о подключении */
+
+      this.$notify({
+        type: 'success',
+        title: 'Connected successfully'
+      })
+    }, 200)
 
     /** close modal on switch */
     ;($('#modal-connect') as any).modal('hide')
