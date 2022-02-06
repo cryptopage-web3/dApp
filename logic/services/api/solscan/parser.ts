@@ -1,6 +1,7 @@
 import { TokenBalanceType } from '~/logic/tokens/types'
 import {
-  SolScanAPITokenType
+  SolScanAPITokenType,
+  SolScanAPITransactionType
 } from '~/logic/services/api/solscan/types'
 
 export class SolScanAPISolBalanceParser {
@@ -44,6 +45,28 @@ export class SolScanAPITokenBalanceParser {
         decimals: token.tokenAmount.decimals,
         rate: { usd: rate }
       }
+    }
+  }
+}
+
+export class SolScanAPITransactionParser {
+  parse = (tx: SolScanAPITransactionType): any => {
+    return {
+      gas: 0,
+      hash: tx.txHash,
+      nonce: '',
+      input: '',
+      value: tx.lamport,
+      blockHash: '',
+      blockNumber: tx.blockTime,
+      confirmations: '',
+      cumulativeGasUsed: 0,
+      from: tx.signer[0],
+      gasPrice: tx.fee,
+      gasUsed: 0,
+      timeStamp: tx.blockTime,
+      to: '',
+      type: 'solana'
     }
   }
 }

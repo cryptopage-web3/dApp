@@ -1,11 +1,13 @@
 import { Service } from 'vue-typedi'
 import { SolScanAPIServiceMixin } from '~/logic/mixins/api'
 import {
-  SolScanAPITokenType
+  SolScanAPITokenType,
+  SolScanAPITransactionType
 } from '~/logic/services/api/solscan/types'
 import {
   SolScanAPISolBalanceParser,
   SolScanAPITokenBalanceParser,
+  SolScanAPITransactionParser,
   SolScanApiSOL20Parser
 } from '~/logic/services/api/solscan/parser'
 import { TokenBalanceType } from '~/logic/tokens/types'
@@ -13,6 +15,7 @@ import tokens from '~/logic/tokens'
 
 import {
   ESortDirectionType,
+  TransactionType,
   ParamsTransactionsType
 } from '~/logic/transactions/types'
 
@@ -44,6 +47,33 @@ export default class SolScanAPIService extends SolScanAPIServiceMixin {
 
   public getTransactionsCount = (): Promise<number> => {
     return Promise.resolve(Number.MAX_SAFE_INTEGER)
+  }
+
+  public getNormalTransactions = async ({
+    address,
+    page = 1,
+    offset = 10,
+    sort = ESortDirectionType.desc
+  }: ParamsTransactionsType): Promise<TransactionType[]> => {
+    const options = {
+      account: address,
+      page: `${page}`,
+      offset: `${offset}`,
+      sort
+    }
+    const params = new URLSearchParams(options).toString()
+    const URL = `${this.baseURL}transactions?${params}`
+    try {
+      const response: any = await this.$axios.get(URL)
+      const parser = new SolScanAPITransactionParser()
+      const transactions = response.data.map(
+        (transaction: SolScanAPITransactionType): TransactionType =>
+          parser.parse(transaction)
+      )
+      return transactions
+    } catch {
+      return []
+    }
   }
 
   /**
