@@ -1,8 +1,6 @@
 import Vue from 'vue'
 import { Component, Watch } from 'nuxt-property-decorator'
 
-declare let window: any
-
 @Component({})
 export default class PaginationMixin extends Vue {
   scrollListener: null | (() => void) = null
@@ -20,10 +18,6 @@ export default class PaginationMixin extends Vue {
     return this.$store.getters['address/address']
   }
 
-  get selectedAddress(): string {
-    return this.$store.getters['auth/selectedAddress']
-  }
-
   get chainId(): number | string {
     return this.$store.getters['auth/chainId']
   }
@@ -39,11 +33,6 @@ export default class PaginationMixin extends Vue {
   @Watch('address')
   onAddressChanged() {
     this.reset()
-  }
-
-  @Watch('selectedAddress')
-  onSelectedAddressChanged(newAddress: string, oldAddress: string) {
-    this.resetAddress(newAddress, oldAddress)
   }
 
   @Watch('chainId')
@@ -97,7 +86,6 @@ export default class PaginationMixin extends Vue {
      * если $fetch выполняется, то необходимо дождаться его завершения, а потом запустить
      * иначе $fetch не запустится
      */
-
     if (!this.$fetchState.pending) {
       this.$fetch()
       return
@@ -115,14 +103,16 @@ export default class PaginationMixin extends Vue {
     })
   }
 
-  async resetAddress(newAddress: string, oldAddress: string) {
-    if (newAddress === oldAddress) return
-    const params = this.$route.params
-    const selectedAddress = this.selectedAddress
-    if (selectedAddress) params.address = selectedAddress
-    await this.$store.dispatch('address/clearTransactions')
-    await this.$router.push({ params })
-  }
+  /** Не сбрасываем транзакции и не редиректим при смене selectedAddress
+   * Для данной страницы selectedAddress никакого значения не имеет, проверяем только address
+   * Иначе нельзя перейти на страницу любого адреса,
+   * т.к. в этот момент selectedAddress меняется с пустой строки на адрес провайдера и происходит редирект
+   * Поэтому удалил resetAddress (Nail M.)
+   * chain не поддается данной логике, т.к. выбранный chain присутствует в URL, поэтому при изменении должны редиректить
+   */
+  /* async resetAddress(newAddress: string, oldAddress: string) {
+    ...
+  } */
 
   async resetChain(newChain: number | string, oldChain: number | string) {
     /** проверяем, что chain изменился вне зависимости от типа: string, number
