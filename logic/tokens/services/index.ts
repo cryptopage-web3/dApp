@@ -65,33 +65,54 @@ export default class TokenService {
     let tokenBalances = await this.tokenAPIService.getTokenBalances(address)
     const pageTokenBalance = await this.getPageTokenBalance(address)
 
+    /** tokenBalances - список токенов, полученный от Сovalent API
+     * для solana - используется public-api.solscan.io
+     * для tron - используется apilist.tronscan.org
+     *
+     * Если Сovalent API возвращает токены по адресу, то данные токены будут являться результатом операции
+     * Если токенов нет (обычно для тестовых сетей), то балансы получаем по каждому токену из списка, который хранится в ipfs
+     * в tokenBalances в таком случае записываются по условию: balance > 0
+     **/
+
     if (tokenBalances.length > 0) {
-      const basicTokenBalance = tokenBalances.find((tokenBalance) => {
-        return tokenBalance.tokenInfo.address === this.basicToken.address
-      })
-      tokenBalances = tokenBalances.filter((tokenBalance) => {
+      /** токен, соответствующий выбранному chainId */
+      let basicTokenBalance = tokenBalances.find((tokenBalance) => {
         return (
-          tokenBalance.tokenInfo.address?.toLowerCase() !==
-          this.basicToken.address?.toLowerCase()
+          tokenBalance.tokenInfo.symbol?.toLowerCase() ===
+          this.basicToken.symbol?.toLowerCase()
         )
       })
+
+      tokenBalances = tokenBalances.filter((tokenBalance) => {
+        return (
+          tokenBalance.tokenInfo.symbol?.toLowerCase() !==
+          this.basicToken.symbol?.toLowerCase()
+        )
+      })
+
       /** Sort desc by usdBalance */
       tokenBalances = tokenBalances.sort((a, b) =>
         a.usdBalance > b.usdBalance ? -1 : 1
       )
-      if (basicTokenBalance) {
-        tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]
-        // tokenBalances.unshift(basicToken)
+
+      /** если нет нужного токена в списке, то пробуем его получить из web3 (eth) */
+      if (!basicTokenBalance) {
+        basicTokenBalance = await this.getBasicTokenBalance(address)
       }
-      // tokenBalances = [basicToken, ...tokenBalances]
+
+      /** итоговый список: токен выбранной сети, баланс crypto.page, все остальные токены */
+      tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]
     } else {
       /** Add basic token, because IPFSTokenStorage don't store it  */
       const basicTokenBalance = await this.getBasicTokenBalance(address)
       tokenBalances = await this.tokenWeb3Service.getTokenBalances(address)
+
       /** Sort desc by usdBalance */
       tokenBalances = tokenBalances.sort((a, b) =>
         a.usdBalance > b.usdBalance ? -1 : 1
       )
+
+      /** итоговый список: токен выбранной сети, баланс crypto.page, все остальные токены */
       tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]
     }
 
@@ -104,6 +125,7 @@ export default class TokenService {
         )
       }
     })
+
     return tokenBalances
   }
 
@@ -211,7 +233,7 @@ export default class TokenService {
     }
     if ([56, 97].includes(Number(chainId))) {
       tokenInfo = {
-        address: '0xb8c77482e45f1f44de1745f52c74426c631bdd52',
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Binance coin',
         symbol: 'BNB',
         decimals: 18,

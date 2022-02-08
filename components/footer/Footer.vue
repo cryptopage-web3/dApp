@@ -57,9 +57,7 @@
         </div>
       </div>
       <div class="main-new-footer__copiryte">
-        Reg.number: 16221045<br />
-        Cryptohub OÜ<br />
-        Copyright 2022 Crypto.Page. All right reserved.
+        Copyright © 2022 The CryptoPage. All Rights Reserved
       </div>
     </div>
   </footer>
