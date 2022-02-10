@@ -1,6 +1,9 @@
 <template>
   <div class="balances">
-    <loader v-if="loadingInfo" />
+    <template v-if="loadingInfo">
+      <skeleton class-name="balances__loading-item" />
+      <skeleton class-name="balances__loading-item" />
+    </template>
     <template v-else>
       <nuxt-link
         v-for="token in tokens"
@@ -53,7 +56,7 @@ import NetworkNameMixin from '~/mixins/networkName'
 
 @Component({
   components: {
-    loader: () => import('~/components/loaders/GrowLoader.vue')
+    skeleton: () => import('~/components/loaders/Skeleton.vue')
   }
 })
 export default class SidebarRightBalance extends mixins(

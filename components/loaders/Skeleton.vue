@@ -1,9 +1,10 @@
 <template>
   <div
     class="loader-skeleton"
+    :class="[className]"
     :style="{
-      height: `${height}px`,
-      width: width ? `${width}px` : `100%`
+      height: height ? `${height}px` : undefined,
+      width: width ? `${width}px` : undefined
     }"
   ></div>
 </template>
@@ -13,10 +14,13 @@ import { Component, Prop } from 'nuxt-property-decorator'
 
 @Component({})
 export default class Skeleton extends Vue {
-  @Prop({ type: Number, default: 100 })
+  @Prop({ type: Number, default: 0 })
   readonly height!: number
 
   @Prop({ type: Number, default: 0 })
   readonly width!: number
+
+  @Prop({ type: String, default: '' })
+  readonly className!: string
 }
 </script>

@@ -32,7 +32,7 @@
             </div>
           </div>
           <div class="profile-info__text-input">
-            <loader v-if="loadingInfo" :height="10" :width="270" />
+            <loader v-if="loadingInfo" :height="10" :width="230" />
             <div v-show="!loadingInfo">
               <strong
                 title="Number of unique addresses from which transactions got. Checked only loaded transactions from all tabs."
