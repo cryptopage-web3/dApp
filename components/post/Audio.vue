@@ -19,7 +19,6 @@ import TransactionMixin from '~/mixins/transaction'
 @Component({
   components: {
     top: async () => await import('~/components/post/PostTop.vue'),
-    loader: () => import('~/components/loaders/Skeleton.vue'),
     textBlock: async () => await import('~/components/post/PostTextBlock.vue'),
     bottom: async () => await import('~/components/post/PostBottom.vue')
   }

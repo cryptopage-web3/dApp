@@ -113,14 +113,13 @@ export default class AddressModule {
 
   @Getter()
   public get transactionsCount(): number {
-    if (this.addressInfo) {
-      if (this.transactions.length > this.addressInfo.transactionsCount) {
-        return this.transactions.length
-      } else {
-        return this.addressInfo.transactionsCount
-      }
+    if (!this.addressInfo) {
+      return 0
     }
-    return 0
+
+    return this.transactions.length > this.addressInfo.transactionsCount
+      ? this.transactions.length
+      : this.addressInfo.transactionsCount
   }
 
   @Getter()

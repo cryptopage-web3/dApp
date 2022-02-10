@@ -22,21 +22,36 @@
           <mark v-if="tokenName">({{ tokenName }})</mark>
         </div>
         <div class="profile-info__text">
-          <strong title="Total transactions">286</strong> total transactions<br />
-          <strong
-            title="Number of unique addresses from which transactions got. Checked only loaded transactions from all tabs."
-            >{{ inputAddressesCount | humanizeCount }}</strong
-          >
-          inputs /
-          <strong
-            title="Number of unique addresses to which transactions sent. Checked only loaded transactions from all tabs."
-            >{{ outputAddressesCount | humanizeCount }}</strong
-          >
-          outputs from
-          <strong title="Number of loaded transactions in the transactions tab">
-            {{ loadedTransactionsCount }}
-          </strong>
-          loaded transactions
+          <div class="profile-info__text-total">
+            <loader v-if="loadingInfo" :height="10" :width="140" />
+            <div v-show="!loadingInfo">
+              <strong title="Total transactions">{{
+                transactionsCount | humanizeCount
+              }}</strong>
+              total transactions
+            </div>
+          </div>
+          <div class="profile-info__text-input">
+            <loader v-if="loadingInfo" :height="10" :width="270" />
+            <div v-show="!loadingInfo">
+              <strong
+                title="Number of unique addresses from which transactions got. Checked only loaded transactions from all tabs."
+                >{{ inputAddressesCount | humanizeCount }}</strong
+              >
+              inputs /
+              <strong
+                title="Number of unique addresses to which transactions sent. Checked only loaded transactions from all tabs."
+                >{{ outputAddressesCount | humanizeCount }}</strong
+              >
+              outputs from
+              <strong
+                title="Number of loaded transactions in the transactions tab"
+              >
+                {{ loadedTransactionsCount }}
+              </strong>
+              loaded transactions
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -58,7 +73,8 @@ import { INotifyParams } from '~/types'
   components: {
     'nft-form': async () => await import('@/components/nft-form/NFTForm.vue'),
     'profile-status': async () =>
-      await import('@/components/address/AddressProfileStatus.vue')
+      await import('@/components/address/AddressProfileStatus.vue'),
+    loader: () => import('~/components/loaders/Skeleton.vue')
   }
 })
 export default class AddressProfileTop extends Vue {
@@ -75,6 +91,10 @@ export default class AddressProfileTop extends Vue {
 
   get image(): string {
     return this.$store.getters['address/image']
+  }
+
+  get loadingInfo(): boolean {
+    return this.$store.state.address.loadingInfo
   }
 
   get transactionsCount(): number {
@@ -96,7 +116,7 @@ export default class AddressProfileTop extends Vue {
   get tokenName(): string {
     const tokenName = this.$store.getters['address/name']
     const tokenSymbol = this.$store.getters['address/symbol']
-    return tokenName && tokenSymbol ? `${tokenName} (${tokenSymbol})` : ''
+    return tokenName && tokenSymbol ? `${tokenSymbol} - ${tokenName}` : ''
   }
 
   mounted() {
