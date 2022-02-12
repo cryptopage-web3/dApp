@@ -133,37 +133,24 @@
         </div>
       </div>
     </div>
-    <connectModal @success-login="successLogin" />
   </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
-import { useStore } from 'vuex-simple'
 import collectionBarPath from '~/assets/img/collection-bar_bg.jpg'
 import { init as stickySidebarInit } from '~/utils/stickySidebar'
-import TypedStore from '~/logic/store'
 
 @Component({
   components: {
-    connect: async () => await import('@/components/connect/Connect.vue'),
-    connectModal: async () =>
-      await import('@/components/connect/ConnectModal.vue')
+    connect: async () => await import('@/components/connect/Connect.vue')
   }
 })
 export default class StartSidebarRight extends Vue {
-  public typedStore: TypedStore = useStore(this.$store)
   collectionBarUrl = collectionBarPath
 
   mounted() {
     stickySidebarInit('#start-right-sidebar', '.main-right')
-  }
-
-  successLogin() {
-    const address = this.typedStore.auth.selectedAddress
-    const network = this.typedStore.auth.selectedNetworkSlug
-
-    this.$router.push(`/${network}/${address}/nft`)
   }
 }
 </script>

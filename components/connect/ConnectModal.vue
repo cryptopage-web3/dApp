@@ -366,6 +366,17 @@ export default class ConnectModal extends Vue {
         $('.modal-backdrop').addClass('modal-backdrop_dark')
       })
     })
+
+    /** TODO: это временное решение.
+     * при закрытии модалки, если это стартовая страница, то делаем редирект на crypto.page
+     * Нужно убрать, когда стартовая старница будет готова
+     **/
+
+    $('#modal-connect').on('hide.bs.modal', () => {
+      if (this.$route.name === 'index' && !this.isAuth) {
+        window.location.href = 'https://crypto.page/'
+      }
+    })
   }
 
   async switchProvider(type: string, provider: string) {

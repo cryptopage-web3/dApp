@@ -3,7 +3,8 @@
     <top-images />
     <hot-collections />
     <top-collections-bar />
-    <div v-if="!isMounted" class="start-page__loading">
+    <!-- TODO: нужно вернуть v-if="!isMounted" -->
+    <div v-if="true" class="start-page__loading">
       <div class="spinner-border text-primary" role="status">
         <span class="sr-only">Loading...</span>
       </div>
@@ -12,7 +13,7 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'nuxt-property-decorator'
+import { Component, Watch } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
 
@@ -34,11 +35,57 @@ export default class IndexPage extends Vue {
 
   isMounted = false
 
+  get isAuth(): boolean {
+    return this.typedStore.auth.isAuth
+  }
+
+  get selectedAddress(): string {
+    return this.typedStore.auth.selectedAddress
+  }
+
+  get selectedNetworkSlug(): string {
+    return this.typedStore.auth.selectedNetworkSlug
+  }
+
   mounted() {
     /** Нужно время, чтобы подключиться к расширению */
     setTimeout(() => {
       this.isMounted = true
     }, 500)
+  }
+
+  @Watch('isMounted')
+  onIsMountedChanged(isMounted: boolean) {
+    if (!isMounted) {
+      return
+    }
+
+    /** TODO: это временное решение.
+     * Нужно убрать открытие модалки и редирект,
+     * когда стартовая старница будет готова
+     **/
+
+    if (this.isAuth) {
+      this.homeRedirect()
+      return
+    }
+
+    ;($('#modal-connect') as any).modal('show')
+  }
+
+  @Watch('isAuth')
+  onIsAuthChanged() {
+    if (this.isAuth) {
+      this.homeRedirect()
+    }
+  }
+
+  homeRedirect() {
+    ;($('#modal-connect') as any).modal('hide')
+
+    this.$router.push(
+      `/${this.selectedNetworkSlug}/${this.selectedAddress}/nft`
+    )
   }
 }
 </script>
