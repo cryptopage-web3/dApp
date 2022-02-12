@@ -703,6 +703,15 @@
     font-size: 12px;
   }
 
+  .modal-content__item-tron,
+  .modal-content__item-solana {
+    display: none;
+  }
+
+  .modal-content-wallet-list li:not(.modal-content-wallet-list__walletconnect) {
+    display: none;
+  }
+
   .nav-tabs.transactions-list {
     padding: 0;
   }

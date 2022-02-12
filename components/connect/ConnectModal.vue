@@ -48,7 +48,7 @@
                   <span></span>
                 </a>
               </li>
-              <li>
+              <li class="modal-content__item-tron">
                 <a
                   id="modal-content-tron"
                   href="#modal-content4"
@@ -58,7 +58,7 @@
                   <span></span>
                 </a>
               </li>
-              <li>
+              <li class="modal-content__item-solana">
                 <a
                   id="modal-content-solana"
                   href="#modal-content5"
@@ -89,7 +89,7 @@
                       <span> MetaMask </span>
                     </a>
                   </li>
-                  <li>
+                  <li class="modal-content-wallet-list__walletconnect">
                     <a
                       href="#"
                       class="modal-content-wallet__link"
@@ -151,7 +151,7 @@
                       <span> BSC Wallet </span>
                     </a>
                   </li>
-                  <li>
+                  <li class="modal-content-wallet-list__walletconnect">
                     <a
                       href="#"
                       class="modal-content-wallet__link"
@@ -198,7 +198,7 @@
                       <span> MetaMask </span>
                     </a>
                   </li>
-                  <li>
+                  <li class="modal-content-wallet-list__walletconnect">
                     <a
                       href="#"
                       class="modal-content-wallet__link"
