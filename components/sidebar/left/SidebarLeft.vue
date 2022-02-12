@@ -9,7 +9,7 @@
           <img src="@/assets/img/nav_bg2.svg" />
         </a>
       </div>
-      <left-menu v-if="isAuth" />
+      <left-menu />
     </header>
   </div>
 </template>
