@@ -1003,6 +1003,15 @@ export default class AuthService extends Vue {
             throw new Error('Request denied by TronLink Ext.')
           }
 
+          window.addEventListener('message', (e) => {
+            if (e.data.message && e.data.message.action === 'setAccount') {
+              const address = e.data.message.data.address
+              if (address !== this.data.address) {
+                this.setOrChangeWeb3Data(address, 'tron')
+              }
+            }
+          })
+
           this.tronLinkConnected = true
         }
 
