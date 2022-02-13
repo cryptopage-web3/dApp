@@ -70,12 +70,15 @@ export default class IndexPage extends Vue {
       return
     }
 
-    ;($('#modal-connect') as any).modal('show')
+    /** Из-за возможности изменения isAuth в момент открытия модалки, убираем анимацию fade
+     * иначе возможны баги с закрытием модалки в момент редиректа
+     **/
+    ;($('#modal-connect') as any).removeClass('fade').modal('show')
   }
 
   @Watch('isAuth')
   onIsAuthChanged() {
-    if (this.isAuth) {
+    if (this.isAuth && this.isMounted) {
       this.homeRedirect()
     }
   }
