@@ -50,7 +50,7 @@ export default class AddressPage extends Vue {
 
   async beforeCreate() {
     const networkName = this.$route.params.networkName
-    const validNetworks: Record<string, number> = {
+    const validNetworks: Record<string, number | string> = {
       eth: 1,
       ropsten: 3,
       rinkeby: 4,

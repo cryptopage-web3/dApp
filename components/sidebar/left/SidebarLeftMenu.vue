@@ -81,7 +81,7 @@
       </div>
     </template>
     <template v-else>
-      <ul class="header-list">
+      <ul class="header-list header-list_auth-mobile">
         <li>
           <connect />
         </li>

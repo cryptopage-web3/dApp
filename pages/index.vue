@@ -83,9 +83,11 @@ export default class IndexPage extends Vue {
   homeRedirect() {
     ;($('#modal-connect') as any).modal('hide')
 
-    this.$router.push(
-      `/${this.selectedNetworkSlug}/${this.selectedAddress}/nft`
-    )
+    setTimeout(() => {
+      this.$router.push(
+        `/${this.selectedNetworkSlug}/${this.selectedAddress}/nft`
+      )
+    }, 300)
   }
 }
 </script>

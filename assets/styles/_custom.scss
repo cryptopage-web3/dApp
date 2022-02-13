@@ -264,6 +264,12 @@
   bottom: 0;
 }
 
+@media (min-width: 1200px) {
+  .header-list_auth-mobile {
+    display: none !important;
+  }
+}
+
 /* ===== address profile ===== */
 
 .main-top {
