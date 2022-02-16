@@ -3,7 +3,8 @@ import { EthplorerGetAddressInfoResponseType } from '~/logic/services/api/ethplo
 import { AddressInfoAdapterType, AddressInfoType } from '~/logic/address/types'
 
 const AddressInfoAdapter = (
-  addressInfo: EthplorerGetAddressInfoResponseType
+  addressInfo: EthplorerGetAddressInfoResponseType,
+  chainId: number | string
 ): AddressInfoAdapterType => {
   return {
     request: (): AddressInfoType => {
@@ -21,6 +22,7 @@ const AddressInfoAdapter = (
       const transactionsCount = addressInfo.countTxs
       return {
         address,
+        chainId,
         tokenInfo,
         tokens,
         transactionsCount

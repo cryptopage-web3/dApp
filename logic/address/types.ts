@@ -2,6 +2,7 @@ import { TokenInfoType, TokenBalanceType } from '~/logic/tokens/types'
 
 export type AddressInfoType = {
   address: string
+  chainId: number | string
   tokenInfo?: TokenInfoType | null
   tokens: TokenBalanceType[]
   transactionsCount: number

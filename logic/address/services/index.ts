@@ -1,6 +1,5 @@
 import Web3 from 'web3'
 import { Container, Service, Inject } from 'vue-typedi'
-import { AddressInfoType } from '~/logic/address/types'
 import AddressWEB3Service from '~/logic/address/services/web3'
 import AddressAPIService from '~/logic/address/services/api'
 import TokenService from '~/logic/tokens/services'
@@ -47,17 +46,5 @@ export default class AddressService {
       )
     }
     return transactionsCount
-  }
-
-  public getAddressInfo = async (address: string): Promise<AddressInfoType> => {
-    const tokenInfo = await this.tokenService.getTokenInfo(address)
-    const tokenBalances = await this.tokenService.getTokenBalances(address)
-    const transactionsCount = await this.getTransactionsCount(address)
-    return {
-      address,
-      tokens: tokenBalances,
-      tokenInfo,
-      transactionsCount
-    }
   }
 }

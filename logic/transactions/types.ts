@@ -77,6 +77,11 @@ export type ParamsTransactionsType = {
   action?: string
 }
 
+export type ParamsUpdateAddressInfoType = {
+  address: string
+  chainId: number | string
+}
+
 export type TransactionType = InternalTransactionType & {
   gas: string
   hash: string

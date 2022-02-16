@@ -9,7 +9,8 @@ import {
   TransactionPagination,
   TransactionType,
   ESortDirectionType,
-  ETransactionStoreType
+  ETransactionStoreType,
+  ParamsUpdateAddressInfoType
 } from '~/logic/transactions/types'
 import TransactionService from '~/logic/transactions/services'
 import TokenService from '~/logic/tokens/services'
@@ -47,6 +48,7 @@ export default class AddressModule {
   @State()
   public addressInfo: AddressInfoType = {
     address: '',
+    chainId: 1,
     tokenInfo: null,
     tokens: [],
     transactionsCount: 0
@@ -161,10 +163,12 @@ export default class AddressModule {
 
   @Getter()
   public get ERC20Transactions(): TransactionType[] {
+    const basicToken = this.tokenService.getBasicToken(this.addressInfo.chainId)
+
     return this.transactions
       .filter(
         (tx: TransactionType) =>
-          tx.token && tx.token.address !== this.tokenService.basicToken.address
+          tx.token && tx.token.address !== basicToken.address
       )
       .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
   }
@@ -291,9 +295,13 @@ export default class AddressModule {
   // Actions
 
   @Action()
-  public async updateAddressInfo(address: string): Promise<void> {
+  public async updateAddressInfo({
+    address,
+    chainId
+  }: ParamsUpdateAddressInfoType): Promise<void> {
     this.setAddressInfo({
       address,
+      chainId,
       tokenInfo: null,
       tokens: [],
       transactionsCount: 0
@@ -305,7 +313,7 @@ export default class AddressModule {
     const tokenInfo = await this.tokenService.getTokenInfo(address)
     this.setTokenInfo(tokenInfo)
 
-    const tokens = await this.tokenService.getTokenBalances(address)
+    const tokens = await this.tokenService.getTokenBalances(address, chainId)
     this.setTokens(tokens)
 
     const transactionsCount = await this.addressService.getTransactionsCount(

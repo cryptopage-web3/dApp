@@ -67,11 +67,10 @@ export default class AddressPage extends Vue {
     const chainId = validNetworks[networkName]
 
     if (chainId) {
-      await this.$store.dispatch('auth/setChainId', chainId)
-      await this.$store.dispatch(
-        'address/updateAddressInfo',
-        this.$route.params.address
-      )
+      await this.$store.dispatch('address/updateAddressInfo', {
+        address: this.$route.params.address,
+        chainId
+      })
     }
   }
 }

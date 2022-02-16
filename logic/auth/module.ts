@@ -115,7 +115,7 @@ export default class AuthModule {
   }
 
   @Action()
-  public async setChainId(chainId: number): Promise<void> {
+  public async setChainId(chainId: number | string): Promise<void> {
     await this.authService.setOrChangeWeb3Data(this.selectedAddress, chainId)
   }
 }

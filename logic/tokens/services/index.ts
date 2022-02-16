@@ -60,10 +60,12 @@ export default class TokenService {
    * Returns sorted desc by usdBalance, but at first plase always basicToken
    */
   public getTokenBalances = async (
-    address: string
+    address: string,
+    chainId: number | string
   ): Promise<TokenBalanceType[]> => {
+    const basicToken = this.getBasicToken(chainId)
     let tokenBalances = await this.tokenAPIService.getTokenBalances(address)
-    const pageTokenBalance = await this.getPageTokenBalance(address)
+    const pageTokenBalance = await this.getPageTokenBalance(address, chainId)
 
     /** tokenBalances - список токенов, полученный от Сovalent API
      * для solana - используется public-api.solscan.io
@@ -79,14 +81,14 @@ export default class TokenService {
       let basicTokenBalance = tokenBalances.find((tokenBalance) => {
         return (
           tokenBalance.tokenInfo.symbol?.toLowerCase() ===
-          this.basicToken.symbol?.toLowerCase()
+          basicToken.symbol?.toLowerCase()
         )
       })
 
       tokenBalances = tokenBalances.filter((tokenBalance) => {
         return (
           tokenBalance.tokenInfo.symbol?.toLowerCase() !==
-          this.basicToken.symbol?.toLowerCase()
+          basicToken.symbol?.toLowerCase()
         )
       })
 
@@ -97,14 +99,17 @@ export default class TokenService {
 
       /** если нет нужного токена в списке, то пробуем его получить из web3 (eth) */
       if (!basicTokenBalance) {
-        basicTokenBalance = await this.getBasicTokenBalance(address)
+        basicTokenBalance = await this.getBasicTokenBalance(address, basicToken)
       }
 
       /** итоговый список: токен выбранной сети, баланс crypto.page, все остальные токены */
       tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]
     } else {
       /** Add basic token, because IPFSTokenStorage don't store it  */
-      const basicTokenBalance = await this.getBasicTokenBalance(address)
+      const basicTokenBalance = await this.getBasicTokenBalance(
+        address,
+        basicToken
+      )
       tokenBalances = await this.tokenWeb3Service.getTokenBalances(address)
 
       /** Sort desc by usdBalance */
@@ -130,10 +135,10 @@ export default class TokenService {
   }
 
   public getBasicTokenBalance = async (
-    address: string
+    address: string,
+    tokenInfo: TokenInfoType
   ): Promise<TokenBalanceType> => {
     const rawBalance = await this.addressService.getBalance(address)
-    const tokenInfo = this.basicToken
     const rate = await this.getTokenRate(tokenInfo.address, 'usd')
     tokenInfo.rate = { usd: rate }
     const balance = rawBalance / 10 ** tokenInfo.decimals
@@ -146,52 +151,33 @@ export default class TokenService {
     }
   }
 
-  public subscribePageTokenBalance = async (
-    address: string
-    // callback?: (tokenBalance: TokenBalanceType) => {}
-  ) => {
-    try {
-      const CONTRACT = await import(
-        `../../../contracts/${this.authService.selectedNetworkSlug}/PageToken.json`
-      )
-      const contract = new this.tokenWeb3Service.$web3.eth.Contract(
-        CONTRACT.abi,
-        CONTRACT.address
-      )
-      const options = {
-        filter: {
-          address: [address]
-        },
-        fromBlock: 0
-      }
-      contract.events
-        .Transfer(options)
-        .on('data', (event: string) => console.log(event))
-        .on('changed', (changed: string) => console.log(changed))
-        .on('error', (err: string) => {
-          throw err
-        })
-        .on('connected', (str: string) => console.log(str))
-    } catch (error) {}
-  }
-
   public getPageTokenBalance = async (
-    address: string
+    address: string,
+    chainId: number | string
   ): Promise<TokenBalanceType> => {
     const tokenInfo = this.pageToken
+
     try {
+      const networkSlug = this.authService.getNetworkSlug(chainId)
       const contractABI = await import(
-        `../../../contracts/${this.authService.selectedNetworkSlug}/PageToken.json`
+        `../../../contracts/${networkSlug}/PageToken.json`
       )
+
+      /** адрес нашего контракта по выбранной в URL сети */
       tokenInfo.address = contractABI.address
+
+      /** получаем баланс по адресу контракта и адресу из URL */
       const balance = await this.addressService.addressWEB3Service.getBalanceOf(
         address,
         tokenInfo.address
       )
+
+      /** получаем ставку токена к USD */
       const rate = await this.getTokenRate(tokenInfo.address, 'usd')
       tokenInfo.rate = { usd: rate }
       const usdBalance =
         balance * Number(tokenInfo.rate ? tokenInfo.rate.usd : 0)
+
       return {
         balance,
         usdBalance,
@@ -219,20 +205,13 @@ export default class TokenService {
     }
   }
 
-  public get basicToken(): TokenInfoType {
-    const chainId = this.authService.selectedChainId
+  public getBasicToken(chainId: number | string): TokenInfoType {
     const baseURL =
       'https://www.covalenthq.com/static/images/icons/display-icons/'
-    let tokenInfo = {
-      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-      name: 'Ethereum coin',
-      symbol: 'ETH',
-      decimals: 18,
-      image: `${baseURL}ethereum-eth-logo.png`,
-      rate: { usd: 0 }
-    }
+
+    /** Binance coin */
     if ([56, 97].includes(Number(chainId))) {
-      tokenInfo = {
+      return {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Binance coin',
         symbol: 'BNB',
@@ -240,8 +219,11 @@ export default class TokenService {
         image: `${baseURL}binance-coin-bnb-logo.png`,
         rate: { usd: 0 }
       }
-    } else if ([137, 80001].includes(Number(chainId))) {
-      tokenInfo = {
+    }
+
+    /** Polygon coin */
+    if ([137, 80001].includes(Number(chainId))) {
+      return {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Polygon coin',
         symbol: 'MATIC',
@@ -249,8 +231,11 @@ export default class TokenService {
         image: `https://logos.covalenthq.com/tokens/1/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0.png`,
         rate: { usd: 0 }
       }
-    } else if (chainId === 'tron') {
-      tokenInfo = {
+    }
+
+    /** Tron */
+    if (chainId === 'tron') {
+      return {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Tron',
         symbol: 'TRX',
@@ -258,8 +243,11 @@ export default class TokenService {
         image: `https://etherscan.io/token/images/trontrx_32.png`,
         rate: { usd: 0 }
       }
-    } else if (chainId === 'solana') {
-      tokenInfo = {
+    }
+
+    /** Solana */
+    if (chainId === 'solana') {
+      return {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Solana',
         symbol: 'SOL',
@@ -268,6 +256,15 @@ export default class TokenService {
         rate: { usd: 0 }
       }
     }
-    return tokenInfo
+
+    /** Ethereum coin (by default) */
+    return {
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      name: 'Ethereum coin',
+      symbol: 'ETH',
+      decimals: 18,
+      image: `${baseURL}ethereum-eth-logo.png`,
+      rate: { usd: 0 }
+    }
   }
 }
