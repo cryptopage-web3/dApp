@@ -47,7 +47,7 @@ export default class TransactionMixin extends mixins(NetworkNameMixin) {
    * Token symbol of main currency on current network.
    */
   get tokenSymbol(): string {
-    return this.typedStore.address.tokenService.basicToken.symbol
+    return this.typedStore.address.basicTokenSymbol
   }
 
   /**

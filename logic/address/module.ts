@@ -83,6 +83,16 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get chainId(): string | number {
+    return this.addressInfo.chainId
+  }
+
+  @Getter()
+  public get basicTokenSymbol(): string {
+    return this.tokenService.getBasicToken(this.chainId).symbol
+  }
+
+  @Getter()
   public get tokens(): TokenBalanceType[] {
     return this.addressInfo ? this.addressInfo.tokens : []
   }
