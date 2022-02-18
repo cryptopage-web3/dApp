@@ -4,7 +4,7 @@
       <ul class="header-list">
         <li>
           <router-link
-            :to="`/${networkName}/${address}/nft`"
+            :to="`/${selectedNetworkSlug}/${selectedAddress}/nft`"
             class="header-list__item"
           >
             <div>
@@ -105,8 +105,12 @@ export default class SidebarLeftMenu extends mixins(NetworkNameMixin) {
     return this.typedStore.auth.isAuth
   }
 
-  get address(): string {
+  get selectedAddress(): string {
     return this.typedStore.auth.selectedAddress
+  }
+
+  get selectedNetworkSlug(): string {
+    return this.typedStore.auth.selectedNetworkSlug
   }
 
   @Watch('$route', { immediate: true })

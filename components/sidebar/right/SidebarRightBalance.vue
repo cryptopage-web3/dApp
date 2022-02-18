@@ -93,12 +93,13 @@ export default class SidebarRightBalance extends mixins(
   }
 
   public url(token: TokenBalanceType): string {
-    const address = this.typedStore.address.address
     const tokenAddress = token && token.tokenInfo ? token.tokenInfo.address : ''
-    if (tokenAddress && address !== tokenAddress) {
-      return `/${this.networkName}/${tokenAddress}/tokens?address=${address}`
+
+    if (tokenAddress && this.address !== tokenAddress) {
+      return `/${this.networkName}/${tokenAddress}/tokens?address=${this.address}`
     }
-    return `/${this.networkName}/${address}/nft`
+
+    return `/${this.networkName}/${this.address}/nft`
   }
 }
 </script>

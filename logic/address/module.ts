@@ -88,6 +88,13 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get networkSlug(): string {
+    return this.tokenService.authService.getNetworkSlug(
+      this.addressInfo.chainId
+    )
+  }
+
+  @Getter()
   public get basicTokenSymbol(): string {
     return this.tokenService.getBasicToken(this.chainId).symbol
   }

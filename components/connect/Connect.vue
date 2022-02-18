@@ -17,7 +17,7 @@
             class="connect-wallet__link-status"
             @click.prevent.stop=""
           >
-            {{ address | shortAddress }}
+            {{ selectedAddress | shortAddress }}
           </div>
           <div
             v-else
@@ -31,7 +31,7 @@
       <div v-if="isAuth" ref="connectList" class="connect-wallet-col-body">
         <ul class="connect-wallet__list">
           <li>
-            <router-link :to="`/${networkName}/${address}/nft`"
+            <router-link :to="`/${selectedNetworkSlug}/${selectedAddress}/nft`"
               >Home page</router-link
             >
           </li>
@@ -48,7 +48,8 @@
             </a>
           </li>
           <li>
-            <router-link :to="`/${networkName}/${address}/transactions`"
+            <router-link
+              :to="`/${selectedNetworkSlug}/${selectedAddress}/transactions`"
               >Transaction History</router-link
             >
           </li>
@@ -128,7 +129,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
 
   // computed
 
-  get address(): string {
+  get selectedAddress(): string {
     return this.$store.getters['auth/selectedAddress']
   }
 
@@ -138,6 +139,10 @@ export default class Connect extends mixins(NetworkNameMixin) {
 
   get selectedNetworkName(): string {
     return this.$store.getters['auth/selectedNetworkName']
+  }
+
+  get selectedNetworkSlug(): string {
+    return this.typedStore.auth.selectedNetworkSlug
   }
 
   get selectedNetworkType(): string {
@@ -269,7 +274,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
   // methods
 
   copyAddress() {
-    copyToClipboard(this.address)
+    copyToClipboard(this.selectedAddress)
 
     this.$notify({
       type: 'success',

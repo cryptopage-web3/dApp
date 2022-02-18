@@ -46,7 +46,7 @@ export default class SidebarRightBalance extends mixins(NetworkNameMixin) {
   }
 
   url(link: string) {
-    return `/${this.networkName}/${this.selectedAddress}/${link}`
+    return `/${this.networkName}/${this.address}/${link}`
   }
 }
 </script>

@@ -42,6 +42,10 @@ export default class PostTextBlock extends mixins(TransactionMixin) {
     return this.transaction.nft?.description || ''
   }
 
+  get selectedAddress(): string {
+    return this.typedStore.auth.selectedAddress
+  }
+
   public get show() {
     if (this.transaction) {
       const ownerAddress = this.transaction?.nft?.owner.toLowerCase()
