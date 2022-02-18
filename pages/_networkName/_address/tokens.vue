@@ -41,13 +41,12 @@ export default class ERC20TransactionsTab extends mixins(PaginationMixin) {
     /** не делаем запрос:
      * если уже получен полный список транзакций,
      * если сменился адрес, но в сторе адрес еще старый,
-     * поэтому транзакции стора и пагинатор относятся к старому адресу
-     * должен отработать метод reset() в pagination
+     * если сменилась сеть, но в сторе сеть еще старая,
+     *
+     * из-за этого транзакции стора и пагинатор относятся еще к старому адресу
+     * должен отработать метод clearTransactions() в beforeCreate
      */
-    if (
-      this.hasAllPages ||
-      (this.address && this.address !== this.$route.params.address)
-    ) {
+    if (this.hasAllPages || this.isNotSyncedAddressWithStore) {
       return
     }
 

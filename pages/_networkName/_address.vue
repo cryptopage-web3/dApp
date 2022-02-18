@@ -67,6 +67,12 @@ export default class AddressPage extends Vue {
     const chainId = validNetworks[networkName]
 
     if (chainId) {
+      /** очищаем транзакции для новой страницы
+       * срабатывает при смене адреса или сети, но пропускает при смене таба
+       * */
+      this.$store.dispatch('address/clearTransactions')
+
+      /** обновляем текущие данные по адресу и сети из URL */
       await this.$store.dispatch('address/updateAddressInfo', {
         address: this.$route.params.address,
         chainId

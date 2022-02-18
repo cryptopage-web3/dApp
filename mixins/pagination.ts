@@ -19,7 +19,7 @@ export default class PaginationMixin extends Vue {
   }
 
   get chainId(): number | string {
-    return this.$store.getters['auth/chainId']
+    return this.$store.getters['address/chainId']
   }
 
   get isFetchDisabled(): boolean {
@@ -28,17 +28,19 @@ export default class PaginationMixin extends Vue {
     )
   }
 
+  /** если сменился адрес, но в сторе адрес еще старый,
+   * если сменилась сеть, но в сторе сеть еще старая
+   */
+  get isNotSyncedAddressWithStore(): boolean {
+    return Boolean(
+      (this.address && this.address !== this.$route.params.address) ||
+        (this.chainId &&
+          this.getNetworkNameByChainId(this.chainId) !==
+            this.$route.params.networkName)
+    )
+  }
+
   // watch
-
-  @Watch('address')
-  onAddressChanged() {
-    this.reset()
-  }
-
-  @Watch('chainId')
-  onChainIdChanged(newChain: number | string, oldChain: number | string) {
-    this.resetChain(newChain, oldChain)
-  }
 
   /** в момент получения новых транзакций необходим триггер скролла
    * чтобы обновилось положение сайдбаров
@@ -77,54 +79,7 @@ export default class PaginationMixin extends Vue {
     this.$fetch()
   }
 
-  reset() {
-    /** очищаем транзакции при смене адреса */
-    this.$store.dispatch('address/clearTransactions')
-
-    /** после очистки нужно запустить $fetch
-     * если $fetch не запущен, то сразу его вызываем
-     * если $fetch выполняется, то необходимо дождаться его завершения, а потом запустить
-     * иначе $fetch не запустится
-     */
-    if (!this.$fetchState.pending) {
-      this.$fetch()
-      return
-    }
-
-    /** ожидаем окончания $fetch, очищаем watcher, запускаем повторно $fetch */
-    const unwatchPending = this.$watch('$fetchState.pending', (pending) => {
-      if (!pending) {
-        unwatchPending()
-
-        this.$nextTick(() => {
-          this.$fetch()
-        })
-      }
-    })
-  }
-
-  /** Не сбрасываем транзакции и не редиректим при смене selectedAddress
-   * Для данной страницы selectedAddress никакого значения не имеет, проверяем только address
-   * Иначе нельзя перейти на страницу любого адреса,
-   * т.к. в этот момент selectedAddress меняется с пустой строки на адрес провайдера и происходит редирект
-   * Поэтому удалил resetAddress (Nail M.)
-   * chain не поддается данной логике, т.к. выбранный chain присутствует в URL, поэтому при изменении должны редиректить
-   */
-  /* async resetAddress(newAddress: string, oldAddress: string) {
-    ...
-  } */
-
-  async resetChain(newChain: number | string, oldChain: number | string) {
-    /** проверяем, что chain изменился вне зависимости от типа: string, number
-     * TODO: в какой момент приходит строка, нужно сделать приведение типа и хранить всегда в number
-     */
-    if (Number(newChain) === Number(oldChain)) {
-      return
-    }
-
-    const params = this.$route.params
-    const chainId = this.chainId
-
+  getNetworkNameByChainId(chainId: number | string) {
     const validNetworks: Record<number | string, string> = {
       1: 'eth',
       3: 'ropsten',
@@ -138,21 +93,8 @@ export default class PaginationMixin extends Vue {
       tron: 'tron',
       solana: 'solana'
     }
-    const networkName = validNetworks[chainId]
-    if (networkName) params.networkName = networkName
-    /*
-    if (chainId === 1) {
-      params.networkName = 'eth'
-    } else if (chainId === 4) {
-      params.networkName = 'rinkeby'
-    } else if (chainId === 56) {
-      params.networkName = 'bsc'
-    } else if (chainId === 137) {
-      params.networkName = 'matic'
-    }
-    */
-    await this.$store.dispatch('address/clearTransactions')
-    await this.$router.push({ params })
+
+    return validNetworks[chainId]
   }
 
   scrollHandler() {
