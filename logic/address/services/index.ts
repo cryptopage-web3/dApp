@@ -1,5 +1,6 @@
 import Web3 from 'web3'
 import { Container, Service, Inject } from 'vue-typedi'
+import { AddressServiceDataType } from '../types'
 import AddressWEB3Service from '~/logic/address/services/web3'
 import AddressAPIService from '~/logic/address/services/api'
 import TokenService from '~/logic/tokens/services'
@@ -21,6 +22,19 @@ export default class AddressService {
 
   protected get $web3(): Web3 {
     return Container.get(tokens.WEB3) as Web3
+  }
+
+  data: AddressServiceDataType = {
+    address: '',
+    chainId: 1
+  }
+
+  public get chainId(): string | number {
+    return this.data.chainId
+  }
+
+  public setData = (params: AddressServiceDataType) => {
+    this.data = params
   }
 
   public getBalance = async (address: string): Promise<number> => {

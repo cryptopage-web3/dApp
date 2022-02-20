@@ -11,3 +11,8 @@ export type AddressInfoType = {
 export type AddressInfoAdapterType = {
   request: () => AddressInfoType
 }
+
+export type AddressServiceDataType = {
+  address: string
+  chainId: number | string
+}

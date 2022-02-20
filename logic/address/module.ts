@@ -215,6 +215,11 @@ export default class AddressModule {
   }
 
   @Mutation()
+  public setChainId(chainId: string): void {
+    Vue.set(this.addressInfo, 'chainId', chainId)
+  }
+
+  @Mutation()
   public setAddressInfo(addressInfo: AddressInfoType | null): void {
     Vue.set(this, 'addressInfo', addressInfo)
   }
@@ -322,6 +327,12 @@ export default class AddressModule {
       tokenInfo: null,
       tokens: [],
       transactionsCount: 0
+    })
+
+    /** сохраняем в service, чтобы была возможность получить chain в API */
+    this.addressService.setData({
+      address,
+      chainId
     })
 
     // const tokenInfo = await this.tokenService.getTokenInfo(address)

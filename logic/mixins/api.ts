@@ -2,19 +2,19 @@ import { AxiosInstance } from 'axios'
 import { Container } from 'vue-typedi'
 // import { ParamsTransactionsType } from '~/logic/transactions/types'
 import tokens from '~/logic/tokens'
-import AuthService from '~/logic/auth/service'
+import AddressService from '~/logic/address/services'
 
 class BaseAPIServiceMixin {
   protected get $axios(): AxiosInstance {
     return Container.get(tokens.AXIOS) as AxiosInstance
   }
 
-  protected get authService(): AuthService {
-    return Container.get(tokens.AUTH_SERVICE) as AuthService
+  protected get addressService(): AddressService {
+    return Container.get(tokens.ADDRESS_SERVICE) as AddressService
   }
 
   protected get chainId(): any {
-    return Number(this.authService.selectedChainId)
+    return Number(this.addressService.chainId)
   }
 }
 
