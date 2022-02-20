@@ -48,6 +48,13 @@ export default class AddressPage extends Vue {
     )
   }
 
+  middleware({ route, params, redirect }: any) {
+    /** для страниц без таба делаем редирект в таб NFT */
+    if (route.name === 'networkName-address') {
+      return redirect(`/${params.networkName}/${params.address}/nft`)
+    }
+  }
+
   async beforeCreate() {
     const networkName = this.$route.params.networkName
     const validNetworks: Record<string, number | string> = {
