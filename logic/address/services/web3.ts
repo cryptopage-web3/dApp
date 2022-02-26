@@ -1,12 +1,18 @@
-import { Container, Service } from 'vue-typedi'
+import { Inject, Service } from 'vue-typedi'
 import Web3 from 'web3'
+import AddressService from '.'
 import { ERC20ABI } from '~/constants/abi-samples'
 import tokens from '~/logic/tokens'
+import { web3Builder } from '~/utils/web3Builder'
 
 @Service(tokens.ADDRESS_WEB3_SERVICE)
 export default class AddressWeb3Service {
+  @Inject(tokens.ADDRESS_SERVICE)
+  public addressService!: AddressService
+
+  /** используем web3 с провайдером сети из address */
   protected get $web3(): Web3 {
-    return Container.get(tokens.WEB3) as Web3
+    return web3Builder(this.addressService.chainId)
   }
 
   public getBalanceOf = async (
