@@ -98,6 +98,7 @@ export default class NFTService {
         tokenId,
         contractAddress
       })
+
       if (contractData) {
         const { owner, tokenURI, comments } = contractData
         const NFTPayload = await this.fetchNFTPayload(tokenURI)
