@@ -20,6 +20,7 @@ export default class CovalentAPIService extends CovalentAPIServiceMixin {
         response.data
       )
       const parser = new CovalentAPITokenBalanceParser()
+
       return data.data.items.map(
         (token: CovalentAPITokenType): TokenBalanceType => parser.parse(token)
       )
