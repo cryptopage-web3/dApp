@@ -91,10 +91,13 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
       module: 'proxy',
       action: 'eth_getTransactionCount'
     }
+
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+
     try {
       const response = await this.$axios.get(URL)
+
       const data = await tPromise.decode(
         ts.type({
           jsonrpc: ts.string,
@@ -103,7 +106,8 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
         }),
         response.data
       )
-      return parseInt(data.result, 10)
+
+      return Number(data.result)
     } catch {
       return 0
     }
