@@ -38,27 +38,15 @@ export default class AddressService {
   }
 
   public getBalance = async (address: string): Promise<number> => {
-    let balance = 0
-    balance = await this.addressWEB3Service.getBalance(address)
-    /*
-    Sometimes addressAPIService.getBalance returns Nan
-    Need to fix it
-    if (!balance) {
-      balance = await this.addressAPIService.getBalance(address)
-    }
-    */
+    const balance = await this.addressWEB3Service.getBalance(address)
+
     return balance
   }
 
   public getTransactionsCount = async (address: string): Promise<number> => {
-    let transactionsCount = await this.addressWEB3Service.getTransactionsCount(
-      address
-    )
-    if (!transactionsCount) {
-      transactionsCount = await this.addressAPIService.getTransactionsCount(
-        address
-      )
-    }
+    const transactionsCount =
+      await this.addressWEB3Service.getTransactionsCount(address)
+
     return transactionsCount
   }
 }
