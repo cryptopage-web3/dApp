@@ -25,10 +25,10 @@
           <div class="profile-info__text-total">
             <loader v-if="loadingInfo" :height="10" :width="140" />
             <div v-show="!loadingInfo">
-              <strong title="Total transactions">{{
+              <strong title="Total number of sent transactions">{{
                 transactionsCount | humanizeCount
               }}</strong>
-              total transactions
+              sent transactions
             </div>
           </div>
           <div class="profile-info__text-input">
