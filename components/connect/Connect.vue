@@ -309,6 +309,10 @@ export default class Connect extends mixins(NetworkNameMixin) {
       setTimeout(() => {
         this.$router.push({ path: '/', query: { openConnect: '1' } })
       })
+    } else {
+      setTimeout(() => {
+        this.$router.push(`/${this.selectedNetworkSlug}/${this.address}/nft`)
+      })
     }
 
     /** закрываем дропдаун сетей */
