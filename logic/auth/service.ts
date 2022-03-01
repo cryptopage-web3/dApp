@@ -307,6 +307,13 @@ export default class AuthService extends Vue {
     this.data.chainId = chainId || 0
   }
 
+  public setChainId(chainId: number | string): void {
+    /** даже если значение пустое, то мы должны установить,
+     * иначе будет показываться корректно предыдущая сеть */
+    Vue.set(this.data, 'chainId', chainId || 0)
+    this.data.chainId = chainId || 0
+  }
+
   /**
    * Change provider name
    * @param providerName
@@ -471,6 +478,9 @@ export default class AuthService extends Vue {
          */
         await this.provider.switchNetwork('bsc-mainnet')
 
+        /** при успехе устанавливаем сеть у нас */
+        this.setChainId(Number(chain.chainId))
+
         return {
           status: 'success'
         }
@@ -503,6 +513,9 @@ export default class AuthService extends Vue {
           params: [{ chainId: chain.chainId }]
         })
 
+        /** при успехе устанавливаем сеть у нас */
+        this.setChainId(Number(chain.chainId))
+
         return {
           status: 'success'
         }
@@ -528,6 +541,9 @@ export default class AuthService extends Vue {
             method: 'wallet_addEthereumChain',
             params: [chain]
           })
+
+          /** при успехе устанавливаем сеть у нас */
+          this.setChainId(Number(chain.chainId))
 
           return {
             status: 'success'
