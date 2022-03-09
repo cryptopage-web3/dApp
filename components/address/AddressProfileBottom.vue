@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isAuth" class="profile-bottom">
+    <div v-if="isAuth && isSameChain" class="profile-bottom">
       <a
         v-if="isOwner"
         href="#"
@@ -54,6 +54,13 @@ export default class AddressProfileBottom extends Vue {
     return (
       String(this.$store.getters['address/address']).toLowerCase() ===
       String(this.$store.getters['auth/selectedAddress']).toLowerCase()
+    )
+  }
+
+  get isSameChain(): boolean {
+    return (
+      String(this.$store.getters['address/chainId']).toLowerCase() ===
+      String(this.$store.getters['auth/chainId']).toLowerCase()
     )
   }
 
