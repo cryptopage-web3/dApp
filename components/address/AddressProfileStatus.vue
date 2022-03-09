@@ -1,6 +1,6 @@
 <template>
   <div class="profile-status__container">
-    <div v-if="!isOwner" class="profile-status" :title="status">
+    <div v-if="!isOwner || !isSameChain" class="profile-status" :title="status">
       Status: <span>{{ status }}</span>
     </div>
     <template v-else>
@@ -70,6 +70,13 @@ export default class AddressProfileStatus extends Vue {
     return (
       String(this.$store.getters['address/address']).toLowerCase() ===
       String(this.$store.getters['auth/selectedAddress']).toLowerCase()
+    )
+  }
+
+  get isSameChain(): boolean {
+    return (
+      String(this.$store.getters['address/chainId']).toLowerCase() ===
+      String(this.$store.getters['auth/chainId']).toLowerCase()
     )
   }
 
