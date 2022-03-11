@@ -54,6 +54,11 @@ export default class IndexPage extends Vue {
     }, 500)
   }
 
+  beforeDestroy() {
+    /** закрываем модалку перед уходом со страницы, иначе сохраняется черный фон */
+    ;($('#modal-connect') as any).removeClass('fade').modal('hide')
+  }
+
   @Watch('isMounted')
   onIsMountedChanged(isMounted: boolean) {
     if (!isMounted) {
