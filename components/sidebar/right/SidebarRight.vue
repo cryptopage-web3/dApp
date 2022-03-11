@@ -26,24 +26,31 @@
     <connectModal />
   </div>
 </template>
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
 import { init as stickySidebarInit } from '~/utils/stickySidebar'
+import TypedStore from '~/logic/store'
 
-export default {
+@Component({
   components: {
     banner: async () =>
-      await import('@/components/sidebar/right/SidebarRightBanner'),
+      await import('~/components/sidebar/right/SidebarRightBanner.vue'),
     balance: async () =>
-      await import('@/components/sidebar/right/SidebarRightBalance'),
+      await import('~/components/sidebar/right/SidebarRightBalance.vue'),
     connect: async () => await import('@/components/connect/Connect.vue'),
     connectModal: async () =>
       await import('@/components/connect/ConnectModal.vue')
-  },
-  computed: {
-    isAuth() {
-      return this.$store.getters['auth/isAuth']
-    }
-  },
+  }
+})
+export default class SidebarRight extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
+  get isAuth(): boolean {
+    return this.typedStore.auth.isAuth
+  }
+
   mounted() {
     stickySidebarInit('#right-sidebar', '.main-right')
   }

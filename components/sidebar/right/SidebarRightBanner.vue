@@ -13,16 +13,22 @@
     </a>
   </div>
 </template>
-<script>
-export default {
-  methods: {
-    close(event) {
-      $(event.target).closest('.banner').slideUp(300)
-    },
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
 
-    openNFTForm() {
-      $('#nft-form-modal').modal('show')
+@Component({})
+export default class SidebarRightBanner extends Vue {
+  close(event: MouseEvent) {
+    if (!event.target) {
+      return
     }
+
+    $(event.target).closest('.banner').slideUp(300)
+  }
+
+  openNFTForm() {
+    ;($('#nft-form-modal') as any).modal('show')
   }
 }
 </script>

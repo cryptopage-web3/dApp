@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import modalKeys from '@/components/modals/messages/Keys.vue'
+import modalKeys from './modals/Keys.vue'
 export default {
   props: {
     sender: {
