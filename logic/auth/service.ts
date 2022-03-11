@@ -236,10 +236,13 @@ export default class AuthService extends Vue {
    * Just reacive proxy for simple access
    */
   public get selectedNetworkName(): string {
+    return this.getNetworkName(this.selectedChainId)
+  }
+
+  public getNetworkName(chainId: any) {
     return (
-      (this.networksByChain[this.selectedChainId] &&
-        this.networksByChain[this.selectedChainId].name) ||
-      'unknown network'
+      (this.networksByChain[chainId] && this.networksByChain[chainId].name) ||
+      'unknown'
     )
   }
 

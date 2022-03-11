@@ -95,6 +95,13 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get networkName(): string {
+    return this.tokenService.authService.getNetworkName(
+      this.addressInfo.chainId
+    )
+  }
+
+  @Getter()
   public get basicTokenSymbol(): string {
     return this.tokenService.getBasicToken(this.chainId).symbol
   }
