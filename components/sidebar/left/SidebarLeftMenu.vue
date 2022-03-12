@@ -21,7 +21,11 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/messages" class="header-list__item">
+          <a
+            href="#"
+            class="header-list__item"
+            @click.prevent="unavailablePage"
+          >
             <div>
               <img
                 src="@/assets/img/header-list__item_img2_2_2.png"
@@ -33,10 +37,14 @@
               />
             </div>
             <span> Messages </span>
-          </router-link>
+          </a>
         </li>
         <li class="mb-xl-0">
-          <router-link to="/profile" class="header-list__item">
+          <a
+            href="#"
+            class="header-list__item"
+            @click.prevent="unavailablePage"
+          >
             <div>
               <img
                 src="@/assets/img/header-list__item_img3_2_2.png"
@@ -50,7 +58,7 @@
               />
             </div>
             <span> Profile </span>
-          </router-link>
+          </a>
         </li>
         <li class="header-list_cw d-xl-none">
           <!-- TODO: Поиск и кошелек для мобилки перенести в отдельный компонент -->
@@ -92,6 +100,7 @@
 <script lang="ts">
 import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
+import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -99,6 +108,8 @@ import NetworkNameMixin from '~/mixins/networkName'
   }
 })
 export default class SidebarLeftMenu extends mixins(NetworkNameMixin) {
+  $notify!: (params: INotifyParams) => void
+
   isShowCreateNft = false
 
   get isAuth(): boolean {
@@ -134,6 +145,13 @@ export default class SidebarLeftMenu extends mixins(NetworkNameMixin) {
 
   showCreateNft() {
     this.isShowCreateNft = Number($(window).scrollTop()) > 300
+  }
+
+  unavailablePage() {
+    this.$notify({
+      type: 'error',
+      title: 'Page is temporarily unavailable'
+    })
   }
 }
 </script>
