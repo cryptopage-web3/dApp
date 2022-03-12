@@ -29,7 +29,6 @@ export default {
     messages: async () => await import('@/components/messages/Messages'),
     roomMenu: async () => await import('@/components/messages/RoomMenu')
   },
-  layout: 'messages',
   middleware: 'auth',
   fetchOnServer: false,
   data: () => ({

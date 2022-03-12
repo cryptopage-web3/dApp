@@ -8,15 +8,18 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'nuxt-property-decorator'
+
+@Component({
   components: {
     'page-loader': () => import('@/components/loaders/PageLoadBG.vue')
-  },
-  computed: {
-    isReadyStore() {
-      return this.$store.state.auth.status
-    }
+  }
+})
+export default class EmptyLayout extends Vue {
+  get isReadyStore(): boolean {
+    return this.$store.state.auth.status
   }
 }
 </script>
