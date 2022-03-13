@@ -2,7 +2,7 @@
   <div class="profile-top">
     <div class="profile-left">
       <div class="profile__thumb">
-        <img v-if="image" :src="image" :width="diameter" :height="diameter" />
+        <img v-if="image" :src="image" />
         <jazzicon
           v-else
           :seed="10211"

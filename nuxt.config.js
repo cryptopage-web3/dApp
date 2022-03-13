@@ -40,9 +40,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/ipfs.client',
     '~/plugins/filters.ts',
-    '~/plugins/jazzicon',
+    '~/plugins/jazzicon.ts',
     '~/plugins/web3',
     '~/plugins/modals.client',
     '~/plugins/easy-circular-progress.client',
