@@ -1,23 +1,26 @@
 export const shortAddress = (
-  address,
-  startCount = 5,
-  endCount = 3,
-  delimiter = '...'
+  address: string | undefined,
+  startCount: number | undefined = 5,
+  endCount: number | undefined = 3,
+  delimiter: string | undefined = '...'
 ) => {
-  if (address) {
-    address = String(address)
-    const start = address.slice(0, startCount)
-    const end = address.slice(address.length - endCount, address.length)
-    return start + delimiter + end
+  if (!address) {
+    return
   }
+
+  address = String(address)
+  const start = address.slice(0, startCount)
+  const end = address.slice(address.length - endCount, address.length)
+  return start + delimiter + end
 }
 
-export const normalizeAmount = (exponential) => {
+export const normalizeAmount = (exponential: number) => {
   let decimal = exponential.toString().toLowerCase()
 
   if (decimal.includes('e+')) {
     const exponentialSplitted = decimal.split('e+')
     let postfix = ''
+
     for (
       let i = 0;
       i <
@@ -29,7 +32,8 @@ export const normalizeAmount = (exponential) => {
     ) {
       postfix += '0'
     }
-    const addSeparator = (text, separator = ' ') => {
+
+    const addSeparator = (text: string, separator = ' ') => {
       let j = 3
       let textLength = text.length
       while (j < textLength) {
@@ -42,8 +46,10 @@ export const normalizeAmount = (exponential) => {
       }
       return text
     }
+
     decimal = addSeparator(exponentialSplitted[0].replace('.', '') + postfix)
   }
+
   if (decimal.toLowerCase().includes('e-')) {
     const exponentialSplitted = decimal.split('e-')
     let prefix = '0.'
@@ -52,5 +58,6 @@ export const normalizeAmount = (exponential) => {
     }
     decimal = prefix + exponentialSplitted[0].replace('.', '')
   }
+
   return decimal
 }
