@@ -40,7 +40,6 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/directives.client',
     '~/plugins/ipfs.client',
     '~/plugins/crypto.client',
     '~/plugins/filters',
@@ -51,9 +50,8 @@ export default {
     '~/plugins/notifications.client',
     '~/plugins/fontawesome.js',
     '~/plugins/type-di.ts',
-    '~/plugins/bootstrap.js',
+    '~/plugins/bootstrap.ts',
     '~/plugins/formstyler.js',
-    '~/plugins/sticky-sidebar.js',
     '~/plugins/installer.js'
   ],
 
