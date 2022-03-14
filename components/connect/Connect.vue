@@ -39,15 +39,6 @@
             <a ref="copy" href="#" @click.prevent="copyAddress">Copy Address</a>
           </li>
           <li>
-            <a
-              v-if="$installer.canInstall && !$installer.hasInstalled"
-              href="#"
-              @click="$installer.prompt"
-            >
-              Install app
-            </a>
-          </li>
-          <li>
             <router-link
               :to="`/${selectedNetworkSlug}/${selectedAddress}/transactions`"
               >Transaction History</router-link

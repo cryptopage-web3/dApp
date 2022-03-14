@@ -45,11 +45,10 @@ export default {
     '~/plugins/web3.ts',
     '~/plugins/easy-circular-progress.client.ts',
     '~/plugins/notifications.client.ts',
-    '~/plugins/fontawesome.js',
+    '~/plugins/fontawesome.ts',
     '~/plugins/type-di.ts',
     '~/plugins/bootstrap.ts',
-    '~/plugins/formstyler.js',
-    '~/plugins/installer.js'
+    '~/plugins/formstyler.ts'
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
