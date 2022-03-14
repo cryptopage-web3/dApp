@@ -19,13 +19,16 @@
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
+import Web3 from 'web3'
+import { Container } from 'vue-typedi'
 import TypedStore from '~/logic/store'
+import tokens from '~/logic/tokens'
 
 @Component({})
 export default class AddressPage extends Vue {
   validNetworks: Record<string, number> | null = null
 
-  validate({ params, $web3 }: any) {
+  validate({ params }: any) {
     const networkName = params.networkName
     const validNetworkNames = [
       'eth',
@@ -42,6 +45,13 @@ export default class AddressPage extends Vue {
       'solana'
     ]
     const isValid = validNetworkNames.includes(networkName)
+
+    /** получаем текущий $web3 авторизации
+     * по сути он не передает реального web3, нам интересен только метод isAddress
+     * поэтому возможно стоит отвязаться от tokens
+     */
+    const $web3 = Container.get(tokens.WEB3) as Web3
+
     return (
       isValid &&
       (networkName === 'tron' || networkName === 'solana'
