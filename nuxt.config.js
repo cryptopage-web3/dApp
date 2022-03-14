@@ -42,8 +42,7 @@ export default {
   plugins: [
     '~/plugins/filters.ts',
     '~/plugins/jazzicon.ts',
-    '~/plugins/web3',
-    '~/plugins/modals.client',
+    '~/plugins/web3.ts',
     '~/plugins/easy-circular-progress.client',
     '~/plugins/notifications.client',
     '~/plugins/fontawesome.js',
