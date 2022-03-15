@@ -34,7 +34,6 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "jest",
       "jquery",
       "nuxt-viewport"
     ]

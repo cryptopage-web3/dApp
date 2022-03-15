@@ -25,12 +25,9 @@ import TransactionMixin from '~/mixins/transaction'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
 import { TransactionType } from '~/logic/transactions/types'
-import { INotifyParams } from '~/types'
 
 @Component({})
 export default class PostTextBlock extends mixins(TransactionMixin) {
-  $notify!: (params: INotifyParams) => void
-
   @Inject(tokens.NFT_SERVICE)
   public nftService!: NFTService
 

@@ -277,13 +277,10 @@ import Vue from 'vue'
 import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
-import { INotifyParams } from '~/types'
 
 @Component({})
 export default class ConnectModal extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
-
-  $notify!: (params: INotifyParams) => void
 
   get selectedProvider(): string {
     return this.typedStore.auth.selectedProviderName

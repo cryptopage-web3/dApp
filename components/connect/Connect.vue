@@ -101,7 +101,6 @@
 <script lang="ts">
 import { Component, Emit, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
-import { INotifyParams } from '~/types'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
 @Component({})
@@ -110,7 +109,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
   hideConnectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
   hideNetworkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 
-  $notify!: (params: INotifyParams) => void
   $refs!: {
     connect: HTMLDivElement
     connectList: HTMLDivElement

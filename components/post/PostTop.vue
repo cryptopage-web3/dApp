@@ -21,14 +21,12 @@ import { Component, mixins } from 'nuxt-property-decorator'
 import TransactionMixin from '~/mixins/transaction'
 import NetworkNameMixin from '~/mixins/networkName'
 import { copyToClipboard } from '~/utils/copyToClipboard'
-import { INotifyParams } from '~/types'
 
 @Component({})
 export default class PostTop extends mixins(
   TransactionMixin,
   NetworkNameMixin
 ) {
-  $notify!: (params: INotifyParams) => void
   $refs!: {
     hash: HTMLAnchorElement
   }

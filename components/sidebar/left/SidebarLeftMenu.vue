@@ -100,7 +100,6 @@
 <script lang="ts">
 import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
-import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -108,8 +107,6 @@ import { INotifyParams } from '~/types'
   }
 })
 export default class SidebarLeftMenu extends mixins(NetworkNameMixin) {
-  $notify!: (params: INotifyParams) => void
-
   isShowCreateNft = false
 
   get isAuth(): boolean {

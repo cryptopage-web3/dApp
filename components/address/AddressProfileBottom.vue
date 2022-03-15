@@ -40,16 +40,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Watch } from 'nuxt-property-decorator'
-import { INotifyParams } from '~/types'
 
 @Component({
   components: {
-    'nft-form': async () => await import('@/components/nft-form/NFTForm.vue')
+    'nft-form': async () => await import('~/components/nft-form/NFTForm.vue')
   }
 })
 export default class AddressProfileBottom extends Vue {
-  $notify!: (params: INotifyParams) => void
-
   isFormShown = false
 
   // computed
