@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-loader v-if="!isReadyStore" />
+    <page-loader v-if="isLoading" />
     <template v-else>
       <section class="main">
         <notifications :duration="10000" />
@@ -38,6 +38,8 @@ import { Component, Watch } from 'nuxt-property-decorator'
   }
 })
 export default class DefaultLayout extends Vue {
+  isLoading = true
+
   get isReadyStore(): boolean {
     return this.$store.state.auth.status
   }
@@ -50,6 +52,19 @@ export default class DefaultLayout extends Vue {
     setTimeout(() => {
       $(window).trigger('scroll')
     }, 100)
+  }
+
+  /** делаем задержку по рендеру компонентов, т.к. есть ошибка в консоли:
+   * render server не совпадает с client */
+  @Watch('isReadyStore', { immediate: true })
+  onIsReadyStore() {
+    if (!this.isReadyStore) {
+      return
+    }
+
+    this.$nextTick(() => {
+      this.isLoading = false
+    })
   }
 }
 </script>
