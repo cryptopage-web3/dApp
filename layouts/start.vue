@@ -62,7 +62,7 @@ export default class StartLayout extends Vue {
   /** делаем задержку по рендеру компонентов, т.к. есть ошибка в консоли:
    * render server не совпадает с client */
   @Watch('isReadyStore', { immediate: true })
-  onIsReadyStore() {
+  onIsReadyStoreChanged() {
     if (!this.isReadyStore) {
       return
     }
