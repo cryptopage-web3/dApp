@@ -10,6 +10,7 @@ import {
 } from '~/logic/auth/types'
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
+import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants'
 
 declare const window: Window &
   typeof globalThis & {
@@ -235,10 +236,13 @@ export default class AuthService extends Vue {
    * Just reacive proxy for simple access
    */
   public get selectedNetworkName(): string {
+    return this.getNetworkName(this.selectedChainId)
+  }
+
+  public getNetworkName(chainId: any) {
     return (
-      (this.networksByChain[this.selectedChainId] &&
-        this.networksByChain[this.selectedChainId].name) ||
-      'unknown network'
+      (this.networksByChain[chainId] && this.networksByChain[chainId].name) ||
+      'unknown'
     )
   }
 
@@ -300,6 +304,13 @@ export default class AuthService extends Vue {
     Vue.set(this.data, 'address', address || '')
     this.data.address = address || ''
 
+    /** даже если значение пустое, то мы должны установить,
+     * иначе будет показываться корректно предыдущая сеть */
+    Vue.set(this.data, 'chainId', chainId || 0)
+    this.data.chainId = chainId || 0
+  }
+
+  public setChainId(chainId: number | string): void {
     /** даже если значение пустое, то мы должны установить,
      * иначе будет показываться корректно предыдущая сеть */
     Vue.set(this.data, 'chainId', chainId || 0)
@@ -470,6 +481,9 @@ export default class AuthService extends Vue {
          */
         await this.provider.switchNetwork('bsc-mainnet')
 
+        /** при успехе устанавливаем сеть у нас */
+        this.setChainId(Number(chain.chainId))
+
         return {
           status: 'success'
         }
@@ -502,6 +516,9 @@ export default class AuthService extends Vue {
           params: [{ chainId: chain.chainId }]
         })
 
+        /** при успехе устанавливаем сеть у нас */
+        this.setChainId(Number(chain.chainId))
+
         return {
           status: 'success'
         }
@@ -527,6 +544,9 @@ export default class AuthService extends Vue {
             method: 'wallet_addEthereumChain',
             params: [chain]
           })
+
+          /** при успехе устанавливаем сеть у нас */
+          this.setChainId(Number(chain.chainId))
 
           return {
             status: 'success'
@@ -717,16 +737,9 @@ export default class AuthService extends Vue {
         this.setOrChangeWeb3Data(address, chainId)
       }
 
-      /** created by Nail M. at https://infura.io/ */
-      const infuraProjectId = '4409ed526a3e48ffa540c25ff4e1015f'
       const provider = await new WalletConnectProvider({
-        infuraId: infuraProjectId,
-        rpc: {
-          1: `https://mainnet.infura.io/v3/${infuraProjectId}`,
-          4: `https://rinkeby.infura.io/v3/${infuraProjectId}`,
-          56: 'https://bsc-dataseed.binance.org',
-          137: 'https://rpc-mainnet.maticvigil.com'
-        }
+        infuraId: INFURA_PROJECT_ID,
+        rpc: PROVIDER_HOST_BY_CHAINID
       })
 
       await provider.enable()

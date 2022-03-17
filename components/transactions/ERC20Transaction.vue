@@ -44,11 +44,9 @@
 import { Component, mixins } from 'nuxt-property-decorator'
 import TransactionMixin from '~/mixins/transaction'
 import { copyToClipboard } from '~/utils/copyToClipboard'
-import { INotifyParams } from '~/types'
 
 @Component({})
 export default class ERC20Transaction extends mixins(TransactionMixin) {
-  $notify!: (params: INotifyParams) => void
   $refs!: {
     hash: HTMLAnchorElement
   }

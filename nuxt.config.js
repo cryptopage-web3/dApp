@@ -40,21 +40,15 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~/plugins/directives.client',
-    '~/plugins/ipfs.client',
-    '~/plugins/crypto.client',
-    '~/plugins/filters',
-    '~/plugins/jazzicon',
-    '~/plugins/web3',
-    '~/plugins/modals.client',
-    '~/plugins/easy-circular-progress.client',
-    '~/plugins/notifications.client',
-    '~/plugins/fontawesome.js',
+    '~/plugins/filters.ts',
+    '~/plugins/jazzicon.ts',
+    '~/plugins/web3.ts',
+    '~/plugins/easy-circular-progress.client.ts',
+    '~/plugins/notifications.client.ts',
+    '~/plugins/fontawesome.ts',
     '~/plugins/type-di.ts',
-    '~/plugins/bootstrap.js',
-    '~/plugins/formstyler.js',
-    '~/plugins/sticky-sidebar.js',
-    '~/plugins/installer.js'
+    '~/plugins/bootstrap.ts',
+    '~/plugins/formstyler.ts'
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading

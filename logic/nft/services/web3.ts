@@ -1,6 +1,7 @@
-import { Service, Container } from 'vue-typedi'
+import { Service, Container, Inject } from 'vue-typedi'
 import Web3 from 'web3'
 import { ERC721ABI } from '~/constants/abi-samples'
+import AddressService from '~/logic/address/services'
 import {
   FetchOneType,
   ERC721ContractDataType,
@@ -9,6 +10,7 @@ import {
   IBurnParamsType
 } from '~/logic/nft/types'
 import tokens from '~/logic/tokens'
+import { web3Builder } from '~/utils/web3Builder'
 
 @Service(tokens.NFT_WEB3_SERVICE)
 /**
@@ -18,15 +20,22 @@ import tokens from '~/logic/tokens'
  * Should not be used as-is, only as a part of the module.
  */
 export default class NFTWeb3Service {
+  @Inject(tokens.ADDRESS_SERVICE)
+  public addressService!: AddressService
+
   /**
    * @returns Global `web3` instance from the IoC container.
    */
-  protected get $web3(): Web3 {
+  protected get $web3Auth(): Web3 {
     return Container.get(tokens.WEB3) as Web3
   }
 
+  public get $web3Address(): Web3 {
+    return web3Builder(this.addressService.chainId)
+  }
+
   private getNetworkName = (): Promise<string> => {
-    return this.$web3.eth.getChainId().then((chainId: number) => {
+    return this.$web3Auth.eth.getChainId().then((chainId: number) => {
       const networks: { [chainId: number]: string } = {
         1: 'eth',
         3: 'ropsten',
@@ -59,7 +68,7 @@ export default class NFTWeb3Service {
     )
 
     /** получаем комментарии */
-    const commentMinterContract = new this.$web3.eth.Contract(
+    const commentMinterContract = new this.$web3Auth.eth.Contract(
       COMMENT_MINTER_CONTRACT.abi,
       COMMENT_MINTER_CONTRACT.address
     )
@@ -78,7 +87,7 @@ export default class NFTWeb3Service {
           .getContract(NFT_CONTRACT.address, tokenId)
           .call()
 
-        const commentContract = new this.$web3.eth.Contract(
+        const commentContract = new this.$web3Auth.eth.Contract(
           COMMENT_CONTRACT.abi,
           commentContractAddress
         )
@@ -103,7 +112,10 @@ export default class NFTWeb3Service {
   }: FetchOneType): Promise<ERC721ContractDataType | null> => {
     try {
       let comments = null
-      const contract = new this.$web3.eth.Contract(ERC721ABI, contractAddress)
+      const contract = new this.$web3Address.eth.Contract(
+        ERC721ABI,
+        contractAddress
+      )
       const tokenURI = await contract.methods.tokenURI(tokenId).call()
       const owner = await contract.methods.ownerOf(tokenId).call()
       const statisticWithComments = await this.getComments({
@@ -125,7 +137,7 @@ export default class NFTWeb3Service {
       this.getNetworkName().then((networkName: string) => {
         import(`../../../contracts/${networkName}/PageNFT.json`).then(
           (CONTRACT) => {
-            const contract = new this.$web3.eth.Contract(
+            const contract = new this.$web3Auth.eth.Contract(
               CONTRACT.abi,
               CONTRACT.address
             )
@@ -151,7 +163,7 @@ export default class NFTWeb3Service {
       this.getNetworkName().then((networkName) => {
         import(`../../../contracts/${networkName}/PageCommentMinter.json`).then(
           (CONTRACT) => {
-            const contract = new this.$web3.eth.Contract(
+            const contract = new this.$web3Auth.eth.Contract(
               CONTRACT.abi,
               CONTRACT.address
             )
@@ -184,7 +196,7 @@ export default class NFTWeb3Service {
       this.getNetworkName().then((networkName: string) => {
         import(`../../../contracts/${networkName}/PageNFT.json`).then(
           (CONTRACT) => {
-            const contract = new this.$web3.eth.Contract(
+            const contract = new this.$web3Auth.eth.Contract(
               CONTRACT.abi,
               CONTRACT.address
             )

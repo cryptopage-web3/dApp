@@ -2,7 +2,7 @@
   <div class="profile-top">
     <div class="profile-left">
       <div class="profile__thumb">
-        <img v-if="image" :src="image" :width="diameter" :height="diameter" />
+        <img v-if="image" :src="image" />
         <jazzicon
           v-else
           :seed="10211"
@@ -25,10 +25,10 @@
           <div class="profile-info__text-total">
             <loader v-if="loadingInfo" :height="10" :width="140" />
             <div v-show="!loadingInfo">
-              <strong title="Total transactions">{{
+              <strong title="Total number of sent transactions">{{
                 transactionsCount | humanizeCount
               }}</strong>
-              total transactions
+              sent transactions
             </div>
           </div>
           <div class="profile-info__text-input">
@@ -67,7 +67,6 @@
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
 import { copyToClipboard } from '~/utils/copyToClipboard'
-import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -80,7 +79,6 @@ import { INotifyParams } from '~/types'
 export default class AddressProfileTop extends Vue {
   diameter = Number($(window).width()) > 767 ? 90 : 50
 
-  $notify!: (params: INotifyParams) => void
   $refs!: {
     address: HTMLSpanElement
   }

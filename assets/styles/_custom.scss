@@ -280,6 +280,23 @@
   background-color: #ffffff;
 }
 
+.profile__thumb img {
+  width: 90px;
+  height: 90px;
+}
+
+.profile__thumb > div > div {
+  width: 90px !important;
+  height: 90px !important;
+  overflow: hidden;
+  border-radius: 45px !important;
+}
+
+.profile__thumb svg {
+  width: 90px;
+  height: 90px;
+}
+
 .profile-info__title-address {
   cursor: pointer;
 }
@@ -691,6 +708,23 @@
 
   .profile__thumb {
     margin-right: 5px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .profile__thumb img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .profile__thumb > div > div {
+    width: 50px !important;
+    height: 50px !important;
+    overflow: hidden;
+    border-radius: 25px !important;
+  }
+
+  .profile__thumb svg {
     width: 50px;
     height: 50px;
   }

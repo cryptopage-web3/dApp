@@ -95,6 +95,13 @@ export default class AddressModule {
   }
 
   @Getter()
+  public get networkName(): string {
+    return this.tokenService.authService.getNetworkName(
+      this.addressInfo.chainId
+    )
+  }
+
+  @Getter()
   public get basicTokenSymbol(): string {
     return this.tokenService.getBasicToken(this.chainId).symbol
   }
@@ -132,13 +139,7 @@ export default class AddressModule {
 
   @Getter()
   public get transactionsCount(): number {
-    if (!this.addressInfo) {
-      return 0
-    }
-
-    return this.transactions.length > this.addressInfo.transactionsCount
-      ? this.transactions.length
-      : this.addressInfo.transactionsCount
+    return this.addressInfo?.transactionsCount || 0
   }
 
   @Getter()

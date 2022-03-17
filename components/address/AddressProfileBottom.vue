@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="isAuth" class="profile-bottom">
+    <div class="profile-bottom">
       <a
         v-if="isOwner"
         href="#"
@@ -19,13 +19,14 @@
         <img src="@/assets/img/profile__add_img.svg" alt="" />
         <span> Send </span>
       </a>
-      <router-link
-        to="/messages"
+      <a
+        href="#"
         class="profile__send btn_profile btn btn_blue"
+        @click.prevent="sendMessage"
       >
         <img src="@/assets/img/profile__send_img.svg" alt="" />
         <span> Send message </span>
-      </router-link>
+      </a>
     </div>
     <div class="creat-post-form">
       <nft-form
@@ -42,7 +43,7 @@ import { Component, Watch } from 'nuxt-property-decorator'
 
 @Component({
   components: {
-    'nft-form': async () => await import('@/components/nft-form/NFTForm.vue')
+    'nft-form': async () => await import('~/components/nft-form/NFTForm.vue')
   }
 })
 export default class AddressProfileBottom extends Vue {
@@ -57,8 +58,23 @@ export default class AddressProfileBottom extends Vue {
     )
   }
 
+  get isSameChain(): boolean {
+    return (
+      String(this.$store.getters['address/chainId']).toLowerCase() ===
+      String(this.$store.getters['auth/chainId']).toLowerCase()
+    )
+  }
+
   get isAuth(): boolean {
     return this.$store.getters['auth/isAuth']
+  }
+
+  get selectedNetworkName(): string {
+    return this.$store.getters['auth/selectedNetworkName']
+  }
+
+  get networkName(): string {
+    return this.$store.getters['address/networkName']
   }
 
   // watch
@@ -77,11 +93,49 @@ export default class AddressProfileBottom extends Vue {
   // methods
 
   showForm() {
+    if (!this.isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to create NFTs'
+      })
+      ;($('#modal-connect') as any).modal('show')
+      return
+    }
+
+    if (!this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Active chain - ${this.selectedNetworkName}<br>
+          You are trying ${
+            this.isOwner ? 'create' : 'send'
+          } nft to account with chain ${this.networkName}<br>
+          Please connect to ${this.networkName}
+        `
+      })
+      return
+    }
+
     this.isFormShown = true
   }
 
   closeForm() {
     this.isFormShown = false
+  }
+
+  sendMessage() {
+    if (!this.isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to send a message'
+      })
+      ;($('#modal-connect') as any).modal('show')
+      return
+    }
+
+    this.$notify({
+      type: 'error',
+      title: 'Sending a message is temporarily unavailable'
+    })
   }
 
   nftSubmitedHandler() {

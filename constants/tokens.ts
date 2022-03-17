@@ -7911,6 +7911,7 @@ export const ubqTokens = [
     type: 'default'
   }
 ]
+
 export const tomoTokens = [
   {
     address: '0x8b353021189375591723e7384262f45709a3c3dc',
@@ -7919,6 +7920,7 @@ export const tomoTokens = [
     type: 'default'
   }
 ]
+
 export const etcTokens = [
   {
     address: '0x6F6DEb5db0C4994A8283A01D6CFeEB27Fc3bBe9C',
@@ -7969,10 +7971,11 @@ export const ellaTokens = [
     type: 'default'
   }
 ]
-export const tokens = [].concat(
-  ethTokens,
-  ubqTokens,
-  tomoTokens,
-  etcTokens,
-  esnTokens
-)
+
+export const tokens = [
+  ...ethTokens,
+  ...ubqTokens,
+  ...tomoTokens,
+  ...etcTokens,
+  ...esnTokens
+]

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-loader v-if="!isReadyStore" />
+    <page-loader v-if="isLoading" />
     <template v-else>
       <section class="main">
         <notifications :duration="10000" />
@@ -43,6 +43,8 @@ import TypedStore from '~/logic/store'
 export default class StartLayout extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
 
+  isLoading = true
+
   get isReadyStore(): boolean {
     return this.$store.state.auth.status
   }
@@ -55,6 +57,19 @@ export default class StartLayout extends Vue {
     setTimeout(() => {
       $(window).trigger('scroll')
     }, 100)
+  }
+
+  /** делаем задержку по рендеру компонентов, т.к. есть ошибка в консоли:
+   * render server не совпадает с client */
+  @Watch('isReadyStore', { immediate: true })
+  onIsReadyStoreChanged() {
+    if (!this.isReadyStore) {
+      return
+    }
+
+    this.$nextTick(() => {
+      this.isLoading = false
+    })
   }
 
   successLogin() {

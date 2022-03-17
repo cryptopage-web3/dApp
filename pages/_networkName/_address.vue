@@ -18,12 +18,17 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
+import Web3 from 'web3'
+import { Container } from 'vue-typedi'
+import TypedStore from '~/logic/store'
+import tokens from '~/logic/tokens'
 
 @Component({})
 export default class AddressPage extends Vue {
   validNetworks: Record<string, number> | null = null
 
-  validate({ params, $web3 }: any) {
+  validate({ params }: any) {
     const networkName = params.networkName
     const validNetworkNames = [
       'eth',
@@ -40,6 +45,13 @@ export default class AddressPage extends Vue {
       'solana'
     ]
     const isValid = validNetworkNames.includes(networkName)
+
+    /** получаем текущий $web3 авторизации
+     * по сути он не передает реального web3, нам интересен только метод isAddress
+     * поэтому возможно стоит отвязаться от tokens
+     */
+    const $web3 = Container.get(tokens.WEB3) as Web3
+
     return (
       isValid &&
       (networkName === 'tron' || networkName === 'solana'
@@ -55,7 +67,12 @@ export default class AddressPage extends Vue {
     }
   }
 
-  async beforeCreate() {
+  beforeCreate() {
+    /** используем типовой стор
+     * если подключать через свойство класса, то в beforeCreate значение undefined
+     */
+    const typedStore: TypedStore = useStore(this.$store)
+
     const networkName = this.$route.params.networkName
     const validNetworks: Record<string, number | string> = {
       eth: 1,
@@ -77,13 +94,21 @@ export default class AddressPage extends Vue {
       /** очищаем транзакции для новой страницы
        * срабатывает при смене адреса или сети, но пропускает при смене таба
        * */
-      this.$store.dispatch('address/clearTransactions')
+      typedStore.address.clearTransactions()
 
       /** обновляем текущие данные по адресу и сети из URL */
-      await this.$store.dispatch('address/updateAddressInfo', {
+      typedStore.address.updateAddressInfo({
         address: this.$route.params.address,
         chainId
       })
+
+      /** если нет авторизации, то переключаем активную сеть на сеть из адреса */
+      const isAuth = typedStore.auth.isAuth
+      const selectedChainId = typedStore.auth.chainId
+
+      if (!isAuth && selectedChainId !== chainId) {
+        typedStore.auth.setChainId(chainId)
+      }
     }
   }
 }

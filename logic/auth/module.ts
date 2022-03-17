@@ -33,7 +33,7 @@ export default class AuthModule {
   }
 
   @Getter()
-  public get chainId(): number {
+  public get chainId(): string | number {
     return this.authService.selectedChainId
   }
 

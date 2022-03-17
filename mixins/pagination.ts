@@ -15,11 +15,11 @@ export default class PaginationMixin extends Vue {
   }
 
   get address(): string {
-    return this.$store.getters['auth/selectedAddress']
+    return this.$store.getters['address/address']
   }
 
   get chainId(): number | string {
-    return this.$store.getters['auth/chainId']
+    return this.$store.getters['address/chainId']
   }
 
   get isFetchDisabled(): boolean {
@@ -41,16 +41,6 @@ export default class PaginationMixin extends Vue {
   }
 
   // watch
-
-  @Watch('address')
-  onAddressChanged(newAddress: string, oldAddress: string) {
-    this.reset(newAddress, oldAddress)
-  }
-
-  @Watch('chainId')
-  onChainIdChanged(newChain: number | string, oldChain: number | string) {
-    this.resetChain(newChain, oldChain)
-  }
 
   /** в момент получения новых транзакций необходим триггер скролла
    * чтобы обновилось положение сайдбаров
@@ -78,55 +68,6 @@ export default class PaginationMixin extends Vue {
 
     $(window).off('scroll', this.scrollListener)
     this.scrollListener = null
-  }
-
-  async reset(newAddress: string, oldAddress: string) {
-    /** очищаем транзакции при смене адреса */
-    this.$store.dispatch('address/clearTransactions')
-
-    /** после очистки нужно запустить $fetch
-     * если $fetch не запущен, то сразу его вызываем
-     * если $fetch выполняется, то необходимо дождаться его завершения, а потом запустить
-     * иначе $fetch не запустится
-     */
-    if (!this.$fetchState.pending) {
-      this.$fetch()
-      return
-    }
-
-    if (newAddress !== oldAddress) {
-      const params = this.$route.params
-      params.address = newAddress
-      await this.$router.push({ params })
-    }
-
-    /** ожидаем окончания $fetch, очищаем watcher, запускаем повторно $fetch */
-    const unwatchPending = this.$watch('$fetchState.pending', (pending) => {
-      if (!pending) {
-        unwatchPending()
-
-        this.$nextTick(() => {
-          this.$fetch()
-        })
-      }
-    })
-  }
-
-  async resetChain(newChain: number | string, oldChain: number | string) {
-    /** проверяем, что chain изменился вне зависимости от типа: string, number
-     * TODO: в какой момент приходит строка, нужно сделать приведение типа и хранить всегда в number
-     */
-    if (Number(newChain) === Number(oldChain)) {
-      return
-    }
-
-    const params = this.$route.params
-    const chainId = this.chainId
-
-    const networkName = this.getNetworkNameByChainId(chainId)
-    if (networkName) params.networkName = networkName
-    await this.$store.dispatch('address/clearTransactions')
-    await this.$router.push({ params })
   }
 
   // methods

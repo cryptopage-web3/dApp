@@ -114,7 +114,6 @@ import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
 import Icon from '~/components/icons/Icon.vue'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
-import { INotifyParams } from '~/types'
 
 @Component({
   components: {
@@ -133,7 +132,6 @@ export default class NFTForm extends Vue {
   @Prop({ type: Boolean, default: false })
   readonly isSendTo!: boolean
 
-  $notify!: (params: INotifyParams) => void
   $refs!: {
     attributes: any
     'upload-file': any

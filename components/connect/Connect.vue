@@ -39,15 +39,6 @@
             <a ref="copy" href="#" @click.prevent="copyAddress">Copy Address</a>
           </li>
           <li>
-            <a
-              v-if="$installer.canInstall && !$installer.hasInstalled"
-              href="#"
-              @click="$installer.prompt"
-            >
-              Install app
-            </a>
-          </li>
-          <li>
             <router-link
               :to="`/${selectedNetworkSlug}/${selectedAddress}/transactions`"
               >Transaction History</router-link
@@ -110,7 +101,6 @@
 <script lang="ts">
 import { Component, Emit, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
-import { INotifyParams } from '~/types'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
 @Component({})
@@ -119,7 +109,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
   hideConnectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
   hideNetworkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
 
-  $notify!: (params: INotifyParams) => void
   $refs!: {
     connect: HTMLDivElement
     connectList: HTMLDivElement
@@ -308,6 +297,10 @@ export default class Connect extends mixins(NetworkNameMixin) {
     if (isAuth) {
       setTimeout(() => {
         this.$router.push({ path: '/', query: { openConnect: '1' } })
+      })
+    } else {
+      setTimeout(() => {
+        this.$router.push(`/${this.selectedNetworkSlug}/${this.address}/nft`)
       })
     }
 

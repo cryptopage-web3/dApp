@@ -48,10 +48,13 @@ export default class TokenService {
       return await this.tokenCacheService.getTokenInfo(address)
     } else {
       let tokenInfo = await this.tokenIPFSService.getTokenInfo(address)
+
       if (!tokenInfo) {
         tokenInfo = await this.tokenWeb3Service.getTokenInfo(address)
       }
+
       this.tokenCacheService.setTokenInfo(address, tokenInfo)
+
       return tokenInfo
     }
   }
@@ -72,7 +75,7 @@ export default class TokenService {
      * для tron - используется apilist.tronscan.org
      *
      * Если Сovalent API возвращает токены по адресу, то данные токены будут являться результатом операции
-     * Если токенов нет (обычно для тестовых сетей), то балансы получаем по каждому токену из списка, который хранится в ipfs
+     * Если токенов нет (обычно для тестовых сетей), то балансы получаем по каждому токену из основных сетей
      * в tokenBalances в таком случае записываются по условию: balance > 0
      **/
 
@@ -113,9 +116,13 @@ export default class TokenService {
       tokenBalances = await this.tokenWeb3Service.getTokenBalances(address)
 
       /** Sort desc by usdBalance */
-      tokenBalances = tokenBalances.sort((a, b) =>
-        a.usdBalance > b.usdBalance ? -1 : 1
-      )
+      tokenBalances = tokenBalances
+        .filter(
+          (token) =>
+            token.tokenInfo.symbol?.toLowerCase() !==
+            basicToken.symbol?.toLowerCase()
+        )
+        .sort((a, b) => (a.usdBalance > b.usdBalance ? -1 : 1))
 
       /** итоговый список: токен выбранной сети, баланс crypto.page, все остальные токены */
       tokenBalances = [basicTokenBalance, pageTokenBalance, ...tokenBalances]

@@ -23,10 +23,12 @@ export default class TokenAPIService {
       // if not evm related blockchain and length is 44, actually it is solana
       return await this.solScanAPIService.getTokenBalances(address)
     }
+
     if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 34) {
       // if not evm related blockchain and length is 34, actually it is tron
       return await this.tronGridAPIService.getTokenBalances(address)
     }
+
     return await this.covalentAPIService.getTokenBalances(address)
   }
 }
