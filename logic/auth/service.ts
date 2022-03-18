@@ -11,6 +11,7 @@ import {
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants'
+import { PROVIDERS, CHAINS, networkHelper } from '~/utils/networkHelper'
 
 declare const window: Window &
   typeof globalThis & {
@@ -21,22 +22,10 @@ declare const window: Window &
     solana: any
   }
 
-const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = [
-  'ETHEREUM',
-  'BSC',
-  'POLYGON',
-  'TRON',
-  'SOLANA'
-]
-const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] = [
-  'metamask',
-  'walletConnect',
-  'bscWallet',
-  'okex',
-  'tron',
-  'phantom'
-]
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = CHAINS
+const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
+  PROVIDERS
 const ERROR_UNKNOWN_NETWORK = 'UNKNOWN_NETWORK'
 
 const bsc = new BscConnector({
@@ -89,67 +78,6 @@ export default class AuthService extends Vue {
     }
 
     this.init(lastUsedProvider)
-  }
-
-  protected networksByChain: any = {
-    1: { network: 'ethereum', name: 'Ethereum', slug: 'eth' },
-    3: { network: 'ethereum', name: 'Ropsten TestNet', slug: 'ropsten' },
-    4: { network: 'ethereum', name: 'Rinkeby TestNet', slug: 'rinkeby' },
-    5: { network: 'ethereum', name: 'Goerly TestNet', slug: 'goerly' },
-    42: { network: 'ethereum', name: 'Kovan TestNet', slug: 'kovan' },
-    56: { network: 'bsc', name: 'BSC Network', slug: 'bsc' },
-    97: { network: 'bsc', name: 'BSC TestNet', slug: 'bsc-testnet' },
-    137: {
-      network: 'polygon',
-      name: 'Polygon',
-      slug: 'polygon'
-    },
-    80001: {
-      network: 'polygon',
-      name: 'Polygon TestNet',
-      slug: 'polygon-testnet'
-    },
-    tron: { network: 'tron', name: 'Tron', slug: 'tron' },
-    solana: { network: 'solana', name: 'Solana', slug: 'solana' }
-  }
-
-  protected chainsByProviders: any = {
-    [METAMASK]: [1, 3, 4, 5, 42, 56, 137],
-    [BSC_WALLET]: [56, 97],
-    [OKEX]: [1, 3, 4, 5, 42, 56, 137],
-    [TRON_LINK]: ['tron'],
-    [PHANTOM]: ['solana'],
-    [WALLET_CONNECT]: [1, 3, 4, 5, 42, 56, 137]
-  }
-
-  // chainid type is hexadecimal nubers
-  protected _CHAINS = {
-    [BSC]: {
-      chainId: '0x38',
-      rpcUrls: ['https://bsc-dataseed.binance.org/'],
-      chainName: 'Binance Smart Chain',
-      nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-      blockExplorerUrls: ['https://bscscan.com/']
-    },
-    [POLYGON]: {
-      chainId: '0x89',
-      rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
-      chainName: 'Matic Mainnet',
-      nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
-      blockExplorerUrls: [
-        'https://explorer.matic.network/',
-        'https://polygonscan.com/'
-      ]
-    },
-    [ETHEREUM]: {
-      chainId: '0x1'
-    },
-    [TRON]: {
-      chainId: 'tron'
-    },
-    [SOLANA]: {
-      chainId: 'solana'
-    }
   }
 
   /*
@@ -236,39 +164,21 @@ export default class AuthService extends Vue {
    * Just reacive proxy for simple access
    */
   public get selectedNetworkName(): string {
-    return this.getNetworkName(this.selectedChainId)
-  }
-
-  public getNetworkName(chainId: any) {
-    return (
-      (this.networksByChain[chainId] && this.networksByChain[chainId].name) ||
-      'unknown'
-    )
+    return networkHelper.getNetworkName(this.selectedChainId)
   }
 
   /*
    * Just reacive proxy for simple access
    */
   public get selectedNetworkSlug(): string {
-    return this.getNetworkSlug(this.selectedChainId)
-  }
-
-  public getNetworkSlug(chainId: any) {
-    return (
-      (this.networksByChain[chainId] && this.networksByChain[chainId].slug) ||
-      'unknown'
-    )
+    return networkHelper.getNetworkSlug(this.selectedChainId)
   }
 
   /*
    * Just reacive proxy for simple access
    */
   public get selectedNetworkType(): string {
-    return (
-      (this.networksByChain[this.selectedChainId] &&
-        this.networksByChain[this.selectedChainId].network) ||
-      'ethereum'
-    )
+    return networkHelper.getNetworkType(this.selectedChainId)
   }
 
   /*
@@ -281,7 +191,7 @@ export default class AuthService extends Vue {
     chainId: string | number,
     provider: string
   ): boolean {
-    return this.chainsByProviders[provider].includes(chainId)
+    return networkHelper.isSupportedByProvider(chainId, provider)
   }
 
   public setUnknownChain(isUnknown: boolean) {
@@ -392,7 +302,7 @@ export default class AuthService extends Vue {
   switchChain = async (networkName: string): Promise<ConnectResponseType> => {
     /** проверяем поддерживаем ли данную сеть */
 
-    const chain = this._CHAINS[networkName]
+    const chain = networkHelper.getChain(networkName)
 
     if (!chain) {
       return {
@@ -580,7 +490,8 @@ export default class AuthService extends Vue {
    **/
   clientSwitchChain = (network: string): void => {
     /** указываем chainId от network */
-    const chain = this._CHAINS[network]
+    const chain = networkHelper.getChain(network)
+
     this.setOrChangeWeb3Data(
       '',
       [TRON, SOLANA].includes(network) ? chain.chainId : Number(chain.chainId)

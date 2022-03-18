@@ -16,6 +16,7 @@ import TransactionService from '~/logic/transactions/services'
 import TokenService from '~/logic/tokens/services'
 import AddressService from '~/logic/address/services/index'
 import tokens from '~/logic/tokens'
+import { networkHelper } from '~/utils/networkHelper'
 
 const defaultPagination: TransactionPagination = {
   pageSize: 10,
@@ -89,16 +90,12 @@ export default class AddressModule {
 
   @Getter()
   public get networkSlug(): string {
-    return this.tokenService.authService.getNetworkSlug(
-      this.addressInfo.chainId
-    )
+    return networkHelper.getNetworkSlug(this.addressInfo.chainId)
   }
 
   @Getter()
   public get networkName(): string {
-    return this.tokenService.authService.getNetworkName(
-      this.addressInfo.chainId
-    )
+    return networkHelper.getNetworkName(this.addressInfo.chainId)
   }
 
   @Getter()
