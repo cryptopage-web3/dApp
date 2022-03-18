@@ -1,5 +1,4 @@
 import { Service, Inject } from 'vue-typedi'
-import AuthService from '~/logic/auth/service'
 import AddressService from '~/logic/address/services'
 import TokenCacheService from '~/logic/tokens/services/cache'
 import TokenAPIService from '~/logic/tokens/services/api'
@@ -7,12 +6,10 @@ import TokenIPFSService from '~/logic/tokens/services/ipfs'
 import TokenWeb3Service from '~/logic/tokens/services/web3'
 import { TokenBalanceType, TokenInfoType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
+import { networkHelper } from '~/utils/networkHelper'
 
 @Service(tokens.TOKEN_SERVICE)
 export default class TokenService {
-  @Inject(tokens.AUTH_SERVICE)
-  public authService!: AuthService
-
   @Inject(tokens.ADDRESS_SERVICE)
   public addressService!: AddressService
 
@@ -165,7 +162,7 @@ export default class TokenService {
     const tokenInfo = this.pageToken
 
     try {
-      const networkSlug = this.authService.getNetworkSlug(chainId)
+      const networkSlug = networkHelper.getNetworkSlug(chainId)
       const contractABI = await import(
         `../../../contracts/${networkSlug}/PageToken.json`
       )
