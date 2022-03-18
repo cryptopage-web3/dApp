@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import { Component, Watch } from 'nuxt-property-decorator'
+import { networkHelper } from '~/utils/networkHelper'
 
 @Component({})
 export default class PaginationMixin extends Vue {
@@ -35,7 +36,7 @@ export default class PaginationMixin extends Vue {
     return Boolean(
       (this.address && this.address !== this.$route.params.address) ||
         (this.chainId &&
-          this.getNetworkNameByChainId(this.chainId) !==
+          networkHelper.getNetworkSlug(this.chainId) !==
             this.$route.params.networkName)
     )
   }
@@ -77,24 +78,6 @@ export default class PaginationMixin extends Vue {
      * либо текущий статус запроса pending или error */
     if (this.isFetchDisabled) return
     this.$fetch()
-  }
-
-  getNetworkNameByChainId(chainId: number | string) {
-    const validNetworks: Record<number | string, string> = {
-      1: 'eth',
-      3: 'ropsten',
-      4: 'rinkeby',
-      5: 'goerly',
-      42: 'kovan',
-      56: 'bsc',
-      97: 'bsc-testnet',
-      137: 'polygon',
-      80001: 'polygon-testnet',
-      tron: 'tron',
-      solana: 'solana'
-    }
-
-    return validNetworks[chainId]
   }
 
   scrollHandler() {
