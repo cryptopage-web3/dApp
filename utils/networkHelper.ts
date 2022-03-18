@@ -35,6 +35,20 @@ export const networkHelper = {
     solana: { network: 'solana', name: 'Solana', slug: 'solana' }
   } as any,
 
+  chainIdBySlug: {
+    eth: 1,
+    ropsten: 3,
+    rinkeby: 4,
+    goerly: 5,
+    kovan: 42,
+    bsc: 56,
+    'bsc-testnet': 97,
+    polygon: 137,
+    'polygon-testnet': 80001,
+    tron: 'tron',
+    solana: 'solana'
+  } as Record<string, number | string>,
+
   chainsByProvider: {
     [METAMASK]: [1, 3, 4, 5, 42, 56, 137],
     [BSC_WALLET]: [56, 97],
@@ -98,7 +112,15 @@ export const networkHelper = {
     return this.chainsByProvider[provider].includes(chainId)
   },
 
-  getChain(name: string) {
+  isValidSlug(slug: string) {
+    return Boolean(this.chainIdBySlug[slug])
+  },
+
+  getChainData(name: string) {
     return this.chains[name]
+  },
+
+  getChainId(slug: string) {
+    return this.chainIdBySlug[slug]
   }
 }

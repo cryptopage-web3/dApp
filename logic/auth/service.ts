@@ -302,7 +302,7 @@ export default class AuthService extends Vue {
   switchChain = async (networkName: string): Promise<ConnectResponseType> => {
     /** проверяем поддерживаем ли данную сеть */
 
-    const chain = networkHelper.getChain(networkName)
+    const chain = networkHelper.getChainData(networkName)
 
     if (!chain) {
       return {
@@ -490,7 +490,7 @@ export default class AuthService extends Vue {
    **/
   clientSwitchChain = (network: string): void => {
     /** указываем chainId от network */
-    const chain = networkHelper.getChain(network)
+    const chain = networkHelper.getChainData(network)
 
     this.setOrChangeWeb3Data(
       '',

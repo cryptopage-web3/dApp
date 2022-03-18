@@ -23,28 +23,13 @@ import Web3 from 'web3'
 import { Container } from 'vue-typedi'
 import TypedStore from '~/logic/store'
 import tokens from '~/logic/tokens'
+import { networkHelper } from '~/utils/networkHelper'
 
 @Component({})
 export default class AddressPage extends Vue {
-  validNetworks: Record<string, number> | null = null
-
   validate({ params }: any) {
     const networkName = params.networkName
-    const validNetworkNames = [
-      'eth',
-      'ropsten',
-      'rinkeby',
-      'goerly',
-      'kovan',
-      'bsc',
-      'bsc-testnet',
-      'polygon',
-      'polygon-testnet',
-      'ganache',
-      'tron',
-      'solana'
-    ]
-    const isValid = validNetworkNames.includes(networkName)
+    const isValid = networkHelper.isValidSlug(networkName)
 
     /** получаем текущий $web3 авторизации
      * по сути он не передает реального web3, нам интересен только метод isAddress
@@ -61,54 +46,45 @@ export default class AddressPage extends Vue {
   }
 
   middleware({ route, params, redirect }: any) {
-    /** для страниц без таба делаем редирект в таб NFT */
-    if (route.name === 'networkName-address') {
+    /** для страниц с сетью и адресом, но без таба делаем редирект в таб NFT */
+    if (
+      route.name === 'networkName-address' &&
+      networkHelper.isValidSlug(params.networkName) &&
+      params.address
+    ) {
       return redirect(`/${params.networkName}/${params.address}/nft`)
     }
   }
 
   beforeCreate() {
+    const chainId = networkHelper.getChainId(this.$route.params.networkName)
+
+    if (!chainId) {
+      return
+    }
+
     /** используем типовой стор
      * если подключать через свойство класса, то в beforeCreate значение undefined
      */
     const typedStore: TypedStore = useStore(this.$store)
 
-    const networkName = this.$route.params.networkName
-    const validNetworks: Record<string, number | string> = {
-      eth: 1,
-      ropsten: 3,
-      rinkeby: 4,
-      goerly: 5,
-      kovan: 42,
-      bsc: 56,
-      'bsc-testnet': 97,
-      polygon: 137,
-      'polygon-testnet': 80001,
-      tron: 'tron',
-      solana: 'solana'
-    }
+    /** очищаем транзакции для новой страницы
+     * срабатывает при смене адреса или сети, но пропускает при смене таба
+     * */
+    typedStore.address.clearTransactions()
 
-    const chainId = validNetworks[networkName]
+    /** обновляем текущие данные по адресу и сети из URL */
+    typedStore.address.updateAddressInfo({
+      address: this.$route.params.address,
+      chainId
+    })
 
-    if (chainId) {
-      /** очищаем транзакции для новой страницы
-       * срабатывает при смене адреса или сети, но пропускает при смене таба
-       * */
-      typedStore.address.clearTransactions()
+    /** если нет авторизации, то переключаем активную сеть на сеть из адреса */
+    const isAuth = typedStore.auth.isAuth
+    const selectedChainId = typedStore.auth.chainId
 
-      /** обновляем текущие данные по адресу и сети из URL */
-      typedStore.address.updateAddressInfo({
-        address: this.$route.params.address,
-        chainId
-      })
-
-      /** если нет авторизации, то переключаем активную сеть на сеть из адреса */
-      const isAuth = typedStore.auth.isAuth
-      const selectedChainId = typedStore.auth.chainId
-
-      if (!isAuth && selectedChainId !== chainId) {
-        typedStore.auth.setChainId(chainId)
-      }
+    if (!isAuth && selectedChainId !== chainId) {
+      typedStore.auth.setChainId(chainId)
     }
   }
 }
