@@ -8,7 +8,7 @@
         {{ description }}
       </div>
     </div>
-    <div v-if="show" class="post-text-right">
+    <div v-if="isOwner" class="post-text-right">
       <div
         class="post-text__link"
         @click="deleteNFT(transaction, selectedAddress)"
@@ -39,24 +39,50 @@ export default class PostTextBlock extends mixins(TransactionMixin) {
     return this.transaction.nft?.description || ''
   }
 
+  get address(): string {
+    return this.typedStore.address.address
+  }
+
   get selectedAddress(): string {
     return this.typedStore.auth.selectedAddress
   }
 
-  public get show() {
-    if (this.transaction) {
-      const ownerAddress = this.transaction?.nft?.owner.toLowerCase()
-      const selectedAddress = this.selectedAddress.toLowerCase()
-      return ownerAddress === selectedAddress
-    }
-    return false
+  get selectedNetworkSlug(): string {
+    return this.typedStore.auth.selectedNetworkSlug
   }
 
-  public deleteNFT = async (
-    transaction: TransactionType,
-    from: string
-  ): Promise<void> => {
+  get selectedNetworkName(): string {
+    return this.typedStore.auth.selectedNetworkName
+  }
+
+  get isOwner(): boolean {
+    return (
+      String(this.address).toLowerCase() ===
+      String(this.selectedAddress).toLowerCase()
+    )
+  }
+
+  get isSameChain(): boolean {
+    return (
+      String(this.selectedNetworkSlug).toLowerCase() ===
+      String(this.networkSlug).toLowerCase()
+    )
+  }
+
+  async deleteNFT(transaction: TransactionType, from: string): Promise<void> {
+    if (!this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Active chain - ${this.selectedNetworkName}<br>
+          You are trying burn nft owned to account with chain ${this.networkName}<br>
+          Please connect to ${this.networkName}
+        `
+      })
+      return
+    }
+
     const tokenId = String(transaction?.token?.id)
+
     const callback = ({
       status,
       txHash

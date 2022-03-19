@@ -8,7 +8,11 @@ export default class NetworkName extends mixins(TypedStoreMixin) {
     return this.typedStore.address.address
   }
 
-  get networkName(): string {
+  get networkSlug(): string {
     return this.typedStore.address.networkSlug
+  }
+
+  get networkName(): string {
+    return this.typedStore.address.networkName
   }
 }

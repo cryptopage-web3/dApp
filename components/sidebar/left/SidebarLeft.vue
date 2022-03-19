@@ -16,8 +16,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
-import { useStore } from 'vuex-simple'
-import TypedStore from '~/logic/store'
 import { init as stickySidebarInit } from '~/utils/stickySidebar'
 
 @Component({
@@ -27,20 +25,6 @@ import { init as stickySidebarInit } from '~/utils/stickySidebar'
   }
 })
 export default class SidebarLeft extends Vue {
-  public typedStore: TypedStore = useStore(this.$store)
-
-  get isAuth(): boolean {
-    return this.typedStore.auth.isAuth
-  }
-
-  get address(): string {
-    return this.typedStore.auth.selectedAddress
-  }
-
-  get networkName(): string {
-    return this.typedStore.auth.selectedNetworkSlug
-  }
-
   mounted() {
     stickySidebarInit('#left-sidebar', '.main-left')
 

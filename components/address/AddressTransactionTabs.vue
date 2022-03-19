@@ -24,7 +24,7 @@ import NetworkNameMixin from '~/mixins/networkName'
 @Component({})
 export default class SidebarRightBalance extends mixins(NetworkNameMixin) {
   get tabs() {
-    const tokensName = tokenNames[this.networkName]
+    const tokensName = tokenNames[this.networkSlug]
     return [
       {
         link: 'nft',
@@ -46,7 +46,7 @@ export default class SidebarRightBalance extends mixins(NetworkNameMixin) {
   }
 
   url(link: string) {
-    return `/${this.networkName}/${this.address}/${link}`
+    return `/${this.networkSlug}/${this.address}/${link}`
   }
 }
 </script>
