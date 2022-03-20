@@ -87,6 +87,25 @@ export default class Comments extends mixins(TypedStoreMixin) {
     return Number(this.transaction.nft?.comments?.dislikes || 0)
   }
 
+  get isAuth(): boolean {
+    return this.typedStore.auth.isAuth
+  }
+
+  get selectedNetworkName(): string {
+    return this.typedStore.auth.selectedNetworkName
+  }
+
+  get networkName(): string {
+    return this.typedStore.address.networkName
+  }
+
+  get isSameChain(): boolean {
+    return (
+      String(this.typedStore.address.chainId).toLowerCase() ===
+      String(this.typedStore.auth.chainId).toLowerCase()
+    )
+  }
+
   async mounted() {
     await this.$nextTick(async () => {
       this.clickOutsideListener = this.clickOutsideHandler.bind(this)
@@ -110,6 +129,10 @@ export default class Comments extends mixins(TypedStoreMixin) {
   // methods
 
   onLike() {
+    if (!this.validateAccess()) {
+      return
+    }
+
     this.like = true
 
     setTimeout(() => {
@@ -121,6 +144,10 @@ export default class Comments extends mixins(TypedStoreMixin) {
   }
 
   onDislike() {
+    if (!this.validateAccess()) {
+      return
+    }
+
     this.like = false
 
     setTimeout(() => {
@@ -128,6 +155,32 @@ export default class Comments extends mixins(TypedStoreMixin) {
       $(this.$refs.root).find('.post-comment__input')[0].focus()
       $(this.$refs.root).addClass('active')
     })
+  }
+
+  validateAccess() {
+    if (!this.isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to send comment'
+      })
+      ;($('#modal-connect') as any).modal('show')
+
+      return false
+    }
+
+    if (!this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Active chain - ${this.selectedNetworkName}<br>
+          You are trying send comment to NFT from chain ${this.networkName}<br>
+          Please connect to ${this.networkName}
+        `
+      })
+
+      return false
+    }
+
+    return true
   }
 
   close() {
