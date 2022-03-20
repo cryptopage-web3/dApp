@@ -55,7 +55,7 @@ export default class TransactionMixin extends mixins(NetworkNameMixin) {
    * If transaction is income, method returns sender address.
    * If transaction is outcome, method returns receiver address.
    */
-  get address(): string {
+  get transactionAddress(): string {
     if (this.income) {
       return this.transaction.sender
     } else {

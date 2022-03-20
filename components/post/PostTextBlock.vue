@@ -39,10 +39,6 @@ export default class PostTextBlock extends mixins(TransactionMixin) {
     return this.transaction.nft?.description || ''
   }
 
-  get address(): string {
-    return this.typedStore.address.address
-  }
-
   get selectedAddress(): string {
     return this.typedStore.auth.selectedAddress
   }
