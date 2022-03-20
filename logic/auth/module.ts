@@ -82,9 +82,9 @@ export default class AuthModule {
   }
 
   @Action()
-  public signout(): void {
+  public async signout(): Promise<void> {
     this.setIsAuth(false)
-    this.authService.clientDisconnect()
+    await this.authService.clientDisconnect()
   }
 
   @Action()
@@ -108,9 +108,9 @@ export default class AuthModule {
   }
 
   @Action()
-  public switchChain(type: string): void {
+  public async switchChain(type: string): Promise<void> {
     this.setIsAuth(false)
-    this.authService.clientDisconnect()
+    await this.authService.clientDisconnect()
     this.authService.clientSwitchChain(type)
   }
 

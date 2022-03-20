@@ -232,7 +232,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   @Watch('isUnknownChain')
-  onIsUnknownChainChanged(isUnknown: boolean) {
+  async onIsUnknownChainChanged(isUnknown: boolean) {
     /** Если есть подключенный провайдер и получили неизвестную сеть,
      * то значит пользователь выбрал ее в провайдере.
      * Для таких случаев делаем disconnect
@@ -241,7 +241,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
       this.hasUnknownNotify = true
       const selectedProvider = this.selectedProvider
 
-      this.$store.dispatch('auth/signout')
+      await this.typedStore.auth.signout()
       this.$router.push('/')
 
       setTimeout(() => {
@@ -285,14 +285,14 @@ export default class Connect extends mixins(NetworkNameMixin) {
     ;($('#modal-connect') as any).modal('show')
   }
 
-  signout() {
-    this.$store.dispatch('auth/signout')
+  async signout() {
+    await this.typedStore.auth.signout()
     this.$router.push('/')
   }
 
-  switchChain(type: string) {
+  async switchChain(type: string) {
     const isAuth = this.isAuth
-    this.$store.dispatch('auth/switchChain', type)
+    await this.typedStore.auth.switchChain(type)
 
     if (isAuth) {
       setTimeout(() => {

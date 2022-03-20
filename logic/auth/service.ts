@@ -1085,6 +1085,7 @@ export default class AuthService extends Vue {
     this.setUnknownChain(false)
     this.provider = undefined
     this.setProviderName('')
+    this.setOrChangeWeb3Data('', 1)
     window.localStorage.removeItem('lastProvider')
   }
 }
