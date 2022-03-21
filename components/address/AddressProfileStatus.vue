@@ -51,9 +51,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
+import TypedStore from '~/logic/store'
 
 @Component({})
 export default class AddressProfileStatus extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
   isEdit = false
   loading = false
   status = 'Hello, World!'
@@ -66,15 +70,15 @@ export default class AddressProfileStatus extends Vue {
 
   get isOwner(): boolean {
     return (
-      String(this.$store.getters['address/address']).toLowerCase() ===
-      String(this.$store.getters['auth/selectedAddress']).toLowerCase()
+      String(this.typedStore.address.address).toLowerCase() ===
+      String(this.typedStore.auth.selectedAddress).toLowerCase()
     )
   }
 
   get isSameChain(): boolean {
     return (
-      String(this.$store.getters['address/chainId']).toLowerCase() ===
-      String(this.$store.getters['auth/chainId']).toLowerCase()
+      String(this.typedStore.address.chainId).toLowerCase() ===
+      String(this.typedStore.auth.chainId).toLowerCase()
     )
   }
 

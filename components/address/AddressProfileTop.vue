@@ -66,7 +66,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
 import { copyToClipboard } from '~/utils/copyToClipboard'
+import TypedStore from '~/logic/store'
 
 @Component({
   components: {
@@ -77,6 +79,8 @@ import { copyToClipboard } from '~/utils/copyToClipboard'
   }
 })
 export default class AddressProfileTop extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
   diameter = Number($(window).width()) > 767 ? 90 : 50
 
   $refs!: {
@@ -84,36 +88,36 @@ export default class AddressProfileTop extends Vue {
   }
 
   get address(): string {
-    return this.$store.getters['address/address']
+    return this.typedStore.address.address
   }
 
   get image(): string {
-    return this.$store.getters['address/image']
+    return this.typedStore.address.image
   }
 
   get loadingInfo(): boolean {
-    return this.$store.state.address.loadingInfo
+    return this.typedStore.address.loadingInfo
   }
 
   get transactionsCount(): number {
-    return this.$store.getters['address/transactionsCount']
+    return this.typedStore.address.transactionsCount
   }
 
   get loadedTransactionsCount(): number {
-    return this.$store.getters['address/allTransactions'].length
+    return this.typedStore.address.allTransactions.length
   }
 
   get inputAddressesCount(): number {
-    return this.$store.getters['address/inputAddressesCount']
+    return this.typedStore.address.inputAddressesCount
   }
 
   get outputAddressesCount(): number {
-    return this.$store.getters['address/outputAddressesCount']
+    return this.typedStore.address.outputAddressesCount
   }
 
   get tokenName(): string {
-    const tokenName = this.$store.getters['address/name']
-    const tokenSymbol = this.$store.getters['address/symbol']
+    const tokenName = this.typedStore.address.name
+    const tokenSymbol = this.typedStore.address.symbol
     return tokenName && tokenSymbol ? `${tokenSymbol} - ${tokenName}` : ''
   }
 

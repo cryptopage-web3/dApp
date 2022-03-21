@@ -40,6 +40,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Watch } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
+import TypedStore from '~/logic/store'
 
 @Component({
   components: {
@@ -47,34 +49,36 @@ import { Component, Watch } from 'nuxt-property-decorator'
   }
 })
 export default class AddressProfileBottom extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
   isFormShown = false
 
   // computed
 
   get isOwner(): boolean {
     return (
-      String(this.$store.getters['address/address']).toLowerCase() ===
-      String(this.$store.getters['auth/selectedAddress']).toLowerCase()
+      String(this.typedStore.address.address).toLowerCase() ===
+      String(this.typedStore.auth.selectedAddress).toLowerCase()
     )
   }
 
   get isSameChain(): boolean {
     return (
-      String(this.$store.getters['address/chainId']).toLowerCase() ===
-      String(this.$store.getters['auth/chainId']).toLowerCase()
+      String(this.typedStore.address.chainId).toLowerCase() ===
+      String(this.typedStore.auth.chainId).toLowerCase()
     )
   }
 
   get isAuth(): boolean {
-    return this.$store.getters['auth/isAuth']
+    return this.typedStore.auth.isAuth
   }
 
   get selectedNetworkName(): string {
-    return this.$store.getters['auth/selectedNetworkName']
+    return this.typedStore.auth.selectedNetworkName
   }
 
   get networkName(): string {
-    return this.$store.getters['address/networkName']
+    return this.typedStore.address.networkName
   }
 
   // watch
