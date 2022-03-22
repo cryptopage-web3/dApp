@@ -107,6 +107,7 @@
 import Vue from 'vue'
 import { Component, Emit, Prop, Watch } from 'nuxt-property-decorator'
 import { Inject } from 'vue-typedi'
+import { useStore } from 'vuex-simple'
 import { validateForm, getAdaptedAttributes } from './utils'
 import { IAttributesFront } from './types'
 import NFTFormFile from './NFTFormFile.vue'
@@ -114,6 +115,7 @@ import NFTFormAttributes from './attributes/NFTFormAttributes.vue'
 import Icon from '~/components/icons/Icon.vue'
 import NFTService from '~/logic/nft/services'
 import tokens from '~/logic/tokens'
+import TypedStore from '~/logic/store'
 
 @Component({
   components: {
@@ -123,6 +125,8 @@ import tokens from '~/logic/tokens'
   }
 })
 export default class NFTForm extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
   loading = false
   text = ''
   title = ''
@@ -283,9 +287,9 @@ export default class NFTForm extends Vue {
       params: {
         nft,
         address: this.isSendTo
-          ? this.$store.getters['address/address']
-          : this.$store.getters['auth/selectedAddress'],
-        from: this.$store.getters['auth/selectedAddress']
+          ? this.typedStore.address.address
+          : this.typedStore.auth.selectedAddress,
+        from: this.typedStore.auth.selectedAddress
       },
       callback: ({ status, message, txHash }) => {
         const titleTx = txHash || 'Unknown hash'
