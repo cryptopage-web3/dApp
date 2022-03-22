@@ -377,7 +377,7 @@ export default class ConnectModal extends Vue {
   }
 
   async switchProvider(type: string, provider: string) {
-    const response = await this.$store.dispatch('auth/switchProvider', {
+    const response = await this.typedStore.auth.switchProvider({
       providerName: provider,
       network: type
     })

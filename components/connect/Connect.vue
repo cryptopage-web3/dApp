@@ -119,15 +119,15 @@ export default class Connect extends mixins(NetworkNameMixin) {
   // computed
 
   get selectedAddress(): string {
-    return this.$store.getters['auth/selectedAddress']
+    return this.typedStore.auth.selectedAddress
   }
 
   get isAuth(): boolean {
-    return this.$store.getters['auth/isAuth']
+    return this.typedStore.auth.isAuth
   }
 
   get selectedNetworkName(): string {
-    return this.$store.getters['auth/selectedNetworkName']
+    return this.typedStore.auth.selectedNetworkName
   }
 
   get selectedNetworkSlug(): string {
@@ -135,15 +135,15 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   get selectedNetworkType(): string {
-    return this.$store.getters['auth/selectedNetworkType']
+    return this.typedStore.auth.selectedNetworkType
   }
 
   get selectedProvider(): string {
-    return this.$store.getters['auth/selectedProviderName']
+    return this.typedStore.auth.selectedProviderName
   }
 
   get isUnknownChain(): boolean {
-    return this.$store.getters['auth/isUnknownChain']
+    return this.typedStore.auth.isUnknownChain
   }
 
   get getNetworkIcon(): string {
@@ -313,7 +313,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
     /** отдельно для мобилки делаем подключение к провайдеру WalletConnect */
     /** TODO: сделать единую логику с ConnectModal */
 
-    const response = await this.$store.dispatch('auth/switchProvider', {
+    const response = await this.typedStore.auth.switchProvider({
       providerName: 'walletConnect',
       network: 'ETHEREUM'
     })
@@ -331,7 +331,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
     /** авторизация */
 
     if (!this.isAuth) {
-      this.$store.dispatch('auth/signin')
+      this.typedStore.auth.signin()
 
       this.emitSuccessLogin()
     }
