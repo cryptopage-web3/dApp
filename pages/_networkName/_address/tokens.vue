@@ -50,8 +50,10 @@ export default class ERC20TransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    const address =
-      String(this.$route.query.address) || this.$route.params.address
+    const queryAddress = Array.isArray(this.$route.query.address)
+      ? this.$route.query.address[0]
+      : this.$route.query.address
+    const address = queryAddress || this.$route.params.address
     const contractAddress = this.$route.query.address
       ? this.$route.params.address
       : ''
