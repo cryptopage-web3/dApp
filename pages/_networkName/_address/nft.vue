@@ -31,11 +31,11 @@ import {
 })
 export default class ERC721TransactionsTab extends mixins(PaginationMixin) {
   get transactions(): TransactionType[] {
-    return this.$store.getters['address/ERC721Transactions']
+    return this.typedStore.address.ERC721Transactions
   }
 
   get hasAllPages(): boolean {
-    return this.$store.getters['address/hasAllERC721TransactionsPages']
+    return this.typedStore.address.hasAllERC721TransactionsPages
   }
 
   async fetch() {
@@ -51,7 +51,7 @@ export default class ERC721TransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    await this.$store.dispatch('address/getTransactions', {
+    await this.typedStore.address.getTransactions({
       address: this.$route.params.address,
       transactionType: ETransactionStoreType.erc721
     })

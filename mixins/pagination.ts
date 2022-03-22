@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import { Component, Watch } from 'nuxt-property-decorator'
+import { useStore } from 'vuex-simple'
 import { networkHelper } from '~/utils/networkHelper'
+import TypedStore from '~/logic/store'
 
 @Component({})
 export default class PaginationMixin extends Vue {
+  public typedStore: TypedStore = useStore(this.$store)
+
   scrollListener: null | (() => void) = null
 
   // computed
@@ -16,11 +20,11 @@ export default class PaginationMixin extends Vue {
   }
 
   get address(): string {
-    return this.$store.getters['address/address']
+    return this.typedStore.address.address
   }
 
   get chainId(): number | string {
-    return this.$store.getters['address/chainId']
+    return this.typedStore.address.chainId
   }
 
   get isFetchDisabled(): boolean {
