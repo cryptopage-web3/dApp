@@ -232,7 +232,7 @@ export default class Comments extends mixins(TypedStoreMixin) {
 
     this.nftService.sendNFTComment({
       params: {
-        from: this.$store.getters['auth/selectedAddress'],
+        from: this.typedStore.auth.selectedAddress,
         nftContractAddress: this.nftContractAddress,
         tokenId: String(this.transaction.token.id),
         comment: this.comment,
@@ -285,8 +285,7 @@ export default class Comments extends mixins(TypedStoreMixin) {
 
     setTimeout(async () => {
       try {
-        await this.$store.dispatch(
-          'address/refreshERC721Transaction',
+        await this.typedStore.address.refreshERC721Transaction(
           this.transaction.hash
         )
 
