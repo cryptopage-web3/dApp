@@ -30,11 +30,11 @@ import {
 })
 export default class ERC20TransactionsTab extends mixins(PaginationMixin) {
   get transactions(): TransactionType[] {
-    return this.$store.getters['address/ERC20Transactions']
+    return this.typedStore.address.ERC20Transactions
   }
 
   get hasAllPages(): boolean {
-    return this.$store.getters['address/hasAllERC20TransactionsPages']
+    return this.typedStore.address.hasAllERC20TransactionsPages
   }
 
   async fetch() {
@@ -50,14 +50,13 @@ export default class ERC20TransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    const address = this.$route.query.address
-      ? this.$route.query.address
-      : this.$route.params.address
+    const address =
+      String(this.$route.query.address) || this.$route.params.address
     const contractAddress = this.$route.query.address
       ? this.$route.params.address
       : ''
 
-    await this.$store.dispatch('address/getTransactions', {
+    await this.typedStore.address.getTransactions({
       address,
       contractAddress,
       transactionType: ETransactionStoreType.erc20

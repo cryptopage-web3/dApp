@@ -31,11 +31,11 @@ import {
 })
 export default class NormalTransactionsTab extends mixins(PaginationMixin) {
   get transactions(): TransactionType[] {
-    return this.$store.getters['address/normalTransactions']
+    return this.typedStore.address.normalTransactions
   }
 
   get hasAllPages(): boolean {
-    return this.$store.getters['address/hasAllNormalTransactionsPages']
+    return this.typedStore.address.hasAllNormalTransactionsPages
   }
 
   async fetch() {
@@ -51,7 +51,7 @@ export default class NormalTransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    await this.$store.dispatch('address/getTransactions', {
+    await this.typedStore.address.getTransactions({
       address: this.$route.params.address,
       transactionType: ETransactionStoreType.normal
     })
