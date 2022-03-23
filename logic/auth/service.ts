@@ -11,9 +11,10 @@ import {
 import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants'
-import { CHAINS, networkHelper } from '~/utils/networkHelper'
+import { networkHelper } from '~/utils/networkHelper'
 import { EChainId } from '~/types/EChainId'
 import { EProvider } from '~/types/EProvider'
+import { EMainChain } from '~/types/EMainChain'
 
 declare const window: Window &
   typeof globalThis & {
@@ -24,8 +25,6 @@ declare const window: Window &
     solana: any
   }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = CHAINS
 const ERROR_UNKNOWN_NETWORK = 'UNKNOWN_NETWORK'
 
 const bsc = new BscConnector({
@@ -338,7 +337,7 @@ export default class AuthService extends Vue {
 
     /** TRON поддерживается только провайдером TRON_LINK */
 
-    if (networkName === TRON) {
+    if (networkName === EMainChain.tron) {
       if (this.selectedProviderName === EProvider.tron) {
         return {
           status: 'success'
@@ -356,7 +355,7 @@ export default class AuthService extends Vue {
 
     /** SOLANA поддерживается только провайдером PHANTOM */
 
-    if (networkName === SOLANA) {
+    if (networkName === EMainChain.solana) {
       if (this.selectedProviderName === EProvider.phantom) {
         return {
           status: 'success'
@@ -375,7 +374,7 @@ export default class AuthService extends Vue {
     /** Провайдер BSC_WALLET поддерживает только сеть BSC */
 
     if (this.selectedProviderName === EProvider.bscWallet) {
-      if (networkName !== BSC) {
+      if (networkName !== EMainChain.bsc) {
         return {
           status: 'error',
           message: {
@@ -496,7 +495,9 @@ export default class AuthService extends Vue {
 
     this.setOrChangeWeb3Data(
       '',
-      [TRON, SOLANA].includes(network) ? chain.chainId : Number(chain.chainId)
+      [String(EMainChain.tron), String(EMainChain.solana)].includes(network)
+        ? chain.chainId
+        : Number(chain.chainId)
     )
   }
 

@@ -1,8 +1,6 @@
 import { EChainId } from '~/types/EChainId'
+import { EMainChain } from '~/types/EMainChain'
 import { EProvider } from '~/types/EProvider'
-
-export const CHAINS = ['ETHEREUM', 'BSC', 'POLYGON', 'TRON', 'SOLANA']
-const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = CHAINS
 
 export const networkHelper = {
   networkByChain: {
@@ -95,14 +93,14 @@ export const networkHelper = {
   } as any,
 
   chains: {
-    [BSC]: {
+    [EMainChain.bsc]: {
       chainId: '0x38',
       rpcUrls: ['https://bsc-dataseed.binance.org/'],
       chainName: 'Binance Smart Chain',
       nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
       blockExplorerUrls: ['https://bscscan.com/']
     },
-    [POLYGON]: {
+    [EMainChain.polygon]: {
       chainId: '0x89',
       rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
       chainName: 'Matic Mainnet',
@@ -112,16 +110,16 @@ export const networkHelper = {
         'https://polygonscan.com/'
       ]
     },
-    [ETHEREUM]: {
+    [EMainChain.eth]: {
       chainId: '0x1'
     },
-    [TRON]: {
+    [EMainChain.tron]: {
       chainId: 'tron'
     },
-    [SOLANA]: {
+    [EMainChain.solana]: {
       chainId: 'solana'
     }
-  },
+  } as any,
 
   getNetworkName(chainId: any) {
     return (

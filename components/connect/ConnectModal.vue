@@ -81,7 +81,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('ETHEREUM', EProvider.metamask)
+                        switchProvider(EMainChain.eth, EProvider.metamask)
                       "
                     >
                       <img
@@ -96,7 +96,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('ETHEREUM', EProvider.walletConnect)
+                        switchProvider(EMainChain.eth, EProvider.walletConnect)
                       "
                     >
                       <img
@@ -111,7 +111,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('ETHEREUM', EProvider.okex)
+                        switchProvider(EMainChain.eth, EProvider.okex)
                       "
                     >
                       <img
@@ -133,7 +133,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', EProvider.metamask)"
+                      @click.prevent="
+                        switchProvider(EMainChain.bsc, EProvider.metamask)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
@@ -147,7 +149,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('BSC', EProvider.bscWallet)
+                        switchProvider(EMainChain.bsc, EProvider.bscWallet)
                       "
                     >
                       <img
@@ -162,7 +164,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('BSC', EProvider.walletConnect)
+                        switchProvider(EMainChain.bsc, EProvider.walletConnect)
                       "
                     >
                       <img
@@ -176,7 +178,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', EProvider.okex)"
+                      @click.prevent="
+                        switchProvider(EMainChain.bsc, EProvider.okex)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -198,7 +202,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('POLYGON', EProvider.metamask)
+                        switchProvider(EMainChain.polygon, EProvider.metamask)
                       "
                     >
                       <img
@@ -213,7 +217,10 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('POLYGON', EProvider.walletConnect)
+                        switchProvider(
+                          EMainChain.polygon,
+                          EProvider.walletConnect
+                        )
                       "
                     >
                       <img
@@ -227,7 +234,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('POLYGON', EProvider.okex)"
+                      @click.prevent="
+                        switchProvider(EMainChain.polygon, EProvider.okex)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -248,7 +257,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('TRON', EProvider.tron)"
+                      @click.prevent="
+                        switchProvider(EMainChain.tron, EProvider.tron)
+                      "
                     >
                       <img src="@/assets/img/tronLink.png" alt="" />
                       <span> TronLink </span>
@@ -267,7 +278,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('SOLANA', EProvider.phantom)
+                        switchProvider(EMainChain.solana, EProvider.phantom)
                       "
                     >
                       <img src="@/assets/img/phantom_.png" alt="" />
@@ -290,11 +301,13 @@ import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
 import { EProvider } from '~/types/EProvider'
+import { EMainChain } from '~/types/EMainChain'
 
 @Component({})
 export default class ConnectModal extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
   EProvider = EProvider
+  EMainChain = EMainChain
 
   get selectedProvider(): string {
     return this.typedStore.auth.selectedProviderName

@@ -61,31 +61,31 @@
       <div ref="changeNetworkList" class="change-network-col-body">
         <ul class="change-network__list">
           <li>
-            <a href="#" @click.prevent="switchChain('ETHEREUM')">
+            <a href="#" @click.prevent="switchChain(EMainChain.eth)">
               <img src="@/assets/img/modal-content__link_img1.png" alt="" />
               Ethereum
             </a>
           </li>
           <li>
-            <a href="#" @click.prevent="switchChain('BSC')">
+            <a href="#" @click.prevent="switchChain(EMainChain.bsc)">
               <img src="@/assets/img/modal-content__link_img2.png" alt="" />
               Binance Smart Chain
             </a>
           </li>
           <li>
-            <a href="#" @click.prevent="switchChain('POLYGON')">
+            <a href="#" @click.prevent="switchChain(EMainChain.polygon)">
               <img src="@/assets/img/modal-content__link_img3.png" alt="" />
               Polygon
             </a>
           </li>
           <li>
-            <a href="#" @click.prevent="switchChain('TRON')">
+            <a href="#" @click.prevent="switchChain(EMainChain.tron)">
               <img src="@/assets/img/modal-content__link_img4.png" alt="" />
               Tron
             </a>
           </li>
           <li>
-            <a href="#" @click.prevent="switchChain('SOLANA')">
+            <a href="#" @click.prevent="switchChain(EMainChain.solana)">
               <img src="@/assets/img/modal-content__link_img5.png" alt="" />
               Solana
             </a>
@@ -102,10 +102,12 @@
 import { Component, Emit, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
 import { EProvider } from '~/types/EProvider'
+import { EMainChain } from '~/types/EMainChain'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
 @Component({})
 export default class Connect extends mixins(NetworkNameMixin) {
+  EMainChain = EMainChain
   hasUnknownNotify = false
   hideConnectDropdownTimeout: ReturnType<typeof setTimeout> | null = null
   hideNetworkDropdownTimeout: ReturnType<typeof setTimeout> | null = null
@@ -316,7 +318,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
 
     const response = await this.typedStore.auth.switchProvider({
       providerName: EProvider.walletConnect,
-      network: 'ETHEREUM'
+      network: EMainChain.eth
     })
 
     if (response.status === 'error') {
