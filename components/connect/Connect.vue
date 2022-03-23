@@ -101,6 +101,7 @@
 <script lang="ts">
 import { Component, Emit, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
+import { EProvider } from '~/types/EProvider'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
 @Component({})
@@ -314,7 +315,7 @@ export default class Connect extends mixins(NetworkNameMixin) {
     /** TODO: сделать единую логику с ConnectModal */
 
     const response = await this.typedStore.auth.switchProvider({
-      providerName: 'walletConnect',
+      providerName: EProvider.walletConnect,
       network: 'ETHEREUM'
     })
 

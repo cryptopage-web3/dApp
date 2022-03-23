@@ -80,7 +80,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('ETHEREUM', 'metamask')"
+                      @click.prevent="
+                        switchProvider('ETHEREUM', EProvider.metamask)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
@@ -94,7 +96,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('ETHEREUM', 'walletConnect')
+                        switchProvider('ETHEREUM', EProvider.walletConnect)
                       "
                     >
                       <img
@@ -108,7 +110,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('ETHEREUM', 'okex')"
+                      @click.prevent="
+                        switchProvider('ETHEREUM', EProvider.okex)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -129,7 +133,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'metamask')"
+                      @click.prevent="switchProvider('BSC', EProvider.metamask)"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
@@ -142,7 +146,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'bscWallet')"
+                      @click.prevent="
+                        switchProvider('BSC', EProvider.bscWallet)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_bsc.png"
@@ -155,7 +161,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'walletConnect')"
+                      @click.prevent="
+                        switchProvider('BSC', EProvider.walletConnect)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img2.png"
@@ -168,7 +176,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('BSC', 'okex')"
+                      @click.prevent="switchProvider('BSC', EProvider.okex)"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -189,7 +197,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('POLYGON', 'metamask')"
+                      @click.prevent="
+                        switchProvider('POLYGON', EProvider.metamask)
+                      "
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img1.png"
@@ -203,7 +213,7 @@
                       href="#"
                       class="modal-content-wallet__link"
                       @click.prevent="
-                        switchProvider('POLYGON', 'walletConnect')
+                        switchProvider('POLYGON', EProvider.walletConnect)
                       "
                     >
                       <img
@@ -217,7 +227,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('POLYGON', 'okex')"
+                      @click.prevent="switchProvider('POLYGON', EProvider.okex)"
                     >
                       <img
                         src="@/assets/img/modal-content-wallet__link_img6.png"
@@ -238,7 +248,7 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('TRON', 'tron')"
+                      @click.prevent="switchProvider('TRON', EProvider.tron)"
                     >
                       <img src="@/assets/img/tronLink.png" alt="" />
                       <span> TronLink </span>
@@ -256,7 +266,9 @@
                     <a
                       href="#"
                       class="modal-content-wallet__link"
-                      @click.prevent="switchProvider('SOLANA', 'phantom')"
+                      @click.prevent="
+                        switchProvider('SOLANA', EProvider.phantom)
+                      "
                     >
                       <img src="@/assets/img/phantom_.png" alt="" />
                       <span> Phantom </span>
@@ -277,10 +289,12 @@ import Vue from 'vue'
 import { Component, Emit, Watch } from 'nuxt-property-decorator'
 import { useStore } from 'vuex-simple'
 import TypedStore from '~/logic/store'
+import { EProvider } from '~/types/EProvider'
 
 @Component({})
 export default class ConnectModal extends Vue {
   public typedStore: TypedStore = useStore(this.$store)
+  EProvider = EProvider
 
   get selectedProvider(): string {
     return this.typedStore.auth.selectedProviderName
@@ -410,7 +424,7 @@ export default class ConnectModal extends Vue {
       /** WalletConnect устанавливает свою сеть при подключении
        * но не ту, которую выбрал пользователь
        */
-      if (provider === 'walletConnect') {
+      if (provider === EProvider.walletConnect) {
         this.$notify({
           type: 'info',
           title: 'WalletConnect set own chain'
