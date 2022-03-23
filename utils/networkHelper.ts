@@ -1,18 +1,8 @@
 import { EChainId } from '~/types/EChainId'
+import { EProvider } from '~/types/EProvider'
 
 export const CHAINS = ['ETHEREUM', 'BSC', 'POLYGON', 'TRON', 'SOLANA']
 const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = CHAINS
-
-export const PROVIDERS = [
-  'metamask',
-  'walletConnect',
-  'bscWallet',
-  'okex',
-  'tron',
-  'phantom'
-]
-const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
-  PROVIDERS
 
 export const networkHelper = {
   networkByChain: {
@@ -72,7 +62,7 @@ export const networkHelper = {
   } as Record<string, number | string>,
 
   chainsByProvider: {
-    [METAMASK]: [
+    [EProvider.metamask]: [
       EChainId.eth,
       EChainId.ropsten,
       EChainId.rinkeby,
@@ -81,8 +71,8 @@ export const networkHelper = {
       EChainId.bsc,
       EChainId.polygon
     ],
-    [BSC_WALLET]: [EChainId.bsc, EChainId.bscTestnet],
-    [OKEX]: [
+    [EProvider.bscWallet]: [EChainId.bsc, EChainId.bscTestnet],
+    [EProvider.okex]: [
       EChainId.eth,
       EChainId.ropsten,
       EChainId.rinkeby,
@@ -91,9 +81,9 @@ export const networkHelper = {
       EChainId.bsc,
       EChainId.polygon
     ],
-    [TRON_LINK]: [EChainId.tron],
-    [PHANTOM]: [EChainId.solana],
-    [WALLET_CONNECT]: [
+    [EProvider.tron]: [EChainId.tron],
+    [EProvider.phantom]: [EChainId.solana],
+    [EProvider.walletConnect]: [
       EChainId.eth,
       EChainId.ropsten,
       EChainId.rinkeby,
