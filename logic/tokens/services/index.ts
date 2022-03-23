@@ -7,6 +7,7 @@ import TokenWeb3Service from '~/logic/tokens/services/web3'
 import { TokenBalanceType, TokenInfoType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
 import { networkHelper } from '~/utils/networkHelper'
+import { EChainId } from '~/types/EChainId'
 
 @Service(tokens.TOKEN_SERVICE)
 export default class TokenService {
@@ -214,7 +215,7 @@ export default class TokenService {
       'https://www.covalenthq.com/static/images/icons/display-icons/'
 
     /** Binance coin */
-    if ([56, 97].includes(Number(chainId))) {
+    if ([EChainId.bsc, EChainId.bscTestnet].includes(Number(chainId))) {
       return {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Binance coin',
@@ -226,7 +227,7 @@ export default class TokenService {
     }
 
     /** Polygon coin */
-    if ([137, 80001].includes(Number(chainId))) {
+    if ([EChainId.polygon, EChainId.polygonTestnet].includes(Number(chainId))) {
       return {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Polygon coin',
@@ -238,7 +239,7 @@ export default class TokenService {
     }
 
     /** Tron */
-    if (chainId === 'tron') {
+    if (chainId === EChainId.tron) {
       return {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Tron',
@@ -250,7 +251,7 @@ export default class TokenService {
     }
 
     /** Solana */
-    if (chainId === 'solana') {
+    if (chainId === EChainId.solana) {
       return {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Solana',

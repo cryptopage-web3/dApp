@@ -7,6 +7,7 @@ import { TokenInfoType, TokenBalanceType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
 import AddressService from '~/logic/address/services'
 import { web3Builder } from '~/utils/web3Builder'
+import { EChainId } from '~/types/EChainId'
 
 @Service(tokens.TOKEN_WEB3_SERVICE)
 export default class TokenWeb3Service {
@@ -82,7 +83,7 @@ export default class TokenWeb3Service {
       'https://www.covalenthq.com/static/images/icons/display-icons/'
 
     return {
-      1: {
+      [EChainId.eth]: {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Ethereum coin',
         symbol: 'ETH',
@@ -90,7 +91,7 @@ export default class TokenWeb3Service {
         image: `${baseURL}ethereum-eth-logo.png`,
         rate: { usd: 0 }
       },
-      3: {
+      [EChainId.ropsten]: {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Ethereum coin',
         symbol: 'ETH',
@@ -98,7 +99,7 @@ export default class TokenWeb3Service {
         image: `${baseURL}ethereum-eth-logo.png`,
         rate: { usd: 0 }
       },
-      4: {
+      [EChainId.rinkeby]: {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Ethereum coin',
         symbol: 'ETH',
@@ -106,7 +107,7 @@ export default class TokenWeb3Service {
         image: `${baseURL}ethereum-eth-logo.png`,
         rate: { usd: 0 }
       },
-      42: {
+      [EChainId.goerli]: {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Ethereum coin',
         symbol: 'ETH',
@@ -114,7 +115,15 @@ export default class TokenWeb3Service {
         image: `${baseURL}ethereum-eth-logo.png`,
         rate: { usd: 0 }
       },
-      56: {
+      [EChainId.kovan]: {
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        name: 'Ethereum coin',
+        symbol: 'ETH',
+        decimals: 18,
+        image: `${baseURL}ethereum-eth-logo.png`,
+        rate: { usd: 0 }
+      },
+      [EChainId.bsc]: {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Binance coin',
         symbol: 'BNB',
@@ -122,7 +131,7 @@ export default class TokenWeb3Service {
         image: `${baseURL}binance-coin-bnb-logo.png`,
         rate: { usd: 0 }
       },
-      97: {
+      [EChainId.bscTestnet]: {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         name: 'Binance coin',
         symbol: 'BNB',
@@ -130,7 +139,7 @@ export default class TokenWeb3Service {
         image: `${baseURL}binance-coin-bnb-logo.png`,
         rate: { usd: 0 }
       },
-      137: {
+      [EChainId.polygon]: {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Polygon coin',
         symbol: 'MATIC',
@@ -138,7 +147,7 @@ export default class TokenWeb3Service {
         image: `https://logos.covalenthq.com/tokens/1/0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0.png`,
         rate: { usd: 0 }
       },
-      80001: {
+      [EChainId.polygonTestnet]: {
         address: '0x0000000000000000000000000000000000001010',
         name: 'Polygon coin',
         symbol: 'MATIC',

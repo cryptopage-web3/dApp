@@ -1,3 +1,5 @@
+import { EChainId } from '~/types/EChainId'
+
 export const CHAINS = ['ETHEREUM', 'BSC', 'POLYGON', 'TRON', 'SOLANA']
 const [ETHEREUM, BSC, POLYGON, TRON, SOLANA] = CHAINS
 
@@ -14,19 +16,39 @@ const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
 
 export const networkHelper = {
   networkByChain: {
-    1: { network: 'ethereum', name: 'Ethereum', slug: 'eth' },
-    3: { network: 'ethereum', name: 'Ropsten TestNet', slug: 'ropsten' },
-    4: { network: 'ethereum', name: 'Rinkeby TestNet', slug: 'rinkeby' },
-    5: { network: 'ethereum', name: 'Goerly TestNet', slug: 'goerly' },
-    42: { network: 'ethereum', name: 'Kovan TestNet', slug: 'kovan' },
-    56: { network: 'bsc', name: 'BSC Network', slug: 'bsc' },
-    97: { network: 'bsc', name: 'BSC TestNet', slug: 'bsc-testnet' },
-    137: {
+    [EChainId.eth]: { network: 'ethereum', name: 'Ethereum', slug: 'eth' },
+    [EChainId.ropsten]: {
+      network: 'ethereum',
+      name: 'Ropsten TestNet',
+      slug: 'ropsten'
+    },
+    [EChainId.rinkeby]: {
+      network: 'ethereum',
+      name: 'Rinkeby TestNet',
+      slug: 'rinkeby'
+    },
+    [EChainId.goerli]: {
+      network: 'ethereum',
+      name: 'Goerli TestNet',
+      slug: 'goerli'
+    },
+    [EChainId.kovan]: {
+      network: 'ethereum',
+      name: 'Kovan TestNet',
+      slug: 'kovan'
+    },
+    [EChainId.bsc]: { network: 'bsc', name: 'BSC Network', slug: 'bsc' },
+    [EChainId.bscTestnet]: {
+      network: 'bsc',
+      name: 'BSC TestNet',
+      slug: 'bsc-testnet'
+    },
+    [EChainId.polygon]: {
       network: 'polygon',
       name: 'Polygon',
       slug: 'polygon'
     },
-    80001: {
+    [EChainId.polygonTestnet]: {
       network: 'polygon',
       name: 'Polygon TestNet',
       slug: 'polygon-testnet'
@@ -36,26 +58,50 @@ export const networkHelper = {
   } as any,
 
   chainIdBySlug: {
-    eth: 1,
-    ropsten: 3,
-    rinkeby: 4,
-    goerly: 5,
-    kovan: 42,
-    bsc: 56,
-    'bsc-testnet': 97,
-    polygon: 137,
-    'polygon-testnet': 80001,
-    tron: 'tron',
-    solana: 'solana'
+    eth: EChainId.eth,
+    ropsten: EChainId.ropsten,
+    rinkeby: EChainId.rinkeby,
+    goerli: EChainId.goerli,
+    kovan: EChainId.kovan,
+    bsc: EChainId.bsc,
+    'bsc-testnet': EChainId.bscTestnet,
+    polygon: EChainId.polygon,
+    'polygon-testnet': EChainId.polygonTestnet,
+    tron: EChainId.tron,
+    solana: EChainId.solana
   } as Record<string, number | string>,
 
   chainsByProvider: {
-    [METAMASK]: [1, 3, 4, 5, 42, 56, 137],
-    [BSC_WALLET]: [56, 97],
-    [OKEX]: [1, 3, 4, 5, 42, 56, 137],
-    [TRON_LINK]: ['tron'],
-    [PHANTOM]: ['solana'],
-    [WALLET_CONNECT]: [1, 3, 4, 5, 42, 56, 137]
+    [METAMASK]: [
+      EChainId.eth,
+      EChainId.ropsten,
+      EChainId.rinkeby,
+      EChainId.goerli,
+      EChainId.kovan,
+      EChainId.bsc,
+      EChainId.polygon
+    ],
+    [BSC_WALLET]: [EChainId.bsc, EChainId.bscTestnet],
+    [OKEX]: [
+      EChainId.eth,
+      EChainId.ropsten,
+      EChainId.rinkeby,
+      EChainId.goerli,
+      EChainId.kovan,
+      EChainId.bsc,
+      EChainId.polygon
+    ],
+    [TRON_LINK]: [EChainId.tron],
+    [PHANTOM]: [EChainId.solana],
+    [WALLET_CONNECT]: [
+      EChainId.eth,
+      EChainId.ropsten,
+      EChainId.rinkeby,
+      EChainId.goerli,
+      EChainId.kovan,
+      EChainId.bsc,
+      EChainId.polygon
+    ]
   } as any,
 
   chains: {

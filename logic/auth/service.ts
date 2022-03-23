@@ -12,6 +12,7 @@ import TokenService from '~/logic/tokens/services'
 import tokens from '~/logic/tokens'
 import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants'
 import { PROVIDERS, CHAINS, networkHelper } from '~/utils/networkHelper'
+import { EChainId } from '~/types/EChainId'
 
 declare const window: Window &
   typeof globalThis & {
@@ -29,7 +30,7 @@ const [METAMASK, WALLET_CONNECT, BSC_WALLET, OKEX, TRON_LINK, PHANTOM] =
 const ERROR_UNKNOWN_NETWORK = 'UNKNOWN_NETWORK'
 
 const bsc = new BscConnector({
-  supportedChainIds: [56, 97]
+  supportedChainIds: [Number(EChainId.bsc), Number(EChainId.bscTestnet)]
 })
 
 @Service(tokens.AUTH_SERVICE)
