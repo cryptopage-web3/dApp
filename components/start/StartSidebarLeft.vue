@@ -362,7 +362,7 @@
             </div>
           </li>
           <li class="card start-connect-mobile">
-            <connect @success-mobile-login="successLogin" />
+            <connect />
           </li>
         </ul>
       </div>
@@ -416,13 +416,6 @@ export default class StartSidebarLeft extends Vue {
     } else {
       $('.header-list').slideDown(300)
     }
-  }
-
-  successLogin() {
-    const address = this.typedStore.auth.selectedAddress
-    const network = this.typedStore.auth.selectedNetworkSlug
-
-    this.$router.push(`/${network}/${address}/nft`)
   }
 }
 </script>

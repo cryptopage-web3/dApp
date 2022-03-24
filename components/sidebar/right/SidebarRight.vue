@@ -23,7 +23,6 @@
         <balance />
       </div>
     </div>
-    <connectModal />
   </div>
 </template>
 <script lang="ts">
@@ -39,9 +38,7 @@ import TypedStore from '~/logic/store'
       await import('~/components/sidebar/right/SidebarRightBanner.vue'),
     balance: async () =>
       await import('~/components/sidebar/right/SidebarRightBalance.vue'),
-    connect: async () => await import('@/components/connect/Connect.vue'),
-    connectModal: async () =>
-      await import('@/components/connect/ConnectModal.vue')
+    connect: async () => await import('@/components/connect/Connect.vue')
   }
 })
 export default class SidebarRight extends Vue {

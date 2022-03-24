@@ -99,9 +99,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Emit, mixins, Watch } from 'nuxt-property-decorator'
+import { Component, mixins, Watch } from 'nuxt-property-decorator'
 import NetworkNameMixin from '~/mixins/networkName'
-import { EProvider } from '~/types/EProvider'
 import { EMainChain } from '~/types/EMainChain'
 import { copyToClipboard } from '~/utils/copyToClipboard'
 
@@ -256,13 +255,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
     }
   }
 
-  // emit
-
-  @Emit('success-mobile-login')
-  emitSuccessLogin() {
-    return true
-  }
-
   // methods
 
   copyAddress() {
@@ -275,16 +267,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
   }
 
   signin() {
-    /** для мобилки делаем подключение к провайдеру WalletConnect */
-
-    if (Number($(window).width()) < 1199) {
-      this.connectToWalletConnect()
-
-      return
-    }
-
-    /** для десктопа открываем модалку ConnectModal и в ней делаем подключение */
-
     ;($('#modal-connect') as any).modal('show')
   }
 
@@ -310,45 +292,6 @@ export default class Connect extends mixins(NetworkNameMixin) {
     /** закрываем дропдаун сетей */
 
     $('.change-network-col-body').slideUp(100)
-  }
-
-  async connectToWalletConnect() {
-    /** отдельно для мобилки делаем подключение к провайдеру WalletConnect */
-    /** TODO: сделать единую логику с ConnectModal */
-
-    const response = await this.typedStore.auth.switchProvider({
-      providerName: EProvider.walletConnect,
-      network: EMainChain.eth
-    })
-
-    if (response.status === 'error') {
-      this.$notify({
-        type: response.status,
-        title: response.message?.title,
-        text: response.message?.text
-      })
-
-      return
-    }
-
-    /** авторизация */
-
-    if (!this.isAuth) {
-      this.typedStore.auth.signin()
-
-      this.emitSuccessLogin()
-    }
-
-    /** показ успешной авторизации с задержкой
-     * т.к. происходит редирект
-     */
-    setTimeout(() => {
-      this.$notify({
-        type: 'success',
-        title: 'Connected successfully'
-      })
-    }, 200)
-    /** TODO: конец */
   }
 }
 </script>
