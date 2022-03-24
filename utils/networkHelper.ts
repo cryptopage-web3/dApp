@@ -1,62 +1,71 @@
 import { EChainId } from '~/types/EChainId'
+import { EChainSlug } from '~/types/EChainSlug'
 import { EMainChain } from '~/types/EMainChain'
 import { EProvider } from '~/types/EProvider'
 
 export const networkHelper = {
   networkByChain: {
-    [EChainId.eth]: { network: 'ethereum', name: 'Ethereum', slug: 'eth' },
+    [EChainId.eth]: {
+      network: 'ethereum',
+      name: 'Ethereum',
+      slug: EChainSlug.eth
+    },
     [EChainId.ropsten]: {
       network: 'ethereum',
       name: 'Ropsten TestNet',
-      slug: 'ropsten'
+      slug: EChainSlug.ropsten
     },
     [EChainId.rinkeby]: {
       network: 'ethereum',
       name: 'Rinkeby TestNet',
-      slug: 'rinkeby'
+      slug: EChainSlug.rinkeby
     },
     [EChainId.goerli]: {
       network: 'ethereum',
       name: 'Goerli TestNet',
-      slug: 'goerli'
+      slug: EChainSlug.goerli
     },
     [EChainId.kovan]: {
       network: 'ethereum',
       name: 'Kovan TestNet',
-      slug: 'kovan'
+      slug: EChainSlug.kovan
     },
-    [EChainId.bsc]: { network: 'bsc', name: 'BSC Network', slug: 'bsc' },
+    [EChainId.bsc]: {
+      network: 'bsc',
+      name: 'BSC Network',
+      slug: EChainSlug.bsc
+    },
     [EChainId.bscTestnet]: {
       network: 'bsc',
       name: 'BSC TestNet',
-      slug: 'bsc-testnet'
+      slug: EChainSlug.bscTestnet
     },
     [EChainId.polygon]: {
       network: 'polygon',
       name: 'Polygon',
-      slug: 'polygon'
+      slug: EChainSlug.polygon
     },
     [EChainId.polygonTestnet]: {
       network: 'polygon',
       name: 'Polygon TestNet',
-      slug: 'polygon-testnet'
+      slug: EChainSlug.polygonTestnet
     },
-    tron: { network: 'tron', name: 'Tron', slug: 'tron' },
-    solana: { network: 'solana', name: 'Solana', slug: 'solana' }
+    tron: { network: 'tron', name: 'Tron', slug: EChainSlug.tron },
+    solana: { network: 'solana', name: 'Solana', slug: EChainSlug.solana }
   } as any,
 
   chainIdBySlug: {
-    eth: EChainId.eth,
-    ropsten: EChainId.ropsten,
-    rinkeby: EChainId.rinkeby,
-    goerli: EChainId.goerli,
-    kovan: EChainId.kovan,
-    bsc: EChainId.bsc,
-    'bsc-testnet': EChainId.bscTestnet,
-    polygon: EChainId.polygon,
-    'polygon-testnet': EChainId.polygonTestnet,
-    tron: EChainId.tron,
-    solana: EChainId.solana
+    [EChainSlug.eth]: EChainId.eth,
+    [EChainSlug.ropsten]: EChainId.ropsten,
+    [EChainSlug.rinkeby]: EChainId.rinkeby,
+    [EChainSlug.goerli]: EChainId.goerli,
+    [EChainSlug.kovan]: EChainId.kovan,
+    [EChainSlug.bsc]: EChainId.bsc,
+    [EChainSlug.bscTestnet]: EChainId.bscTestnet,
+    [EChainSlug.polygon]: EChainId.polygon,
+    [EChainSlug.polygonTestnet]: EChainId.polygonTestnet,
+    [EChainSlug.tron]: EChainId.tron,
+    [EChainSlug.solana]: EChainId.solana
   } as Record<string, number | string>,
 
   chainsByProvider: {

@@ -1,15 +1,17 @@
+import { EChainSlug } from '~/types/EChainSlug'
+
 const tokenNames: Record<string, string> = {
-  eth: 'erc20',
-  ropsten: 'erc20',
-  rinkeby: 'erc20',
-  goerli: 'erc20',
-  kovan: 'erc20',
-  bsc: 'bep20',
-  'bsc-testnet': 'bep20',
-  polygon: 'erc20',
-  'polygon-testnet': 'erc20',
-  tron: 'trc20',
-  solana: 'sol20'
+  [EChainSlug.eth]: 'erc20',
+  [EChainSlug.ropsten]: 'erc20',
+  [EChainSlug.rinkeby]: 'erc20',
+  [EChainSlug.goerli]: 'erc20',
+  [EChainSlug.kovan]: 'erc20',
+  [EChainSlug.bsc]: 'bep20',
+  [EChainSlug.bscTestnet]: 'bep20',
+  [EChainSlug.polygon]: 'erc20',
+  [EChainSlug.polygonTestnet]: 'erc20',
+  [EChainSlug.tron]: 'trc20',
+  [EChainSlug.solana]: 'sol20'
 }
 
 export default tokenNames
