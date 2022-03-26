@@ -57,9 +57,7 @@ export enum EServiceType {
 }
 
 export enum ETransactionStoreType {
-  all = 'all',
   normal = 'normal',
-  internal = 'internal',
   erc20 = 'erc20',
   erc721 = 'erc721'
 }

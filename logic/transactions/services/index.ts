@@ -3,10 +3,8 @@ import tokens from '~/logic/tokens'
 import TokenService from '~/logic/tokens/services'
 import NFTService from '~/logic/nft/services'
 import TransactionAPIService from '~/logic/transactions/services/api'
-import TransactionWeb3Service from '~/logic/transactions/services/web3'
 import TransactionAdapter from '~/logic/transactions/adapter'
 import {
-  EServiceType,
   ESortFieldType,
   TransactionType,
   ETransactionStoreType,
@@ -25,59 +23,13 @@ export default class TransactionService {
   @Inject(tokens.TRANSACTION_API_SERVICE)
   public transactionAPIService!: TransactionAPIService
 
-  @Inject(tokens.TRANSACTION_WEB3_SERVICE)
-  public transactionWeb3Service!: TransactionWeb3Service
-
-  private getServiceByType(
-    type: EServiceType
-  ): TransactionAPIService | TransactionWeb3Service {
-    if (type === EServiceType.api) {
-      return this.transactionAPIService
-    }
-
-    if (type === EServiceType.web3) {
-      return this.transactionWeb3Service
-    }
-
-    // Fallback service
-
-    return this.transactionAPIService
-  }
-
   private getMethodByType(
     type: ETransactionStoreType
   ): (params: ParamsTransactionsType) => Promise<TransactionType[]> {
-    /** Метод для всех транзакции */
-
-    if (type === ETransactionStoreType.all) {
-      return async (
-        params: ParamsTransactionsType
-      ): Promise<TransactionType[]> => {
-        const [normalTransactions, ERC20Transactions, ERC721Transactions] =
-          await Promise.all([
-            await this.getNormalTransactions(params),
-            await this.getERC20Transactions(params),
-            await this.getERC721Transactions(params)
-          ])
-
-        return [
-          ...normalTransactions,
-          ...ERC20Transactions,
-          ...ERC721Transactions
-        ]
-      }
-    }
-
     /** Метод normal */
 
     if (type === ETransactionStoreType.normal) {
       return this.getNormalTransactions
-    }
-
-    /** Метод internal */
-
-    if (type === ETransactionStoreType.internal) {
-      return this.getInternalTransactions
     }
 
     /** Метод erc20 */
@@ -100,10 +52,12 @@ export default class TransactionService {
   public getTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    const transactionType = params.transactionType || ETransactionStoreType.all
+    const transactionType =
+      params.transactionType || ETransactionStoreType.normal
     const method = this.getMethodByType(transactionType)
 
     const transactions: TransactionType[] = await method(params)
+
     if (params.sort) {
       if (!params.sortField || params.sortField === ESortFieldType.timestamp) {
         return transactions.sort((a, b) =>
@@ -122,10 +76,8 @@ export default class TransactionService {
   public getNormalTransactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] = await service.getNormalTransactions(
-      params
-    )
+    const transactions: TransactionType[] =
+      await this.transactionAPIService.getNormalTransactions(params)
 
     return await Promise.all(
       transactions.map(
@@ -138,16 +90,6 @@ export default class TransactionService {
     )
   }
 
-  public getInternalTransactions = async (
-    params: ParamsTransactionsType
-  ): Promise<TransactionType[]> => {
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] =
-      await service.getInternalTransactions(params)
-
-    return transactions
-  }
-
   /**
    * Get a list of "ERC20 - Token Transfer Events" by Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
@@ -155,10 +97,8 @@ export default class TransactionService {
   public getERC20Transactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] = await service.getERC20Transactions(
-      params
-    )
+    const transactions: TransactionType[] =
+      await this.transactionAPIService.getERC20Transactions(params)
 
     return await Promise.all(
       transactions.map(
@@ -177,15 +117,14 @@ export default class TransactionService {
   public getERC721Transactions = async (
     params: ParamsTransactionsType
   ): Promise<TransactionType[]> => {
-    const service = this.getServiceByType(EServiceType.api)
-    const transactions: TransactionType[] = await service.getERC721Transactions(
-      params
-    )
+    const transactions: TransactionType[] =
+      await this.transactionAPIService.getERC721Transactions(params)
 
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {
           const adapter = new TransactionAdapter(transaction)
+
           if (transaction.token && transaction.token.id) {
             const nft = await this.nftService.fetchOne({
               tokenId: String(transaction.token.id),
@@ -193,7 +132,9 @@ export default class TransactionService {
             })
             transaction = adapter.request({ nft })
           }
+
           transaction = adapter.request({})
+
           return transaction
         }
       )
