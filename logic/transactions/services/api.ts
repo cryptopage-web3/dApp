@@ -30,6 +30,7 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
+    /** API solana */
     if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 44) {
       // if not evm related blockchain and length is 44, actually it is solana
       return await this.solScanAPIService.getNormalTransactions({
@@ -39,6 +40,8 @@ export default class TransactionAPIService {
         sort
       })
     }
+
+    /** API tron */
     if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 34) {
       // if not evm related blockchain and length is 34, actually it is tron
       // @todo add address checker
@@ -49,21 +52,9 @@ export default class TransactionAPIService {
         sort
       })
     }
-    return await this.etherscanAPIService.getNormalTransactions({
-      address,
-      page,
-      offset,
-      sort
-    })
-  }
 
-  public getInternalTransactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = ESortDirectionType.desc
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    return await this.etherscanAPIService.getInternalTransactions({
+    /** API etherscan */
+    return await this.etherscanAPIService.getNormalTransactions({
       address,
       page,
       offset,
@@ -82,6 +73,7 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
+    /** API solana */
     if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 44) {
       // if not evm related blockchain and length is 44, actually it is solana
       // @todo add address checker
@@ -92,6 +84,8 @@ export default class TransactionAPIService {
         sort
       })
     }
+
+    /** API tron */
     if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 34) {
       // if not evm related blockchain and length is 34, actually it is tron
       // @todo add address checker
@@ -102,6 +96,8 @@ export default class TransactionAPIService {
         sort
       })
     }
+
+    /** API etherscan */
     return await this.etherscanAPIService.getERC20Transactions({
       address,
       contractAddress,
@@ -121,6 +117,7 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
+    /** API etherscan */
     return await this.etherscanAPIService.getERC721Transactions({
       address,
       page,

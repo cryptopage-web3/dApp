@@ -79,14 +79,8 @@ export default class TransactionService {
     const transactions: TransactionType[] =
       await this.transactionAPIService.getNormalTransactions(params)
 
-    return await Promise.all(
-      transactions.map(
-        async (transaction: TransactionType): Promise<TransactionType> => {
-          const adapter = new TransactionAdapter(transaction)
-          const token = await this.tokenService.getTokenInfo(transaction.to)
-          return adapter.request({ token })
-        }
-      )
+    return transactions.map((transaction: TransactionType) =>
+      new TransactionAdapter(transaction).request()
     )
   }
 
@@ -100,13 +94,8 @@ export default class TransactionService {
     const transactions: TransactionType[] =
       await this.transactionAPIService.getERC20Transactions(params)
 
-    return await Promise.all(
-      transactions.map(
-        async (transaction: TransactionType): Promise<TransactionType> => {
-          const adapter = new TransactionAdapter(transaction)
-          return await adapter.request({})
-        }
-      )
+    return transactions.map((transaction: TransactionType) =>
+      new TransactionAdapter(transaction).request()
     )
   }
 
@@ -130,12 +119,11 @@ export default class TransactionService {
               tokenId: String(transaction.token.id),
               contractAddress: transaction.token.address
             })
-            transaction = adapter.request({ nft })
+
+            adapter.addNFT(nft)
           }
 
-          transaction = adapter.request({})
-
-          return transaction
+          return adapter.request()
         }
       )
     )
@@ -158,6 +146,8 @@ export default class TransactionService {
       contractAddress: actualTransaction.token.address
     })
 
-    return adapter.request({ nft })
+    adapter.addNFT(nft)
+
+    return adapter.request()
   }
 }

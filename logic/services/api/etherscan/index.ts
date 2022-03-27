@@ -6,7 +6,6 @@ import { AxiosResponse } from 'axios'
 import { EtherscanAPIServiceMixin } from '~/logic/mixins/api'
 import tokens from '~/logic/tokens'
 import NFTAPIService from '~/logic/nft/services/api'
-import TokenService from '~/logic/tokens/services'
 import {
   ESortDirectionType,
   TransactionType,
@@ -35,9 +34,6 @@ import {
 
 @Service(tokens.ETHERSCAN_API_SERVICE)
 export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
-  @Inject(tokens.TOKEN_SERVICE)
-  private tokenService!: TokenService
-
   @Inject(tokens.NFT_API_SERVICE)
   public nftAPIService!: NFTAPIService
 
@@ -133,13 +129,16 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+
     try {
       const response: AxiosResponse<EtherscanNormalTransactionsResponseType> =
         await this.$axios.get(URL)
+
       const data = await tPromise.decode(
         EtherscanNormalTransactionsResponse,
         response.data
       )
+
       return await Promise.all(
         data.result.map(
           (transaction: EtherscanNormalTransactionType): TransactionType =>
@@ -167,13 +166,16 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+
     try {
       const response: AxiosResponse<EtherscanInternalTransactionsResponseType> =
         await this.$axios.get(URL)
+
       const data = await tPromise.decode(
         EtherscanInternalTransactionsResponse,
         response.data
       )
+
       return await data.result.map(
         (transaction: EtherscanInternalTransactionType): TransactionType =>
           this.parser.parse(transaction)
@@ -202,18 +204,23 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
       module: 'account',
       action: 'tokentx'
     }
+
     if (contractAddress) {
       Object.assign(options, { contractAddress })
     }
+
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+
     try {
       const response: AxiosResponse<EtherscanERC20TransactionsResponseType> =
         await this.$axios.get(URL)
+
       const data = await tPromise.decode(
         EtherscanERC20TransactionsResponse,
         response.data
       )
+
       return await Promise.all(
         data.result.map(
           (transaction: EtherscanERC20TransactionType): TransactionType =>
@@ -245,6 +252,7 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
+
     try {
       const response: AxiosResponse<EtherscanERC721TransactionsResponseType> =
         await this.$axios.get(URL)
@@ -285,6 +293,7 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
       )
       const key = `${prefix}${currency}`
       const rate = data.result[key] || 0
+
       return Number(rate)
     } catch {
       return 0

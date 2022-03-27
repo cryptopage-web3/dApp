@@ -10,19 +10,22 @@ export default class EtherscanTransactionParser {
   private parseTokenInfo(
     transaction: EtherscanERC20TransactionType | EtherscanERC721TransactionType
   ): TokenInfoType | null {
-    if (transaction.contractAddress) {
-      const tokenInfo = {
-        address: transaction.contractAddress,
-        decimals: Number(transaction.tokenDecimal),
-        name: transaction.tokenName,
-        symbol: transaction.tokenSymbol
-      }
-      if ('tokenID' in transaction) {
-        Object.assign(tokenInfo, { id: transaction.tokenID })
-      }
-      return tokenInfo
+    if (!transaction.contractAddress) {
+      return null
     }
-    return null
+
+    const tokenInfo = {
+      address: transaction.contractAddress,
+      decimals: Number(transaction.tokenDecimal),
+      name: transaction.tokenName,
+      symbol: transaction.tokenSymbol
+    }
+
+    if ('tokenID' in transaction) {
+      Object.assign(tokenInfo, { id: transaction.tokenID })
+    }
+
+    return tokenInfo
   }
 
   public parse(

@@ -1,10 +1,7 @@
+import { NFTType } from '../nft/types'
 import { web3 } from '~/plugins/web3'
 import { signatures } from '~/constants/functionSignatures'
-import {
-  TransactionType,
-  DecodedInputType,
-  TransactionAdaptarParamsType
-} from '~/logic/transactions/types'
+import { TransactionType, DecodedInputType } from '~/logic/transactions/types'
 
 export default class TransactionAdapter {
   protected transaction!: TransactionType
@@ -111,20 +108,20 @@ export default class TransactionAdapter {
     }
   }
 
-  public request(params: TransactionAdaptarParamsType): TransactionType {
-    if (params && params.nft) {
-      this.transaction.nft = params.nft
-    }
-    if (params && params.token) {
-      this.transaction.token = params.token
-    }
+  public addNFT(nft?: NFTType | null): void {
+    nft && (this.transaction.nft = nft)
+  }
+
+  public request(): TransactionType {
     if (this.transaction.input?.startsWith('0x')) {
       this.transaction.decodedInput = this.calculateInput()
     }
+
     this.transaction.sender = this.calculateSender()
     this.transaction.receiver = this.calculateReceiver()
     this.transaction.amount = this.calculateAmount() // this.amount
     this.transaction.fee = this.calculateFee() // this.amount
+
     if (this.transaction.token && this.transaction.token.rate) {
       this.transaction.USDFee = this.calculateUSDFee(
         this.transaction.token.rate
@@ -133,6 +130,7 @@ export default class TransactionAdapter {
         this.transaction.token.rate
       )
     }
+
     return this.transaction
   }
 }
