@@ -7,7 +7,8 @@ import {
   TransactionPagination,
   TransactionType,
   ESortDirectionType,
-  ParamsUpdateAddressInfoType
+  ParamsUpdateAddressInfoType,
+  ParamsUpdateTransactionPagination
 } from '~/logic/transactions/types'
 import TransactionService from '~/logic/transactions/services'
 import TokenService from '~/logic/tokens/services'
@@ -240,7 +241,10 @@ export default class AddressModule {
   }
 
   @Mutation()
-  public setNormalPagination(page: number, hasAllPages = false): void {
+  public setNormalPagination({
+    page,
+    hasAllPages
+  }: ParamsUpdateTransactionPagination): void {
     this.normalTransactionPagination = {
       ...this.normalTransactionPagination,
       page,
@@ -256,7 +260,10 @@ export default class AddressModule {
   }
 
   @Mutation()
-  public setERC721Pagination(page: number, hasAllPages = false): void {
+  public setERC721Pagination({
+    page,
+    hasAllPages
+  }: ParamsUpdateTransactionPagination): void {
     this.ERC721TransactionPagination = {
       ...this.ERC721TransactionPagination,
       page,
@@ -286,7 +293,10 @@ export default class AddressModule {
   }
 
   @Mutation()
-  public setERC20Pagination(page: number, hasAllPages = false): void {
+  public setERC20Pagination({
+    page,
+    hasAllPages
+  }: ParamsUpdateTransactionPagination): void {
     this.ERC20TransactionPagination = {
       ...this.ERC20TransactionPagination,
       page,
@@ -348,7 +358,10 @@ export default class AddressModule {
     })
 
     this.setNormalTransactions(transactions)
-    this.setNormalPagination(page, transactions.length === 0)
+    this.setNormalPagination({
+      page,
+      hasAllPages: transactions.length === 0
+    })
 
     return transactions
   }
@@ -371,7 +384,10 @@ export default class AddressModule {
     })
 
     this.setERC20Transactions(transactions)
-    this.setERC20Pagination(page, transactions.length === 0)
+    this.setERC20Pagination({
+      page,
+      hasAllPages: transactions.length === 0
+    })
 
     return transactions
   }
@@ -392,7 +408,10 @@ export default class AddressModule {
     })
 
     this.setERC721Transactions(transactions)
-    this.setERC721Pagination(page, transactions.length === 0)
+    this.setERC721Pagination({
+      page,
+      hasAllPages: transactions.length === 0
+    })
 
     return transactions
   }

@@ -103,3 +103,8 @@ export type TransactionPagination = {
   page: number
   hasAllPages: boolean
 }
+
+export type ParamsUpdateTransactionPagination = {
+  page: number
+  hasAllPages: boolean
+}
