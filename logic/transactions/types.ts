@@ -103,9 +103,3 @@ export type TransactionPagination = {
   page: number
   hasAllPages: boolean
 }
-
-export type ParamsSetTransactionPagination = {
-  type: ETransactionStoreType
-  page: number
-  hasAllPages?: boolean
-}

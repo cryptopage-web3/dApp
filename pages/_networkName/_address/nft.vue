@@ -17,10 +17,7 @@
 <script lang="ts">
 import { Component, mixins } from 'nuxt-property-decorator'
 import PaginationMixin from '~/mixins/pagination'
-import {
-  ETransactionStoreType,
-  TransactionType
-} from '~/logic/transactions/types'
+import { TransactionType } from '~/logic/transactions/types'
 
 @Component({
   components: {
@@ -51,10 +48,9 @@ export default class ERC721TransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    await this.typedStore.address.getTransactions({
-      address: this.$route.params.address,
-      transactionType: ETransactionStoreType.erc721
-    })
+    await this.typedStore.address.getERC721Transactions(
+      this.$route.params.address
+    )
   }
 }
 </script>

@@ -4,12 +4,9 @@ import { Action, Mutation, State, Getter } from 'vuex-simple'
 import { AddressInfoType } from '~/logic/address/types'
 import { TokenBalanceType, TokenInfoType } from '~/logic/tokens/types'
 import {
-  ParamsSetTransactionPagination,
-  ParamsTransactionsType,
   TransactionPagination,
   TransactionType,
   ESortDirectionType,
-  ETransactionStoreType,
   ParamsUpdateAddressInfoType
 } from '~/logic/transactions/types'
 import TransactionService from '~/logic/transactions/services'
@@ -56,25 +53,37 @@ export default class AddressModule {
   }
 
   @State()
-  public transactions: TransactionType[] = []
+  public loadingInfo = false
+
+  /** normal transactions */
+
+  @State()
+  public normalTransactions: TransactionType[] = []
 
   @State()
   public normalTransactionPagination: TransactionPagination = {
     ...defaultPagination
   }
 
+  /** erc721 transactions */
+
+  @State()
+  public ERC721Transactions: TransactionType[] = []
+
   @State()
   public ERC721TransactionPagination: TransactionPagination = {
     ...defaultPagination
   }
 
+  /** erc20 transactions */
+
+  @State()
+  public ERC20Transactions: TransactionType[] = []
+
   @State()
   public ERC20TransactionPagination: TransactionPagination = {
     ...defaultPagination
   }
-
-  @State()
-  public loadingInfo = false
 
   // Getters
 
@@ -130,19 +139,21 @@ export default class AddressModule {
   }
 
   @Getter()
-  public get hasTransactions(): boolean {
-    return Boolean(this.transactions && this.transactions.length > 0)
-  }
-
-  @Getter()
   public get transactionsCount(): number {
     return this.addressInfo?.transactionsCount || 0
+  }
+
+  // Getters normal transactions
+
+  @Getter()
+  public get hasAllNormalTransactionsPages(): boolean {
+    return this.normalTransactionPagination.hasAllPages
   }
 
   @Getter()
   public get inputAddressesCount(): number {
     return new Set(
-      this.transactions
+      this.normalTransactions
         .filter((tx: TransactionType) => tx.to === this.addressInfo.address)
         .map((tx: TransactionType) => tx.from)
     ).size
@@ -151,58 +162,24 @@ export default class AddressModule {
   @Getter()
   public get outputAddressesCount(): number {
     return new Set(
-      this.transactions
+      this.normalTransactions
         .filter((tx: TransactionType) => tx.from === this.addressInfo.address)
         .map((tx: TransactionType) => tx.to)
     ).size
   }
 
-  @Getter()
-  public get allTransactions(): TransactionType[] {
-    return this.transactions.sort((a, b) =>
-      a.timeStamp > b.timeStamp ? -1 : 1
-    )
-  }
-
-  @Getter()
-  public get normalTransactions(): TransactionType[] {
-    return this.transactions
-      .filter((tx: TransactionType) => tx.input !== 'deprecated')
-      .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
-  }
-
-  @Getter()
-  public get hasAllNormalTransactionsPages(): boolean {
-    return this.normalTransactionPagination.hasAllPages
-  }
-
-  @Getter()
-  public get ERC20Transactions(): TransactionType[] {
-    const basicToken = this.tokenService.getBasicToken(this.addressInfo.chainId)
-
-    return this.transactions
-      .filter(
-        (tx: TransactionType) =>
-          tx.token && tx.token.address !== basicToken.address
-      )
-      .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
-  }
-
-  @Getter()
-  public get hasAllERC20TransactionsPages(): boolean {
-    return this.ERC20TransactionPagination.hasAllPages
-  }
-
-  @Getter()
-  public get ERC721Transactions(): TransactionType[] {
-    return this.transactions
-      .filter((tx: TransactionType) => tx.nft)
-      .sort((a, b) => (a.timeStamp > b.timeStamp ? -1 : 1))
-  }
+  // Getters erc721 transactions
 
   @Getter()
   public get hasAllERC721TransactionsPages(): boolean {
     return this.ERC721TransactionPagination.hasAllPages
+  }
+
+  // Getters erc20 transactions
+
+  @Getter()
+  public get hasAllERC20TransactionsPages(): boolean {
+    return this.ERC20TransactionPagination.hasAllPages
   }
 
   // Mutations
@@ -238,77 +215,82 @@ export default class AddressModule {
   }
 
   @Mutation()
-  public setTransactions(transactions: TransactionType[]): void {
-    transactions.forEach((transaction: TransactionType) => {
-      this.setTransaction(transaction)
-    })
-  }
-
-  @Mutation()
-  public setTransaction(transaction: TransactionType): void {
-    const index: number = this.transactions.findIndex(
-      (tx: TransactionType) => tx.hash === transaction.hash
-    )
-
-    if (index > -1) {
-      const findedTransaction = this.transactions[index]
-
-      if (
-        transaction.input === 'deprecated' &&
-        findedTransaction.input.startsWith('0x')
-      ) {
-        transaction.input = findedTransaction.input
-      }
-
-      Vue.set(
-        this.transactions,
-        index,
-        Object.assign(findedTransaction, transaction)
-      )
-    } else {
-      this.transactions = [...this.transactions, transaction]
-    }
-  }
-
-  @Mutation()
-  public removeTransactions(): void {
-    this.transactions = []
-  }
-
-  @Mutation()
   public setLoadingInfo(loading: boolean): void {
     this.loadingInfo = loading
   }
 
   @Mutation()
-  public setTransactionPagination({
-    type,
-    page,
-    hasAllPages = false
-  }: ParamsSetTransactionPagination): void {
-    switch (type) {
-      case ETransactionStoreType.normal:
-        this.normalTransactionPagination = {
-          ...this.normalTransactionPagination,
-          page,
-          hasAllPages
-        }
-        return
+  public removeTransactions(): void {
+    /** очищаем списки транзакций */
+    this.normalTransactions = []
+    this.ERC20Transactions = []
+    this.ERC721Transactions = []
 
-      case ETransactionStoreType.erc721:
-        this.ERC721TransactionPagination = {
-          ...this.ERC721TransactionPagination,
-          page,
-          hasAllPages
-        }
-        return
+    /** сбрасываем пагинацию */
+    this.normalTransactionPagination = { ...defaultPagination }
+    this.ERC20TransactionPagination = { ...defaultPagination }
+    this.ERC721TransactionPagination = { ...defaultPagination }
+  }
 
-      case ETransactionStoreType.erc20:
-        this.ERC20TransactionPagination = {
-          ...this.ERC20TransactionPagination,
-          page,
-          hasAllPages
-        }
+  // Mutations normal transactions
+
+  @Mutation()
+  public setNormalTransactions(transactions: TransactionType[]): void {
+    this.normalTransactions = [...this.normalTransactions, ...transactions]
+  }
+
+  @Mutation()
+  public setNormalPagination(page: number, hasAllPages = false): void {
+    this.normalTransactionPagination = {
+      ...this.normalTransactionPagination,
+      page,
+      hasAllPages
+    }
+  }
+
+  // Mutations erc721 transactions
+
+  @Mutation()
+  public setERC721Transactions(transactions: TransactionType[]): void {
+    this.ERC721Transactions = [...this.ERC721Transactions, ...transactions]
+  }
+
+  @Mutation()
+  public setERC721Pagination(page: number, hasAllPages = false): void {
+    this.ERC721TransactionPagination = {
+      ...this.ERC721TransactionPagination,
+      page,
+      hasAllPages
+    }
+  }
+
+  @Mutation()
+  public updateERC721Transaction(transaction: TransactionType): void {
+    const index: number = this.ERC721Transactions.findIndex(
+      (tx: TransactionType) => tx.hash === transaction.hash
+    )
+
+    if (index > -1) {
+      Vue.set(this.ERC721Transactions, index, transaction)
+      return
+    }
+
+    this.ERC721Transactions = [transaction, ...this.ERC721Transactions]
+  }
+
+  // Mutations erc20 transactions
+
+  @Mutation()
+  public setERC20Transactions(transactions: TransactionType[]): void {
+    this.ERC20Transactions = [...this.ERC20Transactions, ...transactions]
+  }
+
+  @Mutation()
+  public setERC20Pagination(page: number, hasAllPages = false): void {
+    this.ERC20TransactionPagination = {
+      ...this.ERC20TransactionPagination,
+      page,
+      hasAllPages
     }
   }
 
@@ -351,78 +333,73 @@ export default class AddressModule {
   }
 
   @Action()
-  public async getTransactions({
-    address,
-    transactionType,
-    /** для ERC20 */
-    contractAddress
-  }: ParamsTransactionsType): Promise<TransactionType[]> {
-    /** Если не указан тип транзакций, то ничего не делаем */
-
-    if (!transactionType) {
-      return []
-    }
-
-    /** Получаем текущий статус пагинации
-     * Если нет пагинации с данным типом,
-     * то выкидываем исключение, т.к. это некорректно
-     */
-
-    let pagination: TransactionPagination | null = null
-
-    switch (transactionType) {
-      case ETransactionStoreType.normal:
-        pagination = this.normalTransactionPagination
-        break
-
-      case ETransactionStoreType.erc20:
-        pagination = this.ERC20TransactionPagination
-        break
-
-      case ETransactionStoreType.erc721:
-        pagination = this.ERC721TransactionPagination
-        break
-    }
-
-    if (!pagination) {
-      throw new Error(`No pagination for type - ${transactionType}`)
-    }
-
-    const {
-      page: currentPage,
-      pageSize: offset
-      // sort
-    } = pagination
+  public async getNormalTransactions(
+    address: string
+  ): Promise<TransactionType[]> {
+    const { page: currentPage, pageSize: offset } =
+      this.normalTransactionPagination
     const page = currentPage + 1
 
-    /** Получаем транзакции по типу */
-
-    const transactions = await this.transactionService.getTransactions({
+    const transactions = await this.transactionService.getNormalTransactions({
       address,
       page,
       offset,
-      sort: ESortDirectionType.desc,
-      transactionType,
-      /** для ERC20 */
-      contractAddress
+      sort: ESortDirectionType.desc
     })
 
-    this.setTransactions(transactions)
+    this.setNormalTransactions(transactions)
+    this.setNormalPagination(page, transactions.length === 0)
 
-    /** Обновляем пагинацию */
+    return transactions
+  }
 
-    this.setTransactionPagination({
-      type: transactionType,
+  @Action()
+  public async getERC20Transactions(
+    address: string,
+    contractAddress: string
+  ): Promise<TransactionType[]> {
+    const { page: currentPage, pageSize: offset } =
+      this.ERC20TransactionPagination
+    const page = currentPage + 1
+
+    const transactions = await this.transactionService.getERC20Transactions({
+      address,
+      contractAddress,
       page,
-      hasAllPages: transactions.length === 0
+      offset,
+      sort: ESortDirectionType.desc
     })
+
+    this.setERC20Transactions(transactions)
+    this.setERC20Pagination(page, transactions.length === 0)
+
+    return transactions
+  }
+
+  @Action()
+  public async getERC721Transactions(
+    address: string
+  ): Promise<TransactionType[]> {
+    const { page: currentPage, pageSize: offset } =
+      this.ERC721TransactionPagination
+    const page = currentPage + 1
+
+    const transactions = await this.transactionService.getERC721Transactions({
+      address,
+      page,
+      offset,
+      sort: ESortDirectionType.desc
+    })
+
+    this.setERC721Transactions(transactions)
+    this.setERC721Pagination(page, transactions.length === 0)
 
     return transactions
   }
 
   @Action()
   public async refreshERC721Transaction(txHash: string) {
-    const transaction = this.transactions.find(
+    const transaction = this.ERC721Transactions.find(
       (tx: TransactionType) => tx.hash === txHash
     )
 
@@ -433,25 +410,11 @@ export default class AddressModule {
     const actualTransaction =
       await this.transactionService.refreshERC721Transaction(transaction)
 
-    this.setTransaction(actualTransaction)
+    this.updateERC721Transaction(actualTransaction)
   }
 
   @Action()
   public clearTransactions(): void {
     this.removeTransactions()
-
-    /** Сбрасываем пагинатор у всех транзакций */
-    this.setTransactionPagination({
-      type: ETransactionStoreType.normal,
-      page: 0
-    })
-    this.setTransactionPagination({
-      type: ETransactionStoreType.erc20,
-      page: 0
-    })
-    this.setTransactionPagination({
-      type: ETransactionStoreType.erc721,
-      page: 0
-    })
   }
 }

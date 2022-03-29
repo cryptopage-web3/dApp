@@ -35,21 +35,21 @@
             <loader v-if="loadingInfo" :height="10" :width="230" />
             <div v-show="!loadingInfo">
               <strong
-                title="Number of unique addresses from which transactions got. Checked only loaded transactions from all tabs."
+                title="Number of unique addresses from which transactions got. Checked only loaded transactions from Transactions tab."
                 >{{ inputAddressesCount | humanizeCount }}</strong
               >
               inputs /
               <strong
-                title="Number of unique addresses to which transactions sent. Checked only loaded transactions from all tabs."
+                title="Number of unique addresses to which transactions sent. Checked only loaded transactions from Transactions tab."
                 >{{ outputAddressesCount | humanizeCount }}</strong
               >
               outputs from
               <strong
-                title="Number of loaded transactions in the transactions tab"
+                title="Number of loaded transactions in the Transactions tab"
               >
                 {{ loadedTransactionsCount }}
               </strong>
-              loaded transactions
+              loaded normal transactions
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default class AddressProfileTop extends Vue {
   }
 
   get loadedTransactionsCount(): number {
-    return this.typedStore.address.allTransactions.length
+    return this.typedStore.address.normalTransactions.length
   }
 
   get inputAddressesCount(): number {
