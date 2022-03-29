@@ -108,3 +108,8 @@ export type ParamsUpdateTransactionPagination = {
   page: number
   hasAllPages: boolean
 }
+
+export type ParamsGetTransactions = {
+  address: string
+  contractAddress?: string
+}

@@ -48,9 +48,9 @@ export default class ERC721TransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    await this.typedStore.address.getERC721Transactions(
-      this.$route.params.address
-    )
+    await this.typedStore.address.getERC721Transactions({
+      address: this.$route.params.address
+    })
   }
 }
 </script>

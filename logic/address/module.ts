@@ -8,7 +8,8 @@ import {
   TransactionType,
   ESortDirectionType,
   ParamsUpdateAddressInfoType,
-  ParamsUpdateTransactionPagination
+  ParamsUpdateTransactionPagination,
+  ParamsGetTransactions
 } from '~/logic/transactions/types'
 import TransactionService from '~/logic/transactions/services'
 import TokenService from '~/logic/tokens/services'
@@ -343,9 +344,9 @@ export default class AddressModule {
   }
 
   @Action()
-  public async getNormalTransactions(
-    address: string
-  ): Promise<TransactionType[]> {
+  public async getNormalTransactions({
+    address
+  }: ParamsGetTransactions): Promise<TransactionType[]> {
     const { page: currentPage, pageSize: offset } =
       this.normalTransactionPagination
     const page = currentPage + 1
@@ -367,10 +368,10 @@ export default class AddressModule {
   }
 
   @Action()
-  public async getERC20Transactions(
-    address: string,
-    contractAddress: string
-  ): Promise<TransactionType[]> {
+  public async getERC20Transactions({
+    address,
+    contractAddress
+  }: ParamsGetTransactions): Promise<TransactionType[]> {
     const { page: currentPage, pageSize: offset } =
       this.ERC20TransactionPagination
     const page = currentPage + 1
@@ -393,9 +394,9 @@ export default class AddressModule {
   }
 
   @Action()
-  public async getERC721Transactions(
-    address: string
-  ): Promise<TransactionType[]> {
+  public async getERC721Transactions({
+    address
+  }: ParamsGetTransactions): Promise<TransactionType[]> {
     const { page: currentPage, pageSize: offset } =
       this.ERC721TransactionPagination
     const page = currentPage + 1

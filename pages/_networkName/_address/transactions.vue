@@ -48,9 +48,9 @@ export default class NormalTransactionsTab extends mixins(PaginationMixin) {
       return
     }
 
-    await this.typedStore.address.getNormalTransactions(
-      this.$route.params.address
-    )
+    await this.typedStore.address.getNormalTransactions({
+      address: this.$route.params.address
+    })
   }
 }
 </script>

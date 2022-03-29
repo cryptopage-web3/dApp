@@ -55,7 +55,10 @@ export default class ERC20TransactionsTab extends mixins(PaginationMixin) {
       ? this.$route.params.address
       : ''
 
-    await this.typedStore.address.getERC20Transactions(address, contractAddress)
+    await this.typedStore.address.getERC20Transactions({
+      address,
+      contractAddress
+    })
   }
 }
 </script>
