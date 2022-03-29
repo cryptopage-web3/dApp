@@ -99,27 +99,28 @@ export default class NFTService {
         contractAddress
       })
 
-      if (contractData) {
-        const { owner, tokenURI, comments } = contractData
-        const NFTPayload = await this.fetchNFTPayload(tokenURI)
-        const animationURL = this.parser.parseAnimationURL(NFTPayload)
-        const parsedComments = this.parser.parseComments(comments)
-        const data = this.parser.parse(NFTPayload)
-        const adapter = NFTAdapter(data)
-
-        const params: NFTAdapterRequestParamsType = {
-          owner,
-          comments: parsedComments
-        }
-
-        if (animationURL) {
-          const media = await this.fetchMedia(animationURL)
-          Object.assign(params, media)
-        }
-
-        return adapter.request(params)
+      if (!contractData) {
+        return null
       }
-      return null
+
+      const { owner, tokenURI, comments } = contractData
+      const NFTPayload = await this.fetchNFTPayload(tokenURI)
+      const animationURL = this.parser.parseAnimationURL(NFTPayload)
+      const parsedComments = this.parser.parseComments(comments)
+      const data = this.parser.parse(NFTPayload)
+      const adapter = NFTAdapter(data)
+
+      const params: NFTAdapterRequestParamsType = {
+        owner,
+        comments: parsedComments
+      }
+
+      if (animationURL) {
+        const media = await this.fetchMedia(animationURL)
+        Object.assign(params, media)
+      }
+
+      return adapter.request(params)
     } catch {
       return null
     }

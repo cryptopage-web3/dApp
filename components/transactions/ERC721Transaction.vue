@@ -1,8 +1,8 @@
 <template>
   <div class="main-item">
-    <image-post v-if="transaction.nft.image" :transaction="transaction" />
-    <audio-post v-else-if="transaction.nft.audio" :transaction="transaction" />
-    <video-post v-else-if="transaction.nft.video" :transaction="transaction" />
+    <image-post v-if="isImage" :transaction="transaction" />
+    <audio-post v-else-if="isAudio" :transaction="transaction" />
+    <video-post v-else-if="isVideo" :transaction="transaction" />
     <text-post v-else :transaction="transaction" />
   </div>
 </template>
@@ -18,5 +18,17 @@ import TransactionMixin from '~/mixins/transaction'
     textPost: async () => await import('@/components/post/TextNFT.vue')
   }
 })
-export default class ERC721Transaction extends mixins(TransactionMixin) {}
+export default class ERC721Transaction extends mixins(TransactionMixin) {
+  get isImage(): boolean {
+    return Boolean(this.transaction.nft?.image)
+  }
+
+  get isAudio(): boolean {
+    return Boolean(this.transaction.nft?.audio)
+  }
+
+  get isVideo(): boolean {
+    return Boolean(this.transaction.nft?.video)
+  }
+}
 </script>
