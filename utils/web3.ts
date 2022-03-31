@@ -62,6 +62,9 @@ export const normalizeAmount = (exponential: number) => {
   return decimal
 }
 
+/** показываем нижнюю границу, т.к. эта сумма точно была оплачена */
 export const roundAmount = (value: number | string, digits: number) => {
-  return +Number(value).toFixed(digits)
+  const decimal = 10 ** digits
+
+  return +Math.floor(Number(value) * decimal) / decimal
 }

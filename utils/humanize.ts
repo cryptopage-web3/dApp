@@ -42,6 +42,10 @@ export const shortMonthAndDay = (timestamp: string) => {
   return moment(timestamp, 'X').format('MMM D')
 }
 
+export const shortMonthDayYear = (timestamp: string) => {
+  return moment(timestamp, 'X').format('MMM D YYYY')
+}
+
 export const ucFirstLetter = (str: string) => {
   if (!str) {
     return ''

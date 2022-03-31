@@ -13,7 +13,7 @@
             {{ income ? 'Receive' : 'Send' }} {{ transaction.token.symbol }}
           </div>
           <div class="transactions-link__number">
-            {{ transaction.timeStamp | shortMonthAndDay }} /
+            {{ transaction.timeStamp | shortMonthDayYear }} /
             {{ income ? 'From' : 'To' }}:
             <nuxt-link :to="`/${networkSlug}/${transactionAddress}/nft`">
               {{ transactionAddress | shortAddress(5, 7) }}

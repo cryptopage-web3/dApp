@@ -13,7 +13,7 @@
             {{ income ? 'Receive' : 'Send' }} {{ tokenSymbol }}
           </div>
           <div class="transactions-link__number">
-            {{ transaction.timeStamp | shortMonthAndDay }} /
+            {{ transaction.timeStamp | shortMonthDayYear }} /
             {{ income ? 'From' : 'To' }}:
             <nuxt-link
               v-if="transaction.token"
