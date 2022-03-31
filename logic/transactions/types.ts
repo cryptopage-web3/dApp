@@ -36,6 +36,7 @@ export type InternalTransactionType = TransactionAdaptarParamsType & {
   receiver: string
   amount?: number
   USDAmount?: number
+  type?: string
 }
 
 export enum ESortDirectionType {

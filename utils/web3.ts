@@ -61,3 +61,7 @@ export const normalizeAmount = (exponential: number) => {
 
   return decimal
 }
+
+export const roundAmount = (value: number | string, digits: number) => {
+  return +Number(value).toFixed(digits)
+}

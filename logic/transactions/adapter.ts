@@ -1,7 +1,5 @@
 import { NFTType } from '../nft/types'
-import { web3 } from '~/plugins/web3'
-import { signatures } from '~/constants/functionSignatures'
-import { TransactionType, DecodedInputType } from '~/logic/transactions/types'
+import { TransactionType } from '~/logic/transactions/types'
 
 export default class TransactionAdapter {
   protected transaction!: TransactionType
@@ -14,52 +12,40 @@ export default class TransactionAdapter {
   }
 
   public calculateReceiver(): string {
-    const tx = this.transaction
-    const input = tx.decodedInput
-    let receiver = tx.to
-    if (input && input.name === 'Transfer') {
-      receiver = input.decoded[0]
-    }
-    if (input && input.name === 'TransferFrom') {
-      receiver = input.decoded[1]
-    }
-    if (input && input.name === 'Swap') {
-      receiver = input.decoded[1]
-    }
-    return receiver
+    return this.transaction.to
   }
 
   public calculateAmount(): number {
-    const tx: any = this.transaction
-    if (tx.type === 'tron' || tx.type === 'solana') {
-      return tx.amount
-    }
-    const input = tx.decodedInput
-    let amount = Number(tx.value)
+    const tx = this.transaction
+
+    const amount = Number(tx.value)
     let decimals = 18
-    if (input && input.name === 'Transfer') {
-      amount = Number(web3.utils.toBN(input.decoded[1]))
-    } else if (input && input.name === 'TransferFrom') {
-      amount = Number(web3.utils.toBN(input.decoded[2]))
-    } else if (input && input.name === 'Swap') {
-      amount = Number(web3.utils.toBN(input.decoded[2]))
-    } else if (input && input.name?.startsWith('Swap Exact')) {
-      amount = Number(web3.utils.toBN(input.decoded[3]))
+
+    if (tx.type === 'tron') {
+      decimals = 6
     }
-    if (tx.token) {
+
+    if (tx.token?.decimals) {
       decimals = Number(tx.token.decimals)
     }
-    const divider = 10 ** decimals
-    return amount / divider
+
+    return amount / 10 ** decimals
   }
 
   public calculateFee(): number {
     const tx = this.transaction
     let decimals = 18
-    if (tx.token) {
-      decimals = tx.token.decimals
+
+    if (tx.type === 'tron') {
+      decimals = 6
     }
+
+    if (tx.token?.decimals) {
+      decimals = Number(tx.token.decimals)
+    }
+
     const fee = Number(tx.gasPrice) / 10 ** decimals
+
     return fee * Number(tx.gasUsed)
   }
 
@@ -79,53 +65,21 @@ export default class TransactionAdapter {
     return 0
   }
 
-  public calculateInput(): null | DecodedInputType {
-    const tx = this.transaction
-    try {
-      const signature = tx.input.slice(0, 10)
-      const signatureObject = signatures[signature]
-      if (signatureObject) {
-        const types = signatureObject.text
-          .split('(')[1]
-          .replace(')', '')
-          .split(',')
-        if (types) {
-          const decoded = web3.eth.abi.decodeParameters(
-            types,
-            '0x' + tx.input.slice(10)
-          )
-          return {
-            signature,
-            name: signatureObject.name,
-            text: signatureObject.text,
-            decoded
-          }
-        }
-      }
-      return null
-    } catch {
-      return null
-    }
-  }
-
   public addNFT(nft?: NFTType | null): void {
     nft && (this.transaction.nft = nft)
   }
 
   public request(): TransactionType {
-    if (this.transaction.input?.startsWith('0x')) {
-      this.transaction.decodedInput = this.calculateInput()
-    }
-
     this.transaction.sender = this.calculateSender()
     this.transaction.receiver = this.calculateReceiver()
-    this.transaction.amount = this.calculateAmount() // this.amount
-    this.transaction.fee = this.calculateFee() // this.amount
+    this.transaction.amount = this.calculateAmount()
+    this.transaction.fee = this.calculateFee()
 
     if (this.transaction.token && this.transaction.token.rate) {
       this.transaction.USDFee = this.calculateUSDFee(
         this.transaction.token.rate
       )
+
       this.transaction.USDAmount = this.calculateUSDAmount(
         this.transaction.token.rate
       )

@@ -1,6 +1,6 @@
 <template>
   <div class="main-item">
-    <a href="#" class="transactions-link">
+    <a href="#" class="transactions-link" @click.prevent="">
       <div class="transactions-link-left">
         <img
           v-if="income"
@@ -11,12 +11,6 @@
         <div class="transactions-link__text">
           <div class="transactions-link__tool">
             {{ income ? 'Receive' : 'Send' }} {{ tokenSymbol }}
-          </div>
-          <div
-            v-if="transaction.decodedInput"
-            class="transactions-link__number"
-          >
-            Method: {{ transaction.decodedInput.name }}
           </div>
           <div class="transactions-link__number">
             {{ transaction.timeStamp | shortMonthAndDay }} /
@@ -42,14 +36,11 @@
       <div class="transactions-link-right">
         <div class="transactions-link__usdt">
           {{ income ? '' : '-' }}
-          {{
-            (transaction.value / 10 ** (transaction.type === 'tron' ? 6 : 18))
-              | normalizeAmount
-          }}
+          {{ transaction.amount | normalizeAmount | roundAmount }}
           {{ tokenSymbol }}
         </div>
         <div class="transactions-link__usd">
-          Fee: {{ transaction.fee }} {{ tokenSymbol }}
+          Fee: {{ transaction.fee | roundAmount }} {{ tokenSymbol }}
         </div>
       </div>
     </a>
