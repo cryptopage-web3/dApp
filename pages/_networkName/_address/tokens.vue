@@ -2,7 +2,7 @@
   <div class="transactions-body">
     <transaction
       v-for="transaction in transactions"
-      :key="transaction.hash"
+      :key="uniqueKey(transaction)"
       :transaction="transaction"
     />
     <loader v-if="$fetchState.pending" />
@@ -18,6 +18,7 @@
 import { Component, mixins } from 'nuxt-property-decorator'
 import PaginationMixin from '~/mixins/pagination'
 import { TransactionType } from '~/logic/transactions/types'
+import { getUniqueKey } from '~/utils/array'
 
 @Component({
   components: {
@@ -59,6 +60,10 @@ export default class ERC20TransactionsTab extends mixins(PaginationMixin) {
       address,
       contractAddress
     })
+  }
+
+  uniqueKey(transaction: TransactionType) {
+    return getUniqueKey(transaction)
   }
 }
 </script>

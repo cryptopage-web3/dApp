@@ -27,6 +27,9 @@ export const paginate = (
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
 }
 
+export const getUniqueKey = (transaction: TransactionType) =>
+  `${transaction.hash}_${transaction.from}_${transaction.to}_${transaction.value}`
+
 export const uniqueHashConcat = (
   target: TransactionType[],
   additional: TransactionType[]
@@ -34,7 +37,7 @@ export const uniqueHashConcat = (
   const result = [...target]
 
   additional.forEach((item) => {
-    const same = result.find((tx) => tx.hash === item.hash)
+    const same = result.find((tx) => getUniqueKey(tx) === getUniqueKey(item))
 
     if (!same) {
       result.push(item)
