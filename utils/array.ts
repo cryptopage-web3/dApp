@@ -1,3 +1,5 @@
+import { TransactionType } from '~/logic/transactions/types'
+
 export const _range = (start: number, stop: number, step: number): number[] => {
   if (stop == null) {
     stop = start || 0
@@ -23,4 +25,21 @@ export const paginate = (
   pageSize = 10
 ): any[] => {
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize)
+}
+
+export const uniqueHashConcat = (
+  target: TransactionType[],
+  additional: TransactionType[]
+): TransactionType[] => {
+  const result = [...target]
+
+  additional.forEach((item) => {
+    const same = result.find((tx) => tx.hash === item.hash)
+
+    if (!same) {
+      result.push(item)
+    }
+  })
+
+  return result
 }

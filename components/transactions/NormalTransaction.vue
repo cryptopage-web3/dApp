@@ -36,7 +36,7 @@
       <div class="transactions-link-right">
         <div class="transactions-link__usdt">
           {{ income ? '' : '-' }}
-          {{ transaction.amount | normalizeAmount | roundAmount }}
+          {{ transaction.amount | normalizeAmount | roundAmount(15) }}
           {{ tokenSymbol }}
         </div>
         <div class="transactions-link__usd">

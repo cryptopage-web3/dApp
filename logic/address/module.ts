@@ -16,6 +16,7 @@ import TokenService from '~/logic/tokens/services'
 import AddressService from '~/logic/address/services/index'
 import tokens from '~/logic/tokens'
 import { networkHelper } from '~/utils/networkHelper'
+import { uniqueHashConcat } from '~/utils/array'
 
 const defaultPagination: TransactionPagination = {
   pageSize: 10,
@@ -238,7 +239,13 @@ export default class AddressModule {
 
   @Mutation()
   public setNormalTransactions(transactions: TransactionType[]): void {
-    this.normalTransactions = [...this.normalTransactions, ...transactions]
+    /** проверяем на уникальность,
+     * т.к. в момент скрола могла прийти новая транзакция,
+     * которая сдвигает пагинацию */
+    this.normalTransactions = uniqueHashConcat(
+      this.normalTransactions,
+      transactions
+    )
   }
 
   @Mutation()
@@ -257,7 +264,13 @@ export default class AddressModule {
 
   @Mutation()
   public setERC721Transactions(transactions: TransactionType[]): void {
-    this.ERC721Transactions = [...this.ERC721Transactions, ...transactions]
+    /** проверяем на уникальность,
+     * т.к. в момент скрола могла прийти новая транзакция,
+     * которая сдвигает пагинацию */
+    this.ERC721Transactions = uniqueHashConcat(
+      this.ERC721Transactions,
+      transactions
+    )
   }
 
   @Mutation()
@@ -290,7 +303,13 @@ export default class AddressModule {
 
   @Mutation()
   public setERC20Transactions(transactions: TransactionType[]): void {
-    this.ERC20Transactions = [...this.ERC20Transactions, ...transactions]
+    /** проверяем на уникальность,
+     * т.к. в момент скрола могла прийти новая транзакция,
+     * которая сдвигает пагинацию */
+    this.ERC20Transactions = uniqueHashConcat(
+      this.ERC20Transactions,
+      transactions
+    )
   }
 
   @Mutation()
