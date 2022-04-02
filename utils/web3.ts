@@ -14,57 +14,18 @@ export const shortAddress = (
   return start + delimiter + end
 }
 
-export const normalizeAmount = (exponential: number) => {
-  let decimal = exponential.toString().toLowerCase()
+export const formatNumber = (value: number, digits: number) => {
+  /** сбрасываем лишние числа без округления */
+  let rounded = value
+  const pieces = String(value).split('.')
 
-  if (decimal.includes('e+')) {
-    const exponentialSplitted = decimal.split('e+')
-    let postfix = ''
-
-    for (
-      let i = 0;
-      i <
-      +exponentialSplitted[1] -
-        (exponentialSplitted[0].includes('.')
-          ? exponentialSplitted[0].split('.')[1].length
-          : 0);
-      i++
-    ) {
-      postfix += '0'
-    }
-
-    const addSeparator = (text: string, separator = ' ') => {
-      let j = 3
-      let textLength = text.length
-      while (j < textLength) {
-        text = `${text.slice(0, textLength - j)}${separator}${text.slice(
-          textLength - j,
-          textLength
-        )}`
-        textLength++
-        j += 3 + 1
-      }
-      return text
-    }
-
-    decimal = addSeparator(exponentialSplitted[0].replace('.', '') + postfix)
+  if (pieces[1]?.length > digits) {
+    const decimal = 10 ** digits
+    rounded = +(Math.floor(value * decimal) / decimal).toFixed(digits)
   }
 
-  if (decimal.toLowerCase().includes('e-')) {
-    const exponentialSplitted = decimal.split('e-')
-    let prefix = '0.'
-    for (let i = 0; i < +exponentialSplitted[1] - 1; i++) {
-      prefix += '0'
-    }
-    decimal = prefix + exponentialSplitted[0].replace('.', '')
-  }
-
-  return decimal
-}
-
-/** показываем нижнюю границу, т.к. эта сумма точно была оплачена */
-export const roundAmount = (value: number | string, digits: number) => {
-  const decimal = 10 ** digits
-
-  return +Math.floor(Number(value) * decimal) / decimal
+  return new Intl.NumberFormat('en', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: digits
+  }).format(rounded)
 }

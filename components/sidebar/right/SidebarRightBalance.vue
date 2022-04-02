@@ -17,7 +17,7 @@
           </div>
           <div class="balance-right">
             <div class="balance__countusdt">
-              {{ token.balance | normalizeAmount | truncate(6) }}
+              {{ token.balance | truncate(6) }}
               {{ token.tokenInfo.symbol }}
             </div>
             <div class="balance__procent">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="balance-bottom">
-          {{ token.tokenInfo.rate.usd | normalizeAmount }} $
+          {{ token.tokenInfo.rate.usd }} $
           <br />
           <span> Value: {{ token.usdBalance.toFixed(2) }} $ </span>
         </div>

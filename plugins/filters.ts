@@ -8,15 +8,14 @@ import {
   ucFirstLetter,
   shortMonthDayYear
 } from '~/utils/humanize'
-import { shortAddress, normalizeAmount, roundAmount } from '~/utils/web3'
+import { shortAddress, formatNumber } from '~/utils/web3'
 
 Vue.filter('humanizeCount', (value: number) => humanizeCount(value))
 Vue.filter('normalizeDate', (timestamp: string) => normalizeDate(timestamp))
-Vue.filter('normalizeAmount', (value: number) => normalizeAmount(value))
 Vue.filter('shortMonthAndDay', (value: string) => shortMonthAndDay(value))
 Vue.filter('shortMonthDayYear', (value: string) => shortMonthDayYear(value))
-Vue.filter('roundAmount', (value: number | string, digits = 8) =>
-  roundAmount(value, digits)
+Vue.filter('formatNumber', (value: number, digits = 8) =>
+  formatNumber(value, digits)
 )
 Vue.filter('ucFirstLetter', (value: string) => ucFirstLetter(value))
 Vue.filter(

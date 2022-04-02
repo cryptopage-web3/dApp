@@ -1,6 +1,6 @@
 <template>
   <div class="main-item">
-    <a href="#" class="transactions-link">
+    <a href="#" class="transactions-link" @click.prevent="">
       <div class="transactions-link-left">
         <img
           v-if="income"
@@ -16,8 +16,9 @@
             {{ transaction.timeStamp | shortMonthDayYear }} /
             {{ income ? 'From' : 'To' }}:
             <nuxt-link :to="`/${networkSlug}/${transactionAddress}/nft`">
-              {{ transactionAddress | shortAddress(5, 7) }}
+              {{ transactionAddress | shortAddress }}
             </nuxt-link>
+            {{ transaction.token.name }}
           </div>
           <div class="transactions-link__number">
             Txn Hash:
@@ -30,11 +31,12 @@
       <div class="transactions-link-right">
         <div class="transactions-link__usdt">
           {{ income ? '' : '-' }}
-          {{ transaction.amount | normalizeAmount }}
+          {{ transaction.amount | formatNumber(15) }}
           {{ transaction.token.symbol }}
         </div>
         <div class="transactions-link__usd">
-          Fee: {{ transaction.fee | normalizeAmount }} {{ tokenSymbol }}
+          Fee: {{ transaction.fee | formatNumber }}
+          {{ tokenSymbol }}
         </div>
       </div>
     </a>
