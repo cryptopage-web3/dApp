@@ -157,7 +157,10 @@ export default class AddressModule {
   public get inputAddressesCount(): number {
     return new Set(
       this.normalTransactions
-        .filter((tx: TransactionType) => tx.to === this.addressInfo.address)
+        .filter(
+          (tx: TransactionType) =>
+            tx.to.toLowerCase() === this.addressInfo.address.toLowerCase()
+        )
         .map((tx: TransactionType) => tx.from)
     ).size
   }
@@ -166,7 +169,10 @@ export default class AddressModule {
   public get outputAddressesCount(): number {
     return new Set(
       this.normalTransactions
-        .filter((tx: TransactionType) => tx.from === this.addressInfo.address)
+        .filter(
+          (tx: TransactionType) =>
+            tx.from.toLowerCase() === this.addressInfo.address.toLowerCase()
+        )
         .map((tx: TransactionType) => tx.to)
     ).size
   }
