@@ -18,7 +18,6 @@
             <nuxt-link :to="`/${networkSlug}/${transactionAddress}/nft`">
               {{ transactionAddress | shortAddress }}
             </nuxt-link>
-            {{ transaction.token.name }}
           </div>
           <div class="transactions-link__number">
             Txn Hash:
@@ -35,8 +34,9 @@
           {{ transaction.token.symbol }}
         </div>
         <div class="transactions-link__usd">
-          Fee: {{ transaction.fee | formatNumber }}
-          {{ tokenSymbol }}
+          <nuxt-link :to="`/${networkSlug}/${transaction.token.address}/nft`">
+            {{ transaction.token.name }} ({{ transaction.token.symbol }})
+          </nuxt-link>
         </div>
       </div>
     </a>
