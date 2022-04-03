@@ -8,7 +8,8 @@ import {
   SolScanAPISolBalanceParser,
   SolScanAPITokenBalanceParser,
   SolScanAPITransactionParser,
-  SolScanApiSOL20Parser
+  SolScanApiSOL20Parser,
+  SolScanApiNFTParser
 } from '~/logic/services/api/solscan/parser'
 import { TokenBalanceType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
@@ -77,7 +78,7 @@ export default class SolScanAPIService extends SolScanAPIServiceMixin {
   }
 
   /**
-   * Get a list of TRC20 - Transactions
+   * Get a list of SOL20 - Transactions
    */
   public getERC20Transactions = async ({
     address,
@@ -104,6 +105,39 @@ export default class SolScanAPIService extends SolScanAPIServiceMixin {
         parser.parse(transaction)
       )
       return transactions.filter((e: any) => e.token.symbol)
+    } catch (err) {
+      return []
+    }
+  }
+
+  /**
+   * Get a list of ERC721 - Transactions
+   */
+  public getERC721Transactions = async ({
+    address,
+    contractAddress,
+    page = 1,
+    offset = 10,
+    sort = ESortDirectionType.desc
+  }: ParamsTransactionsType): Promise<any[]> => {
+    const options = {
+      account: address,
+      page: `${offset}`,
+      offset: `${page}`,
+      sort
+    }
+    if (contractAddress) {
+      Object.assign(options, { contractAddress })
+    }
+    const params = new URLSearchParams(options).toString()
+    const URL = `https://api-mainnet.magiceden.dev/v2/wallets/${address}/tokens?${params}`
+    try {
+      const response = await this.$axios.get(URL)
+      const parser = new SolScanApiNFTParser()
+      const transactions = response.data.map((transaction: any): any =>
+        parser.parse(transaction)
+      )
+      return transactions
     } catch (err) {
       return []
     }
