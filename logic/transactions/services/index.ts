@@ -56,6 +56,15 @@ export default class TransactionService {
     const transactions: TransactionType[] =
       await this.transactionAPIService.getERC721Transactions(params)
 
+    if (
+      !params.address?.match('^0x[a-fA-F0-9]{40}$') &&
+      params.address?.length === 44
+    ) {
+      // if not evm related blockchain and length is 44, actually it is solana
+      // @todo add address checker
+      return transactions
+    }
+
     return await Promise.all(
       transactions.map(
         async (transaction: TransactionType): Promise<TransactionType> => {

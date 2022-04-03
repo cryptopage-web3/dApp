@@ -100,3 +100,38 @@ export class SolScanApiSOL20Parser {
     }
   }
 }
+export class SolScanApiNFTParser {
+  parse(tx: any): any {
+    return {
+      gas: 0,
+      hash: '0x',
+      nonce: '',
+      input: '',
+      value: 0,
+      blockHash: '',
+      blockNumber: 0,
+      confirmations: '',
+      cumulativeGasUsed: 0,
+      from: tx.owner,
+      gasPrice: 0,
+      gasUsed: 0,
+      timeStamp: 0,
+      to: '0x',
+      type: 'solana',
+      receiver: tx.owner,
+      amount: 1,
+      token: {
+        address: tx.mintAddress,
+        decimals: 9,
+        name: tx.name,
+        symbol: tx.collection
+      },
+      nft: {
+        image: tx.image,
+        owner: tx.owner,
+        title: tx.name,
+        attributes: []
+      }
+    }
+  }
+}
