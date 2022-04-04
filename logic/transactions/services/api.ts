@@ -62,20 +62,6 @@ export default class TransactionAPIService {
     })
   }
 
-  public getInternalTransactions = async ({
-    address,
-    page = 1,
-    offset = 10,
-    sort = ESortDirectionType.desc
-  }: ParamsTransactionsType): Promise<TransactionType[]> => {
-    return await this.etherscanAPIService.getInternalTransactions({
-      address,
-      page,
-      offset,
-      sort
-    })
-  }
-
   /**
    * Get a list of "ERC20 - Token Transfer Events" by Address from Etherscan API
    * https://etherscan.io/apidocs#accounts
@@ -131,7 +117,6 @@ export default class TransactionAPIService {
     offset = 10,
     sort = ESortDirectionType.desc
   }: ParamsTransactionsType): Promise<TransactionType[]> => {
-
     /** API solana */
     if (!address.match('^0x[a-fA-F0-9]{40}$') && address.length === 44) {
       // if not evm related blockchain and length is 44, actually it is solana
