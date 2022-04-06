@@ -25,11 +25,11 @@ export default class TransactionAdapter {
       decimals = 6
     }
 
-    if (tx.token?.decimals) {
+    if (tx.token && 'decimals' in tx.token) {
       decimals = Number(tx.token.decimals)
     }
 
-    return amount / 10 ** decimals
+    return decimals ? amount / 10 ** decimals : amount
   }
 
   public calculateFee(): number {
@@ -40,11 +40,13 @@ export default class TransactionAdapter {
       decimals = 6
     }
 
-    if (tx.token?.decimals) {
+    if (tx.token && 'decimals' in tx.token) {
       decimals = Number(tx.token.decimals)
     }
 
-    const fee = Number(tx.gasPrice) / 10 ** decimals
+    const fee = decimals
+      ? Number(tx.gasPrice) / 10 ** decimals
+      : Number(tx.gasPrice)
 
     return fee * Number(tx.gasUsed)
   }

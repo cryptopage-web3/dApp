@@ -59,7 +59,9 @@ export default class TokenWeb3Service {
       Object.values(this.baseTokens).forEach(
         (tokenInfo: TokenInfoType, index: number): void => {
           const value = Number(balances[index]) || 0
-          const balance = value / 10 ** tokenInfo.decimals
+          const balance = tokenInfo.decimals
+            ? value / 10 ** tokenInfo.decimals
+            : value
 
           if (Number(balance) > 0) {
             result.push({

@@ -146,7 +146,9 @@ export default class TokenService {
     const rawBalance = await this.addressService.getBalance(address)
     const rate = await this.getTokenRate(tokenInfo.address, 'usd')
     tokenInfo.rate = { usd: rate }
-    const balance = rawBalance / 10 ** tokenInfo.decimals
+    const balance = tokenInfo.decimals
+      ? rawBalance / 10 ** tokenInfo.decimals
+      : rawBalance
     const usdBalance = balance * Number(tokenInfo.rate ? tokenInfo.rate.usd : 0)
     return {
       balance,

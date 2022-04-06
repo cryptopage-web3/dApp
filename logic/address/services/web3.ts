@@ -23,7 +23,7 @@ export default class AddressWeb3Service {
       const contract = new this.$web3.eth.Contract(ERC20ABI, contractAddress)
       const balanceOf = await contract.methods.balanceOf(address).call()
       const decimals = await contract.methods.decimals().call()
-      const balance = balanceOf / 10 ** decimals
+      const balance = decimals ? balanceOf / 10 ** decimals : balanceOf
       return balance
     } catch {
       return 0

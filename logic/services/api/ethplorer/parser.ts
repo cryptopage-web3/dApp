@@ -87,7 +87,7 @@ export default class EthplorerTokenBalanceParser {
   parseBalance(token: EthplorerTokenType): number {
     const decimals = Number(token.tokenInfo.decimals) || 18
     const balance = Number(token.rawBalance)
-    return balance / 10 ** decimals
+    return decimals ? balance / 10 ** decimals : balance
   }
 
   parseUSDBalance(token: EthplorerTokenType): number {
@@ -95,7 +95,7 @@ export default class EthplorerTokenBalanceParser {
     if (rate) {
       const decimals = Number(token.tokenInfo.decimals) || 18
       const balance = Number(token.rawBalance)
-      return rate * (balance / 10 ** decimals)
+      return rate * (decimals ? balance / 10 ** decimals : balance)
     }
     return rate
   }
