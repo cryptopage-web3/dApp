@@ -11,7 +11,8 @@ const BaseEtherscanTransaction = ts.type({
   gasUsed: ts.string,
   timeStamp: ts.string,
   to: ts.string,
-  transactionIndex: ts.string
+  transactionIndex: ts.string,
+  isError: ts.union([ts.string, ts.undefined])
 })
 
 /* Transaction types */

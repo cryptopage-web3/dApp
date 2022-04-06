@@ -259,6 +259,12 @@
   margin-bottom: 14px;
 }
 
+.balance-bottom {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .header_bottom {
   position: absolute;
   bottom: 0;
@@ -278,6 +284,7 @@
 
 .profile__thumb {
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 .profile__thumb img {
@@ -337,6 +344,12 @@
 
 .transactions-link__number {
   margin-top: 4px;
+}
+
+.transactions-link__error {
+  color: #dc3545;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .post-comment__input {

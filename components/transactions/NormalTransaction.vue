@@ -11,6 +11,14 @@
         <div class="transactions-link__text">
           <div class="transactions-link__tool">
             {{ income ? 'Receive' : 'Send' }} {{ tokenSymbol }}
+            <div
+              v-if="Number(transaction.isError)"
+              ref="error"
+              class="transactions-link__error"
+              title="Error in Txn"
+            >
+              <font-awesome-icon :icon="['fas', 'exclamation-circle']" />
+            </div>
           </div>
           <div class="transactions-link__number">
             {{ transaction.timeStamp | shortMonthDayYear }} /
@@ -56,6 +64,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard'
 export default class Transaction extends mixins(TransactionMixin) {
   $refs!: {
     hash: HTMLAnchorElement
+    error: HTMLDivElement
   }
 
   mounted() {
@@ -63,6 +72,9 @@ export default class Transaction extends mixins(TransactionMixin) {
       ;($(this.$refs.hash) as any).tooltip({
         trigger: 'hover',
         title: 'Click to copy'
+      })
+      ;($(this.$refs.error) as any).tooltip({
+        trigger: 'hover'
       })
     })
   }

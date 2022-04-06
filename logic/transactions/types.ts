@@ -96,6 +96,7 @@ export type TransactionType = InternalTransactionType & {
   gasUsed: string
   timeStamp: string
   to: string
+  isError?: string
 }
 
 export type TransactionPagination = {

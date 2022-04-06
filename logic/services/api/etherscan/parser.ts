@@ -51,6 +51,7 @@ export default class EtherscanTransactionParser {
       to: transaction.to,
       sender: transaction.from,
       receiver: transaction.to,
+      isError: transaction.isError,
       token:
         'contractAddress' in transaction
           ? this.parseTokenInfo(transaction)
