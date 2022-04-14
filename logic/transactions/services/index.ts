@@ -1,4 +1,5 @@
 import { Service, Inject } from 'vue-typedi'
+import Moralis from 'moralis'
 import tokens from '~/logic/tokens'
 import NFTService from '~/logic/nft/services'
 import TransactionAPIService from '~/logic/transactions/services/api'
@@ -65,24 +66,63 @@ export default class TransactionService {
       return transactions
     }
 
-    return await Promise.all(
-      transactions.map(
-        async (transaction: TransactionType): Promise<TransactionType> => {
-          const adapter = new TransactionAdapter(transaction)
+    const fullData: TransactionType[] = []
 
-          if (transaction.token && transaction.token.id) {
-            const nft = await this.nftService.fetchOne({
-              tokenId: String(transaction.token.id),
-              contractAddress: transaction.token.address
-            })
+    for (const transaction of transactions) {
+      const adapter = new TransactionAdapter(transaction)
 
-            adapter.addNFT(nft)
-          }
+      if (transaction.token && transaction.token.id) {
+        const nft = await this.nftService.fetchOne({
+          tokenId: String(transaction.token.id),
+          contractAddress: transaction.token.address
+        })
 
-          return adapter.request()
-        }
-      )
-    )
+        adapter.addNFT(nft)
+      }
+
+      fullData.push(adapter.request())
+    }
+
+    return fullData
+
+    // return await Promise.all(
+    //   transactions.map(
+    //     async (transaction: TransactionType): Promise<TransactionType> => {
+    //       const adapter = new TransactionAdapter(transaction)
+
+    //       if (transaction.token && transaction.token.id) {
+    //         const nft = await this.nftService.fetchOne({
+    //           tokenId: String(transaction.token.id),
+    //           contractAddress: transaction.token.address
+    //         })
+
+    //         adapter.addNFT(nft)
+    //       }
+
+    //       return adapter.request()
+    //     }
+    //   )
+    // )
+  }
+
+  public getNFTFromMoralisAPI = async (): Promise<TransactionType[]> => {
+    Moralis.start({
+      serverUrl: 'https://xfmbtpolqrs3.usemoralis.com:2053/server',
+      appId: '06XGAxB8cuXpPWxxHBMzuBYWogvZybZBB4Yjmxzp'
+    })
+
+    /** получаем список NFT через Moralis */
+
+    const options = {
+      chain: 'rinkeby', // 'eth',
+      address: '0xC37194de0b62446528d674FF057AE3a292cbA6e3',
+      limit: 10
+    } as any
+    const nfts = await Moralis.Web3API.account.getNFTs(options)
+
+    console.log(nfts)
+
+    return []
   }
 
   /** refresh NFT data */

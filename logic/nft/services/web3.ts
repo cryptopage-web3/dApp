@@ -1,6 +1,7 @@
 import { Service, Container, Inject } from 'vue-typedi'
+import Moralis from 'moralis'
 import Web3 from 'web3'
-import { ERC721ABI } from '~/constants/abi-samples'
+// import { ERC721ABI } from '~/constants/abi-samples'
 import AddressService from '~/logic/address/services'
 import AuthService from '~/logic/auth/service'
 import {
@@ -102,12 +103,18 @@ export default class NFTWeb3Service {
   }: FetchOneType): Promise<ERC721ContractDataType | null> => {
     try {
       let comments = null
-      const contract = new this.$web3Address.eth.Contract(
-        ERC721ABI,
+      // const contract = new this.$web3Address.eth.Contract(
+      //   ERC721ABI,
+      //   contractAddress
+      // )
+      // const tokenURI = await contract.methods.tokenURI(tokenId).call()
+      // const owner = await contract.methods.ownerOf(tokenId).call()
+      const { tokenURI, owner } = await this.getTokenURIFromMoralis({
+        tokenId,
         contractAddress
-      )
-      const tokenURI = await contract.methods.tokenURI(tokenId).call()
-      const owner = await contract.methods.ownerOf(tokenId).call()
+      })
+      console.log(tokenURI, owner)
+      debugger
       const statisticWithComments = await this.getComments({
         tokenId,
         contractAddress
@@ -120,6 +127,32 @@ export default class NFTWeb3Service {
       return { tokenURI, owner, comments }
     } catch {
       return null
+    }
+  }
+
+  public getTokenURIFromMoralis = async ({
+    tokenId,
+    contractAddress
+  }: FetchOneType): Promise<{
+    tokenURI: string
+    owner: string
+  }> => {
+    Moralis.start({
+      serverUrl: 'https://xfmbtpolqrs3.usemoralis.com:2053/server',
+      appId: '06XGAxB8cuXpPWxxHBMzuBYWogvZybZBB4Yjmxzp'
+    })
+
+    const data = await Moralis.Web3API.token.getTokenIdOwners({
+      chain: 'rinkeby', // 'eth',
+      address: contractAddress,
+      token_id: tokenId
+    })
+
+    const [token] = data.result || []
+
+    return {
+      tokenURI: token.token_uri || '',
+      owner: token.owner_of || ''
     }
   }
 
