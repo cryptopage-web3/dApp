@@ -1,0 +1,792 @@
+.nft-form__field {
+    margin-bottom: 15px;
+}
+
+.nft-form__textarea {
+	width: 100%;
+	height: 175px;
+	border-radius: 15px;
+	background-color: #ffffff;
+	padding: 15px;
+	border: none;
+	color: #000000;
+	font-family: "Myriad Pro";
+	font-size: 14px;
+	font-weight: 400;
+    line-height: 19px;
+}
+.nft-form__textarea::-webkit-input-placeholder    {color: #9e9e9e;opacity: 1;}
+.nft-form__textarea::-moz-placeholder 			{color: #9e9e9e;opacity: 1;}
+.nft-form__textarea:-moz-placeholder 			    {color: #9e9e9e;opacity: 1;}
+.nft-form__textarea:-ms-input-placeholder 		{color: #9e9e9e;opacity: 1;}
+
+.nft-form__text {
+	width: 100%;
+	height: 50px;
+	border-radius: 15px;
+	background-color: #ffffff;
+	padding: 15px;
+	border: none;
+	color: #000000;
+	font-family: "Myriad Pro";
+	font-size: 14px;
+	font-weight: 400;
+}
+.nft-form__text::-webkit-input-placeholder    {color: #9e9e9e;opacity: 1;}
+.nft-form__text::-moz-placeholder 			{color: #9e9e9e;opacity: 1;}
+.nft-form__text:-moz-placeholder 			    {color: #9e9e9e;opacity: 1;}
+.nft-form__text:-ms-input-placeholder 		{color: #9e9e9e;opacity: 1;}
+
+.nft-form__controls {
+    display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.nft-form__control {
+	height: 77px;
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	width: 88px;
+	background-color: #ffffff;
+	border-radius: 15px;
+	margin-right: 18px;
+	-webkit-transition: background-color 0.5s;
+	-o-transition: background-color 0.5s;
+	transition: background-color 0.5s;
+    font-size: 30px;
+    color: #2a91ff;
+}
+
+.nft-form__control:hover {
+	background-color: #dfdede;
+    color: #2a91ff;
+}
+
+.nft-form__control img {
+	display: inline-block;
+	max-width: 80%;
+}
+
+.nft-form__control:last-child {
+	margin-right: 0;
+}
+
+.creat-post-form__title {
+    color: #000000;
+}
+
+.creat-post-form__text {
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+.nft-form__file {
+    position: relative;
+    overflow: hidden;
+    height: 280px;
+    border-radius: 20px;
+    margin: 0 20px 15px;
+    background-color: #ffffff;
+}
+
+.nft-form__file img {
+    -o-object-fit: cover;
+       object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.nft-form__file-delete {
+    position: absolute;
+    z-index: 2;
+    border-radius: 50%;
+    right: 10px;
+    top: 10px;
+    padding: 10px;
+    opacity: 0.4;
+    transition: 0.35s ease;
+    cursor: pointer;
+    background-color: #000000;
+}
+
+.nft-form__file-delete:hover {
+    opacity: 0.8;
+}
+
+.nft-form__file-delete svg {
+    width: 18px;
+    height: 18px;
+    * {
+        fill: #ffffff;
+    }
+}
+
+.nft-form__file_video video {
+    height: 280px;
+    width: 100%;
+    z-index: 1;
+    background-color: #f9f9f9;
+}
+
+.nft-form__file_audio {
+    padding: 60px 10px 10px;
+    height: auto;
+    background-color: #fafafa;
+}
+
+.nft-form__file_audio audio {
+    width: 100%;
+    height: 50px;
+}
+
+.creat-post-bottom {
+    padding-top: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.creat-post-bottom__spinner {
+    margin-right: 10px;
+}
+
+.creat-post-bottom__continue {
+    cursor: pointer;
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    color: #1886ff;
+}
+
+/* ======= attributes ======== */
+
+.nft-form__attributes {
+    display: none;
+    margin: 0 20px 15px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #eaf0f5;
+}
+
+.nft-form__attribute {
+    background-color: #ffffff;
+    border-bottom: 1px solid #eaf0f5;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &-header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 15px 20px;
+        color: #2a91ff;
+
+        &-icon {
+            margin-right: 20px;
+            width: 20px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        &-title {
+            font-size: 16px;
+        }
+
+        &-arrow {
+            font-size: 18px;
+            margin-left: auto;
+        }
+    }
+
+    &-container {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 5px;
+        border-top: 1px solid #f2f7fc;
+        background-color: #f9fcff;
+    }
+
+    input::-webkit-input-placeholder    {color: #9e9e9e;opacity: 1;}
+    input::-moz-placeholder 			{color: #9e9e9e;opacity: 1;}
+    input:-moz-placeholder 			    {color: #9e9e9e;opacity: 1;}
+    input:-ms-input-placeholder 		{color: #9e9e9e;opacity: 1;}
+}
+
+.nft-form__сomments-switch {
+    width: 33px;
+    height: 20px;
+    border-radius: 10px;
+    position: relative;
+    background-color: #e1e9f1;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 2px;
+        top: 2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #ffffff;
+        transition: all 0.2s ease;
+    }
+
+    &_selected {
+        background-color: #2a91ff;
+
+        &::before {
+            left: 15px;
+        }
+    }
+}
+
+.nft-form__property {
+    margin: 5px;
+    width: 150px;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #dfe8f1;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    background-color: #ffffff;
+
+    &_add {
+        font-size: 32px;
+        color: #dfe8f1;
+        cursor: pointer;
+    }
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #536471;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &-input {
+        border: none;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 500;
+        text-overflow: ellipsis;
+        width: 100%;
+        background-color: transparent;
+
+        &_type {
+            color: #15b2e5;
+            font-size: 12px;
+            line-height: 20px;
+            text-transform: uppercase;
+        }
+
+        &_value {
+            color: #353840;
+            font-size: 15px;
+            line-height: 30px;
+        }
+    }
+}
+
+.nft-form__level {
+    margin: 5px;
+    width: 100%;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #dfe8f1;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    background-color: #ffffff;
+
+    &_add {
+        height: 50px;
+        font-size: 24px;
+        color: #dfe8f1;
+        cursor: pointer;
+    }
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #536471;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &-fields {
+        width: 100%;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-type {
+        flex-grow: 1;
+    }
+
+    &-values {
+        margin-left: 20px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    &-value {
+        width: 90px;
+    }
+
+    &-delimiter {
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #707a83;
+    }
+
+    &-input {
+        border: none;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #353840;
+        text-overflow: ellipsis;
+        background-color: transparent;
+        width: 100%;
+
+        &_value {
+            background-color: #f5f9fd;
+            padding: 0 10px;
+            line-height: 26px;
+            font-size: 13px;
+        }
+    }
+
+    &-range {
+        width: 100%;
+
+        &-bar {
+            border: 1px solid #e5e8eb;
+            border-radius: 14px;
+            height: 14px;
+            margin-top: 4px;
+            overflow: hidden;
+
+            &__fill {
+                height: 14px;
+                background-color: #2a91ff;
+                width: 0;
+            }
+        }
+    }
+}
+
+.nft-form__stat {
+    margin: 5px;
+    width: 100%;
+    height: 66px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #dfe8f1;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    background-color: #ffffff;
+
+    &_add {
+        height: 50px;
+        font-size: 24px;
+        color: #dfe8f1;
+        cursor: pointer;
+    }
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #536471;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &-fields {
+        width: 100%;
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-type {
+        flex-grow: 1;
+    }
+
+    &-values {
+        margin-left: 20px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    &-value {
+        width: 90px;
+    }
+
+    &-delimiter {
+        padding: 0 10px;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #707a83;
+    }
+
+    &-input {
+        border: none;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #353840;
+        text-overflow: ellipsis;
+        background-color: transparent;
+        width: 100%;
+
+        &_value {
+            background-color: #f5f9fd;
+            padding: 0 10px;
+            line-height: 26px;
+            font-size: 13px;
+        }
+    }
+}
+
+.nft-form__boost {
+    margin: 5px;
+    width: 150px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #dfe8f1;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    background-color: #ffffff;
+
+    &_add {
+        font-size: 32px;
+        color: #dfe8f1;
+        cursor: pointer;
+    }
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #536471;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &-name {
+        width: 100%;
+
+        &-input {
+            width: 100%;
+            border: none;
+            color: #353840;
+            font-size: 13px;
+            background-color: transparent;
+            padding: 5px 3px;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &-type {
+        width: 100%;
+
+        &-input {
+            width: 100%;
+            font-size: 13px;
+            border: none;
+            color: #353840;
+            background-color: transparent;
+            padding: 5px 0;
+            border-top: 1px solid #e5e8eb;
+            border-bottom: 1px solid #e5e8eb;
+        }
+    }
+
+    &-progress {
+        margin-top: 15px;
+
+        &-input {
+            font-size: 15px;
+            font-weight: 500;
+            color: #353840;
+            text-align: center;
+            border: none;
+            background-color: transparent;
+            width: 50px;
+            height: 30px;
+            text-overflow: ellipsis;
+            border-radius: 15px;
+            padding: 2px 5px 0;
+        }
+    }
+}
+
+.nft-form__date {
+    margin: 5px;
+    width: 100%;
+    height: 66px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid #dfe8f1;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    background-color: #ffffff;
+
+    &_add {
+        height: 50px;
+        font-size: 24px;
+        color: #dfe8f1;
+        cursor: pointer;
+    }
+
+    &-remove {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #536471;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    &-fields {
+        width: 100%;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-type {
+        flex-grow: 1;
+    }
+
+    &-input {
+        border: none;
+        font-size: 15px;
+        font-weight: 500;
+        line-height: 30px;
+        color: #353840;
+        text-overflow: ellipsis;
+        background-color: transparent;
+        width: 100%;
+    }
+
+    &-value {
+        margin-left: 20px;
+        flex-shrink: 0;
+
+        input {
+            background-color: #f5f9fd;
+            border: none;
+            box-shadow: none;
+            font-size: 13px;
+            height: 32px;
+        }
+
+        svg {
+            width: 13px;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .nft-form__control {
+        margin-right: 10px;
+        height: 65px;
+    }
+
+    .nft-form__file {
+        margin-left: 15px;
+        margin-right: 15px;
+        border-radius: 10px;
+    }
+
+    .nft-form__attributes {
+        margin-left: 15px;
+        margin-right: 15px;
+        border-radius: 10px;
+    }
+
+    .nft-form__attribute-header {
+        padding: 10px 15px;
+    }
+
+    .nft-form__attribute-header-icon {
+        font-size: 16px;
+    }
+
+    /* ====== property ====== */
+
+    .nft-form__property {
+        width: 100%;
+    }
+
+    .nft-form__property_add {
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .nft-form__property-field {
+        width: 100%;
+    }
+
+    /* ====== stat ====== */
+
+    .nft-form__stat {
+        height: auto;
+        min-height: 50px;
+    }
+
+    .nft-form__stat-fields {
+        display: block;
+        margin-top: 0;
+    }
+
+    .nft-form__stat-values {
+        margin-left: 0;
+    }
+
+    /* ====== levels ====== */
+
+    .nft-form__level {
+        height: auto;
+        min-height: 50px;
+    }
+
+    .nft-form__level-fields {
+        display: block;
+        margin-top: 0;
+        margin-bottom: 3px;
+    }
+
+    .nft-form__level-values {
+        margin-left: 0;
+    }
+
+    /* ====== dates ====== */
+
+    .nft-form__date {
+        height: auto;
+        min-height: 50px;
+    }
+
+    .nft-form__date-fields {
+        display: block;
+        margin-top: 0;
+    }
+
+    .nft-form__date-value {
+        margin-left: 0;
+        margin-top: 3px;
+    }
+
+    .nft-form__date-value .mx-datepicker {
+        width: 100%;
+    }
+
+    /* ====== boost ====== */
+
+    .nft-form__boost {
+        width: 100%;
+    }
+
+    .nft-form__boost_add {
+        height: 50px;
+        font-size: 24px;
+    }
+}

@@ -1,0 +1,61 @@
+<template>
+  <div class="transactions-body">
+    <transaction
+      v-for="transaction in transactions"
+      :key="uniqueKey(transaction)"
+      :transaction="transaction"
+    />
+    <loader v-if="$fetchState.pending" />
+    <div v-else-if="$fetchState.error" class="transactions-body__empty">
+      Error while fetching NFT
+    </div>
+    <div v-else-if="!transactions.length" class="transactions-body__empty">
+      No NFT
+    </div>
+  </div>
+</template>
+<script lang="ts">
+import { Component, mixins } from 'nuxt-property-decorator'
+import PaginationMixin from '~/mixins/pagination'
+import { TransactionType } from '~/logic/transactions/types'
+import { getUniqueKey } from '~/utils/array'
+
+@Component({
+  components: {
+    transaction: () =>
+      import('~/components/transactions/ERC721Transaction.vue'),
+    loader: () => import('~/components/loaders/GrowLoader.vue')
+  }
+})
+export default class ERC721TransactionsTab extends mixins(PaginationMixin) {
+  get transactions(): TransactionType[] {
+    return this.typedStore.address.ERC721Transactions
+  }
+
+  get hasAllPages(): boolean {
+    return this.typedStore.address.hasAllERC721TransactionsPages
+  }
+
+  async fetch() {
+    /** не делаем запрос:
+     * если уже получен полный список транзакций,
+     * если сменился адрес, но в сторе адрес еще старый,
+     * если сменилась сеть, но в сторе сеть еще старая,
+     *
+     * из-за этого транзакции стора и пагинатор относятся еще к старому адресу
+     * должен отработать метод clearTransactions() в beforeCreate
+     */
+    if (this.hasAllPages || this.isNotSyncedAddressWithStore) {
+      return
+    }
+
+    await this.typedStore.address.getERC721Transactions({
+      address: this.$route.params.address
+    })
+  }
+
+  uniqueKey(transaction: TransactionType) {
+    return getUniqueKey(transaction)
+  }
+}
+</script>
