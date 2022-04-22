@@ -4,7 +4,6 @@ import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
 import * as tPromise from 'io-ts-promise'
 import { Service, Container } from 'vue-typedi'
 import { IPFSHTTPClient } from 'ipfs-http-client'
-import fileType from 'file-type'
 import { NFTPayload } from '~/logic/nft/models'
 import {
   NFTPayloadType,
@@ -39,21 +38,9 @@ export default class NFTIPFSService {
   public fetchMedia = async (ipfsHash: string): Promise<NFTMediaType> => {
     try {
       const response = uint8ArrayConcat(await all(this.$ipfs.cat(ipfsHash)))
-      const fileTypeResult = await fileType.fromBuffer(response)
       return await new Promise((resolve) => {
         const reader = new FileReader()
         reader.onloadend = () => {
-          const result = String(reader.result)
-          if (fileTypeResult !== undefined) {
-            const type = fileTypeResult.mime.split('/')[0]
-            if (type === 'audio') {
-              return resolve({ audio: result })
-            } else if (type === 'video') {
-              return resolve({ video: result })
-            } else if (type === 'image') {
-              return resolve({ image: result })
-            }
-          }
           resolve({})
         }
         const blob = new Blob([response.buffer])

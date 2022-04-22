@@ -43,7 +43,6 @@ export default {
     '~/plugins/filters.ts',
     '~/plugins/jazzicon.ts',
     '~/plugins/web3.ts',
-    '~/plugins/easy-circular-progress.client.ts',
     '~/plugins/notifications.client.ts',
     '~/plugins/fontawesome.ts',
     '~/plugins/type-di.ts',

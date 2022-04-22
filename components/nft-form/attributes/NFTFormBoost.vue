@@ -18,21 +18,14 @@
       </select>
     </div>
     <div class="nft-form__boost-progress">
-      <Progress
-        :value="progress"
-        :radius="30"
-        :stroke-width="7"
-        stroke-color="#2a91ff"
-      >
-        <div class="nft-form__boost-progress-content">
-          <input
-            v-model="value"
-            type="text"
-            placeholder="XX"
-            class="nft-form__boost-progress-input"
-          />
-        </div>
-      </Progress>
+      <div class="nft-form__boost-progress-content">
+        <input
+          v-model="value"
+          type="text"
+          placeholder="XX"
+          class="nft-form__boost-progress-input"
+        />
+      </div>
     </div>
   </div>
 </template>
