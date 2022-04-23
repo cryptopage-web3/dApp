@@ -1,6 +1,4 @@
 import { AbiItem } from 'web3-utils'
-import * as ts from 'io-ts'
-import * as tPromise from 'io-ts-promise'
 import { Service, Inject } from 'vue-typedi'
 import { AxiosResponse } from 'axios'
 import { EtherscanAPIServiceMixin } from '~/logic/mixins/api'
@@ -14,14 +12,9 @@ import {
 import EtherscanTransactionParser from '~/logic/services/api/etherscan/parser'
 import {
   EtherscanNormalTransactionType,
-  EtherscanLastPriceResponseType,
   EtherscanERC20TransactionType,
   EtherscanERC721TransactionType,
-  EtherscanInternalTransactionType,
-  EtherscanNormalTransactionsResponseType,
-  EtherscanERC20TransactionsResponseType,
-  EtherscanERC721TransactionsResponseType,
-  EtherscanInternalTransactionsResponseType
+  EtherscanInternalTransactionType
 } from '~/logic/services/api/etherscan/types'
 import {
   EtherscanABIResponse,
@@ -47,8 +40,8 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const options = { address, module: 'contract', action: 'getabi' }
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}`
-    const response = await this.$axios.get(URL)
-    const data = await tPromise.decode(EtherscanABIResponse, response.data)
+    const response = await this.$axios.get<EtherscanABIResponse>(URL)
+    const data = response.data
     return JSON.parse(data.result)
   }
 
@@ -61,16 +54,13 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
     try {
-      const response = await this.$axios.get(URL)
+      const response = await this.$axios.get<{
+        status: string
+        message: string
+        result: string
+      }>(URL)
 
-      const data = await tPromise.decode(
-        ts.type({
-          status: ts.string,
-          message: ts.string,
-          result: ts.string
-        }),
-        response.data
-      )
+      const data = response.data
       return Number(data.result)
     } catch {
       return 0
@@ -92,16 +82,13 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
 
     try {
-      const response = await this.$axios.get(URL)
+      const response = await this.$axios.get<{
+        jsonrpc: string
+        id: number
+        result: string
+      }>(URL)
 
-      const data = await tPromise.decode(
-        ts.type({
-          jsonrpc: ts.string,
-          id: ts.number,
-          result: ts.string
-        }),
-        response.data
-      )
+      const data = response.data
 
       return Number(data.result)
     } catch {
@@ -131,13 +118,10 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
 
     try {
-      const response: AxiosResponse<EtherscanNormalTransactionsResponseType> =
+      const response: AxiosResponse<EtherscanNormalTransactionsResponse> =
         await this.$axios.get(URL)
 
-      const data = await tPromise.decode(
-        EtherscanNormalTransactionsResponse,
-        response.data
-      )
+      const data = response.data
 
       return await Promise.all(
         data.result.map(
@@ -168,13 +152,10 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
 
     try {
-      const response: AxiosResponse<EtherscanInternalTransactionsResponseType> =
+      const response: AxiosResponse<EtherscanInternalTransactionsResponse> =
         await this.$axios.get(URL)
 
-      const data = await tPromise.decode(
-        EtherscanInternalTransactionsResponse,
-        response.data
-      )
+      const data = response.data
 
       return await data.result.map(
         (transaction: EtherscanInternalTransactionType): TransactionType =>
@@ -213,13 +194,10 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
 
     try {
-      const response: AxiosResponse<EtherscanERC20TransactionsResponseType> =
+      const response: AxiosResponse<EtherscanERC20TransactionsResponse> =
         await this.$axios.get(URL)
 
-      const data = await tPromise.decode(
-        EtherscanERC20TransactionsResponse,
-        response.data
-      )
+      const data = response.data
 
       return await Promise.all(
         data.result.map(
@@ -254,13 +232,10 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
 
     try {
-      const response: AxiosResponse<EtherscanERC721TransactionsResponseType> =
+      const response: AxiosResponse<EtherscanERC721TransactionsResponse> =
         await this.$axios.get(URL)
 
-      const data = await tPromise.decode(
-        EtherscanERC721TransactionsResponse,
-        response.data
-      )
+      const data = response.data
 
       return await Promise.all(
         data.result.map(
@@ -285,12 +260,9 @@ export default class EtherscanAPIService extends EtherscanAPIServiceMixin {
     const params = new URLSearchParams(options).toString()
     const URL = `${this.baseURL}${params}&apikey=${this.APIKey}`
     try {
-      const response: AxiosResponse<EtherscanLastPriceResponseType> =
+      const response: AxiosResponse<EtherscanLastPriceResponse> =
         await this.$axios.get(URL)
-      const data = await tPromise.decode(
-        EtherscanLastPriceResponse,
-        response.data
-      )
+      const data = response.data
       const key = `${prefix}${currency}`
       const rate = data.result[key] || 0
 

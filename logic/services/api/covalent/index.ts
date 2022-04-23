@@ -1,4 +1,3 @@
-import * as tPromise from 'io-ts-promise'
 import { Service } from 'vue-typedi'
 import { CovalentAPIServiceMixin } from '~/logic/mixins/api'
 import { CovalentAPITokensResponse } from '~/logic/services/api/covalent/models'
@@ -14,11 +13,8 @@ export default class CovalentAPIService extends CovalentAPIServiceMixin {
   ): Promise<TokenBalanceType[]> => {
     const URL = `${this.baseURL}/address/${address}/balances_v2/?key=${this.APIKey}`
     try {
-      const response = await this.$axios.get(URL)
-      const data = await tPromise.decode(
-        CovalentAPITokensResponse,
-        response.data
-      )
+      const response = await this.$axios.get<CovalentAPITokensResponse>(URL)
+      const data = response.data
       const parser = new CovalentAPITokenBalanceParser()
 
       return data.data.items.map(

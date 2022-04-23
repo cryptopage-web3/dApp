@@ -1,8 +1,6 @@
-import * as tPromise from 'io-ts-promise'
 import { Service, Inject } from 'vue-typedi'
 import Web3 from 'web3'
 import { ERC20ABI } from '~/constants/abi-samples'
-import { TokenInfo } from '~/logic/tokens/models'
 import { TokenInfoType, TokenBalanceType } from '~/logic/tokens/types'
 import tokens from '~/logic/tokens'
 import AddressService from '~/logic/address/services'
@@ -31,13 +29,13 @@ export default class TokenWeb3Service {
       const decimals = Number(await contract.methods.decimals().call())
       const symbol = await contract.methods.symbol().call()
 
-      return await tPromise.decode(TokenInfo, {
+      return {
         name,
         address,
         totalSupply,
         decimals,
         symbol
-      })
+      }
     } catch {
       return null
     }

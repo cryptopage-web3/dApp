@@ -1,5 +1,4 @@
 import { AxiosInstance } from 'axios'
-import * as tPromise from 'io-ts-promise'
 import { Inject, Service, Container } from 'vue-typedi'
 import { NFTPayload } from '~/logic/nft/models'
 import { NFTPayloadType, NFTMediaType } from '~/logic/nft/types'
@@ -72,10 +71,10 @@ export default class NFTAPIService {
     tokenURI: string
   ): Promise<NFTPayloadType> => {
     try {
-      const response = await this.$axios.get(tokenURI)
-      return tPromise.decode(NFTPayload, response.data)
+      const response = await this.$axios.get<NFTPayload>(tokenURI)
+      return response.data
     } catch {
-      return {}
+      return {} as NFTPayload
     }
   }
 }

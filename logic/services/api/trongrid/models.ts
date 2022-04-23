@@ -1,64 +1,57 @@
-import * as ts from 'io-ts'
+export type BaseTronGridAPIResponse = {
+  error: boolean
+  error_code: number | null
+  error_message: string | null
+}
 
-export const BaseTronGridAPIResponse = ts.type({
-  error: ts.boolean,
-  error_code: ts.union([ts.number, ts.null]),
-  error_message: ts.union([ts.string, ts.null])
-})
+export type TronGridAPITokensResponseDataItem = {
+  balance: string
+  amount: number
+  tokenAbbr: string
+  tokenCanShow: number
+  tokenDecimal: number
+  tokenId: string
+  tokenLogo: string
+  logo_url: string
+  tokenName: string
+  tokenPriceInTrx: string
+  tokenType: string
+}
 
-export const TronGridAPITokensResponseDataItem = ts.type({
-  balance: ts.string,
-  amount: ts.number,
-  tokenAbbr: ts.string,
-  tokenCanShow: ts.number,
-  tokenDecimal: ts.number,
-  tokenId: ts.string,
-  tokenLogo: ts.string,
-  logo_url: ts.string,
-  tokenName: ts.string,
-  tokenPriceInTrx: ts.string,
-  tokenType: ts.string
-})
+export type TronGridAPITokensResponseData = {
+  address: string
+  updated_at: string
+  next_update_at: string
+  quote_currency: string
+  chain_id: number
+  pagination: null
+  items: TronGridAPITokensResponseDataItem[]
+}
 
-export const TronGridAPITokensResponseData = ts.type({
-  address: ts.string,
-  updated_at: ts.string,
-  next_update_at: ts.string,
-  quote_currency: ts.string,
-  chain_id: ts.number,
-  pagination: ts.null,
-  items: ts.array(TronGridAPITokensResponseDataItem)
-})
+export type TronGridAPITokensResponse = BaseTronGridAPIResponse & {
+  data: TronGridAPITokensResponseData
+}
 
-export const TronGridAPITokensResponse = ts.intersection([
-  BaseTronGridAPIResponse,
-  ts.type({
-    data: TronGridAPITokensResponseData
-  })
-])
+export type TronGridAPITransactionsResponseDataItem = {
+  blockNumber: string
+  block_timestamp: number
+  energy_fee: string
+  energy_usage: string
+  energy_usage_total: string
+  net_fee: string
+  net_usage: string
+  raw_data: any
+  raw_data_hex: string
+  signature: string
+  txID: string
+}
 
-export const TronGridAPITransactionsResponseDataItem = ts.type({
-  blockNumber: ts.string,
-  block_timestamp: ts.number,
-  energy_fee: ts.string,
-  energy_usage: ts.string,
-  energy_usage_total: ts.string,
-  net_fee: ts.string,
-  net_usage: ts.string,
-  raw_data: ts.any,
-  raw_data_hex: ts.string,
-  signature: ts.string,
-  txID: ts.string
-})
+type TronGridTRC20 = {
+  contractAddress: string
+  tokenDecimal: string
+  tokenName: string
+  tokenSymbol: string
+}
 
-const TronGridTRC20 = ts.type({
-  contractAddress: ts.string,
-  tokenDecimal: ts.string,
-  tokenName: ts.string,
-  tokenSymbol: ts.string
-})
-
-export const TronGridTRC20Transaction = ts.type({
-  TronGridTRC20,
+export type TronGridTRC20Transaction = TronGridTRC20 &
   TronGridAPITransactionsResponseDataItem
-})

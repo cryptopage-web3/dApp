@@ -1,4 +1,3 @@
-import * as tPromise from 'io-ts-promise'
 import { Inject, Service } from 'vue-typedi'
 import { NFTPayload } from '~/logic/nft/models'
 import NFTAdapter from '~/logic/nft/adapter'
@@ -57,9 +56,9 @@ export default class NFTService {
     const base64 = tokenURI.split(';base64,')[1]
     try {
       const response = await JSON.parse(atob(base64))
-      return tPromise.decode(NFTPayload, response)
+      return response as NFTPayload
     } catch (error) {
-      return {}
+      return {} as NFTPayload
     }
   }
 
@@ -79,16 +78,6 @@ export default class NFTService {
     }
   }
 
-  /**
-   * Fetches NFT from the remote URI (TokenURI).
-   *
-   * Uses runtime type validation to make sure
-   * that types are up-to-date with the any server.
-   *
-   * @see https://github.com/aeirola/io-ts-promise.
-   *
-   * @returns Parsed response data.
-   */
   public fetchOne = async ({
     tokenId,
     contractAddress

@@ -1,50 +1,41 @@
-import * as t from 'io-ts'
+export type BaseToken = {
+  name: string
+  symbol: string
+  decimals: number
+}
 
-export const BaseToken = t.type({
-  name: t.string,
-  symbol: t.string,
-  decimals: t.number
-})
+export type TokenInfo = {
+  address: string
+} & {
+  id?: number
+  totalSupply?: string
+  image?: string
+  rate?: {
+    usd?: number
+  }
+} & BaseToken
 
-export const TokenInfo = t.intersection([
-  t.type({
-    address: t.string
-  }),
-  t.partial({
-    id: t.number,
-    totalSupply: t.string,
-    image: t.string,
-    rate: t.partial({
-      usd: t.number
-    })
-  }),
-  BaseToken
-])
+export type IPFSTokensStorageItemImages = {
+  images: {
+    16: string
+    32: string
+    64: string
+    128: string
+  }
+}
 
-export const IPFSTokensStorageItemImages = t.type({
-  images: t.type({
-    16: t.string,
-    32: t.string,
-    64: t.string,
-    128: t.string
-  })
-})
+export type IPFSTokensStorageItem = BaseToken & IPFSTokensStorageItemImages
 
-export const IPFSTokensStorageItem = t.intersection([
-  BaseToken,
-  IPFSTokensStorageItemImages
-])
-
-export const IPFSTokensStorageItemResponse = t.type({
-  remainderPath: t.string,
+export type IPFSTokensStorageItemResponse = {
+  remainderPath: string
   value: IPFSTokensStorageItem
-})
+}
 
-export const IPFSTokensStorageRootValue = t.type({
+export type IPFSTokensStorageRootValue = {
   address: IPFSTokensStorageItem
-})
+}
 
-export const IPFSTokensStorageRootResponse = t.type({
-  remainderPath: t.string,
+export type IPFSTokensStorageRootResponse = {
+  remainderPath: string
   value: IPFSTokensStorageRootValue
-})
+}

@@ -1,7 +1,6 @@
 import all from 'it-all'
 import { concat as uint8ArrayConcat } from 'uint8arrays/concat'
 import { toString as uint8ArrayToString } from 'uint8arrays/to-string'
-import * as tPromise from 'io-ts-promise'
 import { Service, Container } from 'vue-typedi'
 import { IPFSHTTPClient } from 'ipfs-http-client'
 import { NFTPayload } from '~/logic/nft/models'
@@ -57,9 +56,9 @@ export default class NFTIPFSService {
     try {
       const response = uint8ArrayConcat(await all(this.$ipfs.cat(ipfsHash)))
       const payload = JSON.parse(uint8ArrayToString(response))
-      return await tPromise.decode(NFTPayload, payload)
+      return payload as NFTPayload
     } catch {
-      return {}
+      return {} as NFTPayload
     }
   }
 

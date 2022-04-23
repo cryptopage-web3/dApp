@@ -1,4 +1,3 @@
-import * as ts from 'io-ts'
 import {
   EtherscanNormalTransaction,
   EtherscanInternalTransaction,
@@ -11,31 +10,17 @@ import {
   EtherscanABIResponse,
   EtherscanLastPriceResponse
 } from '~/logic/services/api/etherscan/models'
-export type EtherscanLastPriceResponseType = ts.TypeOf<
-  typeof EtherscanLastPriceResponse
->
-export type EtherscanNormalTransactionType = ts.TypeOf<
-  typeof EtherscanNormalTransaction
->
-export type EtherscanInternalTransactionType = ts.TypeOf<
-  typeof EtherscanInternalTransaction
->
-export type EtherscanERC20TransactionType = ts.TypeOf<
-  typeof EtherscanERC20Transaction
->
-export type EtherscanERC721TransactionType = ts.TypeOf<
-  typeof EtherscanERC721Transaction
->
-export type EtherscanNormalTransactionsResponseType = ts.TypeOf<
-  typeof EtherscanNormalTransactionsResponse
->
-export type EtherscanInternalTransactionsResponseType = ts.TypeOf<
-  typeof EtherscanInternalTransactionsResponse
->
-export type EtherscanERC20TransactionsResponseType = ts.TypeOf<
-  typeof EtherscanERC20TransactionsResponse
->
-export type EtherscanERC721TransactionsResponseType = ts.TypeOf<
-  typeof EtherscanERC721TransactionsResponse
->
-export type EtherscanABIResponseType = ts.TypeOf<typeof EtherscanABIResponse>
+export type EtherscanLastPriceResponseType = EtherscanLastPriceResponse
+export type EtherscanNormalTransactionType = EtherscanNormalTransaction
+export type EtherscanInternalTransactionType = EtherscanInternalTransaction
+export type EtherscanERC20TransactionType = EtherscanERC20Transaction
+export type EtherscanERC721TransactionType = EtherscanERC721Transaction
+export type EtherscanNormalTransactionsResponseType =
+  EtherscanNormalTransactionsResponse
+export type EtherscanInternalTransactionsResponseType =
+  EtherscanInternalTransactionsResponse
+export type EtherscanERC20TransactionsResponseType =
+  EtherscanERC20TransactionsResponse
+export type EtherscanERC721TransactionsResponseType =
+  EtherscanERC721TransactionsResponse
+export type EtherscanABIResponseType = EtherscanABIResponse

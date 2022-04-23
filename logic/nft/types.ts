@@ -1,5 +1,4 @@
 /* eslint-disable camelcase */
-import * as ts from 'io-ts'
 import {
   Attribute,
   Property,
@@ -16,12 +15,12 @@ import {
  */
 
 // We add owner only on the client (for demo purposes)
-export type AttributeType = ts.TypeOf<typeof Attribute>
-export type PropertyType = ts.TypeOf<typeof Property>
-export type NFTPayloadType = ts.TypeOf<typeof NFTPayload>
-export type ParsedNFTType = ts.TypeOf<typeof ParsedNFT>
-export type NFTMediaType = ts.TypeOf<typeof NFTMedia>
-export type NFTAttributesType = ts.TypeOf<typeof NFTAttributes>
+export type AttributeType = Attribute
+export type PropertyType = Property
+export type NFTPayloadType = NFTPayload
+export type ParsedNFTType = ParsedNFT
+export type NFTMediaType = NFTMedia
+export type NFTAttributesType = NFTAttributes
 
 export type NFTCommentsType = {
   total: string

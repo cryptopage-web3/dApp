@@ -1,4 +1,3 @@
-import * as tPromise from 'io-ts-promise'
 import { Service, Container } from 'vue-typedi'
 import { create, IPFSHTTPClient } from 'ipfs-http-client'
 import { CID } from 'multiformats/cid'
@@ -58,10 +57,8 @@ export default class TokenIPFSService {
         path,
         timeout: this.timeout
       })
-      const response = await tPromise.decode(
-        IPFSTokensStorageItemResponse,
-        result
-      )
+      const response = result as IPFSTokensStorageItemResponse
+
       return this.toTokenInfo(address, response.value)
     } catch {
       return null

@@ -1,42 +1,37 @@
-import * as ts from 'io-ts'
+export type BaseCovalentAPIResponse = {
+  error: boolean
+  error_code: number | null
+  error_message: string | null
+}
 
-export const BaseCovalentAPIResponse = ts.type({
-  error: ts.boolean,
-  error_code: ts.union([ts.number, ts.null]),
-  error_message: ts.union([ts.string, ts.null])
-})
+export type CovalentAPITokensResponseDataItem = {
+  balance: string
+  balance_24h: string | null
+  contract_address: string
+  contract_decimals: number
+  contract_name: string | null
+  contract_ticker_symbol: string | null
+  last_transferred_at: string | null
+  logo_url: string
+  nft_data: null | string
+  quote: null | number
+  quote_24h: null | number
+  quote_rate: null | number
+  quote_rate_24h: null | number
+  supports_erc: null | string[]
+  type: string
+}
 
-export const CovalentAPITokensResponseDataItem = ts.type({
-  balance: ts.string,
-  balance_24h: ts.union([ts.string, ts.null]),
-  contract_address: ts.string,
-  contract_decimals: ts.number,
-  contract_name: ts.union([ts.string, ts.null]),
-  contract_ticker_symbol: ts.union([ts.string, ts.null]),
-  last_transferred_at: ts.union([ts.string, ts.null]),
-  logo_url: ts.string,
-  nft_data: ts.union([ts.null, ts.string]),
-  quote: ts.union([ts.null, ts.number]),
-  quote_24h: ts.union([ts.null, ts.number]),
-  quote_rate: ts.union([ts.null, ts.number]),
-  quote_rate_24h: ts.union([ts.null, ts.number]),
-  supports_erc: ts.union([ts.null, ts.array(ts.string)]),
-  type: ts.string
-})
+export type CovalentAPITokensResponseData = {
+  address: string
+  updated_at: string
+  next_update_at: string
+  quote_currency: string
+  chain_id: number
+  pagination: null
+  items: CovalentAPITokensResponseDataItem[]
+}
 
-export const CovalentAPITokensResponseData = ts.type({
-  address: ts.string,
-  updated_at: ts.string,
-  next_update_at: ts.string,
-  quote_currency: ts.string,
-  chain_id: ts.number,
-  pagination: ts.null,
-  items: ts.array(CovalentAPITokensResponseDataItem)
-})
-
-export const CovalentAPITokensResponse = ts.intersection([
-  BaseCovalentAPIResponse,
-  ts.type({
-    data: CovalentAPITokensResponseData
-  })
-])
+export type CovalentAPITokensResponse = BaseCovalentAPIResponse & {
+  data: CovalentAPITokensResponseData
+}

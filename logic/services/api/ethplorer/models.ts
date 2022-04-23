@@ -1,78 +1,76 @@
-import * as t from 'io-ts'
+export type EthplorerBalance = {
+  balance: number
+  rawBalance: string
+}
 
-export const EthplorerBalance = t.type({
-  balance: t.number,
-  rawBalance: t.string
-})
+export type EthplorerPrice = {
+  rate: number
+  currency: string | undefined
+  diff: number
+  diff7d: number | undefined
+  diff30d: number | undefined
+  marketCapUsd: number
+  availableSupply: number
+  volume24h: number | undefined
+  volDiff1: number | undefined
+  volDiff7: number | undefined
+  volDiff30: number | undefined
+  ts: number
+}
 
-export const EthplorerPrice = t.type({
-  rate: t.number,
-  currency: t.union([t.string, t.undefined]),
-  diff: t.number,
-  diff7d: t.union([t.number, t.undefined]),
-  diff30d: t.union([t.number, t.undefined]),
-  marketCapUsd: t.number,
-  availableSupply: t.number,
-  volume24h: t.union([t.number, t.undefined]),
-  volDiff1: t.union([t.number, t.undefined]),
-  volDiff7: t.union([t.number, t.undefined]),
-  volDiff30: t.union([t.number, t.undefined]),
-  ts: t.number
-})
+export type EthplorerETH = {
+  price: EthplorerPrice
+  balance: number
+  rawBalance: string
+}
 
-export const EthplorerETH = t.type({
-  price: EthplorerPrice,
-  balance: t.number,
-  rawBalance: t.string
-})
+export type EthplorerContractInfo = {
+  creatorAddress: string
+  transactionHash: string
+  timestamp: number
+}
 
-export const EthplorerContractInfo = t.type({
-  creatorAddress: t.string,
-  transactionHash: t.string,
-  timestamp: t.number
-})
+export type EthplorerTokenInfo = {
+  address?: string
+  coingecko?: string
+  facebook?: string
+  twitter?: string
+  totalSupply?: string
+  storageTotalSupply?: string
+  name?: string
+  symbol?: string
+  decimals?: string | number
+  publicTags?: string[]
+  price?: EthplorerPrice | boolean
+  owner?: string
+  countOps?: number
+  totalIn?: number
+  totalOut?: number
+  transfersCount?: number
+  ethTransfersCount?: number
+  holdersCount?: number
+  issuancesCount?: number
+  image?: string
+  description?: string
+  website?: string
+  telegram?: string
+  lastUpdated?: number
+  slot?: number
+}
 
-export const EthplorerTokenInfo = t.partial({
-  address: t.string,
-  coingecko: t.string,
-  facebook: t.string,
-  twitter: t.string,
-  totalSupply: t.string,
-  storageTotalSupply: t.string,
-  name: t.string,
-  symbol: t.string,
-  decimals: t.union([t.string, t.number]),
-  publicTags: t.array(t.string),
-  price: t.union([EthplorerPrice, t.boolean]),
-  owner: t.string,
-  countOps: t.number,
-  totalIn: t.number,
-  totalOut: t.number,
-  transfersCount: t.number,
-  ethTransfersCount: t.number,
-  holdersCount: t.number,
-  issuancesCount: t.number,
-  image: t.string,
-  description: t.string,
-  website: t.string,
-  telegram: t.string,
-  lastUpdated: t.number,
-  slot: t.number
-})
-
-export const EthplorerToken = t.type({
-  balance: t.number,
-  rawBalance: t.string,
-  totalIn: t.number,
-  totalOut: t.number,
+export type EthplorerToken = {
+  balance: number
+  rawBalance: string
+  totalIn: number
+  totalOut: number
   tokenInfo: EthplorerTokenInfo
-})
+}
 
-export const EthplorerGetAddressInfoResponse = t.type({
-  ETH: EthplorerETH,
-  address: t.string,
-  contractInfo: t.union([EthplorerContractInfo, t.undefined]),
-  tokenInfo: t.union([EthplorerTokenInfo, t.undefined]),
-  tokens: t.union([t.array(EthplorerToken), t.undefined]),
-  countTxs: t.number
-})
+export type EthplorerGetAddressInfoResponse = {
+  ETH: EthplorerETH
+  address: string
+  contractInfo: EthplorerContractInfo | undefined
+  tokenInfo: EthplorerTokenInfo | undefined
+  tokens: EthplorerToken[] | undefined
+  countTxs: number
+}

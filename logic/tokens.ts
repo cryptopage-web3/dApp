@@ -47,6 +47,5 @@ export default {
   IPFS: new Token('ipfs'),
   WEB3: new Token('web3'),
   WEB3_HTTPS: new Token('web3-https'),
-  SEA: new Token('sea'),
   SEARCH: new Token('search')
 }

@@ -130,10 +130,6 @@ export default class AuthService extends Vue {
     return Container.get(tokens.WEB3)
   }
 
-  protected get $sea(): any {
-    return Container.get(tokens.SEA)
-  }
-
   /**
    * Just reacive proxy for simple access
    */
