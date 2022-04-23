@@ -62,7 +62,6 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     ['@nuxtjs/eslint-module'],
-    ['@nuxtjs/pwa'],
     [
       '@nuxt/typescript-build',
       {
@@ -90,8 +89,7 @@ export default {
         proxy: false,
         retry: false
       }
-    ],
-    ['nuxt-viewport']
+    ]
   ],
 
   workbox: {

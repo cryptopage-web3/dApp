@@ -1,10 +1,10 @@
-import { Transaction } from 'web3-eth/types'
 import { Service, Inject } from 'vue-typedi'
 import Web3 from 'web3'
 import tokens from '~/logic/tokens'
 import {
   TransactionType,
-  ParamsTransactionsType
+  ParamsTransactionsType,
+  Transaction
 } from '~/logic/transactions/types'
 
 @Service(tokens.TRANSACTION_WEB3_SERVICE)

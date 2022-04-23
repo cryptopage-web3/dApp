@@ -1,6 +1,20 @@
 import { NFTType } from '~/logic/nft/types'
 import { TokenInfoType } from '~/logic/tokens/types'
 
+export interface Transaction {
+  hash: string;
+  nonce: number;
+  blockHash: string | null;
+  blockNumber: number | null;
+  transactionIndex: number | null;
+  from: string;
+  to: string | null;
+  value: string;
+  gasPrice: string;
+  gas: number;
+  input: string;
+}
+
 export type DecodedInputType = {
   signature: string
   name: string

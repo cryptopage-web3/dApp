@@ -47,7 +47,6 @@
     "vuex": "^3.4.0",
     "vuex-simple": "^2.2.0",
     "web3": "1.5.2",
-    "web3-eth": "^1.6.1",
     "web3-utils": "^1.6.1"
   },
   "devDependencies": {
@@ -59,10 +58,8 @@
     "@nuxtjs/eslint-config": "^6.0.1",
     "@nuxtjs/eslint-config-typescript": "^6.0.1",
     "@nuxtjs/eslint-module": "^3.0.2",
-    "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/stylelint-module": "^4.0.0",
     "@types/jquery": "^3.5.8",
-    "@types/lunr": "^2.3.4",
     "@types/node": "^16.10.1",
     "@types/vue2-datepicker": "^3.3.1",
     "@types/web3": "^1.2.2",
@@ -73,9 +70,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^7.18.0",
-    "fibers": "^5.0.0",
     "husky": "^7.0.1",
-    "nuxt-viewport": "0.0.7",
     "prettier": "^2.3.2",
     "sass": "^1.37.5",
     "sass-loader": "^10.2.0"

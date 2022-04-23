@@ -35,7 +35,6 @@
       "@types/node",
       "@nuxt/types",
       "jquery",
-      "nuxt-viewport"
     ]
   },
   "include": ["**/*.ts", "**/*.tsx"],
