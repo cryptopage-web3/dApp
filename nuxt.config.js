@@ -91,13 +91,6 @@ export default {
         retry: false
       }
     ],
-    [
-      'nuxt-vuex-localstorage',
-      {
-        mode: 'debug',
-        localStorage: ['auth']
-      }
-    ],
     ['nuxt-viewport']
   ],
 

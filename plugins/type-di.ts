@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import { AxiosInstance } from 'axios'
 import Vue from 'vue'
 import { VueConstructor } from 'vue/types'
