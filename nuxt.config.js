@@ -3,9 +3,6 @@
 const webpack = require('webpack')
 
 export default {
-  // Target: https://go.nuxtjs.dev/config-target
-  target: process.env.NUXT_TARGET || 'static',
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Crypto.Page - decentralized cross-chain social network',
@@ -42,10 +39,8 @@ export default {
   plugins: [
     '~/plugins/filters.ts',
     '~/plugins/jazzicon.ts',
-    '~/plugins/web3.ts',
     '~/plugins/notifications.client.ts',
     '~/plugins/fontawesome.ts',
-    '~/plugins/type-di.ts',
     '~/plugins/bootstrap.ts',
     '~/plugins/formstyler.ts'
   ],
@@ -78,81 +73,10 @@ export default {
   },
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    [
-      '@nuxtjs/axios',
-      {
-        debug: process.env.NODE_ENV === 'development',
-        https: true,
-        proxyHeadersIgnore: ['accept', 'accept-encoding', 'host'],
-        progress: false,
-        proxy: false,
-        retry: false
-      }
-    ]
-  ],
+  modules: [['@nuxtjs/axios']],
 
-  workbox: {
-    runtimeCaching: [
-      {
-        urlPattern: 'https://*.etherscan.io/*',
-        strategyOptions: {
-          cacheName: 'etherscan-cache'
-        },
-        strategyPlugins: [
-          {
-            use: 'Expiration',
-            config: {
-              maxEntries: 10,
-              maxAgeSeconds: 30
-            }
-          }
-        ]
-      },
-      {
-        urlPattern: 'https://*.ethplorer.io/*',
-        strategyOptions: {
-          cacheName: 'ethplorer-cache'
-        },
-        strategyPlugins: [
-          {
-            use: 'Expiration',
-            config: {
-              maxEntries: 10,
-              maxAgeSeconds: 30
-            }
-          }
-        ]
-      },
-      {
-        urlPattern: 'https://ipfs.io/ipfs/*',
-        strategyOptions: {
-          cacheName: 'ipfs-cache'
-        },
-        strategyPlugins: [
-          {
-            use: 'Expiration',
-            config: {
-              maxEntries: 10,
-              maxAgeSeconds: 30
-            }
-          }
-        ]
-      }
-    ]
-  },
-
-  publicRuntimeConfig: {},
-  privateRuntimeConfig: {
-    infuraProjectId:
-      process.env.NODE_ENV === 'production'
-        ? process.env.INFURA_PROJECT_ID
-        : 'a925609bdb25477d8039c763faa7b61d',
-    etherscanAPIKey:
-      process.env.NODE_ENV === 'production'
-        ? process.env.ETHERSCAN_API_KEY
-        : 'VQDBC4GZA5MQT2F6IRW2U6RPH66HJRSF6S'
-  },
+  // Axios module configuration: https://go.nuxtjs.dev/config-axios
+  axios: {},
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

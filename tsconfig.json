@@ -34,11 +34,14 @@
     "types": [
       "@types/node",
       "@nuxt/types",
+      "@nuxtjs/axios",
       "jquery",
     ]
   },
   "include": ["**/*.ts", "**/*.tsx"],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".nuxt",
+    "dist"
   ]
 }

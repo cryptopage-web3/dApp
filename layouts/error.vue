@@ -1,8 +1,5 @@
 <template>
   <div class="error-page">
-    <div class="error-page__icon">
-      <icon type="error" />
-    </div>
     <div class="error-page__title">
       {{ error.message }}
     </div>
@@ -17,10 +14,7 @@ import Vue from 'vue'
 import { Component, Prop } from 'nuxt-property-decorator'
 
 @Component({
-  layout: 'empty',
-  components: {
-    icon: async () => await import('~/components/icons/Icon.vue')
-  }
+  layout: 'empty'
 })
 export default class ErrorLayout extends Vue {
   @Prop({ type: Object, default: () => ({}) })
