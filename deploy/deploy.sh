@@ -81,6 +81,8 @@ cp -rf $deploy_dir/.nuxt $run_dir/.nuxt 2>/dev/null
 
 cd $run_dir
 
+git pull 2>&1
+
 export NODE_ENV=production
 export PORT=$run_port
 
