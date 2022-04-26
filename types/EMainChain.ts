@@ -3,5 +3,5 @@ export enum EMainChain {
   bsc = 'bsc',
   polygon = 'polygon',
   tron = 'tron',
-  solana = 'solana'
+  solana = 'solana',
 }

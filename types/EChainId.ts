@@ -9,5 +9,5 @@ export enum EChainId {
   polygon = 137,
   polygonTestnet = 80001,
   tron = 'tron',
-  solana = 'solana'
+  solana = 'solana',
 }

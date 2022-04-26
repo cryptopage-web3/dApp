@@ -9,5 +9,5 @@ export enum EChainSlug {
   polygon = 'polygon',
   polygonTestnet = 'polygon-testnet',
   tron = 'tron',
-  solana = 'solana'
+  solana = 'solana',
 }

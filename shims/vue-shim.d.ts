@@ -1,8 +1,8 @@
 declare module '*.vue' {
-  import Vue from 'vue'
+  import Vue from 'vue';
 
   // Place any unimported plugins here:
-  import '@nuxtjs/axios'
+  import '@nuxtjs/axios';
 
-  export default Vue
+  export default Vue;
 }

@@ -1,57 +1,57 @@
-import { EChainId } from '~/types/EChainId'
-import { EChainSlug } from '~/types/EChainSlug'
-import { EMainChain } from '~/types/EMainChain'
-import { EProvider } from '~/types/EProvider'
+import { EChainId } from '~/types/EChainId';
+import { EChainSlug } from '~/types/EChainSlug';
+import { EMainChain } from '~/types/EMainChain';
+import { EProvider } from '~/types/EProvider';
 
 export const networkHelper = {
   networkByChain: {
     [EChainId.eth]: {
       network: 'ethereum',
       name: 'Ethereum',
-      slug: EChainSlug.eth
+      slug: EChainSlug.eth,
     },
     [EChainId.ropsten]: {
       network: 'ethereum',
       name: 'Ropsten TestNet',
-      slug: EChainSlug.ropsten
+      slug: EChainSlug.ropsten,
     },
     [EChainId.rinkeby]: {
       network: 'ethereum',
       name: 'Rinkeby TestNet',
-      slug: EChainSlug.rinkeby
+      slug: EChainSlug.rinkeby,
     },
     [EChainId.goerli]: {
       network: 'ethereum',
       name: 'Goerli TestNet',
-      slug: EChainSlug.goerli
+      slug: EChainSlug.goerli,
     },
     [EChainId.kovan]: {
       network: 'ethereum',
       name: 'Kovan TestNet',
-      slug: EChainSlug.kovan
+      slug: EChainSlug.kovan,
     },
     [EChainId.bsc]: {
       network: 'bsc',
       name: 'BSC Network',
-      slug: EChainSlug.bsc
+      slug: EChainSlug.bsc,
     },
     [EChainId.bscTestnet]: {
       network: 'bsc',
       name: 'BSC TestNet',
-      slug: EChainSlug.bscTestnet
+      slug: EChainSlug.bscTestnet,
     },
     [EChainId.polygon]: {
       network: 'polygon',
       name: 'Polygon',
-      slug: EChainSlug.polygon
+      slug: EChainSlug.polygon,
     },
     [EChainId.polygonTestnet]: {
       network: 'polygon',
       name: 'Polygon TestNet',
-      slug: EChainSlug.polygonTestnet
+      slug: EChainSlug.polygonTestnet,
     },
     tron: { network: 'tron', name: 'Tron', slug: EChainSlug.tron },
-    solana: { network: 'solana', name: 'Solana', slug: EChainSlug.solana }
+    solana: { network: 'solana', name: 'Solana', slug: EChainSlug.solana },
   } as any,
 
   chainIdBySlug: {
@@ -65,7 +65,7 @@ export const networkHelper = {
     [EChainSlug.polygon]: EChainId.polygon,
     [EChainSlug.polygonTestnet]: EChainId.polygonTestnet,
     [EChainSlug.tron]: EChainId.tron,
-    [EChainSlug.solana]: EChainId.solana
+    [EChainSlug.solana]: EChainId.solana,
   } as Record<string, number | string>,
 
   chainsByProvider: {
@@ -76,7 +76,7 @@ export const networkHelper = {
       EChainId.goerli,
       EChainId.kovan,
       EChainId.bsc,
-      EChainId.polygon
+      EChainId.polygon,
     ],
     [EProvider.bscWallet]: [EChainId.bsc, EChainId.bscTestnet],
     [EProvider.okex]: [
@@ -86,7 +86,7 @@ export const networkHelper = {
       EChainId.goerli,
       EChainId.kovan,
       EChainId.bsc,
-      EChainId.polygon
+      EChainId.polygon,
     ],
     [EProvider.tron]: [EChainId.tron],
     [EProvider.phantom]: [EChainId.solana],
@@ -97,8 +97,8 @@ export const networkHelper = {
       EChainId.goerli,
       EChainId.kovan,
       EChainId.bsc,
-      EChainId.polygon
-    ]
+      EChainId.polygon,
+    ],
   } as any,
 
   chains: {
@@ -107,7 +107,7 @@ export const networkHelper = {
       rpcUrls: ['https://bsc-dataseed.binance.org/'],
       chainName: 'Binance Smart Chain',
       nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-      blockExplorerUrls: ['https://bscscan.com/']
+      blockExplorerUrls: ['https://bscscan.com/'],
     },
     [EMainChain.polygon]: {
       chainId: '0x89',
@@ -116,54 +116,54 @@ export const networkHelper = {
       nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
       blockExplorerUrls: [
         'https://explorer.matic.network/',
-        'https://polygonscan.com/'
-      ]
+        'https://polygonscan.com/',
+      ],
     },
     [EMainChain.eth]: {
-      chainId: '0x1'
+      chainId: '0x1',
     },
     [EMainChain.tron]: {
-      chainId: 'tron'
+      chainId: 'tron',
     },
     [EMainChain.solana]: {
-      chainId: 'solana'
-    }
+      chainId: 'solana',
+    },
   } as any,
 
   getNetworkName(chainId: any) {
     return (
       (this.networkByChain[chainId] && this.networkByChain[chainId].name) ||
       'unknown'
-    )
+    );
   },
 
   getNetworkSlug(chainId: any) {
     return (
       (this.networkByChain[chainId] && this.networkByChain[chainId].slug) ||
       'unknown'
-    )
+    );
   },
 
   getNetworkType(chainId: any) {
     return (
       (this.networkByChain[chainId] && this.networkByChain[chainId].network) ||
       'ethereum'
-    )
+    );
   },
 
   isSupportedByProvider(chainId: string | number, provider: string): boolean {
-    return this.chainsByProvider[provider].includes(chainId)
+    return this.chainsByProvider[provider].includes(chainId);
   },
 
   isValidSlug(slug: string) {
-    return Boolean(this.chainIdBySlug[slug])
+    return Boolean(this.chainIdBySlug[slug]);
   },
 
   getChainData(name: string) {
-    return this.chains[name]
+    return this.chains[name];
   },
 
   getChainId(slug: string) {
-    return this.chainIdBySlug[slug]
-  }
-}
+    return this.chainIdBySlug[slug];
+  },
+};

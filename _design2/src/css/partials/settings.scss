@@ -1,0 +1,389 @@
+/*colors*/
+$main_black: #1F1F1F;
+$dark_grey: #687684;
+$light_grey: #A7A7A7;
+$divider: #E4E4E4;
+$light_blue: #F5F9FD;
+$white: #FFFFFF;
+$green: #27BC6A;
+$red: #FF1818;
+$blue: #1886FF;
+$blue_hover: #1072DE;
+$binance: #F3BA2F;
+$border: #f1f1f1;
+$dark: #333;
+
+/*font size*/
+@for $i from 10 through 50 {
+	.fs_#{$i} {
+		font-size: $i * 1px;
+	}
+}
+/*margin bottom*/
+@for $i from 5 through 50 {
+	.mb_#{$i} {
+		margin-bottom: $i * 1px;
+	}
+}
+
+/*input mixin*/
+@mixin input {
+	border: 1.6px solid #d3d3d3;
+	color: $dark_grey;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	border-radius: 50px;
+	background-color: $white;
+	transition: color 0.5s;
+	&:focus {
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	}
+	&:hover {
+		color: $light_grey;
+		&::-webkit-input-placeholder {opacity: 1;color: $light_grey;}
+		&::-moz-placeholder      {opacity: 1;color: $light_grey;}
+		&:-moz-placeholder       {opacity: 1;color: $light_grey;}
+		&:-ms-input-placeholder    {opacity: 1;color: $light_grey;}
+	}
+	&::-webkit-input-placeholder {opacity: 1;color: $dark_grey;}
+	&::-moz-placeholder      {opacity: 1;color: $dark_grey;}
+	&:-moz-placeholder       {opacity: 1;color: $dark_grey;}
+	&:-ms-input-placeholder    {opacity: 1;color: $dark_grey;}
+}
+.global-input {
+	@include input;
+	height: 30px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 1.2em;
+	color: $main_black;
+	padding-left: 15px;
+	&::-webkit-input-placeholder {color: $dark_grey;opacity: 1;}
+	&::-moz-placeholder      {color: $dark_grey;opacity: 1;}
+	&:-moz-placeholder       {color: $dark_grey;opacity: 1;}
+	&:-ms-input-placeholder    {color: $dark_grey;opacity: 1;}
+	&:focus {
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+		border-color: $blue;
+	}
+	&.red {
+		border-color: $red;
+	}
+	&.disabled {
+		border-color: $divider;
+		background: $divider;
+		color: $white;
+		&::-webkit-input-placeholder {color: $white;opacity: 1;}
+		&::-moz-placeholder      {color: $white;opacity: 1;}
+		&:-moz-placeholder       {color: $white;opacity: 1;}
+		&:-ms-input-placeholder    {color: $white;opacity: 1;}
+	}
+}
+
+/*market container*/
+@media (min-width: 1310px) {
+	.body-market .container {
+		max-width: 1310px;
+		width: 100%;
+	}
+}
+@media (min-width: 1610px) {
+	.body-market .container {
+		max-width: 1610px;
+		width: 100%;
+	}
+}
+
+/*btn*/
+.btn_transparent {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid $divider;
+	border-radius: 28px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $light_grey;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	max-height: 30px;
+	&.btn_transparent-img {
+		svg * {
+			transition: all 0.5s;
+		}
+	}
+	&:hover {
+		color: $light_grey;
+	}
+	&:active {
+		color: $blue;
+		border-color: $blue;
+	}
+	&.red {
+		color: $red;
+		border-color: $red;
+	}
+	&.success {
+		color: $green;
+		border-color: $green;
+	}
+	&.disabled {
+		color: $divider;
+		border-color: $divider;
+	}
+	&.btn_transparent-img:hover {
+		svg * {
+			fill: $dark_grey;
+		}
+	}
+	&.btn_transparent-img:active {
+		svg * {
+			fill: $blue;
+		}
+	}
+	&.btn_transparent-img.red {
+		svg * {
+			fill: $red;
+		}
+	}
+	&.btn_transparent-img.success {
+		svg * {
+			fill: $green;
+		}
+	}
+	&.btn_transparent-img.disabled {
+		svg * {
+			fill: $divider;
+		}
+	}
+}
+
+.btn_default {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 28px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $white;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	background-color: $light_grey;
+	max-height: 30px;
+	&:hover {
+		color: $white;
+		background-color: $dark_grey;
+	}
+	&:active {
+		color: $white;
+		background-color: $blue;
+	}
+	&.red {
+		color: $white;
+		background-color: $red;
+	}
+	&.success {
+		color: $white;
+		background-color: $green;
+	}
+	&.disabled {
+		color: $white;
+		background-color: $divider;
+	}
+}
+
+.btn_arrow {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	svg * {
+		transition: all 0.5s;
+	}
+	&:hover {
+		rect {
+			stroke: $blue_hover;
+		}
+		path {
+			fill: $blue_hover;
+		}
+	}
+	&:active {
+		rect {
+			stroke: $blue;
+			fill: $blue;
+		}
+		path {
+			fill: $white;
+		}
+	}
+}
+
+.btn-blue-transparent {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid $blue;
+	border-radius: 28px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $blue;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	background-color: transparent;
+	max-height: 30px;
+	&:hover {
+		color: $dark_grey;
+		border-color: $divider;
+	}
+	&:active {
+		color: $light_grey;
+		border-color: $divider;
+	}
+	&.red {
+		color: $red;
+		border-color: $red;
+	}
+	&.success {
+		color: $green;
+		border-color: $green;
+	}
+	&.disabled {
+		color: $divider;
+		border-color: $divider;
+	}
+}
+
+.btn-blue-transparent_button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid $blue;
+	border-radius: 28px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $blue;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	background-color: transparent;
+	max-height: 30px;
+	&:hover {
+		color: $blue_hover;
+		border-color: $blue_hover;
+	}
+	&:active {
+		color: $blue_hover;
+		border-color: $blue_hover;
+	}
+	&.red {
+		color: $red;
+		border-color: $red;
+	}
+	&.success {
+		color: $green;
+		border-color: $green;
+	}
+	&.disabled {
+		color: $divider;
+		border-color: $divider;
+	}
+}
+
+.btn-blue {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 28px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $white;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	background-color: $blue;
+	max-height: 30px;
+	&:hover {
+		color: $white;
+		background-color: $dark_grey;
+	}
+	&:active {
+		color: $white;
+		background-color: $light_grey;
+	}
+	&.red {
+		color: $white;
+		background-color: $red;
+	}
+	&.success {
+		color: $white;
+		background-color: $green;
+	}
+	&.disabled {
+		color: $white;
+		background-color: $divider;
+	}
+}
+
+.btn-blue_button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 28px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $white;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	background-color: $blue;
+	max-height: 30px;
+	&:hover {
+		color: $white;
+		background-color: $blue_hover;
+	}
+	&:active {
+		color: $white;
+		background-color: $blue_hover;
+	}
+	&.red {
+		color: $white;
+		background-color: $red;
+	}
+	&.success {
+		color: $white;
+		background-color: $green;
+	}
+	&.disabled {
+		color: $white;
+		background-color: $divider;
+	}
+}
+
+.btn_large {
+	max-height: 40px;
+	height: 40px;
+	@extend .fs_14;
+}
+.global-input_large {
+	height: 40px;
+	font-size: 14px !important;
+}
+
+/*placeholder*/
+::-webkit-input-placeholder {}
+::-moz-placeholder      {}
+:-moz-placeholder       {}
+:-ms-input-placeholder    {}
