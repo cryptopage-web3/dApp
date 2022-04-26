@@ -4,5 +4,5 @@ export enum EProvider {
   bscWallet = 'bscWallet',
   okex = 'okex',
   tron = 'tron',
-  phantom = 'phantom'
+  phantom = 'phantom',
 }

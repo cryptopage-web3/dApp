@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import Jazzicon from 'vue-jazzicon'
+import Vue from 'vue';
+import Jazzicon from 'vue-jazzicon';
 
-Vue.component('Jazzicon', Jazzicon)
+Vue.component('Jazzicon', Jazzicon);
