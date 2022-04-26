@@ -1,1 +1,1 @@
-declare module 'vue-jazzicon'
+declare module 'vue-jazzicon';

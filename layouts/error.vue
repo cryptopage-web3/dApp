@@ -10,16 +10,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { Component, Prop } from 'nuxt-property-decorator'
+import Vue from 'vue';
+import { Component, Prop } from 'nuxt-property-decorator';
 
 @Component({
-  layout: 'empty'
+  layout: 'empty',
 })
 export default class ErrorLayout extends Vue {
   @Prop({ type: Object, default: () => ({}) })
   readonly error!: {
-    message: string
-  }
+    message: string;
+  };
 }
 </script>
