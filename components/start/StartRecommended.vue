@@ -34,7 +34,9 @@
       <div class="market-product">
         <div
           class="thumb"
-          style="background-image: url('img/market-product_thumb1.png')"
+          :style="{
+            backgroundImage: `url(${thumb1Url})`,
+          }"
         >
           <a href="#" class="market-product__fav">
             <svg
@@ -149,7 +151,9 @@
       <div class="market-product">
         <div
           class="thumb"
-          style="background-image: url('img/market-product_thumb2.png')"
+          :style="{
+            backgroundImage: `url(${thumb2Url})`,
+          }"
         >
           <a href="#" class="market-product__fav">
             <svg
@@ -264,7 +268,9 @@
       <div class="market-product">
         <div
           class="thumb"
-          style="background-image: url('img/market-product_thumb3.png')"
+          :style="{
+            backgroundImage: `url(${thumb3Url})`,
+          }"
         >
           <a href="#" class="market-product__fav">
             <svg
@@ -379,7 +385,9 @@
       <div class="market-product">
         <div
           class="thumb"
-          style="background-image: url('img/market-product_thumb4.png')"
+          :style="{
+            backgroundImage: `url(${thumb4Url})`,
+          }"
         >
           <a href="#" class="market-product__fav">
             <svg
@@ -496,7 +504,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import marketProductThumb1 from '~/assets/img/market-product_thumb1.png';
+import marketProductThumb2 from '~/assets/img/market-product_thumb2.png';
+import marketProductThumb3 from '~/assets/img/market-product_thumb3.png';
+import marketProductThumb4 from '~/assets/img/market-product_thumb4.png';
 
 @Component({})
-export default class StartRecommended extends Vue {}
+export default class StartRecommended extends Vue {
+  thumb1Url = marketProductThumb1;
+  thumb2Url = marketProductThumb2;
+  thumb3Url = marketProductThumb3;
+  thumb4Url = marketProductThumb4;
+}
 </script>
