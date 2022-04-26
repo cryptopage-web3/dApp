@@ -1,11 +1,9 @@
 <template>
   <div>
-    <div class="main">
-      <notifications :duration="10000" />
-      <div class="container">
-        <nuxt />
-      </div>
-    </div>
+    <notifications width="350" />
+    <layout-header />
+    <nuxt />
+    <layout-footer />
   </div>
 </template>
 

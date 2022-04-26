@@ -10,11 +10,15 @@ export default {
       lang: 'en',
     },
     bodyAttrs: {
-      class: 'white',
+      class: 'white body-market modal-bg-white',
     },
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content:
+          'width=device-width, initial-scale=1, user-scalable=no, shrink-to-fit=no',
+      },
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
@@ -39,6 +43,7 @@ export default {
   plugins: [
     '~/plugins/filters.ts',
     '~/plugins/jazzicon.ts',
+    '~/plugins/notifications.server.ts',
     '~/plugins/notifications.client.ts',
     '~/plugins/fontawesome.ts',
     '~/plugins/bootstrap.ts',
