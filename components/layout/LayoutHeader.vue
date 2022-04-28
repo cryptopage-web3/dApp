@@ -397,7 +397,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { headerSearchInit } from '~/utils/headerSearch';
+import { dropdownMenuInit } from '~/utils/dropdownMenu';
 
 @Component({})
-export default class LayoutHeader extends Vue {}
+export default class LayoutHeader extends Vue {
+  mounted() {
+    headerSearchInit();
+    dropdownMenuInit();
+  }
+}
 </script>

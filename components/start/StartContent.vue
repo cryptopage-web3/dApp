@@ -16,7 +16,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { favoriteSelectInit } from '~/utils/favoriteSelect';
 
 @Component({})
-export default class StartContent extends Vue {}
+export default class StartContent extends Vue {
+  mounted() {
+    favoriteSelectInit();
+  }
+}
 </script>
