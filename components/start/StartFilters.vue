@@ -572,28 +572,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">Fungles Assets</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    Bored FungleHeadz #3977
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">Fungles Assets</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      Bored FungleHeadz #3977
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -687,28 +689,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">Fungles Assets</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    Bored FungleHeadz #3977
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">Fungles Assets</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      Bored FungleHeadz #3977
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -802,28 +806,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -917,28 +923,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1032,28 +1040,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1147,28 +1157,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1262,28 +1274,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1377,28 +1391,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1492,28 +1508,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">Fungles Assets</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    Bored FungleHeadz #3977
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">Fungles Assets</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      Bored FungleHeadz #3977
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1607,28 +1625,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">Fungles Assets</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    Bored FungleHeadz #3977
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">Fungles Assets</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      Bored FungleHeadz #3977
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1722,28 +1742,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1837,28 +1859,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -1952,28 +1976,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2067,28 +2093,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2182,28 +2210,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2297,28 +2327,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2412,28 +2444,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">Fungles Assets</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    Bored FungleHeadz #3977
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">Fungles Assets</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      Bored FungleHeadz #3977
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2527,28 +2561,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">Fungles Assets</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    Bored FungleHeadz #3977
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">Fungles Assets</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      Bored FungleHeadz #3977
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2642,28 +2678,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2757,28 +2795,30 @@
           </div>
           <div class="market-product-middle">
             <table class="market-product__table">
-              <tr>
-                <td>
-                  <a href="#" class="market-product__title">BabyCube</a>
-                </td>
-                <td class="market-product__price">Price</td>
-              </tr>
-              <tr>
-                <td>
-                  <a href="#" class="market-product__name">
-                    PunkMusicClub #2151
-                  </a>
-                </td>
-                <td>
-                  <div class="market-product__count">
-                    <img
-                      src="@/assets/img/market-header__wallet_icon1.svg"
-                      alt=""
-                    />
-                    <span> 2 </span>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__title">BabyCube</a>
+                  </td>
+                  <td class="market-product__price">Price</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="#" class="market-product__name">
+                      PunkMusicClub #2151
+                    </a>
+                  </td>
+                  <td>
+                    <div class="market-product__count">
+                      <img
+                        src="@/assets/img/market-header__wallet_icon1.svg"
+                        alt=""
+                      />
+                      <span> 2 </span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="market-product-bottom">
@@ -2835,6 +2875,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { startFiltersInit } from '~/utils/startFilters';
+import { profileContentDropInit } from '~/utils/profileContentDrop';
 import marketProductThumb1 from '~/assets/img/market-product_thumb1.png';
 import marketProductThumb2 from '~/assets/img/market-product_thumb2.png';
 import marketProductThumb3 from '~/assets/img/market-product_thumb3.png';
@@ -2854,5 +2896,10 @@ export default class StartFilters extends Vue {
   thumb6Url = marketProductThumb6;
   thumb7Url = marketProductThumb7;
   thumb8Url = marketProductThumb8;
+
+  mounted() {
+    startFiltersInit();
+    profileContentDropInit();
+  }
 }
 </script>
