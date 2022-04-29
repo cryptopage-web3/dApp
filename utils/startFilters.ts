@@ -2,6 +2,7 @@ export const startFiltersInit = (): void => {
   if ($('.market-main-filtr-oc').is('.market-main-filtr-oc')) {
     $('#market-main-filtr-col').on('show.bs.collapse', function () {
       $('.market-main-default-wrap').slideUp(0);
+      $('.market-main-with-filtrs-wr').slideDown(0);
       $('.market-main-with-filtrs-wr').addClass('active');
       $('.market-main-with-filtrs-right').addClass('active');
       $('body').addClass('market-main-filtr-col__body');
@@ -9,7 +10,7 @@ export const startFiltersInit = (): void => {
     $('#market-main-filtr-col').on('hide.bs.collapse', function () {
       $('.market-main-with-filtrs-wr').removeClass('active');
       $('.market-main-with-filtrs-right').removeClass('active');
-      $('.market-main-default-wrap').slideDown(0);
+      // $('.market-main-default-wrap').slideDown(0);
       $('body').removeClass('market-main-filtr-col__body');
     });
   }

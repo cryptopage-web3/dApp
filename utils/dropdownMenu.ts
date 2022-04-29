@@ -9,4 +9,17 @@ export const dropdownMenuInit = (): void => {
       }
     });
   }
+
+  if (
+    $('.market-header .navbar-collapse').is('.market-header .navbar-collapse')
+  ) {
+    document.addEventListener('click', function (event) {
+      const e = $('.market-header .navbar-collapse');
+      for (let i = 0; i < e.length; i++) {
+        if (!e?.get(i)?.contains(event.target as Node)) {
+          ($(e.get(i) as any) as any).collapse('hide');
+        }
+      }
+    });
+  }
 };
