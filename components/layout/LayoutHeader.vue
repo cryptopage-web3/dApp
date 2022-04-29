@@ -2,9 +2,9 @@
   <header class="market-header">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <a class="navbar-brand" href="#">
+        <nuxt-link to="/" class="navbar-brand">
           <img src="@/assets/img/market-header-logo.svg" alt="" />
-        </a>
+        </nuxt-link>
         <div class="market-header-search">
           <div class="market-header-search__top">
             <input
@@ -198,85 +198,7 @@
           </ul>
         </div>
         <div class="market-header__right">
-          <div class="drop-down market-header__wallet">
-            <a
-              data-toggle="collapse"
-              href="#market-header__wallet-col"
-              role="button"
-              aria-expanded="false"
-              class="drop-down__link"
-            >
-              <div class="thumb">
-                <img
-                  src="@/assets/img/market-header__wallet_icon1.svg"
-                  alt=""
-                />
-              </div>
-              <div class="right">
-                <div class="title">Etherum</div>
-                <div class="status">Connect wallet</div>
-              </div>
-            </a>
-            <div id="market-header__wallet-col" class="collapse drop-down__col">
-              <ul class="drop-down__list">
-                <li>
-                  <a href="#">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/market-header__wallet_icon2.svg"
-                        alt=""
-                      />
-                    </div>
-                    <span> Ethereum </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/market-header__wallet_icon3.svg"
-                        alt=""
-                      />
-                    </div>
-                    <span> Binance Smart Chain </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/market-header__wallet_icon4.svg"
-                        alt=""
-                      />
-                    </div>
-                    <span> Polygon </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/market-header__wallet_icon5.svg"
-                        alt=""
-                      />
-                    </div>
-                    <span> Tron </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/market-header__wallet_icon6.svg"
-                        alt=""
-                      />
-                    </div>
-                    <span> Solana </span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
+          <layout-header-connect />
           <div class="drop-down market-header__cabinet">
             <a
               data-toggle="collapse"
