@@ -50,12 +50,7 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img1.png"
@@ -66,12 +61,7 @@
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img2.png"
@@ -126,12 +116,7 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img1.png"
@@ -142,12 +127,7 @@
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img2.png"
@@ -202,12 +182,7 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img1.png"
@@ -218,12 +193,7 @@
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img2.png"
@@ -278,12 +248,7 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img1.png"
@@ -294,12 +259,7 @@
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img2.png"
@@ -354,12 +314,7 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img1.png"
@@ -370,12 +325,7 @@
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="#"
-                    data-toggle="modal"
-                    data-target="#profile-login-modal"
-                    role="button"
-                  >
+                  <a href="#" role="button">
                     <div class="thumb">
                       <img
                         src="@/assets/img/profile-login__list_img2.png"
@@ -397,56 +347,6 @@
         >
           Show more options
         </a>
-      </div>
-    </div>
-
-    <!-- Modal -->
-    <div
-      id="profile-login-modal"
-      class="modal fade profile-login-modal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-body">
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6.29289 16.2929C5.90237 16.6834 5.90237 17.3166 6.29289 17.7071C6.68342 18.0976 7.31658 18.0976 7.70711 17.7071L6.29289 16.2929ZM17.7071 7.70711C18.0976 7.31658 18.0976 6.68342 17.7071 6.29289C17.3166 5.90237 16.6834 5.90237 16.2929 6.29289L17.7071 7.70711ZM7.70711 6.29289C7.31658 5.90237 6.68342 5.90237 6.29289 6.29289C5.90237 6.68342 5.90237 7.31658 6.29289 7.70711L7.70711 6.29289ZM16.2929 17.7071C16.6834 18.0976 17.3166 18.0976 17.7071 17.7071C18.0976 17.3166 18.0976 16.6834 17.7071 16.2929L16.2929 17.7071ZM7.70711 17.7071L17.7071 7.70711L16.2929 6.29289L6.29289 16.2929L7.70711 17.7071ZM6.29289 7.70711L16.2929 17.7071L17.7071 16.2929L7.70711 6.29289L6.29289 7.70711Z"
-                  fill="#687684"
-                ></path>
-              </svg>
-            </button>
-            <h3 class="profile-login-modal__title">Are your sure?</h3>
-            <div class="profile-login-modal__text">
-              Connect with one of our available wallet providers or create a new
-              one.
-            </div>
-            <div class="profile-login-modal__btns">
-              <a
-                href="#"
-                class="btn-blue-transparent btn_large btn-blue-transparent_button"
-              >
-                No
-              </a>
-              <a href="#" class="btn-blue btn_large btn-blue_button"> Yes </a>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </section>
