@@ -8,7 +8,7 @@
         <div class="profile-wrap">
           <account-left-sidebar />
           <nuxt />
-          <account-right-sidebar />
+          <account-right-sidebar v-if="showRightSidebar" />
         </div>
       </div>
     </section>
@@ -24,5 +24,11 @@ import { Component } from 'nuxt-property-decorator';
 @Component({
   layout: 'default',
 })
-export default class AccountLayout extends Vue {}
+export default class AccountLayout extends Vue {
+  get showRightSidebar(): boolean {
+    return !(
+      this.$route.name && ['profile-settings'].includes(this.$route.name)
+    );
+  }
+}
 </script>
