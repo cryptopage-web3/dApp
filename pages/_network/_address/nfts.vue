@@ -2,7 +2,7 @@
   <div class="profile-center profile-my-nfts">
     <div class="profile-my-nfts-top">
       <div class="profile-my-nfts__title">
-        <a href="#" class="market-sidebar__more">
+        <nuxt-link to="/network/address" class="market-sidebar__more">
           <svg
             width="30"
             height="30"
@@ -24,7 +24,7 @@
               fill="#A7A7A7"
             />
           </svg>
-        </a>
+        </nuxt-link>
         <h2 class="global-zag">My NFT’s</h2>
       </div>
       <div class="profile-my-nfts-top__btns">

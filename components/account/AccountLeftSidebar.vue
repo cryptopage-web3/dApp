@@ -10,7 +10,7 @@
         </a>
         <ul class="profile-menu__list">
           <li>
-            <a href="#" class="active">
+            <nuxt-link to="/network/address" :class="{ active: isProfile }">
               <div class="thumb">
                 <svg
                   width="24"
@@ -26,7 +26,7 @@
                 </svg>
               </div>
               <span> Profile </span>
-            </a>
+            </nuxt-link>
           </li>
           <li>
             <a href="#">
@@ -67,7 +67,7 @@
             </a>
           </li>
           <li>
-            <a href="#">
+            <nuxt-link to="/profile/settings" :class="{ active: isSettings }">
               <div class="thumb">
                 <svg
                   width="24"
@@ -83,7 +83,7 @@
                 </svg>
               </div>
               <span> Settings </span>
-            </a>
+            </nuxt-link>
           </li>
           <li>
             <a href="#">
@@ -220,6 +220,14 @@ import { accountLeftSidebarInit } from '~/utils/accountLeftSidebar';
 
 @Component({})
 export default class AccountLeftSidebar extends Vue {
+  get isProfile(): boolean {
+    return this.$route.name === 'network-address';
+  }
+
+  get isSettings(): boolean {
+    return this.$route.name === 'profile-settings';
+  }
+
   mounted() {
     accountLeftSidebarInit();
   }

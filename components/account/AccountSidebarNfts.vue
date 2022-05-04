@@ -2,7 +2,7 @@
   <div class="market-sidebar">
     <div class="market-sidebar-top">
       <h3 class="market-sidebar__title">My NFT’s</h3>
-      <a href="#" class="market-sidebar__more">
+      <nuxt-link to="/network/address/nfts" class="market-sidebar__more">
         <svg
           width="30"
           height="30"
@@ -23,7 +23,7 @@
             fill="#1886FF"
           />
         </svg>
-      </a>
+      </nuxt-link>
     </div>
     <ul class="market-sidebar__list2">
       <li>

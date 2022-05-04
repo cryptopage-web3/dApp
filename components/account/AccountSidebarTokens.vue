@@ -1,8 +1,8 @@
 <template>
   <div class="market-sidebar">
     <div class="market-sidebar-top">
-      <h3 class="market-sidebar__title">My Token (erc20)</h3>
-      <a href="#" class="market-sidebar__more">
+      <h3 class="market-sidebar__title">My Token's (erc20)</h3>
+      <nuxt-link to="/network/address/tokens" class="market-sidebar__more">
         <svg
           width="30"
           height="30"
@@ -23,7 +23,7 @@
             fill="#1886FF"
           />
         </svg>
-      </a>
+      </nuxt-link>
     </div>
     <ul class="market-sidebar__list3">
       <li>
