@@ -1,5 +1,5 @@
 <template>
-  <div class="market-sidebar">
+  <div v-if="show" class="market-sidebar">
     <div class="market-sidebar-top">
       <h3 class="market-sidebar__title">My NFT’s</h3>
       <nuxt-link to="/network/address/nfts" class="market-sidebar__more">
@@ -96,5 +96,9 @@ export default class AccountSidebarNfts extends Vue {
   sidebarBg4 = marketSidebarBg4;
   sidebarBg5 = marketSidebarBg5;
   sidebarBg6 = marketSidebarBg6;
+
+  get show() {
+    return this.$route.name !== 'network-address-nfts';
+  }
 }
 </script>

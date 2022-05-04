@@ -1,5 +1,5 @@
 <template>
-  <div class="market-sidebar">
+  <div v-if="show" class="market-sidebar">
     <div class="market-sidebar-top">
       <h3 class="market-sidebar__title">My Token's (erc20)</h3>
       <nuxt-link to="/network/address/tokens" class="market-sidebar__more">
@@ -163,5 +163,9 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 
 @Component({})
-export default class AccountSidebarTokens extends Vue {}
+export default class AccountSidebarTokens extends Vue {
+  get show() {
+    return this.$route.name !== 'network-address-tokens';
+  }
+}
 </script>
