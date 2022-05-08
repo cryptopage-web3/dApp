@@ -199,7 +199,8 @@
         </div>
         <div class="market-header__right">
           <layout-header-connect />
-          <div class="drop-down market-header__cabinet">
+
+          <div v-if="isAuth" class="drop-down market-header__cabinet">
             <a
               data-toggle="collapse"
               href="#market-header__cabinet-col"
@@ -321,9 +322,14 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { headerSearchInit } from '~/utils/headerSearch';
 import { dropdownMenuInit } from '~/utils/dropdownMenu';
+import { authModule } from '~/store';
 
 @Component({})
 export default class LayoutHeader extends Vue {
+  get isAuth() {
+    return authModule.isAuth;
+  }
+
   mounted() {
     headerSearchInit();
     dropdownMenuInit();
