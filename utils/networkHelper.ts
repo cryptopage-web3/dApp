@@ -1,57 +1,64 @@
-import { EChainId } from '~/types/EChainId';
-import { EChainSlug } from '~/types/EChainSlug';
-import { EMainChain } from '~/types/EMainChain';
-import { EProvider } from '~/types/EProvider';
+import {
+  EChainId,
+  EChainSlug,
+  EChainType,
+  EMainChain,
+  EProvider,
+} from '~/types';
 
 export const networkHelper = {
   networkByChain: {
     [EChainId.eth]: {
-      network: 'ethereum',
+      network: EChainType.eth,
       name: 'Ethereum',
       slug: EChainSlug.eth,
     },
     [EChainId.ropsten]: {
-      network: 'ethereum',
+      network: EChainType.eth,
       name: 'Ropsten TestNet',
       slug: EChainSlug.ropsten,
     },
     [EChainId.rinkeby]: {
-      network: 'ethereum',
+      network: EChainType.eth,
       name: 'Rinkeby TestNet',
       slug: EChainSlug.rinkeby,
     },
     [EChainId.goerli]: {
-      network: 'ethereum',
+      network: EChainType.eth,
       name: 'Goerli TestNet',
       slug: EChainSlug.goerli,
     },
     [EChainId.kovan]: {
-      network: 'ethereum',
+      network: EChainType.eth,
       name: 'Kovan TestNet',
       slug: EChainSlug.kovan,
     },
     [EChainId.bsc]: {
-      network: 'bsc',
-      name: 'BSC Network',
+      network: EChainType.bsc,
+      name: 'BSC',
       slug: EChainSlug.bsc,
     },
     [EChainId.bscTestnet]: {
-      network: 'bsc',
+      network: EChainType.bsc,
       name: 'BSC TestNet',
       slug: EChainSlug.bscTestnet,
     },
     [EChainId.polygon]: {
-      network: 'polygon',
+      network: EChainType.polygon,
       name: 'Polygon',
       slug: EChainSlug.polygon,
     },
     [EChainId.polygonTestnet]: {
-      network: 'polygon',
+      network: EChainType.polygon,
       name: 'Polygon TestNet',
       slug: EChainSlug.polygonTestnet,
     },
-    tron: { network: 'tron', name: 'Tron', slug: EChainSlug.tron },
-    solana: { network: 'solana', name: 'Solana', slug: EChainSlug.solana },
+    tron: { network: EChainType.tron, name: 'Tron', slug: EChainSlug.tron },
+    solana: {
+      network: EChainType.solana,
+      name: 'Solana',
+      slug: EChainSlug.solana,
+    },
   } as any,
 
   chainIdBySlug: {
@@ -144,10 +151,10 @@ export const networkHelper = {
     );
   },
 
-  getNetworkType(chainId: any) {
+  getNetworkType(chainId: string | number): EChainType {
     return (
       (this.networkByChain[chainId] && this.networkByChain[chainId].network) ||
-      'ethereum'
+      EChainType.eth
     );
   },
 

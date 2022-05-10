@@ -8,11 +8,14 @@
       class="drop-down__link"
     >
       <div class="thumb">
-        <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
+        <img :src="authNetworkIcon" alt="" />
       </div>
       <div class="right">
-        <div class="title">Etherum</div>
-        <div class="status">Connect wallet</div>
+        <div class="title">{{ authNetworkName }}</div>
+        <div v-if="authAddress" class="status">
+          {{ authAddress | shortAddress }}
+        </div>
+        <div v-else class="status">Connect wallet</div>
       </div>
     </a>
     <div id="market-header__wallet-col" class="collapse drop-down__col">
@@ -66,14 +69,34 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { EMainChain } from '~/types/EMainChain';
+import { authModule } from '~/store';
 
 @Component({})
 export default class LayoutHeaderConnect extends Vue {
   EMainChain = EMainChain;
 
-  switchChain() {
-    /** TODO: нужно сохранять type в стор, чтобы потом в форме подключения брать актуальную сеть */
-    // console.log(type);
+  get authAddress(): string {
+    return authModule.address;
+  }
+
+  get authNetworkName() {
+    return authModule.networkName;
+  }
+
+  get authNetworkIcon(): string {
+    const icons: Record<string, string> = {
+      eth: require('@/assets/img/market-header__wallet_icon1.svg'),
+      bsc: require('@/assets/img/market-header__wallet_icon3.svg'),
+      polygon: require('@/assets/img/market-header__wallet_icon4.svg'),
+      tron: require('@/assets/img/market-header__wallet_icon5.svg'),
+      solana: require('@/assets/img/market-header__wallet_icon6.svg'),
+    };
+
+    return icons[authModule.networkType];
+  }
+
+  switchChain(chain: EMainChain) {
+    authModule.selectMainChain(chain);
 
     this.$router.push(`/connect`);
 

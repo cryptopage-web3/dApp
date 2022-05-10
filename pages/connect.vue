@@ -4,8 +4,7 @@
       <div class="profile-login-zag">
         <h1 class="profile-login-zag__title">Connect your wallet</h1>
         <div class="profile-login-zag__text">
-          Connect with one of our available wallet providers or create a new
-          one.
+          Connect with one of our available wallet providers.
         </div>
       </div>
       <div id="accordionExample" class="accordion profile-login-accordion">
@@ -340,21 +339,15 @@
           </div>
         </div>
       </div>
-      <div class="text-center">
-        <a
-          href="#"
-          class="btn-blue-transparent_button profile-login__more btn_large"
-        >
-          Show more options
-        </a>
-      </div>
     </div>
   </section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
+import { authModule } from '~/store';
+import { EChainSlug } from '~/types';
 
 @Component({
   head: {
@@ -369,5 +362,32 @@ import { Component } from 'nuxt-property-decorator';
     ],
   },
 })
-export default class ConnectPage extends Vue {}
+export default class ConnectPage extends Vue {
+  EChainSlug = EChainSlug;
+
+  get authNetworkSlug(): string {
+    return authModule.networkSlug;
+  }
+
+  @Watch('authNetworkSlug')
+  onAuthNetworkTypeChange(slug: EChainSlug) {
+    this.collapseChain(slug);
+  }
+
+  mounted() {
+    this.collapseChain(this.authNetworkSlug as EChainSlug);
+  }
+
+  collapseChain(slug: EChainSlug) {
+    const elementMap = new Map<EChainSlug, string>()
+      .set(EChainSlug.eth, '#profile-login-accordion1')
+      .set(EChainSlug.bsc, '#profile-login-accordion2')
+      .set(EChainSlug.polygon, '#profile-login-accordion3')
+      .set(EChainSlug.tron, '#profile-login-accordion4')
+      .set(EChainSlug.solana, '#profile-login-accordion5');
+
+    const element = elementMap.get(slug);
+    element && ($(element) as any).collapse('show');
+  }
+}
 </script>
