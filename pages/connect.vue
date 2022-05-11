@@ -49,10 +49,16 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.eth, EProvider.metamask)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img1.png"
+                        src="@/assets/img-custom/profile-login__list_img1_2x.png"
                         alt=""
                       />
                     </div>
@@ -60,14 +66,37 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.eth, EProvider.walletConnect)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img2.png"
+                        src="@/assets/img-custom/profile-login__list_img2_2x.png"
                         alt=""
                       />
                     </div>
                     <span> WalletConnect </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.eth, EProvider.okex)
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img3_2x.png"
+                        alt=""
+                      />
+                    </div>
+                    <span> OKEx Wallet </span>
                   </a>
                 </li>
               </ul>
@@ -115,10 +144,16 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.bsc, EProvider.metamask)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img1.png"
+                        src="@/assets/img-custom/profile-login__list_img1_2x.png"
                         alt=""
                       />
                     </div>
@@ -126,14 +161,54 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.bsc, EProvider.bscWallet)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img2.png"
+                        src="@/assets/img-custom/profile-login__list_img4_2x.svg"
+                        alt=""
+                      />
+                    </div>
+                    <span> BSC Wallet </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.bsc, EProvider.walletConnect)
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img2_2x.png"
                         alt=""
                       />
                     </div>
                     <span> WalletConnect </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.bsc, EProvider.okex)
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img3_2x.png"
+                        alt=""
+                      />
+                    </div>
+                    <span> OKEx Wallet </span>
                   </a>
                 </li>
               </ul>
@@ -181,10 +256,16 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.polygon, EProvider.metamask)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img1.png"
+                        src="@/assets/img-custom/profile-login__list_img1_2x.png"
                         alt=""
                       />
                     </div>
@@ -192,14 +273,40 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(
+                        EMainChain.polygon,
+                        EProvider.walletConnect,
+                      )
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img2.png"
+                        src="@/assets/img-custom/profile-login__list_img2_2x.png"
                         alt=""
                       />
                     </div>
                     <span> WalletConnect </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.polygon, EProvider.okex)
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img3_2x.png"
+                        alt=""
+                      />
+                    </div>
+                    <span> OKEx Wallet </span>
                   </a>
                 </li>
               </ul>
@@ -247,25 +354,20 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.tron, EProvider.tron)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img1.png"
+                        src="@/assets/img-custom/profile-login__list_img5_2x.png"
                         alt=""
                       />
                     </div>
-                    <span> Metamask </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" role="button">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/profile-login__list_img2.png"
-                        alt=""
-                      />
-                    </div>
-                    <span> WalletConnect </span>
+                    <span> TronLink </span>
                   </a>
                 </li>
               </ul>
@@ -313,25 +415,20 @@
             <div class="profile-login-accordion__body">
               <ul class="profile-login__list">
                 <li>
-                  <a href="#" role="button">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.solana, EProvider.phantom)
+                    "
+                  >
                     <div class="thumb">
                       <img
-                        src="@/assets/img/profile-login__list_img1.png"
+                        src="@/assets/img-custom/profile-login__list_img6_2x.png"
                         alt=""
                       />
                     </div>
-                    <span> Metamask </span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#" role="button">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/profile-login__list_img2.png"
-                        alt=""
-                      />
-                    </div>
-                    <span> WalletConnect </span>
+                    <span> Phantom </span>
                   </a>
                 </li>
               </ul>
@@ -347,7 +444,7 @@
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
-import { EChainSlug } from '~/types';
+import { EChainSlug, EMainChain, EProvider } from '~/types';
 
 @Component({
   head: {
@@ -364,6 +461,8 @@ import { EChainSlug } from '~/types';
 })
 export default class ConnectPage extends Vue {
   EChainSlug = EChainSlug;
+  EMainChain = EMainChain;
+  EProvider = EProvider;
 
   get authNetworkSlug(): string {
     return authModule.networkSlug;
@@ -388,6 +487,10 @@ export default class ConnectPage extends Vue {
 
     const element = elementMap.get(slug);
     element && ($(element) as any).collapse('show');
+  }
+
+  connectToProvider(chain: EMainChain, provider: EProvider) {
+    console.log(chain, provider);
   }
 }
 </script>
