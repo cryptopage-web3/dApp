@@ -158,8 +158,13 @@ export const networkHelper = {
     );
   },
 
-  isSupportedByProvider(chainId: string | number, provider: string): boolean {
-    return this.chainsByProvider[provider].includes(chainId);
+  isSupportedByProvider(
+    chainId: string | number | null,
+    provider: EProvider | null,
+  ): boolean {
+    return (
+      chainId && provider && this.chainsByProvider[provider].includes(chainId)
+    );
   },
 
   isValidSlug(slug: string) {

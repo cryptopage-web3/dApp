@@ -445,6 +445,7 @@ import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
 import { EChainSlug, EMainChain, EProvider } from '~/types';
+import { networkHelper } from '~/utils/networkHelper';
 
 @Component({
   head: {
@@ -464,17 +465,17 @@ export default class ConnectPage extends Vue {
   EMainChain = EMainChain;
   EProvider = EProvider;
 
-  get authNetworkSlug(): string {
-    return authModule.networkSlug;
+  get authChainSlug(): string {
+    return authModule.chainSlug;
   }
 
-  @Watch('authNetworkSlug')
+  @Watch('authChainSlug')
   onAuthNetworkTypeChange(slug: EChainSlug) {
     this.collapseChain(slug);
   }
 
   mounted() {
-    this.collapseChain(this.authNetworkSlug as EChainSlug);
+    this.collapseChain(this.authChainSlug as EChainSlug);
   }
 
   collapseChain(slug: EChainSlug) {
@@ -489,8 +490,33 @@ export default class ConnectPage extends Vue {
     element && ($(element) as any).collapse('show');
   }
 
-  connectToProvider(chain: EMainChain, provider: EProvider) {
-    console.log(chain, provider);
+  async connectToProvider(chain: EChainSlug, provider: EProvider) {
+    const response = await authModule.connectToProvider({
+      chain,
+      provider,
+    });
+
+    debugger;
+
+    if (response.status === 'error') {
+      this.$notify({
+        type: response.status,
+        title: response.message?.title,
+        text: response.message?.text,
+      });
+
+      return;
+    }
+
+    /** редирект на профиль */
+
+    const { connectData } = response;
+    const address = connectData?.address;
+    const chainSlug = networkHelper.getNetworkSlug(connectData?.chainId);
+
+    debugger;
+
+    this.$router.push(`/${chainSlug}/${address}`);
   }
 }
 </script>

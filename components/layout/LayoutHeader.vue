@@ -287,7 +287,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="#" @click.prevent="logout()">
                     <div class="thumb">
                       <img
                         src="@/assets/img/market-header__cabinet_icon8.svg"
@@ -333,6 +333,12 @@ export default class LayoutHeader extends Vue {
   mounted() {
     headerSearchInit();
     dropdownMenuInit();
+  }
+
+  async logout() {
+    await authModule.logout();
+
+    this.$router.push(`/`);
   }
 }
 </script>

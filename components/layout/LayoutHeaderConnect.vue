@@ -8,10 +8,10 @@
       class="drop-down__link"
     >
       <div class="thumb">
-        <img :src="authNetworkIcon" alt="" />
+        <img :src="authChainIcon" alt="" />
       </div>
       <div class="right">
-        <div class="title">{{ authNetworkName }}</div>
+        <div class="title">{{ authChainName }}</div>
         <div v-if="authAddress" class="status">
           {{ authAddress | shortAddress }}
         </div>
@@ -79,11 +79,11 @@ export default class LayoutHeaderConnect extends Vue {
     return authModule.address;
   }
 
-  get authNetworkName() {
-    return authModule.networkName;
+  get authChainName() {
+    return authModule.chainName;
   }
 
-  get authNetworkIcon(): string {
+  get authChainIcon(): string {
     const icons: Record<string, string> = {
       eth: require('@/assets/img/market-header__wallet_icon1.svg'),
       bsc: require('@/assets/img/market-header__wallet_icon3.svg'),
@@ -92,7 +92,7 @@ export default class LayoutHeaderConnect extends Vue {
       solana: require('@/assets/img/market-header__wallet_icon6.svg'),
     };
 
-    return icons[authModule.networkType];
+    return icons[authModule.chainType];
   }
 
   switchChain(chain: EMainChain) {
