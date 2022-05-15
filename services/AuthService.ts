@@ -366,10 +366,12 @@ export class AuthService {
   };
 
   public logout = async () => {
-    if (this.provider) {
-      this.provider.disconnect && (await this.provider.disconnect());
-      this.provider.close && (await this.provider.close());
+    if (!this.provider) {
+      return;
     }
+
+    this.provider.disconnect && (await this.provider.disconnect());
+    this.provider.close && (await this.provider.close());
 
     this.provider = null;
   };

@@ -20,6 +20,7 @@ const authService = new AuthService();
 })
 export default class AuthModule extends VuexModule {
   isAuth = false;
+  initLoading = true;
 
   connect: IConnectData = {
     address: '',
@@ -57,6 +58,11 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
+  public setInitLoading(loading: boolean) {
+    this.initLoading = loading;
+  }
+
+  @Mutation
   public setChainId(chainId: string | number) {
     this.connect.chainId = chainId;
   }
@@ -64,6 +70,36 @@ export default class AuthModule extends VuexModule {
   @Mutation
   public setConnect(connect: IConnectData) {
     this.connect = connect;
+  }
+
+  @Action
+  public async init() {
+    const auth = localStorage.getItem('auth');
+
+    if (!auth) {
+      this.setInitLoading(false);
+      return;
+    }
+
+    try {
+      const { providerSlug, chainId }: IConnectData = JSON.parse(auth);
+      const chainSlug = networkHelper.getNetworkSlug(chainId || '');
+
+      if (!providerSlug || !chainSlug) {
+        await this.logout();
+        this.setInitLoading(false);
+        return;
+      }
+
+      await this.connectToProvider({
+        chain: chainSlug,
+        provider: providerSlug,
+      });
+      this.setInitLoading(false);
+    } catch {
+      await this.logout();
+      this.setInitLoading(false);
+    }
   }
 
   @Action
@@ -89,16 +125,17 @@ export default class AuthModule extends VuexModule {
       this.onConnectChange,
     );
 
-    console.log(providerResponse);
-    debugger;
-
     if (providerResponse.status === 'error') {
+      await this.logout();
+
       return providerResponse;
     }
 
     const { connectData: providerConnectData } = providerResponse;
 
     if (!providerConnectData) {
+      await this.logout();
+
       return {
         status: 'error',
         message: {
@@ -115,9 +152,6 @@ export default class AuthModule extends VuexModule {
       chain,
     );
 
-    console.log(chainResponse);
-    debugger;
-
     if (chainResponse.status === 'error') {
       await this.logout();
 
@@ -127,6 +161,8 @@ export default class AuthModule extends VuexModule {
     const { connectData } = chainResponse;
 
     if (!connectData) {
+      await this.logout();
+
       return {
         status: 'error',
         message: {
@@ -174,8 +210,49 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public onConnectChange(params: IConnectChangeParams) {
-    console.log(params);
-    debugger;
+    /** TODO: на проде всегда делаем logout,
+     * но для тестирования мы должны пропускать rinkeby */
+
+    const { chainId, address } = params;
+    const providerSlug = this.providerSlug;
+
+    /** если не авторизованы, то никак не реагируем */
+
+    if (!this.isAuth) {
+      return;
+    }
+
+    /** если нет данных по адресу или сети, то сбрасываем авторизацию */
+
+    if (!chainId || !address) {
+      this.logout();
+      return;
+    }
+
+    /** если нет изменений, то ничего не делаем */
+
+    if (chainId === this.chainId && address === this.address) {
+      return;
+    }
+
+    /** если сеть не поддерживается провайдером, то сбрасываем авторизацию */
+
+    if (!networkHelper.isSupportedByProvider(chainId, providerSlug)) {
+      this.logout();
+      return;
+    }
+
+    /** меняем данные connect */
+
+    const connectData: IConnectData = {
+      address,
+      chainId,
+      providerSlug,
+    };
+
+    window.localStorage.setItem('auth', JSON.stringify(connectData));
+
+    this.setConnect(connectData);
   }
 
   @Action

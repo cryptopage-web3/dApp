@@ -496,8 +496,6 @@ export default class ConnectPage extends Vue {
       provider,
     });
 
-    debugger;
-
     if (response.status === 'error') {
       this.$notify({
         type: response.status,
@@ -513,8 +511,6 @@ export default class ConnectPage extends Vue {
     const { connectData } = response;
     const address = connectData?.address;
     const chainSlug = networkHelper.getNetworkSlug(connectData?.chainId);
-
-    debugger;
 
     this.$router.push(`/${chainSlug}/${address}`);
   }

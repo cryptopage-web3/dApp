@@ -138,24 +138,15 @@ export const networkHelper = {
   } as any,
 
   getNetworkName(chainId: any) {
-    return (
-      (this.networkByChain[chainId] && this.networkByChain[chainId].name) ||
-      'unknown'
-    );
+    return this.networkByChain[chainId]?.name || '';
   },
 
   getNetworkSlug(chainId: any) {
-    return (
-      (this.networkByChain[chainId] && this.networkByChain[chainId].slug) ||
-      'unknown'
-    );
+    return this.networkByChain[chainId]?.slug || '';
   },
 
   getNetworkType(chainId: string | number): EChainType {
-    return (
-      (this.networkByChain[chainId] && this.networkByChain[chainId].network) ||
-      EChainType.eth
-    );
+    return this.networkByChain[chainId]?.network || EChainType.eth;
   },
 
   isSupportedByProvider(
