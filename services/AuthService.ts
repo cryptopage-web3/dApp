@@ -17,6 +17,8 @@ declare const window: Window &
   };
 
 export class AuthService {
+  private provider: any = null;
+
   protected get metamaskInstalled(): boolean {
     return (
       typeof window !== 'undefined' &&
@@ -143,12 +145,13 @@ export class AuthService {
       window.ethereum.on('chainChanged', onChange);
       window.ethereum.on('accountsChanged', onChange);
 
+      this.provider = window.ethereum;
+
       return {
         status: 'success',
         connectData: {
           chainId: Number(window.ethereum.chainId),
           address: window.ethereum.selectedAddress,
-          provider: window.ethereum,
           providerSlug: EProvider.metamask,
         },
       };
@@ -188,7 +191,7 @@ export class AuthService {
      * т.к. подключение к провайдеру должно быть раньше, чем к сети
      */
 
-    if (!connectData.provider) {
+    if (!this.provider) {
       return {
         status: 'error',
         message: {
@@ -262,7 +265,7 @@ export class AuthService {
         /** в провайдере BSC_WALLET пытаемся переключить сеть на BSC
          * т.к. в расширении можно выбрать другие сети
          */
-        await connectData.provider.switchNetwork('bsc-mainnet');
+        await this.provider.switchNetwork('bsc-mainnet');
 
         return {
           status: 'success',
@@ -297,7 +300,7 @@ export class AuthService {
       try {
         /** пробуем переключиться на сеть */
 
-        await connectData.provider.request({
+        await this.provider.request({
           method: 'wallet_switchEthereumChain',
           params: [{ chainId: chainData.chainId }],
         });
@@ -327,7 +330,7 @@ export class AuthService {
         /** пробуем добавить сеть */
 
         try {
-          await connectData.provider.request({
+          await this.provider.request({
             method: 'wallet_addEthereumChain',
             params: [chainData],
           });
@@ -360,5 +363,14 @@ export class AuthService {
         text: 'Please try with another network or provider',
       },
     };
+  };
+
+  public logout = async () => {
+    if (this.provider) {
+      this.provider.disconnect && (await this.provider.disconnect());
+      this.provider.close && (await this.provider.close());
+    }
+
+    this.provider = null;
   };
 }

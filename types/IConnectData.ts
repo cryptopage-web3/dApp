@@ -4,5 +4,4 @@ export interface IConnectData {
   address: string;
   chainId: number | string;
   providerSlug: EProvider | null;
-  provider: any;
 }

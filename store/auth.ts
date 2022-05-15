@@ -25,7 +25,6 @@ export default class AuthModule extends VuexModule {
     address: '',
     chainId: 1,
     providerSlug: null,
-    provider: null,
   };
 
   get address(): string {
@@ -50,10 +49,6 @@ export default class AuthModule extends VuexModule {
 
   get providerSlug(): EProvider | null {
     return this.connect.providerSlug;
-  }
-
-  get provider(): any {
-    return this.connect.provider;
   }
 
   @Mutation
@@ -171,7 +166,7 @@ export default class AuthModule extends VuexModule {
       }),
     );
 
-    this.setConnect({ ...this.connect });
+    this.setConnect(connectData);
     this.setAuth(true);
 
     return chainResponse;
@@ -185,10 +180,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public async logout() {
-    if (this.provider) {
-      this.provider.disconnect && (await this.provider.disconnect());
-      this.provider.close && (await this.provider.close());
-    }
+    await authService.logout();
 
     window.localStorage.removeItem('auth');
 
@@ -196,7 +188,6 @@ export default class AuthModule extends VuexModule {
       ...this.connect,
       address: '',
       providerSlug: null,
-      provider: null,
     });
 
     this.setAuth(false);
