@@ -95,7 +95,8 @@ export default class LayoutHeaderConnect extends Vue {
     return icons[authModule.chainType];
   }
 
-  switchChain(chain: EMainChain) {
+  async switchChain(chain: EMainChain) {
+    await authModule.logout();
     authModule.selectMainChain(chain);
 
     this.$router.push(`/connect`);

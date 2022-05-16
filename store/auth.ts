@@ -83,18 +83,36 @@ export default class AuthModule extends VuexModule {
 
     try {
       const { providerSlug, chainId }: IConnectData = JSON.parse(auth);
-      const chainSlug = networkHelper.getNetworkSlug(chainId || '');
 
-      if (!providerSlug || !chainSlug) {
+      if (!providerSlug || !chainId) {
         await this.logout();
         this.setInitLoading(false);
         return;
       }
 
-      await this.connectToProvider({
-        chain: chainSlug,
-        provider: providerSlug,
-      });
+      /** узнаем текущие данные провайдера  */
+
+      const providerResponse = await authService.connectToProvider(
+        providerSlug,
+        this.onConnectChange,
+      );
+
+      const { connectData } = providerResponse;
+
+      /** если сети не совпадают, то не авторизуем */
+
+      if (connectData?.chainId !== chainId) {
+        await this.logout();
+        this.setInitLoading(false);
+        return;
+      }
+
+      /** сохраняем данные connect */
+
+      window.localStorage.setItem('auth', JSON.stringify(connectData));
+
+      this.setConnect(connectData);
+      this.setAuth(true);
       this.setInitLoading(false);
     } catch {
       await this.logout();
