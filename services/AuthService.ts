@@ -133,7 +133,7 @@ export class AuthService {
     }
 
     try {
-      await window.ethereum.send('eth_requestAccounts');
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
 
       const onChange = () => {
         onConnectChange({
