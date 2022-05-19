@@ -21,9 +21,7 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 
-@Component({
-  layout: 'default',
-})
+@Component({})
 export default class AccountLayout extends Vue {
   get showRightSidebar(): boolean {
     return !(
