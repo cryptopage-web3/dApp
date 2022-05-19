@@ -101,7 +101,7 @@ export default class AuthModule extends VuexModule {
 
       /** если сети не совпадают, то не авторизуем */
 
-      if (connectData?.chainId !== chainId) {
+      if (!connectData || connectData.chainId !== chainId) {
         await this.logout();
         this.setInitLoading(false);
         return;

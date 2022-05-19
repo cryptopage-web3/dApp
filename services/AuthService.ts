@@ -1,4 +1,6 @@
+import { BscConnector } from '@binance-chain/bsc-connector';
 import {
+  EChainId,
   EChainSlug,
   EProvider,
   IConnectChangeParams,
@@ -15,6 +17,10 @@ declare const window: Window &
     tronLink: any;
     solana: any;
   };
+
+const bscConnector = new BscConnector({
+  supportedChainIds: [Number(EChainId.bsc), Number(EChainId.bscTestnet)],
+});
 
 export class AuthService {
   private provider: any = null;
@@ -79,11 +85,11 @@ export class AuthService {
     //   return await this.connectToWalletConnect();
     // }
 
-    // /** подключение к bsc_wallet */
+    /** подключение к bsc_wallet */
 
-    // if (provider === EProvider.bscWallet) {
-    //   return await this.connectToBscWallet();
-    // }
+    if (provider === EProvider.bscWallet) {
+      return await this.connectToBscWallet(onConnectChange);
+    }
 
     // /** подключение к okex */
 
@@ -161,6 +167,67 @@ export class AuthService {
         message: {
           title: 'Not connected to MetaMask',
           text: 'Please choose supported chain in the MetaMask Ext.<br>and accept connect',
+        },
+      };
+    }
+  };
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== BSC_WALLET ========
+   *
+   * подключение к bsc_wallet
+   */
+  public connectToBscWallet = async (
+    onConnectChange: (params: IConnectChangeParams) => void,
+  ): Promise<IConnectToProviderResponse> => {
+    if (!this.bscInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found Binance Wallet extension',
+          text: 'Please install Binance Wallet Ext.,<br>reload page and try again',
+        },
+      };
+    }
+
+    try {
+      await bscConnector.activate();
+
+      const onChange = async () => {
+        const address = await bscConnector.getAccount();
+        const chainId = await bscConnector.getChainId();
+
+        onConnectChange({
+          chainId: Number(chainId),
+          address: address || '',
+        });
+      };
+
+      window.BinanceChain.on('chainChanged', onChange);
+      window.BinanceChain.on('accountsChanged', onChange);
+
+      const address = await bscConnector.getAccount();
+      const chainId = await bscConnector.getChainId();
+
+      this.provider = window.BinanceChain;
+
+      return {
+        status: 'success',
+        connectData: {
+          chainId: Number(chainId),
+          address: address || '',
+          providerSlug: EProvider.bscWallet,
+        },
+      };
+    } catch {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to Binance Wallet',
+          text: 'Please choose supported chain in the Binance Ext.<br>and accept connect',
         },
       };
     }
