@@ -1,6 +1,6 @@
 <template>
   <div>
-    <notifications width="350" />
+    <layout-notification />
     <layout-header />
 
     <section id="profile" class="profile height-full">

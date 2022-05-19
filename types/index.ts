@@ -5,3 +5,4 @@ export * from './EProvider';
 export * from './EChainType';
 export * from './IConnectData';
 export * from './IConnectToProvider';
+export * from './IAlertMessage';

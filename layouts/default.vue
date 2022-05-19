@@ -1,6 +1,6 @@
 <template>
   <div>
-    <notifications width="350" />
+    <layout-notification />
     <layout-header />
     <nuxt />
     <layout-footer />

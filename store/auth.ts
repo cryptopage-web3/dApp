@@ -1,4 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { alertModule } from '.';
 import { AuthService } from '~/services';
 import {
   EChainType,
@@ -233,6 +234,8 @@ export default class AuthModule extends VuexModule {
 
     const { chainId, address } = params;
     const providerSlug = this.providerSlug;
+    const isChainChange = chainId !== this.chainId;
+    const isAddressChange = address !== this.address;
 
     /** если не авторизованы, то никак не реагируем */
 
@@ -243,19 +246,28 @@ export default class AuthModule extends VuexModule {
     /** если нет данных по адресу или сети, то сбрасываем авторизацию */
 
     if (!chainId || !address) {
+      alertModule.error(
+        `${networkHelper.getProviderTitle(providerSlug)} is disconnected`,
+      );
       this.logout();
       return;
     }
 
     /** если нет изменений, то ничего не делаем */
 
-    if (chainId === this.chainId && address === this.address) {
+    if (!isChainChange && !isAddressChange) {
       return;
     }
 
     /** если сеть не поддерживается провайдером, то сбрасываем авторизацию */
 
     if (!networkHelper.isSupportedByProvider(chainId, providerSlug)) {
+      alertModule.error(
+        `${networkHelper.getProviderTitle(
+          providerSlug,
+        )}: set unsupported chain`,
+      );
+
       this.logout();
       return;
     }
@@ -271,6 +283,12 @@ export default class AuthModule extends VuexModule {
     window.localStorage.setItem('auth', JSON.stringify(connectData));
 
     this.setConnect(connectData);
+
+    alertModule.success(
+      `${networkHelper.getProviderTitle(providerSlug)}: ${
+        isChainChange ? 'chain' : 'account'
+      } is change`,
+    );
   }
 
   @Action

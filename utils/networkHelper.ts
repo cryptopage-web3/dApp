@@ -6,6 +6,15 @@ import {
   EProvider,
 } from '~/types';
 
+const providerTitleMap = new Map<EProvider, string>([
+  [EProvider.metamask, 'MetaMask Ext.'],
+  [EProvider.bscWallet, 'Binance Wallet Ext.'],
+  [EProvider.okex, 'MetaX Ext.'],
+  [EProvider.phantom, 'Phantom Ext.'],
+  [EProvider.tron, 'TronLink Ext.'],
+  [EProvider.walletConnect, 'WalletConnect'],
+]);
+
 export const networkHelper = {
   networkByChain: {
     [EChainId.eth]: {
@@ -168,5 +177,9 @@ export const networkHelper = {
 
   getChainId(slug: string) {
     return this.chainIdBySlug[slug];
+  },
+
+  getProviderTitle(provider: EProvider | null) {
+    return provider ? providerTitleMap.get(provider) : 'Wallet Provider';
   },
 };
