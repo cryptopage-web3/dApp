@@ -1,4 +1,6 @@
 import { BscConnector } from '@binance-chain/bsc-connector';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import Web3 from 'web3';
 import {
   EChainId,
   EChainSlug,
@@ -8,6 +10,7 @@ import {
   IConnectToProviderResponse,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
+import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants';
 
 declare const window: Window &
   typeof globalThis & {
@@ -24,6 +27,7 @@ const bscConnector = new BscConnector({
 
 export class AuthService {
   private provider: any = null;
+  private web3: any = null;
 
   protected get metamaskInstalled(): boolean {
     return (
@@ -81,9 +85,9 @@ export class AuthService {
 
     // /** подключение к walletConnect */
 
-    // if (provider === EProvider.walletConnect) {
-    //   return await this.connectToWalletConnect();
-    // }
+    if (provider === EProvider.walletConnect) {
+      return await this.connectToWalletConnect(onConnectChange);
+    }
 
     /** подключение к bsc_wallet */
 
@@ -228,6 +232,65 @@ export class AuthService {
         message: {
           title: 'Not connected to Binance Wallet',
           text: 'Please choose supported chain in the Binance Ext.<br>and accept connect',
+        },
+      };
+    }
+  };
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== WALLET_CONNECT ========
+   *
+   * подключение к walletConnect
+   */
+  public connectToWalletConnect = async (
+    onConnectChange: (params: IConnectChangeParams) => void,
+  ): Promise<IConnectToProviderResponse> => {
+    try {
+      const provider = await new WalletConnectProvider({
+        infuraId: INFURA_PROJECT_ID,
+        rpc: PROVIDER_HOST_BY_CHAINID,
+      });
+
+      await provider.enable();
+      this.provider = provider;
+      this.web3 = await new Web3(<any>provider);
+
+      const onChange = async () => {
+        const accounts = await this.web3.eth.getAccounts();
+        const chainId = await this.web3.eth.net.getId();
+
+        onConnectChange({
+          chainId: Number(chainId),
+          address: accounts?.[0] || '',
+        });
+      };
+
+      provider.on('accountsChanged', onChange);
+      provider.on('chainChanged', onChange);
+      provider.on('disconnect', () =>
+        onConnectChange({ chainId: 0, address: '' }),
+      );
+
+      const accounts = await this.web3.eth.getAccounts();
+      const chainId = await this.web3.eth.net.getId();
+
+      return {
+        status: 'success',
+        connectData: {
+          chainId: Number(chainId),
+          address: accounts?.[0] || '',
+          providerSlug: EProvider.walletConnect,
+        },
+      };
+    } catch {
+      return {
+        status: 'error',
+        message: {
+          title: 'WalletConnect not connected',
+          text: 'Please choose supported chain in the wallet<br>and accept connect',
         },
       };
     }
@@ -437,9 +500,10 @@ export class AuthService {
       return;
     }
 
-    this.provider.disconnect && (await this.provider.disconnect());
-    this.provider.close && (await this.provider.close());
-
-    this.provider = null;
+    try {
+      this.provider.disconnect && (await this.provider.disconnect());
+    } finally {
+      this.provider = null;
+    }
   };
 }
