@@ -65,7 +65,7 @@
                     <span> Metamask </span>
                   </a>
                 </li>
-                <li>
+                <li class="profile-login__list__walletconnect">
                   <a
                     href="#"
                     role="button"
@@ -177,7 +177,7 @@
                     <span> BSC Wallet </span>
                   </a>
                 </li>
-                <li>
+                <li class="profile-login__list__walletconnect">
                   <a
                     href="#"
                     role="button"
@@ -272,7 +272,7 @@
                     <span> Metamask </span>
                   </a>
                 </li>
-                <li>
+                <li class="profile-login__list__walletconnect">
                   <a
                     href="#"
                     role="button"
@@ -313,7 +313,7 @@
             </div>
           </div>
         </div>
-        <div class="card profile-login__card">
+        <div class="card profile-login__card profile-login__card_tron">
           <div id="profile-login-accordion4_2" class="card-header">
             <button
               class="profile-login-accordion__link"
@@ -374,7 +374,7 @@
             </div>
           </div>
         </div>
-        <div class="card profile-login__card">
+        <div class="card profile-login__card profile-login__card_solana">
           <div id="profile-login-accordion5_2" class="card-header">
             <button
               class="profile-login-accordion__link"

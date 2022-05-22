@@ -756,12 +756,12 @@
     font-size: 12px;
   }
 
-  .modal-content__item-tron,
-  .modal-content__item-solana {
+  .profile-login__card_tron,
+  .profile-login__card_solana {
     display: none;
   }
 
-  .modal-content-wallet-list li:not(.modal-content-wallet-list__walletconnect) {
+  .profile-login__list li:not(.profile-login__list__walletconnect) {
     display: none;
   }
 
