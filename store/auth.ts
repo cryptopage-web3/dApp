@@ -12,6 +12,10 @@ import {
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 
+type TConnectData = IConnectData;
+type TConnectToProviderParams = IConnectToProviderParams;
+type TConnectChangeParams = IConnectChangeParams;
+
 const authService = new AuthService();
 
 @Module({
@@ -69,7 +73,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public setConnect(connect: IConnectData) {
+  public setConnect(connect: TConnectData) {
     this.connect = connect;
   }
 
@@ -136,7 +140,7 @@ export default class AuthModule extends VuexModule {
   public async connectToProvider({
     chain,
     provider,
-  }: IConnectToProviderParams): Promise<IConnectToProviderResponse> {
+  }: TConnectToProviderParams): Promise<IConnectToProviderResponse> {
     /** подключаемся к провайдеру */
 
     const providerResponse = await authService.connectToProvider(
@@ -228,7 +232,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
-  public onConnectChange(params: IConnectChangeParams) {
+  public onConnectChange(params: TConnectChangeParams) {
     /** TODO: на проде всегда делаем logout,
      * но для тестирования мы должны пропускать rinkeby */
 
