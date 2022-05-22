@@ -95,11 +95,11 @@ export class AuthService {
       return await this.connectToBscWallet(onConnectChange);
     }
 
-    // /** подключение к okex */
+    /** подключение к okex */
 
-    // if (provider === EProvider.okex) {
-    //   return await this.connectToOkex();
-    // }
+    if (provider === EProvider.okex) {
+      return await this.connectToOkex(onConnectChange);
+    }
 
     // /** подключение к tron_link */
 
@@ -291,6 +291,61 @@ export class AuthService {
         message: {
           title: 'WalletConnect not connected',
           text: 'Please choose supported chain in the wallet<br>and accept connect',
+        },
+      };
+    }
+  };
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== OKEX ========
+   *
+   * подключение к okex
+   */
+  public connectToOkex = async (
+    onConnectChange: (params: IConnectChangeParams) => void,
+  ): Promise<IConnectToProviderResponse> => {
+    if (!this.okexInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found MetaX extension',
+          text: 'Please install MetaX Ext.,<br>reload page and try again',
+        },
+      };
+    }
+
+    try {
+      await window.okexchain.request({ method: 'eth_requestAccounts' });
+
+      const onChange = () => {
+        onConnectChange({
+          chainId: Number(window.okexchain.chainId),
+          address: window.okexchain.selectedAddress,
+        });
+      };
+
+      window.okexchain.on('chainChanged', onChange);
+      window.okexchain.on('accountsChanged', onChange);
+
+      this.provider = window.okexchain;
+
+      return {
+        status: 'success',
+        connectData: {
+          chainId: Number(window.okexchain.chainId),
+          address: window.okexchain.selectedAddress,
+          providerSlug: EProvider.okex,
+        },
+      };
+    } catch {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to MetaX',
+          text: 'Please choose supported chain in the MetaX Ext.<br>and accept connect',
         },
       };
     }
