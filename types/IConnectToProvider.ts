@@ -19,3 +19,8 @@ export interface IConnectChangeParams {
   chainId: string | number;
   address: string;
 }
+
+export interface ITronRequestResponse {
+  code: number;
+  message: string;
+}

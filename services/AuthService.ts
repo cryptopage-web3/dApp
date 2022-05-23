@@ -8,6 +8,7 @@ import {
   IConnectChangeParams,
   IConnectData,
   IConnectToProviderResponse,
+  ITronRequestResponse,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants';
@@ -101,11 +102,11 @@ export class AuthService {
       return await this.connectToOkex(onConnectChange);
     }
 
-    // /** подключение к tron_link */
+    /** подключение к tron_link */
 
-    // if (provider === EProvider.tron) {
-    //   return await this.connectToTronLink();
-    // }
+    if (provider === EProvider.tron) {
+      return await this.connectToTronLink(onConnectChange);
+    }
 
     // /** подключение к phantom */
 
@@ -346,6 +347,66 @@ export class AuthService {
         message: {
           title: 'Not connected to MetaX',
           text: 'Please choose supported chain in the MetaX Ext.<br>and accept connect',
+        },
+      };
+    }
+  };
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== TRON_LINK ========
+   *
+   * подключение к tron_link
+   */
+  public connectToTronLink = async (
+    onConnectChange: (params: IConnectChangeParams) => void,
+  ): Promise<IConnectToProviderResponse> => {
+    if (!this.tronInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found TronLink extension',
+          text: 'Please install TronLink Ext.,<br>reload page and try again',
+        },
+      };
+    }
+
+    try {
+      const response: ITronRequestResponse = await window.tronLink.request({
+        method: 'tron_requestAccounts',
+      });
+
+      if (response.code !== 200) {
+        throw new Error('Request denied by TronLink Ext.');
+      }
+
+      window.addEventListener('message', (e) => {
+        if (e.data.message?.action === 'setAccount') {
+          onConnectChange({
+            chainId: 'tron',
+            address: e.data.message.data.address,
+          });
+        }
+      });
+
+      this.provider = window.tronLink.tronWeb;
+
+      return {
+        status: 'success',
+        connectData: {
+          chainId: 'tron',
+          address: window.tronLink.tronWeb.defaultAddress?.base58,
+          providerSlug: EProvider.tron,
+        },
+      };
+    } catch {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to TronLink',
+          text: 'Please accept connect in the TronLink Ext.,<br>reload page and try again',
         },
       };
     }
