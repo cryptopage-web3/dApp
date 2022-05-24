@@ -108,11 +108,11 @@ export class AuthService {
       return await this.connectToTronLink(onConnectChange);
     }
 
-    // /** подключение к phantom */
+    /** подключение к phantom */
 
-    // if (provider === EProvider.phantom) {
-    //   return await this.connectToPhantom();
-    // }
+    if (provider === EProvider.phantom) {
+      return await this.connectToPhantom();
+    }
 
     /** остальное не поддерживаем */
 
@@ -407,6 +407,49 @@ export class AuthService {
         message: {
           title: 'Not connected to TronLink',
           text: 'Please accept connect in the TronLink Ext.,<br>reload page and try again',
+        },
+      };
+    }
+  };
+  /**
+   * ========================
+   */
+
+  /**
+   * ======== PHANTOM ========
+   *
+   * подключение к phantom
+   */
+  public connectToPhantom = async (): Promise<IConnectToProviderResponse> => {
+    if (!this.solanaInstalled) {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not found Phantom extension',
+          text: 'Please install Phantom Ext.,<br>reload page and try again',
+        },
+      };
+    }
+
+    try {
+      const result = await window.solana.connect();
+
+      this.provider = window.solana;
+
+      return {
+        status: 'success',
+        connectData: {
+          chainId: 'solana',
+          address: result?.publicKey?.toString(),
+          providerSlug: EProvider.phantom,
+        },
+      };
+    } catch {
+      return {
+        status: 'error',
+        message: {
+          title: 'Not connected to Phantom',
+          text: 'Please accept connect in the Phantom Ext.,<br>reload page and try again',
         },
       };
     }
