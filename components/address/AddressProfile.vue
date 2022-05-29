@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-iu">
+  <div class="profile-iu mb_20">
     <div class="profile-iu__avatar">
       <jazzicon :seed="10211" :address="address" :diameter="diameter" />
     </div>
@@ -26,19 +26,13 @@
               fill="#687684"
             />
           </svg>
-          Status: <span>set status</span>
+          Assign status
         </a>
       </div>
-      <div class="profile-iu__middle">
+      <div class="profile-iu__middle mb-0">
         <strong>286</strong> transactions<br />
         <strong>106</strong> inputs / <strong>58,4K</strong> outputs from
       </div>
-      <a
-        href="#"
-        class="profile-iu__creat btn-blue-transparent_button btn_large"
-      >
-        + Create
-      </a>
     </div>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
   <div class="profile-center">
     <address-profile />
+    <nft-form />
     <ul id="myTab" class="nav nav-tabs profile-tabs" role="tablist">
       <li class="nav-item">
         <a
