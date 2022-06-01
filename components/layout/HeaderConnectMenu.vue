@@ -72,7 +72,7 @@ import { EMainChain } from '~/types/EMainChain';
 import { authModule } from '~/store';
 
 @Component({})
-export default class LayoutHeaderConnect extends Vue {
+export default class HeaderConnectMenu extends Vue {
   EMainChain = EMainChain;
 
   get authAddress(): string {

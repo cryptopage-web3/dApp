@@ -6,3 +6,4 @@ export * from './EChainType';
 export * from './IConnectData';
 export * from './IConnectToProvider';
 export * from './IAlertMessage';
+export * from './IAddressInfo';

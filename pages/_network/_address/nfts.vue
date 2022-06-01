@@ -2362,7 +2362,6 @@ import { favoriteSelectInit } from '~/utils/favoriteSelect';
       },
     ],
   },
-  layout: 'account',
 })
 export default class NftsPage extends Vue {
   thumb1 = marketProductThumb1;

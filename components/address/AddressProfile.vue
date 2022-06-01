@@ -40,7 +40,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { authModule } from '~/store';
+import { addressModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 
 @Component({})
@@ -56,7 +56,7 @@ export default class AddressProfile extends Vue {
   };
 
   get address(): string {
-    return authModule.address;
+    return addressModule.address;
   }
 
   mounted() {

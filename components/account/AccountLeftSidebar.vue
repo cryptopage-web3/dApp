@@ -10,7 +10,10 @@
         </a>
         <ul class="profile-menu__list">
           <li>
-            <nuxt-link to="/network/address" :class="{ active: isProfile }">
+            <nuxt-link
+              :to="`/${chainSlug}/${address}`"
+              :class="{ active: isProfile }"
+            >
               <div class="thumb">
                 <svg
                   width="24"
@@ -217,6 +220,7 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { accountLeftSidebarInit } from '~/utils/accountLeftSidebar';
+import { authModule } from '~/store';
 
 @Component({})
 export default class AccountLeftSidebar extends Vue {
@@ -226,6 +230,14 @@ export default class AccountLeftSidebar extends Vue {
 
   get isSettings(): boolean {
     return this.$route.name === 'profile-settings';
+  }
+
+  get address(): string {
+    return authModule.address;
+  }
+
+  get chainSlug(): string {
+    return authModule.chainSlug;
   }
 
   mounted() {

@@ -1137,7 +1137,6 @@ import { tokensModalInit } from '~/utils/tokensModal';
       },
     ],
   },
-  layout: 'account',
 })
 export default class TokensPage extends Vue {
   mounted() {

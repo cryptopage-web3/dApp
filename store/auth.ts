@@ -82,7 +82,9 @@ export default class AuthModule extends VuexModule {
     const auth = localStorage.getItem('auth');
 
     if (!auth) {
-      this.setInitLoading(false);
+      setTimeout(() => {
+        this.setInitLoading(false);
+      });
       return;
     }
 

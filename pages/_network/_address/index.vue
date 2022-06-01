@@ -3197,7 +3197,6 @@ import profileReactionsThumb7 from '~/assets/img/profile-reactions__thumb7.png';
       },
     ],
   },
-  layout: 'account',
 })
 export default class AddressPage extends Vue {
   imageBg1 = profileImageBg1;
