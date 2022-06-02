@@ -1,5 +1,6 @@
 import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
 import { IAddressInfo } from '~/types';
+import { networkHelper } from '~/utils/networkHelper';
 
 type TAddressInfo = IAddressInfo;
 
@@ -20,6 +21,10 @@ export default class AddressModule extends VuexModule {
 
   get chainId(): string | number {
     return this.info.chainId;
+  }
+
+  get chainSlug(): string {
+    return networkHelper.getNetworkSlug(this.chainId);
   }
 
   @Mutation

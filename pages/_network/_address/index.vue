@@ -1,7 +1,6 @@
 <template>
   <div class="profile-center">
     <address-profile />
-    <nft-form />
     <ul id="myTab" class="nav nav-tabs profile-tabs" role="tablist">
       <li class="nav-item">
         <a
@@ -51,7 +50,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>From: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -278,7 +277,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>From: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -706,7 +705,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>From: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -941,7 +940,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1061,7 +1060,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1181,7 +1180,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1301,7 +1300,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1421,7 +1420,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1541,7 +1540,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1661,7 +1660,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1781,7 +1780,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -1901,7 +1900,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2021,7 +2020,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2141,7 +2140,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2261,7 +2260,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2388,7 +2387,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2501,7 +2500,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2612,7 +2611,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2720,7 +2719,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2837,7 +2836,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -2950,7 +2949,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>
@@ -3061,7 +3060,7 @@
           <div class="profile-content-top">
             <a href="#" class="profile-content__user">
               <img src="@/assets/img/profile-content__user_img.png" alt="" />
-              <div>Eth: <span>0x7eE...3F5</span></div>
+              <div>txid: <span>0x7eE...3F5</span></div>
             </a>
             <div class="right">
               <div class="profile-content__date">17:11 / 18.12.2021</div>

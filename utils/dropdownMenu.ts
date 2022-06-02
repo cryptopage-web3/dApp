@@ -8,6 +8,10 @@ export const dropdownMenuInit = (): void => {
         }
       }
     });
+
+    $('.drop-down__list li').on('click', function () {
+      ($(this).closest('.drop-down__col') as any).collapse('hide');
+    });
   }
 
   if (

@@ -1,6 +1,6 @@
 <template>
   <div class="profile-left2">
-    <div class="profile-menu-wrap">
+    <div v-if="isAuth" class="profile-menu-wrap">
       <a href="#" class="profile-menu__oc">
         <img src="@/assets/img/profile-menu__oc_icon.svg" alt="" />
       </a>
@@ -230,6 +230,10 @@ export default class AccountLeftSidebar extends Vue {
 
   get isSettings(): boolean {
     return this.$route.name === 'profile-settings';
+  }
+
+  get isAuth(): boolean {
+    return authModule.isAuth;
   }
 
   get address(): string {
