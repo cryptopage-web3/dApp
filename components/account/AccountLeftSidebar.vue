@@ -220,12 +220,12 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { accountLeftSidebarInit } from '~/utils/accountLeftSidebar';
-import { authModule } from '~/store';
+import { authModule, addressModule } from '~/store';
 
 @Component({})
 export default class AccountLeftSidebar extends Vue {
   get isProfile(): boolean {
-    return this.$route.name === 'network-address';
+    return this.$route.name === 'network-address' && this.isOwner;
   }
 
   get isSettings(): boolean {
@@ -242,6 +242,14 @@ export default class AccountLeftSidebar extends Vue {
 
   get chainSlug(): string {
     return authModule.chainSlug;
+  }
+
+  get isOwner(): boolean {
+    return (
+      authModule.address.toLowerCase() ===
+        addressModule.address.toLowerCase() &&
+      authModule.chainSlug === addressModule.chainSlug
+    );
   }
 
   mounted() {

@@ -80,6 +80,7 @@
           <a
             href="#"
             class="profile-iu__creat btn-blue-transparent_button btn_large"
+            @click.prevent="sendMessage"
           >
             Send Message
           </a>
@@ -120,6 +121,10 @@ export default class AddressProfile extends Vue {
     );
   }
 
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+
   mounted() {
     this.$nextTick(() => {
       /** tooltip копирование адреса */
@@ -139,6 +144,22 @@ export default class AddressProfile extends Vue {
     this.$notify({
       type: 'success',
       title: 'Address copied to clipboard',
+    });
+  }
+
+  sendMessage() {
+    if (!this.isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to send a message',
+      });
+
+      return;
+    }
+
+    this.$notify({
+      type: 'error',
+      title: 'Sending a message is temporarily unavailable',
     });
   }
 }

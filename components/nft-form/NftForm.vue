@@ -2,7 +2,7 @@
   <div class="form-creat">
     <input
       type="text"
-      placeholder="What's new with you?"
+      :placeholder="isOwner ? 'What\'s new with you?' : 'Title of the sent nft'"
       class="form-creat__name form-creat-input-js form-creat-focus-js"
     />
     <div class="form-creat-textarea-wrap">
@@ -97,7 +97,7 @@
           href="#"
           class="btn btn_large btn_default form-creat__plus disabled w_xl_100 w_sm_80 w_80"
         >
-          Create
+          {{ isOwner ? 'Create' : 'Send' }}
         </a>
       </div>
     </div>
@@ -109,12 +109,25 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { addressModule, authModule } from '~/store';
 import { nftFormInit } from '~/utils/nftForm';
 
 @Component({})
 export default class NftForm extends Vue {
   mounted() {
     nftFormInit();
+  }
+
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+
+  get isOwner(): boolean {
+    return (
+      authModule.address.toLowerCase() ===
+        addressModule.address.toLowerCase() &&
+      authModule.chainSlug === addressModule.chainSlug
+    );
   }
 }
 </script>
