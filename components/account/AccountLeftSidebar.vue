@@ -1,6 +1,6 @@
 <template>
   <div class="profile-left2">
-    <div v-if="isAuth" class="profile-menu-wrap">
+    <div class="profile-menu-wrap">
       <a href="#" class="profile-menu__oc">
         <img src="@/assets/img/profile-menu__oc_icon.svg" alt="" />
       </a>
@@ -9,7 +9,7 @@
           <img src="@/assets/img/market-main-filtr-oc__close_img.svg" alt="" />
         </a>
         <ul class="profile-menu__list">
-          <li>
+          <li v-if="isAuth">
             <nuxt-link
               :to="`/${chainSlug}/${address}`"
               :class="{ active: isProfile }"
@@ -31,7 +31,7 @@
               <span> Profile </span>
             </nuxt-link>
           </li>
-          <li>
+          <li v-if="isAuth">
             <a href="#">
               <div class="thumb">
                 <svg
@@ -50,7 +50,7 @@
               <span> My favorites </span>
             </a>
           </li>
-          <li>
+          <li v-if="isAuth">
             <a href="#">
               <div class="thumb">
                 <svg
@@ -69,7 +69,7 @@
               <span> Messages </span>
             </a>
           </li>
-          <li>
+          <li v-if="isAuth">
             <nuxt-link to="/profile/settings" :class="{ active: isSettings }">
               <div class="thumb">
                 <svg

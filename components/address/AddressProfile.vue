@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="profile-iu" :class="{ mb_20: isOwner }">
+    <div class="profile-iu mb_20">
       <div class="profile-iu__avatar">
         <jazzicon :seed="10211" :address="address" :diameter="diameter" />
       </div>
@@ -77,9 +77,6 @@
           <strong>106</strong> inputs / <strong>58,4K</strong> outputs from
         </div>
         <div v-if="!isOwner" class="d-flex align-items-center flex-wrap">
-          <a href="#" class="other-profile-iu__send btn-blue_button btn_large">
-            Send NFT
-          </a>
           <a
             href="#"
             class="profile-iu__creat btn-blue-transparent_button btn_large"
@@ -89,7 +86,7 @@
         </div>
       </div>
     </div>
-    <nft-form v-if="isOwner" />
+    <nft-form />
   </div>
 </template>
 

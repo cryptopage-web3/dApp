@@ -1,7 +1,9 @@
 <template>
   <div v-if="show" class="market-sidebar">
     <div class="market-sidebar-top">
-      <h3 class="market-sidebar__title">My Token's (erc20)</h3>
+      <h3 class="market-sidebar__title">
+        {{ isOwner ? 'My' : 'Account' }} Token's (erc20)
+      </h3>
       <nuxt-link to="/network/address/tokens" class="market-sidebar__more">
         <svg
           width="30"
@@ -161,11 +163,20 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { addressModule, authModule } from '~/store';
 
 @Component({})
 export default class AccountSidebarTokens extends Vue {
   get show() {
     return this.$route.name !== 'network-address-tokens';
+  }
+
+  get isOwner(): boolean {
+    return (
+      authModule.address.toLowerCase() ===
+        addressModule.address.toLowerCase() &&
+      authModule.chainSlug === addressModule.chainSlug
+    );
   }
 }
 </script>

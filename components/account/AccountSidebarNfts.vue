@@ -1,7 +1,9 @@
 <template>
   <div v-if="show" class="market-sidebar">
     <div class="market-sidebar-top">
-      <h3 class="market-sidebar__title">My NFT’s</h3>
+      <h3 class="market-sidebar__title">
+        {{ isOwner ? 'My' : 'Account' }} NFT’s
+      </h3>
       <nuxt-link to="/network/address/nfts" class="market-sidebar__more">
         <svg
           width="30"
@@ -81,6 +83,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { addressModule, authModule } from '~/store';
 import marketSidebarBg1 from '~/assets/img/market-sidebar__list2_bg1.jpg';
 import marketSidebarBg2 from '~/assets/img/market-sidebar__list2_bg2.jpg';
 import marketSidebarBg3 from '~/assets/img/market-sidebar__list2_bg3.jpg';
@@ -99,6 +102,14 @@ export default class AccountSidebarNfts extends Vue {
 
   get show() {
     return this.$route.name !== 'network-address-nfts';
+  }
+
+  get isOwner(): boolean {
+    return (
+      authModule.address.toLowerCase() ===
+        addressModule.address.toLowerCase() &&
+      authModule.chainSlug === addressModule.chainSlug
+    );
   }
 }
 </script>
