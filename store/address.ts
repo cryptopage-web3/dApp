@@ -27,6 +27,10 @@ export default class AddressModule extends VuexModule {
     return networkHelper.getNetworkSlug(this.chainId);
   }
 
+  get chainName(): string {
+    return networkHelper.getNetworkName(this.chainId);
+  }
+
   @Mutation
   public setInfo(info: TAddressInfo) {
     this.info = info;

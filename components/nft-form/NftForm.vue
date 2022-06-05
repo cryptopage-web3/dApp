@@ -1,5 +1,10 @@
 <template>
   <div class="form-creat">
+    <div
+      v-if="isDisabled"
+      class="form-creat__block"
+      @click.prevent="showDisableNotify"
+    />
     <input
       type="text"
       :placeholder="isOwner ? 'What\'s new with you?' : 'Title of the sent nft'"
@@ -128,6 +133,49 @@ export default class NftForm extends Vue {
         addressModule.address.toLowerCase() &&
       authModule.chainSlug === addressModule.chainSlug
     );
+  }
+
+  get isSameChain(): boolean {
+    return authModule.chainSlug === addressModule.chainSlug;
+  }
+
+  get authChainName(): string {
+    return authModule.chainName;
+  }
+
+  get addressChainName(): string {
+    return addressModule.chainName;
+  }
+
+  get isDisabled(): boolean {
+    return !this.isAuth || !this.isSameChain;
+  }
+
+  showDisableNotify() {
+    if (!this.isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to create NFTs',
+      });
+
+      return true;
+    }
+
+    if (!this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Active chain - ${this.authChainName}<br>
+          You are trying ${
+            this.isOwner ? 'create' : 'send'
+          } nft to account with chain ${this.addressChainName}<br>
+          Please connect to ${this.addressChainName}
+        `,
+      });
+
+      return true;
+    }
+
+    return false;
   }
 }
 </script>
