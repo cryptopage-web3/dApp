@@ -3,6 +3,8 @@ import { EChainId } from '~/types/EChainId';
 /** created by Nail M. at https://infura.io/ */
 export const INFURA_PROJECT_ID = '4409ed526a3e48ffa540c25ff4e1015f';
 
+export const API_URL = 'https://crypto-page-app.herokuapp.com';
+
 export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
   [EChainId.eth]: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
   [EChainId.ropsten]: `https://ropsten.infura.io/v3/${INFURA_PROJECT_ID}`,

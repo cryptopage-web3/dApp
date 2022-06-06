@@ -28,145 +28,49 @@
       </nuxt-link>
     </div>
     <ul class="market-sidebar__list3">
-      <li>
-        <a href="#" class="my-token">
-          <div class="my-token__top">
-            <div class="my-token__icon">
-              <img src="@/assets/img/my-token_img1.svg" alt="" />
-            </div>
-            <div class="right">
-              <div class="my-token__kurs">5.321</div>
-              <div class="my-token__wallet">USDT</div>
-            </div>
-          </div>
-          <div class="my-token__bottom">
-            <div class="my-token__procent my-token__procent-green">
-              1.44%
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.89044 10L11.1099 10C11.2964 10 11.4006 9.80376 11.2851 9.66979L8.17535 6.07713C8.08633 5.97429 7.91494 5.97429 7.82498 6.07713L4.71526 9.66979C4.59973 9.80376 4.7039 10 4.89044 10Z"
-                  fill="#27BC6A"
-                />
-              </svg>
-            </div>
-            <div class="my-token__count">$ 11,2</div>
-            <div class="my-token__value">Value: $ 2 237.24</div>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="my-token">
-          <div class="my-token__top">
-            <div class="my-token__icon">
-              <img src="@/assets/img/my-token_img2.svg" alt="" />
-            </div>
-            <div class="right">
-              <div class="my-token__kurs">179.422</div>
-              <div class="my-token__wallet">SUSHI</div>
-            </div>
-          </div>
-          <div class="my-token__bottom">
-            <div class="my-token__procent my-token__procent-red">
-              14.78%
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M11.1096 6H4.89012C4.70357 6 4.59941 6.19624 4.71493 6.33021L7.82465 9.92287C7.91367 10.0257 8.08506 10.0257 8.17502 9.92287L11.2847 6.33021C11.4003 6.19624 11.2961 6 11.1096 6Z"
-                  fill="#FF1818"
-                />
-              </svg>
-            </div>
-            <div class="my-token__count">$ 22563,24</div>
-            <div class="my-token__value">Value: $ 237.24</div>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="my-token">
-          <div class="my-token__top">
-            <div class="my-token__icon">
-              <img src="@/assets/img/my-token_img3.svg" alt="" />
-            </div>
-            <div class="right">
-              <div class="my-token__kurs">0.22321</div>
-              <div class="my-token__wallet">PAGE</div>
-            </div>
-          </div>
-          <div class="my-token__bottom">
-            <div class="my-token__procent my-token__procent-red">
-              44.78%
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M11.1096 6H4.89012C4.70357 6 4.59941 6.19624 4.71493 6.33021L7.82465 9.92287C7.91367 10.0257 8.08506 10.0257 8.17502 9.92287L11.2847 6.33021C11.4003 6.19624 11.2961 6 11.1096 6Z"
-                  fill="#FF1818"
-                />
-              </svg>
-            </div>
-            <div class="my-token__count">$ 344,2</div>
-            <div class="my-token__value">Value: $ 3 134.04</div>
-          </div>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="my-token">
-          <div class="my-token__top">
-            <div class="my-token__icon">
-              <img src="@/assets/img/my-token_img4.svg" alt="" />
-            </div>
-            <div class="right">
-              <div class="my-token__kurs">15.333</div>
-              <div class="my-token__wallet">TFUEL</div>
-            </div>
-          </div>
-          <div class="my-token__bottom">
-            <div class="my-token__procent my-token__procent-green">
-              59.03 %
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M4.89044 10L11.1099 10C11.2964 10 11.4006 9.80376 11.2851 9.66979L8.17535 6.07713C8.08633 5.97429 7.91494 5.97429 7.82498 6.07713L4.71526 9.66979C4.59973 9.80376 4.7039 10 4.89044 10Z"
-                  fill="#27BC6A"
-                />
-              </svg>
-            </div>
-            <div class="my-token__count">$ 2563,24</div>
-            <div class="my-token__value">Value: $ 113</div>
-          </div>
-        </a>
-      </li>
+      <template v-if="loading">
+        <li>
+          <Skeleton class-name="market-sidebar__list3-loading-item" />
+        </li>
+        <li>
+          <Skeleton class-name="market-sidebar__list3-loading-item" />
+        </li>
+        <li>
+          <Skeleton class-name="market-sidebar__list3-loading-item" />
+        </li>
+        <li>
+          <Skeleton class-name="market-sidebar__list3-loading-item" />
+        </li>
+      </template>
+      <template v-else-if="!tokens.length">
+        <li class="market-sidebar__list3-empty">No tokens</li>
+      </template>
+      <template v-else>
+        <li v-for="token in tokens" :key="token.symbol">
+          <SidebarToken :token="token" />
+        </li>
+      </template>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
+import SidebarToken from './SidebarToken.vue';
+import Skeleton from '~/components/loaders/Skeleton.vue';
 import { addressModule, authModule } from '~/store';
+import { IAddressInfo, IToken } from '~/types';
 
-@Component({})
+@Component({
+  components: {
+    Skeleton,
+    SidebarToken,
+  },
+})
 export default class AccountSidebarTokens extends Vue {
+  loading = false;
+
   get show() {
     return this.$route.name !== 'network-address-tokens';
   }
@@ -177,6 +81,27 @@ export default class AccountSidebarTokens extends Vue {
         addressModule.address.toLowerCase() &&
       authModule.chainSlug === addressModule.chainSlug
     );
+  }
+
+  get info(): IAddressInfo {
+    return addressModule.info;
+  }
+
+  get tokens(): IToken[] {
+    return addressModule.tokens;
+  }
+
+  @Watch('info', { immediate: true })
+  async onInfoChanged(info: IAddressInfo) {
+    if (!info.address || !info.chainId) {
+      return;
+    }
+
+    this.loading = true;
+
+    await addressModule.fetchTokens();
+
+    this.loading = false;
   }
 }
 </script>

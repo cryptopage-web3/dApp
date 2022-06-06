@@ -1,8 +1,12 @@
-import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
-import { IAddressInfo } from '~/types';
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { alertModule } from '.';
+import { TokensService } from '~/services';
+import { IAddressInfo, IToken } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 
 type TAddressInfo = IAddressInfo;
+
+const tokensService = new TokensService();
 
 @Module({
   name: 'address',
@@ -14,6 +18,8 @@ export default class AddressModule extends VuexModule {
     address: '',
     chainId: 1,
   };
+
+  tokens: IToken[] = [];
 
   get address(): string {
     return this.info.address;
@@ -34,5 +40,26 @@ export default class AddressModule extends VuexModule {
   @Mutation
   public setInfo(info: TAddressInfo) {
     this.info = info;
+  }
+
+  @Mutation
+  public setTokens(tokens: IToken[]) {
+    this.tokens = [...tokens];
+  }
+
+  @Action
+  public async fetchTokens() {
+    try {
+      const tokens = await tokensService.getList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+      });
+
+      this.setTokens(tokens);
+    } catch {
+      alertModule.error('Error getting tokens data');
+
+      this.setTokens([]);
+    }
   }
 }

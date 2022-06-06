@@ -7,3 +7,6 @@ export * from './IConnectData';
 export * from './IConnectToProvider';
 export * from './IAlertMessage';
 export * from './IAddressInfo';
+export * from './IToken';
+export * from './ITokensParams';
+export * from './ITokensResponse';

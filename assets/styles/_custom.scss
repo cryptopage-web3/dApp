@@ -72,6 +72,19 @@
   height: 100px;
 }
 
+.market-sidebar__list3-loading-item {
+  height: 110px;
+}
+
+.market-sidebar__list3-empty {
+  width: 100% !important;
+  text-align: center;
+  font-size: 16px;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  opacity: 0.4;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {
