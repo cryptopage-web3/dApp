@@ -80,6 +80,7 @@
   width: 100% !important;
   text-align: center;
   font-size: 16px;
+  font-weight: 600;
   padding-top: 20px;
   padding-bottom: 30px;
   opacity: 0.4;
@@ -114,6 +115,25 @@
 
 .market-sidebar__list3 {
   max-height: 330px;
+  overflow: auto;
+}
+
+.market-sidebar__list2-loading-item {
+  height: 135px;
+}
+
+.market-sidebar__list2-empty {
+  width: 100% !important;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  opacity: 0.4;
+}
+
+.market-sidebar__list2 {
+  max-height: 370px;
   overflow: auto;
 }
 

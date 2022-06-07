@@ -46,7 +46,7 @@
         <li class="market-sidebar__list3-empty">No tokens</li>
       </template>
       <template v-else>
-        <li v-for="token in tokens" :key="token.symbol">
+        <li v-for="(token, index) in tokens" :key="index">
           <SidebarToken :token="token" />
         </li>
       </template>

@@ -10,3 +10,6 @@ export * from './IAddressInfo';
 export * from './IToken';
 export * from './ITokensParams';
 export * from './ITokensResponse';
+export * from './INft';
+export * from './INftsParams';
+export * from './INftsResponse';

@@ -28,77 +28,50 @@
       </nuxt-link>
     </div>
     <ul class="market-sidebar__list2">
-      <li>
-        <a
-          href="#"
-          :style="{
-            backgroundImage: `url(${sidebarBg1})`,
-          }"
-        ></a>
-      </li>
-      <li>
-        <a
-          href="#"
-          :style="{
-            backgroundImage: `url(${sidebarBg2})`,
-          }"
-        ></a>
-      </li>
-      <li>
-        <a
-          href="#"
-          :style="{
-            backgroundImage: `url(${sidebarBg3})`,
-          }"
-        ></a>
-      </li>
-      <li>
-        <a
-          href="#"
-          :style="{
-            backgroundImage: `url(${sidebarBg4})`,
-          }"
-        ></a>
-      </li>
-      <li>
-        <a
-          href="#"
-          :style="{
-            backgroundImage: `url(${sidebarBg5})`,
-          }"
-        ></a>
-      </li>
-      <li>
-        <a
-          href="#"
-          :style="{
-            backgroundImage: `url(${sidebarBg6})`,
-          }"
-        ></a>
-      </li>
+      <template v-if="loading">
+        <li>
+          <Skeleton class-name="market-sidebar__list2-loading-item" />
+        </li>
+        <li>
+          <Skeleton class-name="market-sidebar__list2-loading-item" />
+        </li>
+        <li>
+          <Skeleton class-name="market-sidebar__list2-loading-item" />
+        </li>
+        <li>
+          <Skeleton class-name="market-sidebar__list2-loading-item" />
+        </li>
+      </template>
+      <template v-else-if="!nfts.length">
+        <li class="market-sidebar__list2-empty">No NFTs</li>
+      </template>
+      <template v-else>
+        <li v-for="(nft, index) in nfts" :key="index">
+          <SidebarNft :nft="nft" />
+        </li>
+      </template>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
+import SidebarNft from './SidebarNft.vue';
 import { addressModule, authModule } from '~/store';
-import marketSidebarBg1 from '~/assets/img/market-sidebar__list2_bg1.jpg';
-import marketSidebarBg2 from '~/assets/img/market-sidebar__list2_bg2.jpg';
-import marketSidebarBg3 from '~/assets/img/market-sidebar__list2_bg3.jpg';
-import marketSidebarBg4 from '~/assets/img/market-sidebar__list2_bg4.jpg';
-import marketSidebarBg5 from '~/assets/img/market-sidebar__list2_bg5.jpg';
-import marketSidebarBg6 from '~/assets/img/market-sidebar__list2_bg6.jpg';
+import { IAddressInfo, INft } from '~/types';
+import Skeleton from '~/components/loaders/Skeleton.vue';
 
-@Component({})
+type TAddressInfo = IAddressInfo;
+
+@Component({
+  components: {
+    Skeleton,
+    SidebarNft,
+  },
+})
 export default class AccountSidebarNfts extends Vue {
-  sidebarBg1 = marketSidebarBg1;
-  sidebarBg2 = marketSidebarBg2;
-  sidebarBg3 = marketSidebarBg3;
-  sidebarBg4 = marketSidebarBg4;
-  sidebarBg5 = marketSidebarBg5;
-  sidebarBg6 = marketSidebarBg6;
+  loading = false;
 
   get show() {
     return this.$route.name !== 'network-address-nfts';
@@ -110,6 +83,27 @@ export default class AccountSidebarNfts extends Vue {
         addressModule.address.toLowerCase() &&
       authModule.chainSlug === addressModule.chainSlug
     );
+  }
+
+  get info(): TAddressInfo {
+    return addressModule.info;
+  }
+
+  get nfts(): INft[] {
+    return addressModule.nfts;
+  }
+
+  @Watch('info', { immediate: true })
+  async onInfoChanged(info: TAddressInfo) {
+    if (!info.address || !info.chainId) {
+      return;
+    }
+
+    this.loading = true;
+
+    await addressModule.fetchNfts();
+
+    this.loading = false;
   }
 }
 </script>

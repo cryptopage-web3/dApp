@@ -1,12 +1,13 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { alertModule } from '.';
-import { TokensService } from '~/services';
-import { IAddressInfo, IToken } from '~/types';
+import { NftService, TokensService } from '~/services';
+import { IAddressInfo, INft, IToken } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 
 type TAddressInfo = IAddressInfo;
 
 const tokensService = new TokensService();
+const nftService = new NftService();
 
 @Module({
   name: 'address',
@@ -20,6 +21,7 @@ export default class AddressModule extends VuexModule {
   };
 
   tokens: IToken[] = [];
+  nfts: INft[] = [];
 
   get address(): string {
     return this.info.address;
@@ -47,6 +49,11 @@ export default class AddressModule extends VuexModule {
     this.tokens = [...tokens];
   }
 
+  @Mutation
+  public setNfts(nfts: INft[]) {
+    this.nfts = [...nfts];
+  }
+
   @Action
   public async fetchTokens() {
     try {
@@ -60,6 +67,22 @@ export default class AddressModule extends VuexModule {
       alertModule.error('Error getting tokens data');
 
       this.setTokens([]);
+    }
+  }
+
+  @Action
+  public async fetchNfts() {
+    try {
+      const nfts = await nftService.getList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+      });
+
+      this.setNfts(nfts);
+    } catch {
+      alertModule.error('Error getting nfts data');
+
+      this.setNfts([]);
     }
   }
 }
