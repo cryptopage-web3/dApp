@@ -29,3 +29,26 @@ export const formatNumber = (value: number, digits: number) => {
     maximumFractionDigits: digits,
   }).format(rounded);
 };
+
+export const formatNumberFloatDigits = (value: number) => {
+  /** сбрасываем лишние числа без округления */
+  let rounded = value;
+  const pieces = String(value).split('.');
+
+  const digitsBig = 2;
+  const digitsMiddle = 4;
+  const digitsSmall = 8;
+
+  const digits =
+    value > 10 ? digitsBig : value > 0.01 ? digitsMiddle : digitsSmall;
+
+  if (pieces[1]?.length > digits) {
+    const decimal = 10 ** digits;
+    rounded = +(Math.floor(value * decimal) / decimal).toFixed(digits);
+  }
+
+  return new Intl.NumberFormat('en', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: digits,
+  }).format(rounded);
+};

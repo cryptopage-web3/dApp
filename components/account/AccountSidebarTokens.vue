@@ -62,6 +62,8 @@ import Skeleton from '~/components/loaders/Skeleton.vue';
 import { addressModule, authModule } from '~/store';
 import { IAddressInfo, IToken } from '~/types';
 
+type TAddressInfo = IAddressInfo;
+
 @Component({
   components: {
     Skeleton,
@@ -83,7 +85,7 @@ export default class AccountSidebarTokens extends Vue {
     );
   }
 
-  get info(): IAddressInfo {
+  get info(): TAddressInfo {
     return addressModule.info;
   }
 
@@ -92,7 +94,7 @@ export default class AccountSidebarTokens extends Vue {
   }
 
   @Watch('info', { immediate: true })
-  async onInfoChanged(info: IAddressInfo) {
+  async onInfoChanged(info: TAddressInfo) {
     if (!info.address || !info.chainId) {
       return;
     }

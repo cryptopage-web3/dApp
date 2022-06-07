@@ -85,6 +85,38 @@
   opacity: 0.4;
 }
 
+.my-token__icon {
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.my-token__top .right {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.my-token__kurs {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-token__count {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.my-token__value {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.market-sidebar__list3 {
+  max-height: 330px;
+  overflow: auto;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

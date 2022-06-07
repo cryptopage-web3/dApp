@@ -8,7 +8,11 @@ import {
   ucFirstLetter,
   shortMonthDayYear,
 } from '~/utils/humanize';
-import { shortAddress, formatNumber } from '~/utils/web3';
+import {
+  shortAddress,
+  formatNumber,
+  formatNumberFloatDigits,
+} from '~/utils/web3';
 
 Vue.filter('humanizeCount', (value: number) => humanizeCount(value));
 Vue.filter('normalizeDate', (timestamp: string) => normalizeDate(timestamp));
@@ -16,6 +20,9 @@ Vue.filter('shortMonthAndDay', (value: string) => shortMonthAndDay(value));
 Vue.filter('shortMonthDayYear', (value: string) => shortMonthDayYear(value));
 Vue.filter('formatNumber', (value: number, digits = 8) =>
   formatNumber(value, digits),
+);
+Vue.filter('formatNumberFloatDigits', (value: number) =>
+  formatNumberFloatDigits(value),
 );
 Vue.filter('ucFirstLetter', (value: string) => ucFirstLetter(value));
 Vue.filter(

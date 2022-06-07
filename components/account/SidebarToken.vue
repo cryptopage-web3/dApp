@@ -5,7 +5,9 @@
         <img :src="token.logo" alt="" />
       </div>
       <div class="right">
-        <div class="my-token__kurs">{{ token.balance }}</div>
+        <div class="my-token__kurs" :title="token.balance">
+          {{ token.balance | formatNumberFloatDigits }}
+        </div>
         <div class="my-token__wallet">{{ token.symbol }}</div>
       </div>
     </div>
@@ -45,8 +47,12 @@
           />
         </svg>
       </div>
-      <div class="my-token__count">$ {{ token.price }}</div>
-      <div class="my-token__value">Value: $ {{ token.balancePrice }}</div>
+      <div class="my-token__count" :title="token.price">
+        $ {{ token.price | formatNumberFloatDigits }}
+      </div>
+      <div class="my-token__value" :title="token.balancePrice">
+        Value: $ {{ token.balancePrice | formatNumberFloatDigits }}
+      </div>
     </div>
   </a>
 </template>
@@ -56,9 +62,11 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { IToken } from '~/types';
 
+type TToken = IToken;
+
 @Component({})
 export default class SidebarToken extends Vue {
   @Prop({ required: true })
-  readonly token!: IToken;
+  readonly token!: TToken;
 }
 </script>
