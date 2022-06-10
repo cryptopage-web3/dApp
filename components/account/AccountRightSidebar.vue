@@ -1,8 +1,8 @@
 <template>
   <div class="market-main-right">
     <div class="market-sidebar-wrap">
-      <account-sidebar-nfts />
-      <account-sidebar-tokens />
+      <account-sidebar-nfts @updated="handleUpdated" />
+      <account-sidebar-tokens @updated="handleUpdated" />
     </div>
   </div>
 </template>
@@ -19,8 +19,7 @@ export default class AccountRightSidebar extends Vue {
   @Watch('$route')
   onRouteChanged() {
     setTimeout(() => {
-      this.stickySidebar && this.stickySidebar.destroy();
-      this.stickySidebar = marketSidebarInit();
+      this.refreshSticky();
     }, 100);
   }
 
@@ -28,6 +27,17 @@ export default class AccountRightSidebar extends Vue {
     setTimeout(() => {
       this.stickySidebar = marketSidebarInit();
     }, 100);
+  }
+
+  handleUpdated() {
+    setTimeout(() => {
+      this.refreshSticky();
+    }, 300);
+  }
+
+  refreshSticky() {
+    this.stickySidebar && this.stickySidebar.destroy();
+    this.stickySidebar = marketSidebarInit();
   }
 }
 </script>
