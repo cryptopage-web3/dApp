@@ -1,5 +1,9 @@
 /* ===== common ===== */
 
+.fade {
+  transition: opacity .2s linear !important;
+}
+
 .tooltip-inner {
   font-size: 12px;
   background-color: #1886ff;
