@@ -1,12 +1,14 @@
 export interface ITransaction {
-  name: string;
+  date: string;
+  explorerUrl: string;
+  fee: number;
   from: string;
   to: string;
-  fee: number;
-  value: number;
-  tokenSymbol: string;
-  tokenAmount: number;
-  tokenAddress: string;
   hash: string;
-  explorerUrl: string;
+  title: string;
+  tokenAddress: string;
+  tokenAmount: number;
+  tokenSymbol: string;
+  value: number;
+  valueUSD: number;
 }

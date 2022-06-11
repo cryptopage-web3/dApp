@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { alertModule } from '.';
 import { NftService, TokensService, TransactionsService } from '~/services';
-import { IAddressInfo, INft, IToken, ITransactionPagination } from '~/types';
+import { IAddressInfo, INft, IToken, ITransactionsPagination } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import { uniqueHashConcat } from '~/utils/array';
 
@@ -11,8 +11,9 @@ const tokensService = new TokensService();
 const nftService = new NftService();
 const transactionsService = new TransactionsService();
 
-const defaultTransactions: ITransactionPagination = {
+const defaultTransactions: ITransactionsPagination = {
   transactions: [],
+  count: 0,
   pageSize: 10,
   sort: 'desc',
   page: 0,
@@ -34,7 +35,7 @@ export default class AddressModule extends VuexModule {
 
   nfts: INft[] = [];
 
-  transactions: ITransactionPagination = { ...defaultTransactions };
+  transactions: ITransactionsPagination = { ...defaultTransactions };
 
   get address(): string {
     return this.info.address;
@@ -68,7 +69,7 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
-  public setTransactions(transactions: ITransactionPagination) {
+  public setTransactions(transactions: ITransactionsPagination) {
     this.transactions = transactions;
   }
 
@@ -114,7 +115,7 @@ export default class AddressModule extends VuexModule {
       } = this.transactions;
       const nextPage = page + 1;
 
-      const transactions = await transactionsService.getList({
+      const { transactions, count } = await transactionsService.getList({
         chainSlug: this.chainSlug,
         address: this.address,
         skip: nextPage,
@@ -124,6 +125,7 @@ export default class AddressModule extends VuexModule {
       this.setTransactions({
         ...this.transactions,
         transactions: uniqueHashConcat(oldTransactions, transactions),
+        count,
         page: nextPage,
         hasAllPages: transactions.length === 0,
       });

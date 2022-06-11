@@ -16,4 +16,5 @@ export * from './INftsResponse';
 export * from './ITransaction';
 export * from './ITransactionsParams';
 export * from './IPagination';
-export * from './ITransactionPagination';
+export * from './ITransactionsPagination';
+export * from './ITransactionsResponse';

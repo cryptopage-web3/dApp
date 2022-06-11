@@ -141,6 +141,19 @@
   overflow: auto;
 }
 
+.transactions__empty {
+  padding: 40px 15px;
+  text-align: center;
+  color: #000000;
+  font-size: 16px;
+  font-weight: 400;
+  border-radius: 10px;
+}
+
+.profile-content__user-icon {
+  margin-right: 10px;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

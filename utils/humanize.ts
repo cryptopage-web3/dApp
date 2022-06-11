@@ -42,6 +42,10 @@ export const shortMonthAndDay = (timestamp: string) => {
   return moment(timestamp, 'X').format('MMM D');
 };
 
+export const formatDate = (timestamp: string) => {
+  return moment(timestamp).format('HH:mm / DD.MM.YYYY');
+};
+
 export const shortMonthDayYear = (timestamp: string) => {
   return moment(timestamp, 'X').format('MMM D YYYY');
 };

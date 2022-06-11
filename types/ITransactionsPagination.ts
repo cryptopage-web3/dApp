@@ -1,5 +1,6 @@
 import { IPagination, ITransaction } from '.';
 
-export interface ITransactionPagination extends IPagination {
+export interface ITransactionsPagination extends IPagination {
   transactions: ITransaction[];
+  count: number;
 }

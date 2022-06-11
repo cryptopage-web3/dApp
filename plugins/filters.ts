@@ -7,6 +7,7 @@ import {
   shortMonthAndDay,
   ucFirstLetter,
   shortMonthDayYear,
+  formatDate,
 } from '~/utils/humanize';
 import {
   shortAddress,
@@ -16,6 +17,7 @@ import {
 
 Vue.filter('humanizeCount', (value: number) => humanizeCount(value));
 Vue.filter('normalizeDate', (timestamp: string) => normalizeDate(timestamp));
+Vue.filter('formatDate', (timestamp: string) => formatDate(timestamp));
 Vue.filter('shortMonthAndDay', (value: string) => shortMonthAndDay(value));
 Vue.filter('shortMonthDayYear', (value: string) => shortMonthDayYear(value));
 Vue.filter('formatNumber', (value: number, digits = 8) =>
