@@ -5,12 +5,13 @@
       <li class="nav-item">
         <a
           id="profile-tabs1-tab"
-          class="profile-tabs__link active"
-          data-toggle="tab"
+          class="profile-tabs__link"
+          :class="{ active: activeTab === 'nfts' }"
           href="#profile-tabs1"
           role="tab"
           aria-controls="profile-tabs1"
           aria-selected="true"
+          @click.prevent="selectTab('nfts', '#profile-tabs1-tab')"
           >Content (13)</a
         >
       </li>
@@ -18,11 +19,12 @@
         <a
           id="profile-tabs2-tab"
           class="profile-tabs__link"
-          data-toggle="tab"
+          :class="{ active: activeTab === 'transactions' }"
           href="#profile-tabs2"
           role="tab"
           aria-controls="profile-tabs2"
           aria-selected="false"
+          @click.prevent="selectTab('transactions', '#profile-tabs2-tab')"
           >Activity (278)</a
         >
       </li>
@@ -30,19 +32,20 @@
         <a
           id="profile-tabs3-tab"
           class="profile-tabs__link"
-          data-toggle="tab"
+          :class="{ active: activeTab === 'reactions' }"
           href="#profile-tabs3"
           role="tab"
           aria-controls="profile-tabs3"
           aria-selected="false"
+          @click.prevent="selectTab('reactions', '#profile-tabs3-tab')"
           >Reactions (7)</a
         >
       </li>
     </ul>
     <div id="myTabContent" class="tab-content">
-      <address-nfts />
-      <address-transactions />
-      <address-reactions />
+      <address-nfts :is-active="activeTab === 'nfts'" />
+      <address-transactions :is-active="activeTab === 'transactions'" />
+      <address-reactions :is-active="activeTab === 'reactions'" />
     </div>
   </div>
 </template>
@@ -67,10 +70,17 @@ import { profileContentAudioInit } from '~/utils/profileContentAudio';
   },
 })
 export default class AddressPage extends Vue {
+  activeTab = 'nfts';
+
   mounted() {
     profileContentDropInit();
     profileContentCommentInit();
     profileContentAudioInit();
+  }
+
+  selectTab(tab: string, id: string) {
+    ($(id) as any).tab('show');
+    this.activeTab = tab;
   }
 }
 </script>

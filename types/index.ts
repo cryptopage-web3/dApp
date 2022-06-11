@@ -13,3 +13,7 @@ export * from './ITokensResponse';
 export * from './INft';
 export * from './INftsParams';
 export * from './INftsResponse';
+export * from './ITransaction';
+export * from './ITransactionsParams';
+export * from './IPagination';
+export * from './ITransactionPagination';

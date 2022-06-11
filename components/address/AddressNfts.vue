@@ -891,7 +891,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Prop } from 'nuxt-property-decorator';
 import profileImageBg1 from '~/assets/img/profile-content__image_bg1.jpg';
 import profileImageBg2 from '~/assets/img/profile-content__image_bg2.jpg';
 
@@ -899,5 +899,8 @@ import profileImageBg2 from '~/assets/img/profile-content__image_bg2.jpg';
 export default class AddressNfts extends Vue {
   imageBg1 = profileImageBg1;
   imageBg2 = profileImageBg2;
+
+  @Prop({ required: true })
+  readonly isActive!: boolean;
 }
 </script>

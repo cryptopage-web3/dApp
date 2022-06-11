@@ -791,7 +791,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Prop } from 'nuxt-property-decorator';
 import profileReactionsThumb1 from '~/assets/img/profile-reactions__thumb1.png';
 import profileReactionsThumb2 from '~/assets/img/profile-reactions__thumb2.png';
 import profileReactionsThumb3 from '~/assets/img/profile-reactions__thumb3.png';
@@ -809,5 +809,8 @@ export default class AddressReactions extends Vue {
   thumb5 = profileReactionsThumb5;
   thumb6 = profileReactionsThumb6;
   thumb7 = profileReactionsThumb7;
+
+  @Prop({ required: true })
+  readonly isActive!: boolean;
 }
 </script>

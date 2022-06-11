@@ -1450,8 +1450,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Prop } from 'nuxt-property-decorator';
 
 @Component({})
-export default class AddressTransactions extends Vue {}
+export default class AddressTransactions extends Vue {
+  @Prop({ required: true })
+  readonly isActive!: boolean;
+}
 </script>
