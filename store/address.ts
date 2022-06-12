@@ -118,7 +118,7 @@ export default class AddressModule extends VuexModule {
       const { transactions, count } = await transactionsService.getList({
         chainSlug: this.chainSlug,
         address: this.address,
-        skip: nextPage,
+        skip: page,
         limit: pageSize,
       });
 
@@ -137,5 +137,13 @@ export default class AddressModule extends VuexModule {
         hasAllPages: true,
       });
     }
+  }
+
+  @Action
+  public clearTransactions(): void {
+    this.setTransactions({
+      ...defaultTransactions,
+      transactions: [],
+    });
   }
 }

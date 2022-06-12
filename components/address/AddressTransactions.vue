@@ -36,6 +36,8 @@ export default class AddressTransactions extends Vue {
   @Prop({ required: true })
   readonly isActive!: boolean;
 
+  scrollListener: null | (() => void) = null;
+
   get transactions(): ITransaction[] {
     return addressModule.transactions.transactions;
   }
@@ -44,9 +46,60 @@ export default class AddressTransactions extends Vue {
     return addressModule.transactions.hasAllPages;
   }
 
+  get isFetchDisabled(): boolean {
+    return Boolean(
+      !this.isActive ||
+        this.hasAllPages ||
+        this.$fetchState.pending ||
+        this.$fetchState.error,
+    );
+  }
+
   @Watch('isActive')
   onIsActiveChanged() {
     this.$fetch();
+  }
+
+  // lifecycle hooks
+
+  mounted() {
+    this.$nextTick(() => {
+      this.scrollListener = this.scrollHandler.bind(this);
+      $(window).on('scroll', this.scrollListener);
+    });
+  }
+
+  beforeDestroy() {
+    if (!this.scrollListener) {
+      return;
+    }
+
+    $(window).off('scroll', this.scrollListener);
+    this.scrollListener = null;
+  }
+
+  // methods
+
+  next() {
+    /** нельзя вызвать $fetch, если уже получили полный список транзакций,
+     * либо текущий статус запроса pending или error */
+    if (this.isFetchDisabled) return;
+
+    this.$fetch();
+  }
+
+  scrollHandler() {
+    /** пагинатор только для транзакций,
+     * если доскролили до низа блока транзакций, то делаем запрос на следующую страницу
+     */
+    const windowHeight = Number($(window).height());
+    const windowScrollTop = Number($(window).scrollTop());
+    const elemOffsetTop = Number($('#profile-tabs2').offset()?.top);
+    const elemHeight = Number($('#profile-tabs2').height());
+
+    if (windowScrollTop + windowHeight > elemOffsetTop + elemHeight) {
+      this.next();
+    }
   }
 
   async fetch() {
