@@ -154,6 +154,10 @@
   margin-right: 10px;
 }
 
+.profile-content__user span {
+  cursor: pointer;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

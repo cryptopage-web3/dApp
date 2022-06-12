@@ -1,22 +1,24 @@
 <template>
   <div class="profile-activity">
     <div class="profile-content-top">
-      <nuxt-link
-        :to="`/${chainSlug}/${transactionAddress}`"
-        class="profile-content__user"
-      >
-        <div class="profile-content__user-icon">
+      <div class="profile-content__user">
+        <nuxt-link
+          :to="`/${chainSlug}/${transactionAddress}`"
+          class="profile-content__user-icon"
+        >
           <jazzicon
             :seed="10211"
             :address="transactionAddress"
             :diameter="30"
           />
-        </div>
+        </nuxt-link>
         <div>
           txid:
-          <span>{{ transaction.hash | shortAddress(5, 7) }}</span>
+          <span ref="hash" @click.prevent="copyHash">
+            {{ transaction.hash | shortAddress(5, 7) }}
+          </span>
         </div>
-      </nuxt-link>
+      </div>
       <div class="right">
         <div class="profile-content__date">
           {{ transaction.date | formatDate }}
@@ -138,14 +140,25 @@
             </svg>
             {{ income ? 'Receive' : 'Send' }} {{ transaction.tokenSymbol }}
           </td>
-          <td>{{ transaction.value }} {{ transaction.tokenSymbol }}</td>
+          <td>
+            <span :title="transaction.value">
+              {{ transaction.value | formatNumber(15) }}
+              {{ transaction.tokenSymbol }}
+            </span>
+          </td>
         </tr>
         <tr class="profile-activity__bottom">
           <td>
             {{ income ? 'From' : 'To' }}:
-            {{ transactionAddress | shortAddress }}
+            <nuxt-link :to="`/${chainSlug}/${transactionAddress}`">
+              {{ transactionAddress | shortAddress }}
+            </nuxt-link>
           </td>
-          <td>$ {{ transaction.valueUSD }}</td>
+          <td>
+            <span :title="transaction.valueUSD">
+              $ {{ transaction.valueUSD | formatNumberFloatDigits }}
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -157,11 +170,16 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { ITransaction } from '~/types';
 import { addressModule } from '~/store';
+import { copyToClipboard } from '~/utils/copyToClipboard';
 
 @Component({})
 export default class TransactionItem extends Vue {
   @Prop({ required: true })
   readonly transaction!: ITransaction;
+
+  $refs!: {
+    hash: HTMLAnchorElement;
+  };
 
   get chainSlug(): string {
     return addressModule.chainSlug;
@@ -176,6 +194,25 @@ export default class TransactionItem extends Vue {
 
   get transactionAddress(): string {
     return this.income ? this.transaction.from : this.transaction.to;
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      ($(this.$refs.hash) as any).tooltip({
+        trigger: 'hover',
+        title: 'Click to copy',
+      });
+    });
+  }
+
+  copyHash() {
+    copyToClipboard(this.transaction.hash);
+    ($(this.$refs.hash) as any).tooltip('hide');
+
+    this.$notify({
+      type: 'success',
+      title: 'Transaction Hash copied to clipboard',
+    });
   }
 }
 </script>
