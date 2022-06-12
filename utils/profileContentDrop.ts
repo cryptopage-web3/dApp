@@ -31,3 +31,24 @@ export const profileContentDropInit = (): void => {
     });
   }
 };
+
+export const profileContentDropTarget = (targetLink: any): void => {
+  $(targetLink).on('click', function (event) {
+    event.preventDefault();
+
+    if (
+      !$(this)
+        .closest('.profile-content-drop')
+        .find('.drop-down__col')
+        .is(':visible')
+    ) {
+      $(this).closest('.profile-content-drop').addClass('active');
+    } else {
+      $(this).closest('.profile-content-drop').removeClass('active');
+    }
+    $(this)
+      .closest('.profile-content-drop')
+      .find('.drop-down__col')
+      .slideToggle(300);
+  });
+};

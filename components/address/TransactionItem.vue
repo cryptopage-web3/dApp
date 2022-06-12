@@ -24,7 +24,7 @@
           {{ transaction.date | formatDate }}
         </div>
         <div class="profile-content-drop">
-          <a href="#" class="profile-content-drop__link">
+          <a ref="dropLink" href="#" class="profile-content-drop__link">
             <svg
               width="24"
               height="24"
@@ -171,6 +171,7 @@ import { Component, Prop } from 'nuxt-property-decorator';
 import { ITransaction } from '~/types';
 import { addressModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
+import { profileContentDropTarget } from '~/utils/profileContentDrop';
 
 @Component({})
 export default class TransactionItem extends Vue {
@@ -179,6 +180,7 @@ export default class TransactionItem extends Vue {
 
   $refs!: {
     hash: HTMLAnchorElement;
+    dropLink: HTMLDivElement;
   };
 
   get chainSlug(): string {
@@ -202,6 +204,8 @@ export default class TransactionItem extends Vue {
         trigger: 'hover',
         title: 'Click to copy',
       });
+
+      profileContentDropTarget(this.$refs.dropLink);
     });
   }
 
