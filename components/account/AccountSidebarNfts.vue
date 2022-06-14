@@ -56,9 +56,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Emit, Watch } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import SidebarNft from './SidebarNft.vue';
-import { addressModule, authModule } from '~/store';
+import { addressModule, authModule, stickyModule } from '~/store';
 import { IAddressInfo, INft } from '~/types';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 
@@ -93,14 +93,9 @@ export default class AccountSidebarNfts extends Vue {
     return addressModule.nfts;
   }
 
-  @Emit('updated')
-  emitUpdated() {
-    return true;
-  }
-
   @Watch('nfts')
   onNftsChanged() {
-    this.emitUpdated();
+    stickyModule.update();
   }
 
   @Watch('info', { immediate: true })

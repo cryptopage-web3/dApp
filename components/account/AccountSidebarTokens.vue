@@ -56,10 +56,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Emit, Watch } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import SidebarToken from './SidebarToken.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
-import { addressModule, authModule } from '~/store';
+import { addressModule, authModule, stickyModule } from '~/store';
 import { IAddressInfo, IToken } from '~/types';
 
 type TAddressInfo = IAddressInfo;
@@ -93,14 +93,9 @@ export default class AccountSidebarTokens extends Vue {
     return addressModule.tokens;
   }
 
-  @Emit('updated')
-  emitUpdated() {
-    return true;
-  }
-
   @Watch('tokens')
   onTokensChanged() {
-    this.emitUpdated();
+    stickyModule.update();
   }
 
   @Watch('info', { immediate: true })

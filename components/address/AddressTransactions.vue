@@ -22,7 +22,7 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import Loader from '~/components/loaders/GrowLoader.vue';
 import TransactionItem from '~/components/address/TransactionItem.vue';
-import { addressModule } from '~/store';
+import { addressModule, stickyModule } from '~/store';
 import { ITransaction } from '~/types';
 import { getUniqueKey } from '~/utils/array';
 
@@ -53,6 +53,11 @@ export default class AddressTransactions extends Vue {
         this.$fetchState.pending ||
         this.$fetchState.error,
     );
+  }
+
+  @Watch('transactions')
+  onTransactionsChanged() {
+    stickyModule.update();
   }
 
   @Watch('isActive')

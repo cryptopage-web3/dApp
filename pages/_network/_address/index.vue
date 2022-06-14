@@ -56,6 +56,7 @@ import { Component } from 'nuxt-property-decorator';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
 import { profileContentCommentInit } from '~/utils/profileContentComment';
 import { profileContentAudioInit } from '~/utils/profileContentAudio';
+import { stickyModule } from '~/store';
 
 @Component({
   head: {
@@ -81,6 +82,10 @@ export default class AddressPage extends Vue {
   selectTab(tab: string, id: string) {
     ($(id) as any).tab('show');
     this.activeTab = tab;
+
+    setTimeout(() => {
+      stickyModule.update();
+    }, 500);
   }
 }
 </script>

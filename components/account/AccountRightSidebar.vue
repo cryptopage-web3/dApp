@@ -1,8 +1,8 @@
 <template>
   <div class="market-main-right">
     <div class="market-sidebar-wrap">
-      <account-sidebar-nfts @updated="handleUpdated" />
-      <account-sidebar-tokens @updated="handleUpdated" />
+      <account-sidebar-nfts />
+      <account-sidebar-tokens />
     </div>
   </div>
 </template>
@@ -11,16 +11,29 @@
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { marketSidebarInit } from '~/utils/marketSidebar';
+import { stickyModule } from '~/store';
 
 @Component({})
 export default class AccountRightSidebar extends Vue {
   stickySidebar: any = null;
 
+  get refresh() {
+    return stickyModule.rightRefresh;
+  }
+
   @Watch('$route')
   onRouteChanged() {
-    setTimeout(() => {
-      this.refreshSticky();
-    }, 100);
+    this.refreshSticky();
+  }
+
+  @Watch('refresh')
+  onRefreshChange(refresh: boolean) {
+    if (!refresh) {
+      return;
+    }
+
+    this.refreshSticky();
+    stickyModule.cleanRight();
   }
 
   mounted() {
@@ -29,15 +42,11 @@ export default class AccountRightSidebar extends Vue {
     }, 100);
   }
 
-  handleUpdated() {
-    setTimeout(() => {
-      this.refreshSticky();
-    }, 300);
-  }
-
   refreshSticky() {
-    this.stickySidebar && this.stickySidebar.destroy();
-    this.stickySidebar = marketSidebarInit();
+    setTimeout(() => {
+      this.stickySidebar && this.stickySidebar.destroy();
+      this.stickySidebar = marketSidebarInit();
+    }, 100);
   }
 }
 </script>

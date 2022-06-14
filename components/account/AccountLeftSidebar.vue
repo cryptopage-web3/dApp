@@ -218,12 +218,19 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import { accountLeftSidebarInit } from '~/utils/accountLeftSidebar';
-import { authModule, addressModule } from '~/store';
+import { leftStickySidebarInit } from '~/utils/leftStickySidebar';
+import { authModule, addressModule, stickyModule } from '~/store';
 
 @Component({})
 export default class AccountLeftSidebar extends Vue {
+  stickySidebar: any = null;
+
+  get refresh() {
+    return stickyModule.leftRefresh;
+  }
+
   get isProfile(): boolean {
     return this.$route.name === 'network-address' && this.isOwner;
   }
@@ -252,8 +259,34 @@ export default class AccountLeftSidebar extends Vue {
     );
   }
 
+  @Watch('$route')
+  onRouteChanged() {
+    this.refreshSticky();
+  }
+
+  @Watch('refresh')
+  onRefreshChange(refresh: boolean) {
+    if (!refresh) {
+      return;
+    }
+
+    this.refreshSticky();
+    stickyModule.cleanLeft();
+  }
+
   mounted() {
     accountLeftSidebarInit();
+
+    setTimeout(() => {
+      this.stickySidebar = leftStickySidebarInit();
+    }, 100);
+  }
+
+  refreshSticky() {
+    setTimeout(() => {
+      this.stickySidebar && this.stickySidebar.destroy();
+      this.stickySidebar = leftStickySidebarInit();
+    }, 100);
   }
 }
 </script>
