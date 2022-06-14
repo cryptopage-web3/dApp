@@ -6,12 +6,13 @@ import { networkHelper } from '~/utils/networkHelper';
 import { uniqueHashConcat } from '~/utils/array';
 
 type TAddressInfo = IAddressInfo;
+type TTransactionsPagination = ITransactionsPagination;
 
 const tokensService = new TokensService();
 const nftService = new NftService();
 const transactionsService = new TransactionsService();
 
-const defaultTransactions: ITransactionsPagination = {
+const defaultTransactions: TTransactionsPagination = {
   transactions: [],
   count: 0,
   pageSize: 10,
@@ -35,7 +36,7 @@ export default class AddressModule extends VuexModule {
 
   nfts: INft[] = [];
 
-  transactions: ITransactionsPagination = { ...defaultTransactions };
+  transactions: TTransactionsPagination = { ...defaultTransactions };
 
   get address(): string {
     return this.info.address;
@@ -69,7 +70,7 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
-  public setTransactions(transactions: ITransactionsPagination) {
+  public setTransactions(transactions: TTransactionsPagination) {
     this.transactions = transactions;
   }
 

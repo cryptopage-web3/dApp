@@ -173,10 +173,12 @@ import { addressModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 import { profileContentDropTarget } from '~/utils/profileContentDrop';
 
+type TTransaction = ITransaction;
+
 @Component({})
 export default class TransactionItem extends Vue {
   @Prop({ required: true })
-  readonly transaction!: ITransaction;
+  readonly transaction!: TTransaction;
 
   $refs!: {
     hash: HTMLAnchorElement;
