@@ -141,7 +141,17 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
-  public clearTransactions(): void {
+  public clear(): void {
+    /** удаляем баланс по токенам */
+
+    this.setTokens([]);
+
+    /** удаляем nfts */
+
+    this.setNfts([]);
+
+    /** удаляем транзакции */
+
     this.setTransactions({
       ...defaultTransactions,
       transactions: [],
