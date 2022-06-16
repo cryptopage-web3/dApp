@@ -1,19 +1,34 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { alertModule } from '.';
-import { NftService, TokensService, TransactionsService } from '~/services';
-import { IAddressInfo, INft, IToken, ITransactionsPagination } from '~/types';
+import { NftsService, TokensService, TransactionsService } from '~/services';
+import {
+  IAddressInfo,
+  INftsPagination,
+  IToken,
+  ITransactionsPagination,
+} from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import { uniqueHashConcat } from '~/utils/array';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
+type TNftsPagination = INftsPagination;
 
 const tokensService = new TokensService();
-const nftService = new NftService();
+const nftsService = new NftsService();
 const transactionsService = new TransactionsService();
 
 const defaultTransactions: TTransactionsPagination = {
   transactions: [],
+  count: 0,
+  pageSize: 10,
+  sort: 'desc',
+  page: 0,
+  hasAllPages: false,
+};
+
+const defaultNfts: TNftsPagination = {
+  nfts: [],
   count: 0,
   pageSize: 10,
   sort: 'desc',
@@ -34,7 +49,7 @@ export default class AddressModule extends VuexModule {
 
   tokens: IToken[] = [];
 
-  nfts: INft[] = [];
+  nfts: TNftsPagination = { ...defaultNfts };
 
   transactions: TTransactionsPagination = { ...defaultTransactions };
 
@@ -65,8 +80,8 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
-  public setNfts(nfts: INft[]) {
-    this.nfts = [...nfts];
+  public setNfts(nfts: TNftsPagination) {
+    this.nfts = nfts;
   }
 
   @Mutation
@@ -93,16 +108,30 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchNfts() {
     try {
-      const nfts = await nftService.getList({
+      const { page, pageSize } = this.nfts;
+      const nextPage = page + 1;
+
+      const { nfts, count } = await nftsService.getList({
         chainSlug: this.chainSlug,
         address: this.address,
+        skip: page,
+        limit: pageSize,
       });
 
-      this.setNfts(nfts);
+      this.setNfts({
+        ...this.nfts,
+        // nfts: uniqueHashConcat(oldNfts, nfts),
+        count,
+        page: nextPage,
+        hasAllPages: nfts.length === 0,
+      });
     } catch {
       alertModule.error('Error getting nfts data');
 
-      this.setNfts([]);
+      this.setNfts({
+        ...this.nfts,
+        hasAllPages: true,
+      });
     }
   }
 
@@ -148,7 +177,10 @@ export default class AddressModule extends VuexModule {
 
     /** удаляем nfts */
 
-    this.setNfts([]);
+    this.setNfts({
+      ...defaultNfts,
+      nfts: [],
+    });
 
     /** удаляем транзакции */
 
