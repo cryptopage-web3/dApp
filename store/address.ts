@@ -8,7 +8,7 @@ import {
   ITransactionsPagination,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
-import { uniqueHashConcat } from '~/utils/array';
+import { uniqueHashConcat, uniqueNftConcat } from '~/utils/array';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -108,10 +108,10 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchNfts() {
     try {
-      const { page, pageSize } = this.nfts;
+      const { page, pageSize, nfts: oldNfts } = this.nfts;
       const nextPage = page + 1;
 
-      const { nfts, count } = await nftsService.getList({
+      const { list, count } = await nftsService.getList({
         chainSlug: this.chainSlug,
         address: this.address,
         skip: page,
@@ -120,10 +120,10 @@ export default class AddressModule extends VuexModule {
 
       this.setNfts({
         ...this.nfts,
-        // nfts: uniqueHashConcat(oldNfts, nfts),
+        nfts: uniqueNftConcat(oldNfts, list),
         count,
         page: nextPage,
-        hasAllPages: nfts.length === 0,
+        hasAllPages: list.length === 0,
       });
     } catch {
       alertModule.error('Error getting nfts data');

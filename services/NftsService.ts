@@ -14,7 +14,7 @@ export class NftsService extends BaseService {
 
     if (!slugMap.has(params.chainSlug)) {
       return {
-        nfts: [],
+        list: [],
         count: 0,
       };
     }
