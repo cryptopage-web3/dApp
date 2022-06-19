@@ -1,3 +1,10 @@
+export interface IAttribute {
+  display_type?: string;
+  trait_type: string;
+  value: number | string;
+  max_value?: number;
+}
+
 export interface INft {
   collectionName: string;
   contract_address: string;
@@ -8,4 +15,5 @@ export interface INft {
   to: string;
   tokenId: string;
   usdPrice: number;
+  attributes?: IAttribute[];
 }

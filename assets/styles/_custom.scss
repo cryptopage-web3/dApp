@@ -158,6 +158,16 @@
   cursor: pointer;
 }
 
+.profile-content__desc span {
+  color: #1886FF;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-content__desc span:hover {
+  opacity: 0.6;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {
