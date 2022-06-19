@@ -176,7 +176,7 @@ import { profileContentDropTarget } from '~/utils/profileContentDrop';
 type TTransaction = ITransaction;
 
 @Component({})
-export default class TransactionItem extends Vue {
+export default class Transaction extends Vue {
   @Prop({ required: true })
   readonly transaction!: TTransaction;
 
