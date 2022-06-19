@@ -244,7 +244,7 @@ import profileImageBg1 from '~/assets/img/profile-content__image_bg1.jpg';
 type TNft = INft;
 
 @Component({})
-export default class NftItem extends Vue {
+export default class Nft extends Vue {
   imageBg1 = profileImageBg1;
   showFull = false;
 

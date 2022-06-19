@@ -5,7 +5,7 @@
     role="tabpanel"
     aria-labelledby="profile-tabs1-tab"
   >
-    <NftItem v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
+    <Nft v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
     <Loader v-if="$fetchState.pending || initLoading" />
     <div v-else-if="!nfts.length" class="transactions__empty">No NFTs</div>
   </div>
@@ -17,7 +17,7 @@ import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import profileImageBg1 from '~/assets/img/profile-content__image_bg1.jpg';
 import profileImageBg2 from '~/assets/img/profile-content__image_bg2.jpg';
 import Loader from '~/components/loaders/GrowLoader.vue';
-import NftItem from '~/components/address/NftItem.vue';
+import Nft from '~/components/address/nft/Nft.vue';
 import { addressModule, stickyModule } from '~/store';
 import { INft } from '~/types';
 import { getNftUniqueKey } from '~/utils/array';
@@ -25,7 +25,7 @@ import { getNftUniqueKey } from '~/utils/array';
 @Component({
   components: {
     Loader,
-    NftItem,
+    Nft,
   },
 })
 export default class AddressNfts extends Vue {
