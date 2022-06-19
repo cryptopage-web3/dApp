@@ -99,19 +99,11 @@
         </div>
       </div>
     </div>
-    <a
-      href="#"
-      class="profile-content__image"
-      :style="{
-        backgroundImage: `url(${nft.image})`,
-      }"
-    ></a>
-    <div v-if="description" class="profile-content__desc">
-      {{ description }}
-      <span v-if="isLongDescription" @click.prevent="switchFull">
-        {{ showFull ? 'hide' : 'show more' }}
-      </span>
-    </div>
+
+    <NftImage :nft="nft" />
+
+    <NftText :nft="nft" />
+
     <div class="profile-content__bottom">
       <ul class="market-product-ld">
         <li>
@@ -239,34 +231,19 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INft } from '~/types';
-import profileImageBg1 from '~/assets/img/profile-content__image_bg1.jpg';
+import NftText from '~/components/address/nft/NftText.vue';
+import NftImage from '~/components/address/nft/NftImage.vue';
 
 type TNft = INft;
 
-@Component({})
+@Component({
+  components: {
+    NftText,
+    NftImage,
+  },
+})
 export default class Nft extends Vue {
-  imageBg1 = profileImageBg1;
-  showFull = false;
-
   @Prop({ required: true })
   readonly nft!: TNft;
-
-  get isLongDescription(): boolean {
-    return this.nft.description.length > 250;
-  }
-
-  get shortDescription(): string {
-    return this.isLongDescription
-      ? this.nft.description.slice(0, 200) + '...'
-      : this.nft.description;
-  }
-
-  get description(): string {
-    return this.showFull ? this.nft.description : this.shortDescription;
-  }
-
-  switchFull() {
-    this.showFull = !this.showFull;
-  }
 }
 </script>
