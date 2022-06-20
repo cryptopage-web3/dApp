@@ -19,7 +19,7 @@ tg_message()
        return 0
     fi
 
-    local data='{"chat_id": "'$chat_id'", "text": "'${TG_TEXT_PREFIX}' '$text'", "disable_notification": true}'
+    local data='{"chat_id": "'$chat_id'", "text": "'${TG_TEXT_PREFIX}' '$text'", "disable_notification": true, "disable_web_page_preview": true}'
 
 #    echo $data
 
