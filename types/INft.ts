@@ -13,7 +13,8 @@ export interface INft {
   image: string;
   name: string;
   to: string;
+  from: string;
   tokenId: string;
   usdPrice: number;
-  attributes?: IAttribute[];
+  attributes: IAttribute[];
 }
