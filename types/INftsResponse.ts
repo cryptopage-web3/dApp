@@ -1,5 +1,6 @@
 import { INft } from '.';
 
 export interface INftsResponse {
-  nfts: INft[];
+  count: number;
+  list: INft[];
 }

@@ -5,7 +5,7 @@
     role="tabpanel"
     aria-labelledby="profile-tabs2-tab"
   >
-    <TransactionItem
+    <Transaction
       v-for="transaction in transactions"
       :key="uniqueKey(transaction)"
       :transaction="transaction"
@@ -21,7 +21,7 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import Loader from '~/components/loaders/GrowLoader.vue';
-import TransactionItem from '~/components/address/TransactionItem.vue';
+import Transaction from '~/components/address/transaction/Transaction.vue';
 import { addressModule, stickyModule } from '~/store';
 import { ITransaction } from '~/types';
 import { getUniqueKey } from '~/utils/array';
@@ -29,7 +29,7 @@ import { getUniqueKey } from '~/utils/array';
 @Component({
   components: {
     Loader,
-    TransactionItem,
+    Transaction,
   },
 })
 export default class AddressTransactions extends Vue {

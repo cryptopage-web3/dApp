@@ -39,7 +39,7 @@ export default class AddressPageContainer extends Vue {
     /** очищаем транзакции для новой страницы
      * срабатывает при смене адреса или сети, но пропускает при смене таба
      **/
-    addressModule.clearTransactions();
+    addressModule.clear();
 
     /** обновляем текущие данные по адресу и сети из URL */
     addressModule.setInfo({

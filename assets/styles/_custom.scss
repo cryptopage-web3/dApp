@@ -158,6 +158,57 @@
   cursor: pointer;
 }
 
+.profile-content__text {
+  margin-bottom: 20px;
+}
+
+.profile-content__title {
+  font-family: 'SF Pro Display';
+	font-weight: 600;
+  font-size: 14px;
+	line-height: 140%;
+	color: #1F1F1F;
+	margin-bottom: 10px;
+}
+
+.profile-content__title:last-child {
+  margin-bottom: 0;
+}
+
+.profile-content__desc {
+  margin-bottom: 0;
+}
+
+.profile-content__desc span {
+  color: #1886FF;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-content__desc span:hover {
+  opacity: 0.6;
+}
+
+.profile-content__image {
+  padding-top: 43.65%;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-content__image::after {
+  display: none;
+}
+
+.profile-content__image img {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

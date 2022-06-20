@@ -90,7 +90,7 @@ export default class AccountSidebarNfts extends Vue {
   }
 
   get nfts(): INft[] {
-    return addressModule.nfts;
+    return [];
   }
 
   @Watch('nfts')
@@ -99,16 +99,16 @@ export default class AccountSidebarNfts extends Vue {
   }
 
   @Watch('info', { immediate: true })
-  async onInfoChanged(info: TAddressInfo) {
+  onInfoChanged(info: TAddressInfo) {
     if (!info.address || !info.chainId) {
       return;
     }
 
     this.loading = true;
 
-    await addressModule.fetchNfts();
-
-    this.loading = false;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
   }
 }
 </script>
