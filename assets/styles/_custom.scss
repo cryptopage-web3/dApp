@@ -159,7 +159,7 @@
 }
 
 .profile-content__text {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .profile-content__title {
@@ -207,6 +207,15 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.profile-content__bottom {
+  min-height: 36px;
+}
+
+.profile-content__bottom-comments {
+  flex-grow: 1;
+  display: flex;
 }
 
 @media (max-width: 767px) {
