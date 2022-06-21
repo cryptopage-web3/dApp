@@ -55,7 +55,6 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
 import { profileContentCommentInit } from '~/utils/profileContentComment';
-import { profileContentAudioInit } from '~/utils/profileContentAudio';
 import { stickyModule } from '~/store';
 
 @Component({
@@ -76,7 +75,6 @@ export default class AddressPage extends Vue {
   mounted() {
     profileContentDropInit();
     profileContentCommentInit();
-    profileContentAudioInit();
   }
 
   selectTab(tab: string, id: string) {
