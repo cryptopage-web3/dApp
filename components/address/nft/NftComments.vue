@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-content__bottom-comments">
+  <div class="profile-content__bottom">
     <ul class="market-product-ld">
       <li>
         <a href="#" @click.prevent="select('like', $event)">
@@ -18,6 +18,7 @@
         </a>
       </li>
     </ul>
+
     <div class="profile-content__comment">
       <input type="text" placeholder="Your comment text" class="global-input" />
       <a href="#" class="profile-content__comment-close" @click.prevent="close">
@@ -27,6 +28,8 @@
         <CommentSendIcon />
       </button>
     </div>
+
+    <NftBurn :nft="nft" />
   </div>
 </template>
 
@@ -34,6 +37,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INft } from '~/types';
+import NftBurn from '~/components/address/nft/NftBurn.vue';
 import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
 import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
@@ -44,6 +48,7 @@ type TCommentType = null | 'like' | 'dislike';
 
 @Component({
   components: {
+    NftBurn,
     CommentLikeIcon,
     CommentDislikeIcon,
     CommentCloseIcon,
