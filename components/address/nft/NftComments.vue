@@ -4,7 +4,7 @@
       <li>
         <a href="#" @click.prevent="select('like', $event)">
           <CommentLikeIcon />
-          <span> 0 </span>
+          <span> {{ nft.likes }} </span>
         </a>
       </li>
       <li>
@@ -14,7 +14,7 @@
           @click.prevent="select('dislike', $event)"
         >
           <CommentDislikeIcon />
-          <span> 0 </span>
+          <span> {{ nft.dislikes }} </span>
         </a>
       </li>
     </ul>
