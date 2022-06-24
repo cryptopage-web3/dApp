@@ -2,7 +2,10 @@
   <div class="profile-center profile-my-nfts tokens">
     <div class="profile-my-nfts-top">
       <div class="profile-my-nfts__title">
-        <nuxt-link to="/network/address" class="market-sidebar__more">
+        <nuxt-link
+          :to="`/${chainSlug}/${address}`"
+          class="market-sidebar__more"
+        >
           <svg
             width="30"
             height="30"
@@ -1125,6 +1128,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
 import { tokensModalInit } from '~/utils/tokensModal';
+import { addressModule } from '~/store';
 
 @Component({
   head: {
@@ -1139,6 +1143,14 @@ import { tokensModalInit } from '~/utils/tokensModal';
   },
 })
 export default class TokensPage extends Vue {
+  get chainSlug(): string {
+    return addressModule.chainSlug;
+  }
+
+  get address(): string {
+    return addressModule.address;
+  }
+
   mounted() {
     profileContentDropInit();
     tokensModalInit();

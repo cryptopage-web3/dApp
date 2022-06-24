@@ -4,7 +4,10 @@
       <h3 class="market-sidebar__title">
         {{ isOwner ? 'My' : 'Account' }} Token's (erc20)
       </h3>
-      <nuxt-link to="/network/address/tokens" class="market-sidebar__more">
+      <nuxt-link
+        :to="`/${chainSlug}/${address}/tokens`"
+        class="market-sidebar__more"
+      >
         <svg
           width="30"
           height="30"
@@ -83,6 +86,14 @@ export default class AccountSidebarTokens extends Vue {
         addressModule.address.toLowerCase() &&
       authModule.chainSlug === addressModule.chainSlug
     );
+  }
+
+  get chainSlug(): string {
+    return addressModule.chainSlug;
+  }
+
+  get address(): string {
+    return addressModule.address;
   }
 
   get info(): TAddressInfo {
