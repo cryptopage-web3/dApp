@@ -19,7 +19,7 @@
               y="0.5"
               width="29"
               height="29"
-              rx="14.5"
+              rx="4.5"
               stroke="#1886FF"
             ></rect>
             <path
