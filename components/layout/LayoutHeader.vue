@@ -198,8 +198,7 @@
           </ul>
         </div>
         <div class="market-header__right">
-          <header-connect-menu />
-          <header-auth-menu v-if="isAuth" />
+          <HeaderConnect />
         </div>
         <button
           class="navbar-toggler"
@@ -220,23 +219,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import HeaderAuthMenu from './HeaderAuthMenu.vue';
-import HeaderConnectMenu from './HeaderConnectMenu.vue';
+import HeaderConnect from './HeaderConnect.vue';
 import { headerSearchInit } from '~/utils/headerSearch';
 import { dropdownMenuInit } from '~/utils/dropdownMenu';
-import { authModule } from '~/store';
 
 @Component({
   components: {
-    HeaderAuthMenu,
-    HeaderConnectMenu,
+    HeaderConnect,
   },
 })
 export default class LayoutHeader extends Vue {
-  get isAuth() {
-    return authModule.isAuth;
-  }
-
   mounted() {
     headerSearchInit();
     dropdownMenuInit();
