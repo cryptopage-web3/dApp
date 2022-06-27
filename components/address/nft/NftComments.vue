@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-content__bottom">
+  <div ref="root" class="profile-content__bottom">
     <ul class="market-product-ld">
       <li>
         <a href="#" @click.prevent="select('like', $event)">
@@ -20,7 +20,12 @@
     </ul>
 
     <div class="profile-content__comment">
-      <input type="text" placeholder="Your comment text" class="global-input" />
+      <input
+        v-model="commentText"
+        type="text"
+        placeholder="Your comment text"
+        class="global-input"
+      />
       <a href="#" class="profile-content__comment-close" @click.prevent="close">
         <CommentCloseIcon />
       </a>
@@ -35,7 +40,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop } from 'nuxt-property-decorator';
+import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import { INft } from '~/types';
 import NftBurn from '~/components/address/nft/NftBurn.vue';
 import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
@@ -59,10 +64,16 @@ export default class NftComments extends Vue {
   @Prop({ required: true })
   readonly nft!: TNft;
 
+  $refs!: {
+    root: HTMLDivElement;
+  };
+
   commentType: TCommentType = null;
+  commentText = '';
 
   select(type: TCommentType, event: PointerEvent) {
     this.commentType = type;
+    this.commentText = '';
 
     const elem = event.currentTarget;
 
@@ -70,15 +81,49 @@ export default class NftComments extends Vue {
       return;
     }
 
-    $(elem).addClass('active');
-    $(elem)
-      .closest('.profile-content__bottom')
-      .find('.profile-content__comment')
-      .slideDown(300);
+    if (!$(elem).hasClass('active')) {
+      $(elem).addClass('active');
+      $(this.$refs.root).find('.profile-content__comment').slideDown(300);
+      $(this.$refs.root).addClass('active');
+      $(elem)
+        .closest('.market-product-ld')
+        .find('a')
+        .not($(elem) as any)
+        .removeClass('active');
+    } else {
+      $(elem).closest('.market-product-ld').find('a').removeClass('active');
+      $(this.$refs.root).removeClass('active');
+      $(this.$refs.root).find('.profile-content__comment').slideUp(300);
+      $(this.$refs.root)
+        .find('.profile-content__comment .profile-content__comment-close')
+        .removeClass('active');
+      $(this.$refs.root)
+        .find('.profile-content__comment .profile-content__comment-send')
+        .removeClass('active');
+    }
+  }
+
+  @Watch('commentText')
+  onCommentTextChanged(value: string) {
+    if (value.length > 1) {
+      $(this.$refs.root)
+        .find('.profile-content__comment-close')
+        .addClass('active');
+      $(this.$refs.root)
+        .find('.profile-content__comment-send')
+        .addClass('active');
+    } else {
+      $(this.$refs.root)
+        .find('.profile-content__comment-close')
+        .removeClass('active');
+      $(this.$refs.root)
+        .find('.profile-content__comment-send')
+        .removeClass('active');
+    }
   }
 
   close(event: PointerEvent) {
-    this.commentType = null;
+    this.commentText = '';
 
     const elem = event.currentTarget;
 
@@ -87,10 +132,9 @@ export default class NftComments extends Vue {
     }
 
     $(elem).removeClass('active');
-    $(elem).closest('.profile-content__comment').slideUp(300);
     $(elem)
-      .closest('.profile-content__bottom')
-      .find('.market-product-ld a')
+      .closest('.profile-content__comment')
+      .find('.profile-content__comment-send')
       .removeClass('active');
   }
 }
