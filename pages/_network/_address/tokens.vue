@@ -18,7 +18,7 @@
               y="29.5"
               width="29"
               height="29"
-              rx="14.5"
+              rx="4.5"
               transform="rotate(-180 29.5 29.5)"
               stroke="#A7A7A7"
             />

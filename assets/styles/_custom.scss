@@ -230,6 +230,14 @@
   min-height: 36px;
 }
 
+.profile-login__card:first-child {
+  border-top: 1.6px solid #E4E4E4;
+}
+
+.profile-login__card {
+  border-bottom: 1.6px solid #E4E4E4 !important;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {
