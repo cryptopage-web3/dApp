@@ -4,11 +4,13 @@
 
     <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
     <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-    <NftImage v-else :nft="nft" />
+    <NftImage v-else :nft="nft" @show-modal="showModal" />
 
-    <NftText :nft="nft" />
+    <NftText :nft="nft" @show-modal="showModal" />
 
     <NftComments :nft="nft" />
+
+    <NftModal ref="modal" :nft="nft" />
   </div>
 </template>
 
@@ -22,6 +24,7 @@ import NftImage from '~/components/address/nft/NftImage.vue';
 import NftVideo from '~/components/address/nft/NftVideo.vue';
 import NftAudio from '~/components/address/nft/NftAudio.vue';
 import NftComments from '~/components/address/nft/NftComments.vue';
+import NftModal from '~/components/address/nft/NftModal.vue';
 
 type TNft = INft;
 
@@ -33,6 +36,7 @@ type TNft = INft;
     NftVideo,
     NftAudio,
     NftComments,
+    NftModal,
   },
 })
 export default class Nft extends Vue {
@@ -40,5 +44,13 @@ export default class Nft extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNft;
+
+  $refs!: {
+    modal: NftModal;
+  };
+
+  showModal() {
+    this.$refs.modal.show();
+  }
 }
 </script>

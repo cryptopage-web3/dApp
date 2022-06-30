@@ -48,11 +48,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { Component } from 'nuxt-property-decorator';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
-
-type TNft = INft;
 
 @Component({
   components: {
@@ -60,9 +57,6 @@ type TNft = INft;
   },
 })
 export default class NftDeleteConfirm extends Vue {
-  @Prop({ required: true })
-  readonly nft!: TNft;
-
   $refs!: {
     modal: HTMLDivElement;
   };

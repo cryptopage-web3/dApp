@@ -34,7 +34,7 @@
       </button>
     </div>
 
-    <NftBurn :nft="nft" />
+    <NftBurn v-if="!hideBurn" :nft="nft" />
   </div>
 </template>
 
@@ -68,6 +68,9 @@ type TCommentType = null | 'like' | 'dislike';
 export default class NftComments extends Vue {
   @Prop({ required: true })
   readonly nft!: TNft;
+
+  @Prop({ type: Boolean, default: false })
+  readonly hideBurn!: false;
 
   $refs!: {
     root: HTMLDivElement;

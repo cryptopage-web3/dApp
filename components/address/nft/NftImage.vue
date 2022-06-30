@@ -4,6 +4,7 @@
     :href="nft.image"
     target="_blank"
     class="profile-content__image loading-bg"
+    @click.prevent="$emit('show-modal')"
   >
     <img :src="nft.image" />
   </a>

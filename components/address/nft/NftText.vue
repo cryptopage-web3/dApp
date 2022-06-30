@@ -1,11 +1,15 @@
 <template>
-  <div v-if="description || title" class="profile-content__text">
+  <div
+    v-if="description || title"
+    class="profile-content__text"
+    @click.prevent="$emit('show-modal')"
+  >
     <div v-if="title" class="profile-content__title">
       {{ title }}
     </div>
     <div v-if="description" class="profile-content__desc">
       {{ description }}
-      <span v-if="isLongDescription" @click.prevent="switchFull">
+      <span v-if="isLongDescription" @click.prevent.stop="switchFull">
         {{ showFull ? 'hide' : 'show more' }}
       </span>
     </div>
