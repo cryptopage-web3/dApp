@@ -60,8 +60,8 @@
             {{ income ? 'Receive' : 'Send' }} {{ transaction.tokenSymbol }}
           </td>
           <td>
-            <span :title="transaction.value">
-              {{ transaction.value | formatNumber(15) }}
+            <span :title="transaction.tokenAmount">
+              {{ transaction.tokenAmount | formatNumber(15) }}
               {{ transaction.tokenSymbol }}
             </span>
           </td>
