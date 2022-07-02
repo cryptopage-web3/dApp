@@ -1,15 +1,14 @@
 <template>
   <div class="modal-post-user">
-    <a
-      href="#"
-      class="modal-post-user__thumb"
-      :style="{
-        backgroundImage: `url(${userBg})`,
-      }"
-    ></a>
+    <nuxt-link :to="`/${chainSlug}/${nft.from}`" class="modal-post-user__icon">
+      <jazzicon :seed="10211" :address="nft.from" :diameter="34" />
+    </nuxt-link>
     <div class="modal-post-user-right">
       <div class="modal-post-user__wallet">
-        From: <a href="#">{{ nft.from | shortAddress }}</a>
+        From:
+        <nuxt-link :to="`/${chainSlug}/${nft.from}`">
+          {{ nft.from | shortAddress }}
+        </nuxt-link>
       </div>
       <div class="modal-post-user__date">
         {{ nft.date | formatDate }}
@@ -22,6 +21,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INft } from '~/types';
+import { addressModule } from '~/store';
 import userBg from '~/assets/img/modal-post-user__thumb_bg.png';
 
 type TNft = INft;
@@ -32,5 +32,9 @@ export default class NftModalTopUser extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNft;
+
+  get chainSlug(): string {
+    return addressModule.chainSlug;
+  }
 }
 </script>
