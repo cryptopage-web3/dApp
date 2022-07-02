@@ -14,7 +14,7 @@
             <NftModalTopUser :nft="nft" />
 
             <div class="modal-post-top-right">
-              <NftModalTopDropdown />
+              <NftModalTopDropdown :nft="nft" />
 
               <button
                 type="button"
@@ -30,7 +30,7 @@
           <div class="profile-content">
             <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
             <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-            <NftImage v-else :nft="nft" @show-modal="showModal" />
+            <NftImage v-else :nft="nft" />
 
             <NftText :nft="nft" />
 
