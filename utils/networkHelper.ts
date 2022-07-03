@@ -21,52 +21,67 @@ export const networkHelper = {
       network: EChainType.eth,
       name: 'Ethereum',
       slug: EChainSlug.eth,
+      symbol: 'ETH',
     },
     [EChainId.ropsten]: {
       network: EChainType.eth,
       name: 'Ropsten TestNet',
       slug: EChainSlug.ropsten,
+      symbol: 'ETH',
     },
     [EChainId.rinkeby]: {
       network: EChainType.eth,
       name: 'Rinkeby TestNet',
       slug: EChainSlug.rinkeby,
+      symbol: 'ETH',
     },
     [EChainId.goerli]: {
       network: EChainType.eth,
       name: 'Goerli TestNet',
       slug: EChainSlug.goerli,
+      symbol: 'ETH',
     },
     [EChainId.kovan]: {
       network: EChainType.eth,
       name: 'Kovan TestNet',
       slug: EChainSlug.kovan,
+      symbol: 'ETH',
     },
     [EChainId.bsc]: {
       network: EChainType.bsc,
       name: 'BSC',
       slug: EChainSlug.bsc,
+      symbol: 'BNB',
     },
     [EChainId.bscTestnet]: {
       network: EChainType.bsc,
       name: 'BSC TestNet',
       slug: EChainSlug.bscTestnet,
+      symbol: 'BNB',
     },
     [EChainId.polygon]: {
       network: EChainType.polygon,
       name: 'Polygon',
       slug: EChainSlug.polygon,
+      symbol: 'MATIC',
     },
     [EChainId.polygonTestnet]: {
       network: EChainType.polygon,
       name: 'Polygon TestNet',
       slug: EChainSlug.polygonTestnet,
+      symbol: 'MATIC',
     },
-    tron: { network: EChainType.tron, name: 'Tron', slug: EChainSlug.tron },
+    tron: {
+      network: EChainType.tron,
+      name: 'Tron',
+      slug: EChainSlug.tron,
+      symbol: 'TRX',
+    },
     solana: {
       network: EChainType.solana,
       name: 'Solana',
       slug: EChainSlug.solana,
+      symbol: 'SOL',
     },
   } as any,
 
@@ -156,6 +171,10 @@ export const networkHelper = {
 
   getNetworkType(chainId: string | number): EChainType {
     return this.networkByChain[chainId]?.network || EChainType.eth;
+  },
+
+  getNetworkSymbol(chainId: any) {
+    return this.networkByChain[chainId]?.symbol || '';
   },
 
   isSupportedByProvider(
