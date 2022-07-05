@@ -45,15 +45,23 @@
           <Skeleton class-name="market-sidebar__list3-loading-item" />
         </li>
       </template>
-      <template v-else-if="!tokens.length">
+      <template v-else-if="!visibleTokens.length">
         <li class="market-sidebar__list3-empty">No tokens</li>
       </template>
       <template v-else>
-        <li v-for="(token, index) in tokens" :key="index">
+        <li v-for="(token, index) in visibleTokens" :key="index">
           <SidebarToken :token="token" />
         </li>
       </template>
     </ul>
+    <a
+      v-if="!isFullList && tokens.length > 9"
+      href="#"
+      class="market-sidebar__show-more"
+      @click.prevent="showMore"
+    >
+      Show more
+    </a>
   </div>
 </template>
 
@@ -75,6 +83,7 @@ type TAddressInfo = IAddressInfo;
 })
 export default class AccountSidebarTokens extends Vue {
   loading = false;
+  isFullList = false;
 
   get show() {
     return this.$route.name !== 'network-address-tokens';
@@ -104,6 +113,10 @@ export default class AccountSidebarTokens extends Vue {
     return addressModule.tokens;
   }
 
+  get visibleTokens(): IToken[] {
+    return this.isFullList ? this.tokens : this.tokens.slice(0, 6);
+  }
+
   @Watch('tokens')
   onTokensChanged() {
     stickyModule.update();
@@ -120,6 +133,19 @@ export default class AccountSidebarTokens extends Vue {
     await addressModule.fetchTokens();
 
     this.loading = false;
+  }
+
+  showMore() {
+    this.isFullList = true;
+
+    this.$nextTick(() => {
+      $('.market-sidebar__list3').animate(
+        {
+          scrollTop: 120,
+        },
+        500,
+      );
+    });
   }
 }
 </script>

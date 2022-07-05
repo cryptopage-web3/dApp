@@ -57,12 +57,17 @@
                 fill="#FF1818"
               ></path>
             </svg>
-            {{ income ? 'Receive' : 'Send' }} {{ transaction.tokenSymbol }}
+            {{ income ? 'Receive' : 'Send' }}
+            {{ isTokenTx ? transaction.tokenSymbol : chainSymbol }}
           </td>
           <td>
-            <span :title="transaction.tokenAmount">
+            <span v-if="isTokenTx" :title="transaction.tokenAmount">
               {{ transaction.tokenAmount | formatNumber(15) }}
               {{ transaction.tokenSymbol }}
+            </span>
+            <span v-else :title="transaction.value">
+              {{ transaction.value | formatNumber(15) }}
+              {{ chainSymbol }}
             </span>
           </td>
         </tr>
@@ -111,6 +116,10 @@ export default class Transaction extends Vue {
     return addressModule.chainSlug;
   }
 
+  get chainSymbol(): string {
+    return addressModule.chainSymbol;
+  }
+
   get income(): boolean {
     const address = addressModule.address.toLowerCase();
     const to = this.transaction.to.toLowerCase();
@@ -120,6 +129,10 @@ export default class Transaction extends Vue {
 
   get transactionAddress(): string {
     return this.income ? this.transaction.from : this.transaction.to;
+  }
+
+  get isTokenTx(): boolean {
+    return Boolean(this.transaction.tokenAddress);
   }
 
   mounted() {
