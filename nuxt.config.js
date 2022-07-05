@@ -3,6 +3,9 @@
 const webpack = require('webpack');
 
 export default {
+  env:{
+    API_SERVER_URL: process.env.API_SERVER_URL || 'https://api-m.crypto.page'
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Crypto.Page - decentralized cross-chain social network',
