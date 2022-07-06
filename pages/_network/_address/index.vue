@@ -25,7 +25,7 @@
           aria-controls="profile-tabs2"
           aria-selected="false"
           @click.prevent="selectTab('transactions', '#profile-tabs2-tab')"
-          >Activity (278)</a
+          >Activity {{ activityCount }}</a
         >
       </li>
       <li class="nav-item">
@@ -54,7 +54,7 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
-import { stickyModule } from '~/store';
+import { addressModule, stickyModule } from '~/store';
 
 @Component({
   head: {
@@ -70,6 +70,12 @@ import { stickyModule } from '~/store';
 })
 export default class AddressPage extends Vue {
   activeTab = 'nfts';
+
+  get activityCount(): string {
+    return addressModule.transactions.count > 0
+      ? `(${addressModule.transactions.count})`
+      : '';
+  }
 
   mounted() {
     profileContentDropInit();
