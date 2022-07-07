@@ -36,6 +36,15 @@ const defaultNfts: TNftsPagination = {
   hasAllPages: false,
 };
 
+const defaultOwnNfts: TNftsPagination = {
+  nfts: [],
+  count: 0,
+  pageSize: 9,
+  sort: 'desc',
+  page: 0,
+  hasAllPages: false,
+};
+
 @Module({
   name: 'address',
   namespaced: true,
@@ -50,6 +59,8 @@ export default class AddressModule extends VuexModule {
   tokens: IToken[] = [];
 
   nfts: TNftsPagination = { ...defaultNfts };
+
+  ownNfts: TNftsPagination = { ...defaultOwnNfts };
 
   transactions: TTransactionsPagination = { ...defaultTransactions };
 
@@ -89,6 +100,11 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
+  public setOwnNfts(nfts: TNftsPagination) {
+    this.ownNfts = nfts;
+  }
+
+  @Mutation
   public setTransactions(transactions: TTransactionsPagination) {
     this.transactions = transactions;
   }
@@ -115,12 +131,14 @@ export default class AddressModule extends VuexModule {
       const { page, pageSize, nfts: oldNfts } = this.nfts;
       const nextPage = page + 1;
 
-      const { list, count } = await nftsService.getList({
+      const { list, count } = await nftsService.getTransactionsList({
         chainSlug: this.chainSlug,
         address: this.address,
         skip: page,
         limit: pageSize,
       });
+
+      debugger;
 
       this.setNfts({
         ...this.nfts,
@@ -134,6 +152,36 @@ export default class AddressModule extends VuexModule {
 
       this.setNfts({
         ...this.nfts,
+        hasAllPages: true,
+      });
+    }
+  }
+
+  @Action
+  public async fetchOwnNfts() {
+    try {
+      const { page, pageSize, nfts: oldNfts } = this.ownNfts;
+      const nextPage = page + 1;
+
+      const { list, count } = await nftsService.getList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+        skip: page,
+        limit: pageSize,
+      });
+
+      this.setOwnNfts({
+        ...this.ownNfts,
+        nfts: uniqueNftConcat(oldNfts, list),
+        count,
+        page: nextPage,
+        hasAllPages: list.length === 0,
+      });
+    } catch {
+      alertModule.error('Error getting own nfts data');
+
+      this.setOwnNfts({
+        ...this.ownNfts,
         hasAllPages: true,
       });
     }
@@ -183,6 +231,13 @@ export default class AddressModule extends VuexModule {
 
     this.setNfts({
       ...defaultNfts,
+      nfts: [],
+    });
+
+    /** удаляем мои nfts */
+
+    this.setOwnNfts({
+      ...defaultOwnNfts,
       nfts: [],
     });
 
