@@ -104,15 +104,15 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 import { profileContentDropTarget } from '~/utils/profileContentDrop';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({})
 export default class NftModalTopDropdown extends Vue {
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   $refs!: {
     dropLink: HTMLDivElement;

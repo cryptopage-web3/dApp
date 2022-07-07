@@ -14,13 +14,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
-import profileImageBg1 from '~/assets/img/profile-content__image_bg1.jpg';
-import profileImageBg2 from '~/assets/img/profile-content__image_bg2.jpg';
 import Loader from '~/components/loaders/GrowLoader.vue';
 import Nft from '~/components/address/nft/Nft.vue';
 import { addressModule, stickyModule } from '~/store';
-import { INft } from '~/types';
-import { getNftUniqueKey } from '~/utils/array';
+import { INftTransaction } from '~/types';
+import { getNftTransactionUniqueKey } from '~/utils/array';
 
 @Component({
   components: {
@@ -29,9 +27,6 @@ import { getNftUniqueKey } from '~/utils/array';
   },
 })
 export default class AddressNfts extends Vue {
-  imageBg1 = profileImageBg1;
-  imageBg2 = profileImageBg2;
-
   initLoading = true;
 
   @Prop({ required: true })
@@ -39,12 +34,12 @@ export default class AddressNfts extends Vue {
 
   scrollListener: null | (() => void) = null;
 
-  get nfts(): INft[] {
-    return addressModule.nfts.nfts;
+  get nfts(): INftTransaction[] {
+    return addressModule.nftTransactions.nfts;
   }
 
   get hasAllPages(): boolean {
-    return addressModule.nfts.hasAllPages;
+    return addressModule.nftTransactions.hasAllPages;
   }
 
   get isFetchDisabled(): boolean {
@@ -123,11 +118,11 @@ export default class AddressNfts extends Vue {
       return;
     }
 
-    await addressModule.fetchNfts();
+    await addressModule.fetchNftTransactions();
   }
 
-  uniqueKey(nft: INft) {
-    return getNftUniqueKey(nft);
+  uniqueKey(nft: INftTransaction) {
+    return getNftTransactionUniqueKey(nft);
   }
 }
 </script>

@@ -13,13 +13,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({})
 export default class NftImage extends Vue {
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 }
 </script>

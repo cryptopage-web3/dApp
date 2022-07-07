@@ -41,7 +41,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 import NftBurn from '~/components/address/nft/NftBurn.vue';
 import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
 import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
@@ -53,7 +53,7 @@ import {
   profileCommentClose,
 } from '~/utils/nftsComment';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 type TCommentType = null | 'like' | 'dislike';
 
 @Component({
@@ -67,7 +67,7 @@ type TCommentType = null | 'like' | 'dislike';
 })
 export default class NftComments extends Vue {
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   @Prop({ type: Boolean, default: false })
   readonly hideBurn!: false;

@@ -47,7 +47,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { ETypeNft, INft } from '~/types';
+import { ETypeNft, INftTransaction } from '~/types';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
 import NftComments from '~/components/address/nft/NftComments.vue';
 import NftText from '~/components/address/nft/NftText.vue';
@@ -58,7 +58,7 @@ import NftModalTopUser from '~/components/address/nft/NftModalTopUser.vue';
 import NftModalTopDropdown from '~/components/address/nft/NftModalTopDropdown.vue';
 import NftModalCommentList from '~/components/address/nft/NftModalCommentList.vue';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({
   components: {
@@ -77,7 +77,7 @@ export default class NftModal extends Vue {
   ETypeNft = ETypeNft;
 
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   $refs!: {
     modal: HTMLDivElement;
