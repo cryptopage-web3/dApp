@@ -1,9 +1,11 @@
 <template>
-  <div
-    v-if="description || title"
-    class="profile-content__text"
-    @click.prevent="$emit('show-modal')"
-  >
+  <div class="profile-content__text" @click.prevent="$emit('show-modal')">
+    <div class="profile-content__title">
+      Transaction Hash:
+      <a ref="hash" href="#" @click.prevent.stop="copyHash">
+        {{ txHash | shortAddress(5, 7) }}
+      </a>
+    </div>
     <div v-if="title" class="profile-content__title">
       {{ title }}
     </div>
@@ -20,6 +22,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
+import { copyToClipboard } from '~/utils/copyToClipboard';
 
 type TNftTransaction = INftTransaction;
 
@@ -29,6 +32,10 @@ export default class NftText extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
+
+  $refs!: {
+    hash: HTMLAnchorElement;
+  };
 
   get isLongDescription(): boolean {
     return this.nft.description.length > 250;
@@ -48,8 +55,31 @@ export default class NftText extends Vue {
     return this.nft.name;
   }
 
+  get txHash(): string {
+    return this.nft.txHash;
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      ($(this.$refs.hash) as any).tooltip({
+        trigger: 'hover',
+        title: 'Click to copy',
+      });
+    });
+  }
+
   switchFull() {
     this.showFull = !this.showFull;
+  }
+
+  copyHash() {
+    copyToClipboard(this.txHash);
+    ($(this.$refs.hash) as any).tooltip('hide');
+
+    this.$notify({
+      type: 'success',
+      title: 'Transaction Hash copied to clipboard',
+    });
   }
 }
 </script>

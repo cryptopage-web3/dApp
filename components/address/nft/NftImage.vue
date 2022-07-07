@@ -1,12 +1,12 @@
 <template>
   <a
-    v-if="nft.image"
-    :href="nft.image"
+    v-if="nft.url"
+    :href="nft.url"
     target="_blank"
     class="profile-content__image loading-bg"
     @click.prevent="$emit('show-modal')"
   >
-    <img :src="nft.image" />
+    <img :src="nft.url" />
   </a>
 </template>
 

@@ -4,7 +4,11 @@
 
     <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
     <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-    <NftImage v-else :nft="nft" @show-modal="showModal" />
+    <NftImage
+      v-else-if="nft.type === ETypeNft.image"
+      :nft="nft"
+      @show-modal="showModal"
+    />
 
     <NftText :nft="nft" @show-modal="showModal" />
 
