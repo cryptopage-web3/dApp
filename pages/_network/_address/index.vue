@@ -72,7 +72,7 @@ export default class AddressPage extends Vue {
   activeTab = 'nfts';
 
   get activityCount(): string {
-    return addressModule.transactions.count > 0
+    return addressModule.transactions?.count > 0
       ? `(${addressModule.transactions.count})`
       : '';
   }

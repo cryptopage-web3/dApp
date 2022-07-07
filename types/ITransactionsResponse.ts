@@ -1,6 +1,6 @@
-import { ITransaction } from '.';
+import { ITransactionData } from './ITransaction';
 
 export interface ITransactionsResponse {
   count: number;
-  transactions: ITransaction[];
+  transactions: ITransactionData[];
 }

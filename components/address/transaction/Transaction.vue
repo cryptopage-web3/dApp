@@ -3,12 +3,12 @@
     <div class="profile-content-top">
       <div class="profile-content__user">
         <nuxt-link
-          :to="`/${chainSlug}/${transactionAddress}`"
+          :to="`/${chainSlug}/${transaction.transactionAddress}`"
           class="profile-content__user-icon"
         >
           <jazzicon
             :seed="10211"
-            :address="transactionAddress"
+            :address="transaction.transactionAddress"
             :diameter="30"
           />
         </nuxt-link>
@@ -32,7 +32,7 @@
         <tr class="profile-activity__top">
           <td>
             <svg
-              v-if="income"
+              v-if="transaction.isIncome"
               width="12"
               height="14"
               viewBox="0 0 12 14"
@@ -57,25 +57,25 @@
                 fill="#FF1818"
               ></path>
             </svg>
-            {{ income ? 'Receive' : 'Send' }}
-            {{ isTokenTx ? transaction.tokenSymbol : chainSymbol }}
+            {{ transaction.displayTransferType }}
+            {{
+              transaction.type !== 'contract_execution'
+                ? transaction.displayTokenOrCoinSymbol
+                : ''
+            }}
           </td>
           <td>
-            <span v-if="isTokenTx" :title="transaction.tokenAmount">
-              {{ transaction.tokenAmount | formatNumber(15) }}
-              {{ transaction.tokenSymbol }}
-            </span>
-            <span v-else :title="transaction.value">
-              {{ transaction.value | formatNumber(15) }}
-              {{ chainSymbol }}
+            <span :title="transaction.displayTokenOrCoinAmount">
+              {{ transaction.displayTokenOrCoinAmount | formatNumber(15) }}
+              {{ transaction.displayTokenOrCoinSymbol }}
             </span>
           </td>
         </tr>
         <tr class="profile-activity__bottom">
           <td>
-            {{ income ? 'From' : 'To' }}:
-            <nuxt-link :to="`/${chainSlug}/${transactionAddress}`">
-              {{ transactionAddress | shortAddress }}
+            {{ transaction.displayTransferDirection }}:
+            <nuxt-link :to="`/${chainSlug}/${transaction.transactionAddress}`">
+              {{ transaction.transactionAddress | shortAddress }}
             </nuxt-link>
           </td>
           <td>
@@ -118,21 +118,6 @@ export default class Transaction extends Vue {
 
   get chainSymbol(): string {
     return addressModule.chainSymbol;
-  }
-
-  get income(): boolean {
-    const address = addressModule.address.toLowerCase();
-    const to = this.transaction.to.toLowerCase();
-
-    return to === address;
-  }
-
-  get transactionAddress(): string {
-    return this.income ? this.transaction.from : this.transaction.to;
-  }
-
-  get isTokenTx(): boolean {
-    return Boolean(this.transaction.tokenAddress);
   }
 
   mounted() {

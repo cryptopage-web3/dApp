@@ -1,4 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { normalize } from './address/tx-normalizer/normalizer';
 import { alertModule } from '.';
 import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
@@ -158,7 +159,10 @@ export default class AddressModule extends VuexModule {
 
       this.setTransactions({
         ...this.transactions,
-        transactions: uniqueHashConcat(oldTransactions, transactions),
+        transactions: uniqueHashConcat(
+          oldTransactions,
+          transactions.map((t) => normalize(t, this.address, this.chainId)),
+        ),
         count,
         page: nextPage,
         hasAllPages: transactions.length === 0,
