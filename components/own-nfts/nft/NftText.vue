@@ -18,8 +18,8 @@
           </td>
           <td>
             <div class="market-product__count">
-              <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
-              <span> 2 </span>
+              $
+              <span>{{ usdPrice | formatNumberFloatDigits }}</span>
             </div>
           </td>
         </tr>
@@ -42,6 +42,10 @@ export default class NftText extends Vue {
 
   get title(): string {
     return this.nft.name;
+  }
+
+  get usdPrice(): number {
+    return this.nft.usdPrice;
   }
 
   get collectionName(): string {
