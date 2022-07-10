@@ -1,11 +1,11 @@
 <template>
   <a
-    v-if="nft.url"
-    :href="nft.url"
+    v-if="nft.image"
+    :href="nft.image"
     target="_blank"
     class="market-product__media-image loading-bg"
   >
-    <img :src="nft.url" />
+    <img :src="nft.image" />
   </a>
 </template>
 
