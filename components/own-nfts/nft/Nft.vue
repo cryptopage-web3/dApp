@@ -7,11 +7,7 @@
           <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
           <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
         </div>
-        <a href="#" class="market-product__fav">
-          <CollectionEmptyIcon />
-          <CollectionFillIcon />
-          <span class="market-product__fav-info"> Add to My collections </span>
-        </a>
+        <NftFavorite :nft="nft" />
         <NftDropdown />
       </div>
       <NftText :nft="nft" />
@@ -24,21 +20,19 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { ETypeNft, INft } from '~/types';
-import CollectionEmptyIcon from '~/components/icon/own-nfts/CollectionEmptyIcon.vue';
-import CollectionFillIcon from '~/components/icon/own-nfts/CollectionFillIcon.vue';
 import NftDropdown from '~/components/own-nfts/nft/NftDropdown.vue';
 import NftText from '~/components/own-nfts/nft/NftText.vue';
 import NftComments from '~/components/own-nfts/nft/NftComments.vue';
 import NftImage from '~/components/own-nfts/nft/NftImage.vue';
 import NftVideo from '~/components/own-nfts/nft/NftVideo.vue';
 import NftAudio from '~/components/own-nfts/nft/NftAudio.vue';
+import NftFavorite from '~/components/own-nfts/nft/NftFavorite.vue';
 
 type TNft = INft;
 
 @Component({
   components: {
-    CollectionEmptyIcon,
-    CollectionFillIcon,
+    NftFavorite,
     NftDropdown,
     NftText,
     NftComments,
