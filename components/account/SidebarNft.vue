@@ -2,6 +2,7 @@
   <div class="market-sidebar__nft">
     <div v-if="isMedia" class="market-sidebar__nft-video">
       <video
+        ref="video"
         style="z-index: 10"
         tabindex="-1"
         data-video=""
@@ -26,6 +27,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { ETypeNft, INft } from '~/types';
+import { playOneVideoInit } from '~/utils/playOneVideo';
 
 type TNft = INft;
 
@@ -34,8 +36,18 @@ export default class SidebarNft extends Vue {
   @Prop({ required: true })
   readonly nft!: TNft;
 
+  $refs!: {
+    video: HTMLVideoElement;
+  };
+
   get isMedia(): boolean {
     return this.nft.type === ETypeNft.video || this.nft.type === ETypeNft.audio;
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      playOneVideoInit(this.$refs.video);
+    });
   }
 }
 </script>

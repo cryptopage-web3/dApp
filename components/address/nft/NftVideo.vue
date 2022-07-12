@@ -4,6 +4,7 @@
       <div class="video">
         <div class="video-player">
           <video
+            ref="video"
             style="z-index: 10"
             tabindex="-1"
             data-video=""
@@ -22,6 +23,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
+import { playOneVideoInit } from '~/utils/playOneVideo';
 
 type TNftTransaction = INftTransaction;
 
@@ -29,5 +31,15 @@ type TNftTransaction = INftTransaction;
 export default class NftVideo extends Vue {
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
+
+  $refs!: {
+    video: HTMLVideoElement;
+  };
+
+  mounted() {
+    this.$nextTick(() => {
+      playOneVideoInit(this.$refs.video);
+    });
+  }
 }
 </script>
