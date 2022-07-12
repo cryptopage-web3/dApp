@@ -13,13 +13,15 @@
       </video>
     </div>
     <a
-      v-else-if="nft.image"
+      v-else-if="nft.image && !isError"
+      ref="container"
       :href="nft.image"
       target="_blank"
       class="market-sidebar__nft-image loading-bg"
-    >
-      <img :src="nft.image" />
-    </a>
+    />
+    <div v-else class="market-sidebar__nft-image">
+      <div class="market-sidebar__nft-image-empty">Failed to get nft data</div>
+    </div>
   </div>
 </template>
 
@@ -33,11 +35,14 @@ type TNft = INft;
 
 @Component({})
 export default class SidebarNft extends Vue {
+  isError = false;
+
   @Prop({ required: true })
   readonly nft!: TNft;
 
   $refs!: {
     video: HTMLVideoElement;
+    container: HTMLDivElement;
   };
 
   get isMedia(): boolean {
@@ -46,7 +51,29 @@ export default class SidebarNft extends Vue {
 
   mounted() {
     this.$nextTick(() => {
-      playOneVideoInit(this.$refs.video);
+      /** для медиа */
+
+      if (this.isMedia) {
+        playOneVideoInit(this.$refs.video);
+        return;
+      }
+
+      /** для картинок */
+
+      if (!this.nft.image) {
+        this.isError = true;
+        return;
+      }
+
+      const image = new Image();
+      image.src = this.nft.image;
+
+      image.onload = () => {
+        this.$refs.container?.append(image);
+      };
+      image.onerror = () => {
+        this.isError = true;
+      };
     });
   }
 }

@@ -9,6 +9,9 @@
       :nft="nft"
       @show-modal="showModal"
     />
+    <div v-else class="profile-content__image">
+      <div class="profile-content__image-empty">No NFT Content</div>
+    </div>
 
     <NftText :nft="nft" @show-modal="showModal" />
 
