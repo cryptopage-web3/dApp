@@ -37,7 +37,7 @@
         </a>
         <div class="profile-iu__middle mb-0">
           <strong>134</strong> transactions / <strong>23</strong> inputs /
-          <strong>5</strong> outputs from
+          <strong>5</strong> outputs
         </div>
       </div>
     </div>
