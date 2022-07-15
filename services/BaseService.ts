@@ -1,10 +1,16 @@
 import axios from 'axios';
+import qs from 'qs';
 import { API_URL } from '~/constants';
 
 const apiOrigin = API_URL;
 
 const baseAxios = axios.create();
 baseAxios.defaults.baseURL = apiOrigin;
+
+/** Преобразует переданные данные params в строку запроса */
+baseAxios.defaults.paramsSerializer = (data: any) => {
+  return qs.stringify(data);
+};
 
 type BaseGETArgs = Parameters<typeof baseAxios.get>;
 type BasePOSTArgs = Parameters<typeof baseAxios.post>;

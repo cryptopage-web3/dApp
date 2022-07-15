@@ -25,7 +25,7 @@ export default class MarketModule extends VuexModule {
         offset: 0,
         limit: 10,
         filter: {
-          name: search,
+          name: `${search}%`,
         },
       });
 
