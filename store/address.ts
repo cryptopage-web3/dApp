@@ -6,6 +6,7 @@ import {
   INftsPagination,
   INftTransactionsPagination,
   IToken,
+  ITransaction,
   ITransactionsPagination,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
@@ -88,6 +89,28 @@ export default class AddressModule extends VuexModule {
 
   get chainSymbol(): string {
     return networkHelper.getNetworkSymbol(this.chainId);
+  }
+
+  get inputs(): number {
+    return new Set(
+      this.transactions.transactions
+        .filter(
+          (tx: ITransaction) =>
+            tx.to.toLowerCase() === this.address.toLowerCase(),
+        )
+        .map((tx: ITransaction) => tx.from),
+    ).size;
+  }
+
+  get outputs(): number {
+    return new Set(
+      this.transactions.transactions
+        .filter(
+          (tx: ITransaction) =>
+            tx.from.toLowerCase() === this.address.toLowerCase(),
+        )
+        .map((tx: ITransaction) => tx.to),
+    ).size;
   }
 
   @Mutation
