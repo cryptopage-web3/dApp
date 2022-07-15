@@ -427,3 +427,50 @@
   width: 100%;
   opacity: 0.6;
 }
+
+.market-nft-block__empty {
+  padding: 60px 0;
+  text-align: center;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 400;
+  width: 100%;
+  opacity: 0.6;
+}
+
+.market-product__image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.market-product__image img {
+  display: block;
+  position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+  object-fit: cover;
+}
+
+.market-product__image-empty {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: center;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.06);
+  color: #4d4d4d;
+}
