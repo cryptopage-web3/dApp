@@ -6,12 +6,14 @@ import AlertModule from '~/store/alert';
 import AddressModule from '~/store/address';
 import StickyModule from '~/store/sticky';
 import MarketModule from '~/store/market';
+import NftFormModule from '~/store/nft-form';
 
 let authModule: AuthModule;
 let alertModule: AlertModule;
 let addressModule: AddressModule;
 let stickyModule: StickyModule;
 let marketModule: MarketModule;
+let nftFormModule: NftFormModule;
 
 function initialiseStores(store: Store<any>): void {
   authModule = getModule(AuthModule, store);
@@ -19,6 +21,7 @@ function initialiseStores(store: Store<any>): void {
   addressModule = getModule(AddressModule, store);
   stickyModule = getModule(StickyModule, store);
   marketModule = getModule(MarketModule, store);
+  nftFormModule = getModule(NftFormModule, store);
 
   if (process.browser) {
     authModule.init();
@@ -32,4 +35,5 @@ export {
   addressModule,
   stickyModule,
   marketModule,
+  nftFormModule,
 };
