@@ -57,23 +57,23 @@
                 fill="#FF1818"
               ></path>
             </svg>
-            {{ transaction.displayTransferType }}
+            {{ transaction.transferType }}
             {{
               transaction.type !== 'contract_execution'
-                ? transaction.displayTokenOrCoinSymbol
+                ? transaction.tokenOrCoinSymbolLeft
                 : ''
             }}
           </td>
           <td>
-            <span :title="transaction.displayTokenOrCoinAmount">
-              {{ transaction.displayTokenOrCoinAmount | formatNumber(15) }}
-              {{ transaction.displayTokenOrCoinSymbol }}
+            <span :title="transaction.tokenOrCoinAmount">
+              {{ transaction.tokenOrCoinAmount | formatNumber(15) }}
+              {{ transaction.tokenOrCoinSymbolRight }}
             </span>
           </td>
         </tr>
         <tr class="profile-activity__bottom">
           <td>
-            {{ transaction.displayTransferDirection }}:
+            {{ transaction.transferDirection }}:
             <nuxt-link :to="`/${chainSlug}/${transaction.transactionAddress}`">
               {{ transaction.transactionAddress | shortAddress }}
             </nuxt-link>

@@ -1,13 +1,85 @@
+export enum OperationType {
+  send = 'send',
+  receive = 'receive',
+  swap = 'swap',
+  contract_execution = 'contract_execution',
+}
+export enum TransactionType {
+  normal = 'normal',
+  erc20 = 'erc20',
+}
+
+/**
+ * Данные которые получаем из api
+ */
+export interface IErc20TransactionData {
+  transactionType: TransactionType.erc20;
+  operationType: OperationType;
+  blockNumber: number;
+  timeStamp: number;
+  hash: string;
+  nonce: number;
+  blockHash: string;
+  from: string;
+  contractAddress: string;
+  to: string;
+  value: number;
+  tokenName: string;
+  tokenSymbol: string;
+  tokenDecimal: number;
+  transactionIndex: number;
+  gas: number;
+  gasPrice: number;
+  gasUsed: number;
+  cumulativeGasUsed: number;
+  input: string;
+  confirmations: number;
+  send?: IErc20TransactionData[];
+  receive?: IErc20TransactionData[];
+}
+
+/**
+ * Данные которые получаем из api
+ */
+export interface IEthTransactionData {
+  transactionType: TransactionType.normal;
+  operationType: OperationType;
+  blockNumber: number;
+  timeStamp: number;
+  hash: string;
+  nonce: number;
+  blockHash: number;
+  transactionIndex: number;
+  from: string;
+  to: string;
+  value: number;
+  gas: number;
+  gasPrice: number;
+  isError: string;
+  txreceipt_status: string;
+  input: string;
+  contractAddress: string;
+  cumulativeGasUsed: number;
+  gasUsed: string;
+  confirmations: number;
+  methodId: string;
+  functionName: string;
+  send?: IErc20TransactionData[];
+  receive?: IErc20TransactionData[];
+}
+
+export type TEthTransaction = IEthTransactionData | IErc20TransactionData;
+
 /**
  * Данные которые получаем из api
  */
 export interface ITransactionData {
+  transactionType: TransactionType.erc20 | TransactionType.normal;
   date: string;
   explorerUrl: string;
   fee: number;
   from: string;
   to: string;
-  type?: 'contract_execution' | 'swap' | 'send';
   description?: string;
   hash: string;
   title: string;
@@ -21,13 +93,21 @@ export interface ITransactionData {
 /**
  * Данные подготовленные для отображения
  */
-export interface ITransaction extends ITransactionData {
+export interface ITransaction {
   transactionAddress: string;
   isIncome: boolean;
 
   /** E.g. 'Receive' | 'Send' | 'Swap' */
-  displayTransferType: string;
-  displayTokenOrCoinSymbol: string;
-  displayTokenOrCoinAmount: number;
-  displayTransferDirection: 'From' | 'To' | 'Contract';
+  transferType: string;
+  tokenOrCoinSymbolLeft: string;
+  tokenOrCoinSymbolRight: string;
+  tokenOrCoinAmount: number;
+  transferDirection: 'From' | 'To' | 'Contract';
+
+  from: string;
+  to: string;
+  value: number;
+  hash: string;
+
+  valueUSD?: number;
 }
