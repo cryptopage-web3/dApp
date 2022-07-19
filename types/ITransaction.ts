@@ -1,10 +1,11 @@
-export enum OperationType {
+export enum EOperationType {
   send = 'send',
   receive = 'receive',
   swap = 'swap',
   contract_execution = 'contract_execution',
 }
-export enum TransactionType {
+
+export enum ETransactionType {
   normal = 'normal',
   erc20 = 'erc20',
 }
@@ -13,8 +14,8 @@ export enum TransactionType {
  * Данные которые получаем из api
  */
 export interface IErc20TransactionData {
-  transactionType: TransactionType.erc20;
-  operationType: OperationType;
+  transactionType: ETransactionType.erc20;
+  operationType: EOperationType;
   blockNumber: number;
   timeStamp: number;
   hash: string;
@@ -42,8 +43,8 @@ export interface IErc20TransactionData {
  * Данные которые получаем из api
  */
 export interface IEthTransactionData {
-  transactionType: TransactionType.normal;
-  operationType: OperationType;
+  transactionType: ETransactionType.normal;
+  operationType: EOperationType;
   blockNumber: number;
   timeStamp: number;
   hash: string;
@@ -74,7 +75,7 @@ export type TEthTransaction = IEthTransactionData | IErc20TransactionData;
  * Данные которые получаем из api
  */
 export interface ITransactionData {
-  transactionType: TransactionType.erc20 | TransactionType.normal;
+  transactionType: ETransactionType.erc20 | ETransactionType.normal;
   date: string;
   explorerUrl: string;
   fee: number;

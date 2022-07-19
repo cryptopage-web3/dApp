@@ -1,8 +1,8 @@
 import {
   ITransaction,
   TEthTransaction,
-  OperationType,
-  TransactionType,
+  EOperationType,
+  ETransactionType,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 
@@ -30,11 +30,11 @@ export function normalizeEth(
 }
 
 function getTransferType(data: TEthTransaction): string {
-  if (data.operationType === OperationType.swap) {
+  if (data.operationType === EOperationType.swap) {
     return 'Swap';
-  } else if (data.operationType === OperationType.contract_execution) {
+  } else if (data.operationType === EOperationType.contract_execution) {
     return 'Smart contract executed';
-  } else if (data.operationType === OperationType.receive) {
+  } else if (data.operationType === EOperationType.receive) {
     return 'Receive';
   }
 
@@ -42,7 +42,7 @@ function getTransferType(data: TEthTransaction): string {
 }
 
 function getTransferDirection(data: TEthTransaction, isIncome: boolean) {
-  if (data.operationType === OperationType.contract_execution) {
+  if (data.operationType === EOperationType.contract_execution) {
     return 'Contract';
   } else if (isIncome) {
     return 'From';
@@ -55,11 +55,11 @@ function getTokenOrCoinSymbolLeft(
   data: TEthTransaction,
   chainId: string | number,
 ): string {
-  if (data.operationType === OperationType.send) {
+  if (data.operationType === EOperationType.send) {
     return extractSymbol(data.send ? data.send[0] : data, chainId);
-  } else if (data.operationType === OperationType.receive) {
+  } else if (data.operationType === EOperationType.receive) {
     return extractSymbol(data.receive ? data.receive[0] : data, chainId);
-  } else if (data.operationType === OperationType.swap) {
+  } else if (data.operationType === EOperationType.swap) {
     return buildSwapTokenOrCoinSymbol(data, chainId);
   }
 
@@ -70,9 +70,9 @@ function getTokenOrCoinSymbolRight(
   data: TEthTransaction,
   chainId: string | number,
 ): string {
-  if (data.operationType === OperationType.receive) {
+  if (data.operationType === EOperationType.receive) {
     return extractSymbol(data.receive ? data.receive[0] : data, chainId);
-  } else if (data.operationType === OperationType.send) {
+  } else if (data.operationType === EOperationType.send) {
     return extractSymbol(data.send ? data.send[0] : data, chainId);
   }
 
@@ -98,15 +98,15 @@ function buildSwapTokenOrCoinSymbol(
 }
 
 function extractSymbol(tx: TEthTransaction, chainId: string | number) {
-  return tx.transactionType === TransactionType.erc20
+  return tx.transactionType === ETransactionType.erc20
     ? tx.tokenSymbol
     : networkHelper.getNetworkSymbol(chainId);
 }
 
 function getTokenOrCoinAmount(data: TEthTransaction): number {
-  if (data.operationType === OperationType.send) {
+  if (data.operationType === EOperationType.send) {
     return data.send ? data.send[0].value : data.value;
-  } else if (data.operationType === OperationType.receive) {
+  } else if (data.operationType === EOperationType.receive) {
     return data.receive ? data.receive[0].value : data.value;
   }
 
