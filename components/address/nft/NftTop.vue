@@ -24,11 +24,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 import { addressModule } from '~/store';
 import NftDropdown from '~/components/address/nft/NftDropdown.vue';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({
   components: {
@@ -37,7 +37,7 @@ type TNft = INft;
 })
 export default class NftTop extends Vue {
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   get chainSlug(): string {
     return addressModule.chainSlug;

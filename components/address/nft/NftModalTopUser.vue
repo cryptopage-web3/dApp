@@ -20,18 +20,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 import { addressModule } from '~/store';
 import userBg from '~/assets/img/modal-post-user__thumb_bg.png';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({})
 export default class NftModalTopUser extends Vue {
   userBg = userBg;
 
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   get chainSlug(): string {
     return addressModule.chainSlug;

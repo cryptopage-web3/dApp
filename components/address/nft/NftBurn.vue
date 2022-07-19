@@ -17,12 +17,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 import NftShareIcon from '~/components/icon/nft/NftShareIcon.vue';
 import NftBurnIcon from '~/components/icon/nft/NftBurnIcon.vue';
 import NftDeleteConfirm from '~/components/address/nft/NftDeleteConfirm.vue';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({
   components: {
@@ -33,7 +33,7 @@ type TNft = INft;
 })
 export default class NftBurn extends Vue {
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   $refs!: {
     modal: NftDeleteConfirm;

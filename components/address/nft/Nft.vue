@@ -4,7 +4,14 @@
 
     <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
     <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-    <NftImage v-else :nft="nft" @show-modal="showModal" />
+    <NftImage
+      v-else-if="nft.type === ETypeNft.image"
+      :nft="nft"
+      @show-modal="showModal"
+    />
+    <div v-else class="profile-content__image">
+      <div class="profile-content__image-empty">No NFT Content</div>
+    </div>
 
     <NftText :nft="nft" @show-modal="showModal" />
 
@@ -17,7 +24,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft, ETypeNft } from '~/types';
+import { INftTransaction, ETypeNft } from '~/types';
 import NftTop from '~/components/address/nft/NftTop.vue';
 import NftText from '~/components/address/nft/NftText.vue';
 import NftImage from '~/components/address/nft/NftImage.vue';
@@ -26,7 +33,7 @@ import NftAudio from '~/components/address/nft/NftAudio.vue';
 import NftComments from '~/components/address/nft/NftComments.vue';
 import NftModal from '~/components/address/nft/NftModal.vue';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({
   components: {
@@ -43,7 +50,7 @@ export default class Nft extends Vue {
   ETypeNft = ETypeNft;
 
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 
   $refs!: {
     modal: NftModal;

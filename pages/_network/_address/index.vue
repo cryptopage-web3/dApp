@@ -12,8 +12,9 @@
           aria-controls="profile-tabs1"
           aria-selected="true"
           @click.prevent="selectTab('nfts', '#profile-tabs1-tab')"
-          >Content (13)</a
         >
+          Content ({{ nftCount }})
+        </a>
       </li>
       <li class="nav-item">
         <a
@@ -25,8 +26,9 @@
           aria-controls="profile-tabs2"
           aria-selected="false"
           @click.prevent="selectTab('transactions', '#profile-tabs2-tab')"
-          >Activity {{ activityCount }}</a
         >
+          Activity ({{ transactionCount }})
+        </a>
       </li>
       <li class="nav-item">
         <a
@@ -38,8 +40,9 @@
           aria-controls="profile-tabs3"
           aria-selected="false"
           @click.prevent="selectTab('reactions', '#profile-tabs3-tab')"
-          >Reactions (7)</a
         >
+          Reactions (7)
+        </a>
       </li>
     </ul>
     <div id="myTabContent" class="tab-content">
@@ -54,7 +57,7 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
-import { addressModule, stickyModule } from '~/store';
+import { stickyModule, addressModule } from '~/store';
 
 @Component({
   head: {
@@ -71,10 +74,12 @@ import { addressModule, stickyModule } from '~/store';
 export default class AddressPage extends Vue {
   activeTab = 'nfts';
 
-  get activityCount(): string {
-    return addressModule.transactions?.count > 0
-      ? `(${addressModule.transactions.count})`
-      : '';
+  get nftCount() {
+    return addressModule.nftTransactions.count;
+  }
+
+  get transactionCount() {
+    return addressModule.transactions.count;
   }
 
   mounted() {

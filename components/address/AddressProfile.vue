@@ -33,11 +33,12 @@
           Set the status
         </nuxt-link>
         <a v-else href="#" class="profile-iu__status2" @click.prevent="">
-          Set the status
+          User status not set
         </a>
         <div class="profile-iu__middle mb-0">
-          <strong>134</strong> transactions / <strong>23</strong> inputs /
-          <strong>5</strong> outputs from
+          <strong>{{ transactionCount }}</strong> transactions /
+          <strong>{{ inputs }}</strong> inputs /
+          <strong>{{ outputs }}</strong> outputs
         </div>
       </div>
     </div>
@@ -84,6 +85,18 @@ export default class AddressProfile extends Vue {
 
   get isAuth(): boolean {
     return authModule.isAuth;
+  }
+
+  get transactionCount() {
+    return addressModule.transactions.count;
+  }
+
+  get inputs() {
+    return addressModule.inputs;
+  }
+
+  get outputs() {
+    return addressModule.outputs;
   }
 
   mounted() {

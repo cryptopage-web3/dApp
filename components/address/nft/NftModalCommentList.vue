@@ -74,11 +74,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { INft } from '~/types';
+import { INftTransaction } from '~/types';
 import modalBg1 from '~/assets/img/modal-post-comment_bg1.png';
 import modalBg2 from '~/assets/img/modal-post-comment_bg2.png';
 
-type TNft = INft;
+type TNftTransaction = INftTransaction;
 
 @Component({})
 export default class NftModalCommentList extends Vue {
@@ -86,6 +86,6 @@ export default class NftModalCommentList extends Vue {
   modalBg2 = modalBg2;
 
   @Prop({ required: true })
-  readonly nft!: TNft;
+  readonly nft!: TNftTransaction;
 }
 </script>

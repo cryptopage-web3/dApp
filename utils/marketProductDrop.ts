@@ -95,3 +95,46 @@ export const marketProductDropInit = (): void => {
     });
   }
 };
+
+export const marketProductDropTarget = (targetLink: any): void => {
+  $(targetLink).on('click', function (event) {
+    event.preventDefault();
+    if (
+      !$(this)
+        .closest('.market-product__drop')
+        .find('.drop-down__col')
+        .is(':visible')
+    ) {
+      $(this)
+        .closest('.market-product__drop')
+        .find('.drop-down__col')
+        .slideDown(300);
+      $(this)
+        .closest('.market-product')
+        .addClass('market-product__drop-active');
+    } else {
+      $(this)
+        .closest('.market-product__drop')
+        .find('.drop-down__col')
+        .slideUp(300);
+      $(this)
+        .closest('.market-product')
+        .removeClass('market-product__drop-active');
+    }
+  });
+
+  document.addEventListener('click', function (event) {
+    const e = $(targetLink).closest('.market-product__drop');
+
+    for (let i = 0; i < e.length; i++) {
+      if (!e.get(i)?.contains(event.target as Node)) {
+        $(e.get(i) as any)
+          .find('.drop-down__col')
+          .slideUp(300);
+        $(e.get(i) as any)
+          .closest('.market-product')
+          .removeClass('market-product__drop-active');
+      }
+    }
+  });
+};
