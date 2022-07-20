@@ -74,6 +74,8 @@ import StartFavoriteFillIcon from '~/components/icon/start/StartFavoriteFillIcon
 import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
 import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
 
+type TCollectionNft = ICollectionNft;
+
 @Component({
   components: {
     StartFavoriteIcon,
@@ -85,6 +87,6 @@ import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
 })
 export default class Nft extends Vue {
   @Prop({ required: true })
-  readonly nft!: ICollectionNft;
+  readonly nft!: TCollectionNft;
 }
 </script>

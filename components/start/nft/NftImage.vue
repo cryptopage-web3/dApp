@@ -16,12 +16,14 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { ICollectionNft } from '~/types';
 
+type TCollectionNft = ICollectionNft;
+
 @Component({})
 export default class NftImage extends Vue {
   isError = false;
 
   @Prop({ required: true })
-  readonly nft!: ICollectionNft;
+  readonly nft!: TCollectionNft;
 
   $refs!: {
     container: HTMLDivElement;
