@@ -5,11 +5,7 @@
       class="form-creat__block"
       @click.prevent="showDisableNotify"
     />
-    <input
-      type="text"
-      :placeholder="isOwner ? 'What\'s new with you?' : 'Title of the sent nft'"
-      class="form-creat__name form-creat-input-js form-creat-focus-js"
-    />
+    <NftFormTitle :is-owner="isOwner" />
     <div class="form-creat-textarea-wrap">
       <textarea
         placeholder="Enter post text"
@@ -47,6 +43,7 @@
         <a
           href="#"
           class="btn btn_large btn_default form-creat__plus disabled w_xl_100 w_sm_80 w_80"
+          @click.prevent="createNft"
         >
           {{ isOwner ? 'Create' : 'Send' }}
         </a>
@@ -60,10 +57,21 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { addressModule, authModule } from '~/store';
+import { addressModule, authModule, nftFormModule } from '~/store';
 import { nftFormInit } from '~/utils/nftForm';
+import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
+import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
+import NftFormVideoIcon from '~/components/icon/nft-form/NftFormVideoIcon.vue';
+import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vue';
 
-@Component({})
+@Component({
+  components: {
+    NftFormAudioIcon,
+    NftFormImageIcon,
+    NftFormVideoIcon,
+    NftFormSettingIcon,
+  },
+})
 export default class NftForm extends Vue {
   mounted() {
     nftFormInit();
@@ -122,6 +130,10 @@ export default class NftForm extends Vue {
     }
 
     return false;
+  }
+
+  createNft() {
+    console.log(nftFormModule.values);
   }
 }
 </script>
