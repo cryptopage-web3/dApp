@@ -11,7 +11,7 @@ export function normalizeEth(
   walletAddress: string,
   chainId: string | number,
 ): ITransaction {
-  const isIncome = data.to === walletAddress;
+  const isIncome = data.operationType === EOperationType.receive;
   /* const isTokenTx = Boolean(
     'tokenAddress' in data || data.send || data.receive,
   ); */
