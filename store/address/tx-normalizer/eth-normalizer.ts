@@ -8,7 +8,6 @@ import { networkHelper } from '~/utils/networkHelper';
 
 export function normalizeEth(
   data: TEthTransaction,
-  walletAddress: string,
   chainId: string | number,
 ): ITransaction {
   const isIncome = data.operationType === EOperationType.receive;

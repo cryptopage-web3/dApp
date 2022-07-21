@@ -8,7 +8,7 @@ export function normalize(
   chainId: string | number,
 ): ITransaction {
   if (chainId === EChainId.eth) {
-    return normalizeEth(data as any, walletAddress, chainId);
+    return normalizeEth(data as any, chainId);
   }
 
   return defaultNormalizer(data, walletAddress, chainId);

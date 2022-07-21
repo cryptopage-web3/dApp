@@ -1,8 +1,10 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { normalize } from './address/tx-normalizer/normalizer';
+import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
+import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
 import { alertModule } from '.';
 import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
+  EChainSlug,
   IAddressInfo,
   INftsPagination,
   INftTransactionsPagination,
@@ -218,30 +220,11 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchTransactions() {
     try {
-      const {
-        page,
-        pageSize,
-        transactions: oldTransactions,
-      } = this.transactions;
-      const nextPage = page + 1;
-
-      const { transactions, count } = await transactionsService.getList({
-        chainSlug: this.chainSlug,
-        address: this.address,
-        skip: page,
-        limit: pageSize,
-      });
-
-      this.setTransactions({
-        ...this.transactions,
-        transactions: uniqueHashConcat(
-          oldTransactions,
-          transactions.map((t) => normalize(t, this.address, this.chainId)),
-        ),
-        count,
-        page: nextPage,
-        hasAllPages: transactions.length === 0,
-      });
+      if (this.chainSlug === EChainSlug.eth) {
+        await this.fetchEthTransactions();
+      } else {
+        await this.fetchDefaultTransactions();
+      }
     } catch {
       alertModule.error('Error getting transactions data');
 
@@ -250,6 +233,63 @@ export default class AddressModule extends VuexModule {
         hasAllPages: true,
       });
     }
+  }
+
+  @Action
+  public async fetchEthTransactions() {
+    const {
+      page,
+      transactions: oldTransactions,
+      continue: oldContinue,
+    } = this.transactions;
+
+    const {
+      transactions,
+      count,
+      continue: newContinue,
+    } = await transactionsService.getEthList({
+      chainSlug: this.chainSlug,
+      address: this.address,
+      continue: oldContinue,
+    });
+
+    this.setTransactions({
+      ...this.transactions,
+      transactions: uniqueHashConcat(
+        oldTransactions,
+        transactions.map((t) => normalizeEth(t, this.chainId)),
+      ),
+      count,
+      continue: newContinue,
+      page: page + 1,
+      pageSize: 20,
+      hasAllPages: transactions.length === 0,
+    });
+  }
+
+  @Action
+  public async fetchDefaultTransactions() {
+    const { page, pageSize, transactions: oldTransactions } = this.transactions;
+
+    const { transactions, count } = await transactionsService.getList({
+      chainSlug: this.chainSlug,
+      address: this.address,
+      skip: page,
+      limit: pageSize,
+    });
+
+    this.setTransactions({
+      ...this.transactions,
+      transactions: uniqueHashConcat(
+        oldTransactions,
+        transactions.map((t) =>
+          defaultNormalizer(t, this.address, this.chainId),
+        ),
+      ),
+      count,
+      page: page + 1,
+      hasAllPages: transactions.length === 0,
+    });
   }
 
   @Action

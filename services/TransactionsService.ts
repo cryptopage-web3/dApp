@@ -1,6 +1,8 @@
 import { BaseService } from './BaseService';
 import {
   EChainSlug,
+  IEthTransactionsParams,
+  IEthTransactionsResponse,
   ITransactionsParams,
   ITransactionsResponse,
 } from '~/types';
@@ -31,6 +33,21 @@ export class TransactionsService extends BaseService {
         params: {
           skip: params.skip,
           limit: params.limit,
+        },
+      },
+    );
+
+    return data;
+  };
+
+  getEthList = async (
+    params: IEthTransactionsParams,
+  ): Promise<IEthTransactionsResponse> => {
+    const { data } = await this.get<IEthTransactionsResponse>(
+      `${this.apiURL}/eth/${params.address}`,
+      {
+        params: {
+          continue: params.continue,
         },
       },
     );
