@@ -6,12 +6,7 @@
       @click.prevent="showDisableNotify"
     />
     <NftFormTitle :is-owner="isOwner" />
-    <div class="form-creat-textarea-wrap">
-      <textarea
-        placeholder="Enter post text"
-        class="form-creat__text form-creat-input-js"
-      ></textarea>
-    </div>
+    <NftFormDescription />
     <div class="form-creat-bottom">
       <div class="form-creat-nav">
         <a href="#" class="form-creat-nav-item stroke">
@@ -57,6 +52,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import NftFormTitle from './NftFormTitle.vue';
+import NftFormDescription from './NftFormDescription.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import { nftFormInit } from '~/utils/nftForm';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
@@ -70,6 +67,8 @@ import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vu
     NftFormImageIcon,
     NftFormVideoIcon,
     NftFormSettingIcon,
+    NftFormTitle,
+    NftFormDescription,
   },
 })
 export default class NftForm extends Vue {
