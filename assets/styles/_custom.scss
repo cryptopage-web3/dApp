@@ -352,6 +352,29 @@
   z-index: 2;
 }
 
+.form-creat-files-item__thumb {
+  height: auto;
+}
+
+.form-creat-files-item__thumb img {
+  display: inline-block;
+  height: auto;
+  max-height: 150px;
+  max-width: 100%;
+}
+
+.form-creat-files-item__thumb video {
+  display: inline-block;
+  max-height: 150px;
+  max-width: 100%;
+}
+
+.form-creat-files-item__thumb audio {
+  display: inline-block;
+  max-height: 150px;
+  max-width: 100%;
+}
+
 /* ===== my nft ===== */
 
 .market-product__media {

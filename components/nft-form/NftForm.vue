@@ -5,17 +5,32 @@
       class="form-creat__block"
       @click.prevent="showDisableNotify"
     />
+
     <NftFormTitle :is-owner="isOwner" />
     <NftFormDescription />
+    <NftFormUpload ref="refUpload" />
+
     <div class="form-creat-bottom">
       <div class="form-creat-nav">
-        <a href="#" class="form-creat-nav-item stroke">
+        <a
+          href="#"
+          class="form-creat-nav-item stroke"
+          @click.prevent="uploadFile('audio')"
+        >
           <NftFormAudioIcon />
         </a>
-        <a href="#" class="form-creat-nav-item all">
+        <a
+          href="#"
+          class="form-creat-nav-item all"
+          @click.prevent="uploadFile('image')"
+        >
           <NftFormImageIcon />
         </a>
-        <a href="#" class="form-creat-nav-item all">
+        <a
+          href="#"
+          class="form-creat-nav-item all"
+          @click.prevent="uploadFile('video')"
+        >
           <NftFormVideoIcon />
         </a>
         <a
@@ -54,6 +69,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import NftFormTitle from './NftFormTitle.vue';
 import NftFormDescription from './NftFormDescription.vue';
+import NftFormUpload from './NftFormUpload.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import { nftFormInit } from '~/utils/nftForm';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
@@ -69,12 +85,17 @@ import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vu
     NftFormSettingIcon,
     NftFormTitle,
     NftFormDescription,
+    NftFormUpload,
   },
 })
 export default class NftForm extends Vue {
   mounted() {
     nftFormInit();
   }
+
+  $refs!: {
+    refUpload: NftFormUpload;
+  };
 
   get isAuth(): boolean {
     return authModule.isAuth;
@@ -129,6 +150,10 @@ export default class NftForm extends Vue {
     }
 
     return false;
+  }
+
+  uploadFile(type: string) {
+    this.$refs.refUpload.upload(type);
   }
 
   createNft() {
