@@ -5,6 +5,7 @@
     :placeholder="isOwner ? 'What\'s new with you?' : 'Title of the sent nft'"
     class="form-creat__name form-creat-input-js form-creat-focus-js"
     @input="updateTitle"
+    @focus="$emit('focus')"
   />
 </template>
 

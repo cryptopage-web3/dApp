@@ -1,12 +1,22 @@
 <template>
-  <div class="form-creat">
+  <div
+    class="form-creat"
+    :class="{
+      'form-creat_dragging': isDragging,
+      'input--filled': isOpen,
+    }"
+    @drop.prevent="handleDropFiles"
+    @dragenter.prevent="handleDragEnter"
+    @dragleave.prevent="handleDragLeave"
+    @dragover.prevent
+  >
     <div
       v-if="isDisabled"
       class="form-creat__block"
       @click.prevent="showDisableNotify"
     />
 
-    <NftFormTitle :is-owner="isOwner" />
+    <NftFormTitle :is-owner="isOwner" @focus="openForm" />
     <NftFormDescription />
     <NftFormUpload ref="refUpload" />
 
@@ -47,6 +57,7 @@
         <a
           href="#"
           class="btn btn-blue-transparent_button form-creat__cancel btn_large form-creat-cancel-js w_xl_100 w_sm_80 w_80 mr_5 mr_md_15"
+          @click.prevent="closeForm"
         >
           Cancel
         </a>
@@ -59,6 +70,18 @@
         </a>
       </div>
     </div>
+
+    <!-- заглушка при D&D -->
+    <label class="form-creat-file__label">
+      <div class="form-creat-file__cont">
+        <img
+          src="@/assets/img/form-creat-file_img.svg"
+          alt=""
+          class="form-creat-file__icon"
+        />
+        <div class="form-creat-file__text">Drag &amp; drop files here</div>
+      </div>
+    </label>
 
     <nft-form-modal />
   </div>
@@ -89,6 +112,10 @@ import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vu
   },
 })
 export default class NftForm extends Vue {
+  isDragging = false;
+  isOpen = false;
+  dragCounter = 0;
+
   mounted() {
     nftFormInit();
   }
@@ -154,6 +181,46 @@ export default class NftForm extends Vue {
 
   uploadFile(type: string) {
     this.$refs.refUpload.upload(type);
+  }
+
+  handleDropFiles(event: DragEvent) {
+    if (this.isDisabled) {
+      return;
+    }
+
+    const file = event.dataTransfer?.files?.[0] || null;
+    this.$refs.refUpload.save(file);
+
+    this.isDragging = false;
+  }
+
+  handleDragEnter() {
+    if (this.isDisabled) {
+      return;
+    }
+
+    this.isDragging = true;
+    this.dragCounter++;
+  }
+
+  handleDragLeave() {
+    this.dragCounter--;
+
+    if (this.dragCounter < 0) {
+      this.dragCounter = 0;
+    }
+
+    if (this.dragCounter === 0) {
+      this.isDragging = false;
+    }
+  }
+
+  openForm() {
+    this.isOpen = true;
+  }
+
+  closeForm() {
+    this.isOpen = false;
   }
 
   createNft() {

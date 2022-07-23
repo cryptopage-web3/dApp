@@ -84,6 +84,10 @@ export default class NftFormUpload extends Vue {
   update() {
     const file = this.$refs.refFile.files?.[0] || null;
 
+    this.save(file);
+  }
+
+  save(file: File | null) {
     if (!this.validateFileWithNotify(file)) {
       return;
     }

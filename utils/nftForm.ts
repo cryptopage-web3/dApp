@@ -9,22 +9,20 @@ export const nftFormInit = (): void => {
           .slideUp(300);
       }
     }); */
-    $('.form-creat-focus-js').focus(function () {
+    /* $('.form-creat-focus-js').focus(function () {
       $(this).closest('.form-creat').addClass('input--filled');
       $(this)
         .closest('.form-creat')
         .find('.form-creat-textarea-wrap')
         .slideDown(300);
-    });
-
-    $('.form-creat-cancel-js').on('click', function (event) {
+    }); */
+    /* $('.form-creat-cancel-js').on('click', function (event) {
       event.preventDefault();
 
       $('.form-creat').removeClass('input--filled');
       $('.form-creat').find('.form-creat-textarea-wrap').slideUp(300);
-    });
-
-    $('.form-creat-focus-js').each(function () {
+    }); */
+    /* $('.form-creat-focus-js').each(function () {
       if (String($(this).val()).trim() !== '') {
         $(this).closest('.form-creat').addClass('input--filled');
         $(this)
@@ -38,7 +36,7 @@ export const nftFormInit = (): void => {
           .find('.form-creat-textarea-wrap')
           .slideUp(300);
       }
-    });
+    }); */
   }
 
   if ($('.form-creat-input-js').is('.form-creat-input-js')) {
