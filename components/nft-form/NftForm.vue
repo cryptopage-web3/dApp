@@ -83,7 +83,7 @@
       </div>
     </label>
 
-    <nft-form-modal />
+    <NftFormModal />
   </div>
 </template>
 
@@ -93,6 +93,7 @@ import { Component } from 'nuxt-property-decorator';
 import NftFormTitle from './NftFormTitle.vue';
 import NftFormDescription from './NftFormDescription.vue';
 import NftFormUpload from './NftFormUpload.vue';
+import NftFormModal from './modal/Modal.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import { nftFormInit } from '~/utils/nftForm';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
@@ -109,6 +110,7 @@ import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vu
     NftFormTitle,
     NftFormDescription,
     NftFormUpload,
+    NftFormModal,
   },
 })
 export default class NftForm extends Vue {
@@ -192,6 +194,7 @@ export default class NftForm extends Vue {
     this.$refs.refUpload.save(file);
 
     this.isDragging = false;
+    this.dragCounter = 0;
   }
 
   handleDragEnter() {

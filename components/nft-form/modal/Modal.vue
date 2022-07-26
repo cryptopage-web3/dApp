@@ -752,5 +752,5 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 
 @Component({})
-export default class NftFormModal extends Vue {}
+export default class Modal extends Vue {}
 </script>
