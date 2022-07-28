@@ -166,8 +166,8 @@ export default class AddressModule extends VuexModule {
       const { list, count } = await nftsService.getTransactionsList({
         chainSlug: this.chainSlug,
         address: this.address,
-        skip: page,
-        limit: pageSize,
+        page: nextPage,
+        pageSize,
       });
 
       this.setNftTransactions({
@@ -196,8 +196,8 @@ export default class AddressModule extends VuexModule {
       const { list, count } = await nftsService.getList({
         chainSlug: this.chainSlug,
         address: this.address,
-        skip: page,
-        limit: pageSize,
+        page: nextPage,
+        pageSize,
       });
 
       this.setOwnNfts({
@@ -270,12 +270,13 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchDefaultTransactions() {
     const { page, pageSize, transactions: oldTransactions } = this.transactions;
+    const nextPage = page + 1;
 
     const { transactions, count } = await transactionsService.getList({
       chainSlug: this.chainSlug,
       address: this.address,
-      skip: page,
-      limit: pageSize,
+      page: nextPage,
+      pageSize,
     });
 
     this.setTransactions({
@@ -287,7 +288,7 @@ export default class AddressModule extends VuexModule {
         ),
       ),
       count,
-      page: page + 1,
+      page: nextPage,
       hasAllPages: transactions.length === 0,
     });
   }

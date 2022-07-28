@@ -28,8 +28,8 @@ export class NftsService extends BaseService {
       `${this.apiURL}/${slugMap.get(params.chainSlug)}/${params.address}`,
       {
         params: {
-          skip: params.skip,
-          limit: params.limit,
+          page: params.page,
+          pageSize: params.pageSize,
         },
       },
     );
@@ -60,8 +60,8 @@ export class NftsService extends BaseService {
       }`,
       {
         params: {
-          skip: params.skip,
-          limit: params.limit,
+          page: params.page,
+          pageSize: params.pageSize,
         },
       },
     );
