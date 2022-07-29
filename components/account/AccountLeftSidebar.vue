@@ -67,6 +67,7 @@
                 </svg>
               </div>
               <span> Messages </span>
+              <mark> Comming Soon </mark>
             </a>
           </li>
           <li v-if="isAuth">
