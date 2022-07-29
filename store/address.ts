@@ -269,14 +269,24 @@ export default class AddressModule extends VuexModule {
 
   @Action
   public async fetchDefaultTransactions() {
-    const { page, pageSize, transactions: oldTransactions } = this.transactions;
+    const {
+      page,
+      pageSize,
+      transactions: oldTransactions,
+      continue: oldContinue,
+    } = this.transactions;
     const nextPage = page + 1;
 
-    const { transactions, count } = await transactionsService.getList({
+    const {
+      transactions,
+      count,
+      continue: newContinue,
+    } = await transactionsService.getList({
       chainSlug: this.chainSlug,
       address: this.address,
       page: nextPage,
       pageSize,
+      continue: oldContinue,
     });
 
     this.setTransactions({
@@ -288,6 +298,7 @@ export default class AddressModule extends VuexModule {
         ),
       ),
       count,
+      continue: newContinue,
       page: nextPage,
       hasAllPages: transactions.length === 0,
     });

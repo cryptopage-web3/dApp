@@ -3,4 +3,7 @@ export interface ITransactionsParams {
   address: string;
   page?: number;
   pageSize?: number;
+  continue?: {
+    fingerprint?: string;
+  };
 }

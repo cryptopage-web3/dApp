@@ -33,6 +33,7 @@ export class TransactionsService extends BaseService {
         params: {
           page: params.page,
           pageSize: params.pageSize,
+          continue: params.continue,
         },
       },
     );
