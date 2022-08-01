@@ -1,4 +1,4 @@
-export const startFiltersInit = (): void => {
+export const marketplaceFiltersInit = (): void => {
   if ($('.market-main-filtr-oc').is('.market-main-filtr-oc')) {
     $('#market-main-filtr-col').on('show.bs.collapse', function () {
       $('.market-main-default-wrap').slideUp(0);

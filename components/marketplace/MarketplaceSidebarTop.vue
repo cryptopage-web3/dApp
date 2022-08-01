@@ -1,7 +1,7 @@
 <template>
   <div class="market-sidebar">
     <div class="market-sidebar-top">
-      <h3 class="market-sidebar__title">Activity</h3>
+      <h3 class="market-sidebar__title">Top collections</h3>
       <a href="#" class="market-sidebar__more">
         <svg
           width="30"
@@ -30,25 +30,24 @@
         <a href="#">
           <div class="market-sidebar__left">
             <img
-              src="@/assets/img/market-sidebar-thumb6.png"
+              src="@/assets/img/market-sidebar-thumb1.png"
               alt=""
               class="thumb"
             />
             <div>
               <div class="name">
-                The FABO’s
+                CryptoPunk
                 <img src="@/assets/img/market-header-search-ident.svg" alt="" />
               </div>
-              <div class="article">The FABO’S 1934</div>
+              <div class="article">CryptoPunk #18 ...</div>
             </div>
           </div>
           <div class="market-sidebar__right">
-            <div class="offer-list">
-              <div class="offer-list__thumb">
-                <img src="@/assets/img/offer-list__thumb_img1.svg" alt="" />
-              </div>
-              <span> Offer </span>
+            <div class="wallet">
+              <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
+              <span>2</span>
             </div>
+            <div class="procent">+ 143%</div>
           </div>
         </a>
       </li>
@@ -56,22 +55,24 @@
         <a href="#">
           <div class="market-sidebar__left">
             <img
-              src="@/assets/img/market-sidebar-thumb7.png"
+              src="@/assets/img/market-sidebar-thumb2.png"
               alt=""
               class="thumb"
             />
             <div>
-              <div class="name">mfers</div>
-              <div class="article">The FABO’S 1934</div>
+              <div class="name">
+                CryptoPunk
+                <img src="@/assets/img/market-header-search-ident.svg" alt="" />
+              </div>
+              <div class="article">CryptoPunk #18 ...</div>
             </div>
           </div>
           <div class="market-sidebar__right">
-            <div class="offer-list">
-              <div class="offer-list__thumb">
-                <img src="@/assets/img/offer-list__thumb_img2.svg" alt="" />
-              </div>
-              <span> List </span>
+            <div class="wallet">
+              <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
+              <span>1</span>
             </div>
+            <div class="procent">+ 0.34%</div>
           </div>
         </a>
       </li>
@@ -79,25 +80,24 @@
         <a href="#">
           <div class="market-sidebar__left">
             <img
-              src="@/assets/img/market-sidebar-thumb8.png"
+              src="@/assets/img/market-sidebar-thumb3.png"
               alt=""
               class="thumb"
             />
             <div>
               <div class="name">
-                NFT World
+                CryptoPunk
                 <img src="@/assets/img/market-header-search-ident.svg" alt="" />
               </div>
-              <div class="article">The FABO’S 1934</div>
+              <div class="article">CryptoPunk #18 ...</div>
             </div>
           </div>
           <div class="market-sidebar__right">
-            <div class="offer-list">
-              <div class="offer-list__thumb">
-                <img src="@/assets/img/offer-list__thumb_img1.svg" alt="" />
-              </div>
-              <span> Offer </span>
+            <div class="wallet">
+              <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
+              <span>0.894</span>
             </div>
+            <div class="procent">+ 540%</div>
           </div>
         </a>
       </li>
@@ -105,25 +105,24 @@
         <a href="#">
           <div class="market-sidebar__left">
             <img
-              src="@/assets/img/market-sidebar-thumb9.png"
+              src="@/assets/img/market-sidebar-thumb4.png"
               alt=""
               class="thumb"
             />
             <div>
               <div class="name">
-                CLONE-X
+                CryptoPunk
                 <img src="@/assets/img/market-header-search-ident.svg" alt="" />
               </div>
-              <div class="article">The FABO’S 1934</div>
+              <div class="article">CryptoPunk #18 ...</div>
             </div>
           </div>
           <div class="market-sidebar__right">
-            <div class="offer-list">
-              <div class="offer-list__thumb">
-                <img src="@/assets/img/offer-list__thumb_img1.svg" alt="" />
-              </div>
-              <span> Sale </span>
+            <div class="wallet">
+              <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
+              <span>2.5</span>
             </div>
+            <div class="procent procent_red">- 28%</div>
           </div>
         </a>
       </li>
@@ -131,25 +130,24 @@
         <a href="#">
           <div class="market-sidebar__left">
             <img
-              src="@/assets/img/market-sidebar-thumb10.png"
+              src="@/assets/img/market-sidebar-thumb5.png"
               alt=""
               class="thumb"
             />
             <div>
               <div class="name">
-                Mutant Ape ...
+                CryptoPunk
                 <img src="@/assets/img/market-header-search-ident.svg" alt="" />
               </div>
-              <div class="article">The FABO’S 1934</div>
+              <div class="article">CryptoPunk #18 ...</div>
             </div>
           </div>
           <div class="market-sidebar__right">
-            <div class="offer-list">
-              <div class="offer-list__thumb">
-                <img src="@/assets/img/offer-list__thumb_img1.svg" alt="" />
-              </div>
-              <span> Offer </span>
+            <div class="wallet">
+              <img src="@/assets/img/market-header__wallet_icon1.svg" alt="" />
+              <span>0.0003</span>
             </div>
+            <div class="procent">+ 695%</div>
           </div>
         </a>
       </li>
@@ -162,5 +160,5 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 
 @Component({})
-export default class StartSidebarActivity extends Vue {}
+export default class MarketplaceSidebarTop extends Vue {}
 </script>

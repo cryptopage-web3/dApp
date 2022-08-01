@@ -1,8 +1,8 @@
 <template>
   <div class="market-main-right">
     <div class="market-sidebar-wrap">
-      <start-sidebar-top />
-      <start-sidebar-activity />
+      <marketplace-sidebar-top />
+      <marketplace-sidebar-activity />
     </div>
   </div>
 </template>
@@ -13,7 +13,7 @@ import { Component } from 'nuxt-property-decorator';
 import { marketSidebarInit } from '~/utils/marketSidebar';
 
 @Component({})
-export default class StartSidebar extends Vue {
+export default class MarketplaceSidebar extends Vue {
   mounted() {
     marketSidebarInit();
   }

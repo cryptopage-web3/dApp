@@ -24,7 +24,7 @@
         </div>
         <a href="#" class="more-nfts">
           <span> Discover more NFT’s </span>
-          <StartMoreArrowIcon />
+          <MarketplaceMoreArrowIcon />
         </a>
       </div>
     </div>
@@ -42,17 +42,17 @@ import { Component } from 'nuxt-property-decorator';
 import Nft from './nft/Nft.vue';
 import { marketModule } from '~/store';
 import Loader from '~/components/loaders/GrowLoader.vue';
-import StartMoreArrowIcon from '~/components/icon/start/StartMoreArrowIcon.vue';
+import MarketplaceMoreArrowIcon from '~/components/icon/marketplace/MarketplaceMoreArrowIcon.vue';
 import { ICollectionNft } from '~/types';
 
 @Component({
   components: {
-    StartMoreArrowIcon,
+    MarketplaceMoreArrowIcon,
     Loader,
     Nft,
   },
 })
-export default class StartTopImages extends Vue {
+export default class MarketplaceTopImages extends Vue {
   loading = true;
 
   get nfts(): ICollectionNft[] {

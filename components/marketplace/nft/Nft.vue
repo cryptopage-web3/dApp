@@ -4,8 +4,8 @@
       <div class="thumb">
         <NftImage :nft="nft" />
         <a href="#" class="market-product__fav">
-          <StartFavoriteIcon />
-          <StartFavoriteFillIcon />
+          <MarketplaceFavoriteIcon />
+          <MarketplaceFavoriteFillIcon />
         </a>
         <div class="market-product__nav">
           <a href="#">Creator</a>
@@ -69,8 +69,8 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import NftImage from './NftImage.vue';
 import { ICollectionNft } from '~/types';
-import StartFavoriteIcon from '~/components/icon/start/StartFavoriteIcon.vue';
-import StartFavoriteFillIcon from '~/components/icon/start/StartFavoriteFillIcon.vue';
+import MarketplaceFavoriteIcon from '~/components/icon/marketplace/MarketplaceFavoriteIcon.vue';
+import MarketplaceFavoriteFillIcon from '~/components/icon/marketplace/MarketplaceFavoriteFillIcon.vue';
 import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
 import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
 
@@ -78,8 +78,8 @@ type TCollectionNft = ICollectionNft;
 
 @Component({
   components: {
-    StartFavoriteIcon,
-    StartFavoriteFillIcon,
+    MarketplaceFavoriteIcon,
+    MarketplaceFavoriteFillIcon,
     CommentLikeIcon,
     CommentDislikeIcon,
     NftImage,
