@@ -4,7 +4,7 @@ export interface INftTransaction {
   url?: string;
   price: number;
   name: string;
-  description: string;
+  description?: string;
   symbol: string;
   date: string;
   to: string;
