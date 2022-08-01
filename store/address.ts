@@ -31,7 +31,7 @@ const transactionsService = new TransactionsService();
 const defaultTransactions: TTransactionsPagination = {
   transactions: [],
   count: 0,
-  pageSize: 10,
+  pageSize: 100,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
@@ -40,7 +40,7 @@ const defaultTransactions: TTransactionsPagination = {
 const defaultNftTransactions: TNftTransactionsPagination = {
   nfts: [],
   count: 0,
-  pageSize: 10,
+  pageSize: 100,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
@@ -49,7 +49,7 @@ const defaultNftTransactions: TNftTransactionsPagination = {
 const defaultOwnNfts: TNftsPagination = {
   nfts: [],
   count: 0,
-  pageSize: 9,
+  pageSize: 100,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
