@@ -23,7 +23,7 @@ export class CollectionsService extends BaseService {
     params: ILastUpdatedParams,
   ): Promise<ILastUpdatedResponse> => {
     const { data } = await this.get<ILastUpdatedResponse>(
-      `${this.apiURL}/last-updated`,
+      `${this.apiURL}/marketdashboard`,
       {
         params,
       },

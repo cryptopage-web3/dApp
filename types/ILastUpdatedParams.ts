@@ -1,5 +1,5 @@
 export interface ILastUpdatedParams {
-  limit?: number;
-  offset?: number;
+  page?: number;
+  pageSize?: number;
   filter?: number[];
 }

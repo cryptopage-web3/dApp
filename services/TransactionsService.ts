@@ -48,6 +48,7 @@ export class TransactionsService extends BaseService {
       `${this.apiURL}/eth/${params.address}`,
       {
         params: {
+          pageSize: params.pageSize,
           continue: params.continue,
         },
       },

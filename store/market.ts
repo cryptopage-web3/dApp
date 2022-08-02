@@ -48,8 +48,8 @@ export default class MarketModule extends VuexModule {
   public async fetchLastUpdated() {
     try {
       const { data } = await collectionsService.getLastUpdated({
-        offset: 0,
-        limit: 8,
+        page: 1,
+        pageSize: 8,
       });
 
       this.setLastUpdatedNfts(data);

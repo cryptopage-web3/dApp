@@ -239,6 +239,7 @@ export default class AddressModule extends VuexModule {
   public async fetchEthTransactions() {
     const {
       page,
+      pageSize,
       transactions: oldTransactions,
       continue: oldContinue,
     } = this.transactions;
@@ -251,6 +252,7 @@ export default class AddressModule extends VuexModule {
       chainSlug: this.chainSlug,
       address: this.address,
       continue: oldContinue,
+      pageSize,
     });
 
     this.setTransactions({
@@ -262,7 +264,6 @@ export default class AddressModule extends VuexModule {
       count,
       continue: newContinue,
       page: page + 1,
-      pageSize: 20,
       hasAllPages: transactions.length === 0,
     });
   }
