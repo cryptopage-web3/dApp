@@ -2,8 +2,8 @@ import { BaseService } from './BaseService';
 import {
   ICollectionsParams,
   ICollectionsResponse,
-  ILastUpdatedParams,
-  ILastUpdatedResponse,
+  IMarketDashboardParams,
+  IMarketDashboardResponse,
 } from '~/types';
 
 export class CollectionsService extends BaseService {
@@ -19,11 +19,11 @@ export class CollectionsService extends BaseService {
     return data;
   };
 
-  getLastUpdated = async (
-    params: ILastUpdatedParams,
-  ): Promise<ILastUpdatedResponse> => {
-    const { data } = await this.get<ILastUpdatedResponse>(
-      `${this.apiURL}/marketdashboard`,
+  getMarketDashboard = async (
+    params: IMarketDashboardParams,
+  ): Promise<IMarketDashboardResponse> => {
+    const { data } = await this.get<IMarketDashboardResponse>(
+      `${this.apiURL}/market-dashboard`,
       {
         params,
       },

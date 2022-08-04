@@ -56,7 +56,7 @@ export default class MarketplaceTopImages extends Vue {
   loading = true;
 
   get nfts(): ICollectionNft[] {
-    return marketModule.lastUpdatedNfts;
+    return marketModule.marketDashboardNfts;
   }
 
   mounted() {
@@ -66,7 +66,7 @@ export default class MarketplaceTopImages extends Vue {
   async fetchNft() {
     this.loading = true;
 
-    await marketModule.fetchLastUpdated();
+    await marketModule.fetchMarketDashboard();
 
     this.loading = false;
   }

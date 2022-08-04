@@ -13,7 +13,7 @@ const collectionsService = new CollectionsService();
 export default class MarketModule extends VuexModule {
   collections: ICollection[] = [];
 
-  lastUpdatedNfts: ICollectionNft[] = [];
+  marketDashboardNfts: ICollectionNft[] = [];
 
   @Mutation
   public setCollections(collections: ICollection[]) {
@@ -21,8 +21,8 @@ export default class MarketModule extends VuexModule {
   }
 
   @Mutation
-  public setLastUpdatedNfts(lastUpdatedNfts: ICollectionNft[]) {
-    this.lastUpdatedNfts = lastUpdatedNfts;
+  public setMarketDashboardNfts(marketDashboardNfts: ICollectionNft[]) {
+    this.marketDashboardNfts = marketDashboardNfts;
   }
 
   @Action
@@ -45,18 +45,18 @@ export default class MarketModule extends VuexModule {
   }
 
   @Action
-  public async fetchLastUpdated() {
+  public async fetchMarketDashboard() {
     try {
-      const { data } = await collectionsService.getLastUpdated({
+      const { data } = await collectionsService.getMarketDashboard({
         page: 1,
         pageSize: 8,
       });
 
-      this.setLastUpdatedNfts(data);
+      this.setMarketDashboardNfts(data);
     } catch {
       alertModule.error('Error getting last updated nfts');
 
-      this.setLastUpdatedNfts([]);
+      this.setMarketDashboardNfts([]);
     }
   }
 }
