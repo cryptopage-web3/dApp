@@ -24,6 +24,7 @@ pipelines:
               "export TG_BOT_ID=$TG_BOT_ID && 
               export TG_CHAT_ID=$TG_CHAT_ID && 
               export TG_TEXT_PREFIX=$TG_TEXT_PREFIX && 
+              export DEPLOY_LOG_FILE=$DEPLOY_LOG_FILE && 
               /bin/bash /tmp/deploy.sh > $DEPLOY_LOG_FILE"
 
             

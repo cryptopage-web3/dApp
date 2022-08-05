@@ -3,6 +3,8 @@ tg_message()
     local chat_id="${TG_CHAT_ID}"
     local text="$1"
     local bot_id="${TG_BOT_ID}"
+    local msg_log="/tmp/tg-msg.log"
+    local file_send_log="/tmp/tg-file-send.log"
 
     if [ -z "$bot_id" ]; then
        echo "Empty TG_BOT_ID env variable"
@@ -27,18 +29,26 @@ tg_message()
         -X POST
          -H 'Content-Type: application/json'
          -d "$data"
-         --silent --output /tmp/tg.log --show-error --fail
+         --connect-timeout 4
+         --silent --show-error
          https://api.telegram.org/bot$bot_id/sendMessage
     )
 
-    curl "${args[@]}" #send message
+    curl "${args[@]}" >> $msg_log #send message
+
+    echo "" >> $msg_log
 
     local FILE="$2"
 
     if [ -f "$FILE" ]; then #send file
+        echo "Send file to tg: $FILE"
+        
         curl -F document=@"$FILE" \
-        --silent --output /tmp/tg.log --show-error --fail \
-        https://api.telegram.org/bot$bot_id/sendDocument?chat_id=$chat_id
+        --connect-timeout 4 \
+        --silent --show-error \
+        https://api.telegram.org/bot$bot_id/sendDocument?chat_id=$chat_id >> $file_send_log
+
+        echo "" >> $file_send_log
     fi
 }
 
