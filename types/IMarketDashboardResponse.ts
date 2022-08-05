@@ -1,6 +1,6 @@
 import { ICollectionNft } from '.';
 
-export interface ILastUpdatedResponse {
+export interface IMarketDashboardResponse {
   data: ICollectionNft[];
   itemsTotal: number;
 }

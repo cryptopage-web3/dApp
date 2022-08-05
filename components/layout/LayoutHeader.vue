@@ -192,9 +192,14 @@
 
         <div id="navbarSupportedContent" class="collapse navbar-collapse">
           <ul class="market-header-menu">
-            <li><a href="#">Explore</a></li>
-            <li><a href="#">Activity</a></li>
-            <li><a href="#">Resources</a></li>
+            <li>
+              <nuxt-link to="/">Home</nuxt-link>
+            </li>
+            <li>
+              <nuxt-link to="/marketplace">Marketplace</nuxt-link>
+            </li>
+            <li><a href="#">Inbox</a></li>
+            <li><a href="#">Notification</a></li>
           </ul>
         </div>
         <div class="market-header__right">

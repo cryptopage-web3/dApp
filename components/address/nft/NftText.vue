@@ -37,18 +37,22 @@ export default class NftText extends Vue {
     hash: HTMLAnchorElement;
   };
 
+  get originDescription(): string {
+    return this.nft.description || '';
+  }
+
   get isLongDescription(): boolean {
-    return this.nft.description.length > 250;
+    return this.originDescription.length > 250;
   }
 
   get shortDescription(): string {
     return this.isLongDescription
-      ? this.nft.description.slice(0, 200) + '...'
-      : this.nft.description;
+      ? this.originDescription.slice(0, 200) + '...'
+      : this.originDescription;
   }
 
   get description(): string {
-    return this.showFull ? this.nft.description : this.shortDescription;
+    return this.showFull ? this.originDescription : this.shortDescription;
   }
 
   get title(): string {

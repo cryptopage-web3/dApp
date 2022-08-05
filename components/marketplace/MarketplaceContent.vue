@@ -1,15 +1,15 @@
 <template>
   <div class="market-main-left">
     <div class="market-main-catalogs">
-      <start-filters-btn />
-      <start-catalogs />
+      <marketplace-filters-btn />
+      <marketplace-catalogs />
     </div>
     <div class="market-main-default-wrap">
-      <start-top-images />
-      <start-hot-collection />
-      <start-recommended />
+      <marketplace-top-images />
+      <marketplace-hot-collection />
+      <marketplace-recommended />
     </div>
-    <start-filters />
+    <marketplace-filters />
   </div>
 </template>
 
@@ -19,7 +19,7 @@ import { Component } from 'nuxt-property-decorator';
 import { favoriteSelectInit } from '~/utils/favoriteSelect';
 
 @Component({})
-export default class StartContent extends Vue {
+export default class MarketplaceContent extends Vue {
   mounted() {
     favoriteSelectInit();
   }

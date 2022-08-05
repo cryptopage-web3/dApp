@@ -2452,7 +2452,7 @@ import PriceFilter from './filters/PriceFilter.vue';
 import SaleFilter from './filters/SaleFilter.vue';
 import StatusFilter from './filters/StatusFilter.vue';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
-import { startFiltersInit } from '~/utils/startFilters';
+import { marketplaceFiltersInit } from '~/utils/marketplaceFilters';
 import marketProductThumb1 from '~/assets/img/market-product_thumb1.png';
 import marketProductThumb2 from '~/assets/img/market-product_thumb2.png';
 import marketProductThumb3 from '~/assets/img/market-product_thumb3.png';
@@ -2472,7 +2472,7 @@ import marketProductThumb8 from '~/assets/img/market-product_thumb8.png';
     StatusFilter,
   },
 })
-export default class StartFilters extends Vue {
+export default class MarketplaceFilters extends Vue {
   thumb1Url = marketProductThumb1;
   thumb2Url = marketProductThumb2;
   thumb3Url = marketProductThumb3;
@@ -2483,7 +2483,7 @@ export default class StartFilters extends Vue {
   thumb8Url = marketProductThumb8;
 
   mounted() {
-    startFiltersInit();
+    marketplaceFiltersInit();
     profileContentDropInit();
   }
 }

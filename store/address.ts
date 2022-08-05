@@ -31,7 +31,7 @@ const transactionsService = new TransactionsService();
 const defaultTransactions: TTransactionsPagination = {
   transactions: [],
   count: 0,
-  pageSize: 10,
+  pageSize: 100,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
@@ -40,7 +40,7 @@ const defaultTransactions: TTransactionsPagination = {
 const defaultNftTransactions: TNftTransactionsPagination = {
   nfts: [],
   count: 0,
-  pageSize: 10,
+  pageSize: 100,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
@@ -49,7 +49,7 @@ const defaultNftTransactions: TNftTransactionsPagination = {
 const defaultOwnNfts: TNftsPagination = {
   nfts: [],
   count: 0,
-  pageSize: 9,
+  pageSize: 100,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
@@ -239,6 +239,7 @@ export default class AddressModule extends VuexModule {
   public async fetchEthTransactions() {
     const {
       page,
+      pageSize,
       transactions: oldTransactions,
       continue: oldContinue,
     } = this.transactions;
@@ -251,6 +252,7 @@ export default class AddressModule extends VuexModule {
       chainSlug: this.chainSlug,
       address: this.address,
       continue: oldContinue,
+      pageSize,
     });
 
     this.setTransactions({
@@ -262,21 +264,30 @@ export default class AddressModule extends VuexModule {
       count,
       continue: newContinue,
       page: page + 1,
-      pageSize: 20,
       hasAllPages: transactions.length === 0,
     });
   }
 
   @Action
   public async fetchDefaultTransactions() {
-    const { page, pageSize, transactions: oldTransactions } = this.transactions;
+    const {
+      page,
+      pageSize,
+      transactions: oldTransactions,
+      continue: oldContinue,
+    } = this.transactions;
     const nextPage = page + 1;
 
-    const { transactions, count } = await transactionsService.getList({
+    const {
+      transactions,
+      count,
+      continue: newContinue,
+    } = await transactionsService.getList({
       chainSlug: this.chainSlug,
       address: this.address,
       page: nextPage,
       pageSize,
+      continue: oldContinue,
     });
 
     this.setTransactions({
@@ -288,6 +299,7 @@ export default class AddressModule extends VuexModule {
         ),
       ),
       count,
+      continue: newContinue,
       page: nextPage,
       hasAllPages: transactions.length === 0,
     });

@@ -1,17 +1,15 @@
 <template>
-  <section class="market-main">
-    <div class="container">
-      <div class="market-main-wr">
-        <start-content />
-        <start-sidebar />
-      </div>
+  <div class="start-page__loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only">Loading...</span>
     </div>
-  </section>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
+import { authModule } from '~/store';
 
 @Component({
   head: {
@@ -26,5 +24,42 @@ import { Component } from 'nuxt-property-decorator';
     ],
   },
 })
-export default class IndexPage extends Vue {}
+export default class IndexPage extends Vue {
+  get initLoading() {
+    return authModule.initLoading;
+  }
+
+  get isAuth() {
+    return authModule.isAuth;
+  }
+
+  get authAddress(): string {
+    return authModule.address;
+  }
+
+  get authChainSlug(): string {
+    return authModule.chainSlug;
+  }
+
+  mounted() {
+    if (!this.initLoading) {
+      this.redirect();
+    }
+  }
+
+  @Watch('initLoading')
+  initLoadingChanged() {
+    this.redirect();
+  }
+
+  redirect() {
+    setTimeout(() => {
+      const url = this.isAuth
+        ? `/${this.authChainSlug}/${this.authAddress}`
+        : `/connect`;
+
+      this.$router.push(url);
+    }, 500);
+  }
+}
 </script>
