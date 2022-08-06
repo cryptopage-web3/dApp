@@ -4,5 +4,7 @@ export interface INftForm {
   title: string;
   description: string;
   file: File | null;
+  externalLink: string;
+  isCommentsEnable: boolean;
   attributes: IAttributes;
 }

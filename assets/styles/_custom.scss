@@ -427,6 +427,43 @@
   display: block;
 }
 
+.form-creat-avatar {
+  width: auto;
+  display: inline-block;
+}
+
+.form-creat-avatar::after {
+  display: none;
+}
+
+.form-creat-avatar__thumb {
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  cursor: default;
+}
+
+.form-creat-avatar__thumb img {
+  display: inline-block;
+  height: auto;
+  max-height: 120px;
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.form-creat-avatar__thumb video {
+  display: inline-block;
+  max-height: 120px;
+  max-width: 100%;
+  border-radius: 5px;
+}
+
+.form-creat-avatar__thumb audio {
+  display: inline-block;
+  max-height: 120px;
+  max-width: 100%;
+}
+
 /* ===== my nft ===== */
 
 .market-product__media {

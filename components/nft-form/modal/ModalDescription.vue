@@ -16,7 +16,7 @@ import { Component } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 
 @Component({})
-export default class NftFormDescription extends Vue {
+export default class ModalDescription extends Vue {
   get description(): string {
     return nftFormModule.values.description;
   }

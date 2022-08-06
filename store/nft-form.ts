@@ -11,6 +11,8 @@ export default class NftFormModule extends VuexModule {
     title: '',
     description: '',
     file: null,
+    externalLink: '',
+    isCommentsEnable: false,
     attributes: {},
   };
 
@@ -27,5 +29,15 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setFile(file: File | null) {
     this.values.file = file;
+  }
+
+  @Mutation
+  public setExternalLink(link: string) {
+    this.values.externalLink = link;
+  }
+
+  @Mutation
+  public setIsCommentsEnable(isEnable: boolean) {
+    this.values.isCommentsEnable = isEnable;
   }
 }
