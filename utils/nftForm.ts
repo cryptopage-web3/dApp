@@ -108,14 +108,14 @@ export const nftFormInit = (): void => {
   }
 
   if ($('.form-creat-avatar__close').is('.form-creat-avatar__close')) {
-    $('.form-creat-avatar__close').on('click', function (event) {
-      event.preventDefault();
-      $('.form-creat-avatar').slideUp(300);
-      $('.modal-creat-text-content').slideUp(300);
-      $('.modal-creat-input-js').val('');
-      $('.btn_modal-creat').addClass('disabled');
-      $('.btn_modal-creat').removeClass('btn-blue_button');
-    });
+    // $('.form-creat-avatar__close').on('click', function (event) {
+    //   event.preventDefault();
+    //   $('.form-creat-avatar').slideUp(300);
+    //   $('.modal-creat-text-content').slideUp(300);
+    //   $('.modal-creat-input-js').val('');
+    //   $('.btn_modal-creat').addClass('disabled');
+    //   $('.btn_modal-creat').removeClass('btn-blue_button');
+    // });
   }
 
   if ($('.modal-creat-add-input-js').is('.modal-creat-add-input-js')) {
