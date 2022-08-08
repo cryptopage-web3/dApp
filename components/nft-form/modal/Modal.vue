@@ -424,7 +424,8 @@ Dolor sit vel adipiscing interdum in mollis venenatis accumsan nunc justo nulla 
               <div class="text-center">
                 <a
                   href="#"
-                  class="btn btn_modal-creat btn_default disabled btn_large w_164"
+                  class="btn btn_modal-creat btn_default btn_large w_164"
+                  :class="{ 'btn-blue_button': isValid, disabled: !isValid }"
                   @click.prevent="createNft"
                 >
                   {{ isOwner ? 'Create' : 'Send' }}
@@ -468,6 +469,10 @@ export default class Modal extends Vue {
         addressModule.address.toLowerCase() &&
       authModule.chainSlug === addressModule.chainSlug
     );
+  }
+
+  get isValid(): boolean {
+    return nftFormModule.isValid;
   }
 
   createNft() {

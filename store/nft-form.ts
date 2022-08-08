@@ -16,6 +16,12 @@ export default class NftFormModule extends VuexModule {
     attributes: {},
   };
 
+  get isValid(): boolean {
+    const { title, file } = this.values;
+
+    return Boolean(title && file);
+  }
+
   @Mutation
   public setTitle(title: string) {
     this.values.title = title;

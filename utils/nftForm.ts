@@ -39,7 +39,7 @@ export const nftFormInit = (): void => {
     }); */
   }
 
-  if ($('.form-creat-input-js').is('.form-creat-input-js')) {
+  /* if ($('.form-creat-input-js').is('.form-creat-input-js')) {
     $('.form-creat-input-js').on('keyup', function () {
       let all_fill = true;
       if (String($(this).val()).trim().length > 0) {
@@ -62,7 +62,7 @@ export const nftFormInit = (): void => {
         $('.form-creat__plus').removeClass('btn-blue');
       }
     });
-  }
+  } */
 
   if ($('.modal-creat-collapse-link').is('.modal-creat-collapse-link')) {
     $('.modal-creat-collapse-link').on('click', function (event) {
@@ -88,7 +88,7 @@ export const nftFormInit = (): void => {
     });
   }
 
-  if ($('.modal-creat-input-js').is('.modal-creat-input-js')) {
+  /* if ($('.modal-creat-input-js').is('.modal-creat-input-js')) {
     $('.modal-creat-input-js').on('keyup', function () {
       if (String($(this).val()).trim().length > 0) {
         $('.form-creat-avatar').slideDown(300);
@@ -105,18 +105,18 @@ export const nftFormInit = (): void => {
         $('.btn_modal-creat').removeClass('btn-blue_button');
       }
     });
-  }
+  } */
 
-  if ($('.form-creat-avatar__close').is('.form-creat-avatar__close')) {
-    // $('.form-creat-avatar__close').on('click', function (event) {
-    //   event.preventDefault();
-    //   $('.form-creat-avatar').slideUp(300);
-    //   $('.modal-creat-text-content').slideUp(300);
-    //   $('.modal-creat-input-js').val('');
-    //   $('.btn_modal-creat').addClass('disabled');
-    //   $('.btn_modal-creat').removeClass('btn-blue_button');
-    // });
-  }
+  /* if ($('.form-creat-avatar__close').is('.form-creat-avatar__close')) {
+    $('.form-creat-avatar__close').on('click', function (event) {
+      event.preventDefault();
+      $('.form-creat-avatar').slideUp(300);
+      $('.modal-creat-text-content').slideUp(300);
+      $('.modal-creat-input-js').val('');
+      $('.btn_modal-creat').addClass('disabled');
+      $('.btn_modal-creat').removeClass('btn-blue_button');
+    });
+  } */
 
   if ($('.modal-creat-add-input-js').is('.modal-creat-add-input-js')) {
     $('.modal-creat-add-input-js').on('keyup', function () {

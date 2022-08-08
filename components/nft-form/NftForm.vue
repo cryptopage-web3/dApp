@@ -63,7 +63,8 @@
         </a>
         <a
           href="#"
-          class="btn btn_large btn_default form-creat__plus disabled w_xl_100 w_sm_80 w_80"
+          class="btn btn_large btn_default form-creat__plus w_xl_100 w_sm_80 w_80"
+          :class="{ 'btn-blue': isValid, disabled: !isValid }"
           @click.prevent="createNft"
         >
           {{ isOwner ? 'Create' : 'Send' }}
@@ -152,6 +153,10 @@ export default class NftForm extends Vue {
 
   get isDisabled(): boolean {
     return !this.isAuth || !this.isSameChain;
+  }
+
+  get isValid(): boolean {
+    return nftFormModule.isValid;
   }
 
   showDisableNotify() {
