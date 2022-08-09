@@ -33,43 +33,8 @@
               <ModalExternalLink />
               <ModalCollection />
               <ModalComments />
+              <ModalUnlockable />
 
-              <div class="modal-creat-checkbox mb_20">
-                <div class="modal-creat-checkbox__left">
-                  <div class="modal-creat-checkbox__icon">
-                    <img
-                      src="@/assets/img/modal-creat-checkbox_icon2.svg"
-                      alt=""
-                    />
-                  </div>
-                  <div class="modal-creat-checkbox__cont">
-                    <div class="modal-creat-checkbox__title">
-                      Unlockable content
-                    </div>
-                    <div class="modal-creat-checkbox__text">
-                      Include unlockable content that can only be revealed by
-                      the owner of the item
-                    </div>
-                  </div>
-                </div>
-                <div class="modal-creat-checkbox__right">
-                  <label class="global-checkbox">
-                    <input type="checkbox" />
-                    <div class="global-checkbox__wrap">
-                      <div class="global-checkbox__circle"></div>
-                    </div>
-                  </label>
-                </div>
-              </div>
-              <div class="form-field modal-creat-text-content mb_20">
-                <div class="form-field__title">Text content</div>
-                <textarea
-                  class="global-input global-input_textarea"
-                  placeholder="Enter text"
-                >
-Dolor sit vel adipiscing interdum in mollis venenatis accumsan nunc justo nulla lacinia mattis eleifend nec imperdiet in nunc nisi vitae ut. </textarea
-                >
-              </div>
               <div class="modal-creat-checkbox mb_20">
                 <div class="modal-creat-checkbox__left">
                   <div class="modal-creat-checkbox__icon">
@@ -448,6 +413,7 @@ import ModalFile from './ModalFile.vue';
 import ModalExternalLink from './ModalExternalLink.vue';
 import ModalCollection from './ModalCollection.vue';
 import ModalComments from './ModalComments.vue';
+import ModalUnlockable from './ModalUnlockable.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue';
 
@@ -460,6 +426,7 @@ import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue'
     ModalExternalLink,
     ModalCollection,
     ModalComments,
+    ModalUnlockable,
   },
 })
 export default class Modal extends Vue {

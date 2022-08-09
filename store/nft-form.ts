@@ -14,6 +14,8 @@ export default class NftFormModule extends VuexModule {
     externalLink: '',
     isCommentsEnable: false,
     attributes: {},
+    isUnlockableContent: false,
+    unlockableText: '',
   };
 
   get isValid(): boolean {
@@ -45,5 +47,15 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setIsCommentsEnable(isEnable: boolean) {
     this.values.isCommentsEnable = isEnable;
+  }
+
+  @Mutation
+  public setIsUnlockableContent(isUnlockable: boolean) {
+    this.values.isUnlockableContent = isUnlockable;
+  }
+
+  @Mutation
+  public setUnlockableText(text: string) {
+    this.values.unlockableText = text;
   }
 }

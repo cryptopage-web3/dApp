@@ -6,5 +6,7 @@ export interface INftForm {
   file: File | null;
   externalLink: string;
   isCommentsEnable: boolean;
+  isUnlockableContent: boolean;
+  unlockableText: string;
   attributes: IAttributes;
 }
