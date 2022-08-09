@@ -41,7 +41,7 @@
           aria-selected="false"
           @click.prevent="selectTab('reactions', '#profile-tabs3-tab')"
         >
-          Reactions (7)
+          Reactions (0)
         </a>
       </li>
     </ul>

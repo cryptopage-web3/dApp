@@ -67,7 +67,14 @@ export default class AddressTransactions extends Vue {
 
   // lifecycle hooks
 
-  mounted() {
+  async mounted() {
+    /**
+     * делаем запрос напрямую, т.к. это первый запрос при монтировании,
+     * isActive на этот момент еще false
+     * чтобы показать количество на вкладке
+     */
+    await addressModule.fetchTransactions();
+
     this.$nextTick(() => {
       this.scrollListener = this.scrollHandler.bind(this);
       $(window).on('scroll', this.scrollListener);
