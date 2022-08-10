@@ -16,6 +16,7 @@ export default class NftFormModule extends VuexModule {
     attributes: {},
     isUnlockableContent: false,
     unlockableText: '',
+    isExplicit: false,
   };
 
   get isValid(): boolean {
@@ -57,5 +58,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setUnlockableText(text: string) {
     this.values.unlockableText = text;
+  }
+
+  @Mutation
+  public setIsExplicit(isExplicit: boolean) {
+    this.values.isExplicit = isExplicit;
   }
 }

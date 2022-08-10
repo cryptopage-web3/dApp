@@ -8,5 +8,6 @@ export interface INftForm {
   isCommentsEnable: boolean;
   isUnlockableContent: boolean;
   unlockableText: string;
+  isExplicit: boolean;
   attributes: IAttributes;
 }
