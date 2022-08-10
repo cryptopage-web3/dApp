@@ -7,9 +7,9 @@ import {
 } from '.';
 
 export interface IAttributes {
-  properties?: IAttributeProperty[];
-  levels?: IAttributeLevel[];
-  stats?: IAttributeStat[];
-  dates?: IAttributeDate[];
-  boosts?: IAttributeBoost[];
+  properties: IAttributeProperty[];
+  levels: IAttributeLevel[];
+  stats: IAttributeStat[];
+  dates: IAttributeDate[];
+  boosts: IAttributeBoost[];
 }

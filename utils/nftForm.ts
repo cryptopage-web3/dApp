@@ -1,6 +1,6 @@
 export const nftFormInit = (): void => {
-  if ($('.form-creat-focus-js').is('.form-creat-focus-js')) {
-    /* $('.form-creat-focus-js').blur(function () {
+  // if ($('.form-creat-focus-js').is('.form-creat-focus-js')) {
+  /* $('.form-creat-focus-js').blur(function () {
       if (String($(this).val()).trim() === '') {
         $(this).closest('.form-creat').removeClass('input--filled');
         $(this)
@@ -9,20 +9,20 @@ export const nftFormInit = (): void => {
           .slideUp(300);
       }
     }); */
-    /* $('.form-creat-focus-js').focus(function () {
+  /* $('.form-creat-focus-js').focus(function () {
       $(this).closest('.form-creat').addClass('input--filled');
       $(this)
         .closest('.form-creat')
         .find('.form-creat-textarea-wrap')
         .slideDown(300);
     }); */
-    /* $('.form-creat-cancel-js').on('click', function (event) {
+  /* $('.form-creat-cancel-js').on('click', function (event) {
       event.preventDefault();
 
       $('.form-creat').removeClass('input--filled');
       $('.form-creat').find('.form-creat-textarea-wrap').slideUp(300);
     }); */
-    /* $('.form-creat-focus-js').each(function () {
+  /* $('.form-creat-focus-js').each(function () {
       if (String($(this).val()).trim() !== '') {
         $(this).closest('.form-creat').addClass('input--filled');
         $(this)
@@ -37,7 +37,7 @@ export const nftFormInit = (): void => {
           .slideUp(300);
       }
     }); */
-  }
+  // }
 
   /* if ($('.form-creat-input-js').is('.form-creat-input-js')) {
     $('.form-creat-input-js').on('keyup', function () {
@@ -63,7 +63,7 @@ export const nftFormInit = (): void => {
       }
     });
   } */
-
+  /* 
   if ($('.modal-creat-collapse-link').is('.modal-creat-collapse-link')) {
     $('.modal-creat-collapse-link').on('click', function (event) {
       event.preventDefault();
@@ -87,7 +87,7 @@ export const nftFormInit = (): void => {
       }
     });
   }
-
+ */
   /* if ($('.modal-creat-input-js').is('.modal-creat-input-js')) {
     $('.modal-creat-input-js').on('keyup', function () {
       if (String($(this).val()).trim().length > 0) {
@@ -117,7 +117,7 @@ export const nftFormInit = (): void => {
       $('.btn_modal-creat').removeClass('btn-blue_button');
     });
   } */
-
+  /* 
   if ($('.modal-creat-add-input-js').is('.modal-creat-add-input-js')) {
     $('.modal-creat-add-input-js').on('keyup', function () {
       let all_fill = true;
@@ -172,8 +172,8 @@ export const nftFormInit = (): void => {
       }
     });
   }
-
-  if ($('.modal-creat-add__close').is('.modal-creat-add__close')) {
+ */
+  /* if ($('.modal-creat-add__close').is('.modal-creat-add__close')) {
     $(document).on('click', '.modal-creat-add__close.active', function (event) {
       event.preventDefault();
       $(this).closest('.modal-creat-add').find('.global-input').val('');
@@ -191,9 +191,9 @@ export const nftFormInit = (): void => {
         .removeClass('btn-blue_button');
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
-  }
+  } */
 
-  if ($('.modal-creat-add__btn1').is('.modal-creat-add__btn1')) {
+  /* if ($('.modal-creat-add__btn1').is('.modal-creat-add__btn1')) {
     $('.modal-creat-add__btn1').on('click', function () {
       const state = $(this)
         .closest('.modal-creat-add-wrap')
@@ -230,7 +230,7 @@ export const nftFormInit = (): void => {
         .removeClass('btn-blue_button');
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
-  }
+  } */
 
   if ($('.modal-creat-add__btn2').is('.modal-creat-add__btn2')) {
     $('.modal-creat-add__btn2').on('click', function () {
