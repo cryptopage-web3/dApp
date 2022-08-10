@@ -244,24 +244,23 @@ export default class AddressModule extends VuexModule {
       continue: oldContinue,
     } = this.transactions;
 
-    const {
-      transactions,
-      count,
-      continue: newContinue,
-    } = await transactionsService.getEthList({
-      chainSlug: this.chainSlug,
-      address: this.address,
-      continue: oldContinue,
-      pageSize,
-    });
+    const { transactions, continue: newContinue } =
+      await transactionsService.getEthList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+        continue: oldContinue,
+        pageSize,
+      });
+
+    const newTransactions = uniqueHashConcat(
+      oldTransactions,
+      transactions.map((t) => normalizeEth(t, this.chainId)),
+    );
 
     this.setTransactions({
       ...this.transactions,
-      transactions: uniqueHashConcat(
-        oldTransactions,
-        transactions.map((t) => normalizeEth(t, this.chainId)),
-      ),
-      count,
+      transactions: newTransactions,
+      count: newTransactions.length,
       continue: newContinue,
       page: page + 1,
       hasAllPages: transactions.length === 0,
