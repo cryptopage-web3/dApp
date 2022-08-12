@@ -232,7 +232,7 @@ export const nftFormInit = (): void => {
     });
   } */
 
-  if ($('.modal-creat-add__btn2').is('.modal-creat-add__btn2')) {
+  /* if ($('.modal-creat-add__btn2').is('.modal-creat-add__btn2')) {
     $('.modal-creat-add__btn2').on('click', function () {
       const name = $(this)
         .closest('.modal-creat-add-wrap')
@@ -275,7 +275,7 @@ export const nftFormInit = (): void => {
         .removeClass('btn-blue_button');
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
-  }
+  } */
 
   if ($('.modal-creat-add__btn3').is('.modal-creat-add__btn3')) {
     $('.modal-creat-add__btn3').on('click', function () {

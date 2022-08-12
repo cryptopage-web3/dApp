@@ -7,12 +7,12 @@
     >
       <div class="modal-creat-checkbox__left">
         <div class="modal-creat-checkbox__icon">
-          <img src="@/assets/img/modal-creat-checkbox_icon4.svg" alt="" />
+          <img src="@/assets/img/modal-creat-checkbox_icon5.svg" alt="" />
         </div>
         <div class="modal-creat-checkbox__cont">
-          <div class="modal-creat-checkbox__title">Properties</div>
+          <div class="modal-creat-checkbox__title">Stats</div>
           <div class="modal-creat-checkbox__text">
-            Textual traits that show up as rectangles
+            Numerical traits that just show as numbers
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
       </div>
     </a>
     <div class="modal-creat-collapse-body">
-      <div class="modal-creat__title2 mb_10">Add properties</div>
+      <div class="modal-creat__title2 mb_10">Add Stats</div>
       <div class="modal-creat-add">
         <a
           href="#"
@@ -34,24 +34,32 @@
         >
           <ModalResetIcon />
         </a>
-        <div class="modal-creat-add-wrap modal-creat-add-wrap1">
+        <div class="modal-creat-add-wrap modal-creat-add-wrap2">
           <input
             v-model="type"
-            type="text"
-            placeholder="Type"
-            name="type"
-            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
-          />
-          <input
-            v-model="value"
             type="text"
             placeholder="Name"
             name="name"
             class="global-input modal-creat-add-input-js mr_5 mr_md_10"
           />
+          <input
+            v-model="value"
+            type="text"
+            placeholder="3"
+            name="from"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+          />
+          <span class="d-inline-block mr_5 mr_md_10">of</span>
+          <input
+            v-model="maxValue"
+            type="text"
+            placeholder="5"
+            name="to"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+          />
           <a
             href="#"
-            class="modal-creat-add__btn1 btn btn_default"
+            class="modal-creat-add__btn2 btn btn_default"
             :class="{ disabled: !isFilled, 'btn-blue_button': isFilled }"
             @click.prevent="add"
           >
@@ -59,13 +67,12 @@
           </a>
         </div>
         <div class="modal-creat-add-cont">
-          <div
-            v-for="property in properties"
-            :key="property.id"
-            class="modal-creat-item1"
-          >
-            <span>{{ property.type }}: {{ property.value }}</span>
-            <a href="#" @click.prevent="remove(property.id)">
+          <div v-for="stat in stats" :key="stat.id" class="modal-creat-item1">
+            <span>
+              {{ stat.type }}: {{ stat.value }} of
+              {{ stat.maxValue }}
+            </span>
+            <a href="#" @click.prevent="remove(stat.id)">
               <img src="@/assets/img/modal-creat-item1_img.svg" alt="" />
             </a>
           </div>
@@ -81,7 +88,7 @@ import { Component } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 import { collapseInit } from '~/utils/nftFormCollapse';
 import ModalResetIcon from '~/components/icon/nft-form/modal/ModalResetIcon.vue';
-import { IAttributeProperty } from '~/types/nft-form';
+import { IAttributeStat } from '~/types/nft-form';
 
 @Component({
   components: {
@@ -91,13 +98,14 @@ import { IAttributeProperty } from '~/types/nft-form';
 export default class ModalProperties extends Vue {
   type = '';
   value = '';
+  maxValue = '';
 
   get isFilled(): boolean {
-    return Boolean(this.type && this.value);
+    return Boolean(this.type && this.value && this.maxValue);
   }
 
-  get properties(): IAttributeProperty[] {
-    return nftFormModule.values.attributes.properties;
+  get stats(): IAttributeStat[] {
+    return nftFormModule.values.attributes.stats;
   }
 
   $refs!: {
@@ -109,12 +117,13 @@ export default class ModalProperties extends Vue {
   }
 
   add() {
-    nftFormModule.setProperties([
-      ...this.properties,
+    nftFormModule.setStats([
+      ...this.stats,
       {
         id: Date.now(),
         type: this.type,
         value: this.value,
+        maxValue: this.maxValue,
       },
     ]);
 
@@ -122,14 +131,15 @@ export default class ModalProperties extends Vue {
   }
 
   remove(id: number) {
-    nftFormModule.setProperties([
-      ...this.properties.filter((property) => property.id !== id),
+    nftFormModule.setStats([
+      ...this.stats.filter((property) => property.id !== id),
     ]);
   }
 
   reset() {
     this.type = '';
     this.value = '';
+    this.maxValue = '';
   }
 }
 </script>

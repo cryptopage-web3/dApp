@@ -1,5 +1,5 @@
 import { Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import { IAttributeProperty, INftForm } from '~/types/nft-form';
+import { IAttributeProperty, IAttributeStat, INftForm } from '~/types/nft-form';
 
 @Module({
   name: 'nft-form',
@@ -74,5 +74,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setProperties(properties: IAttributeProperty[]) {
     this.values.attributes.properties = properties;
+  }
+
+  @Mutation
+  public setStats(stats: IAttributeStat[]) {
+    this.values.attributes.stats = stats;
   }
 }
