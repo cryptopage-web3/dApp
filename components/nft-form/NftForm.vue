@@ -96,7 +96,6 @@ import NftFormDescription from './NftFormDescription.vue';
 import NftFormUpload from './NftFormUpload.vue';
 import NftFormModal from './modal/Modal.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
-import { nftFormInit } from '~/utils/nftForm';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
 import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
 import NftFormVideoIcon from '~/components/icon/nft-form/NftFormVideoIcon.vue';
@@ -118,10 +117,6 @@ export default class NftForm extends Vue {
   isDragging = false;
   isOpen = false;
   dragCounter = 0;
-
-  mounted() {
-    nftFormInit();
-  }
 
   $refs!: {
     refUpload: NftFormUpload;

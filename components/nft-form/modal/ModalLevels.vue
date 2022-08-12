@@ -7,12 +7,12 @@
     >
       <div class="modal-creat-checkbox__left">
         <div class="modal-creat-checkbox__icon">
-          <img src="@/assets/img/modal-creat-checkbox_icon5.svg" alt="" />
+          <img src="@/assets/img/modal-creat-checkbox_icon6.svg" alt="" />
         </div>
         <div class="modal-creat-checkbox__cont">
-          <div class="modal-creat-checkbox__title">Stats</div>
+          <div class="modal-creat-checkbox__title">Levels</div>
           <div class="modal-creat-checkbox__text">
-            Numerical traits that just show as numbers
+            Numerical traits that show as a progress bar
           </div>
         </div>
       </div>
@@ -24,7 +24,7 @@
       </div>
     </a>
     <div class="modal-creat-collapse-body">
-      <div class="modal-creat__title2 mb_10">Add Stats</div>
+      <div class="modal-creat__title2 mb_10">Add Levels</div>
       <div class="modal-creat-add">
         <a
           href="#"
@@ -59,7 +59,7 @@
           />
           <a
             href="#"
-            class="modal-creat-add__btn2 btn btn_default"
+            class="modal-creat-add__btn3 btn btn_default"
             :class="{ disabled: !isFilled, 'btn-blue_button': isFilled }"
             @click.prevent="add"
           >
@@ -67,12 +67,30 @@
           </a>
         </div>
         <div class="modal-creat-add-cont">
-          <div v-for="stat in stats" :key="stat.id" class="modal-creat-item1">
-            <span>
-              {{ stat.type }}: {{ stat.value }} of
-              {{ stat.maxValue }}
-            </span>
-            <a href="#" @click.prevent="remove(stat.id)">
+          <div
+            v-for="level in levels"
+            :key="level.id"
+            class="modal-creat-item2"
+          >
+            <div class="modal-creat-item2__left">
+              <div class="modal-creat-item2__top">
+                <span> {{ level.type }} </span>
+                <span>
+                  {{ level.value }} of
+                  {{ level.maxValue }}
+                </span>
+              </div>
+              <div class="modal-creat-item2__progress">
+                <div
+                  :style="{
+                    width: `${
+                      (Number(level.value) / Number(level.maxValue)) * 100
+                    }%`,
+                  }"
+                />
+              </div>
+            </div>
+            <a href="#" @click.prevent="remove(level.id)">
               <img src="@/assets/img/modal-creat-item1_img.svg" alt="" />
             </a>
           </div>
@@ -88,14 +106,14 @@ import { Component } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 import { collapseInit } from '~/utils/nftFormCollapse';
 import ModalResetIcon from '~/components/icon/nft-form/modal/ModalResetIcon.vue';
-import { IAttributeStat } from '~/types/nft-form';
+import { IAttributeLevel } from '~/types/nft-form';
 
 @Component({
   components: {
     ModalResetIcon,
   },
 })
-export default class ModalStats extends Vue {
+export default class ModalLevels extends Vue {
   type = '';
   value = '';
   maxValue = '';
@@ -104,8 +122,8 @@ export default class ModalStats extends Vue {
     return Boolean(this.type && this.value && this.maxValue);
   }
 
-  get stats(): IAttributeStat[] {
-    return nftFormModule.values.attributes.stats;
+  get levels(): IAttributeLevel[] {
+    return nftFormModule.values.attributes.levels;
   }
 
   $refs!: {
@@ -117,8 +135,8 @@ export default class ModalStats extends Vue {
   }
 
   add() {
-    nftFormModule.setStats([
-      ...this.stats,
+    nftFormModule.setLevels([
+      ...this.levels,
       {
         id: Date.now(),
         type: this.type,
@@ -131,7 +149,9 @@ export default class ModalStats extends Vue {
   }
 
   remove(id: number) {
-    nftFormModule.setStats([...this.stats.filter((stat) => stat.id !== id)]);
+    nftFormModule.setLevels([
+      ...this.levels.filter((level) => level.id !== id),
+    ]);
   }
 
   reset() {

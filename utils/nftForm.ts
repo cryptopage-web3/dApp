@@ -38,7 +38,6 @@ export const nftFormInit = (): void => {
       }
     }); */
   // }
-
   /* if ($('.form-creat-input-js').is('.form-creat-input-js')) {
     $('.form-creat-input-js').on('keyup', function () {
       let all_fill = true;
@@ -106,7 +105,6 @@ export const nftFormInit = (): void => {
       }
     });
   } */
-
   /* if ($('.form-creat-avatar__close').is('.form-creat-avatar__close')) {
     $('.form-creat-avatar__close').on('click', function (event) {
       event.preventDefault();
@@ -192,7 +190,6 @@ export const nftFormInit = (): void => {
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
   } */
-
   /* if ($('.modal-creat-add__btn1').is('.modal-creat-add__btn1')) {
     $('.modal-creat-add__btn1').on('click', function () {
       const state = $(this)
@@ -231,7 +228,6 @@ export const nftFormInit = (): void => {
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
   } */
-
   /* if ($('.modal-creat-add__btn2').is('.modal-creat-add__btn2')) {
     $('.modal-creat-add__btn2').on('click', function () {
       const name = $(this)
@@ -276,8 +272,7 @@ export const nftFormInit = (): void => {
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
   } */
-
-  if ($('.modal-creat-add__btn3').is('.modal-creat-add__btn3')) {
+  /* if ($('.modal-creat-add__btn3').is('.modal-creat-add__btn3')) {
     $('.modal-creat-add__btn3').on('click', function () {
       const name = $(this)
         .closest('.modal-creat-add-wrap')
@@ -324,21 +319,19 @@ export const nftFormInit = (): void => {
         .removeClass('btn-blue_button');
       $(this).closest('.modal-creat-add').find('.btn').addClass('disabled');
     });
-  }
-
-  $(document).on('click', '.modal-creat-item1 a', function (event) {
+  } */
+  /* $(document).on('click', '.modal-creat-item1 a', function (event) {
     event.preventDefault();
     $(this).closest('.modal-creat-item1').remove();
   });
   $(document).on('click', '.modal-creat-item2 a', function (event) {
     event.preventDefault();
     $(this).closest('.modal-creat-item2').remove();
-  });
-
-  if ($('.form-creat-files-item').is('.form-creat-files-item')) {
+  }); */
+  /* if ($('.form-creat-files-item').is('.form-creat-files-item')) {
     $('.form-creat-files-item__close').on('click', function (event) {
       event.preventDefault();
       $(this).closest('.form-creat-files-item').remove();
     });
-  }
+  } */
 };
