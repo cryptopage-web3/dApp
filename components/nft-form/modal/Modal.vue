@@ -39,82 +39,8 @@
               <ModalStats />
               <ModalLevels />
               <ModalSupply />
+              <ModalBlockchain />
 
-              <div class="modal-creat-text mb_20">
-                <div class="modal-creat__title2">Blockchain</div>
-                <div
-                  class="profile-content-drop modal-creat-drop2 market-filtr__drop mt_5"
-                >
-                  <a href="#" class="profile-content-drop__link">
-                    <div class="thumb">
-                      <img
-                        src="@/assets/img/market-header__wallet_icon2.svg"
-                        alt=""
-                      />
-                    </div>
-                    <span> Ethereum </span>
-                  </a>
-                  <div class="drop-down__col">
-                    <ul class="drop-down__list">
-                      <li>
-                        <a href="#">
-                          <div class="thumb">
-                            <img
-                              src="@/assets/img/market-header__wallet_icon2.svg"
-                              alt=""
-                            />
-                          </div>
-                          <span> Ethereum </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="thumb">
-                            <img
-                              src="@/assets/img/market-header__wallet_icon3.svg"
-                              alt=""
-                            />
-                          </div>
-                          <span> Binance Smart Chain </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="thumb">
-                            <img
-                              src="@/assets/img/market-header__wallet_icon4.svg"
-                              alt=""
-                            />
-                          </div>
-                          <span> Polygon </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="thumb">
-                            <img
-                              src="@/assets/img/market-header__wallet_icon5.svg"
-                              alt=""
-                            />
-                          </div>
-                          <span> Tron </span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <div class="thumb">
-                            <img
-                              src="@/assets/img/market-header__wallet_icon6.svg"
-                              alt=""
-                            />
-                          </div>
-                          <span> Solana </span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
               <div class="text-center">
                 <a
                   href="#"
@@ -148,6 +74,7 @@ import ModalProperties from './ModalProperties.vue';
 import ModalStats from './ModalStats.vue';
 import ModalLevels from './ModalLevels.vue';
 import ModalSupply from './ModalSupply.vue';
+import ModalBlockchain from './ModalBlockchain.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue';
 
@@ -166,6 +93,7 @@ import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue'
     ModalStats,
     ModalLevels,
     ModalSupply,
+    ModalBlockchain,
   },
 })
 export default class Modal extends Vue {

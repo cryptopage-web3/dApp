@@ -1,4 +1,5 @@
 import { Module, Mutation, VuexModule } from 'vuex-module-decorators';
+
 import {
   IAttributeLevel,
   IAttributeProperty,
@@ -29,6 +30,7 @@ export default class NftFormModule extends VuexModule {
     unlockableText: '',
     isExplicit: false,
     supply: '1',
+    chain: '',
   };
 
   get isValid(): boolean {
@@ -95,5 +97,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setSupply(supply: string) {
     this.values.supply = supply;
+  }
+
+  @Mutation
+  public setChain(chain: string) {
+    this.values.chain = chain;
   }
 }

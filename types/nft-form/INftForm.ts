@@ -11,4 +11,5 @@ export interface INftForm {
   isExplicit: boolean;
   attributes: IAttributes;
   supply: string;
+  chain: string;
 }
