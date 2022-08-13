@@ -10,4 +10,5 @@ export interface INftForm {
   unlockableText: string;
   isExplicit: boolean;
   attributes: IAttributes;
+  supply: string;
 }

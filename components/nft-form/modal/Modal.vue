@@ -38,18 +38,8 @@
               <ModalProperties />
               <ModalStats />
               <ModalLevels />
+              <ModalSupply />
 
-              <div class="modal-creat-text mb_20">
-                <div class="modal-creat__title2">Supply</div>
-                <div class="global-text">
-                  The number of items that can be minted. No gas cost to you!
-                </div>
-                <input
-                  type="text"
-                  placeholder="1"
-                  class="global-input global-input_large mt_10"
-                />
-              </div>
               <div class="modal-creat-text mb_20">
                 <div class="modal-creat__title2">Blockchain</div>
                 <div
@@ -157,6 +147,7 @@ import ModalExplicit from './ModalExplicit.vue';
 import ModalProperties from './ModalProperties.vue';
 import ModalStats from './ModalStats.vue';
 import ModalLevels from './ModalLevels.vue';
+import ModalSupply from './ModalSupply.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue';
 
@@ -174,6 +165,7 @@ import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue'
     ModalProperties,
     ModalStats,
     ModalLevels,
+    ModalSupply,
   },
 })
 export default class Modal extends Vue {

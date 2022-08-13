@@ -28,6 +28,7 @@ export default class NftFormModule extends VuexModule {
     isUnlockableContent: false,
     unlockableText: '',
     isExplicit: false,
+    supply: '1',
   };
 
   get isValid(): boolean {
@@ -89,5 +90,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setLevels(levels: IAttributeLevel[]) {
     this.values.attributes.levels = levels;
+  }
+
+  @Mutation
+  public setSupply(supply: string) {
+    this.values.supply = supply;
   }
 }
