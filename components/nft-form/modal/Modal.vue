@@ -42,14 +42,16 @@
               <ModalBlockchain />
 
               <div class="text-center">
-                <a
-                  href="#"
-                  class="btn btn_modal-creat btn_default btn_large w_164"
-                  :class="{ 'btn-blue_button': isValid, disabled: !isValid }"
-                  @click.prevent="createNft"
-                >
-                  {{ isOwner ? 'Create' : 'Send' }}
-                </a>
+                <div ref="sendBtn" class="d-inline-block">
+                  <a
+                    href="#"
+                    class="btn btn_modal-creat btn_default btn_large w_164"
+                    :class="{ 'btn-blue_button': isValid, disabled: !isValid }"
+                    @click.prevent="createNft"
+                  >
+                    {{ isOwner ? 'Create' : 'Send' }}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -61,7 +63,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import ModalTitle from './ModalTitle.vue';
 import ModalDescription from './ModalDescription.vue';
 import ModalFile from './ModalFile.vue';
@@ -97,6 +99,10 @@ import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue'
   },
 })
 export default class Modal extends Vue {
+  $refs!: {
+    sendBtn: HTMLDivElement;
+  };
+
   get isOwner(): boolean {
     return (
       authModule.address.toLowerCase() ===
@@ -107,6 +113,20 @@ export default class Modal extends Vue {
 
   get isValid(): boolean {
     return nftFormModule.isValid;
+  }
+
+  @Watch('isValid', { immediate: true })
+  onIsValidChanged(isValid: boolean) {
+    if (process.client) {
+      ($(this.$refs.sendBtn) as any).tooltip(isValid ? 'disable' : 'enable');
+    }
+  }
+
+  mounted() {
+    ($(this.$refs.sendBtn) as any).tooltip({
+      trigger: 'hover',
+      title: 'Name and file are required',
+    });
   }
 
   createNft() {

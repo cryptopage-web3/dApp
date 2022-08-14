@@ -2,7 +2,7 @@
   <div class="modal-creat-text mb_20">
     <div class="modal-creat__title2">Supply</div>
     <div class="global-text">
-      The number of items that can be minted. No gas cost to you!
+      The number of items that can be minted (minimum: 1). No gas cost to you!
     </div>
     <input
       type="text"

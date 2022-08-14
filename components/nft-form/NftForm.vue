@@ -61,14 +61,16 @@
         >
           Cancel
         </a>
-        <a
-          href="#"
-          class="btn btn_large btn_default form-creat__plus w_xl_100 w_sm_80 w_80"
-          :class="{ 'btn-blue': isValid, disabled: !isValid }"
-          @click.prevent="createNft"
-        >
-          {{ isOwner ? 'Create' : 'Send' }}
-        </a>
+        <div ref="sendBtn" class="d-inline-block">
+          <a
+            href="#"
+            class="btn btn_large btn_default form-creat__plus w_xl_100 w_sm_80 w_80"
+            :class="{ 'btn-blue': isValid, disabled: !isValid }"
+            @click.prevent="createNft"
+          >
+            {{ isOwner ? 'Create' : 'Send' }}
+          </a>
+        </div>
       </div>
     </div>
 
@@ -90,7 +92,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import NftFormTitle from './NftFormTitle.vue';
 import NftFormDescription from './NftFormDescription.vue';
 import NftFormUpload from './NftFormUpload.vue';
@@ -120,6 +122,7 @@ export default class NftForm extends Vue {
 
   $refs!: {
     refUpload: NftFormUpload;
+    sendBtn: HTMLDivElement;
   };
 
   get isAuth(): boolean {
@@ -152,6 +155,20 @@ export default class NftForm extends Vue {
 
   get isValid(): boolean {
     return nftFormModule.isValid;
+  }
+
+  @Watch('isValid', { immediate: true })
+  onIsValidChanged(isValid: boolean) {
+    if (process.client) {
+      ($(this.$refs.sendBtn) as any).tooltip(isValid ? 'disable' : 'enable');
+    }
+  }
+
+  mounted() {
+    ($(this.$refs.sendBtn) as any).tooltip({
+      trigger: 'hover',
+      title: 'Name and file are required',
+    });
   }
 
   showDisableNotify() {
