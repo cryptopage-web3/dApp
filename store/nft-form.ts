@@ -23,8 +23,6 @@ export default class NftFormModule extends VuexModule {
       properties: [],
       levels: [],
       stats: [],
-      dates: [],
-      boosts: [],
     },
     isUnlockableContent: false,
     unlockableText: '',
