@@ -31,7 +31,8 @@
               <div class="modal-creat__title mb_20">Addictional fields</div>
 
               <ModalExternalLink />
-              <ModalCollection />
+              <!-- скрываем, т.к. нужна возможность выбрать/создать свои коллекции -->
+              <!-- <ModalCollection /> -->
               <ModalComments />
               <ModalUnlockable />
               <ModalExplicit />

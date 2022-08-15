@@ -44,11 +44,13 @@
           <NftFormVideoIcon />
         </a>
         <a
+          ref="settingBtn"
           href="#"
           role="button"
           data-toggle="modal"
           data-target="#modal-creat-nft"
           class="form-creat-nav-item form-creat-nav-item-js fill"
+          :class="{ 'form-creat-nav-item_filled': hasSettings }"
         >
           <NftFormSettingIcon />
         </a>
@@ -123,6 +125,7 @@ export default class NftForm extends Vue {
   $refs!: {
     refUpload: NftFormUpload;
     sendBtn: HTMLDivElement;
+    settingBtn: HTMLAnchorElement;
   };
 
   get isAuth(): boolean {
@@ -157,10 +160,23 @@ export default class NftForm extends Vue {
     return nftFormModule.isValid;
   }
 
+  get hasSettings(): boolean {
+    return nftFormModule.hasSettings;
+  }
+
   @Watch('isValid', { immediate: true })
   onIsValidChanged(isValid: boolean) {
     if (process.client) {
       ($(this.$refs.sendBtn) as any).tooltip(isValid ? 'disable' : 'enable');
+    }
+  }
+
+  @Watch('hasSettings', { immediate: true })
+  onHasSettingsChanged(hasSettings: boolean) {
+    if (process.client) {
+      ($(this.$refs.settingBtn) as any).tooltip(
+        !hasSettings ? 'disable' : 'enable',
+      );
     }
   }
 
@@ -169,6 +185,14 @@ export default class NftForm extends Vue {
       trigger: 'hover',
       title: 'Name and file are required',
     });
+
+    ($(this.$refs.settingBtn) as any).tooltip({
+      trigger: 'hover',
+      title: 'Has settings',
+    });
+    ($(this.$refs.settingBtn) as any).tooltip(
+      !this.hasSettings ? 'disable' : 'enable',
+    );
   }
 
   showDisableNotify() {

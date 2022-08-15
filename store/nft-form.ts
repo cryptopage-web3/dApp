@@ -1,4 +1,4 @@
-import { Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 
 import {
   IAttributeLevel,
@@ -31,10 +31,34 @@ export default class NftFormModule extends VuexModule {
     chain: '',
   };
 
+  loading = false;
+
+  error = '';
+
   get isValid(): boolean {
     const { title, file } = this.values;
 
     return Boolean(title && file);
+  }
+
+  get hasSettings(): boolean {
+    const {
+      externalLink,
+      isCommentsEnable,
+      attributes,
+      isUnlockableContent,
+      isExplicit,
+    } = this.values;
+
+    return Boolean(
+      externalLink ||
+        isCommentsEnable ||
+        isUnlockableContent ||
+        isExplicit ||
+        attributes.properties.length ||
+        attributes.levels.length ||
+        attributes.stats.length,
+    );
   }
 
   @Mutation
@@ -100,5 +124,25 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setChain(chain: string) {
     this.values.chain = chain;
+  }
+
+  @Mutation
+  public setError(error: string) {
+    this.error = error;
+  }
+
+  @Action
+  public submit() {
+    if (!this.validate()) {
+      return;
+    }
+
+    this.loading = true;
+  }
+
+  @Action
+  public validate() {
+    this.setError('Test message');
+    return false;
   }
 }
