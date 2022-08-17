@@ -1,11 +1,12 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-
+import { alertModule, authModule } from '.';
 import {
   IAttributeLevel,
   IAttributeProperty,
   IAttributeStat,
   INftForm,
 } from '~/types/nft-form';
+import { validateNftForm } from '~/utils/validateNftForm';
 
 @Module({
   name: 'nft-form',
@@ -33,8 +34,6 @@ export default class NftFormModule extends VuexModule {
 
   loading = false;
 
-  error = '';
-
   get isValid(): boolean {
     const { title, file } = this.values;
 
@@ -59,6 +58,10 @@ export default class NftFormModule extends VuexModule {
         attributes.levels.length ||
         attributes.stats.length,
     );
+  }
+
+  get loadingForm(): boolean {
+    return this.loading;
   }
 
   @Mutation
@@ -127,8 +130,8 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Mutation
-  public setError(error: string) {
-    this.error = error;
+  public setLoading(loading: boolean) {
+    this.loading = loading;
   }
 
   @Action
@@ -137,12 +140,18 @@ export default class NftFormModule extends VuexModule {
       return;
     }
 
-    this.loading = true;
+    this.setLoading(true);
   }
 
   @Action
-  public validate() {
-    this.setError('Test message');
-    return false;
+  public validate(): boolean {
+    const status = validateNftForm(this.values, authModule.chainSlug);
+
+    if (!status.status) {
+      alertModule.error(status.error || 'Form validation error');
+      return false;
+    }
+
+    return true;
   }
 }

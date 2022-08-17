@@ -472,6 +472,50 @@
   fill: #1072DE;
 }
 
+.form-creat-btns {
+  position: relative;
+}
+
+.form-creat-btns__loading {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-creat-btns__loading .spinner-border {
+  width: 25px;
+  height: 25px;
+}
+
+.modal-creat-control {
+  position: relative;
+}
+
+.modal-creat-control__loading {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-creat-control__loading .spinner-border {
+  width: 25px;
+  height: 25px;
+}
+
 /* ===== my nft ===== */
 
 .market-product__media {

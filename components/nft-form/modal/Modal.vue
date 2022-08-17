@@ -42,7 +42,7 @@
               <ModalSupply />
               <ModalBlockchain />
 
-              <div class="text-center">
+              <div class="modal-creat-control text-center">
                 <div ref="sendBtn" class="d-inline-block">
                   <a
                     href="#"
@@ -52,6 +52,12 @@
                   >
                     {{ isOwner ? 'Create' : 'Send' }}
                   </a>
+                </div>
+
+                <div v-if="loadingForm" class="modal-creat-control__loading">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -116,6 +122,10 @@ export default class Modal extends Vue {
     return nftFormModule.isValid;
   }
 
+  get loadingForm(): boolean {
+    return nftFormModule.loadingForm;
+  }
+
   @Watch('isValid', { immediate: true })
   onIsValidChanged(isValid: boolean) {
     if (process.client) {
@@ -131,7 +141,7 @@ export default class Modal extends Vue {
   }
 
   createNft() {
-    console.log(nftFormModule.values);
+    nftFormModule.submit();
   }
 }
 </script>

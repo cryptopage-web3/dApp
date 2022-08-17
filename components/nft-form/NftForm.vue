@@ -73,6 +73,12 @@
             {{ isOwner ? 'Create' : 'Send' }}
           </a>
         </div>
+
+        <div v-if="loadingForm" class="form-creat-btns__loading">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -162,6 +168,10 @@ export default class NftForm extends Vue {
 
   get hasSettings(): boolean {
     return nftFormModule.hasSettings;
+  }
+
+  get loadingForm(): boolean {
+    return nftFormModule.loadingForm;
   }
 
   @Watch('isValid', { immediate: true })
@@ -268,7 +278,7 @@ export default class NftForm extends Vue {
   }
 
   createNft() {
-    console.log(nftFormModule.values);
+    nftFormModule.submit();
   }
 }
 </script>
