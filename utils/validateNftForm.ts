@@ -144,6 +144,13 @@ export const validateNftForm = (
     };
   }
 
+  if (+supply < 1) {
+    return {
+      status: false,
+      error: 'Supply: value should be at least 1',
+    };
+  }
+
   // validate chain
 
   if (chain !== authChainSlug) {

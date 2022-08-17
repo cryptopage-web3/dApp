@@ -86,6 +86,7 @@
                     width: `${
                       (Number(level.value) / Number(level.maxValue)) * 100
                     }%`,
+                    maxWidth: '100%',
                   }"
                 />
               </div>

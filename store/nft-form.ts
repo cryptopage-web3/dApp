@@ -135,8 +135,10 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Action
-  public submit() {
-    if (!this.validate()) {
+  public async submit() {
+    const validateSuccess = await this.validate();
+
+    if (!validateSuccess) {
       return;
     }
 
