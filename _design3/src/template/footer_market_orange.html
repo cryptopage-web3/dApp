@@ -1,4 +1,4 @@
-  <footer class="market-footer">
+<footer class="market-footer">
     <div class="container">
         <div class="market-footer-wrap">
             <div class="market-footer-left">
@@ -14,10 +14,10 @@
                     <img src="img/market-footer-logo_img_orange.svg" alt="">
                 </a>
                 <div class="market-footer-apps">
-                    <a href="#">
+                    <a href="#" role="button" data-toggle="modal" data-target="#modal-test">
                         <img src="img/market-footer-apps_img1.svg" alt="">
                     </a>
-                    <a href="#">
+                    <a href="#" role="button" data-toggle="modal" data-target="#modal-test">
                         <img src="img/market-footer-apps_img2.svg" alt="">
                     </a>
                 </div>
@@ -36,6 +36,67 @@
 </footer>
 <!-- Optional JavaScript -->
 <script src="js/main.js" ></script>
+
+<div class="modal fade modal-celar-history modal-test" id="modal-test" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-test-top">
+                    <img src="img/modal-test-logo.svg" alt="" class="modal-test-logo">
+                    <h3 class="modal-test__title">
+                        Become to test
+                    </h3>
+                </div>
+                <div class="modal-test-bttom">
+                    <form>
+                        <div class="form-field mb_20">
+                            <div class="form-field__title">
+                                Name
+                            </div>
+                            <input type="text" class="global-input global-input_large" placeholder="Example: Michael">
+                        </div>
+                        <div class="form-field mb_20">
+                            <div class="form-field__title">
+                                Email
+                            </div>
+                            <input type="email" class="global-input global-input_large" placeholder="Example: Maga@gmail.com">
+                        </div>
+                        <div class="form-field mb_20">
+                            <div class="form-field__title">
+                                Telegram
+                            </div>
+                            <input type="email" class="global-input global-input_large" placeholder="Example: @Michael">
+                        </div>
+                        <div class="modal-test-btns d-flex justify-content-center">
+                            <a href="#" role="button" data-dismiss="modal" class="btn btn-blue-transparent_button btn_large w_110 mr_20">
+                                Cancel
+                            </a>
+                            <a href="#" class="btn btn-blue_button btn_large w_110">
+                                Done
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="global-cookie">
+    <div class="global-cookie-wr">
+        <div class="global-text_16 global-cookie__text">
+            We use cookies to analyze site performance and deliver personalized content. By clicking “Agree”, you consent<br> to our Cookie Policy. You may change your settings at any time.
+        </div>
+        <div class="global-cookie-btns">
+            <a href="#" class="btn btn-blue btn_large global-cookie-btn1 w_xl_120 w_100 mr_xl_15 mr_5">
+                Agree
+            </a>
+            <a href="#" class="btn btn_transparent btn_large global-cookie-btn2 w_xl_120 w_100">
+                Decline
+            </a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
