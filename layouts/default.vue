@@ -1,6 +1,7 @@
 <template>
   <div>
     <layout-notification />
+    <layout-cookies />
     <layout-header />
     <nuxt />
     <layout-footer />

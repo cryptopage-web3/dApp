@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <layout-notification />
+    <layout-cookies />
     <nuxt />
   </div>
 </template>
