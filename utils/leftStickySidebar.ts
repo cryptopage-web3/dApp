@@ -5,7 +5,7 @@ export const leftStickySidebarInit = (): any => {
   }
 
   const sidebar = new (window as any).StickySidebar('.profile-menu-wrap', {
-    topSpacing: 20,
+    topSpacing: 115.8,
     bottomSpacing: 20,
     containerSelector: '.profile-left2',
     innerWrapperSelector: '.profile-menu-wrap',

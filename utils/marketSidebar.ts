@@ -5,7 +5,7 @@ export const marketSidebarInit = (): any => {
   }
 
   const sidebar2 = new (window as any).StickySidebar('.market-sidebar-wrap', {
-    topSpacing: 20,
+    topSpacing: 115.8,
     bottomSpacing: 20,
     containerSelector: '.market-main-right',
     innerWrapperSelector: '.market-sidebar-wrap',

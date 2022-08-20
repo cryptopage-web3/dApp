@@ -1,5 +1,5 @@
 <template>
-  <header class="market-header">
+  <header id="header" class="market-header">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
         <nuxt-link to="/" class="navbar-brand">
@@ -226,6 +226,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import HeaderConnect from './HeaderConnect.vue';
 import { headerSearchInit } from '~/utils/headerSearch';
+import { headerStickyInit } from '~/utils/headerSticky';
 import { dropdownMenuInit } from '~/utils/dropdownMenu';
 
 @Component({
@@ -236,6 +237,7 @@ import { dropdownMenuInit } from '~/utils/dropdownMenu';
 export default class LayoutHeader extends Vue {
   mounted() {
     headerSearchInit();
+    headerStickyInit();
     dropdownMenuInit();
   }
 }
