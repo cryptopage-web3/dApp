@@ -17,11 +17,13 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { favoriteSelectInit } from '~/utils/favoriteSelect';
+import { marketplaceSlider } from '~/utils/marketplaceSlider';
 
 @Component({})
 export default class MarketplaceContent extends Vue {
   mounted() {
     favoriteSelectInit();
+    marketplaceSlider();
   }
 }
 </script>
