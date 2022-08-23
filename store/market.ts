@@ -49,7 +49,7 @@ export default class MarketModule extends VuexModule {
     try {
       const { data } = await collectionsService.getMarketDashboard({
         page: 1,
-        pageSize: 8,
+        pageSize: 80,
       });
 
       this.setMarketDashboardNfts(data);

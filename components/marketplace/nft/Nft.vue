@@ -1,5 +1,5 @@
 <template>
-  <div class="col-xl-3 col-md-4 col-12">
+  <div class="col-12">
     <div class="market-product">
       <div class="thumb">
         <NftImage :nft="nft" />

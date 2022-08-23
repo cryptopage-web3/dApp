@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <div class="main-slider">
+    <div ref="root" class="main-slider">
       <div class="swiper">
         <div class="swiper-wrapper">
           <div class="swiper-slide">
@@ -1033,6 +1033,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { marketplaceSlider } from '~/utils/marketplaceSlider';
 import marketProductThumb1 from '~/assets/img/market-product_thumb1.png';
 import marketProductThumb2 from '~/assets/img/market-product_thumb2.png';
 import marketProductThumb3 from '~/assets/img/market-product_thumb3.png';
@@ -1044,5 +1045,13 @@ export default class MarketplaceRecommended extends Vue {
   thumb2Url = marketProductThumb2;
   thumb3Url = marketProductThumb3;
   thumb4Url = marketProductThumb4;
+
+  $refs!: {
+    root: HTMLDivElement;
+  };
+
+  mounted() {
+    marketplaceSlider(this.$refs.root);
+  }
 }
 </script>
