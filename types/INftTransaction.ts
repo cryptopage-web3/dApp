@@ -1,17 +1,23 @@
 import { ETypeNft, IAttribute } from '.';
 
 export interface INftTransaction {
-  url?: string;
-  price: number;
-  name: string;
-  description?: string;
-  symbol: string;
-  date: string;
+  type?: ETypeNft;
+  txHash: string;
+  blockNumber: number;
+  contract_address: string;
+  tokenId: string;
   to: string;
   from: string;
-  txHash: string;
-  tokenId: string;
-  contract_address: string;
-  type?: ETypeNft;
+
+  hasDetails?: boolean;
+  id?: number;
+  date?: string;
+  chain?: string;
+  name?: string;
+  description?: string;
+  url?: string;
   attributes?: IAttribute[];
+
+  price?: number;
+  symbol?: string;
 }

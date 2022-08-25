@@ -32,3 +32,5 @@ export * from './IMarketDashboardResponse';
 export * from './INftTransaction';
 export * from './INftTransactionsResponse';
 export * from './INftTransactionsPagination';
+export * from './INftDetailsParams';
+export * from './INftTransactionDetailsResponse';

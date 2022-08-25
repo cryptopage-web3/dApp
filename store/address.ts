@@ -7,6 +7,7 @@ import {
   EChainSlug,
   IAddressInfo,
   INftsPagination,
+  INftTransaction,
   INftTransactionsPagination,
   IToken,
   ITransaction,
@@ -183,6 +184,45 @@ export default class AddressModule extends VuexModule {
       this.setNftTransactions({
         ...this.nftTransactions,
         hasAllPages: true,
+      });
+    }
+  }
+
+  @Action
+  public async fetchNftTransactionDetails(nft: INftTransaction) {
+    const { nfts } = this.nftTransactions;
+
+    try {
+      const data = await nftsService.getTransactionDetails({
+        chainSlug: this.chainSlug,
+        contractAddress: nft.contract_address,
+        tokenId: nft.tokenId,
+        blockNumber: nft.blockNumber,
+      });
+
+      this.setNftTransactions({
+        ...this.nftTransactions,
+        nfts: nfts.map((item) =>
+          item === nft
+            ? {
+                ...item,
+                ...data,
+                hasDetails: true,
+              }
+            : item,
+        ),
+      });
+    } catch {
+      this.setNftTransactions({
+        ...this.nftTransactions,
+        nfts: nfts.map((item) =>
+          item === nft
+            ? {
+                ...item,
+                hasDetails: true,
+              }
+            : item,
+        ),
       });
     }
   }
