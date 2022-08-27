@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
@@ -24,6 +25,10 @@ type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
 type TNftsPagination = INftsPagination;
 type TNftTransactionsPagination = INftTransactionsPagination;
+type TNftTransactionDetailsParams = {
+  index: number;
+  nft: INftTransaction;
+};
 
 const tokensService = new TokensService();
 const nftsService = new NftsService();
@@ -133,6 +138,16 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
+  public setNftTransactionDetails({
+    index,
+    nft,
+  }: TNftTransactionDetailsParams) {
+    const { nfts } = this.nftTransactions;
+
+    Vue.set(nfts, index, nft);
+  }
+
+  @Mutation
   public setOwnNfts(nfts: TNftsPagination) {
     this.ownNfts = nfts;
   }
@@ -191,6 +206,7 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchNftTransactionDetails(nft: INftTransaction) {
     const { nfts } = this.nftTransactions;
+    const index = nfts.findIndex((item) => item === nft);
 
     try {
       const data = await nftsService.getTransactionDetails({
@@ -200,29 +216,21 @@ export default class AddressModule extends VuexModule {
         blockNumber: nft.blockNumber,
       });
 
-      this.setNftTransactions({
-        ...this.nftTransactions,
-        nfts: nfts.map((item) =>
-          item === nft
-            ? {
-                ...item,
-                ...data,
-                hasDetails: true,
-              }
-            : item,
-        ),
+      this.setNftTransactionDetails({
+        index,
+        nft: {
+          ...nft,
+          ...data,
+          hasDetails: true,
+        },
       });
     } catch {
-      this.setNftTransactions({
-        ...this.nftTransactions,
-        nfts: nfts.map((item) =>
-          item === nft
-            ? {
-                ...item,
-                hasDetails: true,
-              }
-            : item,
-        ),
+      this.setNftTransactionDetails({
+        index,
+        nft: {
+          ...nft,
+          hasDetails: true,
+        },
       });
     }
   }

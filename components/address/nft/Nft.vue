@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop, Watch } from 'nuxt-property-decorator';
+import { Component, Prop } from 'nuxt-property-decorator';
 import { INftTransaction, ETypeNft } from '~/types';
 import { addressModule } from '~/store';
 import NftTop from '~/components/address/nft/NftTop.vue';
@@ -67,16 +67,7 @@ export default class Nft extends Vue {
     modal: NftModal;
   };
 
-  get hasDetails() {
-    return this.nft.hasDetails;
-  }
-
-  @Watch('hasDetails', { immediate: true })
-  async onHasDetailsChanged(hasDetails?: boolean) {
-    if (hasDetails) {
-      return;
-    }
-
+  async mounted() {
     this.loading = true;
 
     await addressModule.fetchNftTransactionDetails(this.nft);
