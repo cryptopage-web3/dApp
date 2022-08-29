@@ -253,6 +253,23 @@
   min-height: 36px;
 }
 
+.profile-content__loading-top {
+  height: 33px;
+  border-radius: 10px;
+}
+
+.profile-content__loading-img {
+  margin-top: 15px;
+  height: 400px;
+  border-radius: 10px;
+}
+
+.profile-content__loading-text {
+  margin-top: 15px;
+  height: 80px;
+  border-radius: 10px;
+}
+
 .profile-login__card:first-child {
   border-top: 1.6px solid #E4E4E4;
 }
@@ -339,6 +356,10 @@
 
   .profile-content__bottom {
     min-height: 0;
+  }
+
+  .profile-content__loading-img {
+    height: 150px;
   }
 }
 

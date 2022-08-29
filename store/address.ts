@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
@@ -7,6 +8,7 @@ import {
   EChainSlug,
   IAddressInfo,
   INftsPagination,
+  INftTransaction,
   INftTransactionsPagination,
   IToken,
   ITransaction,
@@ -23,6 +25,10 @@ type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
 type TNftsPagination = INftsPagination;
 type TNftTransactionsPagination = INftTransactionsPagination;
+type TNftTransactionDetailsParams = {
+  index: number;
+  nft: INftTransaction;
+};
 
 const tokensService = new TokensService();
 const nftsService = new NftsService();
@@ -132,6 +138,16 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
+  public setNftTransactionDetails({
+    index,
+    nft,
+  }: TNftTransactionDetailsParams) {
+    const { nfts } = this.nftTransactions;
+
+    Vue.set(nfts, index, nft);
+  }
+
+  @Mutation
   public setOwnNfts(nfts: TNftsPagination) {
     this.ownNfts = nfts;
   }
@@ -183,6 +199,38 @@ export default class AddressModule extends VuexModule {
       this.setNftTransactions({
         ...this.nftTransactions,
         hasAllPages: true,
+      });
+    }
+  }
+
+  @Action
+  public async fetchNftTransactionDetails(nft: INftTransaction) {
+    const { nfts } = this.nftTransactions;
+    const index = nfts.findIndex((item) => item === nft);
+
+    try {
+      const data = await nftsService.getTransactionDetails({
+        chainSlug: this.chainSlug,
+        contractAddress: nft.contract_address,
+        tokenId: nft.tokenId,
+        blockNumber: nft.blockNumber,
+      });
+
+      this.setNftTransactionDetails({
+        index,
+        nft: {
+          ...nft,
+          ...data,
+          hasDetails: true,
+        },
+      });
+    } catch {
+      this.setNftTransactionDetails({
+        index,
+        nft: {
+          ...nft,
+          hasDetails: true,
+        },
       });
     }
   }
