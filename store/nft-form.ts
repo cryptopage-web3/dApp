@@ -4,9 +4,15 @@ import {
   IAttributeLevel,
   IAttributeProperty,
   IAttributeStat,
+  INFTCreateParams,
   INftForm,
+  ISendNFTParams,
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
+import { IPFSService } from '~/services';
+import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
+
+const ipfsService = new IPFSService();
 
 @Module({
   name: 'nft-form',
@@ -143,6 +149,89 @@ export default class NftFormModule extends VuexModule {
     }
 
     this.setLoading(true);
+
+    const { file, title, description, attributes } = this.values;
+
+    const nftParams: INFTCreateParams = {
+      name: title,
+      description,
+      attributes: getAdaptedAttributes(attributes),
+    };
+
+    /** загружаем файл в IPFS */
+
+    if (!file) {
+      this.setLoading(false);
+      return;
+    }
+
+    try {
+      const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
+      const fileHash = await ipfsService.saveFile(file);
+
+      nftParams[isMediaFile ? 'animation_url' : 'image'] =
+        fileHash && `https://ipfs.io/ipfs/${fileHash}`;
+
+      alertModule.info('Got file hash from IPFS');
+    } catch {
+      alertModule.error('Failed to save file into IPFS');
+      this.setLoading(false);
+      return;
+    }
+
+    console.log(nftParams);
+
+    /** загружаем NFT в IPFS */
+
+    let nftHash = '';
+
+    try {
+      nftHash = await ipfsService.saveNFT(nftParams);
+
+      alertModule.info('Got NFT hash from IPFS');
+    } catch {
+      alertModule.error('Failed to save NFT into IPFS');
+      this.setLoading(false);
+      return;
+    }
+
+    /** передача NFT в контракт через web3 */
+
+    const sendNFTParams: ISendNFTParams = {
+      address: authModule.address,
+      from: authModule.address,
+      hash: nftHash,
+    };
+
+    /* let txHash = '';
+
+    this.nftWeb3Service.sendSafeMint({
+      params: nftHashParams,
+      callbacks: {
+        onTransactionHash(hash: string) {
+          txHash = hash;
+
+          callback({
+            status: 'pendingTx',
+            txHash,
+          });
+        },
+        onReceipt() {
+          callback({
+            status: 'successTx',
+            txHash,
+          });
+        },
+        onError() {
+          callback({
+            status: 'errorTx',
+            txHash,
+          });
+        },
+      },
+    }); */
+
+    console.log(sendNFTParams);
   }
 
   @Action

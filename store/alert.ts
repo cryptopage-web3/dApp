@@ -31,6 +31,14 @@ export default class AlertModule extends VuexModule {
   }
 
   @Action
+  public info(title: string) {
+    this.setMessage({
+      type: IAlertType.info,
+      title,
+    });
+  }
+
+  @Action
   public clean() {
     this.setMessage(null);
   }

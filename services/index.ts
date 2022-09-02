@@ -3,3 +3,4 @@ export * from './TokensService';
 export * from './NftsService';
 export * from './TransactionsService';
 export * from './CollectionsService';
+export * from './IPFSService';

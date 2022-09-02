@@ -1,6 +1,7 @@
 export enum IAlertType {
   success = 'success',
   error = 'error',
+  info = 'info',
 }
 
 export interface IAlertMessage {
