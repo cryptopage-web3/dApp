@@ -1,0 +1,10 @@
+import { IAttributesServer } from '.';
+
+export interface INFTCreateParams {
+  name: string;
+  description: string;
+  /** get link after save file */
+  animation_url?: string | null;
+  image?: string | null;
+  attributes: IAttributesServer[];
+}
