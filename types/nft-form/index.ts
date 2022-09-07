@@ -7,3 +7,4 @@ export * from './IAttributesServer';
 export * from './INftForm';
 export * from './INFTCreateParams';
 export * from './ISendNFTParams';
+export * from './IWritePostParams';

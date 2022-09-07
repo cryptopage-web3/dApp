@@ -9,10 +9,13 @@ import {
   ISendNFTParams,
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
-import { IPFSService } from '~/services';
+import { IPFSService, Web3Service } from '~/services';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
+import { OPEN_FORUM_ID } from '~/constants';
+import { EChainSlug } from '~/types';
 
 const ipfsService = new IPFSService();
+const web3Service = new Web3Service();
 
 @Module({
   name: 'nft-form',
@@ -142,10 +145,18 @@ export default class NftFormModule extends VuexModule {
 
   @Action
   public async submit() {
+    /** проверяем валидность данных */
+
     const validateSuccess = await this.validate();
 
     if (!validateSuccess) {
       return;
+    }
+
+    /** пока есть возможность создать только для goerli */
+
+    if (authModule.chainSlug !== EChainSlug.goerli) {
+      alertModule.error('Available only Goerli');
     }
 
     this.setLoading(true);
@@ -179,8 +190,6 @@ export default class NftFormModule extends VuexModule {
       return;
     }
 
-    console.log(nftParams);
-
     /** загружаем NFT в IPFS */
 
     let nftHash = '';
@@ -198,40 +207,33 @@ export default class NftFormModule extends VuexModule {
     /** передача NFT в контракт через web3 */
 
     const sendNFTParams: ISendNFTParams = {
-      address: authModule.address,
-      from: authModule.address,
-      hash: nftHash,
+      authChainSlug: authModule.chainSlug,
+      authAddress: authModule.address,
+      communityId: OPEN_FORUM_ID,
+      ipfsHash: nftHash,
     };
 
-    /* let txHash = '';
+    let txHash = '';
+    const self = this;
 
-    this.nftWeb3Service.sendSafeMint({
-      params: nftHashParams,
+    web3Service.writePost({
+      params: sendNFTParams,
       callbacks: {
         onTransactionHash(hash: string) {
           txHash = hash;
 
-          callback({
-            status: 'pendingTx',
-            txHash,
-          });
+          alertModule.info(`${txHash}: Transaction on pending`);
         },
         onReceipt() {
-          callback({
-            status: 'successTx',
-            txHash,
-          });
+          alertModule.success('Transaction completed');
+          self.setLoading(false);
         },
         onError() {
-          callback({
-            status: 'errorTx',
-            txHash,
-          });
+          alertModule.error('Transaction has some error');
+          self.setLoading(false);
         },
       },
-    }); */
-
-    console.log(sendNFTParams);
+    });
   }
 
   @Action

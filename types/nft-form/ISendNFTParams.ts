@@ -1,5 +1,6 @@
 export interface ISendNFTParams {
-  address: string;
-  from: string;
-  hash: string;
+  authChainSlug: string;
+  authAddress: string;
+  communityId: number;
+  ipfsHash: string;
 }
