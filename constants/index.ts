@@ -3,6 +3,10 @@ import { EChainId } from '~/types/EChainId';
 /** created by Nail M. at https://infura.io/ */
 export const INFURA_PROJECT_ID = '4409ed526a3e48ffa540c25ff4e1015f';
 
+/** created by P at https://infura.io/ */
+export const IPFS_INFURA_PROJECT_ID = '2EDEASi84EnJFp1eNlH02MWgRBm';
+export const IPFS_INFURA_SECRET_KEY = 'a96c0da772683cc68de2511a4932d45a';
+
 export const API_URL = process.env.API_SERVER_URL;
 
 export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
@@ -16,3 +20,6 @@ export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
   [EChainId.polygon]: `https://polygon-rpc.com`,
   [EChainId.polygonTestnet]: `https://rpc-mumbai.matic.today`,
 };
+
+/** дефолтное комьюнити для создания NFT */
+export const OPEN_FORUM_ID = 1;
