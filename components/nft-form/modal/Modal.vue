@@ -3,6 +3,7 @@
     <!-- Modal -->
     <div
       id="modal-creat-nft"
+      ref="modal"
       class="modal fade modal-creat"
       tabindex="-1"
       role="dialog"
@@ -108,6 +109,7 @@ import ModalCloseIcon from '~/components/icon/nft-form/modal/ModalCloseIcon.vue'
 export default class Modal extends Vue {
   $refs!: {
     sendBtn: HTMLDivElement;
+    modal: HTMLDivElement;
   };
 
   get isOwner(): boolean {
@@ -142,6 +144,14 @@ export default class Modal extends Vue {
 
   createNft() {
     nftFormModule.submit();
+  }
+
+  show() {
+    ($(this.$refs.modal) as any).modal('show');
+  }
+
+  hide() {
+    ($(this.$refs.modal) as any).modal('hide');
   }
 }
 </script>

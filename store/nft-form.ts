@@ -17,31 +17,35 @@ import { EChainSlug } from '~/types';
 const ipfsService = new IPFSService();
 const web3Service = new Web3Service();
 
+const initValues: INftForm = {
+  title: '',
+  description: '',
+  file: null,
+  externalLink: '',
+  isCommentsEnable: false,
+  attributes: {
+    properties: [],
+    levels: [],
+    stats: [],
+  },
+  isUnlockableContent: false,
+  unlockableText: '',
+  isExplicit: false,
+  supply: '1',
+  chain: '',
+};
+
 @Module({
   name: 'nft-form',
   namespaced: true,
   stateFactory: true,
 })
 export default class NftFormModule extends VuexModule {
-  values: INftForm = {
-    title: '',
-    description: '',
-    file: null,
-    externalLink: '',
-    isCommentsEnable: false,
-    attributes: {
-      properties: [],
-      levels: [],
-      stats: [],
-    },
-    isUnlockableContent: false,
-    unlockableText: '',
-    isExplicit: false,
-    supply: '1',
-    chain: '',
-  };
+  values: INftForm = initValues;
 
   loading = false;
+
+  completed = false;
 
   get isValid(): boolean {
     const { title, file } = this.values;
@@ -139,6 +143,16 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Mutation
+  public setValues(values: INftForm) {
+    this.values = values;
+  }
+
+  @Mutation
+  public setCompleted(completed: boolean) {
+    this.completed = completed;
+  }
+
+  @Mutation
   public setLoading(loading: boolean) {
     this.loading = loading;
   }
@@ -157,6 +171,7 @@ export default class NftFormModule extends VuexModule {
 
     if (authModule.chainSlug !== EChainSlug.goerli) {
       alertModule.error('Available only Goerli');
+      return;
     }
 
     this.setLoading(true);
@@ -226,6 +241,8 @@ export default class NftFormModule extends VuexModule {
         },
         onReceipt() {
           alertModule.success('Transaction completed');
+
+          self.setCompleted(true);
           self.setLoading(false);
         },
         onError() {
@@ -246,5 +263,14 @@ export default class NftFormModule extends VuexModule {
     }
 
     return true;
+  }
+
+  @Action
+  public clear() {
+    this.setCompleted(false);
+    this.setValues({
+      ...initValues,
+      chain: authModule.chainSlug,
+    });
   }
 }

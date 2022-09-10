@@ -94,7 +94,7 @@
       </div>
     </label>
 
-    <NftFormModal />
+    <NftFormModal ref="modal" />
   </div>
 </template>
 
@@ -132,6 +132,7 @@ export default class NftForm extends Vue {
     refUpload: NftFormUpload;
     sendBtn: HTMLDivElement;
     settingBtn: HTMLAnchorElement;
+    modal: NftFormModal;
   };
 
   get isAuth(): boolean {
@@ -174,6 +175,10 @@ export default class NftForm extends Vue {
     return nftFormModule.loadingForm;
   }
 
+  get completed(): boolean {
+    return nftFormModule.completed;
+  }
+
   @Watch('isValid', { immediate: true })
   onIsValidChanged(isValid: boolean) {
     if (process.client) {
@@ -187,6 +192,15 @@ export default class NftForm extends Vue {
       ($(this.$refs.settingBtn) as any).tooltip(
         !hasSettings ? 'disable' : 'enable',
       );
+    }
+  }
+
+  @Watch('completed')
+  onCompletedChanged(completed: boolean) {
+    if (completed) {
+      this.closeForm();
+      this.$refs.modal.hide();
+      nftFormModule.clear();
     }
   }
 
