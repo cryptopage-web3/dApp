@@ -1,3 +1,4 @@
+import { EChainSlug } from '~/types';
 import { EChainId } from '~/types/EChainId';
 
 /** created by Nail M. at https://infura.io/ */
@@ -20,6 +21,14 @@ export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
   [EChainId.polygon]: `https://polygon-rpc.com`,
   [EChainId.polygonTestnet]: `https://rpc-mumbai.matic.today`,
 };
+
+export const API_CHAIN_MAP = new Map<string, string>()
+  .set(EChainSlug.eth, 'eth')
+  .set(EChainSlug.bsc, 'bsc')
+  .set(EChainSlug.solana, 'sol')
+  .set(EChainSlug.tron, 'tron')
+  .set(EChainSlug.polygon, 'matic')
+  .set(EChainSlug.goerli, 'goerli');
 
 /** дефолтное комьюнити для создания NFT */
 export const OPEN_FORUM_ID = 1;

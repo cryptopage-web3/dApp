@@ -1,16 +1,12 @@
 import { BaseService } from './BaseService';
-import { EChainSlug, IToken, ITokensParams, ITokensResponse } from '~/types';
+import { IToken, ITokensParams, ITokensResponse } from '~/types';
+import { API_CHAIN_MAP } from '~/constants';
 
 export class TokensService extends BaseService {
   readonly apiURL = '/tokens';
 
   getList = async (params: ITokensParams): Promise<IToken[]> => {
-    const slugMap = new Map<string, string>()
-      .set(EChainSlug.eth, 'eth')
-      .set(EChainSlug.bsc, 'bsc')
-      .set(EChainSlug.solana, 'sol')
-      .set(EChainSlug.tron, 'tron')
-      .set(EChainSlug.polygon, 'matic');
+    const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
       return [];

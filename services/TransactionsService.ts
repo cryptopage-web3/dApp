@@ -1,11 +1,11 @@
 import { BaseService } from './BaseService';
 import {
-  EChainSlug,
   IEthTransactionsParams,
   IEthTransactionsResponse,
   ITransactionsParams,
   ITransactionsResponse,
 } from '~/types';
+import { API_CHAIN_MAP } from '~/constants';
 
 export class TransactionsService extends BaseService {
   readonly apiURL = '/transactions';
@@ -13,12 +13,7 @@ export class TransactionsService extends BaseService {
   getList = async (
     params: ITransactionsParams,
   ): Promise<ITransactionsResponse> => {
-    const slugMap = new Map<string, string>()
-      .set(EChainSlug.eth, 'eth')
-      .set(EChainSlug.bsc, 'bsc')
-      .set(EChainSlug.solana, 'sol')
-      .set(EChainSlug.tron, 'tron')
-      .set(EChainSlug.polygon, 'matic');
+    const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
       return {

@@ -1,23 +1,18 @@
 import { BaseService } from './BaseService';
 import {
-  EChainSlug,
   INftDetailsParams,
   INftsParams,
   INftsResponse,
   INftTransactionDetailsResponse,
   INftTransactionsResponse,
 } from '~/types';
+import { API_CHAIN_MAP } from '~/constants';
 
 export class NftsService extends BaseService {
   readonly apiURL = '/nfts';
 
   getList = async (params: INftsParams): Promise<INftsResponse> => {
-    const slugMap = new Map<string, string>()
-      .set(EChainSlug.eth, 'eth')
-      .set(EChainSlug.bsc, 'bsc')
-      .set(EChainSlug.solana, 'sol')
-      .set(EChainSlug.tron, 'tron')
-      .set(EChainSlug.polygon, 'matic');
+    const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
       return {
@@ -42,12 +37,7 @@ export class NftsService extends BaseService {
   getTransactionsList = async (
     params: INftsParams,
   ): Promise<INftTransactionsResponse> => {
-    const slugMap = new Map<string, string>()
-      .set(EChainSlug.eth, 'eth')
-      .set(EChainSlug.bsc, 'bsc')
-      .set(EChainSlug.solana, 'sol')
-      .set(EChainSlug.tron, 'tron')
-      .set(EChainSlug.polygon, 'matic');
+    const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
       return {
@@ -74,12 +64,7 @@ export class NftsService extends BaseService {
   getTransactionDetails = async (
     params: INftDetailsParams,
   ): Promise<INftTransactionDetailsResponse> => {
-    const slugMap = new Map<string, string>()
-      .set(EChainSlug.eth, 'eth')
-      .set(EChainSlug.bsc, 'bsc')
-      .set(EChainSlug.solana, 'sol')
-      .set(EChainSlug.tron, 'tron')
-      .set(EChainSlug.polygon, 'matic');
+    const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
       return {};
