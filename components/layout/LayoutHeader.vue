@@ -195,9 +195,9 @@
             <li>
               <nuxt-link to="/">Home</nuxt-link>
             </li>
-            <li>
+            <!-- <li>
               <nuxt-link to="/marketplace">Marketplace</nuxt-link>
-            </li>
+            </li> -->
             <li><a href="#">Inbox</a></li>
             <li><a href="#">Notification</a></li>
           </ul>
