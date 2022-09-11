@@ -268,8 +268,22 @@ export default class NftFormModule extends VuexModule {
   @Action
   public clear() {
     this.setCompleted(false);
+
     this.setValues({
-      ...initValues,
+      title: '',
+      description: '',
+      file: null,
+      externalLink: '',
+      isCommentsEnable: false,
+      attributes: {
+        properties: [],
+        levels: [],
+        stats: [],
+      },
+      isUnlockableContent: false,
+      unlockableText: '',
+      isExplicit: false,
+      supply: '1',
       chain: authModule.chainSlug,
     });
   }
