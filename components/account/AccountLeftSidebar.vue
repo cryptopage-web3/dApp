@@ -51,7 +51,7 @@
             </a>
           </li>
           <li v-if="isAuth">
-            <a href="#">
+            <a href="https://inbox.crypto.page/" target="_blank">
               <div class="thumb">
                 <svg
                   width="24"
@@ -67,7 +67,6 @@
                 </svg>
               </div>
               <span> Messages </span>
-              <mark> Comming Soon </mark>
             </a>
           </li>
           <li v-if="isAuth">

@@ -198,7 +198,9 @@
             <!-- <li>
               <nuxt-link to="/marketplace">Marketplace</nuxt-link>
             </li> -->
-            <li><a href="#">Inbox</a></li>
+            <li>
+              <a href="https://inbox.crypto.page/" target="_blank">Inbox</a>
+            </li>
             <li><a href="#">Notification</a></li>
           </ul>
         </div>

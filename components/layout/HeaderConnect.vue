@@ -110,7 +110,7 @@
           </a>
         </li>
         <li>
-          <a href="#">
+          <a href="https://inbox.crypto.page/" target="_blank">
             <div class="thumb">
               <img src="@/assets/img/market-header__cabinet_icon5.svg" alt="" />
             </div>
