@@ -164,6 +164,7 @@ export class AuthService {
           chainId: Number(window.ethereum.chainId),
           address: window.ethereum.selectedAddress,
           providerSlug: EProvider.metamask,
+          provider: this.provider,
         },
       };
     } catch {
@@ -225,6 +226,7 @@ export class AuthService {
           chainId: Number(chainId),
           address: address || '',
           providerSlug: EProvider.bscWallet,
+          provider: this.provider,
         },
       };
     } catch {
@@ -284,6 +286,7 @@ export class AuthService {
           chainId: Number(chainId),
           address: accounts?.[0] || '',
           providerSlug: EProvider.walletConnect,
+          provider: this.provider,
         },
       };
     } catch {
@@ -339,6 +342,7 @@ export class AuthService {
           chainId: Number(window.okexchain.chainId),
           address: window.okexchain.selectedAddress,
           providerSlug: EProvider.okex,
+          provider: this.provider,
         },
       };
     } catch {
@@ -399,6 +403,7 @@ export class AuthService {
           chainId: 'tron',
           address: window.tronLink.tronWeb.defaultAddress?.base58,
           providerSlug: EProvider.tron,
+          provider: this.provider,
         },
       };
     } catch {
@@ -442,6 +447,7 @@ export class AuthService {
           chainId: 'solana',
           address: result?.publicKey?.toString(),
           providerSlug: EProvider.phantom,
+          provider: this.provider,
         },
       };
     } catch {

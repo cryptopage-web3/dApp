@@ -17,6 +17,7 @@ type TConnectToProviderParams = IConnectToProviderParams;
 type TConnectChangeParams = IConnectChangeParams;
 
 const authService = new AuthService();
+let authProvider: any = null;
 
 @Module({
   name: 'auth',
@@ -31,6 +32,8 @@ export default class AuthModule extends VuexModule {
     address: '',
     chainId: 1,
     providerSlug: null,
+    /** не храним authProvider в сторе, т.к. ошибка при прокcировании объекта vue */
+    // provider: null,
   };
 
   get address(): string {
@@ -55,6 +58,10 @@ export default class AuthModule extends VuexModule {
 
   get providerSlug(): EProvider | null {
     return this.connect.providerSlug;
+  }
+
+  get provider(): any {
+    return authProvider;
   }
 
   @Mutation
@@ -116,7 +123,17 @@ export default class AuthModule extends VuexModule {
 
       /** сохраняем данные connect */
 
-      window.localStorage.setItem('auth', JSON.stringify(connectData));
+      window.localStorage.setItem(
+        'auth',
+        JSON.stringify({
+          address: connectData.address,
+          chainId: connectData.chainId,
+          providerSlug: connectData.providerSlug,
+        }),
+      );
+
+      authProvider = connectData.provider;
+      connectData.provider = null;
 
       this.setConnect(connectData);
       this.setAuth(true);
@@ -227,6 +244,9 @@ export default class AuthModule extends VuexModule {
       }),
     );
 
+    authProvider = connectData.provider;
+    connectData.provider = null;
+
     this.setConnect(connectData);
     this.setAuth(true);
 
@@ -303,10 +323,13 @@ export default class AuthModule extends VuexModule {
 
     window.localStorage.removeItem('auth');
 
+    authProvider = null;
+
     this.setConnect({
       ...this.connect,
       address: '',
       providerSlug: null,
+      provider: null,
     });
 
     this.setAuth(false);

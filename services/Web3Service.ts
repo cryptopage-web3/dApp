@@ -4,13 +4,9 @@ import { IWritePostParams } from '~/types/nft-form';
 export class Web3Service {
   web3!: Web3;
 
-  constructor() {
-    this.init();
+  constructor(provider: any = null) {
+    this.web3 = new Web3(provider || Web3.givenProvider);
   }
-
-  init = () => {
-    this.web3 = new Web3(Web3.givenProvider);
-  };
 
   public writePost = async ({ params, callbacks }: IWritePostParams) => {
     try {

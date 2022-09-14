@@ -15,7 +15,6 @@ import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug } from '~/types';
 
 const ipfsService = new IPFSService();
-const web3Service = new Web3Service();
 
 const initValues: INftForm = {
   title: '',
@@ -230,6 +229,10 @@ export default class NftFormModule extends VuexModule {
 
     let txHash = '';
     const self = this;
+
+    /** создаем web3 с провайдером авторизации */
+
+    const web3Service = new Web3Service(authModule.provider);
 
     web3Service.writePost({
       params: sendNFTParams,
