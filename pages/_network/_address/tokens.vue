@@ -112,7 +112,7 @@
             <div>
               <div class="token__name">Ethereum (ETH)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -194,7 +194,7 @@
             <div>
               <div class="token__name">BNB (BNB)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -276,7 +276,7 @@
             <div>
               <div class="token__name">Litecoin (LTC)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -358,7 +358,7 @@
             <div>
               <div class="token__name">Chainlink (LINK)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -440,7 +440,7 @@
             <div>
               <div class="token__name">Stellar (XLM)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -522,7 +522,7 @@
             <div>
               <div class="token__name">IOTA (MIOTA)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -604,7 +604,7 @@
             <div>
               <div class="token__name">Monero (XMR)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -686,7 +686,7 @@
             <div>
               <div class="token__name">Harmony (ONE)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -767,7 +767,7 @@
             <div>
               <div class="token__name">Helium (HNT)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -849,7 +849,7 @@
             <div>
               <div class="token__name">Flow (FLOW)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
@@ -944,7 +944,7 @@
             <div>
               <div class="token__name">Ethereum (ETH)</div>
               <div class="token__address">
-                Contact address: <a href="#">0xd3C...e70</a>
+                Contract address: <a href="#">0xd3C...e70</a>
               </div>
             </div>
           </div>
