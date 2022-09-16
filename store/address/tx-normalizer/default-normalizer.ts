@@ -22,6 +22,7 @@ export function defaultNormalizer(
     tokenOrCoinSymbolRight: symbol,
     tokenOrCoinAmount: isTokenTx ? data.tokenAmount : data.value,
     transferDirection: isIncome ? 'From' : 'To',
+    valueUSD: data.valueUSD || 0,
   };
 }
 
