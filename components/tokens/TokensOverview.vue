@@ -4,23 +4,21 @@
     <div class="tokens-wallets">
       <div class="tokens-wallet">
         <div class="tokens-wallet__title">Net Worth in USD</div>
-        <div class="tokens-wallet__count">$ 9,825,630.73</div>
+        <div class="tokens-wallet__count">$ 0</div>
       </div>
       <div class="tokens-wallet">
-        <div class="tokens-wallet__title">Net Worth in ETH</div>
+        <div class="tokens-wallet__title">Net Worth in {{ chainSymbol }}</div>
         <div class="tokens-wallet__count">
-          <img src="@/assets/img/tokens-wallet_eth.svg" alt="" />
-          3263.526793
+          <img :src="chainIcon" alt="" />
+          0
         </div>
       </div>
       <div class="tokens-wallet">
         <div class="tokens-wallet__title">Total Balance Change (24H)</div>
         <div class="tokens-wallet__procent tokens-wallet__procent-green">
-          4.00%
+          0%
         </div>
-        <div class="tokens-wallet__procent tokens-wallet__procent-red">
-          - 4.00%
-        </div>
+        <div class="tokens-wallet__procent tokens-wallet__procent-red">0%</div>
       </div>
     </div>
   </div>
@@ -29,7 +27,24 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { addressModule } from '~/store';
 
 @Component({})
-export default class TokensOverview extends Vue {}
+export default class TokensOverview extends Vue {
+  get chainSymbol(): string {
+    return addressModule.chainSymbol;
+  }
+
+  get chainIcon(): string {
+    const icons: Record<string, string> = {
+      eth: require('@/assets/img/market-header__wallet_icon1.svg'),
+      bsc: require('@/assets/img/market-header__wallet_icon3.svg'),
+      polygon: require('@/assets/img/market-header__wallet_icon4.svg'),
+      tron: require('@/assets/img/market-header__wallet_icon5.svg'),
+      solana: require('@/assets/img/market-header__wallet_icon6.svg'),
+    };
+
+    return icons[addressModule.chainType];
+  }
+}
 </script>

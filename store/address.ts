@@ -6,6 +6,7 @@ import { alertModule } from '.';
 import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
   EChainSlug,
+  EChainType,
   IAddressInfo,
   INftsPagination,
   INftTransaction,
@@ -90,6 +91,10 @@ export default class AddressModule extends VuexModule {
 
   get chainSlug(): string {
     return networkHelper.getNetworkSlug(this.chainId);
+  }
+
+  get chainType(): EChainType {
+    return networkHelper.getNetworkType(this.chainId);
   }
 
   get chainName(): string {
