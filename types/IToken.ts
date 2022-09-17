@@ -6,4 +6,5 @@ export interface IToken {
   percentChange: number;
   price: number;
   symbol: string;
+  address: string;
 }

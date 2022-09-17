@@ -10,7 +10,7 @@
           role="tab"
           aria-controls="profile-tabs1"
           aria-selected="true"
-          >Assets in Wallet (8)</a
+          >Assets in Wallet ({{ tokens.length }})</a
         >
       </li>
       <li class="nav-item">
@@ -53,6 +53,8 @@ import { Component } from 'nuxt-property-decorator';
 import TokensContentAssets from './TokensContentAssets.vue';
 import TokensContentHidden from './TokensContentHidden.vue';
 import TokensContentLiquidity from './TokensContentLiquidity.vue';
+import { IToken } from '~/types';
+import { addressModule } from '~/store';
 
 @Component({
   components: {
@@ -61,5 +63,9 @@ import TokensContentLiquidity from './TokensContentLiquidity.vue';
     TokensContentLiquidity,
   },
 })
-export default class TokensContent extends Vue {}
+export default class TokensContent extends Vue {
+  get tokens(): IToken[] {
+    return addressModule.tokens;
+  }
+}
 </script>

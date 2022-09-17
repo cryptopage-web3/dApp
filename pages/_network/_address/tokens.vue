@@ -12,7 +12,6 @@ import { Component } from 'nuxt-property-decorator';
 import TokensHeader from '~/components/tokens/TokensHeader.vue';
 import TokensOverview from '~/components/tokens/TokensOverview.vue';
 import TokensContent from '~/components/tokens/TokensContent.vue';
-import { profileContentDropInit } from '~/utils/profileContentDrop';
 
 @Component({
   head: {
@@ -31,9 +30,5 @@ import { profileContentDropInit } from '~/utils/profileContentDrop';
     TokensContent,
   },
 })
-export default class TokensPage extends Vue {
-  mounted() {
-    profileContentDropInit();
-  }
-}
+export default class TokensPage extends Vue {}
 </script>
