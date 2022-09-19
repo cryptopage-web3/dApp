@@ -10,7 +10,13 @@ export class Web3Service {
 
   public writePost = async ({ params, callbacks }: IWritePostParams) => {
     try {
-      const { authChainSlug, authAddress, communityId, ipfsHash } = params;
+      const {
+        authChainSlug,
+        authAddress,
+        ownerAddress,
+        communityId,
+        ipfsHash,
+      } = params;
 
       const CONTRACT = await import(
         `../contracts/${authChainSlug}/proxy_community.json`
@@ -22,7 +28,7 @@ export class Web3Service {
       );
 
       contract.methods
-        .writePost(communityId, ipfsHash, authAddress)
+        .writePost(communityId, ipfsHash, ownerAddress)
         .send({
           from: authAddress,
         })

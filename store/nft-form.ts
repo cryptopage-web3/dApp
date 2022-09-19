@@ -1,5 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import { alertModule, authModule } from '.';
+import { alertModule, authModule, addressModule } from '.';
 import {
   IAttributeLevel,
   IAttributeProperty,
@@ -166,12 +166,32 @@ export default class NftFormModule extends VuexModule {
       return;
     }
 
+    /** owner в NFT будет из addressModule */
+    /** проверяем что addressModule той же сети, что и authModule */
+
+    const isSameChain = authModule.chainSlug === addressModule.chainSlug;
+    const isOwner =
+      authModule.address.toLowerCase() === addressModule.address.toLowerCase();
+
+    if (!isSameChain) {
+      alertModule.error(`Active chain - ${authModule.chainName}<br>
+          You are trying ${
+            isOwner ? 'create' : 'send'
+          } nft to account with chain ${addressModule.chainName}<br>
+          Please connect to ${addressModule.chainName}
+        `);
+
+      return;
+    }
+
     /** пока есть возможность создать только для goerli */
 
     if (authModule.chainSlug !== EChainSlug.goerli) {
       alertModule.error('Available only Goerli');
       return;
     }
+
+    /** начало процесса создания NFT */
 
     this.setLoading(true);
 
@@ -223,6 +243,7 @@ export default class NftFormModule extends VuexModule {
     const sendNFTParams: ISendNFTParams = {
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
+      ownerAddress: addressModule.address,
       communityId: OPEN_FORUM_ID,
       ipfsHash: nftHash,
     };
