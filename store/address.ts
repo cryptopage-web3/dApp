@@ -191,10 +191,12 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+      const newNfts = uniqueNftTransactionConcat(oldNfts, list);
+
       this.setNftTransactions({
         ...this.nftTransactions,
-        nfts: uniqueNftTransactionConcat(oldNfts, list),
-        count,
+        nfts: newNfts,
+        count: count === undefined ? newNfts.length : count,
         page: nextPage,
         hasAllPages: list.length === 0,
       });
@@ -253,10 +255,12 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+      const newNfts = uniqueNftConcat(oldNfts, list);
+
       this.setOwnNfts({
         ...this.ownNfts,
-        nfts: uniqueNftConcat(oldNfts, list),
-        count,
+        nfts: newNfts,
+        count: count === undefined ? newNfts.length : count,
         page: nextPage,
         hasAllPages: list.length === 0,
       });
@@ -342,15 +346,15 @@ export default class AddressModule extends VuexModule {
       continue: oldContinue,
     });
 
+    const newTransactions = uniqueHashConcat(
+      oldTransactions,
+      transactions.map((t) => defaultNormalizer(t, this.address, this.chainId)),
+    );
+
     this.setTransactions({
       ...this.transactions,
-      transactions: uniqueHashConcat(
-        oldTransactions,
-        transactions.map((t) =>
-          defaultNormalizer(t, this.address, this.chainId),
-        ),
-      ),
-      count,
+      transactions: newTransactions,
+      count: count === undefined ? newTransactions.length : count,
       continue: newContinue,
       page: nextPage,
       hasAllPages: transactions.length === 0,

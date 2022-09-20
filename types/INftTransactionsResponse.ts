@@ -1,6 +1,6 @@
 import { INftTransaction } from '.';
 
 export interface INftTransactionsResponse {
-  count: number;
+  count?: number;
   list: INftTransaction[];
 }
