@@ -195,11 +195,12 @@ export default class NftFormModule extends VuexModule {
 
     this.setLoading(true);
 
-    const { file, title, description, attributes } = this.values;
+    const { file, title, description, attributes, externalLink } = this.values;
 
     const nftParams: INFTCreateParams = {
       name: title,
       description,
+      external_url: externalLink,
       attributes: getAdaptedAttributes(attributes),
     };
 
