@@ -7,6 +7,7 @@
     <input
       type="text"
       :value="supply"
+      :disabled="true"
       placeholder="number"
       class="global-input global-input_large mt_10"
       @input="updateSupply"

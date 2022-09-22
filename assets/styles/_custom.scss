@@ -1,5 +1,10 @@
 /* ===== common ===== */
 
+.global-input[disabled] {
+  color: #A7A7A7;
+  cursor: not-allowed;
+}
+
 .fade {
   transition: opacity .2s linear !important;
 }
