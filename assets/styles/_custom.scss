@@ -338,6 +338,24 @@
   color: #4d4d4d;
 }
 
+.profile-content__comment-loading {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  right: 15px;
+  transform: translate(0,-50%);
+  width: 24px;
+  height: 24px;
+}
+
+.profile-content__comment-loading .spinner-border {
+  width: 15px;
+  height: 15px;
+  border-width: 2px;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

@@ -37,4 +37,10 @@ export class IPFSService {
     await this.api.pin.add(data.path);
     return data.path;
   };
+
+  saveComment = async (text: string): Promise<string> => {
+    const data = await this.api.add(text);
+    await this.api.pin.add(data.path);
+    return data.path;
+  };
 }
