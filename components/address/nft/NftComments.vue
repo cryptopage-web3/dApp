@@ -134,7 +134,13 @@ export default class NftComments extends Vue {
   }
 
   resetComment() {
+    const elem =
+      this.commentType === 'like' ? this.$refs.like : this.$refs.dislike;
+
     this.commentText = '';
+    this.commentType = null;
+
+    profileCommentSelect(elem, this.$refs.root);
   }
 
   async sendComment() {
