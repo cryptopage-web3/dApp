@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="profile-content__bottom">
+  <div v-if="cryptoPageNft" ref="root" class="profile-content__bottom">
     <ul class="market-product-ld">
       <li>
         <a ref="like" href="#" @click.prevent="select('like', $event)">
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <NftBurn v-if="!hideBurn" :nft="nft" />
+    <NftBurn v-if="!hideBurn && myNft" :nft="nft" />
   </div>
 </template>
 
@@ -59,6 +59,7 @@ import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
 import { ISendCommentParams } from '~/types/comment-form';
 import { IPFSService, Web3Service } from '~/services';
+import { nftContractAddress } from '~/contracts';
 import NftBurn from '~/components/address/nft/NftBurn.vue';
 import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
 import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
@@ -69,7 +70,7 @@ import {
   profileCommentControlVisible,
   profileCommentClose,
 } from '~/utils/nftsComment';
-import { authModule } from '~/store';
+import { addressModule, authModule } from '~/store';
 
 type TNftTransaction = INftTransaction;
 type TCommentType = null | 'like' | 'dislike';
@@ -102,6 +103,29 @@ export default class NftComments extends Vue {
 
   commentType: TCommentType = null;
   commentText = '';
+
+  get cryptoPageNft(): boolean {
+    const address = nftContractAddress[addressModule.chainId];
+
+    /** TODO: временно открываем всем, т.к. сейчас контракты с нашим не совпадают */
+    return address === this.nft.contract_address || true;
+  }
+
+  get isSameChain(): boolean {
+    return authModule.chainSlug === addressModule.chainSlug;
+  }
+
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+
+  get addressChainName(): string {
+    return addressModule.chainName;
+  }
+
+  get myNft(): boolean {
+    return authModule.address.toLowerCase() === this.nft.to.toLowerCase();
+  }
 
   select(type: TCommentType, event: PointerEvent) {
     this.commentType = type;
@@ -144,8 +168,6 @@ export default class NftComments extends Vue {
   }
 
   async sendComment() {
-    this.loading = true;
-
     if (!this.commentText) {
       this.$notify({
         type: 'error',
@@ -153,6 +175,18 @@ export default class NftComments extends Vue {
       });
       return;
     }
+
+    /** проверяем, что подключен кошелек нужной сети */
+
+    if (!this.isAuth || !this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Need connect to ${this.addressChainName}`,
+      });
+      return;
+    }
+
+    this.loading = true;
 
     /** сохраняем текст в IPFS */
 
