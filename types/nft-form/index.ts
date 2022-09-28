@@ -8,3 +8,5 @@ export * from './INftForm';
 export * from './INFTCreateParams';
 export * from './ISendNFTParams';
 export * from './IWritePostParams';
+export * from './IDeleteNFTParams';
+export * from './IBurnPostParams';

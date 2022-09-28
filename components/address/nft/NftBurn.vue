@@ -9,7 +9,7 @@
       <a href="#" @click.prevent="showModal">
         <NftBurnIcon />
       </a>
-      <NftDeleteConfirm ref="modal" />
+      <NftDeleteConfirm ref="modal" :nft="nft" />
     </li>
   </ul>
 </template>

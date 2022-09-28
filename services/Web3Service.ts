@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 import { IWriteCommentParams } from '~/types/comment-form';
-import { IWritePostParams } from '~/types/nft-form';
+import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
 
 export class Web3Service {
   web3!: Web3;
@@ -57,6 +57,32 @@ export class Web3Service {
 
       contract.methods
         .writeComment(nftTokenId, ipfsHash, isUp, isDown, authAddress)
+        .send({
+          from: authAddress,
+        })
+        .on('transactionHash', callbacks.onTransactionHash)
+        .on('receipt', callbacks.onReceipt)
+        .on('error', callbacks.onError);
+    } catch {
+      callbacks.onError();
+    }
+  };
+
+  public burnPost = async ({ params, callbacks }: IBurnPostParams) => {
+    try {
+      const { authAddress, authChainSlug, nftTokenId } = params;
+
+      const CONTRACT = await import(
+        `../contracts/${authChainSlug}/proxy_community.json`
+      );
+
+      const contract = new this.web3.eth.Contract(
+        CONTRACT.abi,
+        CONTRACT.address,
+      );
+
+      contract.methods
+        .burnPost(nftTokenId)
         .send({
           from: authAddress,
         })

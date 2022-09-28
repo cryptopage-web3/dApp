@@ -356,6 +356,28 @@
   border-width: 2px;
 }
 
+.nft-delete__modal-content {
+  position: relative;
+}
+
+.nft-delete__loading {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nft-delete__loading .spinner-border {
+  width: 40px;
+  height: 40px;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

@@ -362,6 +362,16 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
+  public deleteNft(nft: INftTransaction): void {
+    const { nfts } = this.nftTransactions;
+
+    this.setNftTransactions({
+      ...this.nftTransactions,
+      nfts: nfts.filter((item) => item !== nft),
+    });
+  }
+
+  @Action
   public clear(): void {
     /** удаляем баланс по токенам */
 

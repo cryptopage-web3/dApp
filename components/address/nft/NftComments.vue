@@ -105,10 +105,9 @@ export default class NftComments extends Vue {
   commentText = '';
 
   get cryptoPageNft(): boolean {
-    const address = nftContractAddress[addressModule.chainId];
+    const address = nftContractAddress[addressModule.chainId] || '';
 
-    /** TODO: временно открываем всем, т.к. сейчас контракты с нашим не совпадают */
-    return address === this.nft.contract_address || true;
+    return address.toLowerCase() === this.nft.contract_address?.toLowerCase();
   }
 
   get isSameChain(): boolean {
