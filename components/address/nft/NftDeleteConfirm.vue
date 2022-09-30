@@ -139,7 +139,6 @@ export default class NftDeleteConfirm extends Vue {
           /** закрываем модалку и удаляем NFT из стора */
 
           self.hide();
-          addressModule.deleteNft(self.nft);
         },
         onError() {
           self.$notify({
