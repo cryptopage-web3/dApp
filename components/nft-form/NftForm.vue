@@ -175,8 +175,8 @@ export default class NftForm extends Vue {
     return nftFormModule.loadingForm;
   }
 
-  get completed(): boolean {
-    return nftFormModule.completed;
+  get txHash(): string | null {
+    return nftFormModule.txHash;
   }
 
   @Watch('isValid', { immediate: true })
@@ -195,9 +195,9 @@ export default class NftForm extends Vue {
     }
   }
 
-  @Watch('completed')
-  onCompletedChanged(completed: boolean) {
-    if (completed) {
+  @Watch('txHash')
+  onTxHashChanged(txHash: string | null) {
+    if (txHash) {
       this.closeForm();
       this.$refs.modal.hide();
       nftFormModule.clear();

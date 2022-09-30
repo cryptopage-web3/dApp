@@ -44,7 +44,7 @@ export default class NftFormModule extends VuexModule {
 
   loading = false;
 
-  completed = false;
+  txHash: string | null = null;
 
   get isValid(): boolean {
     const { title, file } = this.values;
@@ -147,8 +147,8 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Mutation
-  public setCompleted(completed: boolean) {
-    this.completed = completed;
+  public setTxHash(txHash: string | null) {
+    this.txHash = txHash;
   }
 
   @Mutation
@@ -192,6 +192,8 @@ export default class NftFormModule extends VuexModule {
     }
 
     /** начало процесса создания NFT */
+
+    this.setTxHash(null);
 
     this.setLoading(true);
 
@@ -267,7 +269,7 @@ export default class NftFormModule extends VuexModule {
         onReceipt() {
           alertModule.success('Transaction completed');
 
-          self.setCompleted(true);
+          self.setTxHash(txHash);
           self.setLoading(false);
         },
         onError() {
@@ -292,7 +294,7 @@ export default class NftFormModule extends VuexModule {
 
   @Action
   public clear() {
-    this.setCompleted(false);
+    this.setTxHash(null);
 
     this.setValues({
       title: '',
