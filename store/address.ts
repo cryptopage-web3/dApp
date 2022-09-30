@@ -77,6 +77,8 @@ export default class AddressModule extends VuexModule {
 
   nftTransactions: TNftTransactionsPagination = { ...defaultNftTransactions };
 
+  syncNftTransactionsLoading = false;
+
   ownNfts: TNftsPagination = { ...defaultOwnNfts };
 
   transactions: TTransactionsPagination = { ...defaultTransactions };
@@ -160,6 +162,11 @@ export default class AddressModule extends VuexModule {
   @Mutation
   public setTransactions(transactions: TTransactionsPagination) {
     this.transactions = transactions;
+  }
+
+  @Mutation
+  public setSyncNftTransactionsLoading(loading: boolean) {
+    this.syncNftTransactionsLoading = loading;
   }
 
   @Action
@@ -370,6 +377,80 @@ export default class AddressModule extends VuexModule {
       nfts: nfts.filter((item) => item !== nft),
     });
   }
+
+  @Action
+  public async syncAddressTransactions(targetTxHash: string | null) {
+    await this.syncNftTransactions(targetTxHash);
+    // await this.syncTransactions(targetTxHash);
+  }
+
+  @Action
+  public async syncNftTransactions(targetTxHash: string | null) {
+    try {
+      /**
+       * Получаем первые 10 записей, и добавляем те, которых у нас еще нет
+       * Процесс происходит каждые 3 секунды до 5-ти раз пока не получим targetTxHash
+       */
+
+      this.setSyncNftTransactionsLoading(true);
+
+      /** метод обновления списка NFT, возвращает флаг наличия целевой NFT */
+
+      const fetchNftTransactions = async () => {
+        const { nfts: oldNfts } = this.nftTransactions;
+
+        const { list, count } = await nftsService.getTransactionsList({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          page: 1,
+          pageSize: 10,
+        });
+
+        const newNfts = uniqueNftTransactionConcat(list, oldNfts);
+
+        this.setNftTransactions({
+          ...this.nftTransactions,
+          nfts: newNfts,
+          count: count === undefined ? newNfts.length : count,
+        });
+
+        const hasTargetTx = newNfts.some(
+          (item) =>
+            item.txHash?.toLowerCase() === (targetTxHash || '').toLowerCase(),
+        );
+
+        return hasTargetTx;
+      };
+
+      /** запуск цикла обновления NFT */
+
+      let targetLoaded = false;
+
+      for (let i = 0; i < 5; i++) {
+        const hasTargetTx = await new Promise((resolve) => {
+          setTimeout(async () => {
+            resolve(await fetchNftTransactions());
+          }, 3000);
+        });
+
+        if (hasTargetTx) {
+          targetLoaded = true;
+          break;
+        }
+      }
+
+      if (!targetLoaded) {
+        alertModule.info('Created NFT not loaded');
+      }
+    } catch {
+      alertModule.error('Failed to load created NFT');
+    } finally {
+      this.setSyncNftTransactionsLoading(false);
+    }
+  }
+
+  // @Action
+  // public syncTransactions(targetTxHash: string | null): void {}
 
   @Action
   public clear(): void {

@@ -5,6 +5,7 @@
     role="tabpanel"
     aria-labelledby="profile-tabs1-tab"
   >
+    <Loader v-if="newNftLoading" />
     <Nft v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
     <Loader v-if="$fetchState.pending || initLoading" />
     <div v-else-if="!nfts.length" class="transactions__empty">No NFTs</div>
@@ -40,6 +41,10 @@ export default class AddressNfts extends Vue {
 
   get hasAllPages(): boolean {
     return addressModule.nftTransactions.hasAllPages;
+  }
+
+  get newNftLoading(): boolean {
+    return addressModule.syncNftTransactionsLoading;
   }
 
   get isFetchDisabled(): boolean {
