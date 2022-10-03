@@ -5,6 +5,7 @@
     role="tabpanel"
     aria-labelledby="profile-tabs2-tab"
   >
+    <Loader v-if="newTransactionLoading" />
     <Transaction
       v-for="transaction in transactions"
       :key="uniqueKey(transaction)"
@@ -44,6 +45,10 @@ export default class AddressTransactions extends Vue {
 
   get hasAllPages(): boolean {
     return addressModule.transactions.hasAllPages;
+  }
+
+  get newTransactionLoading(): boolean {
+    return addressModule.syncTransactionsLoading;
   }
 
   get isFetchDisabled(): boolean {

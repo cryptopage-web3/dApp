@@ -18,6 +18,7 @@ import {
 import { networkHelper } from '~/utils/networkHelper';
 import {
   getNftTransactionUniqueKey,
+  getUniqueKey,
   uniqueHashConcat,
   uniqueNftConcat,
   uniqueNftTransactionConcat,
@@ -83,6 +84,8 @@ export default class AddressModule extends VuexModule {
   ownNfts: TNftsPagination = { ...defaultOwnNfts };
 
   transactions: TTransactionsPagination = { ...defaultTransactions };
+
+  syncTransactionsLoading = false;
 
   get address(): string {
     return this.info.address;
@@ -168,6 +171,11 @@ export default class AddressModule extends VuexModule {
   @Mutation
   public setSyncNftTransactionsLoading(loading: boolean) {
     this.syncNftTransactionsLoading = loading;
+  }
+
+  @Mutation
+  public setSyncTransactionsLoading(loading: boolean) {
+    this.syncTransactionsLoading = loading;
   }
 
   @Action
@@ -380,9 +388,11 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
-  public async syncAddressTransactions(targetTxHash: string | null) {
-    await this.syncNftTransactions(targetTxHash);
-    // await this.syncTransactions(targetTxHash);
+  public syncAddressTransactions(targetTxHash: string | null) {
+    /** запускаем параллельную синхронизацию, без async/await */
+
+    this.syncNftTransactions(targetTxHash);
+    this.syncTransactions(targetTxHash);
   }
 
   @Action
@@ -472,8 +482,92 @@ export default class AddressModule extends VuexModule {
     }
   }
 
-  // @Action
-  // public syncTransactions(targetTxHash: string | null): void {}
+  @Action
+  public async syncTransactions(targetTxHash: string | null) {
+    try {
+      /**
+       * Получаем первые 10 записей, и добавляем те, которых у нас еще нет
+       * Процесс происходит каждые 3 секунды до 5-ти раз пока не получим targetTxHash
+       */
+
+      this.setSyncTransactionsLoading(true);
+
+      /** метод обновления списка транзакций, возвращает флаг наличия целевой транзакции */
+
+      const fetchTransactions = async () => {
+        const { transactions: oldTransactions } = this.transactions;
+
+        const { transactions, count } = await transactionsService.getList({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          page: 1,
+          pageSize: 10,
+        });
+
+        /** отбираем уникальные значения */
+
+        const uniqueList: ITransaction[] = [];
+
+        transactions
+          .map((t) => defaultNormalizer(t, this.address, this.chainId))
+          .forEach((item) => {
+            const same = oldTransactions.find(
+              (tx) => getUniqueKey(tx) === getUniqueKey(item),
+            );
+
+            if (!same) {
+              uniqueList.push(item);
+            }
+          });
+
+        if (!uniqueList.length) {
+          return false;
+        }
+
+        /** обновляем стор */
+
+        const newTransactions = [...uniqueList, ...oldTransactions];
+
+        this.setTransactions({
+          ...this.transactions,
+          transactions: newTransactions,
+          count: count === undefined ? newTransactions.length : count,
+        });
+
+        const hasTargetTx = newTransactions.some(
+          (item) =>
+            item.hash?.toLowerCase() === (targetTxHash || '').toLowerCase(),
+        );
+
+        return hasTargetTx;
+      };
+
+      /** запуск цикла обновления транзакций */
+
+      let targetLoaded = false;
+
+      for (let i = 0; i < 5; i++) {
+        const hasTargetTx = await new Promise((resolve) => {
+          setTimeout(async () => {
+            resolve(await fetchTransactions());
+          }, 3000);
+        });
+
+        if (hasTargetTx) {
+          targetLoaded = true;
+          break;
+        }
+      }
+
+      if (!targetLoaded) {
+        alertModule.info('Created transaction not loaded');
+      }
+    } catch {
+      alertModule.error('Failed to load created transaction');
+    } finally {
+      this.setSyncTransactionsLoading(false);
+    }
+  }
 
   @Action
   public clear(): void {
