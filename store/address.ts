@@ -17,6 +17,7 @@ import {
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
+  getNftTransactionUniqueKey,
   uniqueHashConcat,
   uniqueNftConcat,
   uniqueNftTransactionConcat,
@@ -406,7 +407,29 @@ export default class AddressModule extends VuexModule {
           pageSize: 10,
         });
 
-        const newNfts = uniqueNftTransactionConcat(list, oldNfts);
+        /** отбираем уникальные значения */
+
+        const uniqueList: INftTransaction[] = [];
+
+        list.forEach((item) => {
+          const same = oldNfts.find(
+            (tx) =>
+              getNftTransactionUniqueKey(tx) ===
+              getNftTransactionUniqueKey(item),
+          );
+
+          if (!same) {
+            uniqueList.push(item);
+          }
+        });
+
+        if (!uniqueList.length) {
+          return false;
+        }
+
+        /** обновляем стор */
+
+        const newNfts = [...uniqueList, ...oldNfts];
 
         this.setNftTransactions({
           ...this.nftTransactions,
