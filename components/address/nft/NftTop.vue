@@ -2,7 +2,9 @@
   <div class="profile-content-top">
     <nuxt-link :to="`/${chainSlug}/${nft.from}`" class="profile-content__user">
       <div class="profile-content__user-icon">
-        <jazzicon :seed="10211" :address="nft.from" :diameter="30" />
+        <client-only>
+          <jazzicon :seed="10211" :address="nft.from" :diameter="30" />
+        </client-only>
       </div>
       <div>
         From:
