@@ -14,9 +14,11 @@ import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug } from '~/types';
 
+type TNftForm = INftForm;
+
 const ipfsService = new IPFSService();
 
-const initValues: INftForm = {
+const initValues: TNftForm = {
   title: '',
   description: '',
   file: null,
@@ -40,7 +42,7 @@ const initValues: INftForm = {
   stateFactory: true,
 })
 export default class NftFormModule extends VuexModule {
-  values: INftForm = initValues;
+  values: TNftForm = initValues;
 
   loading = false;
 
@@ -142,7 +144,7 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Mutation
-  public setValues(values: INftForm) {
+  public setValues(values: TNftForm) {
     this.values = values;
   }
 

@@ -30,6 +30,7 @@ type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
 type TNftsPagination = INftsPagination;
 type TNftTransactionsPagination = INftTransactionsPagination;
+type TNftTransaction = INftTransaction;
 type TNftTransactionDetailsParams = {
   index: number;
   nft: INftTransaction;
@@ -236,7 +237,7 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
-  public async fetchNftTransactionDetails(nft: INftTransaction) {
+  public async fetchNftTransactionDetails(nft: TNftTransaction) {
     const { nfts } = this.nftTransactions;
     const index = nfts.findIndex((item) => item === nft);
 
@@ -387,7 +388,7 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
-  public deleteNft(nft: INftTransaction): void {
+  public deleteNft(nft: TNftTransaction): void {
     const { nfts } = this.nftTransactions;
 
     this.setNftTransactions({
@@ -429,7 +430,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
-        const uniqueList: INftTransaction[] = [];
+        const uniqueList: TNftTransaction[] = [];
 
         list.forEach((item) => {
           const same = oldNfts.find(
