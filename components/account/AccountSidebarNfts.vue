@@ -30,7 +30,7 @@
         <li class="market-sidebar__list2-empty">No NFTs</li>
       </template>
       <template v-else>
-        <li v-for="(nft, index) in visibleNfts" :key="index">
+        <li v-for="nft in visibleNfts" :key="getNftUniqueKey(nft)">
           <SidebarNft :nft="nft" />
         </li>
       </template>
@@ -54,6 +54,7 @@ import { addressModule, authModule, stickyModule } from '~/store';
 import { IAddressInfo, INft } from '~/types';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 import SidebarArrowIcon from '~/components/icon/account/SidebarArrowIcon.vue';
+import { getNftUniqueKey } from '~/utils/array';
 
 type TAddressInfo = IAddressInfo;
 
@@ -119,6 +120,10 @@ export default class AccountSidebarNfts extends Vue {
     await addressModule.fetchOwnNfts();
 
     this.loading = false;
+  }
+
+  getNftUniqueKey(nft: INft) {
+    return getNftUniqueKey(nft);
   }
 }
 </script>
