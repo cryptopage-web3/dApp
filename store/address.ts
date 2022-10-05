@@ -8,6 +8,7 @@ import {
   EChainSlug,
   EChainType,
   IAddressInfo,
+  INft,
   INftsPagination,
   INftTransaction,
   INftTransactionsPagination,
@@ -18,6 +19,7 @@ import {
 import { networkHelper } from '~/utils/networkHelper';
 import {
   getNftTransactionUniqueKey,
+  getNftUniqueKey,
   getUniqueKey,
   uniqueHashConcat,
   uniqueNftConcat,
@@ -82,6 +84,8 @@ export default class AddressModule extends VuexModule {
   syncNftTransactionsLoading = false;
 
   ownNfts: TNftsPagination = { ...defaultOwnNfts };
+
+  syncOwnNftsLoading = false;
 
   transactions: TTransactionsPagination = { ...defaultTransactions };
 
@@ -176,6 +180,11 @@ export default class AddressModule extends VuexModule {
   @Mutation
   public setSyncTransactionsLoading(loading: boolean) {
     this.syncTransactionsLoading = loading;
+  }
+
+  @Mutation
+  public setSyncOwnNftsLoading(loading: boolean) {
+    this.syncOwnNftsLoading = loading;
   }
 
   @Action
@@ -393,6 +402,7 @@ export default class AddressModule extends VuexModule {
 
     this.syncNftTransactions(targetTxHash);
     this.syncTransactions(targetTxHash);
+    this.syncOwnNfts(targetTxHash);
   }
 
   @Action
@@ -564,6 +574,94 @@ export default class AddressModule extends VuexModule {
       }
     } catch {
       alertModule.error('Failed to load created transaction');
+    } finally {
+      this.setSyncTransactionsLoading(false);
+    }
+  }
+
+  @Action
+  public async syncOwnNfts(targetTxHash: string | null) {
+    try {
+      /**
+       * Получаем первые 10 записей, и добавляем те, которых у нас еще нет
+       * Процесс происходит каждые 3 секунды до 5-ти раз пока не получим targetTxHash
+       */
+
+      this.setSyncOwnNftsLoading(true);
+
+      /** метод обновления списка NFT, возвращает флаг наличия целевой транзакции */
+
+      const fetchOwnNfts = async () => {
+        const { nfts: oldNfts } = this.ownNfts;
+
+        const { list, count } = await nftsService.getList({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          page: 1,
+          pageSize: 10,
+        });
+
+        /** отбираем уникальные значения */
+
+        const uniqueList: INft[] = [];
+
+        list.forEach((item) => {
+          const same = oldNfts.find(
+            (tx) => getNftUniqueKey(tx) === getNftUniqueKey(item),
+          );
+
+          if (!same) {
+            uniqueList.push(item);
+          }
+        });
+
+        if (!uniqueList.length) {
+          return false;
+        }
+
+        /** обновляем стор */
+
+        const newNfts = [...uniqueList, ...oldNfts];
+
+        this.setOwnNfts({
+          ...this.ownNfts,
+          nfts: newNfts,
+          count: count === undefined ? newNfts.length : count,
+        });
+
+        /** TODO: с бэка не приходит hash по моим NFT, в результате данное условие всегда будет false */
+        const hasTargetTx = newNfts.some(
+          (item) =>
+            item.from?.toLowerCase() === (targetTxHash || '').toLowerCase(),
+        );
+
+        return hasTargetTx;
+      };
+
+      /** запуск цикла обновления транзакций */
+
+      let targetLoaded = false;
+
+      for (let i = 0; i < 5; i++) {
+        const hasTargetTx = await new Promise((resolve) => {
+          setTimeout(async () => {
+            resolve(await fetchOwnNfts());
+          }, 3000);
+        });
+
+        if (hasTargetTx) {
+          targetLoaded = true;
+          break;
+        }
+      }
+
+      /** Не отображаем сообщение, т.к. пользователь его не ждет и не нужен этот спам */
+
+      if (!targetLoaded) {
+        // alertModule.info('Created NFT not loaded');
+      }
+    } catch {
+      // alertModule.error('Failed to load created NFT');
     } finally {
       this.setSyncTransactionsLoading(false);
     }
