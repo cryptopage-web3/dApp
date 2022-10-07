@@ -94,7 +94,9 @@
       </div>
     </label>
 
-    <NftFormModal ref="modal" />
+    <client-only>
+      <NftFormModal ref="modal" />
+    </client-only>
   </div>
 </template>
 
