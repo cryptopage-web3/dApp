@@ -5,6 +5,7 @@
         <nuxt-link to="/" class="navbar-brand">
           <img src="@/assets/img/market-header-logo.svg" alt="" />
         </nuxt-link>
+        <div class="header-beta">BETA</div>
         <div class="market-header-search">
           <div class="market-header-search__top">
             <input
