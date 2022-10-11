@@ -3,8 +3,11 @@
     <layout-notification />
     <layout-cookies />
     <layout-header />
+
     <nuxt />
+
     <layout-footer />
+    <onboarding-modals />
   </div>
 </template>
 

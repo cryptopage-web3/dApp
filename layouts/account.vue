@@ -15,6 +15,7 @@
     </section>
 
     <layout-footer />
+    <onboarding-modals />
   </div>
 </template>
 
