@@ -23,6 +23,7 @@
             <div class="form-field mt_md_20 mt_10">
               <div class="form-field__title">Your name</div>
               <input
+                v-model="name"
                 type="text"
                 class="w-100 global-input global-input_large"
                 placeholder="Enter your name"
@@ -34,7 +35,6 @@
               <a
                 href="#"
                 role="button"
-                data-dismiss="modal"
                 class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30"
                 @click.prevent="skip"
               >
@@ -43,9 +43,6 @@
               <a
                 href="#"
                 role="button"
-                data-toggle="modal"
-                data-target="#onboarding-modal-step2"
-                data-dismiss="modal"
                 class="btn btn-blue_button btn_large pr_30 pl_30"
                 @click.prevent="next"
               >
@@ -65,6 +62,8 @@ import { Component, Emit } from 'nuxt-property-decorator';
 
 @Component({})
 export default class OnboardingStep1 extends Vue {
+  name = '';
+
   $refs!: {
     modal: HTMLDivElement;
   };
@@ -97,6 +96,15 @@ export default class OnboardingStep1 extends Vue {
   }
 
   next() {
+    if (!this.name) {
+      this.$notify({
+        type: 'error',
+        title: 'Enter your name',
+      });
+
+      return;
+    }
+
     this.emitNext();
     this.hide();
   }

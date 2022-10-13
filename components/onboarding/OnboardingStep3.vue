@@ -24,7 +24,6 @@
               <a
                 href="#"
                 role="button"
-                data-dismiss="modal"
                 class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30"
                 @click.prevent="skip"
               >
@@ -33,9 +32,6 @@
               <a
                 href="#"
                 role="button"
-                data-toggle="modal"
-                data-target="#onboarding-modal-step4"
-                data-dismiss="modal"
                 class="btn btn-blue_button btn_large pr_30 pl_30"
                 @click.prevent="next"
               >

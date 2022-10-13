@@ -19,27 +19,9 @@
               congue volutpat mauris, ac scelerisque ante feugiat a.
             </div>
             <div class="form-creat mt_md_20 mt_10 mb-0 pb_md_20 pb_10">
-              <input
-                type="text"
-                placeholder="Enter title"
-                class="form-creat__name"
-              />
-              <div class="form-creat-textarea-wrap" style="display: block">
-                <textarea class="form-creat__text" placeholder="Enter text" />
-              </div>
-              <div class="form-creat-bottom">
-                <div class="form-creat-nav">
-                  <a href="#" class="form-creat-nav-item stroke">
-                    <NftFormAudioIcon />
-                  </a>
-                  <a href="#" class="form-creat-nav-item all">
-                    <NftFormImageIcon />
-                  </a>
-                  <a href="#" class="form-creat-nav-item all">
-                    <NftFormVideoIcon />
-                  </a>
-                </div>
-              </div>
+              <NftFormTitle />
+              <NftFormDescription />
+              <NftFormFile />
             </div>
             <div
               class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"
@@ -47,7 +29,6 @@
               <a
                 href="#"
                 role="button"
-                data-dismiss="modal"
                 class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30"
                 @click.prevent="skip"
               >
@@ -71,15 +52,15 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Emit } from 'nuxt-property-decorator';
-import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
-import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
-import NftFormVideoIcon from '~/components/icon/nft-form/NftFormVideoIcon.vue';
+import NftFormTitle from './nft-form/NftFormTitle.vue';
+import NftFormDescription from './nft-form/NftFormDescription.vue';
+import NftFormFile from './nft-form/NftFormFile.vue';
 
 @Component({
   components: {
-    NftFormAudioIcon,
-    NftFormImageIcon,
-    NftFormVideoIcon,
+    NftFormTitle,
+    NftFormDescription,
+    NftFormFile,
   },
 })
 export default class OnboardingStep5 extends Vue {

@@ -83,6 +83,7 @@ export default class OnboardingModals extends Vue {
     }
 
     this.step = steps[currentIndex + 1];
+    this.$refs[this.step].show();
   }
 }
 </script>
