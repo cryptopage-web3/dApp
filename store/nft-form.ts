@@ -168,6 +168,13 @@ export default class NftFormModule extends VuexModule {
       return;
     }
 
+    /** проверяем наличие авторизации */
+
+    if (!authModule.isAuth) {
+      alertModule.error('Need to connect a wallet to create NFTs');
+      return;
+    }
+
     /** owner в NFT будет из addressModule */
     /** проверяем что addressModule той же сети, что и authModule */
 

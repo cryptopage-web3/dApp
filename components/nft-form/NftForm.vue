@@ -199,12 +199,16 @@ export default class NftForm extends Vue {
 
   @Watch('txHash')
   onTxHashChanged(txHash: string | null) {
-    if (txHash) {
+    if (!txHash) {
+      return;
+    }
+
+    setTimeout(() => {
       this.closeForm();
       this.$refs.modal.hide();
       nftFormModule.clear();
       addressModule.syncAddressTransactions(txHash);
-    }
+    }, 10);
   }
 
   mounted() {

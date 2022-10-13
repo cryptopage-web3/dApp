@@ -41,6 +41,12 @@
               >
                 Public
               </a>
+
+              <div v-if="loadingForm" class="onboarding-welcome-btns__loading">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -51,10 +57,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Emit } from 'nuxt-property-decorator';
+import { Component, Emit, Watch } from 'nuxt-property-decorator';
 import NftFormTitle from './nft-form/NftFormTitle.vue';
 import NftFormDescription from './nft-form/NftFormDescription.vue';
 import NftFormFile from './nft-form/NftFormFile.vue';
+import { addressModule, nftFormModule } from '~/store';
 
 @Component({
   components: {
@@ -68,6 +75,14 @@ export default class OnboardingStep5 extends Vue {
     modal: HTMLDivElement;
   };
 
+  get loadingForm(): boolean {
+    return nftFormModule.loadingForm;
+  }
+
+  get txHash(): string | null {
+    return nftFormModule.txHash;
+  }
+
   // emit
 
   @Emit('skip')
@@ -78,6 +93,22 @@ export default class OnboardingStep5 extends Vue {
   @Emit('next')
   emitNext() {
     return true;
+  }
+
+  // watch
+
+  @Watch('txHash')
+  onTxHashChanged(txHash: string | null) {
+    if (!txHash) {
+      return;
+    }
+
+    setTimeout(() => {
+      this.emitNext();
+      this.hide();
+      nftFormModule.clear();
+      addressModule.syncAddressTransactions(txHash);
+    }, 10);
   }
 
   // methods
@@ -96,8 +127,7 @@ export default class OnboardingStep5 extends Vue {
   }
 
   next() {
-    this.emitNext();
-    this.hide();
+    nftFormModule.submit();
   }
 }
 </script>
