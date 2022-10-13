@@ -53,11 +53,17 @@ export default class OnboardingModals extends Vue {
   $refs!: TRefs;
 
   mounted() {
+    const completed = localStorage.getItem('onboarding-completed');
+
+    if (completed) {
+      return;
+    }
+
     this.$refs[this.step].show();
   }
 
   skip() {
-    // debugger;
+    localStorage.setItem('onboarding-completed', 'skip');
   }
 
   next() {
@@ -72,6 +78,7 @@ export default class OnboardingModals extends Vue {
     /** последний шаг */
 
     if (!steps[currentIndex + 1]) {
+      localStorage.setItem('onboarding-completed', 'public');
       return;
     }
 
