@@ -22,9 +22,8 @@
               <div class="form-field__title">Your email</div>
               <input
                 type="text"
-                value="Philippe_Khvatov@gmail.com"
                 class="w-100 global-input global-input_large"
-                placeholder="Enter your name"
+                placeholder="Enter your email"
               />
             </div>
             <div

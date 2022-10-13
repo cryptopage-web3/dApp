@@ -24,7 +24,6 @@
               <div class="form-field__title">Your name</div>
               <input
                 type="text"
-                value="Philippe_Khvatov"
                 class="w-100 global-input global-input_large"
                 placeholder="Enter your name"
               />
