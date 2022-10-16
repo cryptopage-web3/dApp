@@ -1,4 +1,4 @@
-import { ETypeNft, IAttribute } from '.';
+import { ETypeNft, IAttribute, INftComment } from '.';
 
 export interface INftTransaction {
   type?: ETypeNft;
@@ -20,4 +20,6 @@ export interface INftTransaction {
 
   price?: number;
   symbol?: string;
+
+  comments?: INftComment[];
 }

@@ -4,7 +4,7 @@
       <li>
         <a ref="like" href="#" @click.prevent="select('like', $event)">
           <CommentLikeIcon />
-          <span> {{ nft.likes || 0 }} </span>
+          <span> {{ likes }} </span>
         </a>
       </li>
       <li>
@@ -15,7 +15,7 @@
           @click.prevent="select('dislike', $event)"
         >
           <CommentDislikeIcon />
-          <span> {{ nft.dislikes || 0 }} </span>
+          <span> {{ dislikes }} </span>
         </a>
       </li>
     </ul>
@@ -126,6 +126,14 @@ export default class NftComments extends Vue {
     return authModule.address.toLowerCase() === this.nft.to.toLowerCase();
   }
 
+  get likes(): number {
+    return (this.nft.comments || []).filter((item) => item.isUp).length;
+  }
+
+  get dislikes(): number {
+    return (this.nft.comments || []).filter((item) => item.isDown).length;
+  }
+
   select(type: TCommentType, event: PointerEvent) {
     this.commentType = type;
     this.commentText = '';
@@ -181,6 +189,20 @@ export default class NftComments extends Vue {
       this.$notify({
         type: 'error',
         title: `Need connect to ${this.addressChainName}`,
+      });
+      return;
+    }
+
+    /** проверяем, что нет реакции от этого пользователя ранее */
+
+    const hasComment = (this.nft.comments || []).some(
+      (item) => item._owner.toLowerCase() === authModule.address.toLowerCase(),
+    );
+
+    if (hasComment) {
+      this.$notify({
+        type: 'error',
+        title: `You have already commented this NFT`,
       });
       return;
     }
@@ -245,6 +267,10 @@ export default class NftComments extends Vue {
 
           self.loading = false;
           self.resetComment();
+
+          /** обновляем информацию NFT */
+
+          addressModule.fetchNftTransactionDetails(self.nft);
         },
         onError() {
           self.$notify({

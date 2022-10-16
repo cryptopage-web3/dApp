@@ -34,3 +34,4 @@ export * from './INftTransactionsResponse';
 export * from './INftTransactionsPagination';
 export * from './INftDetailsParams';
 export * from './INftTransactionDetailsResponse';
+export * from './INftComment';
