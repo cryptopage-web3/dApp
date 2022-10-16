@@ -196,7 +196,7 @@ export default class NftComments extends Vue {
     /** проверяем, что нет реакции от этого пользователя ранее */
 
     const hasComment = (this.nft.comments || []).some(
-      (item) => item._owner.toLowerCase() === authModule.address.toLowerCase(),
+      (item) => item.creator.toLowerCase() === authModule.address.toLowerCase(),
     );
 
     if (hasComment) {
