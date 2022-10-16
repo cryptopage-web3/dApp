@@ -27,7 +27,10 @@
             </div>
           </div>
 
-          <div class="profile-content">
+          <div
+            class="profile-content"
+            :class="{ 'profile-content_no-border': !hasComments }"
+          >
             <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
             <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
             <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
@@ -37,7 +40,7 @@
             <NftComments :hide-burn="true" :nft="nft" />
           </div>
 
-          <NftModalCommentList :nft="nft" />
+          <NftModalCommentList v-if="hasComments" :nft="nft" />
         </div>
       </div>
     </div>
@@ -82,6 +85,10 @@ export default class NftModal extends Vue {
   $refs!: {
     modal: HTMLDivElement;
   };
+
+  get hasComments(): boolean {
+    return !!(this.nft.comments || []).length;
+  }
 
   show() {
     ($(this.$refs.modal) as any).modal('show');
