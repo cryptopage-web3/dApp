@@ -32,11 +32,11 @@ export default class NftModalCommentList extends Vue {
   readonly nft!: TNftTransaction;
 
   get comments(): INftComment[] {
-    return this.nft.comments || [];
+    return (this.nft.comments || []).filter((item) => item.ipfsHash);
   }
 
   uniqKey(comment: INftComment) {
-    return `${comment.ipfsHash}_${comment.creator}_${comment.price}`;
+    return `${comment.ipfsHash}_${comment.creator}_${this.nft.txHash}`;
   }
 }
 </script>

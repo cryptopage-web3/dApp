@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="modal-post-comment__text">
-        {{ comment.ipfsHash }}
+        {{ commentText }}
       </div>
     </div>
   </div>
@@ -43,14 +43,28 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INftComment } from '~/types';
 import { addressModule } from '~/store';
+import { IPFSService } from '~/services';
+
+const ipfsService = new IPFSService();
+type TNftComment = INftComment;
 
 @Component({})
 export default class NftModalCommentItem extends Vue {
   @Prop({ required: true })
-  readonly comment!: INftComment;
+  readonly comment!: TNftComment;
+
+  commentText = 'Loading...';
 
   get chainSlug(): string {
     return addressModule.chainSlug;
+  }
+
+  async mounted() {
+    try {
+      this.commentText = await ipfsService.getComment(this.comment.ipfsHash);
+    } catch {
+      this.commentText = 'No comment text';
+    }
   }
 }
 </script>

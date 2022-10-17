@@ -383,6 +383,14 @@
   height: 40px;
 }
 
+.modal-post-bottom {
+  padding-top: 20px;
+}
+
+.modal-post-comment__thumb::after {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {
