@@ -78,4 +78,24 @@ export class NftsService extends BaseService {
 
     return data;
   };
+
+  getMimeType = async (url: string) => {
+    const mimeType = await new Promise<string>((resolve) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+
+      xhr.onload = function () {
+        resolve(xhr.response.type);
+      };
+
+      xhr.send();
+
+      setTimeout(() => {
+        resolve('');
+      }, 30000);
+    });
+
+    return mimeType;
+  };
 }

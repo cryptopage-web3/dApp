@@ -391,6 +391,12 @@
   display: none;
 }
 
+.audio-player audio {
+  display: inline-block;
+  max-height: 150px;
+  max-width: 100%;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {

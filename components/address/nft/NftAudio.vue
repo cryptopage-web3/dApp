@@ -1,19 +1,10 @@
 <template>
   <div class="post-videos">
     <div class="post-video">
-      <div class="video">
-        <div class="video-player">
-          <video
-            ref="video"
-            style="z-index: 10"
-            tabindex="-1"
-            data-video=""
-            allowfullscreen="false"
-            controlslist="nodownload"
-          >
-            <source :src="nft.url" type="video/mp4" />
-          </video>
-        </div>
+      <div class="audio-player">
+        <audio ref="audio" style="z-index: 10" controls>
+          <source :src="nft.url" />
+        </audio>
       </div>
     </div>
   </div>
@@ -33,12 +24,12 @@ export default class NftAudio extends Vue {
   readonly nft!: TNftTransaction;
 
   $refs!: {
-    video: HTMLVideoElement;
+    audio: HTMLAudioElement;
   };
 
   mounted() {
     this.$nextTick(() => {
-      playOneVideoInit(this.$refs.video);
+      playOneVideoInit(this.$refs.audio);
     });
   }
 }

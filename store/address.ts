@@ -7,6 +7,7 @@ import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
   EChainSlug,
   EChainType,
+  ETypeNft,
   IAddressInfo,
   INft,
   INftsPagination,
@@ -248,6 +249,22 @@ export default class AddressModule extends VuexModule {
         tokenId: nft.tokenId,
         blockNumber: nft.blockNumber,
       });
+
+      if (data.url) {
+        const mimeType = await nftsService.getMimeType(data.url);
+
+        if (/audio/.test(mimeType)) {
+          data.type = ETypeNft.audio;
+        }
+
+        if (/video/.test(mimeType)) {
+          data.type = ETypeNft.video;
+        }
+
+        if (/image/.test(mimeType)) {
+          data.type = ETypeNft.image;
+        }
+      }
 
       this.setNftTransactionDetails({
         index,
