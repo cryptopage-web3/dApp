@@ -397,6 +397,26 @@
   max-width: 100%;
 }
 
+.market-product-ld li a svg path:not(.empty) {
+  stroke: none !important;
+}
+
+.market-product-ld li:first-child a.active svg path.empty {
+  display: none;
+}
+
+.market-product-ld li:first-child a:not(.active) svg path.active {
+  display: none;
+}
+
+.market-product-ld li:last-child a.market-product-dislike.active svg path.empty {
+  display: none;
+}
+
+.market-product-ld li:last-child a.market-product-dislike:not(.active) svg path.active {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {
