@@ -80,21 +80,41 @@ export class NftsService extends BaseService {
   };
 
   getMimeType = async (url: string) => {
-    const mimeType = await new Promise<string>((resolve) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'blob';
+    let mimeType = '';
 
-      xhr.onload = function () {
-        resolve(xhr.response.type);
-      };
+    try {
+      mimeType = await new Promise<string>((resolve) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('HEAD', url, true);
 
-      xhr.send();
+        xhr.onload = function () {
+          const contentType = xhr.getResponseHeader('Content-Type');
+          resolve(contentType || '');
+        };
 
-      setTimeout(() => {
-        resolve('');
-      }, 30000);
-    });
+        xhr.send();
+
+        setTimeout(() => {
+          resolve('');
+        }, 30000);
+      });
+    } catch {
+      mimeType = '';
+    }
+
+    if (!mimeType) {
+      if (/\.(gif|jpeg|jpg|png|webp|bmp|svg)$/i.test(url)) {
+        mimeType = 'image/jpeg';
+      }
+
+      if (/\.(avi|mp4|mov|webm|mpeg|wmv)$/i.test(url)) {
+        mimeType = 'video/mp4';
+      }
+
+      if (/\.(mp3|wav|ogg|flac)$/i.test(url)) {
+        mimeType = 'audio/mp3';
+      }
+    }
 
     return mimeType;
   };

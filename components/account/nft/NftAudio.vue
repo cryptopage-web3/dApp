@@ -1,5 +1,5 @@
 <template>
-  <div class="market-sidebar__nft-video">
+  <div ref="player" class="market-sidebar__nft-audio green-audio-player">
     <audio ref="audio" crossorigin="" preload="none">
       <source :src="nft.url" type="audio/mpeg" />
     </audio>
@@ -16,16 +16,27 @@ type TNft = INft;
 
 @Component({})
 export default class NftAudio extends Vue {
+  gap: any = null;
+
   @Prop({ required: true })
   readonly nft!: TNft;
 
   $refs!: {
     audio: HTMLAudioElement;
+    player: HTMLDivElement;
   };
 
   mounted() {
     this.$nextTick(() => {
-      playOneVideoInit(this.$refs.audio);
+      if (!this.gap) {
+        this.gap = new (window as any).GreenAudioPlayer(this.$refs.player, {
+          showTooltips: true,
+          showDownloadButton: false,
+          enableKeystrokes: true,
+        });
+
+        playOneVideoInit(this.gap.player);
+      }
     });
   }
 }

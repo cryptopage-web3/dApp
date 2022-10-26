@@ -30,7 +30,7 @@ type TNft = INft;
     Skeleton,
   },
 })
-export default class SidebarNft extends Vue {
+export default class Nft extends Vue {
   ETypeNft = ETypeNft;
   loading = true;
 

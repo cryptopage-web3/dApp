@@ -32,13 +32,14 @@ type TTransactionsPagination = ITransactionsPagination;
 type TNftsPagination = INftsPagination;
 type TNftTransactionsPagination = INftTransactionsPagination;
 type TNftTransaction = INftTransaction;
+type TNft = INft;
 type TNftTransactionDetailsParams = {
   index: number;
   nft: INftTransaction;
 };
 type TOwnNftDetailsParams = {
   index: number;
-  nft: INft;
+  nft: TNft;
 };
 
 const tokensService = new TokensService();
@@ -329,7 +330,7 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
-  public async fetchOwnNftDetails(nft: INft) {
+  public async fetchOwnNftDetails(nft: TNft) {
     const { nfts } = this.ownNfts;
     const index = nfts.findIndex((item) => item === nft);
 
