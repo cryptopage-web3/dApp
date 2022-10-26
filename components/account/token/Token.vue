@@ -65,7 +65,7 @@ import { IToken } from '~/types';
 type TToken = IToken;
 
 @Component({})
-export default class SidebarToken extends Vue {
+export default class Token extends Vue {
   @Prop({ required: true })
   readonly token!: TToken;
 }

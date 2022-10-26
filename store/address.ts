@@ -36,6 +36,10 @@ type TNftTransactionDetailsParams = {
   index: number;
   nft: INftTransaction;
 };
+type TOwnNftDetailsParams = {
+  index: number;
+  nft: INft;
+};
 
 const tokensService = new TokensService();
 const nftsService = new NftsService();
@@ -167,6 +171,13 @@ export default class AddressModule extends VuexModule {
   @Mutation
   public setOwnNfts(nfts: TNftsPagination) {
     this.ownNfts = nfts;
+  }
+
+  @Mutation
+  public setOwnNftDetails({ index, nft }: TOwnNftDetailsParams) {
+    const { nfts } = this.ownNfts;
+
+    Vue.set(nfts, index, nft);
   }
 
   @Mutation
@@ -313,6 +324,46 @@ export default class AddressModule extends VuexModule {
       this.setOwnNfts({
         ...this.ownNfts,
         hasAllPages: true,
+      });
+    }
+  }
+
+  @Action
+  public async fetchOwnNftDetails(nft: INft) {
+    const { nfts } = this.ownNfts;
+    const index = nfts.findIndex((item) => item === nft);
+
+    try {
+      if (nft.url) {
+        const mimeType = await nftsService.getMimeType(nft.url);
+
+        if (/audio/.test(mimeType)) {
+          nft.type = ETypeNft.audio;
+        }
+
+        if (/video/.test(mimeType)) {
+          nft.type = ETypeNft.video;
+        }
+
+        if (/image/.test(mimeType)) {
+          nft.type = ETypeNft.image;
+        }
+      }
+
+      this.setOwnNftDetails({
+        index,
+        nft: {
+          ...nft,
+          hasDetails: true,
+        },
+      });
+    } catch {
+      this.setOwnNftDetails({
+        index,
+        nft: {
+          ...nft,
+          hasDetails: true,
+        },
       });
     }
   }

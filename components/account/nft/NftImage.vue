@@ -1,0 +1,51 @@
+<template>
+  <a
+    v-if="nft.url && !isError"
+    ref="container"
+    :href="nft.url"
+    target="_blank"
+    class="market-sidebar__nft-image loading-bg"
+  />
+  <div v-else class="market-sidebar__nft-image">
+    <div class="market-sidebar__nft-image-empty">Failed to get nft data</div>
+  </div>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import { Component, Prop } from 'nuxt-property-decorator';
+import { INft } from '~/types';
+
+type TNft = INft;
+
+@Component({})
+export default class NftImage extends Vue {
+  isError = false;
+
+  @Prop({ required: true })
+  readonly nft!: TNft;
+
+  $refs!: {
+    container: HTMLDivElement;
+  };
+
+  mounted() {
+    this.$nextTick(() => {
+      if (!this.nft.url) {
+        this.isError = true;
+        return;
+      }
+
+      const image = new Image();
+      image.src = this.nft.url;
+
+      image.onload = () => {
+        this.$refs.container?.append(image);
+      };
+      image.onerror = () => {
+        this.isError = true;
+      };
+    });
+  }
+}
+</script>

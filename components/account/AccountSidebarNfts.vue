@@ -31,7 +31,7 @@
       </template>
       <template v-else>
         <li v-for="nft in visibleNfts" :key="getNftUniqueKey(nft)">
-          <SidebarNft :nft="nft" />
+          <Nft :nft="nft" />
         </li>
       </template>
     </ul>
@@ -49,7 +49,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
-import SidebarNft from './SidebarNft.vue';
+import Nft from './nft/Nft.vue';
 import { addressModule, authModule, stickyModule } from '~/store';
 import { IAddressInfo, INft } from '~/types';
 import Skeleton from '~/components/loaders/Skeleton.vue';
@@ -61,7 +61,7 @@ type TAddressInfo = IAddressInfo;
 @Component({
   components: {
     Skeleton,
-    SidebarNft,
+    Nft,
     SidebarArrowIcon,
   },
 })

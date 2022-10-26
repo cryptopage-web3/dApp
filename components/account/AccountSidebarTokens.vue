@@ -31,7 +31,7 @@
       </template>
       <template v-else>
         <li v-for="(token, index) in visibleTokens" :key="index">
-          <SidebarToken :token="token" />
+          <Token :token="token" />
         </li>
       </template>
     </ul>
@@ -49,7 +49,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
-import SidebarToken from './SidebarToken.vue';
+import Token from './token/Token.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 import { addressModule, authModule, stickyModule } from '~/store';
 import { IAddressInfo, IToken } from '~/types';
@@ -60,7 +60,7 @@ type TAddressInfo = IAddressInfo;
 @Component({
   components: {
     Skeleton,
-    SidebarToken,
+    Token,
     SidebarArrowIcon,
   },
 })
