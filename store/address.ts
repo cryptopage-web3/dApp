@@ -333,21 +333,22 @@ export default class AddressModule extends VuexModule {
   public async fetchOwnNftDetails(nft: TNft) {
     const { nfts } = this.ownNfts;
     const index = nfts.findIndex((item) => item === nft);
+    let nftType = nft.type;
 
     try {
       if (nft.url) {
         const mimeType = await nftsService.getMimeType(nft.url);
 
         if (/audio/.test(mimeType)) {
-          nft.type = ETypeNft.audio;
+          nftType = ETypeNft.audio;
         }
 
         if (/video/.test(mimeType)) {
-          nft.type = ETypeNft.video;
+          nftType = ETypeNft.video;
         }
 
         if (/image/.test(mimeType)) {
-          nft.type = ETypeNft.image;
+          nftType = ETypeNft.image;
         }
       }
 
@@ -355,6 +356,7 @@ export default class AddressModule extends VuexModule {
         index,
         nft: {
           ...nft,
+          type: nftType,
           hasDetails: true,
         },
       });
