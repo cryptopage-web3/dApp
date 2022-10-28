@@ -99,7 +99,7 @@ export default class OnboardingStep5 extends Vue {
 
   @Watch('txHash')
   onTxHashChanged(txHash: string | null) {
-    if (!txHash) {
+    if (!txHash || !$(this.$refs.modal).hasClass('show')) {
       return;
     }
 
