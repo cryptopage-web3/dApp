@@ -1,15 +1,8 @@
 <template>
-  <div class="market-product__media-video">
-    <video
-      ref="video"
-      style="z-index: 10"
-      tabindex="-1"
-      data-video=""
-      allowfullscreen="false"
-      controls
-    >
-      <source :src="nft.url" type="video/mp4" />
-    </video>
+  <div ref="player" class="market-product__media-audio green-audio-player">
+    <audio ref="audio" crossorigin="" preload="none">
+      <source :src="nft.url" type="audio/mpeg" />
+    </audio>
   </div>
 </template>
 
@@ -23,16 +16,27 @@ type TNft = INft;
 
 @Component({})
 export default class NftVideo extends Vue {
+  gap: any = null;
+
   @Prop({ required: true })
   readonly nft!: TNft;
 
   $refs!: {
-    video: HTMLVideoElement;
+    audio: HTMLAudioElement;
+    player: HTMLDivElement;
   };
 
   mounted() {
     this.$nextTick(() => {
-      playOneVideoInit(this.$refs.video);
+      if (!this.gap) {
+        this.gap = new (window as any).GreenAudioPlayer(this.$refs.player, {
+          showTooltips: true,
+          showDownloadButton: false,
+          enableKeystrokes: true,
+        });
+
+        playOneVideoInit(this.gap.player);
+      }
     });
   }
 }
