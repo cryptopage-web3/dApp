@@ -1,4 +1,4 @@
-import { ETypeNft, IAttribute } from '.';
+import { ETypeNft, IAttribute, INftComment } from '.';
 
 export interface INft {
   collectionName: string;
@@ -12,9 +12,9 @@ export interface INft {
   from: string;
   tokenId: string;
   usdPrice: number;
-  comments: number;
   likes: number;
   dislikes: number;
   type: ETypeNft;
   attributes: IAttribute[];
+  comments?: INftComment[];
 }
