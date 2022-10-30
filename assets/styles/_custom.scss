@@ -441,6 +441,16 @@
   display: none;
 }
 
+.market-product__title:hover {
+  color: #687684;
+  opacity: 0.7;
+}
+
+.market-product__name:hover {
+  color: #1F1F1F;
+  opacity: 0.7;
+}
+
 @media (max-width: 767px) {
   .profile-login__card_tron,
   .profile-login__card_solana {
