@@ -1,7 +1,7 @@
 <template>
   <div ref="player" class="market-product__media-audio green-audio-player">
     <audio ref="audio" crossorigin="" preload="none">
-      <source :src="nft.url" type="audio/mpeg" />
+      <source :src="nft.contentUrl" type="audio/mpeg" />
     </audio>
   </div>
 </template>

@@ -4,7 +4,7 @@ export interface INftTransactionDetailsResponse {
   id?: number;
   date?: string;
   type?: ETypeNft;
-  url?: string;
+  contentUrl?: string;
   name?: string;
   description?: string;
   chain?: string;

@@ -1,8 +1,8 @@
 <template>
   <a
-    v-if="nft.url && !isError"
+    v-if="nft.contentUrl && !isError"
     ref="container"
-    :href="nft.url"
+    :href="nft.contentUrl"
     target="_blank"
     class="market-sidebar__nft-image loading-bg"
   />
@@ -31,13 +31,13 @@ export default class NftImage extends Vue {
 
   mounted() {
     this.$nextTick(() => {
-      if (!this.nft.url) {
+      if (!this.nft.contentUrl) {
         this.isError = true;
         return;
       }
 
       const image = new Image();
-      image.src = this.nft.url;
+      image.src = this.nft.contentUrl;
 
       image.onload = () => {
         this.$refs.container?.append(image);

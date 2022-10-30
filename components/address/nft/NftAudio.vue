@@ -3,7 +3,7 @@
     <div class="post-video">
       <div ref="player" class="post-audio-item green-audio-player">
         <audio crossorigin="" preload="none">
-          <source :src="nft.url" type="audio/mpeg" />
+          <source :src="nft.contentUrl" type="audio/mpeg" />
         </audio>
       </div>
     </div>

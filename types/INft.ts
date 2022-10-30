@@ -5,7 +5,7 @@ export interface INft {
   contract_address: string;
   date: string;
   description?: string;
-  url: string;
+  contentUrl: string;
   hasDetails?: boolean;
   name: string;
   to: string;

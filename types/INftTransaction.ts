@@ -15,7 +15,7 @@ export interface INftTransaction {
   chain?: string;
   name?: string;
   description?: string;
-  url?: string;
+  contentUrl?: string;
   attributes?: IAttribute[];
 
   price?: number;
