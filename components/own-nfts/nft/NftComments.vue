@@ -2,13 +2,17 @@
   <div v-if="cryptoPageNft" class="market-product-bottom">
     <ul class="market-product-ld">
       <li>
-        <a href="#">
+        <a href="#" @click.prevent="$emit('select', 'like')">
           <CommentLikeIcon />
           <span> {{ likes }} </span>
         </a>
       </li>
       <li>
-        <a href="#" class="market-product-dislike">
+        <a
+          href="#"
+          class="market-product-dislike"
+          @click.prevent="$emit('select', 'dislike')"
+        >
           <CommentDislikeIcon />
           <span> {{ dislikes }} </span>
         </a>

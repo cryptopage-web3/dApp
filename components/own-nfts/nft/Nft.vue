@@ -15,8 +15,10 @@
         <NftDropdown />
       </div>
       <NftText :nft="nft" />
-      <NftComments :nft="nft" />
+      <NftComments :nft="nft" @select="selectReaction" />
     </div>
+
+    <NftCommentsModal ref="modal" :nft="nft" />
   </div>
 </template>
 
@@ -31,8 +33,10 @@ import NftImage from '~/components/own-nfts/nft/NftImage.vue';
 import NftVideo from '~/components/own-nfts/nft/NftVideo.vue';
 import NftAudio from '~/components/own-nfts/nft/NftAudio.vue';
 import NftFavorite from '~/components/own-nfts/nft/NftFavorite.vue';
+import NftCommentsModal from '~/components/own-nfts/nft/NftCommentsModal.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 import { addressModule } from '~/store';
+import { TCommentType } from '~/types/comment-form';
 
 type TNft = INft;
 
@@ -46,6 +50,7 @@ type TNft = INft;
     NftVideo,
     NftAudio,
     Skeleton,
+    NftCommentsModal,
   },
 })
 export default class Nft extends Vue {
@@ -54,6 +59,10 @@ export default class Nft extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNft;
+
+  $refs!: {
+    modal: NftCommentsModal;
+  };
 
   async mounted() {
     if (this.nft.hasDetails) {
@@ -66,6 +75,10 @@ export default class Nft extends Vue {
     await addressModule.fetchOwnNftDetails(this.nft);
 
     this.loading = false;
+  }
+
+  selectReaction(type: TCommentType) {
+    this.$refs.modal.show(type);
   }
 }
 </script>

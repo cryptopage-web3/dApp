@@ -57,7 +57,7 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
-import { ISendCommentParams } from '~/types/comment-form';
+import { ISendCommentParams, TCommentType } from '~/types/comment-form';
 import { IPFSService, Web3Service } from '~/services';
 import { nftContractAddress } from '~/contracts';
 import NftBurn from '~/components/address/nft/NftBurn.vue';
@@ -73,7 +73,6 @@ import {
 import { addressModule, authModule } from '~/store';
 
 type TNftTransaction = INftTransaction;
-type TCommentType = null | 'like' | 'dislike';
 
 const ipfsService = new IPFSService();
 

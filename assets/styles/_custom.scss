@@ -741,6 +741,16 @@
   box-shadow: none;
 }
 
+.modal-comment-nft-thumb {
+  display: block;
+  position: relative;
+  width: 232px;
+  height: 232px;
+  margin: 0 auto 20px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
 /* ===== my tokens ===== */
 
 .tokens-wallet__count img {

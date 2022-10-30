@@ -56,7 +56,7 @@ export default class NftText extends Vue {
   }
 
   get title(): string {
-    return this.nft.name;
+    return this.nft.name || '';
   }
 
   get txHash(): string {
