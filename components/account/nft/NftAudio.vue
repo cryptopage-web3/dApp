@@ -28,7 +28,7 @@ export default class NftAudio extends Vue {
 
   mounted() {
     this.$nextTick(() => {
-      if (!this.gap) {
+      if (!this.gap && this.$refs.player) {
         this.gap = new (window as any).GreenAudioPlayer(this.$refs.player, {
           showTooltips: true,
           showDownloadButton: false,
