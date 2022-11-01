@@ -8,7 +8,7 @@
       allowfullscreen="false"
       controls
     >
-      <source :src="nft.url" type="video/mp4" />
+      <source :src="nft.contentUrl" type="video/mp4" />
     </video>
   </div>
 </template>

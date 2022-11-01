@@ -11,7 +11,7 @@
             allowfullscreen="false"
             controls
           >
-            <source :src="nft.url" />
+            <source :src="nft.contentUrl" />
           </video>
         </div>
       </div>

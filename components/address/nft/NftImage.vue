@@ -1,8 +1,8 @@
 <template>
   <a
-    v-if="nft.url && !isError"
+    v-if="nft.contentUrl && !isError"
     ref="container"
-    :href="nft.url"
+    :href="nft.contentUrl"
     target="_blank"
     class="profile-content__image loading-bg"
     @click.prevent="$emit('show-modal')"
@@ -32,13 +32,13 @@ export default class NftImage extends Vue {
 
   mounted() {
     this.$nextTick(() => {
-      if (!this.nft.url) {
+      if (!this.nft.contentUrl) {
         this.isError = true;
         return;
       }
 
       const image = new Image();
-      image.src = this.nft.url;
+      image.src = this.nft.contentUrl;
 
       image.onload = () => {
         this.$refs.container?.append(image);

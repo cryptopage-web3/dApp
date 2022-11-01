@@ -262,8 +262,8 @@ export default class AddressModule extends VuexModule {
         blockNumber: nft.blockNumber,
       });
 
-      if (data.url) {
-        const mimeType = await nftsService.getMimeType(data.url);
+      if (data.contentUrl) {
+        const mimeType = await nftsService.getMimeType(data.contentUrl);
 
         if (/audio/.test(mimeType)) {
           data.type = ETypeNft.audio;
@@ -336,8 +336,8 @@ export default class AddressModule extends VuexModule {
     let nftType = nft.type;
 
     try {
-      if (nft.url) {
-        const mimeType = await nftsService.getMimeType(nft.url);
+      if (nft.contentUrl) {
+        const mimeType = await nftsService.getMimeType(nft.contentUrl);
 
         if (/audio/.test(mimeType)) {
           nftType = ETypeNft.audio;
