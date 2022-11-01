@@ -8,15 +8,21 @@
     <div v-else class="profile-content__content">
       <NftTop :nft="nft" />
 
-      <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
-      <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-      <NftImage
-        v-else-if="nft.type === ETypeNft.image"
-        :nft="nft"
-        @show-modal="showModal"
-      />
-      <div v-else class="profile-content__image">
-        <div class="profile-content__image-empty">No NFT Content</div>
+      <div class="profile-content__media">
+        <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
+        <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
+        <NftImage
+          v-else-if="nft.type === ETypeNft.image"
+          :nft="nft"
+          @show-modal="showModal"
+        />
+        <div v-else class="profile-content__image">
+          <div class="profile-content__image-empty">No NFT Content</div>
+        </div>
+
+        <div class="profile-content__media-refresh" @click.prevent="refresh">
+          <NftRefreshIcon />
+        </div>
       </div>
 
       <NftText :nft="nft" @show-modal="showModal" />
@@ -41,6 +47,7 @@ import NftAudio from '~/components/address/nft/NftAudio.vue';
 import NftComments from '~/components/address/nft/NftComments.vue';
 import NftModal from '~/components/address/nft/NftModal.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
+import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 
 type TNftTransaction = INftTransaction;
 
@@ -54,6 +61,7 @@ type TNftTransaction = INftTransaction;
     NftComments,
     NftModal,
     Skeleton,
+    NftRefreshIcon,
   },
 })
 export default class Nft extends Vue {
@@ -67,16 +75,20 @@ export default class Nft extends Vue {
     modal: NftModal;
   };
 
-  async mounted() {
+  mounted() {
+    this.refresh();
+  }
+
+  showModal() {
+    this.$refs.modal.show();
+  }
+
+  async refresh() {
     this.loading = true;
 
     await addressModule.fetchNftTransactionDetails(this.nft);
 
     this.loading = false;
-  }
-
-  showModal() {
-    this.$refs.modal.show();
   }
 }
 </script>
