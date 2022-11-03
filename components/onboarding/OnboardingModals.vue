@@ -30,11 +30,11 @@ type TRefs = {
 
 const steps: (keyof TRefs)[] = [
   'welcome',
-  'step1',
-  'step2',
-  'step3',
-  'step4',
-  'step5',
+  // 'step1',
+  // 'step2',
+  // 'step3',
+  // 'step4',
+  // 'step5',
 ];
 
 @Component({

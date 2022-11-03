@@ -7,6 +7,7 @@
     role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
+    data-backdrop="static"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -21,10 +22,11 @@
               Welcome to Crypto.Page
             </h3>
             <div class="global-text_12">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-              congue volutpat mauris, ac scelerisque ante feugiat a. Vivamus sit
-              amet enim sed lectus elementum varius. In rhoncus vitae tellus at
-              consequat.
+              Create an account using your web3 wallet. Is an open platform that
+              allows anyone to create their own decentralized profile pages that
+              are resistant to censorship. With Crypto.Page, your wallet keys
+              control your content the same way they control your funds.<br />
+              <b>Your keys = your content</b>.
             </div>
             <div
               class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"
@@ -91,6 +93,8 @@ export default class OnboardingWelcome extends Vue {
   }
 
   next() {
+    this.$router.push(`/connect`);
+
     this.emitNext();
     this.hide();
   }
