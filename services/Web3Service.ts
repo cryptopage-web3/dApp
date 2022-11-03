@@ -29,7 +29,7 @@ export class Web3Service {
       );
 
       contract.methods
-        .writePost(communityId, ipfsHash, ownerAddress)
+        .writePost(communityId, ipfsHash, ownerAddress, true)
         .send({
           from: authAddress,
         })
