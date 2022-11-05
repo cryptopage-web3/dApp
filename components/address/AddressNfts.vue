@@ -127,7 +127,7 @@ export default class AddressNfts extends Vue {
   }
 
   uniqueKey(nft: INftTransaction) {
-    return getNftTransactionUniqueKey(nft);
+    return nft ? getNftTransactionUniqueKey(nft) : '_';
   }
 }
 </script>
