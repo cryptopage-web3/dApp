@@ -1,17 +1,7 @@
 <template>
   <div class="profile-left2">
     <div class="profile-menu-wrap">
-      <div class="main-profile-top">
-        <h3 class="market-sidebar__title">My Profile</h3>
-        <div class="right">
-          <a href="#" class="main-profile-eyes">
-            <HomeEyeIcon />
-          </a>
-          <a href="#" class="main-profile-edit">
-            <HomeEditIcon />
-          </a>
-        </div>
-      </div>
+      <Header />
       <Connect />
       <Profile />
     </div>
@@ -21,15 +11,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import Connect from './profile/Connect.vue';
-import Profile from './profile/Profile.vue';
-import HomeEyeIcon from '~/components/icon/home/HomeEyeIcon.vue';
-import HomeEditIcon from '~/components/icon/home/HomeEditIcon.vue';
+import Header from './left/Header.vue';
+import Connect from './left/Connect.vue';
+import Profile from './left/Profile.vue';
 
 @Component({
   components: {
-    HomeEyeIcon,
-    HomeEditIcon,
+    Header,
     Connect,
     Profile,
   },
