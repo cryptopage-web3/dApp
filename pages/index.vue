@@ -1,15 +1,18 @@
 <template>
-  <div class="start-page__loading">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
+  <section id="profile" class="profile height-full">
+    <div class="container">
+      <div class="profile-wrap">
+        <home-left />
+        <home-center />
+        <home-right />
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Watch } from 'nuxt-property-decorator';
-import { authModule } from '~/store';
+import { Component } from 'nuxt-property-decorator';
 
 @Component({
   head: {
@@ -24,42 +27,5 @@ import { authModule } from '~/store';
     ],
   },
 })
-export default class IndexPage extends Vue {
-  get initLoading() {
-    return authModule.initLoading;
-  }
-
-  get isAuth() {
-    return authModule.isAuth;
-  }
-
-  get authAddress(): string {
-    return authModule.address;
-  }
-
-  get authChainSlug(): string {
-    return authModule.chainSlug;
-  }
-
-  mounted() {
-    if (!this.initLoading) {
-      this.redirect();
-    }
-  }
-
-  @Watch('initLoading')
-  initLoadingChanged() {
-    this.redirect();
-  }
-
-  redirect() {
-    setTimeout(() => {
-      const url = this.isAuth
-        ? `/${this.authChainSlug}/${this.authAddress}`
-        : `/connect`;
-
-      this.$router.push(url);
-    }, 500);
-  }
-}
+export default class IndexPage extends Vue {}
 </script>
