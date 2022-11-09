@@ -39,13 +39,13 @@
             <ul class="market-product-ld">
               <li>
                 <a>
-                  <CommentLikeIcon />
+                  <CommentLikeEmptyIcon />
                   <span> {{ likes }} </span>
                 </a>
               </li>
               <li>
                 <a class="market-product-dislike">
-                  <CommentDislikeIcon />
+                  <CommentDislikeEmptyIcon />
                   <span> {{ dislikes }} </span>
                 </a>
               </li>
@@ -89,8 +89,8 @@
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import { ETypeNft, INft } from '~/types';
-import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
-import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
+import CommentLikeEmptyIcon from '~/components/icon/nft/CommentLikeEmptyIcon.vue';
+import CommentDislikeEmptyIcon from '~/components/icon/nft/CommentDislikeEmptyIcon.vue';
 import CommentLikeActiveIcon from '~/components/icon/nft/CommentLikeActiveIcon.vue';
 import CommentDislikeActiveIcon from '~/components/icon/nft/CommentDislikeActiveIcon.vue';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
@@ -113,8 +113,8 @@ const ipfsService = new IPFSService();
 
 @Component({
   components: {
-    CommentLikeIcon,
-    CommentDislikeIcon,
+    CommentLikeEmptyIcon,
+    CommentDislikeEmptyIcon,
     CommentLikeActiveIcon,
     CommentDislikeActiveIcon,
     NftCloseIcon,

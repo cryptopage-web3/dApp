@@ -3,7 +3,8 @@
     <ul class="market-product-ld">
       <li>
         <a ref="like" href="#" @click.prevent="select('like', $event)">
-          <CommentLikeIcon />
+          <CommentLikeActiveIcon v-if="commentType === 'like'" />
+          <CommentLikeEmptyIcon v-else />
           <span> {{ likes }} </span>
         </a>
       </li>
@@ -14,7 +15,8 @@
           class="market-product-dislike"
           @click.prevent="select('dislike', $event)"
         >
-          <CommentDislikeIcon />
+          <CommentDislikeActiveIcon v-if="commentType === 'dislike'" />
+          <CommentDislikeEmptyIcon v-else />
           <span> {{ dislikes }} </span>
         </a>
       </li>
@@ -61,8 +63,10 @@ import { ISendCommentParams, TCommentType } from '~/types/comment-form';
 import { IPFSService, Web3Service } from '~/services';
 import { nftContractAddress } from '~/contracts';
 import NftBurn from '~/components/address/nft/NftBurn.vue';
-import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
-import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
+import CommentLikeEmptyIcon from '~/components/icon/nft/CommentLikeEmptyIcon.vue';
+import CommentLikeActiveIcon from '~/components/icon/nft/CommentLikeActiveIcon.vue';
+import CommentDislikeEmptyIcon from '~/components/icon/nft/CommentDislikeEmptyIcon.vue';
+import CommentDislikeActiveIcon from '~/components/icon/nft/CommentDislikeActiveIcon.vue';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
 import CommentSendIcon from '~/components/icon/nft/CommentSendIcon.vue';
 import {
@@ -79,8 +83,10 @@ const ipfsService = new IPFSService();
 @Component({
   components: {
     NftBurn,
-    CommentLikeIcon,
-    CommentDislikeIcon,
+    CommentLikeEmptyIcon,
+    CommentLikeActiveIcon,
+    CommentDislikeEmptyIcon,
+    CommentDislikeActiveIcon,
     CommentCloseIcon,
     CommentSendIcon,
   },
@@ -134,7 +140,7 @@ export default class NftComments extends Vue {
   }
 
   select(type: TCommentType, event: PointerEvent) {
-    this.commentType = type;
+    this.commentType = this.commentType === type ? null : type;
     this.commentText = '';
 
     const elem = event.currentTarget;
@@ -174,6 +180,14 @@ export default class NftComments extends Vue {
   }
 
   async sendComment() {
+    if (!this.commentType) {
+      this.$notify({
+        type: 'error',
+        title: 'No comment type',
+      });
+      return;
+    }
+
     if (!this.commentText) {
       this.$notify({
         type: 'error',

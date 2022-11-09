@@ -3,7 +3,7 @@
     <ul class="market-product-ld">
       <li>
         <a href="#" @click.prevent="$emit('select', 'like')">
-          <CommentLikeIcon />
+          <CommentLikeEmptyIcon />
           <span> {{ likes }} </span>
         </a>
       </li>
@@ -13,7 +13,7 @@
           class="market-product-dislike"
           @click.prevent="$emit('select', 'dislike')"
         >
-          <CommentDislikeIcon />
+          <CommentDislikeEmptyIcon />
           <span> {{ dislikes }} </span>
         </a>
       </li>
@@ -25,8 +25,8 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INft } from '~/types';
-import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
-import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
+import CommentLikeEmptyIcon from '~/components/icon/nft/CommentLikeEmptyIcon.vue';
+import CommentDislikeEmptyIcon from '~/components/icon/nft/CommentDislikeEmptyIcon.vue';
 import { nftContractAddress } from '~/contracts';
 import { addressModule } from '~/store';
 
@@ -34,8 +34,8 @@ type TNft = INft;
 
 @Component({
   components: {
-    CommentLikeIcon,
-    CommentDislikeIcon,
+    CommentLikeEmptyIcon,
+    CommentDislikeEmptyIcon,
   },
 })
 export default class NftComments extends Vue {

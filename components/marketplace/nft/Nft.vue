@@ -47,13 +47,13 @@
         <ul class="market-product-ld">
           <li>
             <a href="#">
-              <CommentLikeIcon />
+              <CommentLikeEmptyIcon />
               <span> 0 </span>
             </a>
           </li>
           <li>
             <a href="#" class="market-product-dislike">
-              <CommentDislikeIcon />
+              <CommentDislikeEmptyIcon />
               <span> 0 </span>
             </a>
           </li>
@@ -71,8 +71,8 @@ import NftImage from './NftImage.vue';
 import { ICollectionNft } from '~/types';
 import MarketplaceFavoriteIcon from '~/components/icon/marketplace/MarketplaceFavoriteIcon.vue';
 import MarketplaceFavoriteFillIcon from '~/components/icon/marketplace/MarketplaceFavoriteFillIcon.vue';
-import CommentLikeIcon from '~/components/icon/nft/CommentLikeIcon.vue';
-import CommentDislikeIcon from '~/components/icon/nft/CommentDislikeIcon.vue';
+import CommentLikeEmptyIcon from '~/components/icon/nft/CommentLikeEmptyIcon.vue';
+import CommentDislikeEmptyIcon from '~/components/icon/nft/CommentDislikeEmptyIcon.vue';
 
 type TCollectionNft = ICollectionNft;
 
@@ -80,8 +80,8 @@ type TCollectionNft = ICollectionNft;
   components: {
     MarketplaceFavoriteIcon,
     MarketplaceFavoriteFillIcon,
-    CommentLikeIcon,
-    CommentDislikeIcon,
+    CommentLikeEmptyIcon,
+    CommentDislikeEmptyIcon,
     NftImage,
   },
 })

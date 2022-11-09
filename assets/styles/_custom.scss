@@ -63,6 +63,14 @@
   }
 }
 
+.dislike-active-icon {
+  stroke: none !important;
+}
+
+.like-active-icon {
+  stroke: none !important;
+}
+
 /* ===== address ===== */
 
 .market-header__wallet .drop-down__link .thumb {
@@ -419,26 +427,6 @@
   display: inline-block;
   max-height: 150px;
   max-width: 100%;
-}
-
-.market-product-ld li a svg path:not(.empty) {
-  stroke: none !important;
-}
-
-.market-product-ld li:first-child a.active svg path.empty {
-  display: none;
-}
-
-.market-product-ld li:first-child a:not(.active) svg path.active {
-  display: none;
-}
-
-.market-product-ld li:last-child a.market-product-dislike.active svg path.empty {
-  display: none;
-}
-
-.market-product-ld li:last-child a.market-product-dislike:not(.active) svg path.active {
-  display: none;
 }
 
 .market-product__title:hover {
