@@ -13,7 +13,7 @@
       <div class="modal-content">
         <div class="modal-body">
           <img
-            src="@/assets/img/onboarding-welcome_img.jpg"
+            src="@/assets/img-custom/onboarding-welcome_img2.jpg"
             alt=""
             class="onboarding-welcome__thumb"
           />
