@@ -1,25 +1,31 @@
 <template>
-  <a href="#" class="main-profile-user">
-    <div
-      class="thumb"
-      :style="{
-        backgroundImage: `url(${homeProfileUser})`,
-      }"
-    ></div>
-    <div class="right">
-      <div class="nik">Hvatov Philippe</div>
-      <div class="id-user">0x7eE...3F5</div>
+  <nuxt-link :to="`/${chainSlug}/${address}`" class="main-profile-user">
+    <div class="thumb">
+      <jazzicon :seed="10211" :address="address" :diameter="diameter" />
     </div>
-  </a>
+    <div class="right">
+      <div class="id-user">
+        {{ address | shortAddress }}
+      </div>
+    </div>
+  </nuxt-link>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import homeProfileUser from '~/assets/img/main-profile-user_img.png';
+import { authModule } from '~/store';
 
 @Component({})
 export default class ProfileUser extends Vue {
-  homeProfileUser = homeProfileUser;
+  diameter = 50;
+
+  get address(): string {
+    return authModule.address;
+  }
+
+  get chainSlug(): string {
+    return authModule.chainSlug;
+  }
 }
 </script>

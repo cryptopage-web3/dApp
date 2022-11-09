@@ -1,7 +1,7 @@
 <template>
   <div class="main-profile-top">
     <h3 class="market-sidebar__title">My Profile</h3>
-    <div class="right">
+    <div v-if="isAuth" class="right">
       <a href="#" class="main-profile-eyes">
         <HomeEyeIcon />
       </a>
@@ -17,6 +17,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import HomeEyeIcon from '~/components/icon/home/HomeEyeIcon.vue';
 import HomeEditIcon from '~/components/icon/home/HomeEditIcon.vue';
+import { authModule } from '~/store';
 
 @Component({
   components: {
@@ -24,5 +25,9 @@ import HomeEditIcon from '~/components/icon/home/HomeEditIcon.vue';
     HomeEditIcon,
   },
 })
-export default class Header extends Vue {}
+export default class Header extends Vue {
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+}
 </script>

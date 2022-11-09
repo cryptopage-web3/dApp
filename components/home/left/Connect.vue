@@ -1,10 +1,10 @@
 <template>
-  <a
-    href="#"
+  <nuxt-link
+    to="/connect"
     class="btn_main-profile-connect btn btn-blue_button btn_large w-100"
   >
     Connect Wallet
-  </a>
+  </nuxt-link>
 </template>
 
 <script lang="ts">
