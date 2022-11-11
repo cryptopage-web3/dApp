@@ -2,7 +2,7 @@
   <div>
     <div class="main-profile-wallet-top">
       <h3 class="market-sidebar__title">My Wallet</h3>
-      <a href="#" class="main-profile-wallet-link">
+      <a href="#" class="main-profile-wallet-link" @click.prevent="logout">
         <HomeExitIcon />
       </a>
     </div>
@@ -30,11 +30,16 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import HomeExitIcon from '~/components/icon/home/HomeExitIcon.vue';
+import { authModule } from '~/store';
 
 @Component({
   components: {
     HomeExitIcon,
   },
 })
-export default class ProfileWallet extends Vue {}
+export default class ProfileWallet extends Vue {
+  async logout() {
+    await authModule.logout();
+  }
+}
 </script>

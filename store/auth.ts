@@ -358,6 +358,7 @@ export default class AuthModule extends VuexModule {
     window.localStorage.setItem('auth', JSON.stringify(connectData));
 
     this.setConnect(connectData);
+    this.cleanData();
 
     alertModule.success(
       `${networkHelper.getProviderTitle(providerSlug)}: ${
@@ -382,14 +383,26 @@ export default class AuthModule extends VuexModule {
     });
 
     this.setAuth(false);
+    this.cleanData();
   }
 
   @Action
   public async fetchData() {
+    if (!this.isAuth) {
+      return;
+    }
+
     await this.fetchTokens();
     await this.fetchTransactions();
 
     this.setDataLoaded(true);
+  }
+
+  @Action
+  public cleanData() {
+    this.setDataLoaded(false);
+    this.setTokens([]);
+    this.setTransactions([]);
   }
 
   @Action

@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import ProfileUser from './ProfileUser.vue';
 import ProfileTransactions from './ProfileTransactions.vue';
 import ProfileWallet from './ProfileWallet.vue';
@@ -37,8 +37,9 @@ export default class Profile extends Vue {
     return authModule.dataLoaded;
   }
 
-  mounted() {
-    if (!this.dataLoaded) {
+  @Watch('dataLoaded', { immediate: true })
+  onDataLoadedChanged(loaded: boolean) {
+    if (!loaded) {
       this.fetchData();
     }
   }
