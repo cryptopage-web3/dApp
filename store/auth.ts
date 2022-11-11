@@ -1,6 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
+import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { alertModule } from '.';
-import { AuthService } from '~/services';
+import { AuthService, TokensService, TransactionsService } from '~/services';
 import {
   EChainType,
   EMainChain,
@@ -9,6 +11,9 @@ import {
   IConnectToProviderResponse,
   EProvider,
   IConnectData,
+  IToken,
+  ITransaction,
+  EChainSlug,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 
@@ -17,6 +22,8 @@ type TConnectToProviderParams = IConnectToProviderParams;
 type TConnectChangeParams = IConnectChangeParams;
 
 const authService = new AuthService();
+const tokensService = new TokensService();
+const transactionsService = new TransactionsService();
 let authProvider: any = null;
 
 @Module({
@@ -27,6 +34,7 @@ let authProvider: any = null;
 export default class AuthModule extends VuexModule {
   isAuth = false;
   initLoading = true;
+  dataLoaded = false;
 
   connect: IConnectData = {
     address: '',
@@ -35,6 +43,10 @@ export default class AuthModule extends VuexModule {
     /** не храним authProvider в сторе, т.к. ошибка при прокcировании объекта vue */
     // provider: null,
   };
+
+  tokens: IToken[] = [];
+
+  transactions: ITransaction[] = [];
 
   get address(): string {
     return this.connect.address;
@@ -64,6 +76,28 @@ export default class AuthModule extends VuexModule {
     return authProvider;
   }
 
+  get inputs(): number {
+    return new Set(
+      this.transactions
+        .filter(
+          (tx: ITransaction) =>
+            tx.to.toLowerCase() === this.address.toLowerCase(),
+        )
+        .map((tx: ITransaction) => tx.from),
+    ).size;
+  }
+
+  get outputs(): number {
+    return new Set(
+      this.transactions
+        .filter(
+          (tx: ITransaction) =>
+            tx.from.toLowerCase() === this.address.toLowerCase(),
+        )
+        .map((tx: ITransaction) => tx.to),
+    ).size;
+  }
+
   @Mutation
   public setAuth(isAuth: boolean) {
     this.isAuth = isAuth;
@@ -82,6 +116,21 @@ export default class AuthModule extends VuexModule {
   @Mutation
   public setConnect(connect: TConnectData) {
     this.connect = connect;
+  }
+
+  @Mutation
+  public setDataLoaded(loaded: boolean) {
+    this.dataLoaded = loaded;
+  }
+
+  @Mutation
+  public setTokens(tokens: IToken[]) {
+    this.tokens = [...tokens];
+  }
+
+  @Mutation
+  public setTransactions(transactions: ITransaction[]) {
+    this.transactions = transactions;
   }
 
   @Action
@@ -333,5 +382,70 @@ export default class AuthModule extends VuexModule {
     });
 
     this.setAuth(false);
+  }
+
+  @Action
+  public async fetchData() {
+    await this.fetchTokens();
+    await this.fetchTransactions();
+
+    this.setDataLoaded(true);
+  }
+
+  @Action
+  public async fetchTokens() {
+    try {
+      const tokens = await tokensService.getList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+      });
+
+      this.setTokens(tokens);
+    } catch {
+      alertModule.error('Error getting AUTH tokens data');
+
+      this.setTokens([]);
+    }
+  }
+
+  @Action
+  public async fetchTransactions() {
+    try {
+      if (this.chainSlug === EChainSlug.eth) {
+        await this.fetchEthTransactions();
+      } else {
+        await this.fetchDefaultTransactions();
+      }
+    } catch {
+      alertModule.error('Error getting AUTH transactions data');
+
+      this.setTransactions([]);
+    }
+  }
+
+  @Action
+  public async fetchEthTransactions() {
+    const { transactions } = await transactionsService.getEthList({
+      chainSlug: this.chainSlug,
+      address: this.address,
+      pageSize: 200,
+    });
+
+    this.setTransactions(
+      transactions.map((t) => normalizeEth(t, this.chainId)),
+    );
+  }
+
+  @Action
+  public async fetchDefaultTransactions() {
+    const { transactions } = await transactionsService.getList({
+      chainSlug: this.chainSlug,
+      address: this.address,
+      pageSize: 200,
+    });
+
+    this.setTransactions(
+      transactions.map((t) => defaultNormalizer(t, this.address, this.chainId)),
+    );
   }
 }

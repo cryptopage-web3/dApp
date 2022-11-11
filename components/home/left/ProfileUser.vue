@@ -1,7 +1,9 @@
 <template>
   <nuxt-link :to="`/${chainSlug}/${address}`" class="main-profile-user">
     <div class="thumb">
-      <jazzicon :seed="10211" :address="address" :diameter="diameter" />
+      <client-only>
+        <jazzicon :seed="10211" :address="address" :diameter="diameter" />
+      </client-only>
     </div>
     <div class="right">
       <div class="id-user">
