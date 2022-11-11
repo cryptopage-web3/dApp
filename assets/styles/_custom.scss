@@ -907,7 +907,7 @@
   height: 25px;
 }
 
-/* ===== main ===== */
+/* ===== home ===== */
 
 .main-profile-top .right {
   display: flex;
@@ -924,6 +924,11 @@
 
 .main-profile-user:hover {
   opacity: 0.7;
+}
+
+.main-profile-copy-wrap .global-input {
+  padding-right: 40px;
+  text-overflow: ellipsis;
 }
 
 /* ======================= */

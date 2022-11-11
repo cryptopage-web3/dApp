@@ -8,17 +8,16 @@
     </div>
     <div class="main-profile-copy-wrap global-copy">
       <input
-        value="0xd7765d5feddd42c8ddf..."
+        :value="address"
+        readonly
         type="text"
         class="global-input global-input_large"
       />
       <a
+        ref="refCopy"
         href="#"
         class="global-copy__link main-profile-copy"
-        data-clipboard-text="0xd7765d5feddd42c8ddf..."
-        data-toggle="tooltip"
-        title="Copied!"
-        data-trigger="focus"
+        @click.prevent.stop="copyAddress"
       >
         <img src="@/assets/img/spaces_copy_icon.svg" alt="" />
       </a>
@@ -31,6 +30,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import HomeExitIcon from '~/components/icon/home/HomeExitIcon.vue';
 import { authModule } from '~/store';
+import { copyToClipboard } from '~/utils/copyToClipboard';
 
 @Component({
   components: {
@@ -38,8 +38,35 @@ import { authModule } from '~/store';
   },
 })
 export default class ProfileWallet extends Vue {
+  get address(): string {
+    return authModule.address;
+  }
+
+  $refs!: {
+    refCopy: HTMLAnchorElement;
+  };
+
+  mounted() {
+    this.$nextTick(() => {
+      ($(this.$refs.refCopy) as any).tooltip({
+        trigger: 'hover',
+        title: 'Click to copy',
+      });
+    });
+  }
+
   async logout() {
     await authModule.logout();
+  }
+
+  copyAddress() {
+    copyToClipboard(this.address);
+    ($(this.$refs.refCopy) as any).tooltip('hide');
+
+    this.$notify({
+      type: 'success',
+      title: 'Address copied to clipboard',
+    });
   }
 }
 </script>
