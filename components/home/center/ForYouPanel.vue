@@ -105,12 +105,14 @@
           backgroundImage: `url(${homeContentBg1})`,
         }"
       ></a>
-      <div class="profile-content__title">Freddy #0123</div>
-      <div class="profile-content__desc">
-        Sometimes we face a problem that turns out to be more vicious than we
-        imagined, there is no other way, but to kick their asses. Simply
-        colorful store, in Galaxy not so far from the furtherest planet. Ramen
-        is considered a fast food, with a combination of
+      <div class="profile-content__text">
+        <div class="profile-content__title">Freddy #0123</div>
+        <div class="profile-content__desc">
+          Sometimes we face a problem that turns out to be more vicious than we
+          imagined, there is no other way, but to kick their asses. Simply
+          colorful store, in Galaxy not so far from the furtherest planet. Ramen
+          is considered a fast food, with a combination of
+        </div>
       </div>
       <div class="profile-content__bottom">
         <ul class="market-product-ld">
@@ -1220,12 +1222,14 @@
           </div>
         </div>
       </div>
-      <div class="profile-content__title">Zerion DNA</div>
-      <div class="profile-content__desc">
-        Sometimes we face a problem that turns out to be more vicious than we
-        imagined, there is no other way, but to kick their asses. Simply
-        colorful store, in Galaxy not so far from the furtherest planet. Ramen
-        is considered a fast food, with a combination of
+      <div class="profile-content__text">
+        <div class="profile-content__title">Zerion DNA</div>
+        <div class="profile-content__desc">
+          Sometimes we face a problem that turns out to be more vicious than we
+          imagined, there is no other way, but to kick their asses. Simply
+          colorful store, in Galaxy not so far from the furtherest planet. Ramen
+          is considered a fast food, with a combination of
+        </div>
       </div>
       <div class="profile-content__bottom">
         <ul class="market-product-ld">
