@@ -18,7 +18,7 @@ import ProfileWallet from './ProfileWallet.vue';
 import ProfileTokens from './ProfileTokens.vue';
 import ProfileInbox from './ProfileInbox.vue';
 import Loader from '~/components/loaders/GrowLoader.vue';
-import { authModule } from '~/store';
+import { authModule, stickyModule } from '~/store';
 
 @Component({
   components: {
@@ -50,6 +50,7 @@ export default class Profile extends Vue {
     await authModule.fetchData();
 
     this.dataLoading = false;
+    stickyModule.update();
   }
 }
 </script>
