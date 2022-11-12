@@ -226,6 +226,7 @@ import { authModule, addressModule, stickyModule } from '~/store';
 @Component({})
 export default class AccountLeftSidebar extends Vue {
   stickySidebar: any = null;
+  timeout: any = null;
 
   get refresh() {
     return stickyModule.leftRefresh;
@@ -283,10 +284,18 @@ export default class AccountLeftSidebar extends Vue {
   }
 
   refreshSticky() {
-    setTimeout(() => {
+    this.timeout && clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(() => {
       this.stickySidebar && this.stickySidebar.destroy();
-      this.stickySidebar = leftStickySidebarInit();
-    }, 100);
+      const elements = $('.profile-left2 .inner-wrapper-sticky > *');
+      $('.profile-menu-wrap').append(elements);
+      $('.profile-left2 .inner-wrapper-sticky').remove();
+
+      this.$nextTick(() => {
+        this.stickySidebar = leftStickySidebarInit();
+      });
+    }, 500);
   }
 }
 </script>

@@ -16,6 +16,7 @@ import { stickyModule } from '~/store';
 @Component({})
 export default class AccountRightSidebar extends Vue {
   stickySidebar: any = null;
+  timeout: any = null;
 
   get refresh() {
     return stickyModule.rightRefresh;
@@ -43,10 +44,18 @@ export default class AccountRightSidebar extends Vue {
   }
 
   refreshSticky() {
-    setTimeout(() => {
+    this.timeout && clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(() => {
       this.stickySidebar && this.stickySidebar.destroy();
-      this.stickySidebar = marketSidebarInit();
-    }, 100);
+      const elements = $('.market-main-right .inner-wrapper-sticky > *');
+      $('.market-sidebar-wrap').append(elements);
+      $('.market-main-right .inner-wrapper-sticky').remove();
+
+      this.$nextTick(() => {
+        this.stickySidebar = marketSidebarInit();
+      });
+    }, 500);
   }
 }
 </script>
