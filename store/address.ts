@@ -278,7 +278,8 @@ export default class AddressModule extends VuexModule {
           data.type = ETypeNft.image;
         }
 
-        if (/json/.test(mimeType)) {
+        // #TODO normal check
+        if (data.contentUrl === 'https://i.ibb.co/ZHVhQKL/encrypted.png') {
           const metadataService = new MetadataService();
           try {
             const imageData = await metadataService.decryptIpfsFile(data.tokenId as string);

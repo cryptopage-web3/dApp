@@ -10,7 +10,7 @@ export const IPFS_INFURA_SECRET_KEY = 'a96c0da772683cc68de2511a4932d45a';
 
 export const API_URL = process.env.API_SERVER_URL;
 
-export const METADATA_SERVICE_API_URL = 'http://localhost:3333';
+export const METADATA_SERVICE_API_URL = process.env.METADATA_SERVICE_URL || 'https://xcp9so0072.execute-api.us-east-1.amazonaws.com';
 
 export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
   [EChainId.eth]: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,
