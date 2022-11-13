@@ -17,6 +17,7 @@ export class Web3Service {
         ownerAddress,
         communityId,
         ipfsHash,
+        isEncrypted
       } = params;
 
       const CONTRACT = await import(
@@ -29,7 +30,7 @@ export class Web3Service {
       );
 
       contract.methods
-        .writePost(communityId, ipfsHash, ownerAddress)
+        .writePost(communityId, ipfsHash, ownerAddress, isEncrypted)
         .send({
           from: authAddress,
         })

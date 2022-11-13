@@ -26,6 +26,7 @@ import {
   uniqueNftConcat,
   uniqueNftTransactionConcat,
 } from '~/utils/array';
+import { MetadataService } from '~/services/MetadataService';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -275,6 +276,17 @@ export default class AddressModule extends VuexModule {
 
         if (/image/.test(mimeType)) {
           data.type = ETypeNft.image;
+        }
+
+        if (/json/.test(mimeType)) {
+          const metadataService = new MetadataService();
+          try {
+            const imageData = await metadataService.decryptIpfsFile(data.tokenId as string);
+            data.type = ETypeNft.image;
+            data.contentUrl = imageData;
+          } catch (e) {
+            console.log(e);
+          }
         }
       }
 

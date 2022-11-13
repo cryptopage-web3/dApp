@@ -13,10 +13,12 @@ import { IPFSService, Web3Service } from '~/services';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug } from '~/types';
+import { MetadataService } from '~/services/MetadataService';
 
 type TNftForm = INftForm;
 
 const ipfsService = new IPFSService();
+const metadataService = new MetadataService();
 
 const initValues: TNftForm = {
   title: '',
@@ -206,7 +208,7 @@ export default class NftFormModule extends VuexModule {
 
     this.setLoading(true);
 
-    const { file, title, description, attributes, externalLink } = this.values;
+    const { file, title, description, attributes, externalLink, isUnlockableContent } = this.values;
 
     const nftParams: INFTCreateParams = {
       name: title,
@@ -224,7 +226,7 @@ export default class NftFormModule extends VuexModule {
 
     try {
       const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
-      const fileHash = await ipfsService.saveFile(file);
+      const fileHash = await metadataService.uploadFileToIPFS(file, isUnlockableContent);
 
       nftParams[isMediaFile ? 'animation_url' : 'image'] =
         fileHash && `https://ipfs.io/ipfs/${fileHash}`;
@@ -258,6 +260,7 @@ export default class NftFormModule extends VuexModule {
       ownerAddress: addressModule.address,
       communityId: OPEN_FORUM_ID,
       ipfsHash: nftHash,
+      isEncrypted: isUnlockableContent
     };
 
     let txHash = '';
