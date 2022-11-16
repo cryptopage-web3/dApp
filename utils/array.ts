@@ -21,7 +21,7 @@ export const uniqueHashConcat = (
 };
 
 export const getNftUniqueKey = (nft: INft) =>
-  `${nft.contract_address}_${nft.date}_${nft.to}_${nft.tokenId}`;
+  `${nft?.contract_address}_${nft?.date}_${nft?.to}_${nft?.tokenId}`;
 
 export const uniqueNftConcat = (target: INft[], additional: INft[]): INft[] => {
   const result = [...target];

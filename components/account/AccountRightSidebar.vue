@@ -1,5 +1,5 @@
 <template>
-  <div class="market-main-right">
+  <div :key="routeName" class="market-main-right">
     <div class="market-sidebar-wrap">
       <account-sidebar-nfts />
       <account-sidebar-tokens />
@@ -20,6 +20,10 @@ export default class AccountRightSidebar extends Vue {
 
   get refresh() {
     return stickyModule.rightRefresh;
+  }
+
+  get routeName() {
+    return this.$route.name;
   }
 
   @Watch('$route')
