@@ -1728,6 +1728,27 @@ if($('.global-collapse-link').is('.global-collapse-link')) {
 }
 /*end global-collapse*/
 
+/*start global-hint*/
+if($('.global-hint').is('.global-hint')) {
+	$('.global-hint-close').on('click', function(){
+		event.preventDefault();
+		$(this).closest('.global-hint').fadeOut(300);
+	});
+}
+/*start global-hint*/
+
+/*start onboarding-modal-step1*/
+if($('#onboarding-modal-step1').is('#onboarding-modal-step1')) {
+	$('#onboarding-modal-step1').on('shown.bs.modal', function (e) {
+		if($('#onboarding-modal-step1 .global-hint').is('#onboarding-modal-step1 .global-hint')) {
+			setTimeout(function() {
+				$('#onboarding-modal-step1 .global-hint').fadeIn(300);
+			}, 1000);
+		}
+	})
+}
+/*end onboarding-modal-step1*/
+
 });
 
 /*audio init*/

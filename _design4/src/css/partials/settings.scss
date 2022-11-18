@@ -306,6 +306,16 @@ $dark: #333;
 	flex: 1;
 }
 
+/*break text*/
+.break-all {
+	word-break: break-all;
+}
+
+/*relative block*/
+.p-relative {
+	position: relative;
+}
+
 /*market container*/
 @media (min-width: 1310px) {
 	.body-market .container {
