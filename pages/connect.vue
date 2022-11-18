@@ -519,6 +519,7 @@ export default class ConnectPage extends Vue {
 
         return 'right';
       },
+      trigger: 'manual',
       template: `
         <div class="popover ui-popover" role="tooltip">
           <div class="ui-popover-close"></div>
