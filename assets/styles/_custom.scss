@@ -71,6 +71,81 @@
   stroke: none !important;
 }
 
+/* ===== popover ===== */
+
+.ui-popover {
+  background-color: #1886FF;
+  width: 220px;
+  border-radius: 5px;
+  padding: 30px;
+  border-color: #1886FF;
+}
+
+.ui-popover.bs-popover-right {
+  margin-top: 70px;
+}
+
+.ui-popover-close {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 10px;
+  right: 10px;
+  background: url("../img/global-hint-close_img.svg") center no-repeat;
+  cursor: pointer;
+}
+
+.ui-popover-header {
+  font-family: "SF Pro Display";
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #F5F9FD;
+  margin-bottom: 10px;
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.ui-popover-header::before {
+  display: none !important;
+}
+
+.ui-popover-body {
+  color: #F5F9FD;
+  font-size: 12px;
+  font-family: "SF Pro Display";
+  font-weight: 400;
+  line-height: 143%;
+  padding: 0;
+  border-radius: 0;
+}
+
+.ui-popover.bs-popover-right .ui-popover-arrow::before {
+  border-right-color: #1886FF !important;
+}
+
+.ui-popover.bs-popover-right .ui-popover-arrow::after {
+  border-right-color: #1886FF !important;
+}
+
+.ui-popover.bs-popover-left .ui-popover-arrow::before {
+  border-left-color: #1886FF !important;
+}
+
+.ui-popover.bs-popover-left .ui-popover-arrow::after {
+  border-left-color: #1886FF !important;
+}
+
+.ui-popover.bs-popover-bottom .ui-popover-arrow::before {
+  border-bottom-color: #1886FF !important;
+}
+
+.ui-popover.bs-popover-bottom .ui-popover-arrow::after {
+  border-bottom-color: #1886FF !important;
+}
+
 /* ===== address ===== */
 
 .market-header__wallet .drop-down__link .thumb {

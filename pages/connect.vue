@@ -9,7 +9,11 @@
       </div>
       <div id="accordionExample" class="accordion profile-login-accordion">
         <div class="card profile-login__card">
-          <div id="profile-login-accordion1_2" class="card-header">
+          <div
+            id="profile-login-accordion1_2"
+            class="card-header"
+            data-toggle="popover"
+          >
             <button
               class="profile-login-accordion__link"
               type="button"
@@ -476,6 +480,14 @@ export default class ConnectPage extends Vue {
 
   mounted() {
     this.collapseChain(this.authChainSlug as EChainSlug);
+
+    /** подсказка для connect */
+
+    this.connectHint();
+  }
+
+  beforeDestroy() {
+    this.destroyConnectHint();
   }
 
   collapseChain(slug: EChainSlug) {
@@ -488,6 +500,46 @@ export default class ConnectPage extends Vue {
 
     const element = elementMap.get(slug);
     element && ($(element) as any).collapse('show');
+  }
+
+  connectHint() {
+    const completed = localStorage.getItem('onboarding-connect-hint');
+
+    if (completed) {
+      return;
+    }
+
+    ($('#profile-login-accordion1_2') as any).popover({
+      title: 'Attention',
+      content: 'Select a network and log in to continue onboarding',
+      placement: () => {
+        if (Number($(window).width()) < 1000) {
+          return 'bottom';
+        }
+
+        return 'right';
+      },
+      template: `
+        <div class="popover ui-popover" role="tooltip">
+          <div class="ui-popover-close"></div>
+          <div class="arrow ui-popover-arrow"></div>
+          <h3 class="popover-header ui-popover-header"></h3>
+          <div class="popover-body ui-popover-body"></div>
+        </div>
+      `,
+    });
+
+    ($('#profile-login-accordion1_2') as any).popover('show');
+
+    $('.ui-popover-close').on('click', function () {
+      localStorage.setItem('onboarding-connect-hint', 'done');
+
+      ($('#profile-login-accordion1_2') as any).popover('hide');
+    });
+  }
+
+  destroyConnectHint() {
+    ($('#profile-login-accordion1_2') as any).popover('dispose');
   }
 
   async connectToProvider(chain: EChainSlug, provider: EProvider) {
