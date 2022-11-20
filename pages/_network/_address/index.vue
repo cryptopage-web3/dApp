@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import SignupModal from '~/components/signup/SignupModal.vue';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
 import { stickyModule, addressModule, authModule } from '~/store';
@@ -99,10 +99,15 @@ export default class AddressPage extends Vue {
     );
   }
 
+  @Watch('isOwner')
+  onIsOwnerChanged(isOwner: boolean) {
+    isOwner && this.showSignupModal();
+  }
+
   mounted() {
     profileContentDropInit();
 
-    this.showSignupModal();
+    this.isOwner && this.showSignupModal();
   }
 
   selectTab(tab: string, id: string) {

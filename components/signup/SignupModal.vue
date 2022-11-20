@@ -31,29 +31,22 @@
                   alt=""
                 />
               </div>
-              <div class="onboarding-between-step checked">
+              <div class="onboarding-between-step active">
                 <span>2</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
                   alt=""
                 />
               </div>
-              <div class="onboarding-between-step checked">
+              <div class="onboarding-between-step">
                 <span>3</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
                   alt=""
                 />
               </div>
-              <div class="onboarding-between-step active">
-                <span>4</span>
-                <img
-                  src="@/assets/img/onboarding-between-step_img.svg"
-                  alt=""
-                />
-              </div>
               <div class="onboarding-between-step">
-                <span>5</span>
+                <span>4</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
                   alt=""
@@ -87,11 +80,9 @@
                 <div class="onboarding-between-list-t">
                   <div class="global-text_14">
                     <strong class="fw-600 mb_5"
-                      >You’ve connected an Ethereum address</strong
+                      >You’ve connected an {{ authChainName }} address</strong
                     ><br />
-                    <span class="break-all"
-                      >0xf145187e0caa13573c6c24F3668d620c767A62FA</span
-                    >
+                    <span class="break-all">{{ authAddress }}</span>
                   </div>
                 </div>
               </li>
@@ -100,6 +91,7 @@
                   <img
                     src="@/assets/img/onboarding-between-list_img2.svg"
                     alt=""
+                    class="onboarding-between-list-i__img"
                   />
                 </div>
                 <div class="onboarding-between-list-t">
@@ -154,6 +146,7 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
+import { authModule } from '~/store';
 
 @Component({
   components: {
@@ -164,6 +157,14 @@ export default class SignupModal extends Vue {
   $refs!: {
     modal: HTMLDivElement;
   };
+
+  get authAddress(): string {
+    return authModule.address;
+  }
+
+  get authChainName() {
+    return authModule.chainName;
+  }
 
   // methods
 

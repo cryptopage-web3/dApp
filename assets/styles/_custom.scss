@@ -71,6 +71,12 @@
   stroke: none !important;
 }
 
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* ===== popover ===== */
 
 .ui-popover {
@@ -1004,6 +1010,12 @@
 .main-profile-copy-wrap .global-input {
   padding-right: 40px;
   text-overflow: ellipsis;
+}
+
+/* ===== signup modal ===== */
+
+.onboarding-between-list-i__img {
+  animation: spin 1.5s linear infinite;
 }
 
 /* ======================= */
