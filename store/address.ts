@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
-import { alertModule } from '.';
+import { alertModule, authModule } from '.';
 import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
   EChainSlug,
@@ -12,6 +12,7 @@ import {
   INft,
   INftsPagination,
   INftTransaction,
+  ENftTransactionAccessType,
   INftTransactionsPagination,
   IToken,
   ITransaction,
@@ -26,7 +27,7 @@ import {
   uniqueNftConcat,
   uniqueNftTransactionConcat,
 } from '~/utils/array';
-import { MetadataService } from '~/services/MetadataService';
+// import { MetadataService } from '~/services/MetadataService';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -251,6 +252,26 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
+  public updateNftDetails({
+    nft,
+    updatedDetails,
+  }: {
+    nft: TNftTransaction;
+    updatedDetails: Record<string, any>;
+  }) {
+    const { nfts } = this.nftTransactions;
+    const index = nfts.findIndex((item) => item === nft);
+
+    this.setNftTransactionDetails({
+      index,
+      nft: {
+        ...nft,
+        ...updatedDetails,
+      },
+    });
+  }
+
+  @Action
   public async fetchNftTransactionDetails(nft: TNftTransaction) {
     const { nfts } = this.nftTransactions;
     const index = nfts.findIndex((item) => item === nft);
@@ -277,18 +298,21 @@ export default class AddressModule extends VuexModule {
         if (/image/.test(mimeType)) {
           data.type = ETypeNft.image;
         }
+      }
 
-        // #TODO normal check
-        if (data.contentUrl === 'https://i.ibb.co/ZHVhQKL/encrypted.png') {
-          const metadataService = new MetadataService();
-          try {
-            const imageData = await metadataService.decryptIpfsFile(data.tokenId as string);
-            data.type = ETypeNft.image;
-            data.contentUrl = imageData;
-          } catch (e) {
-            console.log(e);
-          }
+      let accessType: ENftTransactionAccessType;
+
+      if (data.isEncrypted) {
+        if (
+          this.address.toLocaleLowerCase() ===
+          authModule.address.toLocaleLowerCase()
+        ) {
+          accessType = ENftTransactionAccessType.has_access;
+        } else {
+          accessType = ENftTransactionAccessType.not_requested;
         }
+      } else {
+        accessType = ENftTransactionAccessType.has_access;
       }
 
       this.setNftTransactionDetails({
@@ -296,6 +320,7 @@ export default class AddressModule extends VuexModule {
         nft: {
           ...nft,
           ...data,
+          accessType,
           hasDetails: true,
         },
       });

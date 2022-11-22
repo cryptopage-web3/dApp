@@ -5,6 +5,6 @@ export interface IWritePostParams {
   callbacks: {
     onTransactionHash: (hash: string) => void;
     onReceipt: () => void;
-    onError: () => void;
+    onError: (e: any) => void;
   };
 }

@@ -1,5 +1,8 @@
 import { networkHelper } from './networkHelper';
-import { INftForm } from '~/types/nft-form';
+import {
+  ENftFormUnlockableContentAccessType,
+  INftForm,
+} from '~/types/nft-form';
 
 interface IStatus {
   status: boolean;
@@ -15,7 +18,9 @@ export const validateNftForm = (
     file,
     attributes,
     isUnlockableContent,
-    unlockableText,
+    unlockableContentAccessType,
+    unlockableContentPrice,
+    unlockableContentAccessDuration,
     supply,
     chain,
   } = values;
@@ -121,11 +126,24 @@ export const validateNftForm = (
 
   // validate unlockable content
 
-  if (isUnlockableContent && !unlockableText) {
-    return {
-      status: false,
-      error: 'Unlockable content: text content is empty',
-    };
+  if (isUnlockableContent) {
+    if (!unlockableContentPrice || unlockableContentPrice <= 0) {
+      return {
+        status: false,
+        error: 'Unlockable content: price must be positive number',
+      };
+    }
+
+    if (
+      unlockableContentAccessType ===
+        ENftFormUnlockableContentAccessType.customDuration &&
+      (!unlockableContentAccessDuration || unlockableContentAccessDuration <= 0)
+    ) {
+      return {
+        status: false,
+        error: 'Unlockable content: access duration must be positive number',
+      };
+    }
   }
 
   // validate supply

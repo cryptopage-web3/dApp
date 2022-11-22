@@ -6,7 +6,9 @@
     target="_blank"
     class="profile-content__image loading-bg"
     @click.prevent="$emit('show-modal')"
-  />
+  >
+    <img :src="nft.contentUrl" />
+  </a>
   <div v-else class="profile-content__image">
     <div class="profile-content__image-empty">Failed to get nft data</div>
   </div>
@@ -30,23 +32,23 @@ export default class NftImage extends Vue {
     container: HTMLDivElement;
   };
 
-  mounted() {
-    this.$nextTick(() => {
-      if (!this.nft.contentUrl) {
-        this.isError = true;
-        return;
-      }
-
-      const image = new Image();
-      image.src = this.nft.contentUrl;
-
-      image.onload = () => {
-        this.$refs.container?.append(image);
-      };
-      image.onerror = () => {
-        this.isError = true;
-      };
-    });
-  }
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     if (!this.nft.contentUrl) {
+  //       this.isError = true;
+  //       return;
+  //     }
+  //
+  //     const image = new Image();
+  //     image.src = this.nft.contentUrl;
+  //
+  //     image.onload = () => {
+  //       this.$refs.container?.append(image);
+  //     };
+  //     image.onerror = () => {
+  //       this.isError = true;
+  //     };
+  //   });
+  // }
 }
 </script>

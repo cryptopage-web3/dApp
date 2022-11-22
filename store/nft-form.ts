@@ -1,6 +1,7 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import { alertModule, authModule, addressModule } from '.';
 import {
+  ENftFormUnlockableContentAccessType,
   IAttributeLevel,
   IAttributeProperty,
   IAttributeStat,
@@ -20,7 +21,21 @@ type TNftForm = INftForm;
 const ipfsService = new IPFSService();
 const metadataService = new MetadataService();
 
-const initValues: TNftForm = {
+const genUnlockableContentDisabledState = () => ({
+  isUnlockableContent: false,
+  unlockableContentAccessType: null,
+  unlockableContentPrice: null,
+  unlockableContentAccessDuration: null,
+});
+
+const genUnlockableContentEnabledDefaultState = () => ({
+  isUnlockableContent: true,
+  unlockableContentAccessType: ENftFormUnlockableContentAccessType.oneTime,
+  unlockableContentPrice: 10 ** 18 * 10,
+  unlockableContentAccessDuration: 0,
+});
+
+const genInitValues = (): TNftForm => ({
   title: '',
   description: '',
   file: null,
@@ -31,12 +46,13 @@ const initValues: TNftForm = {
     levels: [],
     stats: [],
   },
-  isUnlockableContent: false,
-  unlockableText: '',
+  ...genUnlockableContentDisabledState(),
   isExplicit: false,
   supply: '1',
   chain: '',
-};
+});
+
+const initValues: TNftForm = genInitValues();
 
 @Module({
   name: 'nft-form',
@@ -107,12 +123,33 @@ export default class NftFormModule extends VuexModule {
 
   @Mutation
   public setIsUnlockableContent(isUnlockable: boolean) {
-    this.values.isUnlockableContent = isUnlockable;
+    if (isUnlockable) {
+      Object.assign(this.values, genUnlockableContentEnabledDefaultState());
+    } else {
+      Object.assign(this.values, genUnlockableContentDisabledState());
+    }
   }
 
   @Mutation
-  public setUnlockableText(text: string) {
-    this.values.unlockableText = text;
+  public setUnlockableContentAccessType(
+    type: ENftFormUnlockableContentAccessType,
+  ) {
+    this.values.unlockableContentAccessType = type;
+
+    if (type === ENftFormUnlockableContentAccessType.oneTime) {
+      this.values.unlockableContentAccessDuration = 0;
+    } else if (type === ENftFormUnlockableContentAccessType.customDuration) {
+      this.values.unlockableContentAccessDuration = 24 * 60 * 60; // 1 day
+    }
+  }
+
+  @Mutation
+  public setUnlockableContentPrice(newPrice: number) {
+    this.values.unlockableContentPrice = newPrice;
+  }
+
+  @Mutation setUnlockableContentAccessDuration(duration: number) {
+    this.values.unlockableContentAccessDuration = duration;
   }
 
   @Mutation
@@ -208,7 +245,16 @@ export default class NftFormModule extends VuexModule {
 
     this.setLoading(true);
 
-    const { file, title, description, attributes, externalLink, isUnlockableContent } = this.values;
+    const {
+      file,
+      title,
+      description,
+      attributes,
+      externalLink,
+      isUnlockableContent,
+      unlockableContentPrice,
+      unlockableContentAccessDuration,
+    } = this.values;
 
     const nftParams: INFTCreateParams = {
       name: title,
@@ -226,7 +272,10 @@ export default class NftFormModule extends VuexModule {
 
     try {
       const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
-      const fileHash = await metadataService.uploadFileToIPFS(file, isUnlockableContent);
+      const fileHash = await metadataService.uploadFileToIPFS(
+        file,
+        isUnlockableContent,
+      );
 
       nftParams[isMediaFile ? 'animation_url' : 'image'] =
         fileHash && `https://ipfs.io/ipfs/${fileHash}`;
@@ -260,7 +309,9 @@ export default class NftFormModule extends VuexModule {
       ownerAddress: addressModule.address,
       communityId: OPEN_FORUM_ID,
       ipfsHash: nftHash,
-      isEncrypted: isUnlockableContent
+      isEncrypted: isUnlockableContent,
+      accessPrice: unlockableContentPrice || 0,
+      accessDuration: unlockableContentAccessDuration || 0,
     };
 
     let txHash = '';
@@ -284,7 +335,8 @@ export default class NftFormModule extends VuexModule {
           self.setTxHash(txHash);
           self.setLoading(false);
         },
-        onError() {
+        onError(e) {
+          console.log(e);
           alertModule.error('Transaction has some error');
           self.setLoading(false);
         },
@@ -308,22 +360,6 @@ export default class NftFormModule extends VuexModule {
   public clear() {
     this.setTxHash(null);
 
-    this.setValues({
-      title: '',
-      description: '',
-      file: null,
-      externalLink: '',
-      isCommentsEnable: false,
-      attributes: {
-        properties: [],
-        levels: [],
-        stats: [],
-      },
-      isUnlockableContent: false,
-      unlockableText: '',
-      isExplicit: false,
-      supply: '1',
-      chain: authModule.chainSlug,
-    });
+    this.setValues(genInitValues());
   }
 }

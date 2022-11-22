@@ -5,4 +5,6 @@ export interface ISendNFTParams {
   communityId: number;
   ipfsHash: string;
   isEncrypted: boolean;
+  accessPrice: number;
+  accessDuration: number;
 }
