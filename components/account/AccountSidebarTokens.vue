@@ -27,7 +27,7 @@
         </li>
       </template>
       <template v-else-if="!visibleTokens.length">
-        <li class="market-sidebar__list3-empty">No tokens</li>
+        <li class="market-sidebar__list3-empty">You don't have token’s</li>
       </template>
       <template v-else>
         <li v-for="(token, index) in visibleTokens" :key="index">
