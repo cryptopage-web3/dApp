@@ -8,7 +8,15 @@
     <Loader v-if="newNftLoading" />
     <Nft v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
     <Loader v-if="$fetchState.pending || initLoading" />
-    <div v-else-if="!nfts.length" class="transactions__empty">No NFTs</div>
+    <div v-else-if="!nfts.length" class="transactions__empty-block">
+      <div class="global-text mb_30 text-center">
+        There is not a single NFT on your address<br />
+        you can create it here
+      </div>
+      <div class="text-center">
+        <a href="#" class="btn-blue_button btn_large"> + Create NFT </a>
+      </div>
+    </div>
   </div>
 </template>
 
