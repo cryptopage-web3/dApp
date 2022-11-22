@@ -1,5 +1,11 @@
 import { ETypeNft, IAttribute, INftComment } from '.';
 
+export enum ENftTransactionAccessType {
+  not_requested = 'not_requested',
+  has_access = 'has_access',
+  has_not_access = 'has_not_access',
+}
+
 export interface INftTransaction {
   type?: ETypeNft;
   txHash: string;
@@ -17,6 +23,11 @@ export interface INftTransaction {
   description?: string;
   contentUrl?: string;
   attributes?: IAttribute[];
+
+  isEncrypted: boolean;
+  accessType: ENftTransactionAccessType;
+  accessPrice: number;
+  accessDuration: number;
 
   price?: number;
   symbol?: string;

@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import { IWriteCommentParams } from '~/types/comment-form';
 import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
+import { alertModule, authModule } from '~/utils/storeAccessor';
 
 export class Web3Service {
   web3!: Web3;
@@ -17,6 +18,9 @@ export class Web3Service {
         ownerAddress,
         communityId,
         ipfsHash,
+        isEncrypted,
+        accessPrice,
+        accessDuration,
       } = params;
 
       const CONTRACT = await import(
@@ -29,7 +33,14 @@ export class Web3Service {
       );
 
       contract.methods
-        .writePost(communityId, ipfsHash, ownerAddress, true)
+        .writePost(
+          communityId,
+          ipfsHash,
+          ownerAddress,
+          isEncrypted,
+          accessPrice.toString(),
+          accessDuration,
+        )
         .send({
           from: authAddress,
         })
@@ -92,5 +103,51 @@ export class Web3Service {
     } catch {
       callbacks.onError();
     }
+  };
+
+  public checkIfHaveAccessToEncryptedPost = async (postId: string) => {
+    // TODO replace by authChainSlug
+    const CONTRACT = await import(
+      `../contracts/${'goerli'}/proxy_community.json`
+    );
+
+    const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
+
+    return await contract.methods
+      .hasAccessToPost(parseInt(postId), authModule.address)
+      .call();
+  };
+
+  public buyPostAccess = async (
+    authAddress: string,
+    postId: string,
+  ): Promise<void> => {
+    // TODO replace by authChainSlug
+    const CONTRACT = await import(
+      `../contracts/${'goerli'}/proxy_community.json`
+    );
+
+    const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
+
+    return await new Promise((resolve, reject) => {
+      contract.methods
+        .buyPostAccess(postId)
+        .send({
+          from: authAddress,
+        })
+        .on('transactionHash', (hash: string) => {
+          alertModule.info(`${hash}: Transaction on pending`);
+        })
+        .on('receipt', (receipt: any) => {
+          console.log('receipt', receipt);
+          alertModule.success('Transaction completed');
+          resolve();
+        })
+        .on('error', (error: any) => {
+          console.log('error', error);
+          alertModule.success('Transaction has some error');
+          reject(error);
+        });
+    });
   };
 }

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
-import { alertModule } from '.';
+import { alertModule, authModule } from '.';
 import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
   EChainSlug,
@@ -12,6 +12,7 @@ import {
   INft,
   INftsPagination,
   INftTransaction,
+  ENftTransactionAccessType,
   INftTransactionsPagination,
   IToken,
   ITransaction,
@@ -250,6 +251,26 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
+  public updateNftDetails({
+    nft,
+    updatedDetails,
+  }: {
+    nft: TNftTransaction;
+    updatedDetails: Record<string, any>;
+  }) {
+    const { nfts } = this.nftTransactions;
+    const index = nfts.findIndex((item) => item === nft);
+
+    this.setNftTransactionDetails({
+      index,
+      nft: {
+        ...nft,
+        ...updatedDetails,
+      },
+    });
+  }
+
+  @Action
   public async fetchNftTransactionDetails(nft: TNftTransaction) {
     const { nfts } = this.nftTransactions;
     const index = nfts.findIndex((item) => item === nft);
@@ -278,11 +299,27 @@ export default class AddressModule extends VuexModule {
         }
       }
 
+      let accessType: ENftTransactionAccessType;
+
+      if (data.isEncrypted) {
+        if (
+          this.address.toLocaleLowerCase() ===
+          authModule.address.toLocaleLowerCase()
+        ) {
+          accessType = ENftTransactionAccessType.has_access;
+        } else {
+          accessType = ENftTransactionAccessType.not_requested;
+        }
+      } else {
+        accessType = ENftTransactionAccessType.has_access;
+      }
+
       this.setNftTransactionDetails({
         index,
         nft: {
           ...nft,
           ...data,
+          accessType,
           hasDetails: true,
         },
       });
