@@ -1,5 +1,10 @@
 import { IAttributes } from '.';
 
+export enum ENftFormUnlockableContentAccessType {
+  oneTime = 'ONE_TIME',
+  customDuration = 'CUSTOM_DURATION',
+}
+
 export interface INftForm {
   title: string;
   description: string;
@@ -7,7 +12,9 @@ export interface INftForm {
   externalLink: string;
   isCommentsEnable: boolean;
   isUnlockableContent: boolean;
-  unlockableText: string;
+  unlockableContentAccessType: ENftFormUnlockableContentAccessType | null;
+  unlockableContentPrice: number | null;
+  unlockableContentAccessDuration: number | null;
   isExplicit: boolean;
   attributes: IAttributes;
   supply: string;

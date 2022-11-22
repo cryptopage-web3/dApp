@@ -10,4 +10,5 @@ export interface INftTransactionDetailsResponse {
   chain?: string;
   tokenId?: string;
   attributes?: IAttribute[];
+  isEncrypted?: boolean;
 }
