@@ -46,10 +46,7 @@ export class Web3Service {
         })
         .on('transactionHash', callbacks.onTransactionHash)
         .on('receipt', callbacks.onReceipt)
-        .on('error', (e: any) => {
-          console.log(e);
-          callbacks.onError();
-        });
+        .on('error', callbacks.onError);
     } catch {
       callbacks.onError();
     }
