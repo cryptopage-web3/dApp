@@ -359,6 +359,9 @@ export default class NftFormModule extends VuexModule {
   public clear() {
     this.setTxHash(null);
 
-    this.setValues(genInitValues());
+    this.setValues({
+      ...genInitValues(),
+      chain: authModule.chainSlug,
+    });
   }
 }

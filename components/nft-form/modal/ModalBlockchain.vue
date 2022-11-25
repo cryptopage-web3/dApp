@@ -5,7 +5,7 @@
       ref="drop"
       class="profile-content-drop modal-creat-drop2 market-filtr__drop mt_5"
     >
-      <a href="#" class="profile-content-drop__link">
+      <a ref="dropLink" href="#" class="profile-content-drop__link">
         <template v-if="chainInfo">
           <div class="thumb">
             <img :src="chainInfo.icon" alt="" />
@@ -35,6 +35,7 @@ import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { nftFormModule, authModule } from '~/store';
 import { EChainSlug } from '~/types';
+import { profileContentDropTarget } from '~/utils/profileContentDrop';
 
 @Component({})
 export default class ModalBlockchain extends Vue {
@@ -73,6 +74,7 @@ export default class ModalBlockchain extends Vue {
 
   $refs!: {
     drop: HTMLDivElement;
+    dropLink: HTMLDivElement;
   };
 
   get chain(): string {
@@ -92,6 +94,12 @@ export default class ModalBlockchain extends Vue {
     if (process.client && slug !== this.chain) {
       nftFormModule.setChain(slug);
     }
+  }
+
+  mounted() {
+    this.$nextTick(() => {
+      profileContentDropTarget(this.$refs.dropLink);
+    });
   }
 
   select(slug: EChainSlug) {
