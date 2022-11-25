@@ -88,12 +88,6 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 
-  /** for mobile connect to localhost */
-  server: {
-    port: 3000,
-    host: '0.0.0.0',
-  },
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     babel: {
