@@ -10,13 +10,24 @@
     <Loader v-if="$fetchState.pending || initLoading" />
     <div v-else-if="!nfts.length" class="transactions__empty-block">
       <div class="global-text mb_30 text-center">
-        There is not a single NFT on your address<br />
-        you can create it here
+        There is not a single NFT on
+        {{ isOwner ? 'your' : 'user' }} address<br />
+        you can {{ isOwner ? 'create' : 'send' }} it here
       </div>
       <div class="text-center">
-        <a href="#" class="btn-blue_button btn_large"> + Create NFT </a>
+        <a
+          href="#"
+          class="btn-blue_button btn_large"
+          @click.prevent="showModal"
+        >
+          + {{ isOwner ? 'Create' : 'Send' }} NFT
+        </a>
       </div>
     </div>
+
+    <client-only>
+      <NftFormModal ref="modal" />
+    </client-only>
   </div>
 </template>
 
@@ -25,7 +36,13 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import Loader from '~/components/loaders/GrowLoader.vue';
 import Nft from '~/components/address/nft/Nft.vue';
-import { addressModule, stickyModule } from '~/store';
+import NftFormModal from '~/components/nft-form/modal/Modal.vue';
+import {
+  addressModule,
+  authModule,
+  nftFormModule,
+  stickyModule,
+} from '~/store';
 import { INftTransaction } from '~/types';
 import { getNftTransactionUniqueKey } from '~/utils/array';
 
@@ -33,10 +50,15 @@ import { getNftTransactionUniqueKey } from '~/utils/array';
   components: {
     Loader,
     Nft,
+    NftFormModal,
   },
 })
 export default class AddressNfts extends Vue {
   initLoading = true;
+
+  $refs!: {
+    modal: NftFormModal;
+  };
 
   @Prop({ required: true })
   readonly isActive!: boolean;
@@ -64,6 +86,32 @@ export default class AddressNfts extends Vue {
     );
   }
 
+  get isOwner(): boolean {
+    return (
+      authModule.address.toLowerCase() === addressModule.address.toLowerCase()
+    );
+  }
+
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+
+  get isSameChain(): boolean {
+    return authModule.chainSlug === addressModule.chainSlug;
+  }
+
+  get authChainName(): string {
+    return authModule.chainName;
+  }
+
+  get addressChainName(): string {
+    return addressModule.chainName;
+  }
+
+  get txHash(): string | null {
+    return nftFormModule.txHash;
+  }
+
   @Watch('nfts')
   onNftsChanged() {
     stickyModule.update();
@@ -72,6 +120,17 @@ export default class AddressNfts extends Vue {
   @Watch('isActive')
   onIsActiveChanged() {
     this.$fetch();
+  }
+
+  @Watch('txHash')
+  onTxHashChanged(txHash: string | null) {
+    if (!txHash) {
+      return;
+    }
+
+    setTimeout(() => {
+      this.$refs.modal.hide();
+    }, 10);
   }
 
   // lifecycle hooks
@@ -136,6 +195,41 @@ export default class AddressNfts extends Vue {
 
   uniqueKey(nft: INftTransaction) {
     return nft ? getNftTransactionUniqueKey(nft) : '_';
+  }
+
+  validateCreateNFT() {
+    if (!this.isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to create NFTs',
+      });
+
+      return false;
+    }
+
+    if (!this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Active chain - ${this.authChainName}<br>
+          You are trying ${
+            this.isOwner ? 'create' : 'send'
+          } nft to account with chain ${this.addressChainName}<br>
+          Please connect to ${this.addressChainName}
+        `,
+      });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  showModal() {
+    if (!this.validateCreateNFT()) {
+      return;
+    }
+
+    this.$refs.modal.show();
   }
 }
 </script>

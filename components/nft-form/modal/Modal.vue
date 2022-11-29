@@ -2,7 +2,6 @@
   <div>
     <!-- Modal -->
     <div
-      id="modal-creat-nft"
       ref="modal"
       class="modal fade modal-creat"
       tabindex="-1"

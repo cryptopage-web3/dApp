@@ -47,10 +47,9 @@
           ref="settingBtn"
           href="#"
           role="button"
-          data-toggle="modal"
-          data-target="#modal-creat-nft"
           class="form-creat-nav-item form-creat-nav-item-js fill"
           :class="{ 'form-creat-nav-item_filled': hasSettings }"
+          @click.prevent="showModal"
         >
           <NftFormSettingIcon />
         </a>
@@ -300,6 +299,10 @@ export default class NftForm extends Vue {
 
   createNft() {
     nftFormModule.submit();
+  }
+
+  showModal() {
+    this.$refs.modal.show();
   }
 }
 </script>
