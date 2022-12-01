@@ -12,15 +12,7 @@
       :transaction="transaction"
     />
     <Loader v-if="$fetchState.pending" />
-    <EmptyNfts
-      v-else-if="!transactions.length"
-      is-transaction
-      @show-modal="showModal"
-    />
-
-    <client-only>
-      <NftFormModal ref="modal" />
-    </client-only>
+    <EmptyNfts v-else-if="!transactions.length" is-transaction />
   </div>
 </template>
 
@@ -29,7 +21,6 @@ import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import Loader from '~/components/loaders/GrowLoader.vue';
 import Transaction from '~/components/address/transaction/Transaction.vue';
-import NftFormModal from '~/components/nft-form/modal/Modal.vue';
 import EmptyNfts from '~/components/empty-nfts/EmptyNfts.vue';
 import { addressModule, stickyModule } from '~/store';
 import { ITransaction } from '~/types';
@@ -39,7 +30,6 @@ import { getUniqueKey } from '~/utils/array';
   components: {
     Loader,
     Transaction,
-    NftFormModal,
     EmptyNfts,
   },
 })
@@ -48,10 +38,6 @@ export default class AddressTransactions extends Vue {
   readonly isActive!: boolean;
 
   scrollListener: null | (() => void) = null;
-
-  $refs!: {
-    modal: NftFormModal;
-  };
 
   get transactions(): ITransaction[] {
     return addressModule.transactions.transactions;
@@ -147,10 +133,6 @@ export default class AddressTransactions extends Vue {
 
   uniqueKey(transaction: ITransaction) {
     return getUniqueKey(transaction);
-  }
-
-  showModal() {
-    this.$refs.modal.show();
   }
 }
 </script>

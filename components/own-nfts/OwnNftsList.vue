@@ -4,12 +4,8 @@
     <div class="profile-my-nfts-wrap row">
       <Nft v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
       <Loader v-if="$fetchState.pending || initLoading" />
-      <EmptyNfts v-else-if="!nfts.length" is-nft @show-modal="showModal" />
+      <EmptyNfts v-else-if="!nfts.length" is-nft />
     </div>
-
-    <client-only>
-      <NftFormModal ref="modal" />
-    </client-only>
   </div>
 </template>
 
@@ -19,7 +15,6 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import OwnNftsFilter from './OwnNftsFilter.vue';
 import Nft from './nft/Nft.vue';
 import Loader from '~/components/loaders/GrowLoader.vue';
-import NftFormModal from '~/components/nft-form/modal/Modal.vue';
 import EmptyNfts from '~/components/empty-nfts/EmptyNfts.vue';
 import { addressModule, stickyModule } from '~/store';
 import { INft } from '~/types';
@@ -31,17 +26,12 @@ import { getNftUniqueKey } from '~/utils/array';
     Loader,
     OwnNftsFilter,
     EmptyNfts,
-    NftFormModal,
   },
 })
 export default class OwnNftsList extends Vue {
   initLoading = true;
 
   scrollListener: null | (() => void) = null;
-
-  $refs!: {
-    modal: NftFormModal;
-  };
 
   get nfts(): INft[] {
     return addressModule.ownNfts.nfts;
@@ -120,10 +110,6 @@ export default class OwnNftsList extends Vue {
 
   uniqueKey(nft: INft) {
     return getNftUniqueKey(nft);
-  }
-
-  showModal() {
-    this.$refs.modal.show();
   }
 }
 </script>

@@ -131,6 +131,10 @@ export default class Modal extends Vue {
     return nftFormModule.txHash;
   }
 
+  get showModal(): boolean {
+    return nftFormModule.showModal;
+  }
+
   @Watch('isValid', { immediate: true })
   onIsValidChanged(isValid: boolean) {
     if (process.client) {
@@ -149,10 +153,19 @@ export default class Modal extends Vue {
     }, 10);
   }
 
+  @Watch('showModal')
+  onShowModalChanged(showModal: boolean) {
+    showModal && this.show();
+  }
+
   mounted() {
     ($(this.$refs.sendBtn) as any).tooltip({
       trigger: 'hover',
       title: 'Name and file are required',
+    });
+
+    ($(this.$refs.modal) as any).on('hide.bs.modal', function () {
+      nftFormModule.setShowModal(false);
     });
   }
 

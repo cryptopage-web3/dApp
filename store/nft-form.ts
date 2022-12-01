@@ -66,6 +66,8 @@ export default class NftFormModule extends VuexModule {
 
   txHash: string | null = null;
 
+  showModal = false;
+
   get isValid(): boolean {
     const { title, file } = this.values;
 
@@ -119,6 +121,11 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setIsCommentsEnable(isEnable: boolean) {
     this.values.isCommentsEnable = isEnable;
+  }
+
+  @Mutation
+  public setShowModal(show: boolean) {
+    this.showModal = show;
   }
 
   @Mutation

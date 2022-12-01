@@ -92,10 +92,6 @@
         <div class="form-creat-file__text">Drag &amp; drop files here</div>
       </div>
     </label>
-
-    <client-only>
-      <NftFormModal ref="modal" />
-    </client-only>
   </div>
 </template>
 
@@ -105,7 +101,6 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import NftFormTitle from './NftFormTitle.vue';
 import NftFormDescription from './NftFormDescription.vue';
 import NftFormUpload from './NftFormUpload.vue';
-import NftFormModal from './modal/Modal.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
 import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
@@ -121,7 +116,6 @@ import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vu
     NftFormTitle,
     NftFormDescription,
     NftFormUpload,
-    NftFormModal,
   },
 })
 export default class NftForm extends Vue {
@@ -133,7 +127,6 @@ export default class NftForm extends Vue {
     refUpload: NftFormUpload;
     sendBtn: HTMLDivElement;
     settingBtn: HTMLAnchorElement;
-    modal: NftFormModal;
   };
 
   get isAuth(): boolean {
@@ -301,7 +294,7 @@ export default class NftForm extends Vue {
   }
 
   showModal() {
-    this.$refs.modal.show();
+    nftFormModule.setShowModal(true);
   }
 }
 </script>

@@ -16,14 +16,23 @@
 
     <layout-footer />
     <onboarding-modals />
+
+    <client-only>
+      <NftFormModal />
+    </client-only>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import NftFormModal from '~/components/nft-form/modal/Modal.vue';
 
-@Component({})
+@Component({
+  components: {
+    NftFormModal,
+  },
+})
 export default class AccountLayout extends Vue {
   get showRightSidebar(): boolean {
     return !(

@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Emit, Prop } from 'nuxt-property-decorator';
-import { addressModule, authModule } from '~/store';
+import { Component, Prop } from 'nuxt-property-decorator';
+import { addressModule, authModule, nftFormModule } from '~/store';
 
 @Component({})
 export default class EmptyNfts extends Vue {
@@ -63,11 +63,6 @@ export default class EmptyNfts extends Vue {
 
   get addressChainName(): string {
     return addressModule.chainName;
-  }
-
-  @Emit('show-modal')
-  emitShowModal() {
-    return true;
   }
 
   // methods
@@ -104,7 +99,7 @@ export default class EmptyNfts extends Vue {
       return;
     }
 
-    this.emitShowModal();
+    nftFormModule.setShowModal(true);
   }
 }
 </script>
