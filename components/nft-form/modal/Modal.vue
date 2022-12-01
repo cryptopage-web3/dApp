@@ -127,11 +127,26 @@ export default class Modal extends Vue {
     return nftFormModule.loadingForm;
   }
 
+  get txHash(): string | null {
+    return nftFormModule.txHash;
+  }
+
   @Watch('isValid', { immediate: true })
   onIsValidChanged(isValid: boolean) {
     if (process.client) {
       ($(this.$refs.sendBtn) as any).tooltip(isValid ? 'disable' : 'enable');
     }
+  }
+
+  @Watch('txHash')
+  onTxHashChanged(txHash: string | null) {
+    if (!txHash) {
+      return;
+    }
+
+    setTimeout(() => {
+      this.hide();
+    }, 10);
   }
 
   mounted() {

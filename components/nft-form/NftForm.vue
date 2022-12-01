@@ -204,7 +204,6 @@ export default class NftForm extends Vue {
 
     setTimeout(() => {
       this.closeForm();
-      this.$refs.modal.hide();
       nftFormModule.clear();
       addressModule.syncAddressTransactions(txHash);
     }, 10);
