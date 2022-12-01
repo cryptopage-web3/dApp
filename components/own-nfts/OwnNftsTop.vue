@@ -7,7 +7,9 @@
       <h2 class="global-zag">{{ isOwner ? 'My' : 'Account' }} NFT’s</h2>
     </div>
     <div class="profile-my-nfts-top__btns">
-      <a href="#" class="btn-blue-transparent"> + Create NFT </a>
+      <a href="#" class="btn-blue-transparent" @click.prevent="showModal">
+        + Create NFT
+      </a>
       <a
         href="#"
         class="btn_transparent"
@@ -25,7 +27,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { addressModule, authModule } from '~/store';
+import { addressModule, authModule, nftFormModule } from '~/store';
 import OwnNftsBackIcon from '~/components/icon/own-nfts/OwnNftsBackIcon.vue';
 
 @Component({
@@ -48,6 +50,48 @@ export default class OwnNftsTop extends Vue {
         addressModule.address.toLowerCase() &&
       authModule.chainSlug === addressModule.chainSlug
     );
+  }
+
+  // methods
+
+  validateCreateNFT() {
+    const isAuth = authModule.isAuth;
+    const isSameChain = authModule.chainSlug === addressModule.chainSlug;
+    const authChainName = authModule.chainName;
+    const addressChainName = addressModule.chainName;
+
+    if (!isAuth) {
+      this.$notify({
+        type: 'error',
+        title: 'Need to connect a wallet to create NFTs',
+      });
+
+      return false;
+    }
+
+    if (!isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Active chain - ${authChainName}<br>
+          You are trying ${
+            this.isOwner ? 'create' : 'send'
+          } nft to account with chain ${addressChainName}<br>
+          Please connect to ${addressChainName}
+        `,
+      });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  showModal() {
+    if (!this.validateCreateNFT()) {
+      return;
+    }
+
+    nftFormModule.setShowModal(true);
   }
 }
 </script>

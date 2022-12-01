@@ -49,26 +49,15 @@ export default class EmptyNfts extends Vue {
     );
   }
 
-  get isAuth(): boolean {
-    return authModule.isAuth;
-  }
-
-  get isSameChain(): boolean {
-    return authModule.chainSlug === addressModule.chainSlug;
-  }
-
-  get authChainName(): string {
-    return authModule.chainName;
-  }
-
-  get addressChainName(): string {
-    return addressModule.chainName;
-  }
-
   // methods
 
   validateCreateNFT() {
-    if (!this.isAuth) {
+    const isAuth = authModule.isAuth;
+    const isSameChain = authModule.chainSlug === addressModule.chainSlug;
+    const authChainName = authModule.chainName;
+    const addressChainName = addressModule.chainName;
+
+    if (!isAuth) {
       this.$notify({
         type: 'error',
         title: 'Need to connect a wallet to create NFTs',
@@ -77,14 +66,14 @@ export default class EmptyNfts extends Vue {
       return false;
     }
 
-    if (!this.isSameChain) {
+    if (!isSameChain) {
       this.$notify({
         type: 'error',
-        title: `Active chain - ${this.authChainName}<br>
+        title: `Active chain - ${authChainName}<br>
           You are trying ${
             this.isOwner ? 'create' : 'send'
-          } nft to account with chain ${this.addressChainName}<br>
-          Please connect to ${this.addressChainName}
+          } nft to account with chain ${addressChainName}<br>
+          Please connect to ${addressChainName}
         `,
       });
 
