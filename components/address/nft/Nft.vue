@@ -1,6 +1,6 @@
 <template>
-  <div class="profile-content">
-    <div v-if="loading" class="profile-content__loading">
+  <div ref="root" class="profile-content">
+    <div v-if="loading || !visible" class="profile-content__loading">
       <Skeleton class-name="profile-content__loading-top" />
       <Skeleton class-name="profile-content__loading-img" />
       <Skeleton class-name="profile-content__loading-text" />
@@ -135,20 +135,63 @@ export default class Nft extends Vue {
   ETypeNft = ETypeNft;
   ENftTransactionAccessType = ENftTransactionAccessType;
   loading = false;
+  visible = false;
+
+  scrollListener: null | (() => void) = null;
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
 
   $refs!: {
     modal: NftModal;
+    root: HTMLDivElement;
   };
 
   mounted() {
-    this.refresh();
+    if (this.nft.hasDetails) {
+      return;
+    }
+
+    this.$nextTick(() => {
+      this.scrollListener = this.scrollHandler.bind(this);
+      this.scrollListener();
+
+      $(window).on('scroll', this.scrollListener);
+    });
+  }
+
+  beforeDestroy() {
+    if (!this.scrollListener) {
+      return;
+    }
+
+    $(window).off('scroll', this.scrollListener);
+    this.scrollListener = null;
   }
 
   showModal() {
     this.$refs.modal.show();
+  }
+
+  scrollHandler() {
+    /** если NFT была показана, то ничего не делаем */
+    if (this.visible) {
+      return;
+    }
+
+    const windowHeight = Number($(window).height());
+    const windowScrollTop = Number($(window).scrollTop());
+    const elemOffsetTop = Number($(this.$refs.root).offset()?.top);
+    const nftHeight = Number($(window).width()) > 767 ? 530 : 330;
+
+    /** если до видимости NFT осталось проскроллить больше одной NFT, то ничего не делаем */
+    if (windowScrollTop + windowHeight < elemOffsetTop - nftHeight) {
+      return;
+    }
+
+    /** если NFT скоро покажется, то помечаем ее видимой и делаем запрос на детали */
+    this.visible = true;
+    this.refresh();
   }
 
   async checkIfHaveAccessToSeePost() {
