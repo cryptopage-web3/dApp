@@ -179,6 +179,14 @@ export default class Nft extends Vue {
       return;
     }
 
+    /**
+     * NFT имеет некорректное расположение относительно страницы
+     * скорее всего скрыто. Например, активен другой таб
+     * */
+    if (!$(this.$refs.root).offset()?.top) {
+      return;
+    }
+
     const windowHeight = Number($(window).height());
     const windowScrollTop = Number($(window).scrollTop());
     const elemOffsetTop = Number($(this.$refs.root).offset()?.top);
