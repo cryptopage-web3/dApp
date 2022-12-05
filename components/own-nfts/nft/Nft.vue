@@ -1,8 +1,11 @@
 <template>
-  <div class="col-xl-4 col-md-4 col-12">
+  <div ref="root" class="col-xl-4 col-md-4 col-12">
     <div class="market-product">
       <div class="thumb">
-        <Skeleton v-if="loading" class-name="market-product__media-loading" />
+        <Skeleton
+          v-if="loading || !visible"
+          class-name="market-product__media-loading"
+        />
         <div v-else class="market-product__media">
           <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
           <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
@@ -55,30 +58,81 @@ type TNft = INft;
 })
 export default class Nft extends Vue {
   loading = true;
+  visible = false;
   ETypeNft = ETypeNft;
+
+  scrollListener: null | (() => void) = null;
 
   @Prop({ required: true })
   readonly nft!: TNft;
 
   $refs!: {
     modal: NftCommentsModal;
+    root: HTMLDivElement;
   };
 
-  async mounted() {
+  mounted() {
     if (this.nft.hasDetails) {
       this.loading = false;
       return;
     }
 
+    this.$nextTick(() => {
+      this.scrollListener = this.scrollHandler.bind(this);
+      this.scrollListener();
+
+      $(window).on('scroll', this.scrollListener);
+    });
+  }
+
+  beforeDestroy() {
+    if (!this.scrollListener) {
+      return;
+    }
+
+    $(window).off('scroll', this.scrollListener);
+    this.scrollListener = null;
+  }
+
+  scrollHandler() {
+    /** если NFT была показана, то ничего не делаем */
+    if (this.visible) {
+      return;
+    }
+
+    /**
+     * NFT имеет некорректное расположение относительно страницы
+     * скорее всего скрыто. Например, активен другой таб
+     * */
+    if (!$(this.$refs.root).offset()?.top) {
+      return;
+    }
+
+    const windowHeight = Number($(window).height());
+    const windowScrollTop = Number($(window).scrollTop());
+    const elemOffsetTop = Number($(this.$refs.root).offset()?.top);
+    const nftHeight = 530;
+
+    /** если до видимости NFT осталось проскроллить больше одной NFT, то ничего не делаем */
+    if (windowScrollTop + windowHeight < elemOffsetTop - nftHeight) {
+      return;
+    }
+
+    /** если NFT скоро покажется, то помечаем ее видимой и делаем запрос на детали */
+    this.visible = true;
+    this.fetchDetails();
+  }
+
+  selectReaction(type: TCommentType) {
+    this.$refs.modal.show(type);
+  }
+
+  async fetchDetails() {
     this.loading = true;
 
     await addressModule.fetchOwnNftDetails(this.nft);
 
     this.loading = false;
-  }
-
-  selectReaction(type: TCommentType) {
-    this.$refs.modal.show(type);
   }
 }
 </script>
