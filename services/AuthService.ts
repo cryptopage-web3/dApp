@@ -144,25 +144,33 @@ export class AuthService {
     }
 
     try {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      let provider: any;
+      if (window.ethereum.providers?.length) {
+        provider = window.ethereum.providers.find(
+          (provider: any) => provider.isMetaMask,
+        );
+      } else {
+        provider = window.ethereum;
+      }
+      await provider.request({ method: 'eth_requestAccounts' });
 
       const onChange = () => {
         onConnectChange({
           chainId: Number(window.ethereum.chainId),
-          address: window.ethereum.selectedAddress,
+          address: provider.selectedAddress,
         });
       };
 
-      window.ethereum.on('chainChanged', onChange);
-      window.ethereum.on('accountsChanged', onChange);
+      provider.on('chainChanged', onChange);
+      provider.on('accountsChanged', onChange);
 
-      this.provider = window.ethereum;
+      this.provider = provider;
 
       return {
         status: 'success',
         connectData: {
-          chainId: Number(window.ethereum.chainId),
-          address: window.ethereum.selectedAddress,
+          chainId: Number(provider.chainId),
+          address: provider.selectedAddress,
           providerSlug: EProvider.metamask,
           provider: this.provider,
         },
