@@ -144,19 +144,19 @@ export class AuthService {
     }
 
     try {
-      let provider: any;
-      if (window.ethereum.providers?.length) {
-        provider = window.ethereum.providers.find(
-          (provider: any) => provider.isMetaMask,
-        );
-      } else {
-        provider = window.ethereum;
+      const provider = window.ethereum.providers?.length
+        ? window.ethereum.providers.find((provider: any) => provider.isMetaMask)
+        : window.ethereum;
+
+      if (!provider) {
+        throw new Error('Empty MetaMask provider');
       }
+
       await provider.request({ method: 'eth_requestAccounts' });
 
       const onChange = () => {
         onConnectChange({
-          chainId: Number(window.ethereum.chainId),
+          chainId: Number(provider.chainId),
           address: provider.selectedAddress,
         });
       };
