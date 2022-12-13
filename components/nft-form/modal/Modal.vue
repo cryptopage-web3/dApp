@@ -155,7 +155,13 @@ export default class Modal extends Vue {
 
   @Watch('showModal')
   onShowModalChanged(showModal: boolean) {
-    showModal && this.show();
+    setTimeout(() => {
+      if (showModal) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    }, 100);
   }
 
   mounted() {

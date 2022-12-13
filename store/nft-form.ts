@@ -18,6 +18,11 @@ import { MetadataService } from '~/services/MetadataService';
 
 type TNftForm = INftForm;
 
+type TSuccessModal = {
+  status: boolean;
+  data?: TNftForm;
+};
+
 const ipfsService = new IPFSService();
 const metadataService = new MetadataService();
 
@@ -67,6 +72,10 @@ export default class NftFormModule extends VuexModule {
   txHash: string | null = null;
 
   showModal = false;
+
+  showSuccessModal: TSuccessModal = {
+    status: false,
+  };
 
   get isValid(): boolean {
     const { title, file } = this.values;
@@ -126,6 +135,11 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setShowModal(show: boolean) {
     this.showModal = show;
+  }
+
+  @Mutation
+  public setShowSuccessModal(status: TSuccessModal) {
+    this.showSuccessModal = status;
   }
 
   @Mutation
@@ -339,6 +353,10 @@ export default class NftFormModule extends VuexModule {
         onReceipt() {
           alertModule.success('Transaction completed');
 
+          self.setShowSuccessModal({
+            status: true,
+            data: self.values,
+          });
           self.setTxHash(txHash);
           self.setLoading(false);
         },

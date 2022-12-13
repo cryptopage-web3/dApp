@@ -19,6 +19,7 @@
 
     <client-only>
       <NftFormModal />
+      <NftSuccessModal />
     </client-only>
   </div>
 </template>
@@ -27,10 +28,12 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import NftFormModal from '~/components/nft-form/modal/Modal.vue';
+import NftSuccessModal from '~/components/nft-form/modal-success/ModalSuccess.vue';
 
 @Component({
   components: {
     NftFormModal,
+    NftSuccessModal,
   },
 })
 export default class AccountLayout extends Vue {
