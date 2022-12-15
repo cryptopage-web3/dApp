@@ -25,7 +25,29 @@
                 You created “{{ title }}”
               </div>
               <div class="modal-creat-result__thumb">
-                <img :src="fileLink" alt="" />
+                <div
+                  v-if="fileType === 'video'"
+                  class="modal-creat-result__thumb-video"
+                >
+                  <video
+                    style="z-index: 10"
+                    tabindex="-1"
+                    data-video=""
+                    allowfullscreen="false"
+                    controls
+                  >
+                    <source :src="fileLink" />
+                  </video>
+                </div>
+                <div
+                  v-else-if="fileType === 'audio'"
+                  class="modal-creat-result__thumb-audio"
+                >
+                  <audio controls>
+                    <source :src="fileLink" />
+                  </audio>
+                </div>
+                <img v-else :src="fileLink" alt="" />
               </div>
               <div v-if="description" class="modal-creat-result__text">
                 {{ description }}

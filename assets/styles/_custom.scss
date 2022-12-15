@@ -796,6 +796,28 @@
   height: 25px;
 }
 
+.modal-creat-result__thumb {
+  overflow: hidden;
+}
+
+.modal-creat-result__thumb-video {
+  width: 100%;
+  padding: 30px 0;
+}
+
+.modal-creat-result__thumb-video video {
+	width: 100%;
+}
+
+.modal-creat-result__thumb-audio {
+  position: relative;
+  padding: 30px 0;
+}
+
+.modal-creat-result__thumb-audio audio {
+  width: 100%;
+}
+
 /* ===== my nft ===== */
 
 .market-product__media {
