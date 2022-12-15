@@ -3,6 +3,22 @@
     <h2 class="global-zag">Profile Settings</h2>
     <div class="profil-settings__info"><span>*</span> Required fields</div>
     <div class="profil-settings-form">
+      <!--<div class="profil-settings-item">
+            <div class="profil-settings-item__title">
+              Image Profile
+            </div>
+            <div class="profil-settings-edit-avatar">
+              <input type="file" id="profil-settings_input1">
+              <div class="profil-settings-edit-avatar__default">
+                NN
+              </div>
+              <label for="profil-settings_input1" class="profil-settings-edit-avatar__label">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.2677 3.73223L20.9748 3.02513V3.02513L20.2677 3.73223ZM6.5 21.0355V22.0355C6.76522 22.0355 7.01957 21.9301 7.20711 21.7426L6.5 21.0355ZM3 21.0355H2C2 21.5878 2.44772 22.0355 3 22.0355V21.0355ZM3 17.4644L2.29289 16.7573C2.10536 16.9448 2 17.1992 2 17.4644H3ZM15.9393 4.52513C15.5488 4.1346 14.9156 4.1346 14.5251 4.52513C14.1345 4.91565 14.1345 5.54882 14.5251 5.93934L15.9393 4.52513ZM18.0606 9.47487C18.4511 9.8654 19.0843 9.8654 19.4748 9.47487C19.8653 9.08435 19.8653 8.45118 19.4748 8.06066L18.0606 9.47487ZM17.4393 4.43934C18.0251 3.85355 18.9748 3.85355 19.5606 4.43934L20.9748 3.02513C19.608 1.65829 17.3919 1.65829 16.0251 3.02513L17.4393 4.43934ZM19.5606 4.43934C20.1464 5.02513 20.1464 5.97487 19.5606 6.56066L20.9748 7.97487C22.3417 6.60804 22.3417 4.39196 20.9748 3.02513L19.5606 4.43934ZM19.5606 6.56066L5.79289 20.3284L7.20711 21.7426L20.9748 7.97487L19.5606 6.56066ZM6.5 20.0355H3V22.0355H6.5V20.0355ZM16.0251 3.02513L2.29289 16.7573L3.70711 18.1715L17.4393 4.43934L16.0251 3.02513ZM2 17.4644V21.0355H4V17.4644H2ZM14.5251 5.93934L18.0606 9.47487L19.4748 8.06066L15.9393 4.52513L14.5251 5.93934Z" fill="white"/>
+                </svg>
+              </label>
+            </div>
+          </div>-->
       <div class="profil-settings-item">
         <div class="profil-settings-item__title">Image Profile</div>
         <div class="profil-settings-edit-avatar">
@@ -45,14 +61,84 @@
         <div class="profil-settings-item__title">
           Name Profile<span>*</span>
         </div>
-        <input
-          type="text"
-          placeholder="Enter name profile"
-          class="global-input global-input_large profil-settings-item__text"
-        />
+        <div class="psi-status">
+          <input
+            type="text"
+            placeholder="Enter name profile"
+            class="global-input global-input_large profil-settings-item__text"
+          />
+          <div class="global-status global-status_blue">
+            <img src="@/assets/img/global-status_icon1.svg" alt="" />
+            <span> Verified </span>
+          </div>
+        </div>
       </div>
       <div class="profil-settings-item">
-        <div class="profil-settings-item__title">Name<span>*</span></div>
+        <div class="profil-settings-item__title">
+          Name Profile<span>*</span>
+        </div>
+        <div class="psi-status">
+          <input
+            type="text"
+            placeholder="Enter name profile"
+            value="Vitalik Buterin"
+            class="global-input global-input_large profil-settings-item__text"
+          />
+          <div class="global-status global-status_red">
+            <img src="@/assets/img/global-status_icon2.svg" alt="" />
+            <span> Rejected </span>
+          </div>
+        </div>
+      </div>
+      <div class="profil-settings-item">
+        <div class="profil-settings-item__title">
+          Name Profile<span>*</span>
+        </div>
+        <div class="psi-status">
+          <input
+            type="text"
+            placeholder="Enter name profile"
+            value="Vitalik Buterin"
+            class="global-input global-input_large profil-settings-item__text"
+          />
+          <div class="global-status global-status_grey p-relative zindex-2">
+            <img src="@/assets/img/global-status_icon3.svg" alt="" />
+            <span> Unverified </span>
+            <div class="global-hint global-hint-right">
+              <a href="#" class="global-hint-close">
+                <img src="@/assets/img/global-hint-close_img.svg" alt="" />
+              </a>
+              <div class="global-hint-body">
+                <div class="global-hint__title">Attention</div>
+                <div class="global-text_12 light_blue">
+                  Identity verification (KYC<br />/AML) is mandatory to
+                  participate in our token sale.
+                </div>
+                <a
+                  href="#"
+                  class="btn-white global-hint-close_js mt_20 pr_20 pl_20"
+                >
+                  Close
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="profil-settings-item">
+        <div class="profil-settings-item__title">Email</div>
+        <div class="psi-status">
+          <input
+            type="email"
+            placeholder="Enter you email"
+            class="global-input global-input_large profil-settings-item__text"
+          />
+        </div>
+      </div>
+      <div class="profil-settings-item">
+        <div class="profil-settings-item__title">
+          Ethereum Public Address<span>*</span>
+        </div>
         <div class="global-copy">
           <input
             id="global-copy1"

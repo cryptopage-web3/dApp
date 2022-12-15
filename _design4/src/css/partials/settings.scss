@@ -533,6 +533,38 @@ $dark: #333;
 	}
 }
 
+.btn-white {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 5px;
+	font-family: 'SF Pro Display';
+	font-weight: 500;
+	@extend .fs_12;
+	line-height: 1.2em;
+	color: $blue;
+	padding: 8px 15px;
+	transition: all 0.5s;
+	background-color: $white;
+	max-height: 30px;
+	&:hover {
+		color: $blue_hover;
+	}
+	&:active {
+		color: $blue_hover;
+	}
+	&.red {
+		color: $red;
+	}
+	&.success {
+		color: $green;
+	}
+	&.disabled {
+		color: $divider;
+	}
+}
+
 .btn-blue {
 	display: inline-flex;
 	align-items: center;
@@ -615,6 +647,13 @@ $dark: #333;
 .global-input_large {
 	height: 40px;
 	font-size: 14px !important;
+}
+
+/*z-index*/
+@for $i from 1 through 5 {
+	.zindex-#{$i} {
+		z-index: $i;
+	}
 }
 
 /*placeholder*/

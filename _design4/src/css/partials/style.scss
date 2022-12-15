@@ -7677,6 +7677,33 @@ body.body-market{
 		bottom: 100%;
 		left: 10px; 
 	}
+	&.global-hint-right {
+		left: calc(100% + 23px);
+		top: -7px;
+		margin-left: 0;
+		&::after {
+			border-bottom-color: transparent;
+			border-right-color: $blue;
+			left: auto;
+			right: 100%;
+			bottom: auto;
+			top: 10px;
+		}
+	}
+	&.global-hint-left {
+		right: calc(100% + 23px);
+		left: auto;
+		top: -7px;
+		margin-left: 0;
+		&::after {
+			border-bottom-color: transparent;
+			border-left-color: $blue;
+			left: 100%;
+			right: auto;
+			bottom: auto;
+			top: 10px;
+		}
+	}
 }
 .global-hint-close {
 	display: inline-flex;
@@ -7701,6 +7728,46 @@ body.body-market{
 	line-height: 1.18em;
 	color: $light_blue;
 	margin-bottom: 10px;
+}
+.psi-status {
+	display: flex;
+	align-items: center;
+	.global-input {
+		width: 53%;
+	}
+}
+.global-status {
+	display: flex;
+	align-items: center;
+	margin-left: 15px;
+	img {
+		display: inline-block;
+		width: 24px;
+		margin-right: 8px;
+	}
+	& > span {
+		display: inline-block;
+		flex: 1;
+		font-family: 'SF Pro Display';
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 1.7em;
+	}
+	&.global-status_blue {
+		& > span {
+			color: $blue;
+		}
+	}
+	&.global-status_red {
+		& > span {
+			color: $red;
+		}
+	}
+	&.global-status_grey {
+		& > span {
+			color: $dark_grey;
+		}
+	}
 }
 
 
@@ -8154,6 +8221,54 @@ body.body-market{
 		width: calc(100vw - 30px);
 		left: 15px;
 		transform: none;
+	}
+	.global-hint {
+		position: absolute;
+		background: $blue;
+		left: 50%;
+		top: calc(100% + 20px);
+		margin-left: -20px;
+		min-width: 210px;
+		border-radius: 5px;
+		&::after {
+			display: block;
+			position: absolute;
+			content: '';
+			border: 10px solid transparent; 
+			border-bottom: 10px solid $blue;
+			bottom: 100%;
+			left: 10px; 
+		}
+		&.global-hint-right {
+			left: 50%;
+			top: calc(100% + 20px);
+			margin-left: -20px;
+			&::after {
+				border-bottom-color: $blue;
+				border-right-color: transparent;
+				left: 10%;
+				right: auto;
+				bottom: 100%;
+				top: auto;
+			}
+		}
+		&.global-hint-left {
+			right: auto;
+			left: 50%;
+			top: calc(100% + 20px);
+			margin-left: -20px;
+			&::after {
+				border-bottom-color: $blue;
+				border-left-color: transparent;
+				left: 10%;
+				right: auto;
+				bottom: 100%;
+				top: auto;
+			}
+		}
+	}
+	.global-copy__link-copied {
+		display: none !important;
 	}
 
 }
@@ -8770,6 +8885,20 @@ body.body-market{
 	}
 	.header-beta {
 		margin-right: auto;
+	}
+	.psi-status .global-input {
+		width: 66%;
+	}
+	.psi-status {
+		.global-hint {
+			margin-left: 0;
+			right: 0;
+			left: auto;
+			&::after {
+				left: auto;
+				right: 10%;
+			}
+		}
 	}
 
 }

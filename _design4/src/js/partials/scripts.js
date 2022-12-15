@@ -1730,7 +1730,7 @@ if($('.global-collapse-link').is('.global-collapse-link')) {
 
 /*start global-hint*/
 if($('.global-hint').is('.global-hint')) {
-	$('.global-hint-close').on('click', function(){
+	$('.global-hint-close, .global-hint-close_js').on('click', function(){
 		event.preventDefault();
 		$(this).closest('.global-hint').fadeOut(300);
 	});
