@@ -101,27 +101,11 @@
             value="Vitalik Buterin"
             class="global-input global-input_large profil-settings-item__text"
           />
-          <div class="global-status global-status_grey p-relative zindex-2">
+          <div
+            class="global-status global-status_grey global-status_unverified p-relative zindex-2"
+          >
             <img src="@/assets/img/global-status_icon3.svg" alt="" />
-            <span> Unverified </span>
-            <div class="global-hint global-hint-right">
-              <a href="#" class="global-hint-close">
-                <img src="@/assets/img/global-hint-close_img.svg" alt="" />
-              </a>
-              <div class="global-hint-body">
-                <div class="global-hint__title">Attention</div>
-                <div class="global-text_12 light_blue">
-                  Identity verification (KYC<br />/AML) is mandatory to
-                  participate in our token sale.
-                </div>
-                <a
-                  href="#"
-                  class="btn-white global-hint-close_js mt_20 pr_20 pl_20"
-                >
-                  Close
-                </a>
-              </div>
-            </div>
+            <span id="status-unverified"> Unverified </span>
           </div>
         </div>
       </div>
@@ -137,19 +121,21 @@
       </div>
       <div class="profil-settings-item">
         <div class="profil-settings-item__title">
-          Ethereum Public Address<span>*</span>
+          {{ chainName }} Public Address<span>*</span>
         </div>
         <div class="global-copy">
           <input
             id="global-copy1"
             type="text"
-            value="0xd7765d5feddd42c8ddfca60df0a94b0dff8c9814"
+            :value="address"
+            readonly
             class="global-input global-input_large profil-settings-item__text"
           />
           <a
             href="#"
             data-clipboard-target="#global-copy1"
             class="global-copy__link"
+            @click.prevent="copyAddress"
           >
             <svg
               width="24"
@@ -163,8 +149,6 @@
                 fill="#687684"
               />
             </svg>
-            <span class="global-copy__link-copy"> Copy </span>
-            <span class="global-copy__link-copied"> Copied! </span>
           </a>
         </div>
       </div>
@@ -178,7 +162,7 @@
       </div>
     </div>
     <div class="profil-settings-btns">
-      <button class="btn_default btn_large disabled" disabled>Save</button>
+      <button class="btn btn_default btn_large btn-blue">Save</button>
     </div>
   </div>
 </template>
@@ -186,6 +170,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { authModule } from '~/store';
+import { copyToClipboard } from '~/utils/copyToClipboard';
 
 @Component({
   head: {
@@ -200,5 +186,64 @@ import { Component } from 'nuxt-property-decorator';
   },
   layout: 'account',
 })
-export default class ProfileSettingsPage extends Vue {}
+export default class ProfileSettingsPage extends Vue {
+  get address(): string {
+    return authModule.address;
+  }
+
+  get chainName() {
+    return authModule.chainName;
+  }
+
+  mounted() {
+    this.showHint();
+  }
+
+  beforeDestroy() {
+    this.destroyHint();
+  }
+
+  copyAddress() {
+    copyToClipboard(this.address);
+
+    this.$notify({
+      type: 'success',
+      title: 'Address copied to clipboard',
+    });
+  }
+
+  showHint() {
+    ($('#status-unverified') as any).popover({
+      title: 'Attention',
+      content:
+        'Identity verification (KYC/AML) is mandatory to participate in our token sale.',
+      placement: () => {
+        if (Number($(window).width()) < 1000) {
+          return 'bottom';
+        }
+
+        return 'right';
+      },
+      trigger: 'manual',
+      template: `
+        <div class="popover ui-popover" role="tooltip">
+          <div class="ui-popover-close"></div>
+          <div class="arrow ui-popover-arrow"></div>
+          <h3 class="popover-header ui-popover-header"></h3>
+          <div class="popover-body ui-popover-body"></div>
+        </div>
+      `,
+    });
+
+    ($('#status-unverified') as any).popover('show');
+
+    $('.ui-popover-close').on('click', function () {
+      ($('#status-unverified') as any).popover('hide');
+    });
+  }
+
+  destroyHint() {
+    ($('#status-unverified') as any).popover('dispose');
+  }
+}
 </script>
