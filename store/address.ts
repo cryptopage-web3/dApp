@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
+import { AxiosError } from 'axios';
 import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
 import { alertModule, authModule } from '.';
@@ -240,8 +241,14 @@ export default class AddressModule extends VuexModule {
         page: nextPage,
         hasAllPages: list.length === 0,
       });
-    } catch {
-      alertModule.error('Error getting nfts data');
+    } catch (error) {
+      if ((error as AxiosError)?.response?.status === 429) {
+        alertModule.error(
+          'NFT Transactions: Too Many Requests. Rate limit 30 per second',
+        );
+      } else {
+        alertModule.error('Error getting nfts data');
+      }
 
       this.setNftTransactions({
         ...this.nftTransactions,
@@ -323,7 +330,13 @@ export default class AddressModule extends VuexModule {
           hasDetails: true,
         },
       });
-    } catch {
+    } catch (error) {
+      if ((error as AxiosError)?.response?.status === 429) {
+        alertModule.error(
+          'NFT Details: Too Many Requests. Rate limit 30 per second',
+        );
+      }
+
       this.setNftTransactionDetails({
         index,
         nft: {
@@ -356,8 +369,14 @@ export default class AddressModule extends VuexModule {
         page: nextPage,
         hasAllPages: list.length === 0,
       });
-    } catch {
-      alertModule.error('Error getting own nfts data');
+    } catch (error) {
+      if ((error as AxiosError)?.response?.status === 429) {
+        alertModule.error(
+          'My NFTs: Too Many Requests. Rate limit 30 per second',
+        );
+      } else {
+        alertModule.error('Error getting own nfts data');
+      }
 
       this.setOwnNfts({
         ...this.ownNfts,
@@ -594,8 +613,14 @@ export default class AddressModule extends VuexModule {
       if (!targetLoaded) {
         alertModule.info('Created NFT not loaded');
       }
-    } catch {
-      alertModule.error('Failed to load created NFT');
+    } catch (error) {
+      if ((error as AxiosError)?.response?.status === 429) {
+        alertModule.error(
+          'Load created NFT: Too Many Requests. Rate limit 30 per second',
+        );
+      } else {
+        alertModule.error('Failed to load created NFT');
+      }
     } finally {
       this.setSyncNftTransactionsLoading(false);
     }
@@ -769,8 +794,12 @@ export default class AddressModule extends VuexModule {
       if (!targetLoaded) {
         // alertModule.info('Created NFT not loaded');
       }
-    } catch {
-      // alertModule.error('Failed to load created NFT');
+    } catch (error) {
+      if ((error as AxiosError)?.response?.status === 429) {
+        alertModule.error(
+          'My NFTs: Too Many Requests. Rate limit 30 per second',
+        );
+      }
     } finally {
       this.setSyncTransactionsLoading(false);
     }
