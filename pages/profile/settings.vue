@@ -105,7 +105,7 @@
             class="global-status global-status_grey global-status_unverified p-relative zindex-2"
           >
             <img src="@/assets/img/global-status_icon3.svg" alt="" />
-            <span id="status-unverified"> Unverified </span>
+            <span id="status-unverified" ref="hintRef"> Unverified </span>
           </div>
         </div>
       </div>
@@ -172,6 +172,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
+import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 
 @Component({
   head: {
@@ -187,6 +188,10 @@ import { copyToClipboard } from '~/utils/copyToClipboard';
   layout: 'account',
 })
 export default class ProfileSettingsPage extends Vue {
+  $refs!: {
+    hintRef: HTMLSpanElement;
+  };
+
   get address(): string {
     return authModule.address;
   }
@@ -213,37 +218,15 @@ export default class ProfileSettingsPage extends Vue {
   }
 
   showHint() {
-    ($('#status-unverified') as any).popover({
+    popoverHintInit(this.$refs.hintRef, {
       title: 'Attention',
       content:
         'Identity verification (KYC/AML) is mandatory to participate in our token sale.',
-      placement: () => {
-        if (Number($(window).width()) < 1000) {
-          return 'bottom';
-        }
-
-        return 'right';
-      },
-      trigger: 'manual',
-      template: `
-        <div class="popover ui-popover" role="tooltip">
-          <div class="ui-popover-close"></div>
-          <div class="arrow ui-popover-arrow"></div>
-          <h3 class="popover-header ui-popover-header"></h3>
-          <div class="popover-body ui-popover-body"></div>
-        </div>
-      `,
-    });
-
-    ($('#status-unverified') as any).popover('show');
-
-    $('.ui-popover-close').on('click', function () {
-      ($('#status-unverified') as any).popover('hide');
     });
   }
 
   destroyHint() {
-    ($('#status-unverified') as any).popover('dispose');
+    popoverHintDestroy(this.$refs.hintRef);
   }
 }
 </script>

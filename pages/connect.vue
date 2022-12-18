@@ -11,6 +11,7 @@
         <div class="card profile-login__card">
           <div
             id="profile-login-accordion1_2"
+            ref="hintRef"
             class="card-header"
             data-toggle="popover"
           >
@@ -450,6 +451,7 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
 import { EChainSlug, EMainChain, EProvider } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
+import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 
 @Component({
   head: {
@@ -472,6 +474,10 @@ export default class ConnectPage extends Vue {
   get authChainSlug(): string {
     return authModule.chainSlug;
   }
+
+  $refs!: {
+    hintRef: HTMLDivElement;
+  };
 
   @Watch('authChainSlug')
   onAuthNetworkTypeChange(slug: EChainSlug) {
@@ -509,38 +515,17 @@ export default class ConnectPage extends Vue {
       return;
     }
 
-    ($('#profile-login-accordion1_2') as any).popover({
+    popoverHintInit(this.$refs.hintRef, {
       title: 'Attention',
       content: 'Select a network and log in to continue onboarding',
-      placement: () => {
-        if (Number($(window).width()) < 1000) {
-          return 'bottom';
-        }
-
-        return 'right';
+      onClose: () => {
+        localStorage.setItem('onboarding-connect-hint', 'done');
       },
-      trigger: 'manual',
-      template: `
-        <div class="popover ui-popover" role="tooltip">
-          <div class="ui-popover-close"></div>
-          <div class="arrow ui-popover-arrow"></div>
-          <h3 class="popover-header ui-popover-header"></h3>
-          <div class="popover-body ui-popover-body"></div>
-        </div>
-      `,
-    });
-
-    ($('#profile-login-accordion1_2') as any).popover('show');
-
-    $('.ui-popover-close').on('click', function () {
-      localStorage.setItem('onboarding-connect-hint', 'done');
-
-      ($('#profile-login-accordion1_2') as any).popover('hide');
     });
   }
 
   destroyConnectHint() {
-    ($('#profile-login-accordion1_2') as any).popover('dispose');
+    popoverHintDestroy(this.$refs.hintRef);
   }
 
   async connectToProvider(chain: EChainSlug, provider: EProvider) {
