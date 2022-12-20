@@ -57,7 +57,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
-import SignupModal from '~/components/signup/SignupModal.vue';
+import SignupModal from '~/components/signup-modal/SignupModal.vue';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
 import { stickyModule, addressModule, authModule } from '~/store';
 
