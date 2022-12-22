@@ -32,3 +32,9 @@ export const API_CHAIN_MAP = new Map<string, string>()
 
 /** дефолтное комьюнити для создания NFT */
 export const OPEN_FORUM_ID = 1;
+
+/** fractal ID, created by Nail M. https://docs.developer.fractal.id/fractal-credentials-api */
+export const FRACTAL_APPLICATION_NAME = 'Crypto Page';
+export const FRACTAL_CLIENT_ID = 'c0uqfU0-sbr4eZkdvr3XXipoVPH91_nqdnCRDkX0OcI';
+export const FRACTAL_LEVEL = 'plus+liveness';
+export const FRACTAL_URL = 'https://credentials.fractal.id';

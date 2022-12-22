@@ -14,8 +14,16 @@ import {
   IToken,
   ITransaction,
   EChainSlug,
+  IVerifiedStatus,
+  ISaveVerifiedStatusParams,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
+import {
+  FRACTAL_APPLICATION_NAME,
+  FRACTAL_CLIENT_ID,
+  FRACTAL_LEVEL,
+  FRACTAL_URL,
+} from '~/constants';
 
 type TConnectData = IConnectData;
 type TConnectToProviderParams = IConnectToProviderParams;
@@ -42,6 +50,11 @@ export default class AuthModule extends VuexModule {
     providerSlug: null,
     /** не храним authProvider в сторе, т.к. ошибка при прокcировании объекта vue */
     // provider: null,
+  };
+
+  verifiedStatus: IVerifiedStatus = {
+    isVerified: false,
+    isChecked: false,
   };
 
   tokens: IToken[] = [];
@@ -133,6 +146,11 @@ export default class AuthModule extends VuexModule {
     this.transactions = transactions;
   }
 
+  @Mutation
+  public setVerifiedStatus(status: IVerifiedStatus) {
+    this.verifiedStatus = status;
+  }
+
   @Action
   public async init() {
     const auth = localStorage.getItem('auth');
@@ -181,10 +199,15 @@ export default class AuthModule extends VuexModule {
         }),
       );
 
+      /** получаем данные verifiedStatus */
+
+      const verifiedStatus = await this.getVerifiedStatus(connectData.address);
+
       authProvider = connectData.provider;
       connectData.provider = null;
 
       this.setConnect(connectData);
+      this.setVerifiedStatus(verifiedStatus);
       this.setAuth(true);
       this.setInitLoading(false);
     } catch {
@@ -293,9 +316,14 @@ export default class AuthModule extends VuexModule {
       }),
     );
 
+    /** получаем данные verifiedStatus */
+
+    const verifiedStatus = await this.getVerifiedStatus(connectData.address);
+
     authProvider = connectData.provider;
     connectData.provider = null;
 
+    this.setVerifiedStatus(verifiedStatus);
     this.setConnect(connectData);
     this.setAuth(true);
 
@@ -303,7 +331,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
-  public onConnectChange(params: TConnectChangeParams) {
+  public async onConnectChange(params: TConnectChangeParams) {
     /** TODO: на проде всегда делаем logout,
      * но для тестирования мы должны пропускать rinkeby */
 
@@ -357,6 +385,11 @@ export default class AuthModule extends VuexModule {
 
     window.localStorage.setItem('auth', JSON.stringify(connectData));
 
+    /** получаем данные verifiedStatus */
+
+    const verifiedStatus = await this.getVerifiedStatus(connectData.address);
+
+    this.setVerifiedStatus(verifiedStatus);
     this.setConnect(connectData);
     this.cleanData();
 
@@ -364,6 +397,89 @@ export default class AuthModule extends VuexModule {
       `${networkHelper.getProviderTitle(providerSlug)}: ${
         isChainChange ? 'chain' : 'account'
       } is change`,
+    );
+  }
+
+  @Action
+  public async fractalSign() {
+    const lines = [
+      `I authorize ${FRACTAL_APPLICATION_NAME} (${FRACTAL_CLIENT_ID}) to get a proof from Fractal that:`,
+      `- I passed KYC level ${FRACTAL_LEVEL}`,
+    ];
+
+    const message = lines.join('\n');
+    const account = this.address;
+    let signature = '';
+
+    /** получаем подпись с метамаска */
+
+    try {
+      signature = await this.provider.request({
+        method: 'personal_sign',
+        params: [message, account],
+      });
+    } catch {
+      const verifiedStatus = {
+        isVerified: false,
+        isChecked: false,
+      };
+
+      this.setVerifiedStatus(verifiedStatus);
+      this.saveVerifiedStatus({ address: account, status: verifiedStatus });
+
+      return false;
+    }
+
+    /** проверяем подпись в fractal */
+
+    const encMessage = encodeURIComponent(message);
+    const verifiedStatus = {
+      isVerified: false,
+      isChecked: true,
+    };
+
+    try {
+      const res = await fetch(
+        `${FRACTAL_URL}?message=${encMessage}&signature=${signature}`,
+      );
+
+      verifiedStatus.isVerified = res.status === 200;
+    } catch {}
+
+    this.setVerifiedStatus(verifiedStatus);
+    this.saveVerifiedStatus({ address: account, status: verifiedStatus });
+
+    return true;
+  }
+
+  @Action
+  public getVerifiedStatus(address: string): IVerifiedStatus {
+    const str = window.localStorage.getItem('verified-status');
+    const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
+      string,
+      IVerifiedStatus
+    >;
+
+    return (
+      verifiedStatus[address] || {
+        isVerified: false,
+        isChecked: false,
+      }
+    );
+  }
+
+  @Action
+  public saveVerifiedStatus({ address, status }: ISaveVerifiedStatusParams) {
+    const str = window.localStorage.getItem('verified-status');
+    const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
+      string,
+      IVerifiedStatus
+    >;
+    verifiedStatus[address] = status;
+
+    window.localStorage.setItem(
+      'verified-status',
+      JSON.stringify(verifiedStatus),
     );
   }
 
@@ -382,6 +498,10 @@ export default class AuthModule extends VuexModule {
       provider: null,
     });
 
+    this.setVerifiedStatus({
+      isVerified: false,
+      isChecked: false,
+    });
     this.setAuth(false);
     this.cleanData();
   }

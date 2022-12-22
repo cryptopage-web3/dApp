@@ -24,28 +24,40 @@
               Sign Up • Sign Wallet Request
             </div>
             <div class="onboarding-between-steps mb_20">
-              <div class="onboarding-between-step checked">
+              <div
+                class="onboarding-between-step"
+                :class="{ checked: stepIndex > 0, active: stepIndex === 0 }"
+              >
                 <span>1</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
                   alt=""
                 />
               </div>
-              <div class="onboarding-between-step active">
+              <div
+                class="onboarding-between-step"
+                :class="{ checked: stepIndex > 1, active: stepIndex === 1 }"
+              >
                 <span>2</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
                   alt=""
                 />
               </div>
-              <div class="onboarding-between-step">
+              <div
+                class="onboarding-between-step"
+                :class="{ checked: stepIndex > 2, active: stepIndex === 2 }"
+              >
                 <span>3</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
                   alt=""
                 />
               </div>
-              <div class="onboarding-between-step">
+              <div
+                class="onboarding-between-step"
+                :class="{ checked: stepIndex > 3, active: stepIndex === 3 }"
+              >
                 <span>4</span>
                 <img
                   src="@/assets/img/onboarding-between-step_img.svg"
@@ -73,12 +85,19 @@
               <li>
                 <div class="onboarding-between-list-i">
                   <img
-                    src="@/assets/img/onboarding-between-list_img1.svg"
+                    :src="getStepIcon(ESignupStep.connect)"
                     alt=""
+                    :class="{
+                      'onboarding-between-list-i__img':
+                        stepIndex === 0 && loading,
+                    }"
                   />
                 </div>
                 <div class="onboarding-between-list-t">
-                  <div class="global-text_14">
+                  <div
+                    class="global-text_14"
+                    :class="{ main_black: stepIndex === 0 }"
+                  >
                     <strong class="fw-600 mb_5"
                       >You’ve connected an {{ authChainName }} address</strong
                     ><br />
@@ -89,13 +108,19 @@
               <li>
                 <div class="onboarding-between-list-i">
                   <img
-                    src="@/assets/img/onboarding-between-list_img2.svg"
+                    :src="getStepIcon(ESignupStep.verify)"
                     alt=""
-                    class="onboarding-between-list-i__img"
+                    :class="{
+                      'onboarding-between-list-i__img':
+                        stepIndex === 1 && loading,
+                    }"
                   />
                 </div>
                 <div class="onboarding-between-list-t">
-                  <div class="global-text_14 main_black">
+                  <div
+                    class="global-text_14"
+                    :class="{ main_black: stepIndex === 1 }"
+                  >
                     <strong class="fw-600 mb_5"
                       >Verify that you own this address</strong
                     ><br />
@@ -104,19 +129,27 @@
                   <div class="global-text_12 dark_grey mt_10">
                     Not seeing the wallet request? Please make sure to open your
                     wallet extension. If you’re still not seeing it, we can
-                    resend it. <a href="#">Resend request</a>
+                    resend it.
+                    <a href="#" @click.prevent="startStep">Resend request</a>
                   </div>
                 </div>
               </li>
               <li>
                 <div class="onboarding-between-list-i">
                   <img
-                    src="@/assets/img/onboarding-between-list_img3.svg"
+                    :src="getStepIcon(ESignupStep.signMessage)"
                     alt=""
+                    :class="{
+                      'onboarding-between-list-i__img':
+                        stepIndex === 2 && loading,
+                    }"
                   />
                 </div>
                 <div class="onboarding-between-list-t">
-                  <div class="global-text_14">
+                  <div
+                    class="global-text_14"
+                    :class="{ main_black: stepIndex === 2 }"
+                  >
                     Sign the message to get access to Crypto.Page sevices
                   </div>
                 </div>
@@ -124,12 +157,19 @@
               <li>
                 <div class="onboarding-between-list-i">
                   <img
-                    src="@/assets/img/onboarding-between-list_img3.svg"
+                    :src="getStepIcon(ESignupStep.consent)"
                     alt=""
+                    :class="{
+                      'onboarding-between-list-i__img':
+                        stepIndex === 3 && loading,
+                    }"
                   />
                 </div>
                 <div class="onboarding-between-list-t">
-                  <div class="global-text_14">
+                  <div
+                    class="global-text_14"
+                    :class="{ main_black: stepIndex === 3 }"
+                  >
                     Consent to register your public profile on Crypto.Page
                   </div>
                 </div>
@@ -147,6 +187,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
+import { ESignupStep } from '~/types';
 
 @Component({
   components: {
@@ -154,6 +195,10 @@ import { authModule } from '~/store';
   },
 })
 export default class SignupModal extends Vue {
+  loading = true;
+  ESignupStep = ESignupStep;
+  step: ESignupStep = ESignupStep.connect;
+
   $refs!: {
     modal: HTMLDivElement;
   };
@@ -166,14 +211,114 @@ export default class SignupModal extends Vue {
     return authModule.chainName;
   }
 
+  get verifiedStatus() {
+    return authModule.verifiedStatus;
+  }
+
+  get stepIndex() {
+    return this.getStepIndex(this.step);
+  }
+
   // methods
 
   show() {
     ($(this.$refs.modal) as any).modal('show');
+
+    this.startStep();
   }
 
   hide() {
     ($(this.$refs.modal) as any).modal('hide');
+  }
+
+  getStep() {
+    if (!authModule.isAuth) {
+      return ESignupStep.connect;
+    }
+
+    if (!this.verifiedStatus.isChecked) {
+      return ESignupStep.verify;
+    }
+
+    return ESignupStep.signMessage;
+  }
+
+  getStepIndex(step: ESignupStep) {
+    const steps = {
+      [ESignupStep.connect]: 0,
+      [ESignupStep.verify]: 1,
+      [ESignupStep.signMessage]: 2,
+      [ESignupStep.consent]: 3,
+    };
+
+    return steps[step];
+  }
+
+  getStepIcon(step: ESignupStep): string {
+    const icons: Record<string, string> = {
+      complete: require('@/assets/img/onboarding-between-list_img1.svg'),
+      loading: require('@/assets/img/onboarding-between-list_img2.svg'),
+      default: require('@/assets/img/onboarding-between-list_img3.svg'),
+    };
+
+    const stepIndex = this.getStepIndex(step);
+    const slug =
+      this.stepIndex === stepIndex && this.loading
+        ? 'loading'
+        : this.stepIndex > stepIndex
+        ? 'complete'
+        : 'default';
+
+    return icons[slug];
+  }
+
+  startStep() {
+    this.step = this.getStep();
+
+    if (this.step === ESignupStep.connect) {
+      this.$notify({
+        type: 'error',
+        title: 'Connect to Metamask wallet',
+      });
+
+      return;
+    }
+
+    if (this.step === ESignupStep.verify) {
+      this.startVerify();
+
+      return;
+    }
+
+    if (this.step === ESignupStep.signMessage) {
+      this.startSignMessage();
+
+      return;
+    }
+
+    if (this.step === ESignupStep.consent) {
+      this.startConsent();
+    }
+  }
+
+  async startVerify() {
+    this.loading = true;
+
+    const result = await authModule.fractalSign();
+
+    this.loading = false;
+
+    if (result) {
+      this.startStep();
+    }
+  }
+
+  startSignMessage() {
+    this.loading = true;
+  }
+
+  startConsent() {
+    this.loading = true;
   }
 }
 </script>
