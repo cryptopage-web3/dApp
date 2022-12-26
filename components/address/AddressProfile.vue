@@ -10,6 +10,9 @@
             <a ref="address" href="#" @click.prevent="copyAddress">
               {{ address | shortAddress }}
             </a>
+            <div v-if="isVerified" class="profile-iu__nik-icon">
+              <ProfileVerifiedIcon />
+            </div>
           </div>
           <div v-if="!isOwner" class="d-flex align-items-center">
             <a href="#" class="other-profile-share">
@@ -53,11 +56,13 @@ import { addressModule, authModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 import ProfileShareIcon from '~/components/icon/profile/ProfileShareIcon.vue';
 import ProfileMessageIcon from '~/components/icon/profile/ProfileMessageIcon.vue';
+import ProfileVerifiedIcon from '~/components/icon/profile/ProfileVerifiedIcon.vue';
 
 @Component({
   components: {
     ProfileShareIcon,
     ProfileMessageIcon,
+    ProfileVerifiedIcon,
   },
 })
 export default class AddressProfile extends Vue {
@@ -97,6 +102,10 @@ export default class AddressProfile extends Vue {
 
   get outputs() {
     return addressModule.outputs;
+  }
+
+  get isVerified() {
+    return authModule.verifiedStatus.isVerified;
   }
 
   mounted() {

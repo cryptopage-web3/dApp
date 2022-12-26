@@ -390,6 +390,17 @@
   border-bottom: 1.6px solid #E4E4E4 !important;
 }
 
+.profile-iu__nik {
+  display: flex;
+  align-items: center;
+}
+
+.profile-iu__nik-icon {
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
+
 .modal-post-user__icon {
   margin-right: 10px;
 }
@@ -1071,6 +1082,10 @@
 
 .global-status_unverified span {
   padding-right: 10px;
+}
+
+.global-status_unverified:hover {
+  opacity: 0.7;
 }
 
 /* ======================= */
