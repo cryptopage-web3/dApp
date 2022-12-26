@@ -28,6 +28,7 @@ import {
 type TConnectData = IConnectData;
 type TConnectToProviderParams = IConnectToProviderParams;
 type TConnectChangeParams = IConnectChangeParams;
+type TVerifiedStatus = IVerifiedStatus;
 
 const authService = new AuthService();
 const tokensService = new TokensService();
@@ -52,7 +53,7 @@ export default class AuthModule extends VuexModule {
     // provider: null,
   };
 
-  verifiedStatus: IVerifiedStatus = {
+  verifiedStatus: TVerifiedStatus = {
     isVerified: false,
     isChecked: false,
   };
@@ -147,7 +148,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public setVerifiedStatus(status: IVerifiedStatus) {
+  public setVerifiedStatus(status: TVerifiedStatus) {
     this.verifiedStatus = status;
   }
 
@@ -453,11 +454,11 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
-  public getVerifiedStatus(address: string): IVerifiedStatus {
+  public getVerifiedStatus(address: string): TVerifiedStatus {
     const str = window.localStorage.getItem('verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
-      IVerifiedStatus
+      TVerifiedStatus
     >;
 
     return (
@@ -473,7 +474,7 @@ export default class AuthModule extends VuexModule {
     const str = window.localStorage.getItem('verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
-      IVerifiedStatus
+      TVerifiedStatus
     >;
     verifiedStatus[address] = status;
 
