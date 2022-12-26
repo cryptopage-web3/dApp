@@ -67,46 +67,20 @@
             placeholder="Enter name profile"
             class="global-input global-input_large profil-settings-item__text"
           />
-          <div class="global-status global-status_blue">
+          <div v-if="isVerified" class="global-status global-status_blue">
             <img src="@/assets/img/global-status_icon1.svg" alt="" />
             <span> Verified </span>
           </div>
-        </div>
-      </div>
-      <div class="profil-settings-item">
-        <div class="profil-settings-item__title">
-          Name Profile<span>*</span>
-        </div>
-        <div class="psi-status">
-          <input
-            type="text"
-            placeholder="Enter name profile"
-            value="Vitalik Buterin"
-            class="global-input global-input_large profil-settings-item__text"
-          />
-          <div class="global-status global-status_red">
-            <img src="@/assets/img/global-status_icon2.svg" alt="" />
-            <span> Rejected </span>
-          </div>
-        </div>
-      </div>
-      <div class="profil-settings-item">
-        <div class="profil-settings-item__title">
-          Name Profile<span>*</span>
-        </div>
-        <div class="psi-status">
-          <input
-            type="text"
-            placeholder="Enter name profile"
-            value="Vitalik Buterin"
-            class="global-input global-input_large profil-settings-item__text"
-          />
-          <div
+          <a
+            v-else
+            :href="verificationUrl"
+            target="_blank"
             class="global-status global-status_grey global-status_unverified p-relative zindex-2"
+            @click="resetVerifiedStatus"
           >
             <img src="@/assets/img/global-status_icon3.svg" alt="" />
             <span id="status-unverified" ref="hintRef"> Unverified </span>
-          </div>
+          </a>
         </div>
       </div>
       <div class="profil-settings-item">
@@ -173,6 +147,7 @@ import { Component } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
+import { FRACTAL_VERIFICATION_URL } from '~/constants';
 
 @Component({
   head: {
@@ -188,6 +163,8 @@ import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
   layout: 'account',
 })
 export default class ProfileSettingsPage extends Vue {
+  verificationUrl = FRACTAL_VERIFICATION_URL;
+
   $refs!: {
     hintRef: HTMLSpanElement;
   };
@@ -198,6 +175,14 @@ export default class ProfileSettingsPage extends Vue {
 
   get chainName() {
     return authModule.chainName;
+  }
+
+  get verifiedStatus() {
+    return authModule.verifiedStatus;
+  }
+
+  get isVerified() {
+    return this.verifiedStatus.isVerified;
   }
 
   mounted() {
@@ -227,6 +212,16 @@ export default class ProfileSettingsPage extends Vue {
 
   destroyHint() {
     popoverHintDestroy(this.$refs.hintRef);
+  }
+
+  resetVerifiedStatus() {
+    authModule.saveVerifiedStatus({
+      address: this.address,
+      status: {
+        isVerified: false,
+        isChecked: false,
+      },
+    });
   }
 }
 </script>
