@@ -221,12 +221,15 @@ export default class ProfileSettingsPage extends Vue {
   }
 
   refreshVerifiedStatus() {
+    const verifiedStatus = {
+      isVerified: false,
+      isChecked: false,
+    };
+
+    authModule.setVerifiedStatus(verifiedStatus);
     authModule.saveVerifiedStatus({
       address: this.address,
-      status: {
-        isVerified: false,
-        isChecked: false,
-      },
+      status: verifiedStatus,
     });
 
     authModule.setShowSignupModal(true);
