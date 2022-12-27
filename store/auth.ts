@@ -44,6 +44,7 @@ export default class AuthModule extends VuexModule {
   isAuth = false;
   initLoading = true;
   dataLoaded = false;
+  showSignupModal = false;
 
   connect: IConnectData = {
     address: '',
@@ -150,6 +151,11 @@ export default class AuthModule extends VuexModule {
   @Mutation
   public setVerifiedStatus(status: TVerifiedStatus) {
     this.verifiedStatus = status;
+  }
+
+  @Mutation
+  public setShowSignupModal(show: boolean) {
+    this.showSignupModal = show;
   }
 
   @Action

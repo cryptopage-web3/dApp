@@ -20,20 +20,24 @@
     <client-only>
       <NftFormModal />
       <NftSuccessModal />
+      <SignupModal />
     </client-only>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import NftFormModal from '~/components/nft-form/modal/Modal.vue';
 import NftSuccessModal from '~/components/nft-form/modal-success/ModalSuccess.vue';
+import SignupModal from '~/components/signup-modal/SignupModal.vue';
+import { authModule } from '~/store';
 
 @Component({
   components: {
     NftFormModal,
     NftSuccessModal,
+    SignupModal,
   },
 })
 export default class AccountLayout extends Vue {
@@ -41,6 +45,15 @@ export default class AccountLayout extends Vue {
     return !(
       this.$route.name && ['profile-settings'].includes(this.$route.name)
     );
+  }
+
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+
+  @Watch('isAuth')
+  onIsAuthChange() {
+    authModule.setShowSignupModal(true);
   }
 }
 </script>

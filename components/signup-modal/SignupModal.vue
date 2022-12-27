@@ -184,7 +184,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
 import { ESignupStep } from '~/types';
@@ -217,6 +217,25 @@ export default class SignupModal extends Vue {
 
   get stepIndex() {
     return this.getStepIndex(this.step);
+  }
+
+  get showModal(): boolean {
+    return authModule.showSignupModal;
+  }
+
+  @Watch('showModal')
+  onShowModalChanged(showModal: boolean) {
+    if (showModal) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
+  mounted() {
+    ($(this.$refs.modal) as any).on('hide.bs.modal', function () {
+      authModule.setShowSignupModal(false);
+    });
   }
 
   // methods

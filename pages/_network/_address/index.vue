@@ -50,16 +50,14 @@
       <address-transactions :is-active="activeTab === 'transactions'" />
       <address-reactions :is-active="activeTab === 'reactions'" />
     </div>
-    <SignupModal ref="modal" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Watch } from 'nuxt-property-decorator';
-import SignupModal from '~/components/signup-modal/SignupModal.vue';
+import { Component } from 'nuxt-property-decorator';
 import { profileContentDropInit } from '~/utils/profileContentDrop';
-import { stickyModule, addressModule, authModule } from '~/store';
+import { stickyModule, addressModule } from '~/store';
 
 @Component({
   head: {
@@ -72,16 +70,9 @@ import { stickyModule, addressModule, authModule } from '~/store';
       },
     ],
   },
-  components: {
-    SignupModal,
-  },
 })
 export default class AddressPage extends Vue {
   activeTab = 'nfts';
-
-  $refs!: {
-    modal: SignupModal;
-  };
 
   get nftCount() {
     return addressModule.nftTransactions.count;
@@ -91,23 +82,8 @@ export default class AddressPage extends Vue {
     return addressModule.transactions.count;
   }
 
-  get isOwner(): boolean {
-    return (
-      authModule.address.toLowerCase() ===
-        addressModule.address.toLowerCase() &&
-      authModule.chainSlug === addressModule.chainSlug
-    );
-  }
-
-  @Watch('isOwner')
-  onIsOwnerChanged(isOwner: boolean) {
-    isOwner && this.showSignupModal();
-  }
-
   mounted() {
     profileContentDropInit();
-
-    this.isOwner && this.showSignupModal();
   }
 
   selectTab(tab: string, id: string) {
@@ -117,10 +93,6 @@ export default class AddressPage extends Vue {
     setTimeout(() => {
       stickyModule.update();
     }, 500);
-  }
-
-  showSignupModal() {
-    this.$refs.modal.show();
   }
 }
 </script>

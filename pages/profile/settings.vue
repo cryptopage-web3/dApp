@@ -76,11 +76,13 @@
             :href="verificationUrl"
             target="_blank"
             class="global-status global-status_grey global-status_unverified p-relative zindex-2"
-            @click="resetVerifiedStatus"
           >
             <img src="@/assets/img/global-status_icon3.svg" alt="" />
             <span id="status-unverified" ref="hintRef"> Unverified </span>
           </a>
+          <div class="psi-status__refresh" @click="refreshVerifiedStatus">
+            <NftRefreshIcon />
+          </div>
         </div>
       </div>
       <div class="profil-settings-item">
@@ -148,6 +150,7 @@ import { authModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import { FRACTAL_VERIFICATION_URL } from '~/constants';
+import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 
 @Component({
   head: {
@@ -161,6 +164,9 @@ import { FRACTAL_VERIFICATION_URL } from '~/constants';
     ],
   },
   layout: 'account',
+  components: {
+    NftRefreshIcon,
+  },
 })
 export default class ProfileSettingsPage extends Vue {
   verificationUrl = FRACTAL_VERIFICATION_URL;
@@ -214,7 +220,7 @@ export default class ProfileSettingsPage extends Vue {
     popoverHintDestroy(this.$refs.hintRef);
   }
 
-  resetVerifiedStatus() {
+  refreshVerifiedStatus() {
     authModule.saveVerifiedStatus({
       address: this.address,
       status: {
@@ -222,6 +228,8 @@ export default class ProfileSettingsPage extends Vue {
         isChecked: false,
       },
     });
+
+    authModule.setShowSignupModal(true);
   }
 }
 </script>
