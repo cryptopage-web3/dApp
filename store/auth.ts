@@ -29,6 +29,7 @@ type TConnectData = IConnectData;
 type TConnectToProviderParams = IConnectToProviderParams;
 type TConnectChangeParams = IConnectChangeParams;
 type TVerifiedStatus = IVerifiedStatus;
+type TSaveVerifiedStatusParams = ISaveVerifiedStatusParams;
 
 const authService = new AuthService();
 const tokensService = new TokensService();
@@ -476,7 +477,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
-  public saveVerifiedStatus({ address, status }: ISaveVerifiedStatusParams) {
+  public saveVerifiedStatus({ address, status }: TSaveVerifiedStatusParams) {
     const str = window.localStorage.getItem('verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
