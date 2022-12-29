@@ -67,15 +67,36 @@
             placeholder="Enter name profile"
             class="global-input global-input_large profil-settings-item__text"
           />
-          <div v-if="isVerified" class="global-status global-status_blue">
+          <div
+            v-if="statusSlug === EVerifiedStatus.verified"
+            class="global-status global-status_blue"
+          >
             <img src="@/assets/img/global-status_icon1.svg" alt="" />
             <span> Verified </span>
           </div>
           <a
+            v-else-if="statusSlug === EVerifiedStatus.rejected"
+            :href="verificationUrl"
+            target="_blank"
+            class="global-status global-status_red global-status_link"
+          >
+            <img src="@/assets/img/global-status_icon2.svg" alt="" />
+            <span> Rejected </span>
+          </a>
+          <a
+            v-else-if="statusSlug === EVerifiedStatus.pending"
+            :href="verificationUrl"
+            target="_blank"
+            class="global-status global-status_grey global-status_link global-status_pending"
+          >
+            <img src="@/assets/img-custom/global-status_icon4.svg" alt="" />
+            <span> Pending </span>
+          </a>
+          <a
             v-else
             :href="verificationUrl"
             target="_blank"
-            class="global-status global-status_grey global-status_unverified p-relative zindex-2"
+            class="global-status global-status_grey global-status_link global-status_unverified p-relative zindex-2"
           >
             <img src="@/assets/img/global-status_icon3.svg" alt="" />
             <span id="status-unverified" ref="hintRef"> Unverified </span>
@@ -151,6 +172,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import { FRACTAL_VERIFICATION_URL } from '~/constants';
 import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
+import { EVerifiedStatus } from '~/types';
 
 @Component({
   head: {
@@ -170,6 +192,7 @@ import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 })
 export default class ProfileSettingsPage extends Vue {
   verificationUrl = FRACTAL_VERIFICATION_URL;
+  EVerifiedStatus = EVerifiedStatus;
 
   $refs!: {
     hintRef: HTMLSpanElement;
@@ -187,8 +210,8 @@ export default class ProfileSettingsPage extends Vue {
     return authModule.verifiedStatus;
   }
 
-  get isVerified() {
-    return this.verifiedStatus.isVerified;
+  get statusSlug() {
+    return this.verifiedStatus.status;
   }
 
   mounted() {
@@ -222,7 +245,7 @@ export default class ProfileSettingsPage extends Vue {
 
   refreshVerifiedStatus() {
     const verifiedStatus = {
-      isVerified: false,
+      status: EVerifiedStatus.unverified,
       isChecked: false,
     };
 

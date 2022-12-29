@@ -57,6 +57,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard';
 import ProfileShareIcon from '~/components/icon/profile/ProfileShareIcon.vue';
 import ProfileMessageIcon from '~/components/icon/profile/ProfileMessageIcon.vue';
 import ProfileVerifiedIcon from '~/components/icon/profile/ProfileVerifiedIcon.vue';
+import { EVerifiedStatus } from '~/types';
 
 @Component({
   components: {
@@ -105,7 +106,7 @@ export default class AddressProfile extends Vue {
   }
 
   get isVerified() {
-    return authModule.verifiedStatus.isVerified;
+    return authModule.verifiedStatus.status === EVerifiedStatus.verified;
   }
 
   mounted() {

@@ -16,6 +16,7 @@ import {
   EChainSlug,
   IVerifiedStatus,
   ISaveVerifiedStatusParams,
+  EVerifiedStatus,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -56,7 +57,7 @@ export default class AuthModule extends VuexModule {
   };
 
   verifiedStatus: TVerifiedStatus = {
-    isVerified: false,
+    status: EVerifiedStatus.unverified,
     isChecked: false,
   };
 
@@ -428,7 +429,7 @@ export default class AuthModule extends VuexModule {
       });
     } catch {
       const verifiedStatus = {
-        isVerified: false,
+        status: EVerifiedStatus.unverified,
         isChecked: false,
       };
 
@@ -442,7 +443,7 @@ export default class AuthModule extends VuexModule {
 
     const encMessage = encodeURIComponent(message);
     const verifiedStatus = {
-      isVerified: false,
+      status: EVerifiedStatus.unverified,
       isChecked: true,
     };
 
@@ -450,8 +451,13 @@ export default class AuthModule extends VuexModule {
       const res = await fetch(
         `${FRACTAL_URL}?message=${encMessage}&signature=${signature}`,
       );
+      const proof = await res.json();
 
-      verifiedStatus.isVerified = res.status === 200;
+      if (res.status === 200) {
+        verifiedStatus.status = EVerifiedStatus.verified;
+      } else if (res.status === 404 && proof?.error === 'user_pending') {
+        verifiedStatus.status = EVerifiedStatus.pending;
+      }
     } catch {}
 
     this.setVerifiedStatus(verifiedStatus);
@@ -470,7 +476,7 @@ export default class AuthModule extends VuexModule {
 
     return (
       verifiedStatus[address] || {
-        isVerified: false,
+        status: EVerifiedStatus.unverified,
         isChecked: false,
       }
     );
@@ -507,7 +513,7 @@ export default class AuthModule extends VuexModule {
     });
 
     this.setVerifiedStatus({
-      isVerified: false,
+      status: EVerifiedStatus.unverified,
       isChecked: false,
     });
     this.setAuth(false);

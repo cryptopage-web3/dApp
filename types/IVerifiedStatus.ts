@@ -1,6 +1,13 @@
+export enum EVerifiedStatus {
+  unverified = 'unverified',
+  rejected = 'rejected',
+  verified = 'verified',
+  pending = 'pending',
+}
+
 export interface IVerifiedStatus {
-  isVerified: boolean;
   isChecked: boolean;
+  status: EVerifiedStatus;
 }
 
 export interface ISaveVerifiedStatusParams {
