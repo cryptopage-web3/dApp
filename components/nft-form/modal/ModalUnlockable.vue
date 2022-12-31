@@ -3,7 +3,7 @@
     <div class="modal-creat-checkbox mb_20">
       <div class="modal-creat-checkbox__left">
         <div class="modal-creat-checkbox__icon">
-          <img src="@/assets/img/modal-creat-checkbox_icon2.svg" alt="" />
+          <img src="@/assets/img/modal-creat-checkbox_icon2_2.svg" alt="" />
         </div>
         <div class="modal-creat-checkbox__cont">
           <div class="modal-creat-checkbox__title">Unlockable content</div>
