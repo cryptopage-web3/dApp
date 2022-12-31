@@ -540,6 +540,29 @@ $(function(){
 	}
 	/*end header fixed*/
 
+	/*start checkbox collapse*/
+	if($('.checkbox-collapse-link').is('.checkbox-collapse-link')) {
+		$('.checkbox-collapse-link').each(function(){
+			var ch_el_id = $(this).attr('data-id');
+			if($(this).is(':checked')){
+				$(ch_el_id).slideDown(300);
+			}
+			else {
+				$(ch_el_id).slideUp(300);
+			}
+		});
+		$('.checkbox-collapse-link').on('change', function(){
+			var ch_el_id = $(this).attr('data-id');
+			if($(this).is(':checked')){
+				$(ch_el_id).slideDown(300);
+			}
+			else {
+				$(ch_el_id).slideUp(300);
+			}
+		});
+	}
+	/*end checkbox collapse*/
+
 	/*start init slider on main page*/
 	if($('.main-slider').is('.main-slider')) {
 

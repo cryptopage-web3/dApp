@@ -70,7 +70,7 @@ $dark: #333;
 	font-size: 12px !important;
 }
 /*margin bottom*/
-@for $i from 1 through 100 {
+@for $i from 0 through 100 {
   .mb_#{$i} {
     margin-bottom: $i * 1px !important;
   }
@@ -104,7 +104,7 @@ $dark: #333;
   }
 }
 @media (min-width: 576px) {
-  @for $i from 1 through 100 {
+  @for $i from 0 through 100 {
     .mb_sm_#{$i} {
       margin-bottom: $i * 1px !important;
     }
@@ -139,7 +139,7 @@ $dark: #333;
   }
 }
 @media (min-width: 768px) {
-  @for $i from 1 through 100 {
+  @for $i from 0 through 100 {
     .mb_md_#{$i} {
       margin-bottom: $i * 1px !important;
     }
@@ -174,7 +174,7 @@ $dark: #333;
   }
 }
 @media (min-width: 992px) {
-  @for $i from 1 through 100 {
+  @for $i from 0 through 100 {
     .mb_lg_#{$i} {
       margin-bottom: $i * 1px !important;
     }
@@ -209,7 +209,7 @@ $dark: #333;
   }
 }
 @media (min-width: 1200px) {
-  @for $i from 1 through 100 {
+  @for $i from 0 through 100 {
     .mb_xl_#{$i} {
       margin-bottom: $i * 1px !important;
     }

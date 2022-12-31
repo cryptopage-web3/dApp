@@ -3921,7 +3921,7 @@ body.body-market{
 }
 .modal-creat-add__close {
 	display: inline-flex;
-	width: 30px;
+	width: 40px;
 	margin-right: 10px;
 	&.active {
 		svg {
@@ -7768,6 +7768,39 @@ body.body-market{
 			color: $dark_grey;
 		}
 	}
+}
+.modal-creat-unlocks-tabs {
+	padding-left: 34px;
+	.voite-collapse-body {
+		padding-top: 0;
+	}
+}
+.form-field-with-drop_text {
+	.form-field-with-drop__link {
+		color: $main_black;
+		&.disabled {
+			color: $light_grey;
+		}
+	}
+	.drop-down__list {
+		a {
+			color: $main_black;
+		}
+	}
+}
+.modal-creat-unlocks-tabs-row {
+	margin-right: -5px;
+	margin-left: -5px;
+	&>div {
+		padding-right: 5px;
+		padding-left: 5px;
+	}
+}
+.modal-creat-collapse-body {
+	padding-left: 34px;
+}
+.h_40 {
+	height: 40px !important;
 }
 
 
