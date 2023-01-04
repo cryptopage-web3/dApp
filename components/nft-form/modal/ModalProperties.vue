@@ -40,18 +40,18 @@
             type="text"
             placeholder="Type"
             name="type"
-            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40"
           />
           <input
             v-model="value"
             type="text"
             placeholder="Name"
             name="name"
-            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40"
           />
           <a
             href="#"
-            class="modal-creat-add__btn1 btn btn_default"
+            class="modal-creat-add__btn1 btn btn_default btn_large"
             :class="{ disabled: !isFilled, 'btn-blue_button': isFilled }"
             @click.prevent="add"
           >
