@@ -40,26 +40,26 @@
             type="text"
             placeholder="Name"
             name="name"
-            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40"
           />
           <input
             v-model="value"
             type="text"
             placeholder="3"
             name="from"
-            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40"
           />
-          <span class="d-inline-block mr_5 mr_md_10">of</span>
+          <span class="d-inline-block mr_5 mr_md_10 h_40">of</span>
           <input
             v-model="maxValue"
             type="text"
             placeholder="5"
             name="to"
-            class="global-input modal-creat-add-input-js mr_5 mr_md_10"
+            class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40"
           />
           <a
             href="#"
-            class="modal-creat-add__btn2 btn btn_default"
+            class="modal-creat-add__btn2 btn btn_default btn_large"
             :class="{ disabled: !isFilled, 'btn-blue_button': isFilled }"
             @click.prevent="add"
           >
