@@ -51,9 +51,15 @@ export default class AccountLayout extends Vue {
     return authModule.isAuth;
   }
 
-  @Watch('isAuth')
-  onIsAuthChange() {
-    authModule.setShowSignupModal(true);
+  @Watch('isAuth', { immediate: true })
+  onIsAuthChange(isAuth: boolean) {
+    if (!isAuth) {
+      return;
+    }
+
+    this.$nextTick(() => {
+      authModule.setShowSignupModal(true);
+    });
   }
 }
 </script>
