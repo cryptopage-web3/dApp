@@ -1073,6 +1073,17 @@
   text-overflow: ellipsis;
 }
 
+.main-profile-inbox-chats {
+  height: 350px;
+}
+
+.main-profile-inbox-chats__iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
 /* ===== signup modal ===== */
 
 .onboarding-between-list-i__img {

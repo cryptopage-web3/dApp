@@ -39,3 +39,7 @@ export const FRACTAL_CLIENT_ID = 'c0uqfU0-sbr4eZkdvr3XXipoVPH91_nqdnCRDkX0OcI';
 export const FRACTAL_LEVEL = 'basic+liveness';
 export const FRACTAL_URL = 'https://credentials.fractal.id';
 export const FRACTAL_VERIFICATION_URL = `https://app.fractal.id/authorize?client_id=${FRACTAL_CLIENT_ID}&redirect_uri=https%3A%2F%2Fapp.crypto.page%2F&response_type=code&scope=contact%3Aread%20verification.basic%3Aread%20verification.basic.details%3Aread%20verification.liveness%3Aread%20verification.liveness.details%3Aread%20verification.wallet-eth%3Aread%20verification.wallet-eth.details%3Aread`;
+
+/** messenger */
+export const MESSENGER_CHAT_LIST_SIDEBAR_URL =
+  'https://inbox.crypto.page/ChatListSidebar';
