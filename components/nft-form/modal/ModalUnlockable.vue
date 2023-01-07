@@ -102,7 +102,7 @@
                   <div class="drop-down__col">
                     <ul class="drop-down__list">
                       <li>
-                        <a href="#">
+                        <a href="#" @click.prevent="selectOnetimeToken">
                           <img
                             src="@/assets/img/modal-creat-unlocks-tabs-icon1.svg"
                             alt=""
@@ -189,7 +189,7 @@
                       <div class="drop-down__col">
                         <ul class="drop-down__list">
                           <li>
-                            <a href="#">
+                            <a href="#" @click.prevent="selectTimeToken">
                               <img
                                 src="@/assets/img/modal-creat-unlocks-tabs-icon1.svg"
                                 alt=""
@@ -218,7 +218,10 @@ import {
   ENftFormUnlockableContentAccessType,
   INftForm,
 } from '~/types/nft-form';
-import { profileContentDropTarget } from '~/utils/profileContentDrop';
+import {
+  hideProfileContentDropTarget,
+  profileContentDropTarget,
+} from '~/utils/profileContentDrop';
 
 @Component({})
 export default class ModalUnlockable extends Vue {
@@ -274,6 +277,14 @@ export default class ModalUnlockable extends Vue {
       profileContentDropTarget(this.$refs.durationDropLink);
       profileContentDropTarget(this.$refs.timePriceDropLink);
     });
+  }
+
+  selectOnetimeToken() {
+    hideProfileContentDropTarget(this.$refs.onetimePriceDropLink);
+  }
+
+  selectTimeToken() {
+    hideProfileContentDropTarget(this.$refs.timePriceDropLink);
   }
 }
 </script>

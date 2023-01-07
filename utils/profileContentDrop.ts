@@ -52,3 +52,11 @@ export const profileContentDropTarget = (targetLink: any): void => {
       .slideToggle(300);
   });
 };
+
+export const hideProfileContentDropTarget = (targetLink: any): void => {
+  $(targetLink).closest('.profile-content-drop').removeClass('active');
+  $(targetLink)
+    .closest('.profile-content-drop')
+    .find('.drop-down__col')
+    .slideUp(300);
+};
