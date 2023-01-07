@@ -146,18 +146,17 @@
                         href="#"
                         class="form-field-with-drop__link profile-content-drop__link"
                       >
-                        Days
+                        {{ durationTypeLabel }}
                       </a>
                       <div class="drop-down__col">
                         <ul class="drop-down__list">
-                          <li>
-                            <a href="#"> Days </a>
-                          </li>
-                          <li>
-                            <a href="#"> Weeks </a>
-                          </li>
-                          <li>
-                            <a href="#"> Months </a>
+                          <li v-for="item in durationList" :key="item.slug">
+                            <a
+                              href="#"
+                              @click.prevent="selectDuration(item.slug)"
+                            >
+                              {{ item.label }}
+                            </a>
                           </li>
                         </ul>
                       </div>
@@ -223,10 +222,36 @@ import {
   profileContentDropTarget,
 } from '~/utils/profileContentDrop';
 
+enum EDurationType {
+  days = 'days',
+  weeks = 'weeks',
+  months = 'months',
+}
+
+const durationList = [
+  {
+    slug: EDurationType.days,
+    label: 'Days',
+    count: 1,
+  },
+  {
+    slug: EDurationType.weeks,
+    label: 'Weeks',
+    count: 7,
+  },
+  {
+    slug: EDurationType.months,
+    label: 'Months',
+    count: 30,
+  },
+];
+
 @Component({})
 export default class ModalUnlockable extends Vue {
   ENftFormUnlockableContentAccessType = ENftFormUnlockableContentAccessType;
   nftFormModule = nftFormModule;
+  durationList = durationList;
+  durationType = EDurationType.days;
 
   $refs!: {
     onetimePriceDropLink: HTMLDivElement;
@@ -244,6 +269,18 @@ export default class ModalUnlockable extends Vue {
     );
   }
 
+  get durationTypeLabel() {
+    const find = durationList.find((item) => item.slug === this.durationType);
+
+    return find?.label || '';
+  }
+
+  get durationTypeCount() {
+    const find = durationList.find((item) => item.slug === this.durationType);
+
+    return find?.count || 1;
+  }
+
   get unlockableContentAccessType(): INftForm['unlockableContentAccessType'] {
     return nftFormModule.values.unlockableContentAccessType;
   }
@@ -259,15 +296,17 @@ export default class ModalUnlockable extends Vue {
   }
 
   get unlockableContentAccessDuration(): string {
-    return String(
-      (nftFormModule.values.unlockableContentAccessDuration || 0) /
-        (24 * 60 * 60),
-    );
+    return nftFormModule.values.unlockableContentAccessDuration
+      ? String(
+          nftFormModule.values.unlockableContentAccessDuration /
+            (this.durationTypeCount * 24 * 60 * 60),
+        )
+      : '';
   }
 
   set unlockableContentAccessDuration(e) {
     nftFormModule.setUnlockableContentAccessDuration(
-      parseInt(e) * (24 * 60 * 60),
+      e ? parseInt(e) * (this.durationTypeCount * 24 * 60 * 60) : 0,
     );
   }
 
@@ -285,6 +324,20 @@ export default class ModalUnlockable extends Vue {
 
   selectTimeToken() {
     hideProfileContentDropTarget(this.$refs.timePriceDropLink);
+  }
+
+  selectDuration(slug: EDurationType) {
+    const oldDuration = this.unlockableContentAccessDuration;
+
+    this.durationType = slug;
+
+    /** возвращаем актуальное значение duration с учетом нового типа */
+
+    this.unlockableContentAccessDuration = oldDuration;
+
+    /** закрываем дропдаун */
+
+    hideProfileContentDropTarget(this.$refs.durationDropLink);
   }
 }
 </script>
