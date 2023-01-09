@@ -51,7 +51,7 @@
             </a>
           </li>
           <li v-if="isAuth">
-            <a href="https://inbox.crypto.page/" target="_blank">
+            <a :href="MESSENGER_URL" target="_blank">
               <div class="thumb">
                 <svg
                   width="24"
@@ -222,9 +222,11 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import { accountLeftSidebarInit } from '~/utils/accountLeftSidebar';
 import { leftStickySidebarInit } from '~/utils/leftStickySidebar';
 import { authModule, addressModule, stickyModule } from '~/store';
+import { MESSENGER_URL } from '~/constants';
 
 @Component({})
 export default class AccountLeftSidebar extends Vue {
+  MESSENGER_URL = MESSENGER_URL;
   stickySidebar: any = null;
   timeout: any = null;
 

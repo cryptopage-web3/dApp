@@ -110,7 +110,7 @@
           </a>
         </li>
         <li>
-          <a href="https://inbox.crypto.page/" target="_blank">
+          <a :href="MESSENGER_URL" target="_blank">
             <div class="thumb">
               <img src="@/assets/img/market-header__cabinet_icon5.svg" alt="" />
             </div>
@@ -151,9 +151,11 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { EMainChain } from '~/types/EMainChain';
 import { authModule } from '~/store';
+import { MESSENGER_URL } from '~/constants';
 
 @Component({})
 export default class HeaderConnect extends Vue {
+  MESSENGER_URL = MESSENGER_URL;
   EMainChain = EMainChain;
 
   get isAuth() {

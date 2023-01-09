@@ -200,7 +200,7 @@
               <nuxt-link to="/marketplace">Marketplace</nuxt-link>
             </li> -->
             <li>
-              <a href="https://inbox.crypto.page/" target="_blank">Inbox</a>
+              <a :href="MESSENGER_URL" target="_blank">Inbox</a>
             </li>
             <li><a href="#">Notification</a></li>
           </ul>
@@ -231,6 +231,7 @@ import HeaderConnect from './HeaderConnect.vue';
 import { headerSearchInit } from '~/utils/headerSearch';
 import { headerStickyInit } from '~/utils/headerSticky';
 import { dropdownMenuInit } from '~/utils/dropdownMenu';
+import { MESSENGER_URL } from '~/constants';
 
 @Component({
   components: {
@@ -238,6 +239,8 @@ import { dropdownMenuInit } from '~/utils/dropdownMenu';
   },
 })
 export default class LayoutHeader extends Vue {
+  MESSENGER_URL = MESSENGER_URL;
+
   mounted() {
     headerSearchInit();
     headerStickyInit();
