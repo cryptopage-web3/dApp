@@ -150,10 +150,10 @@
                       </a>
                       <div class="drop-down__col">
                         <ul class="drop-down__list">
-                          <li v-for="item in durationList" :key="item.slug">
+                          <li v-for="item in durationTypeList" :key="item.slug">
                             <a
                               href="#"
-                              @click.prevent="selectDuration(item.slug)"
+                              @click.prevent="selectDurationType(item.slug)"
                             >
                               {{ item.label }}
                             </a>
@@ -214,6 +214,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 import {
+  ENftFormUnlockableContentAccessDurationType,
   ENftFormUnlockableContentAccessType,
   INftForm,
 } from '~/types/nft-form';
@@ -221,37 +222,13 @@ import {
   hideProfileContentDropTarget,
   profileContentDropTarget,
 } from '~/utils/profileContentDrop';
-
-enum EDurationType {
-  days = 'days',
-  weeks = 'weeks',
-  months = 'months',
-}
-
-const durationList = [
-  {
-    slug: EDurationType.days,
-    label: 'Days',
-    count: 1,
-  },
-  {
-    slug: EDurationType.weeks,
-    label: 'Weeks',
-    count: 7,
-  },
-  {
-    slug: EDurationType.months,
-    label: 'Months',
-    count: 30,
-  },
-];
+import { durationTypeList } from '~/utils/durationType';
 
 @Component({})
 export default class ModalUnlockable extends Vue {
   ENftFormUnlockableContentAccessType = ENftFormUnlockableContentAccessType;
   nftFormModule = nftFormModule;
-  durationList = durationList;
-  durationType = EDurationType.days;
+  durationTypeList = durationTypeList;
 
   $refs!: {
     onetimePriceDropLink: HTMLDivElement;
@@ -270,15 +247,11 @@ export default class ModalUnlockable extends Vue {
   }
 
   get durationTypeLabel() {
-    const find = durationList.find((item) => item.slug === this.durationType);
+    const find = durationTypeList.find(
+      (item) => item.slug === this.unlockableContentAccessDurationType,
+    );
 
     return find?.label || '';
-  }
-
-  get durationTypeCount() {
-    const find = durationList.find((item) => item.slug === this.durationType);
-
-    return find?.count || 1;
   }
 
   get unlockableContentAccessType(): INftForm['unlockableContentAccessType'] {
@@ -286,28 +259,27 @@ export default class ModalUnlockable extends Vue {
   }
 
   get unlockableContentPrice(): string {
-    return String(
-      (nftFormModule.values.unlockableContentPrice || 0) / 10 ** 18,
-    );
+    return nftFormModule.values.unlockableContentPrice
+      ? String(nftFormModule.values.unlockableContentPrice)
+      : '';
   }
 
   set unlockableContentPrice(v: string) {
-    nftFormModule.setUnlockableContentPrice(parseInt(v) * 10 ** 18);
+    nftFormModule.setUnlockableContentPrice(v ? parseInt(v) : 0);
   }
 
   get unlockableContentAccessDuration(): string {
     return nftFormModule.values.unlockableContentAccessDuration
-      ? String(
-          nftFormModule.values.unlockableContentAccessDuration /
-            (this.durationTypeCount * 24 * 60 * 60),
-        )
+      ? String(nftFormModule.values.unlockableContentAccessDuration)
       : '';
   }
 
   set unlockableContentAccessDuration(e) {
-    nftFormModule.setUnlockableContentAccessDuration(
-      e ? parseInt(e) * (this.durationTypeCount * 24 * 60 * 60) : 0,
-    );
+    nftFormModule.setUnlockableContentAccessDuration(e ? parseInt(e) : 0);
+  }
+
+  get unlockableContentAccessDurationType(): ENftFormUnlockableContentAccessDurationType | null {
+    return nftFormModule.values.unlockableContentAccessDurationType;
   }
 
   mounted() {
@@ -326,14 +298,8 @@ export default class ModalUnlockable extends Vue {
     hideProfileContentDropTarget(this.$refs.timePriceDropLink);
   }
 
-  selectDuration(slug: EDurationType) {
-    const oldDuration = this.unlockableContentAccessDuration;
-
-    this.durationType = slug;
-
-    /** возвращаем актуальное значение duration с учетом нового типа */
-
-    this.unlockableContentAccessDuration = oldDuration;
+  selectDurationType(slug: ENftFormUnlockableContentAccessDurationType) {
+    nftFormModule.setUnlockableContentAccessDurationType(slug);
 
     /** закрываем дропдаун */
 

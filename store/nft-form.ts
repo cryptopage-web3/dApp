@@ -1,6 +1,7 @@
 import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import { alertModule, authModule, addressModule } from '.';
 import {
+  ENftFormUnlockableContentAccessDurationType,
   ENftFormUnlockableContentAccessType,
   IAttributeLevel,
   IAttributeProperty,
@@ -15,6 +16,7 @@ import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug } from '~/types';
 import { MetadataService } from '~/services/MetadataService';
+import { getSecDuration } from '~/utils/durationType';
 
 type TNftForm = INftForm;
 
@@ -31,13 +33,16 @@ const genUnlockableContentDisabledState = () => ({
   unlockableContentAccessType: null,
   unlockableContentPrice: null,
   unlockableContentAccessDuration: null,
+  unlockableContentAccessDurationType: null,
 });
 
 const genUnlockableContentEnabledDefaultState = () => ({
   isUnlockableContent: true,
   unlockableContentAccessType: ENftFormUnlockableContentAccessType.oneTime,
-  unlockableContentPrice: 10 ** 18 * 10,
+  unlockableContentPrice: 10,
   unlockableContentAccessDuration: 0,
+  unlockableContentAccessDurationType:
+    ENftFormUnlockableContentAccessDurationType.days,
 });
 
 const genInitValues = (): TNftForm => ({
@@ -156,11 +161,14 @@ export default class NftFormModule extends VuexModule {
     type: ENftFormUnlockableContentAccessType,
   ) {
     this.values.unlockableContentAccessType = type;
+    /** сбрасываем тип периода */
+    this.values.unlockableContentAccessDurationType =
+      ENftFormUnlockableContentAccessDurationType.days;
 
     if (type === ENftFormUnlockableContentAccessType.oneTime) {
       this.values.unlockableContentAccessDuration = 0;
     } else if (type === ENftFormUnlockableContentAccessType.customDuration) {
-      this.values.unlockableContentAccessDuration = 24 * 60 * 60; // 1 day
+      this.values.unlockableContentAccessDuration = 1; // 1 day
     }
   }
 
@@ -171,6 +179,12 @@ export default class NftFormModule extends VuexModule {
 
   @Mutation setUnlockableContentAccessDuration(duration: number) {
     this.values.unlockableContentAccessDuration = duration;
+  }
+
+  @Mutation setUnlockableContentAccessDurationType(
+    type: ENftFormUnlockableContentAccessDurationType,
+  ) {
+    this.values.unlockableContentAccessDurationType = type;
   }
 
   @Mutation
@@ -275,6 +289,7 @@ export default class NftFormModule extends VuexModule {
       isUnlockableContent,
       unlockableContentPrice,
       unlockableContentAccessDuration,
+      unlockableContentAccessDurationType,
     } = this.values;
 
     const nftParams: INFTCreateParams = {
@@ -331,8 +346,11 @@ export default class NftFormModule extends VuexModule {
       communityId: OPEN_FORUM_ID,
       ipfsHash: nftHash,
       isEncrypted: isUnlockableContent,
-      accessPrice: unlockableContentPrice || 0,
-      accessDuration: unlockableContentAccessDuration || 0,
+      accessPrice: (unlockableContentPrice || 0) * 10 ** 18,
+      accessDuration: getSecDuration(
+        unlockableContentAccessDuration,
+        unlockableContentAccessDurationType,
+      ),
     };
 
     let txHash = '';
