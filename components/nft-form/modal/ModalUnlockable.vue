@@ -82,9 +82,11 @@
             <div class="form-field">
               <div class="form-field-with-drop">
                 <input
-                  v-model="unlockableContentPrice"
+                  v-model="priceLocal"
                   class="global-input global-input_large"
                   placeholder="Enter content price"
+                  @blur="handlePriceBlur"
+                  @focus="handlePriceFocus"
                 />
                 <div
                   class="profile-content-drop modal-creat-drop market-filtr__drop"
@@ -134,7 +136,7 @@
                 <div class="form-field">
                   <div class="form-field-with-drop form-field-with-drop_text">
                     <input
-                      v-model="unlockableContentAccessDuration"
+                      v-model="durationLocal"
                       class="global-input global-input_large"
                       placeholder="Enter access duration"
                     />
@@ -168,9 +170,11 @@
                 <div class="form-field">
                   <div class="form-field-with-drop">
                     <input
-                      v-model="unlockableContentPrice"
+                      v-model="priceLocal"
                       class="global-input global-input_large"
                       placeholder="Enter content price"
+                      @blur="handlePriceBlur"
+                      @focus="handlePriceFocus"
                     />
                     <div
                       class="profile-content-drop modal-creat-drop market-filtr__drop"
@@ -211,7 +215,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 import {
   ENftFormUnlockableContentAccessDurationType,
@@ -229,6 +233,8 @@ export default class ModalUnlockable extends Vue {
   ENftFormUnlockableContentAccessType = ENftFormUnlockableContentAccessType;
   nftFormModule = nftFormModule;
   durationTypeList = durationTypeList;
+  priceLocal = '';
+  durationLocal = '';
 
   $refs!: {
     onetimePriceDropLink: HTMLDivElement;
@@ -258,24 +264,68 @@ export default class ModalUnlockable extends Vue {
     return nftFormModule.values.unlockableContentAccessType;
   }
 
-  get unlockableContentPrice(): string {
-    return nftFormModule.values.unlockableContentPrice
-      ? String(nftFormModule.values.unlockableContentPrice)
-      : '';
+  get unlockableContentPrice() {
+    return nftFormModule.values.unlockableContentPrice;
   }
 
-  set unlockableContentPrice(v: string) {
-    nftFormModule.setUnlockableContentPrice(v ? parseInt(v) : 0);
+  @Watch('priceLocal')
+  onPriceLocalChanged(priceLocal: string) {
+    if (priceLocal.includes('PAGE')) {
+      return;
+    }
+
+    const numPrice = parseInt(priceLocal);
+
+    if (!priceLocal || isNaN(numPrice)) {
+      nftFormModule.setUnlockableContentPrice(0);
+      this.priceLocal = '';
+      return;
+    }
+
+    if (priceLocal !== String(numPrice)) {
+      this.priceLocal = String(numPrice);
+      return;
+    }
+
+    nftFormModule.setUnlockableContentPrice(numPrice);
   }
 
-  get unlockableContentAccessDuration(): string {
-    return nftFormModule.values.unlockableContentAccessDuration
-      ? String(nftFormModule.values.unlockableContentAccessDuration)
-      : '';
+  @Watch('unlockableContentPrice', { immediate: true })
+  onUnlockableContentPriceChanged(unlockableContentPrice: number | null) {
+    if (String(unlockableContentPrice || '') !== this.priceLocal) {
+      this.priceLocal = `${String(unlockableContentPrice)} PAGE`;
+    }
   }
 
-  set unlockableContentAccessDuration(e) {
-    nftFormModule.setUnlockableContentAccessDuration(e ? parseInt(e) : 0);
+  get unlockableContentAccessDuration() {
+    return nftFormModule.values.unlockableContentAccessDuration;
+  }
+
+  @Watch('durationLocal')
+  onDurationLocalChanged(durationLocal: string) {
+    const numDuration = parseInt(durationLocal);
+
+    if (!durationLocal || isNaN(numDuration)) {
+      nftFormModule.setUnlockableContentAccessDuration(0);
+      this.durationLocal = '';
+      return;
+    }
+
+    if (durationLocal !== String(numDuration)) {
+      this.durationLocal = String(numDuration);
+      return;
+    }
+
+    nftFormModule.setUnlockableContentAccessDuration(numDuration);
+  }
+
+  @Watch('unlockableContentAccessDuration', { immediate: true })
+  onUnlockableContentAccessDurationChanged(
+    unlockableContentAccessDuration: number | null,
+  ) {
+    if (String(unlockableContentAccessDuration || '') !== this.durationLocal) {
+      this.durationLocal = String(unlockableContentAccessDuration);
+    }
   }
 
   get unlockableContentAccessDurationType(): ENftFormUnlockableContentAccessDurationType | null {
@@ -304,6 +354,14 @@ export default class ModalUnlockable extends Vue {
     /** закрываем дропдаун */
 
     hideProfileContentDropTarget(this.$refs.durationDropLink);
+  }
+
+  handlePriceBlur() {
+    this.priceLocal = this.priceLocal ? `${this.priceLocal} PAGE` : '';
+  }
+
+  handlePriceFocus() {
+    this.priceLocal = this.priceLocal.replace(' PAGE', '');
   }
 }
 </script>
