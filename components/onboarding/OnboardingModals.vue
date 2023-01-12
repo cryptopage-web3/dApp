@@ -11,13 +11,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import OnboardingWelcome from './OnboardingWelcome.vue';
 import OnboardingStep1 from './OnboardingStep1.vue';
 import OnboardingStep2 from './OnboardingStep2.vue';
 import OnboardingStep3 from './OnboardingStep3.vue';
 import OnboardingStep4 from './OnboardingStep4.vue';
 import OnboardingStep5 from './OnboardingStep5.vue';
+import { authModule } from '~/store';
 
 type TRefs = {
   welcome: OnboardingWelcome;
@@ -52,18 +53,48 @@ export default class OnboardingModals extends Vue {
 
   $refs!: TRefs;
 
-  mounted() {
-    const completed = localStorage.getItem('onboarding-completed');
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
 
-    if (completed) {
+  get isInitLoading(): boolean {
+    return authModule.initLoading;
+  }
+
+  @Watch('isInitLoading', { immediate: true })
+  onIsInitLoadingChange(isLoading: boolean) {
+    if (isLoading) {
       return;
     }
 
-    this.$refs[this.step].show();
+    this.$nextTick(() => {
+      const completed = localStorage.getItem('onboarding-completed');
+
+      /** если ранее открывалось окно, то пропускаем */
+
+      if (completed) {
+        return;
+      }
+
+      /** если пользователь авторизован, то фиксируем и пропускаем */
+
+      if (this.isAuth) {
+        this.public();
+        return;
+      }
+
+      /** пользователь не был авторизован и ранее окно не видел */
+
+      this.$refs[this.step].show();
+    });
   }
 
   skip() {
     localStorage.setItem('onboarding-completed', 'skip');
+  }
+
+  public() {
+    localStorage.setItem('onboarding-completed', 'public');
   }
 
   next() {
@@ -78,7 +109,7 @@ export default class OnboardingModals extends Vue {
     /** последний шаг */
 
     if (!steps[currentIndex + 1]) {
-      localStorage.setItem('onboarding-completed', 'public');
+      this.public();
       return;
     }
 
