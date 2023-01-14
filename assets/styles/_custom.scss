@@ -1090,6 +1090,10 @@
   animation: spin 1.5s linear infinite;
 }
 
+.verify-confirm-modal {
+  background-color: rgba(0, 0, 0, .5) !important;
+}
+
 /* ===== settings ===== */
 
 .global-status span {
