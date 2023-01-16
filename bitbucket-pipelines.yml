@@ -3,28 +3,30 @@
 # -----
 # You can specify a custom docker image from Docker Hub as your build environment.
 
-#image: sickp/alpine-sshd
+image: atlassian/default-image:3
 
 pipelines:
   branches:
-    master:
+    staging:
       - step:
-          name: Deploy
+          name: Build
           deployment: Build
           script:
-            - pipe: atlassian/scp-deploy:1.2.1
-              variables:
-                USER: $USER
-                SERVER: $SERVER
-                REMOTE_PATH: '/tmp/'
-                LOCAL_PATH: './deploy/*'
-                EXTRA_ARGS: ['-r']
-            - >- 
-              ssh $USER@$SERVER 
-              "export TG_BOT_ID=$TG_BOT_ID && 
-              export TG_CHAT_ID=$TG_CHAT_ID && 
-              export TG_TEXT_PREFIX=$TG_TEXT_PREFIX && 
-              export DEPLOY_LOG_FILE=$DEPLOY_LOG_FILE && 
-              /bin/bash /tmp/deploy.sh > $DEPLOY_LOG_FILE"
+            - node -v
+            - npm i
+            - NUXT_TARGET=server npm run build
+            - zip -r crypto.page-artifacts.zip .nuxt node_modules
+          artifacts: # defining the artifacts to be passed to each future step.
+            - crypto.page-artifacts.zip
+      - step:
+          name: Deploy dist artifacts using SCP
+          script:
+             - pipe: atlassian/scp-deploy:1.2.1
+               variables:
+                  USER: $USER
+                  SERVER: $SERVER
+                  REMOTE_PATH: '/tmp/'
+                  LOCAL_PATH: 'crypto.page-artifacts.zip'
+                  EXTRA_ARGS: ['-r']
 
             
