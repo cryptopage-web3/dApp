@@ -21,7 +21,7 @@
               <div class="global-zag">Welcome to Crypto.Page</div>
             </div>
             <div class="global-text_14 text-center">
-              By connecting your wallet and using Crypto.Page, you agree ti our
+              By connecting your wallet and using Crypto.Page, you agree to our
               <a href="#">Terms of Service</a> and
               <a href="#">Privacy Policy</a>
             </div>
