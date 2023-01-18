@@ -83,21 +83,6 @@ export class NftsService extends BaseService {
     let mimeType = '';
 
     try {
-      const callHeadMethod = (): Promise<string> =>
-        new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.open('HEAD', url, true);
-
-          xhr.onload = () => {
-            const contentType = xhr.getResponseHeader('Content-Type');
-            resolve(contentType || '');
-          };
-
-          xhr.onerror = reject;
-
-          xhr.send();
-        });
-
       const callGetMethod = (): Promise<string> =>
         new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
@@ -115,11 +100,7 @@ export class NftsService extends BaseService {
         });
 
       mimeType = await new Promise<string>((resolve, reject) => {
-        callHeadMethod()
-          .then(resolve)
-          .catch(() => {
-            callGetMethod().then(resolve).catch(reject);
-          });
+        callGetMethod().then(resolve).catch(reject);
 
         setTimeout(() => {
           resolve('');
