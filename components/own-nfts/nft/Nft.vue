@@ -73,6 +73,7 @@ export default class Nft extends Vue {
 
   mounted() {
     if (this.nft.hasDetails) {
+      this.visible = true;
       this.loading = false;
       return;
     }
