@@ -301,7 +301,9 @@ export default class AddressModule extends VuexModule {
           data.type = ETypeNft.video;
         }
 
-        if (/image/.test(mimeType)) {
+        /** если есть урл и не удалось определить mimeType,
+         * то по умолчанию указываем картинку */
+        if (/image/.test(mimeType) || !mimeType) {
           data.type = ETypeNft.image;
         }
       }
@@ -403,7 +405,9 @@ export default class AddressModule extends VuexModule {
           nftType = ETypeNft.video;
         }
 
-        if (/image/.test(mimeType)) {
+        /** если есть урл и не удалось определить mimeType,
+         * то по умолчанию указываем картинку */
+        if (/image/.test(mimeType) || !mimeType) {
           nftType = ETypeNft.image;
         }
       }
