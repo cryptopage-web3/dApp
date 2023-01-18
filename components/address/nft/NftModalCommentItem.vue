@@ -25,7 +25,7 @@
 
           <img
             v-if="comment.isDown"
-            src="@/assets/img/modal-post-comment_img2.svg"
+            src="@/assets/img-custom/modal-post-comment_down.svg"
             alt=""
             class="modal-post-comment__ld"
           />
