@@ -540,6 +540,15 @@ $(function(){
 	}
 	/*end header fixed*/
 
+	/*start info-fixed-block close*/
+	if($('.info-fixed-block').is('.info-fixed-block')) {
+		$('.info-fixed-block__close').on('click', function(){
+			event.preventDefault();
+			$(this).closest('.info-fixed-block').fadeOut(300);
+		});
+	}
+	/*end info-fixed-block close*/
+
 	/*start checkbox collapse*/
 	if($('.checkbox-collapse-link').is('.checkbox-collapse-link')) {
 		$('.checkbox-collapse-link').each(function(){

@@ -7802,6 +7802,27 @@ body.body-market{
 .h_40 {
 	height: 40px !important;
 }
+.info-fixed-block {
+	background: $blue;
+	position: fixed;
+	z-index: 13;
+	top: 0;
+	left: 0;
+	width: 100%;
+	padding: 13px 15px;
+}
+.form-creat-nav-item_moneta {
+	&[aria-expanded='true'] {
+		svg * {
+			fill: $blue;
+		}
+	}
+}
+.modal-creat-checkbox__right {
+	.global-checkbox {
+		margin-top: 4px;
+	}
+}
 
 
 
@@ -8922,7 +8943,7 @@ body.body-market{
 	.psi-status .global-input {
 		width: 66%;
 	}
-	.psi-status {
+	.psi-status, .profile-login__card {
 		.global-hint {
 			margin-left: 0;
 			right: 0;
