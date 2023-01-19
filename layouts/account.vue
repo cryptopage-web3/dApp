@@ -2,6 +2,7 @@
   <div>
     <layout-notification />
     <layout-cookies />
+    <layout-beta-warning />
     <layout-header />
 
     <section id="profile" class="profile height-full">

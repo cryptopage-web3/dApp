@@ -2,6 +2,7 @@
   <div class="container">
     <layout-notification />
     <layout-cookies />
+    <layout-beta-warning />
     <nuxt />
   </div>
 </template>
