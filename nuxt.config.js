@@ -14,7 +14,7 @@ export default {
       lang: 'en',
     },
     bodyAttrs: {
-      class: 'white body-market modal-bg-white',
+      class: 'white white-bg body-market modal-bg-white',
     },
     meta: [
       { charset: 'utf-8' },
