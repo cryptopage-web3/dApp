@@ -26,6 +26,7 @@ import { Component } from 'nuxt-property-decorator';
       },
     ],
   },
+  scrollToTop: true,
 })
 export default class IndexPage extends Vue {}
 </script>

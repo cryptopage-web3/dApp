@@ -10,6 +10,7 @@ import { addressModule, authModule } from '~/store';
 
 @Component({
   layout: 'account',
+  scrollToTop: true,
 })
 export default class AddressPageContainer extends Vue {
   get authLoading() {

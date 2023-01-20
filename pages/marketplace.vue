@@ -25,6 +25,7 @@ import { Component } from 'nuxt-property-decorator';
       },
     ],
   },
+  scrollToTop: true,
 })
 export default class MarketplacePage extends Vue {}
 </script>

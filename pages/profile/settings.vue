@@ -186,6 +186,7 @@ import { EVerifiedStatus } from '~/types';
     ],
   },
   layout: 'account',
+  scrollToTop: true,
   components: {
     NftRefreshIcon,
   },

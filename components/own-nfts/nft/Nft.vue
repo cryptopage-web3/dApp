@@ -79,6 +79,8 @@ export default class Nft extends Vue {
     }
 
     this.$nextTick(() => {
+      $(window).scrollTop(0);
+
       this.scrollListener = this.scrollHandler.bind(this);
       this.scrollListener();
 

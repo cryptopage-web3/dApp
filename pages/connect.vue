@@ -601,6 +601,7 @@ import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
       },
     ],
   },
+  scrollToTop: true,
 })
 export default class ConnectPage extends Vue {
   EChainSlug = EChainSlug;
