@@ -281,7 +281,7 @@ export default class AccountLeftSidebar extends Vue {
     accountLeftSidebarInit();
 
     setTimeout(() => {
-      this.stickySidebar = leftStickySidebarInit();
+      this.refreshSticky();
     }, 100);
   }
 

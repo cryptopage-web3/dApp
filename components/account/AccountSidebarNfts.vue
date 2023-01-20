@@ -104,7 +104,7 @@ export default class AccountSidebarNfts extends Vue {
     return this.nfts.slice(0, 6);
   }
 
-  @Watch('nfts')
+  @Watch('nfts', { immediate: true })
   onNftsChanged() {
     stickyModule.update();
   }
