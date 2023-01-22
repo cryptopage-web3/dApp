@@ -19,7 +19,7 @@
     <NftFormTitle :is-owner="isOwner" @focus="openForm" />
     <NftFormDescription />
     <NftFormUpload ref="refUpload" />
-    <NftFormUnlockable />
+    <NftFormUnlockable v-show="isOpen && isUnlockable" />
 
     <div class="form-creat-bottom">
       <div class="form-creat-nav">
