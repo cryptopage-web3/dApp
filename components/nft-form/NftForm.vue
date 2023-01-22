@@ -19,6 +19,7 @@
     <NftFormTitle :is-owner="isOwner" @focus="openForm" />
     <NftFormDescription />
     <NftFormUpload ref="refUpload" />
+    <NftFormUnlockable />
 
     <div class="form-creat-bottom">
       <div class="form-creat-nav">
@@ -42,6 +43,14 @@
           @click.prevent="uploadFile('video')"
         >
           <NftFormVideoIcon />
+        </a>
+        <a
+          href="#"
+          class="form-creat-nav-item form-creat-nav-item_moneta fill"
+          :class="{ 'form-creat-nav-item_filled': isUnlockable }"
+          @click.prevent="toggleIsUnlockable"
+        >
+          <NftFormMonetaIcon />
         </a>
         <a
           ref="settingBtn"
@@ -101,11 +110,13 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import NftFormTitle from './NftFormTitle.vue';
 import NftFormDescription from './NftFormDescription.vue';
 import NftFormUpload from './NftFormUpload.vue';
+import NftFormUnlockable from './NftFormUnlockable.vue';
 import { addressModule, authModule, nftFormModule } from '~/store';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
 import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
 import NftFormVideoIcon from '~/components/icon/nft-form/NftFormVideoIcon.vue';
 import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vue';
+import NftFormMonetaIcon from '~/components/icon/nft-form/NftFormMonetaIcon.vue';
 
 @Component({
   components: {
@@ -113,9 +124,11 @@ import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vu
     NftFormImageIcon,
     NftFormVideoIcon,
     NftFormSettingIcon,
+    NftFormMonetaIcon,
     NftFormTitle,
     NftFormDescription,
     NftFormUpload,
+    NftFormUnlockable,
   },
 })
 export default class NftForm extends Vue {
@@ -171,6 +184,14 @@ export default class NftForm extends Vue {
 
   get txHash(): string | null {
     return nftFormModule.txHash;
+  }
+
+  get isUnlockable(): boolean {
+    return nftFormModule.values.isUnlockableContent;
+  }
+
+  toggleIsUnlockable() {
+    nftFormModule.setIsUnlockableContent(!this.isUnlockable);
   }
 
   @Watch('isValid', { immediate: true })
