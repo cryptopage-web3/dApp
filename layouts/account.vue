@@ -22,6 +22,7 @@
       <NftFormModal />
       <NftSuccessModal />
       <SignupModal />
+      <BuyPageModal />
     </client-only>
   </div>
 </template>
@@ -32,6 +33,7 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import NftFormModal from '~/components/nft-form/modal/Modal.vue';
 import NftSuccessModal from '~/components/nft-form/modal-success/ModalSuccess.vue';
 import SignupModal from '~/components/signup-modal/SignupModal.vue';
+import BuyPageModal from '~/components/buy-page-modal/BuyPageModal.vue';
 import { authModule } from '~/store';
 
 @Component({
@@ -39,6 +41,7 @@ import { authModule } from '~/store';
     NftFormModal,
     NftSuccessModal,
     SignupModal,
+    BuyPageModal,
   },
 })
 export default class AccountLayout extends Vue {

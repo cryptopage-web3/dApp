@@ -47,6 +47,7 @@ export default class AuthModule extends VuexModule {
   initLoading = true;
   dataLoaded = false;
   showSignupModal = false;
+  showBuyPageModal = false;
 
   connect: IConnectData = {
     address: '',
@@ -158,6 +159,11 @@ export default class AuthModule extends VuexModule {
   @Mutation
   public setShowSignupModal(show: boolean) {
     this.showSignupModal = show;
+  }
+
+  @Mutation
+  public setShowBuyPageModal(show: boolean) {
+    this.showBuyPageModal = show;
   }
 
   @Action

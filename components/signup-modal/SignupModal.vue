@@ -251,6 +251,9 @@ export default class SignupModal extends Vue {
   mounted() {
     ($(this.$refs.modal) as any).on('hide.bs.modal', function () {
       authModule.setShowSignupModal(false);
+
+      /** открываем модалку BuyPageModal при закрытии SignupModal */
+      authModule.setShowBuyPageModal(true);
     });
   }
 
