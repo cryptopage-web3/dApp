@@ -60,7 +60,11 @@ import { Component } from 'nuxt-property-decorator';
 import AttentionModal from './AttentionModal.vue';
 import { FRACTAL_VERIFICATION_URL } from '~/constants';
 
-@Component({})
+@Component({
+  components: {
+    AttentionModal,
+  },
+})
 export default class KycVerificationModal extends Vue {
   $refs!: {
     modal: HTMLDivElement;

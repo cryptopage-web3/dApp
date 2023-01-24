@@ -55,7 +55,11 @@ import { authModule } from '~/store';
 import { EVerifiedStatus } from '~/types';
 import { BUYPAGEMODAL_VERIFIED_URL } from '~/constants';
 
-@Component({})
+@Component({
+  components: {
+    KycVerificationModal,
+  },
+})
 export default class BuyPageModal extends Vue {
   $refs!: {
     modal: HTMLDivElement;
