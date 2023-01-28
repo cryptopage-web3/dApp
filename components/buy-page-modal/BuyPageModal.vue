@@ -2,7 +2,7 @@
   <div>
     <div
       ref="modal"
-      class="modal fade global-modal onboarding-modal"
+      class="modal fade global-modal onboarding-modal buy-page-modal"
       tabindex="-1"
       role="dialog"
       aria-labelledby="exampleModalLabel"
@@ -13,9 +13,15 @@
           <div class="modal-body">
             <div class="global-modal-body">
               <h3 class="global-zag mb_xl_20 mb_md_15 mb_10">Buy PAGE</h3>
-              <div class="global-text_12">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-                congue volutpat mauris, ac scelerisque ante feugiat a.
+              <div class="global-text_12 buy-page-modal__content">
+                <p>Thank you for your interest in Crypto.Page!</p>
+                <p>
+                  To participate in the seeding round of selling PAGE tokens,
+                  specify in the next window the requested information to send a
+                  request to be added to the white list, after approval you will
+                  be sent to the contacts specified (to you by) further
+                  instructions.
+                </p>
               </div>
               <div
                 class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"

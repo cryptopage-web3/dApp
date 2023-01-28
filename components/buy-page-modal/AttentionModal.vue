@@ -15,7 +15,7 @@
             <div class="global-text_12">
               Identity verification (KYC/AML) is mandatory to participate in our
               token sale. Participation in the purchase of PAGE tokens will
-              remain unavailable
+              remain unavailable until verified.
             </div>
             <div
               class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"
