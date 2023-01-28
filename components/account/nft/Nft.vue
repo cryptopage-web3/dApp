@@ -3,7 +3,11 @@
   <div v-else class="market-sidebar__nft">
     <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
     <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-    <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+    <NftImage
+      v-else-if="nft.type === ETypeNft.image"
+      :nft="nft"
+      @show-modal="$emit('show-modal', nft)"
+    />
     <div v-else class="market-sidebar__nft-image">
       <div class="market-sidebar__nft-image-empty">No NFT Content</div>
     </div>

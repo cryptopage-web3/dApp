@@ -2,9 +2,9 @@
   <a
     v-if="nft.contentUrl && !isError"
     ref="container"
-    :href="nft.contentUrl"
-    target="_blank"
+    href="#"
     class="market-sidebar__nft-image loading-bg"
+    @click.prevent="$emit('show-modal')"
   />
   <div v-else class="market-sidebar__nft-image">
     <div class="market-sidebar__nft-image-empty">Failed to get nft data</div>

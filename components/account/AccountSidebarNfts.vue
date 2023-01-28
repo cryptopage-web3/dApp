@@ -31,7 +31,7 @@
       </template>
       <template v-else>
         <li v-for="nft in visibleNfts" :key="getNftUniqueKey(nft)">
-          <Nft :nft="nft" />
+          <Nft :nft="nft" @show-modal="showNftModal" />
         </li>
       </template>
     </ul>
@@ -43,6 +43,8 @@
     >
       Show more
     </nuxt-link>
+
+    <NftModal v-if="selectedNft" ref="nftModal" :nft="selectedNft" />
   </div>
 </template>
 
@@ -54,6 +56,7 @@ import { addressModule, authModule, stickyModule } from '~/store';
 import { IAddressInfo, INft } from '~/types';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 import SidebarArrowIcon from '~/components/icon/account/SidebarArrowIcon.vue';
+import NftModal from '~/components/own-nfts/nft/modal/Modal.vue';
 import { getNftUniqueKey } from '~/utils/array';
 
 type TAddressInfo = IAddressInfo;
@@ -63,10 +66,16 @@ type TAddressInfo = IAddressInfo;
     Skeleton,
     Nft,
     SidebarArrowIcon,
+    NftModal,
   },
 })
 export default class AccountSidebarNfts extends Vue {
   loading = false;
+  selectedNft: INft | null = null;
+
+  $refs!: {
+    nftModal: NftModal;
+  };
 
   get show() {
     return this.$route.name !== 'network-address-nfts';
@@ -120,6 +129,13 @@ export default class AccountSidebarNfts extends Vue {
     await addressModule.fetchOwnNfts();
 
     this.loading = false;
+  }
+
+  showNftModal(nft: INft) {
+    this.selectedNft = nft;
+    this.$nextTick(() => {
+      this.$refs.nftModal.show();
+    });
   }
 
   getNftUniqueKey(nft: INft) {

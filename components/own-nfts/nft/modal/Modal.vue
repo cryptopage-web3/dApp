@@ -1,7 +1,7 @@
 <template>
   <div
     ref="modal"
-    class="modal fade modal-post"
+    class="modal fade modal-post own-nft-modal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
