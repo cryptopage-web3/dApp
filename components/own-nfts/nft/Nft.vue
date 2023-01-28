@@ -9,7 +9,11 @@
         <div v-else class="market-product__media">
           <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
           <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-          <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+          <NftImage
+            v-else-if="nft.type === ETypeNft.image"
+            :nft="nft"
+            @show-modal="showNftModal"
+          />
           <div v-else class="market-product__media-image">
             <div class="market-product__media-image-empty">No NFT Content</div>
           </div>
@@ -17,17 +21,20 @@
         <NftFavorite :nft="nft" />
         <NftDropdown />
       </div>
-      <NftText :nft="nft" />
+      <NftText :nft="nft" @show-modal="showNftModal" />
       <NftComments :nft="nft" @select="selectReaction" />
     </div>
 
-    <NftCommentsModal ref="modal" :nft="nft" />
+    <NftCommentsModal ref="commentsModal" :nft="nft" />
+
+    <NftModal ref="nftModal" :nft="nft" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
+import NftModal from './modal/Modal.vue';
 import { ETypeNft, INft } from '~/types';
 import NftDropdown from '~/components/own-nfts/nft/NftDropdown.vue';
 import NftText from '~/components/own-nfts/nft/NftText.vue';
@@ -54,6 +61,7 @@ type TNft = INft;
     NftAudio,
     Skeleton,
     NftCommentsModal,
+    NftModal,
   },
 })
 export default class Nft extends Vue {
@@ -67,7 +75,8 @@ export default class Nft extends Vue {
   readonly nft!: TNft;
 
   $refs!: {
-    modal: NftCommentsModal;
+    commentsModal: NftCommentsModal;
+    nftModal: NftModal;
     root: HTMLDivElement;
   };
 
@@ -127,7 +136,11 @@ export default class Nft extends Vue {
   }
 
   selectReaction(type: TCommentType) {
-    this.$refs.modal.show(type);
+    this.$refs.commentsModal.show(type);
+  }
+
+  showNftModal() {
+    this.$refs.nftModal.show();
   }
 
   async fetchDetails() {
