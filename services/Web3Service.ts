@@ -145,7 +145,7 @@ export class Web3Service {
         })
         .on('error', (error: any) => {
           console.log('error', error);
-          alertModule.success('Transaction has some error');
+          alertModule.error('Transaction has some error');
           reject(error);
         });
     });
