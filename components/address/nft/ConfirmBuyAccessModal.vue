@@ -15,7 +15,9 @@
             <h3 class="global-zag mb_xl_20 mb_md_15 mb_10">Buy Access</h3>
             <div class="global-text_12">
               Unlock post for {{ price }} PAGE<br />
-              Access will be active - {{ duration }} days
+              <template v-if="duration">
+                Access will be active - {{ duration }} days
+              </template>
             </div>
             <div
               class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"
