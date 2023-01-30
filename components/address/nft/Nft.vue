@@ -21,7 +21,7 @@
         </div>
 
         <div
-          v-if="nft.isEncrypted"
+          v-if="nft.isEncrypted && !decryptLoading"
           class="profile-content__media-encrypted-wrapper"
         >
           <div
@@ -88,6 +88,12 @@
         <div class="profile-content__media-refresh" @click.prevent="refresh">
           <NftRefreshIcon />
         </div>
+
+        <div v-if="decryptLoading" class="profile-content__media-loading">
+          <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
       </div>
 
       <NftText :nft="nft" @show-modal="showModal" />
@@ -135,6 +141,7 @@ export default class Nft extends Vue {
   ETypeNft = ETypeNft;
   ENftTransactionAccessType = ENftTransactionAccessType;
   loading = false;
+  decryptLoading = false;
   visible = false;
 
   scrollListener: null | (() => void) = null;
@@ -224,16 +231,29 @@ export default class Nft extends Vue {
   async decryptPostContent() {
     const metadataService = new MetadataService();
 
-    const imageData = await metadataService.decryptIpfsFile(this.nft.tokenId);
+    try {
+      this.decryptLoading = true;
 
-    addressModule.updateNftDetails({
-      nft: this.nft,
-      updatedDetails: {
-        type: ETypeNft.image,
-        contentUrl: imageData,
-        isEncrypted: false,
-      },
-    });
+      const imageData = await metadataService.decryptIpfsFile(this.nft.tokenId);
+
+      addressModule.updateNftDetails({
+        nft: this.nft,
+        updatedDetails: {
+          type: ETypeNft.image,
+          contentUrl: imageData,
+          isEncrypted: false,
+        },
+      });
+
+      this.decryptLoading = false;
+    } catch {
+      this.decryptLoading = false;
+
+      this.$notify({
+        type: 'error',
+        title: 'Data decryption error',
+      });
+    }
   }
 
   async buyPostAccess() {
