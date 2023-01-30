@@ -62,7 +62,7 @@
             <a
               href="#"
               class="btn btn_large btn_default btn-blue"
-              @click.prevent="buyPostAccess"
+              @click.prevent="showConfirmModal"
             >
               Unlock post for {{ nft.accessPrice / 10 ** 18 }} PAGE
               {{
@@ -89,8 +89,14 @@
 
       <NftComments :nft="nft" />
 
-      <NftModal ref="modal" :nft="nft" />
+      <NftModal ref="nftModal" :nft="nft" />
     </div>
+
+    <ConfirmBuyAccessModal
+      ref="confirmBuyModal"
+      :nft="nft"
+      @accept="buyPostAccess"
+    />
   </div>
 </template>
 
@@ -99,6 +105,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { Web3Service } from '../../../services';
 import { MetadataService } from '../../../services/MetadataService';
+import ConfirmBuyAccessModal from './ConfirmBuyAccessModal.vue';
 import { INftTransaction, ENftTransactionAccessType, ETypeNft } from '~/types';
 import { addressModule, authModule } from '~/store';
 import NftTop from '~/components/address/nft/NftTop.vue';
@@ -126,6 +133,7 @@ type TNftTransaction = INftTransaction;
     Skeleton,
     NftRefreshIcon,
     NftLockIcon,
+    ConfirmBuyAccessModal,
   },
 })
 export default class Nft extends Vue {
@@ -141,7 +149,8 @@ export default class Nft extends Vue {
   readonly nft!: TNftTransaction;
 
   $refs!: {
-    modal: NftModal;
+    nftModal: NftModal;
+    confirmBuyModal: ConfirmBuyAccessModal;
     root: HTMLDivElement;
   };
 
@@ -170,7 +179,7 @@ export default class Nft extends Vue {
   }
 
   showModal() {
-    this.$refs.modal.show();
+    this.$refs.nftModal.show();
   }
 
   scrollHandler() {
@@ -258,6 +267,10 @@ export default class Nft extends Vue {
         title: 'Error to decrypt content',
       });
     }
+  }
+
+  showConfirmModal() {
+    this.$refs.confirmBuyModal.show();
   }
 
   async buyPostAccess() {
