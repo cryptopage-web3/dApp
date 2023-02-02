@@ -191,6 +191,7 @@ export default class NftForm extends Vue {
   }
 
   toggleIsUnlockable() {
+    this.openForm();
     nftFormModule.setIsUnlockableContent(!this.isUnlockable);
   }
 
@@ -266,6 +267,7 @@ export default class NftForm extends Vue {
   }
 
   uploadFile(type: string) {
+    this.openForm();
     this.$refs.refUpload.upload(type);
   }
 
@@ -308,6 +310,7 @@ export default class NftForm extends Vue {
 
   closeForm() {
     this.isOpen = false;
+    nftFormModule.clear();
   }
 
   createNft() {
@@ -315,6 +318,7 @@ export default class NftForm extends Vue {
   }
 
   showModal() {
+    this.openForm();
     nftFormModule.setShowModal(true);
   }
 }
