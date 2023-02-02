@@ -2,7 +2,6 @@
   <div>
     <layout-notification />
     <layout-cookies />
-    <layout-beta-warning />
     <layout-header />
 
     <nuxt />

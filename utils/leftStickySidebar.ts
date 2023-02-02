@@ -4,8 +4,10 @@ export const leftStickySidebarInit = (): any => {
     return null;
   }
 
+  const height = $('#header').height() || 0;
+
   const sidebar = new (window as any).StickySidebar('.profile-menu-wrap', {
-    topSpacing: 115.8,
+    topSpacing: height + 1,
     bottomSpacing: 20,
     containerSelector: '.profile-left2',
     innerWrapperSelector: '.profile-menu-wrap',

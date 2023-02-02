@@ -1,5 +1,8 @@
 <template>
-  <div v-if="isOpen" class="info-fixed-block text-center">
+  <div
+    v-if="isOpen"
+    class="info-fixed-block info-fixed-block_relative text-center"
+  >
     <div
       class="d-inline-flex align-items-start justify-content-center flex-wrap"
     >
@@ -23,6 +26,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { stickyModule } from '~/store';
 
 @Component({})
 export default class LayoutBetaWarning extends Vue {
@@ -40,6 +44,8 @@ export default class LayoutBetaWarning extends Vue {
 
   close() {
     localStorage.setItem('cp-beta-warning', 'true');
+    stickyModule.update();
+
     this.isOpen = false;
   }
 }
