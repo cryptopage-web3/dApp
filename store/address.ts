@@ -392,10 +392,45 @@ export default class AddressModule extends VuexModule {
     const { nfts } = this.ownNfts;
     const index = nfts.findIndex((item) => item === nft);
     let nftType = nft.type;
+    const nftTemp = { ...nft };
 
     try {
-      if (nft.contentUrl) {
-        const mimeType = await nftsService.getMimeType(nft.contentUrl);
+      /** если нет contentUrl, то скорее всего это зашифрованное NFT
+       * получаем датели только для пустых contentUrl
+       */
+      if (!nft.contentUrl) {
+        const data = await nftsService.getOwnDetails({
+          chainSlug: this.chainSlug,
+          contractAddress: nft.contract_address,
+          tokenId: nft.tokenId,
+        });
+
+        let accessType: ENftTransactionAccessType;
+
+        if (data.isEncrypted) {
+          if (
+            this.address.toLocaleLowerCase() ===
+            authModule.address.toLocaleLowerCase()
+          ) {
+            accessType = ENftTransactionAccessType.has_access;
+          } else {
+            accessType = ENftTransactionAccessType.not_requested;
+          }
+        } else {
+          accessType = ENftTransactionAccessType.has_access;
+        }
+
+        Object.assign(nftTemp, {
+          contentUrl: data.contentUrl || '',
+          isEncrypted: data.isEncrypted,
+          accessPrice: data.accessPrice,
+          accessDuration: data.accessDuration,
+          accessType,
+        });
+      }
+
+      if (nftTemp.contentUrl) {
+        const mimeType = await nftsService.getMimeType(nftTemp.contentUrl);
 
         if (/audio/.test(mimeType)) {
           nftType = ETypeNft.audio;
@@ -429,6 +464,28 @@ export default class AddressModule extends VuexModule {
         },
       });
     }
+  }
+
+  @Action
+  public async fetchOwnNftComments(nft: TNft) {
+    const { nfts } = this.ownNfts;
+    const index = nfts.findIndex((item) => item === nft);
+
+    try {
+      const data = await nftsService.getOwnDetails({
+        chainSlug: this.chainSlug,
+        contractAddress: nft.contract_address,
+        tokenId: nft.tokenId,
+      });
+
+      this.setOwnNftDetails({
+        index,
+        nft: {
+          ...nft,
+          comments: data.comments,
+        },
+      });
+    } catch {}
   }
 
   @Action

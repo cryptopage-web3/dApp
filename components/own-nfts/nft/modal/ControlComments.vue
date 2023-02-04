@@ -275,7 +275,7 @@ export default class ControlComments extends Vue {
 
           /** обновляем информацию NFT */
 
-          // addressModule.fetchNftTransactionDetails(self.nft);
+          addressModule.fetchOwnNftComments(self.nft);
         },
         onError() {
           self.$notify({

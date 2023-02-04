@@ -1,4 +1,9 @@
-import { ETypeNft, IAttribute, INftComment } from '.';
+import {
+  ENftTransactionAccessType,
+  ETypeNft,
+  IAttribute,
+  INftComment,
+} from '.';
 
 export interface INft {
   collectionName: string;
@@ -17,4 +22,9 @@ export interface INft {
   type: ETypeNft;
   attributes: IAttribute[];
   comments?: INftComment[];
+
+  isEncrypted?: boolean;
+  accessType?: ENftTransactionAccessType;
+  accessPrice?: number;
+  accessDuration?: number;
 }

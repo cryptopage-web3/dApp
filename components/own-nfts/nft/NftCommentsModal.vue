@@ -287,6 +287,10 @@ export default class NftCommentsModal extends Vue {
 
           self.loading = false;
           self.resetComment();
+
+          /** обновляем информацию NFT */
+
+          addressModule.fetchOwnNftComments(self.nft);
         },
         onError() {
           self.$notify({
