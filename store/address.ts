@@ -451,6 +451,7 @@ export default class AddressModule extends VuexModule {
         index,
         nft: {
           ...nft,
+          ...nftTemp,
           type: nftType,
           hasDetails: true,
         },

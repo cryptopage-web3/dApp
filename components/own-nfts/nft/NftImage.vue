@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop } from 'nuxt-property-decorator';
+import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import { INft } from '~/types';
 
 type TNft = INft;
@@ -29,23 +29,30 @@ export default class NftImage extends Vue {
     container: HTMLDivElement;
   };
 
+  @Watch('nft.contentUrl')
+  onContentUrlChange() {
+    this.loadNftContent();
+  }
+
+  loadNftContent() {
+    if (!this.nft.contentUrl) {
+      this.isError = true;
+      return;
+    }
+
+    const image = new Image();
+    image.src = this.nft.contentUrl;
+
+    image.onload = () => {
+      this.$refs.container?.append(image);
+    };
+    image.onerror = () => {
+      this.isError = true;
+    };
+  }
+
   mounted() {
-    this.$nextTick(() => {
-      if (!this.nft.contentUrl) {
-        this.isError = true;
-        return;
-      }
-
-      const image = new Image();
-      image.src = this.nft.contentUrl;
-
-      image.onload = () => {
-        this.$refs.container?.append(image);
-      };
-      image.onerror = () => {
-        this.isError = true;
-      };
-    });
+    this.$nextTick(this.loadNftContent);
   }
 }
 </script>
