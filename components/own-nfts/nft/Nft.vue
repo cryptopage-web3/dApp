@@ -64,6 +64,7 @@ import NftAudio from '~/components/own-nfts/nft/NftAudio.vue';
 import NftFavorite from '~/components/own-nfts/nft/NftFavorite.vue';
 import NftCommentsModal from '~/components/own-nfts/nft/NftCommentsModal.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
+import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import { addressModule, authModule } from '~/store';
 import { TCommentType } from '~/types/comment-form';
 import { MetadataService, Web3Service } from '~/services';
@@ -83,6 +84,7 @@ type TNft = INft;
     NftCommentsModal,
     NftModal,
     NftAccessConfirmModal,
+    NftAccessControl,
   },
 })
 export default class Nft extends Vue {
