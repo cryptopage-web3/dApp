@@ -441,6 +441,10 @@ export default class AddressModule extends VuexModule {
         }
 
         Object.assign(nftTemp, {
+          description: data.description || '',
+          name: data.name || '',
+          attributes: data.attributes || [],
+          comments: data.comments || [],
           contentUrl: data.contentUrl || '',
           isEncrypted: data.isEncrypted,
           accessPrice: data.accessPrice,
