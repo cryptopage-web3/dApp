@@ -45,8 +45,12 @@ export default class ModalImage extends Vue {
     image.src = this.nft.contentUrl;
 
     image.onload = () => {
+      if (!this.$refs.container) {
+        return;
+      }
+
       this.$refs.container.innerHTML = '';
-      this.$refs.container?.append(image);
+      this.$refs.container.append(image);
     };
     image.onerror = () => {
       this.isError = true;
