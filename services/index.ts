@@ -5,3 +5,4 @@ export * from './TransactionsService';
 export * from './CollectionsService';
 export * from './IPFSService';
 export * from './Web3Service';
+export * from './MetadataService';

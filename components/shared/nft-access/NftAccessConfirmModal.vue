@@ -49,26 +49,26 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Emit, Prop } from 'nuxt-property-decorator';
-import { INftTransaction } from '~/types';
-
-type TNftTransaction = INftTransaction;
 
 @Component({})
-export default class ConfirmBuyAccessModal extends Vue {
+export default class NftAccessConfirmModal extends Vue {
   @Prop({ required: true })
-  readonly nft!: TNftTransaction;
+  readonly accessPrice!: number;
+
+  @Prop({ required: true })
+  readonly accessDuration!: number;
 
   $refs!: {
     modal: HTMLDivElement;
   };
 
   get price(): number {
-    return this.nft.accessPrice / 10 ** 18;
+    return this.accessPrice / 10 ** 18;
   }
 
   get duration(): string {
-    return this.nft.accessDuration
-      ? String(Math.round(this.nft.accessDuration / (24 * 60 * 60)))
+    return this.accessDuration
+      ? String(Math.round(this.accessDuration / (24 * 60 * 60)))
       : '';
   }
 

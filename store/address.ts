@@ -388,6 +388,26 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
+  public updateOwnNftDetails({
+    nft,
+    updatedDetails,
+  }: {
+    nft: TNft;
+    updatedDetails: Record<string, any>;
+  }) {
+    const { nfts } = this.ownNfts;
+    const index = nfts.findIndex((item) => item === nft);
+
+    this.setOwnNftDetails({
+      index,
+      nft: {
+        ...nft,
+        ...updatedDetails,
+      },
+    });
+  }
+
+  @Action
   public async fetchOwnNftDetails(nft: TNft) {
     const { nfts } = this.ownNfts;
     const index = nfts.findIndex((item) => item === nft);

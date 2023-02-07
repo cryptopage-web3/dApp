@@ -20,68 +20,19 @@
           <div class="profile-content__image-empty">No NFT Content</div>
         </div>
 
-        <div
-          v-if="nft.isEncrypted && !decryptLoading"
-          class="profile-content__media-encrypted-wrapper"
-        >
-          <div
-            v-if="nft.accessType === ENftTransactionAccessType.not_requested"
-          >
-            <p>
-              This post is encrypted, please check if you have access to see it
-            </p>
-            <a
-              href="#"
-              class="btn btn_large btn_default btn-blue"
-              @click.prevent="checkIfHaveAccessToSeePost"
-            >
-              Check access
-            </a>
-          </div>
-          <div
-            v-else-if="nft.accessType === ENftTransactionAccessType.has_access"
-          >
-            <p>This post is encrypted, but you can decrypt it</p>
-            <a
-              href="#"
-              class="btn btn_large btn_default btn-blue"
-              @click.prevent="decryptPostContent"
-            >
-              Decrypt content
-            </a>
-          </div>
-          <div
-            v-else-if="
-              nft.accessType === ENftTransactionAccessType.has_not_access
-            "
-          >
-            <div class="profile-content__media-encrypted-lock">
-              <NftLockIcon />
-            </div>
-            <p>To see the post, you need to unblock it</p>
-            <a
-              href="#"
-              class="btn btn_large btn_default btn-blue"
-              @click.prevent="showConfirmModal"
-            >
-              Unlock post for {{ nft.accessPrice / 10 ** 18 }} PAGE
-              {{
-                nft.accessDuration
-                  ? `(${Math.round(nft.accessDuration / (24 * 60 * 60))} days)`
-                  : ''
-              }}
-            </a>
-          </div>
-        </div>
+        <NftAccessControl
+          :loading="decryptLoading"
+          :is-encrypted="nft.isEncrypted"
+          :access-duration="nft.accessDuration"
+          :access-price="nft.accessPrice"
+          :access-type="nft.accessType"
+          @check-access="checkIfHaveAccessToSeePost"
+          @decrypt="decryptPostContent"
+          @unlock="showConfirmModal"
+        />
 
         <div class="profile-content__media-refresh" @click.prevent="refresh">
           <NftRefreshIcon />
-        </div>
-
-        <div v-if="decryptLoading" class="profile-content__media-loading">
-          <div class="spinner-border text-light" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
         </div>
       </div>
 
@@ -92,9 +43,10 @@
       <NftModal ref="nftModal" :nft="nft" />
     </div>
 
-    <ConfirmBuyAccessModal
+    <NftAccessConfirmModal
       ref="confirmBuyModal"
-      :nft="nft"
+      :access-duration="nft.accessDuration"
+      :access-price="nft.accessPrice"
       @accept="buyPostAccess"
     />
   </div>
@@ -103,9 +55,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { Web3Service } from '../../../services';
-import { MetadataService } from '../../../services/MetadataService';
-import ConfirmBuyAccessModal from './ConfirmBuyAccessModal.vue';
+import { MetadataService, Web3Service } from '~/services';
+import NftAccessConfirmModal from '~/components/shared/nft-access/NftAccessConfirmModal.vue';
 import { INftTransaction, ENftTransactionAccessType, ETypeNft } from '~/types';
 import { addressModule, authModule } from '~/store';
 import NftTop from '~/components/address/nft/NftTop.vue';
@@ -116,6 +67,7 @@ import NftAudio from '~/components/address/nft/NftAudio.vue';
 import NftComments from '~/components/address/nft/NftComments.vue';
 import NftModal from '~/components/address/nft/NftModal.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
+import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 import NftLockIcon from '~/components/icon/nft/NftLockIcon.vue';
 
@@ -133,7 +85,8 @@ type TNftTransaction = INftTransaction;
     Skeleton,
     NftRefreshIcon,
     NftLockIcon,
-    ConfirmBuyAccessModal,
+    NftAccessConfirmModal,
+    NftAccessControl,
   },
 })
 export default class Nft extends Vue {
@@ -150,7 +103,7 @@ export default class Nft extends Vue {
 
   $refs!: {
     nftModal: NftModal;
-    confirmBuyModal: ConfirmBuyAccessModal;
+    confirmBuyModal: NftAccessConfirmModal;
     root: HTMLDivElement;
   };
 

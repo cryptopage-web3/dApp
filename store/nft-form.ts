@@ -11,11 +11,10 @@ import {
   ISendNFTParams,
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
-import { IPFSService, Web3Service } from '~/services';
+import { IPFSService, MetadataService, Web3Service } from '~/services';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug } from '~/types';
-import { MetadataService } from '~/services/MetadataService';
 import { getSecDuration } from '~/utils/durationType';
 
 type TNftForm = INftForm;
