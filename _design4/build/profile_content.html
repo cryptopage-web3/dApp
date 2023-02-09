@@ -15,8 +15,27 @@
 		<title>Crypto Page!</title>
 	</head>
 	<body class="white white-bg body-market modal-bg-white">
-		<header class="market-header" id="header">
-			<div class="container">
+		<div id="header">
+			<div class="info-fixed-block text-center">
+			<div class="d-inline-flex align-items-start justify-content-center flex-wrap">
+				<div class="d-flex align-items-start flex-all">
+					<div class="d-flex align-items-center mr_5">
+						<img src="img/beta-version-icon.svg" class="mr_5" alt="">
+						<span class="white global-text_14 fw-600">
+							Beta Warning!
+						</span>
+					</div>
+					<div class="flex-all white global-text_14 pt_2 text-left">
+						Crypto.Page is still in the beta phase, things may break please handle us with care
+					</div>
+				</div>
+				<a href="#" class="info-fixed-block__close ml_5">
+					<img src="img/global-hint-close_img.svg" alt="">
+				</a>
+			</div>
+			</div>
+			<header class="market-header">
+				<div class="container">
 				<nav class="navbar navbar-expand-xl navbar-light">
 					<a class="navbar-brand" href="#">
 						<img src="img/market-header-logo.svg" alt="">
@@ -355,26 +374,8 @@
 						<img src="img/nav_bg2.svg" alt="">
 					</button>
 				</nav>
-			</div>
-		</header>
-
-		<div class="info-fixed-block text-center">
-			<div class="d-inline-flex align-items-start justify-content-center flex-wrap">
-				<div class="d-flex align-items-start flex-all">
-					<div class="d-flex align-items-center mr_5">
-						<img src="img/beta-version-icon.svg" class="mr_5" alt="">
-						<span class="white global-text_14 fw-600">
-							Beta Warning!
-						</span>
-					</div>
-					<div class="flex-all white global-text_14 pt_2 text-left">
-						Crypto.Page is still in the beta phase, things may break please handle us with care
-					</div>
 				</div>
-				<a href="#" class="info-fixed-block__close ml_5">
-					<img src="img/global-hint-close_img.svg" alt="">
-				</a>
-			</div>
+			</header>
 		</div>
 
 <section class="profile height-full" id="profile">
@@ -2791,7 +2792,7 @@
             </div>
             <textarea class="global-input global-input_textarea" placeholder="Enter text"></textarea>
           </div>
-          <div class="modal-creat-text mb_20">
+          <div class="modal-creat-text mb_25">
             <div class="modal-creat__title2">
               Image, Video, Audio, Voice
             </div>
@@ -2832,7 +2833,7 @@
           </div>
         </div>
         <div class="modal-creat-row">
-          <div class="modal-creat__title mb_20">
+          <div class="modal-creat__title mb_25">
             Addictional fields
           </div>
           <div class="modal-creat-text mb_20">
@@ -2906,14 +2907,14 @@
               </label>
             </div>
           </div>
-          <div class="modal-creat-checkbox mb_20">
+          <div class="modal-creat-checkbox mb_10">
             <div class="modal-creat-checkbox__left">
               <div class="modal-creat-checkbox__icon">
-                <img src="img/modal-creat-checkbox_icon2.svg" alt="">
+                <img src="img/modal-creat-checkbox_icon2_3.svg" alt="">
               </div>
               <div class="modal-creat-checkbox__cont">
                 <div class="modal-creat-checkbox__title">
-                  Unlockable content
+                  NFT monetization settings
                 </div>
                 <div class="modal-creat-checkbox__text">
                   Include unlockable content that can only be revealed by the owner of the item
@@ -2922,11 +2923,127 @@
             </div>
             <div class="modal-creat-checkbox__right">
               <label class="global-checkbox">
-                <input type="checkbox">
+                <input type="checkbox" data-id="#checkbox-collapse1" class="checkbox-collapse-link">
                 <div class="global-checkbox__wrap">
                   <div class="global-checkbox__circle"></div>
                 </div>
               </label>
+            </div>
+          </div>
+          <div class="pb_10">
+            <div id="checkbox-collapse1" class="modal-creat-unlocks-tabs voite-collapse mb_10 checkbox-collapse">
+              <div class="voite-collapse-links-wrap">
+                <a href="#voite-collapse5" class="btn btn_default voite-collapse-link active">
+                  One-time
+                </a>
+                <a href="#voite-collapse6" class="btn btn_default voite-collapse-link">
+                  Subscribe
+                </a>
+                <a href="#voite-collapse7" class="btn btn_default voite-collapse-link">
+                  Time
+                </a>
+              </div>
+              <div class="voite-collapse-wrap">
+                <div class="voite-collapse-cont" id="voite-collapse5" style="display: block;">
+                  <div class="voite-collapse-body">
+                    <div class="global-text_12 mb_10">
+                      Enter the amount that the user will have to pay to view the content
+                    </div>
+                    <div class="form-field">
+                      <div class="form-field-with-drop">
+                        <input type="text" class="global-input global-input_large" value="10 PAGE">
+                        <div class="profile-content-drop modal-creat-drop market-filtr__drop">
+                          <a href="#" class="form-field-with-drop__link">
+                            <img src="img/modal-creat-unlocks-tabs-icon1.svg" alt="">
+                          </a>
+                          <div class="drop-down__col">
+                            <ul class="drop-down__list">
+                              <li>
+                                <a href="#">
+                                  <img src="img/modal-creat-unlocks-tabs-icon1.svg" alt="">
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#">
+                                  <img src="img/modal-creat-unlocks-tabs-icon1.svg" alt="">
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="voite-collapse-cont" id="voite-collapse6">
+                  <div class="voite-collapse-body">
+                    <div class="global-text_12">
+                      This post will be paid as part of the payment for the entire subscription
+                    </div>
+                  </div>
+                </div>
+                <div class="voite-collapse-cont" id="voite-collapse7">
+                  <div class="voite-collapse-body">
+                    <div class="global-text_12 mb_10">
+                      This post will be paid as part of the payment for the entire subscription
+                    </div>
+                    <div class="row modal-creat-unlocks-tabs-row">
+                      <div class="col-sm-6 col-12 mb_10 mb_sm_0">
+                        <div class="form-field">
+                          <div class="form-field-with-drop form-field-with-drop_text">
+                            <input type="text" class="global-input global-input_large" value="2">
+                            <div class="profile-content-drop modal-creat-drop market-filtr__drop">
+                              <a href="#" class="form-field-with-drop__link">
+                                Days
+                              </a>
+                              <div class="drop-down__col">
+                                <ul class="drop-down__list">
+                                  <li>
+                                    <a href="#">
+                                      Weeks
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      Months
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-12">
+                        <div class="form-field">
+                          <div class="form-field-with-drop">
+                            <input type="text" class="global-input global-input_large" value="10 PAGE">
+                            <div class="profile-content-drop modal-creat-drop market-filtr__drop">
+                              <a href="#" class="form-field-with-drop__link">
+                                <img src="img/modal-creat-unlocks-tabs-icon1.svg" alt="">
+                              </a>
+                              <div class="drop-down__col">
+                                <ul class="drop-down__list">
+                                  <li>
+                                    <a href="#">
+                                      <img src="img/modal-creat-unlocks-tabs-icon1.svg" alt="">
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="#">
+                                      <img src="img/modal-creat-unlocks-tabs-icon1.svg" alt="">
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-field modal-creat-text-content mb_20">
@@ -2983,15 +3100,15 @@
               </div>
               <div class="modal-creat-add">
                 <a href="#" class="modal-creat-add__close disabled">
-                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.5" y="0.500977" width="29" height="29" rx="14.5" stroke="#E4E4E4"/>
-                    <path d="M19.8731 11.5413C20.2636 11.1507 20.2636 10.5176 19.8731 10.127C19.4826 9.73652 18.8494 9.73652 18.4589 10.127L19.8731 11.5413ZM10.1256 18.4604C9.73505 18.8509 9.73505 19.4841 10.1256 19.8746C10.5161 20.2651 11.1493 20.2651 11.5398 19.8746L10.1256 18.4604ZM18.4589 19.8746C18.8494 20.2651 19.4826 20.2651 19.8731 19.8746C20.2636 19.4841 20.2636 18.8509 19.8731 18.4604L18.4589 19.8746ZM11.5398 10.127C11.1493 9.73652 10.5161 9.73652 10.1256 10.127C9.73505 10.5176 9.73505 11.1507 10.1256 11.5413L11.5398 10.127ZM18.4589 10.127L10.1256 18.4604L11.5398 19.8746L19.8731 11.5413L18.4589 10.127ZM19.8731 18.4604L11.5398 10.127L10.1256 11.5413L18.4589 19.8746L19.8731 18.4604Z" fill="#A7A7A7"/>
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.5" y="0.5" width="39" height="39" rx="4.5" fill="white" stroke="#E4E4E4"/>
+                    <path d="M25.5554 14.4444L14.4443 25.5555M25.5554 25.5555L14.4443 14.4444" stroke="#A7A7A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </a>
                 <div class="modal-creat-add-wrap modal-creat-add-wrap1">
-                  <input type="text" placeholder="Type" name="type" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <input type="text" placeholder="Name" name="name" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <a href="#" class="modal-creat-add__btn1 btn btn_default disabled">
+                  <input type="text" placeholder="Type" name="type" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <input type="text" placeholder="Name" name="name" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <a href="#" class="modal-creat-add__btn1 btn btn_default btn_large disabled">
                     Apply
                   </a>
                 </div>
@@ -3024,17 +3141,17 @@
               </div>
               <div class="modal-creat-add">
                 <a href="#" class="modal-creat-add__close disabled">
-                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.5" y="0.500977" width="29" height="29" rx="14.5" stroke="#E4E4E4"/>
-                    <path d="M19.8731 11.5413C20.2636 11.1507 20.2636 10.5176 19.8731 10.127C19.4826 9.73652 18.8494 9.73652 18.4589 10.127L19.8731 11.5413ZM10.1256 18.4604C9.73505 18.8509 9.73505 19.4841 10.1256 19.8746C10.5161 20.2651 11.1493 20.2651 11.5398 19.8746L10.1256 18.4604ZM18.4589 19.8746C18.8494 20.2651 19.4826 20.2651 19.8731 19.8746C20.2636 19.4841 20.2636 18.8509 19.8731 18.4604L18.4589 19.8746ZM11.5398 10.127C11.1493 9.73652 10.5161 9.73652 10.1256 10.127C9.73505 10.5176 9.73505 11.1507 10.1256 11.5413L11.5398 10.127ZM18.4589 10.127L10.1256 18.4604L11.5398 19.8746L19.8731 11.5413L18.4589 10.127ZM19.8731 18.4604L11.5398 10.127L10.1256 11.5413L18.4589 19.8746L19.8731 18.4604Z" fill="#A7A7A7"/>
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.5" y="0.5" width="39" height="39" rx="4.5" fill="white" stroke="#E4E4E4"/>
+                    <path d="M25.5554 14.4444L14.4443 25.5555M25.5554 25.5555L14.4443 14.4444" stroke="#A7A7A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </a>
                 <div class="modal-creat-add-wrap modal-creat-add-wrap2">
-                  <input type="text" placeholder="Name" name="name" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <input type="text" placeholder="3" name="from" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <span class="d-inline-block mr_5 mr_md_10">of</span>
-                  <input type="text" placeholder="5" name="to" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <a href="#" class="modal-creat-add__btn2 btn btn_default disabled">
+                  <input type="text" placeholder="Name" name="name" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <input type="text" placeholder="3" name="from" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <span class="d-inline-block mr_5 mr_md_10 h_40">of</span>
+                  <input type="text" placeholder="5" name="to" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <a href="#" class="modal-creat-add__btn2 btn btn_default btn_large disabled">
                     Apply
                   </a>
                 </div>
@@ -3067,17 +3184,17 @@
               </div>
               <div class="modal-creat-add">
                 <a href="#" class="modal-creat-add__close disabled">
-                  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="0.5" y="0.500977" width="29" height="29" rx="14.5" stroke="#E4E4E4"/>
-                    <path d="M19.8731 11.5413C20.2636 11.1507 20.2636 10.5176 19.8731 10.127C19.4826 9.73652 18.8494 9.73652 18.4589 10.127L19.8731 11.5413ZM10.1256 18.4604C9.73505 18.8509 9.73505 19.4841 10.1256 19.8746C10.5161 20.2651 11.1493 20.2651 11.5398 19.8746L10.1256 18.4604ZM18.4589 19.8746C18.8494 20.2651 19.4826 20.2651 19.8731 19.8746C20.2636 19.4841 20.2636 18.8509 19.8731 18.4604L18.4589 19.8746ZM11.5398 10.127C11.1493 9.73652 10.5161 9.73652 10.1256 10.127C9.73505 10.5176 9.73505 11.1507 10.1256 11.5413L11.5398 10.127ZM18.4589 10.127L10.1256 18.4604L11.5398 19.8746L19.8731 11.5413L18.4589 10.127ZM19.8731 18.4604L11.5398 10.127L10.1256 11.5413L18.4589 19.8746L19.8731 18.4604Z" fill="#A7A7A7"/>
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.5" y="0.5" width="39" height="39" rx="4.5" fill="white" stroke="#E4E4E4"/>
+                    <path d="M25.5554 14.4444L14.4443 25.5555M25.5554 25.5555L14.4443 14.4444" stroke="#A7A7A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </a>
                 <div class="modal-creat-add-wrap modal-creat-add-wrap2">
-                  <input type="text" placeholder="Name" name="name" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <input type="text" placeholder="3" name="from" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <span class="d-inline-block mr_5 mr_md_10">of</span>
-                  <input type="text" placeholder="5" name="to" class="global-input modal-creat-add-input-js mr_5 mr_md_10">
-                  <a href="#" class="modal-creat-add__btn3 btn btn_default disabled">
+                  <input type="text" placeholder="Name" name="name" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <input type="text" placeholder="3" name="from" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <span class="d-inline-block mr_5 mr_md_10 h_40">of</span>
+                  <input type="text" placeholder="5" name="to" class="global-input modal-creat-add-input-js mr_5 mr_md_10 h_40">
+                  <a href="#" class="modal-creat-add__btn3 btn btn_default btn_large disabled">
                     Apply
                   </a>
                 </div>
@@ -3475,10 +3592,10 @@
             </p>
           </div>
           <div class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10">
-            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-sign" data-dismiss="modal" class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30">
+            <a href="#" role="button" data-dismiss="modal" class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30">
               Skip
             </a>
-            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-step1" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30">
+            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-between" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30">
               Start
             </a>
           </div>
@@ -3488,7 +3605,7 @@
   </div>
 </div>
 
-<div class="modal fade global-modal onboarding-modal" id="onboarding-modal-between" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade global-modal onboarding-modal" id="onboarding-modal-between" tabindex="-1" role="dialog" data-delay="3000" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body">
@@ -3590,8 +3707,8 @@
     <div class="modal-content">
       <div class="modal-body">
         <div class="global-modal-body">
-          <div class="d-flex align-items-center mb_20">
-            <img class="mr_20" src="img/onboarding-modal-sign_img.svg" alt="">
+          <div class="d-flex align-items-center flex-column mb_20">
+            <img class="mb_20" src="img/onboarding-modal-sign_img.svg" alt="">
             <div class="global-zag">
               Welcome to Crypto.Page
             </div>
@@ -3604,8 +3721,92 @@
             <a href="#" role="button" data-dismiss="modal" class="btn btn-blue-transparent_button btn_large pr_30 pl_30 mr_10 ml_10">
               Cancel
             </a>
-            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-between" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10">
+            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-sign2" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10">
               Assept and Sign
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade global-modal onboarding-modal" id="onboarding-modal-sign2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="global-modal-body">
+          <div class="d-flex align-items-center flex-column mb_20">
+            <img class="mb_20" src="img/onboarding-modal-sign_img.svg" alt="">
+            <div class="global-zag">
+              Buy PAGE token
+            </div>
+          </div>
+          <div class="global-text_14">
+            <p>Thank you for your interest in Crypto.Page!</p>
+            <p>To participate in the seeding round of selling PAGE tokens, specify in the next window the requested information to send a request to be added to the white list, after approval you will be sent to the contacts specified (to you by) further instructions.</p>
+          </div>
+          <div class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10">
+            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-sign" data-dismiss="modal" class="btn btn-blue-transparent_button btn_large pr_30 pl_30 mr_10 ml_10">
+              Skip
+            </a>
+            <a href="#" role="button" data-toggle="modal" data-target="#onboarding-modal-sign3" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10">
+              Buy PAGE
+              <img class="ml_5" src="img/onboarding-modal-sign3-icon.svg" alt="">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade global-modal onboarding-modal" id="onboarding-modal-sign3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="global-modal-body">
+          <div class="d-flex align-items-center flex-column mb_20">
+            <img class="mb_20" src="img/onboarding-modal-sign_img2.svg" alt="">
+            <div class="global-zag">
+              KYC Verification
+            </div>
+          </div>
+          <div class="global-text_14">
+            <p>To comply with regulations each participant is required to go through identity verification (KYC/AML) to prevent fraud, money laundering operations, transactions banned under the sanctions regime or those which fund terrorism.</p>
+            <p>Please, complete our fast and secure verification process to participate in token offerings.</p>
+          </div>
+          <div class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10">
+            <a href="#" role="button" data-dismiss="modal" data-toggle="modal" data-target="#onboarding-modal-sign4" class="btn btn-blue-transparent_button btn_large pr_30 pl_30 mr_10 ml_10">
+              Cancel
+            </a>
+            <a href="#" role="button" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10">
+              Verify
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade global-modal onboarding-modal" id="onboarding-modal-sign4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="global-modal-body">
+          <div class="d-flex align-items-center flex-column mb_20">
+            <img class="mb_20" src="img/onboarding-modal-sign_img3.svg" alt="">
+            <div class="global-zag">
+              Attention
+            </div>
+          </div>
+          <div class="global-text_14">
+            <p>Identity verification (KYC/AML) is mandatory to participate in our token sale. Participation in the purchase of PAGE tokens will remain unavailable</p>
+          </div>
+          <div class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10">
+            <a href="#" role="button" data-dismiss="modal" class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10">
+              Home
             </a>
           </div>
         </div>
