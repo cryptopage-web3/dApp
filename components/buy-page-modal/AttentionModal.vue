@@ -11,11 +11,20 @@
       <div class="modal-content">
         <div class="modal-body">
           <div class="global-modal-body">
-            <h3 class="global-zag mb_xl_20 mb_md_15 mb_10">Attention</h3>
-            <div class="global-text_12">
-              Identity verification (KYC/AML) is mandatory to participate in our
-              token sale. Participation in the purchase of PAGE tokens will
-              remain unavailable until verified.
+            <div class="d-flex align-items-center flex-column mb_20">
+              <img
+                class="mb_20"
+                src="@/assets/img/onboarding-modal-sign_img3.svg"
+                alt=""
+              />
+              <div class="global-zag">Attention</div>
+            </div>
+            <div class="global-text_14">
+              <p>
+                Identity verification (KYC/AML) is mandatory to participate in
+                our token sale. Participation in the purchase of PAGE tokens
+                will remain unavailable
+              </p>
             </div>
             <div
               class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"
@@ -23,7 +32,7 @@
               <a
                 href="#"
                 role="button"
-                class="btn btn-blue_button btn_large pr_30 pl_30"
+                class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10"
                 @click.prevent="home"
               >
                 Home

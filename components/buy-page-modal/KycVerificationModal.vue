@@ -13,16 +13,25 @@
         <div class="modal-content">
           <div class="modal-body">
             <div class="global-modal-body">
-              <h3 class="global-zag mb_xl_20 mb_md_15 mb_10">
-                KYC Verification
-              </h3>
-              <div class="global-text_12">
-                To comply with regulations each participant is required to go
-                through identity verification (KYC/AML) to prevent fraud, money
-                laundering operations, transactions banned under the sanctions
-                regime or those which fund terrorism. Please, complete our fast
-                and secure verification process to participate in token
-                offerings.
+              <div class="d-flex align-items-center flex-column mb_20">
+                <img
+                  class="mb_20"
+                  src="@/assets/img/onboarding-modal-sign_img2.svg"
+                  alt=""
+                />
+                <div class="global-zag">KYC Verification</div>
+              </div>
+              <div class="global-text_14">
+                <p>
+                  To comply with regulations each participant is required to go
+                  through identity verification (KYC/AML) to prevent fraud,
+                  money laundering operations, transactions banned under the
+                  sanctions regime or those which fund terrorism.
+                </p>
+                <p>
+                  Please, complete our fast and secure verification process to
+                  participate in token offerings.
+                </p>
               </div>
               <div
                 class="onboarding-welcome-btns d-flex align-items-center justify-content-center mt_md_20 mt_10"
@@ -30,7 +39,7 @@
                 <a
                   href="#"
                   role="button"
-                  class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30"
+                  class="btn btn-blue-transparent_button btn_large pr_30 pl_30 mr_10 ml_10"
                   @click.prevent="cancel"
                 >
                   Cancel
@@ -38,7 +47,7 @@
                 <a
                   href="#"
                   role="button"
-                  class="btn btn-blue_button btn_large pr_30 pl_30"
+                  class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10"
                   @click.prevent="verify"
                 >
                   Verify

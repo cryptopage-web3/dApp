@@ -12,8 +12,15 @@
         <div class="modal-content">
           <div class="modal-body">
             <div class="global-modal-body">
-              <h3 class="global-zag mb_xl_20 mb_md_15 mb_10">Buy PAGE</h3>
-              <div class="global-text_12 buy-page-modal__content">
+              <div class="d-flex align-items-center flex-column mb_20">
+                <img
+                  class="mb_20"
+                  src="@/assets/img/onboarding-modal-sign_img.svg"
+                  alt=""
+                />
+                <div class="global-zag">Buy PAGE token</div>
+              </div>
+              <div class="global-text_14">
                 <p>Thank you for your interest in Crypto.Page!</p>
                 <p>
                   To participate in the seeding round of selling PAGE tokens,
@@ -29,7 +36,7 @@
                 <a
                   href="#"
                   role="button"
-                  class="btn btn-blue-transparent_button btn_large mr_20 pr_30 pl_30"
+                  class="btn btn-blue-transparent_button btn_large pr_30 pl_30 mr_10 ml_10"
                   @click.prevent="hide"
                 >
                   Skip
@@ -37,10 +44,15 @@
                 <a
                   href="#"
                   role="button"
-                  class="btn btn-blue_button btn_large pr_30 pl_30"
+                  class="btn btn-blue_button btn_large pr_30 pl_30 mr_10 ml_10"
                   @click.prevent="buy"
                 >
                   Buy PAGE
+                  <img
+                    class="ml_5"
+                    src="@/assets/img/onboarding-modal-sign3-icon.svg"
+                    alt=""
+                  />
                 </a>
               </div>
             </div>

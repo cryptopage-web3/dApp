@@ -12,9 +12,9 @@
       <div class="modal-content">
         <div class="modal-body">
           <div class="global-modal-body">
-            <div class="d-flex align-items-center mb_20">
+            <div class="d-flex align-items-center flex-column mb_20">
               <img
-                class="mr_20"
+                class="mb_20"
                 src="@/assets/img/onboarding-modal-sign_img.svg"
                 alt=""
               />
