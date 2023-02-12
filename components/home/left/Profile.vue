@@ -3,6 +3,7 @@
   <div v-else class="main-profile-cont">
     <ProfileUser />
     <ProfileTransactions />
+    <ProfileCreatePost />
     <ProfileWallet />
     <ProfileTokens />
     <ProfileInbox />
@@ -17,6 +18,7 @@ import ProfileTransactions from './ProfileTransactions.vue';
 import ProfileWallet from './ProfileWallet.vue';
 import ProfileTokens from './ProfileTokens.vue';
 import ProfileInbox from './ProfileInbox.vue';
+import ProfileCreatePost from './ProfileCreatePost.vue';
 import Loader from '~/components/loaders/GrowLoader.vue';
 import { authModule, stickyModule } from '~/store';
 
@@ -27,6 +29,7 @@ import { authModule, stickyModule } from '~/store';
     ProfileWallet,
     ProfileTokens,
     ProfileInbox,
+    ProfileCreatePost,
     Loader,
   },
 })
