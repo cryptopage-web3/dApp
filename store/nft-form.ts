@@ -77,6 +77,8 @@ export default class NftFormModule extends VuexModule {
 
   showModal = false;
 
+  forceOwner = false;
+
   showSuccessModal: TSuccessModal = {
     status: false,
   };
@@ -144,6 +146,11 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setShowSuccessModal(status: TSuccessModal) {
     this.showSuccessModal = status;
+  }
+
+  @Mutation
+  public setForceOwner(force: boolean) {
+    this.forceOwner = force;
   }
 
   @Mutation
@@ -235,34 +242,17 @@ export default class NftFormModule extends VuexModule {
   public async submit() {
     /** проверяем валидность данных */
 
-    const validateSuccess = await this.validate();
+    const validateSuccess = await this.validateValues();
 
     if (!validateSuccess) {
       return;
     }
 
-    /** проверяем наличие авторизации */
+    /** проверяем валидность подключения */
 
-    if (!authModule.isAuth) {
-      alertModule.error('Need to connect a wallet to create NFTs');
-      return;
-    }
+    const connectSuccess = await this.validateConnect();
 
-    /** owner в NFT будет из addressModule */
-    /** проверяем что addressModule той же сети, что и authModule */
-
-    const isSameChain = authModule.chainSlug === addressModule.chainSlug;
-    const isOwner =
-      authModule.address.toLowerCase() === addressModule.address.toLowerCase();
-
-    if (!isSameChain) {
-      alertModule.error(`Active chain - ${authModule.chainName}<br>
-          You are trying ${
-            isOwner ? 'create' : 'send'
-          } nft to account with chain ${addressModule.chainName}<br>
-          Please connect to ${addressModule.chainName}
-        `);
-
+    if (!connectSuccess) {
       return;
     }
 
@@ -338,10 +328,14 @@ export default class NftFormModule extends VuexModule {
 
     /** передача NFT в контракт через web3 */
 
+    const ownerAddress = this.forceOwner
+      ? authModule.address
+      : addressModule.address;
+
     const sendNFTParams: ISendNFTParams = {
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
-      ownerAddress: addressModule.address,
+      ownerAddress,
       communityId: OPEN_FORUM_ID,
       ipfsHash: nftHash,
       isEncrypted: isUnlockableContent,
@@ -386,7 +380,39 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Action
-  public validate(): boolean {
+  public validateConnect(): boolean {
+    /** проверяем наличие авторизации */
+
+    if (!authModule.isAuth) {
+      alertModule.error('Need to connect a wallet to create NFTs');
+      return false;
+    }
+
+    /** owner в NFT будет из addressModule */
+    /** проверяем что addressModule той же сети, что и authModule */
+
+    const isSameChain =
+      this.forceOwner || authModule.chainSlug === addressModule.chainSlug;
+    const isOwner =
+      this.forceOwner ||
+      authModule.address.toLowerCase() === addressModule.address.toLowerCase();
+
+    if (!isSameChain) {
+      alertModule.error(`Active chain - ${authModule.chainName}<br>
+          You are trying ${
+            isOwner ? 'create' : 'send'
+          } nft to account with chain ${addressModule.chainName}<br>
+          Please connect to ${addressModule.chainName}
+        `);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  @Action
+  public validateValues(): boolean {
     const status = validateNftForm(this.values, authModule.chainSlug);
 
     if (!status.status) {

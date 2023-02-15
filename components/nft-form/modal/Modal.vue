@@ -113,14 +113,19 @@ export default class Modal extends Vue {
 
   get isOwner(): boolean {
     return (
-      authModule.address.toLowerCase() ===
+      this.forceOwner ||
+      (authModule.address.toLowerCase() ===
         addressModule.address.toLowerCase() &&
-      authModule.chainSlug === addressModule.chainSlug
+        authModule.chainSlug === addressModule.chainSlug)
     );
   }
 
   get isValid(): boolean {
     return nftFormModule.isValid;
+  }
+
+  get forceOwner(): boolean {
+    return nftFormModule.forceOwner;
   }
 
   get loadingForm(): boolean {
@@ -172,6 +177,9 @@ export default class Modal extends Vue {
 
     ($(this.$refs.modal) as any).on('hide.bs.modal', function () {
       nftFormModule.setShowModal(false);
+
+      /** при закрытии модалки сбрасываем флаг создания для себя */
+      nftFormModule.setForceOwner(false);
     });
   }
 

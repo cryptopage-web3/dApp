@@ -11,30 +11,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { authModule, nftFormModule } from '~/store';
+import { nftFormModule } from '~/store';
 
 @Component({})
 export default class ProfileCreatePost extends Vue {
-  validateCreateNFT() {
-    const isAuth = authModule.isAuth;
-
-    if (!isAuth) {
-      this.$notify({
-        type: 'error',
-        title: 'Need to connect a wallet to create NFTs',
-      });
-
-      return false;
-    }
-
-    return true;
-  }
-
   showModal() {
-    if (!this.validateCreateNFT()) {
-      return;
-    }
-
+    nftFormModule.setForceOwner(true);
     nftFormModule.setShowModal(true);
   }
 }

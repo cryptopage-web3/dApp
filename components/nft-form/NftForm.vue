@@ -240,30 +240,8 @@ export default class NftForm extends Vue {
   }
 
   showDisableNotify() {
-    if (!this.isAuth) {
-      this.$notify({
-        type: 'error',
-        title: 'Need to connect a wallet to create NFTs',
-      });
-
-      return true;
-    }
-
-    if (!this.isSameChain) {
-      this.$notify({
-        type: 'error',
-        title: `Active chain - ${this.authChainName}<br>
-          You are trying ${
-            this.isOwner ? 'create' : 'send'
-          } nft to account with chain ${this.addressChainName}<br>
-          Please connect to ${this.addressChainName}
-        `,
-      });
-
-      return true;
-    }
-
-    return false;
+    /** запускаем валидацию, чтобы показать ошибки */
+    nftFormModule.validateConnect();
   }
 
   uploadFile(type: string) {
