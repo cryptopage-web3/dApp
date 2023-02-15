@@ -154,7 +154,12 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 2 }"
                     >
-                      Sign the message to get access to Crypto.Page sevices
+                      Sign the message to get access to Crypto.Page sevices.
+                      <small class="global-text_12">
+                        <a href="#" @click.prevent="startStep">
+                          Resend request
+                        </a>
+                      </small>
                     </div>
                   </div>
                 </li>
@@ -200,6 +205,7 @@ import ConfirmModal from './ConfirmModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
 import { ESignupStep } from '~/types';
+import { MESSENGER_SIGNUP_URL } from '~/constants';
 
 @Component({
   components: {
@@ -366,8 +372,31 @@ export default class SignupModal extends Vue {
     }
   }
 
-  startSignMessage() {
+  async startSignMessage() {
     this.loading = true;
+
+    /** добавляем задержку, чтобы сообщение успело отобразиться */
+
+    this.$notify({
+      type: 'info',
+      title: 'Please check access to the messenger via opened page',
+    });
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
+    /** открываем мессенджер */
+
+    window.open(MESSENGER_SIGNUP_URL, '_blank');
+
+    /** ожидаем ответ от мессенджера */
+
+    const channel = new BroadcastChannel('peer:onboarding');
+
+    channel.addEventListener('message', ({ data }) => {
+      console.log(data);
+    });
   }
 
   startConsent() {
