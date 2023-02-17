@@ -222,7 +222,7 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchNftTransactions() {
     try {
-      const { page, pageSize, nfts: oldNfts } = this.nftTransactions;
+      const { page, pageSize } = this.nftTransactions;
       const nextPage = page + 1;
 
       const { list, count } = await nftsService.getTransactionsList({
@@ -232,6 +232,10 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+      /** текущие NFTs достаем только перед объединением
+       * за время запроса уже могли получить детали и обновить старые NFT
+       */
+      const { nfts: oldNfts } = this.nftTransactions;
       const newNfts = uniqueNftTransactionConcat(oldNfts, list);
 
       this.setNftTransactions({
@@ -352,7 +356,7 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchOwnNfts() {
     try {
-      const { page, pageSize, nfts: oldNfts } = this.ownNfts;
+      const { page, pageSize } = this.ownNfts;
       const nextPage = page + 1;
 
       const { list, count } = await nftsService.getList({
@@ -362,6 +366,10 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+      /** текущие NFTs достаем только перед объединением
+       * за время запроса уже могли получить детали и обновить старые NFT
+       */
+      const { nfts: oldNfts } = this.ownNfts;
       const newNfts = uniqueNftConcat(oldNfts, list);
 
       this.setOwnNfts({
@@ -533,12 +541,7 @@ export default class AddressModule extends VuexModule {
 
   @Action
   public async fetchEthTransactions() {
-    const {
-      page,
-      pageSize,
-      transactions: oldTransactions,
-      continue: oldContinue,
-    } = this.transactions;
+    const { page, pageSize, continue: oldContinue } = this.transactions;
 
     const { transactions, continue: newContinue } =
       await transactionsService.getEthList({
@@ -548,6 +551,7 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+    const { transactions: oldTransactions } = this.transactions;
     const newTransactions = uniqueHashConcat(
       oldTransactions,
       transactions.map((t) => normalizeEth(t, this.chainId)),
@@ -565,12 +569,7 @@ export default class AddressModule extends VuexModule {
 
   @Action
   public async fetchDefaultTransactions() {
-    const {
-      page,
-      pageSize,
-      transactions: oldTransactions,
-      continue: oldContinue,
-    } = this.transactions;
+    const { page, pageSize, continue: oldContinue } = this.transactions;
     const nextPage = page + 1;
 
     const {
@@ -585,6 +584,7 @@ export default class AddressModule extends VuexModule {
       continue: oldContinue,
     });
 
+    const { transactions: oldTransactions } = this.transactions;
     const newTransactions = uniqueHashConcat(
       oldTransactions,
       transactions.map((t) => defaultNormalizer(t, this.address, this.chainId)),
@@ -632,8 +632,6 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка NFT, возвращает флаг наличия целевой NFT */
 
       const fetchNftTransactions = async () => {
-        const { nfts: oldNfts } = this.nftTransactions;
-
         const { list, count } = await nftsService.getTransactionsList({
           chainSlug: this.chainSlug,
           address: this.address,
@@ -643,6 +641,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
+        const { nfts: oldNfts } = this.nftTransactions;
         const uniqueList: TNftTransaction[] = [];
 
         list.forEach((item) => {
@@ -725,8 +724,6 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка транзакций, возвращает флаг наличия целевой транзакции */
 
       const fetchTransactions = async () => {
-        const { transactions: oldTransactions } = this.transactions;
-
         const { transactions, count } = await transactionsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
@@ -736,6 +733,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
+        const { transactions: oldTransactions } = this.transactions;
         const uniqueList: ITransaction[] = [];
 
         transactions
@@ -812,8 +810,6 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка NFT, возвращает флаг наличия целевой транзакции */
 
       const fetchOwnNfts = async () => {
-        const { nfts: oldNfts } = this.ownNfts;
-
         const { list, count } = await nftsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
@@ -823,6 +819,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
+        const { nfts: oldNfts } = this.ownNfts;
         const uniqueList: INft[] = [];
 
         list.forEach((item) => {
