@@ -9,10 +9,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component } from 'nuxt-property-decorator';
+import { Component, Watch } from 'nuxt-property-decorator';
 import Recommendations from './right/Recommendations.vue';
 import NewUsers from './right/NewUsers.vue';
 import { marketSidebarInit } from '~/utils/marketSidebar';
+import { stickyModule } from '~/store';
 
 @Component({
   components: {
@@ -22,6 +23,20 @@ import { marketSidebarInit } from '~/utils/marketSidebar';
 })
 export default class HomeRight extends Vue {
   stickySidebar: any = null;
+
+  get refresh() {
+    return stickyModule.rightRefresh;
+  }
+
+  @Watch('refresh')
+  onRefreshChange(refresh: boolean) {
+    if (!refresh) {
+      return;
+    }
+
+    this.refreshSticky();
+    stickyModule.cleanRight();
+  }
 
   mounted() {
     setTimeout(() => {
