@@ -31,9 +31,26 @@
             class="profile-content"
             :class="{ 'profile-content_no-border': !hasComments }"
           >
-            <ModalVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
-            <ModalAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-            <ModalImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+            <div class="profile-content__media">
+              <ModalVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
+              <ModalAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
+              <ModalImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+              <div v-else class="profile-content__image">
+                <div class="profile-content__image-empty">No NFT Content</div>
+              </div>
+
+              <NftAccessControl
+                :loading="decryptLoading"
+                :is-encrypted="isEncrypted"
+                :access-duration="accessDuration"
+                :access-price="accessPrice"
+                :access-type="accessType"
+                :is-transparent="true"
+                @check-access="$emit('check-access')"
+                @decrypt="$emit('decrypt')"
+                @unlock="$emit('unlock')"
+              />
+            </div>
 
             <ModalText :nft="nft" />
 
@@ -58,8 +75,9 @@ import ModalText from './ModalText.vue';
 import ModalImage from './ModalImage.vue';
 import ModalVideo from './ModalVideo.vue';
 import ModalAudio from './ModalAudio.vue';
+import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
-import { ETypeNft, INft } from '~/types';
+import { ENftTransactionAccessType, ETypeNft, INft } from '~/types';
 
 type TNft = INft;
 
@@ -74,6 +92,7 @@ type TNft = INft;
     ModalTopDropdown,
     ModalTopUser,
     ModalCommentList,
+    NftAccessControl,
   },
 })
 export default class Modal extends Vue {
@@ -81,6 +100,25 @@ export default class Modal extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNft;
+
+  @Prop({ required: true })
+  readonly decryptLoading!: boolean;
+
+  get isEncrypted(): boolean {
+    return this.nft.isEncrypted || false;
+  }
+
+  get accessType(): ENftTransactionAccessType {
+    return this.nft.accessType || ENftTransactionAccessType.has_access;
+  }
+
+  get accessPrice(): number {
+    return this.nft.accessPrice || 0;
+  }
+
+  get accessDuration(): number {
+    return this.nft.accessDuration || 0;
+  }
 
   $refs!: {
     modal: HTMLDivElement;

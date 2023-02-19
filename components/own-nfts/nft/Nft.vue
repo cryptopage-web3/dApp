@@ -38,7 +38,14 @@
 
     <NftCommentsModal ref="commentsModal" :nft="nft" />
 
-    <NftModal ref="nftModal" :nft="nft" />
+    <NftModal
+      ref="nftModal"
+      :nft="nft"
+      :decrypt-loading="decryptLoading"
+      @check-access="checkIfHaveAccessToSeePost"
+      @decrypt="decryptPostContent"
+      @unlock="showConfirmModal"
+    />
 
     <NftAccessConfirmModal
       ref="confirmBuyModal"
