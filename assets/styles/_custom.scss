@@ -81,6 +81,16 @@
   width: 100% !important;
 }
 
+.btn-white-transparent_custom {
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+  background-color: transparent;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
 /* ===== popover ===== */
 
 .ui-popover {
@@ -563,7 +573,9 @@
   text-align: center;
 
   p {
-    mix-blend-mode: difference;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 19px;
   }
 }
 
@@ -614,6 +626,10 @@
     width: 60px;
     height: 60px;
   }
+}
+
+.confirm-buy-access-modal {
+  background-color: rgba(0, 0, 0, .5) !important;
 }
 
 @media (max-width: 767px) {

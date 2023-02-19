@@ -7,6 +7,7 @@
       <a
         href="#"
         class="btn btn_large btn_default btn-blue"
+        :class="{ 'btn-white-transparent_custom': isTransparent }"
         @click.prevent="$emit('check-access')"
       >
         Check access
@@ -17,6 +18,7 @@
       <a
         href="#"
         class="btn btn_large btn_default btn-blue"
+        :class="{ 'btn-white-transparent_custom': isTransparent }"
         @click.prevent="$emit('decrypt')"
       >
         Decrypt content
@@ -30,6 +32,7 @@
       <a
         href="#"
         class="btn btn_large btn_default btn-blue"
+        :class="{ 'btn-white-transparent_custom': isTransparent }"
         @click.prevent="$emit('unlock')"
       >
         Unlock post for {{ accessPrice / 10 ** 18 }} PAGE
@@ -73,5 +76,8 @@ export default class NftAccessControl extends Vue {
 
   @Prop({ required: true })
   readonly accessDuration!: number;
+
+  @Prop({ type: Boolean, default: false })
+  readonly isTransparent!: false;
 }
 </script>

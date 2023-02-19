@@ -31,9 +31,26 @@
             class="profile-content"
             :class="{ 'profile-content_no-border': !hasComments }"
           >
-            <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
-            <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-            <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+            <div class="profile-content__media">
+              <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
+              <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
+              <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+              <div v-else class="profile-content__image">
+                <div class="profile-content__image-empty">No NFT Content</div>
+              </div>
+
+              <NftAccessControl
+                :loading="decryptLoading"
+                :is-encrypted="nft.isEncrypted"
+                :access-duration="nft.accessDuration"
+                :access-price="nft.accessPrice"
+                :access-type="nft.accessType"
+                :is-transparent="true"
+                @check-access="$emit('check-access')"
+                @decrypt="$emit('decrypt')"
+                @unlock="$emit('unlock')"
+              />
+            </div>
 
             <NftText :nft="nft" />
 
@@ -57,6 +74,7 @@ import NftText from '~/components/address/nft/NftText.vue';
 import NftImage from '~/components/address/nft/NftImage.vue';
 import NftVideo from '~/components/address/nft/NftVideo.vue';
 import NftAudio from '~/components/address/nft/NftAudio.vue';
+import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import NftModalTopUser from '~/components/address/nft/NftModalTopUser.vue';
 import NftModalTopDropdown from '~/components/address/nft/NftModalTopDropdown.vue';
 import NftModalCommentList from '~/components/address/nft/NftModalCommentList.vue';
@@ -74,6 +92,7 @@ type TNftTransaction = INftTransaction;
     NftModalTopDropdown,
     NftModalTopUser,
     NftModalCommentList,
+    NftAccessControl,
   },
 })
 export default class NftModal extends Vue {
@@ -81,6 +100,9 @@ export default class NftModal extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
+
+  @Prop({ required: true })
+  readonly decryptLoading!: boolean;
 
   $refs!: {
     modal: HTMLDivElement;
