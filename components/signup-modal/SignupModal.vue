@@ -101,9 +101,10 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 0 }"
                     >
-                      <strong class="fw-600 mb_5"
-                        >You’ve connected an {{ authChainName }} address</strong
-                      ><br />
+                      <strong class="fw-600 mb_5">
+                        You’ve connected an {{ authChainName }} address
+                      </strong>
+                      <br />
                       <span class="break-all">{{ authAddress }}</span>
                     </div>
                   </div>
@@ -124,9 +125,10 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 1 }"
                     >
-                      <strong class="fw-600 mb_5"
-                        >Verify that you own this address</strong
-                      ><br />
+                      <strong class="fw-600 mb_5">
+                        Verify that you own this address
+                      </strong>
+                      <br />
                       You’ll be able to sign in to Crypto.Page using this
                       address.
                     </div>
@@ -190,10 +192,26 @@
       </div>
     </div>
 
-    <ConfirmModal
-      ref="confirmModal"
+    <ConfirmVerifyModal
+      ref="confirmVerifyModal"
       @cancel="handleCancelVerify"
       @accept="handleAcceptVerify"
+    />
+
+    <ConfirmSignModal
+      ref="confirmSignModal"
+      @cancel="handleCancelSign"
+      @accept="handleAcceptSign"
+    />
+
+    <iframe
+      ref="signIframe"
+      allowtransparency
+      frameborder="0"
+      width="0"
+      height="0"
+      class="onboarding-sign-iframe"
+      sandbox="allow-same-origin || allow-top-navigation || allow-forms || allow-scripts"
     />
   </div>
 </template>
@@ -201,7 +219,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
-import ConfirmModal from './ConfirmModal.vue';
+import ConfirmVerifyModal from './ConfirmVerifyModal.vue';
+import ConfirmSignModal from './ConfirmSignModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
 import { ESignupStep } from '~/types';
@@ -210,19 +229,26 @@ import { MESSENGER_SIGNUP_URL } from '~/constants';
 @Component({
   components: {
     SignupModalCloseIcon,
-    ConfirmModal,
+    ConfirmVerifyModal,
+    ConfirmSignModal,
   },
 })
 export default class SignupModal extends Vue {
   loading = true;
   ESignupStep = ESignupStep;
   step: ESignupStep = ESignupStep.connect;
+
   cancelVerify: any = null;
   acceptVerify: any = null;
 
+  cancelSign: any = null;
+  acceptSign: any = null;
+
   $refs!: {
     modal: HTMLDivElement;
-    confirmModal: ConfirmModal;
+    signIframe: HTMLIFrameElement;
+    confirmVerifyModal: ConfirmVerifyModal;
+    confirmSignModal: ConfirmSignModal;
   };
 
   get authAddress(): string {
@@ -355,7 +381,7 @@ export default class SignupModal extends Vue {
         this.acceptVerify = resolve;
         this.cancelVerify = reject;
 
-        this.$refs.confirmModal.show();
+        this.$refs.confirmVerifyModal.show();
       });
 
       /** проверяем верификацию */
@@ -373,30 +399,32 @@ export default class SignupModal extends Vue {
   }
 
   async startSignMessage() {
-    this.loading = true;
+    try {
+      this.loading = true;
 
-    /** добавляем задержку, чтобы сообщение успело отобразиться */
+      /** подтверждение старта подписи в мессенджере */
 
-    this.$notify({
-      type: 'info',
-      title: 'Please check access to the messenger via opened page',
-    });
+      await new Promise<void>((resolve, reject) => {
+        this.acceptSign = resolve;
+        this.cancelSign = reject;
 
-    await new Promise((resolve) => {
-      setTimeout(resolve, 2000);
-    });
+        this.$refs.confirmSignModal.show();
+      });
 
-    /** открываем мессенджер */
+      /** показываем или перезапускаем iframe */
 
-    window.open(MESSENGER_SIGNUP_URL, '_blank');
+      this.$refs.signIframe.src = MESSENGER_SIGNUP_URL;
 
-    /** ожидаем ответ от мессенджера */
+      /** ожидаем ответ от мессенджера */
 
-    const channel = new BroadcastChannel('peer:onboarding');
+      const channel = new BroadcastChannel('peer:onboarding');
 
-    channel.addEventListener('message', ({ data }) => {
-      console.log(data);
-    });
+      channel.addEventListener('message', ({ data }) => {
+        console.log('peer:onboarding message', data);
+      });
+    } catch {
+      this.loading = false;
+    }
   }
 
   startConsent() {
@@ -409,6 +437,14 @@ export default class SignupModal extends Vue {
 
   handleAcceptVerify() {
     this.acceptVerify && this.acceptVerify();
+  }
+
+  handleCancelSign() {
+    this.cancelSign && this.cancelSign();
+  }
+
+  handleAcceptSign() {
+    this.acceptSign && this.acceptSign();
   }
 }
 </script>

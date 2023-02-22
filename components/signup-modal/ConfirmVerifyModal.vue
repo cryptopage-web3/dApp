@@ -57,7 +57,7 @@ import Vue from 'vue';
 import { Component, Emit } from 'nuxt-property-decorator';
 
 @Component({})
-export default class ConfirmModal extends Vue {
+export default class ConfirmVerifyModal extends Vue {
   $refs!: {
     modal: HTMLDivElement;
   };
