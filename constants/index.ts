@@ -41,7 +41,7 @@ export const FRACTAL_URL = 'https://credentials.fractal.id';
 export const FRACTAL_VERIFICATION_URL = `https://app.fractal.id/authorize?client_id=${FRACTAL_CLIENT_ID}&redirect_uri=https%3A%2F%2Fapp.crypto.page%2F&response_type=code&scope=contact%3Aread%20verification.basic%3Aread%20verification.basic.details%3Aread%20verification.liveness%3Aread%20verification.liveness.details%3Aread%20verification.wallet-eth%3Aread%20verification.wallet-eth.details%3Aread`;
 
 /** messenger */
-export const MESSENGER_URL = 'https://app.crypto.page/messenger';
+export const MESSENGER_URL = 'https://app.crypto.page/messenger/';
 export const MESSENGER_SIGNUP_URL = `${MESSENGER_URL}?onboarding=true`;
 export const MESSENGER_CHAT_LIST_SIDEBAR_URL = `${MESSENGER_URL}/ChatListSidebar`;
 
