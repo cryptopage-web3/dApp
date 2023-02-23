@@ -2,7 +2,7 @@
   <input
     type="text"
     :value="title"
-    :placeholder="isOwner ? 'What\'s new with you?' : 'ENTER YOUR MESSAGE'"
+    placeholder="ENTER YOUR MESSAGE"
     class="form-creat__name form-creat-input-js form-creat-focus-js"
     @input="updateTitle"
     @focus="$emit('focus')"
