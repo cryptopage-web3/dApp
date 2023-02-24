@@ -223,7 +223,11 @@ import ConfirmVerifyModal from './ConfirmVerifyModal.vue';
 import ConfirmSignModal from './ConfirmSignModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
-import { ESignupStep } from '~/types';
+import {
+  EMessengerOnboardingStatus,
+  ESignupStep,
+  IMessengerOnboardingBroadcast,
+} from '~/types';
 import { MESSENGER_SIGNUP_URL } from '~/constants';
 
 @Component({
@@ -417,12 +421,38 @@ export default class SignupModal extends Vue {
 
       /** ожидаем ответ от мессенджера */
 
-      const channel = new BroadcastChannel('peer:onboarding');
+      await new Promise<void>((resolve, reject) => {
+        const channel = new BroadcastChannel('peer:onboarding');
 
-      channel.addEventListener('message', ({ data }) => {
-        console.log('peer:onboarding message', data);
+        channel.addEventListener(
+          'message',
+          ({ data }: IMessengerOnboardingBroadcast) => {
+            if (data.status === EMessengerOnboardingStatus.error) {
+              reject(new Error(data.message));
+              return;
+            }
+
+            resolve();
+          },
+          { once: true },
+        );
+
+        setTimeout(() => {
+          reject(new Error('Request timed out'));
+        }, 20000);
       });
-    } catch {
+
+      this.loading = false;
+    } catch (e: unknown) {
+      const error = e as Error | undefined;
+
+      if (error?.message) {
+        this.$notify({
+          type: 'error',
+          title: error.message,
+        });
+      }
+
       this.loading = false;
     }
   }
