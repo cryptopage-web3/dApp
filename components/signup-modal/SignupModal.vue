@@ -224,7 +224,7 @@ import ConfirmSignModal from './ConfirmSignModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
 import {
-  EMessengerOnboardingStatus,
+  EMessengerStatus,
   ESignupStep,
   IMessengerOnboardingBroadcast,
 } from '~/types';
@@ -427,7 +427,7 @@ export default class SignupModal extends Vue {
         channel.addEventListener(
           'message',
           ({ data }: IMessengerOnboardingBroadcast) => {
-            if (data.status === EMessengerOnboardingStatus.error) {
+            if (data.status === EMessengerStatus.error) {
               reject(new Error(data.message));
               return;
             }
@@ -441,6 +441,8 @@ export default class SignupModal extends Vue {
           reject(new Error('Request timed out'));
         }, 20000);
       });
+
+      /** успех sign message */
 
       this.loading = false;
     } catch (e: unknown) {

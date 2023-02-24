@@ -1,11 +1,11 @@
-export enum EMessengerOnboardingStatus {
+export enum EMessengerStatus {
   error = 'error',
   success = 'success',
 }
 
 export interface IMessengerOnboardingBroadcast {
   data: {
-    status: EMessengerOnboardingStatus;
+    status: EMessengerStatus;
     message: string;
   };
 }

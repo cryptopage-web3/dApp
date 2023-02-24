@@ -17,6 +17,7 @@ import {
   IVerifiedStatus,
   ISaveVerifiedStatusParams,
   EVerifiedStatus,
+  EMessengerStatus,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -31,6 +32,7 @@ type TConnectToProviderParams = IConnectToProviderParams;
 type TConnectChangeParams = IConnectChangeParams;
 type TVerifiedStatus = IVerifiedStatus;
 type TSaveVerifiedStatusParams = ISaveVerifiedStatusParams;
+type TMessengerStatus = EMessengerStatus | null;
 
 const authService = new AuthService();
 const tokensService = new TokensService();
@@ -61,6 +63,8 @@ export default class AuthModule extends VuexModule {
     status: EVerifiedStatus.unverified,
     isChecked: false,
   };
+
+  messengerStatus: TMessengerStatus = null;
 
   tokens: IToken[] = [];
 
@@ -157,6 +161,11 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
+  public setMessengerStatus(status: TMessengerStatus) {
+    this.messengerStatus = status;
+  }
+
+  @Mutation
   public setShowSignupModal(show: boolean) {
     this.showSignupModal = show;
   }
@@ -218,11 +227,16 @@ export default class AuthModule extends VuexModule {
 
       const verifiedStatus = await this.getVerifiedStatus(connectData.address);
 
+      /** получаем данные messengerStatus */
+
+      const messengerStatus = await this.getMessengerStatus();
+
       authProvider = connectData.provider;
       connectData.provider = null;
 
       this.setConnect(connectData);
       this.setVerifiedStatus(verifiedStatus);
+      this.setMessengerStatus(messengerStatus);
       this.setAuth(true);
       this.setInitLoading(false);
     } catch {
@@ -335,10 +349,15 @@ export default class AuthModule extends VuexModule {
 
     const verifiedStatus = await this.getVerifiedStatus(connectData.address);
 
+    /** получаем данные messengerStatus */
+
+    const messengerStatus = await this.getMessengerStatus();
+
     authProvider = connectData.provider;
     connectData.provider = null;
 
     this.setVerifiedStatus(verifiedStatus);
+    this.setMessengerStatus(messengerStatus);
     this.setConnect(connectData);
     this.setAuth(true);
 
@@ -404,7 +423,12 @@ export default class AuthModule extends VuexModule {
 
     const verifiedStatus = await this.getVerifiedStatus(connectData.address);
 
+    /** получаем данные messengerStatus */
+
+    const messengerStatus = await this.getMessengerStatus();
+
     this.setVerifiedStatus(verifiedStatus);
+    this.setMessengerStatus(messengerStatus);
     this.setConnect(connectData);
     this.cleanData();
 
@@ -473,6 +497,14 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
+  public updateMessengerStatus(status: TMessengerStatus) {
+    this.setMessengerStatus(status);
+    this.saveMessengerStatus(status);
+
+    return true;
+  }
+
+  @Action
   public getVerifiedStatus(address: string): TVerifiedStatus {
     const str = window.localStorage.getItem('verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
@@ -489,6 +521,13 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
+  public getMessengerStatus(): TMessengerStatus {
+    const str = window.localStorage.getItem('cp-messenger-status');
+
+    return str as TMessengerStatus;
+  }
+
+  @Action
   public saveVerifiedStatus({ address, status }: TSaveVerifiedStatusParams) {
     const str = window.localStorage.getItem('verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
@@ -501,6 +540,16 @@ export default class AuthModule extends VuexModule {
       'verified-status',
       JSON.stringify(verifiedStatus),
     );
+  }
+
+  @Action
+  public saveMessengerStatus(status: TMessengerStatus) {
+    if (!status) {
+      window.localStorage.removeItem('cp-messenger-status');
+      return;
+    }
+
+    window.localStorage.setItem('cp-messenger-status', status);
   }
 
   @Action
@@ -522,6 +571,7 @@ export default class AuthModule extends VuexModule {
       status: EVerifiedStatus.unverified,
       isChecked: false,
     });
+    this.setMessengerStatus(null);
     this.setAuth(false);
     this.cleanData();
   }
