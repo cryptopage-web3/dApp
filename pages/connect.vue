@@ -101,7 +101,7 @@
                         alt=""
                       />
                     </div>
-                    <span> MetaX Wallet </span>
+                    <span> OKX Wallet </span>
                   </a>
                 </li>
               </ul>
@@ -213,7 +213,7 @@
                         alt=""
                       />
                     </div>
-                    <span> MetaX Wallet </span>
+                    <span> OKX Wallet </span>
                   </a>
                 </li>
               </ul>
@@ -311,7 +311,7 @@
                         alt=""
                       />
                     </div>
-                    <span> MetaX Wallet </span>
+                    <span> OKX Wallet </span>
                   </a>
                 </li>
               </ul>

@@ -9,7 +9,7 @@ import {
 const providerTitleMap = new Map<EProvider, string>([
   [EProvider.metamask, 'MetaMask Ext.'],
   [EProvider.bscWallet, 'Binance Wallet Ext.'],
-  [EProvider.okex, 'MetaX Ext.'],
+  [EProvider.okex, 'OKX Ext.'],
   [EProvider.phantom, 'Phantom Ext.'],
   [EProvider.tron, 'TronLink Ext.'],
   [EProvider.walletConnect, 'WalletConnect'],
