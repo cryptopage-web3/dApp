@@ -267,6 +267,10 @@ export default class SignupModal extends Vue {
     return authModule.verifiedStatus;
   }
 
+  get messengerStatus() {
+    return authModule.messengerStatus;
+  }
+
   get stepIndex() {
     return this.getStepIndex(this.step);
   }
@@ -314,7 +318,11 @@ export default class SignupModal extends Vue {
       return ESignupStep.verify;
     }
 
-    return ESignupStep.signMessage;
+    if (this.messengerStatus !== EMessengerStatus.success) {
+      return ESignupStep.signMessage;
+    }
+
+    return ESignupStep.consent;
   }
 
   getStepIndex(step: ESignupStep) {
@@ -444,7 +452,11 @@ export default class SignupModal extends Vue {
 
       /** успех sign message */
 
+      await authModule.updateMessengerStatus(EMessengerStatus.success);
+
       this.loading = false;
+
+      this.startStep();
     } catch (e: unknown) {
       const error = e as Error | undefined;
 
@@ -453,6 +465,10 @@ export default class SignupModal extends Vue {
           type: 'error',
           title: error.message,
         });
+      }
+
+      if (error) {
+        await authModule.updateMessengerStatus(EMessengerStatus.error);
       }
 
       this.loading = false;
