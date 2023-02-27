@@ -60,36 +60,23 @@
         </div>
       </div>
     </div>
-
-    <KycVerificationModal ref="kycModal" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
-import KycVerificationModal from './KycVerificationModal.vue';
 import { authModule } from '~/store';
-import { EVerifiedStatus } from '~/types';
-import { BUYPAGEMODAL_VERIFIED_URL } from '~/constants';
+import { BUYPAGE_QUIZ_URL } from '~/constants';
 
-@Component({
-  components: {
-    KycVerificationModal,
-  },
-})
+@Component({})
 export default class BuyPageModal extends Vue {
   $refs!: {
     modal: HTMLDivElement;
-    kycModal: KycVerificationModal;
   };
 
   get showModal(): boolean {
     return authModule.showBuyPageModal;
-  }
-
-  get isVerified() {
-    return authModule.verifiedStatus.status === EVerifiedStatus.verified;
   }
 
   @Watch('showModal')
@@ -119,12 +106,7 @@ export default class BuyPageModal extends Vue {
 
   buy() {
     this.hide();
-
-    if (this.isVerified) {
-      window.open(BUYPAGEMODAL_VERIFIED_URL, '_blank');
-    } else {
-      this.$refs.kycModal.show();
-    }
+    window.open(BUYPAGE_QUIZ_URL, '_blank');
   }
 }
 </script>
