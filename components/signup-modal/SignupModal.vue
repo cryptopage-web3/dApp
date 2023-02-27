@@ -236,6 +236,7 @@ import ConfirmConsentModal from './ConfirmConsentModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
 import {
+  EConsentStatus,
   EMessengerStatus,
   ESignupStep,
   IMessengerOnboardingBroadcast,
@@ -286,6 +287,10 @@ export default class SignupModal extends Vue {
 
   get messengerStatus() {
     return authModule.messengerStatus;
+  }
+
+  get consentStatus() {
+    return authModule.consentStatus;
   }
 
   get stepIndex() {
@@ -339,7 +344,11 @@ export default class SignupModal extends Vue {
       return ESignupStep.signMessage;
     }
 
-    return ESignupStep.consent;
+    if (this.consentStatus !== EConsentStatus.success) {
+      return ESignupStep.consent;
+    }
+
+    return ESignupStep.final;
   }
 
   getStepIndex(step: ESignupStep) {
@@ -348,6 +357,7 @@ export default class SignupModal extends Vue {
       [ESignupStep.verify]: 1,
       [ESignupStep.signMessage]: 2,
       [ESignupStep.consent]: 3,
+      [ESignupStep.final]: 4,
     };
 
     return steps[step];
@@ -507,7 +517,7 @@ export default class SignupModal extends Vue {
 
       /** успех Consent */
 
-      await authModule.updateMessengerStatus(EMessengerStatus.success);
+      await authModule.updateConsentStatus(EConsentStatus.success);
 
       this.loading = false;
 

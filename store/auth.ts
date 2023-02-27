@@ -18,6 +18,7 @@ import {
   ISaveVerifiedStatusParams,
   EVerifiedStatus,
   EMessengerStatus,
+  EConsentStatus,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -33,6 +34,7 @@ type TConnectChangeParams = IConnectChangeParams;
 type TVerifiedStatus = IVerifiedStatus;
 type TSaveVerifiedStatusParams = ISaveVerifiedStatusParams;
 type TMessengerStatus = EMessengerStatus | null;
+type TConsentStatus = EConsentStatus | null;
 
 const authService = new AuthService();
 const tokensService = new TokensService();
@@ -65,6 +67,8 @@ export default class AuthModule extends VuexModule {
   };
 
   messengerStatus: TMessengerStatus = null;
+
+  consentStatus: TConsentStatus = null;
 
   tokens: IToken[] = [];
 
@@ -166,6 +170,11 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
+  public setConsentStatus(status: TConsentStatus) {
+    this.consentStatus = status;
+  }
+
+  @Mutation
   public setShowSignupModal(show: boolean) {
     this.showSignupModal = show;
   }
@@ -231,12 +240,17 @@ export default class AuthModule extends VuexModule {
 
       const messengerStatus = await this.getMessengerStatus();
 
+      /** получаем данные consentStatus */
+
+      const consentStatus = await this.getConsentStatus();
+
       authProvider = connectData.provider;
       connectData.provider = null;
 
       this.setConnect(connectData);
       this.setVerifiedStatus(verifiedStatus);
       this.setMessengerStatus(messengerStatus);
+      this.setConsentStatus(consentStatus);
       this.setAuth(true);
       this.setInitLoading(false);
     } catch {
@@ -353,11 +367,16 @@ export default class AuthModule extends VuexModule {
 
     const messengerStatus = await this.getMessengerStatus();
 
+    /** получаем данные consentStatus */
+
+    const consentStatus = await this.getConsentStatus();
+
     authProvider = connectData.provider;
     connectData.provider = null;
 
     this.setVerifiedStatus(verifiedStatus);
     this.setMessengerStatus(messengerStatus);
+    this.setConsentStatus(consentStatus);
     this.setConnect(connectData);
     this.setAuth(true);
 
@@ -427,8 +446,13 @@ export default class AuthModule extends VuexModule {
 
     const messengerStatus = await this.getMessengerStatus();
 
+    /** получаем данные consentStatus */
+
+    const consentStatus = await this.getConsentStatus();
+
     this.setVerifiedStatus(verifiedStatus);
     this.setMessengerStatus(messengerStatus);
+    this.setConsentStatus(consentStatus);
     this.setConnect(connectData);
     this.cleanData();
 
@@ -505,6 +529,14 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
+  public updateConsentStatus(status: TConsentStatus) {
+    this.setConsentStatus(status);
+    this.saveConsentStatus(status);
+
+    return true;
+  }
+
+  @Action
   public getVerifiedStatus(address: string): TVerifiedStatus {
     const str = window.localStorage.getItem('verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
@@ -525,6 +557,13 @@ export default class AuthModule extends VuexModule {
     const str = window.localStorage.getItem('cp-messenger-status');
 
     return str as TMessengerStatus;
+  }
+
+  @Action
+  public getConsentStatus(): TConsentStatus {
+    const str = window.localStorage.getItem('cp-consent-status');
+
+    return str as TConsentStatus;
   }
 
   @Action
@@ -553,6 +592,16 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action
+  public saveConsentStatus(status: TConsentStatus) {
+    if (!status) {
+      window.localStorage.removeItem('cp-consent-status');
+      return;
+    }
+
+    window.localStorage.setItem('cp-consent-status', status);
+  }
+
+  @Action
   public async logout() {
     await authService.logout();
 
@@ -572,6 +621,7 @@ export default class AuthModule extends VuexModule {
       isChecked: false,
     });
     this.setMessengerStatus(null);
+    this.setConsentStatus(null);
     this.setAuth(false);
     this.cleanData();
   }
