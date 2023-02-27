@@ -40,3 +40,4 @@ export * from './IVerifiedStatus';
 export * from './IOwnNftDetailsParams';
 export * from './IOwnNftDetailsResponse';
 export * from './IMessengerOnboardingBroadcast';
+export * from './EConsentStatus';

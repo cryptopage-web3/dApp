@@ -181,7 +181,12 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 3 }"
                     >
-                      Consent to register your public profile on Crypto.Page
+                      Consent to register your public profile on Crypto.Page.
+                      <small class="global-text_12">
+                        <a href="#" @click.prevent="startStep">
+                          Resend request
+                        </a>
+                      </small>
                     </div>
                   </div>
                 </li>
@@ -204,6 +209,12 @@
       @accept="handleAcceptSign"
     />
 
+    <ConfirmConsentModal
+      ref="confirmConsentModal"
+      @cancel="handleCancelConsent"
+      @accept="handleAcceptConsent"
+    />
+
     <iframe
       ref="signIframe"
       allowtransparency
@@ -221,6 +232,7 @@ import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import ConfirmVerifyModal from './ConfirmVerifyModal.vue';
 import ConfirmSignModal from './ConfirmSignModal.vue';
+import ConfirmConsentModal from './ConfirmConsentModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
 import {
@@ -235,6 +247,7 @@ import { MESSENGER_SIGNUP_URL } from '~/constants';
     SignupModalCloseIcon,
     ConfirmVerifyModal,
     ConfirmSignModal,
+    ConfirmConsentModal,
   },
 })
 export default class SignupModal extends Vue {
@@ -248,11 +261,15 @@ export default class SignupModal extends Vue {
   cancelSign: any = null;
   acceptSign: any = null;
 
+  cancelConsent: any = null;
+  acceptConsent: any = null;
+
   $refs!: {
     modal: HTMLDivElement;
     signIframe: HTMLIFrameElement;
     confirmVerifyModal: ConfirmVerifyModal;
     confirmSignModal: ConfirmSignModal;
+    confirmConsentModal: ConfirmConsentModal;
   };
 
   get authAddress(): string {
@@ -475,8 +492,29 @@ export default class SignupModal extends Vue {
     }
   }
 
-  startConsent() {
-    this.loading = true;
+  async startConsent() {
+    try {
+      this.loading = true;
+
+      /** подтверждение старта Consent */
+
+      await new Promise<void>((resolve, reject) => {
+        this.acceptConsent = resolve;
+        this.cancelConsent = reject;
+
+        this.$refs.confirmConsentModal.show();
+      });
+
+      /** успех Consent */
+
+      await authModule.updateMessengerStatus(EMessengerStatus.success);
+
+      this.loading = false;
+
+      this.startStep();
+    } catch {
+      this.loading = false;
+    }
   }
 
   handleCancelVerify() {
@@ -493,6 +531,14 @@ export default class SignupModal extends Vue {
 
   handleAcceptSign() {
     this.acceptSign && this.acceptSign();
+  }
+
+  handleCancelConsent() {
+    this.cancelConsent && this.cancelConsent();
+  }
+
+  handleAcceptConsent() {
+    this.acceptConsent && this.acceptConsent();
   }
 }
 </script>
