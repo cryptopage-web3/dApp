@@ -462,6 +462,7 @@ export default class SignupModal extends Vue {
         channel.addEventListener(
           'message',
           ({ data }: IMessengerOnboardingBroadcast) => {
+            console.log(data);
             if (data.status === EMessengerStatus.error) {
               reject(new Error(data.message));
               return;
