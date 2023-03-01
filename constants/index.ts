@@ -43,7 +43,7 @@ export const FRACTAL_VERIFICATION_URL = `https://app.fractal.id/authorize?client
 /** messenger */
 export const MESSENGER_URL = 'https://app.crypto.page/messenger/';
 export const MESSENGER_SIGNUP_URL = `${MESSENGER_URL}?onboarding=true`;
-export const MESSENGER_CHAT_LIST_SIDEBAR_URL = `${MESSENGER_URL}/ChatListSidebar`;
+export const MESSENGER_CHAT_LIST_SIDEBAR_URL = `${MESSENGER_URL}ChatListSidebar`;
 
 /** BuyPageModal: открытие вкладки для верифицированных аккаунтов */
 export const BUYPAGEMODAL_VERIFIED_URL = 'https://uniswap.org/';
