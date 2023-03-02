@@ -1,9 +1,9 @@
 <template>
   <div class="form-field mb_20">
-    <div class="form-field__title">Description</div>
+    <div class="form-field__title">Description (optional)</div>
     <textarea
       class="global-input global-input_textarea"
-      placeholder="Enter text"
+      placeholder="Text"
       :value="description"
       @input="updateDescription"
     />

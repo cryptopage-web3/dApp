@@ -1,11 +1,11 @@
 <template>
   <div class="form-field mb_20">
-    <div class="form-field__title">Name</div>
+    <div class="form-field__title">Message</div>
     <input
       type="text"
       :value="title"
       class="global-input global-input_large modal-creat-input-js"
-      placeholder="Enter name item"
+      placeholder="Create a single text message"
       @input="updateTitle"
     />
   </div>
