@@ -195,7 +195,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public async init() {
-    const auth = localStorage.getItem('auth');
+    const auth = localStorage.getItem('cp-auth');
 
     if (!auth) {
       setTimeout(() => {
@@ -233,7 +233,7 @@ export default class AuthModule extends VuexModule {
       /** сохраняем данные connect */
 
       window.localStorage.setItem(
-        'auth',
+        'cp-auth',
         JSON.stringify({
           address: connectData.address,
           chainId: connectData.chainId,
@@ -360,7 +360,7 @@ export default class AuthModule extends VuexModule {
     /** подключение прошло успешно */
 
     window.localStorage.setItem(
-      'auth',
+      'cp-auth',
       JSON.stringify({
         address: connectData.address,
         chainId: connectData.chainId,
@@ -445,7 +445,7 @@ export default class AuthModule extends VuexModule {
       providerSlug,
     };
 
-    window.localStorage.setItem('auth', JSON.stringify(connectData));
+    window.localStorage.setItem('cp-auth', JSON.stringify(connectData));
 
     /** получаем данные verifiedStatus */
 
@@ -547,7 +547,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public getVerifiedStatus(address: string): TVerifiedStatus {
-    const str = window.localStorage.getItem('verified-status');
+    const str = window.localStorage.getItem('cp-verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
       TVerifiedStatus
@@ -577,7 +577,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public saveVerifiedStatus({ address, status }: TSaveVerifiedStatusParams) {
-    const str = window.localStorage.getItem('verified-status');
+    const str = window.localStorage.getItem('cp-verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
       TVerifiedStatus
@@ -585,7 +585,7 @@ export default class AuthModule extends VuexModule {
     verifiedStatus[address] = status;
 
     window.localStorage.setItem(
-      'verified-status',
+      'cp-verified-status',
       JSON.stringify(verifiedStatus),
     );
   }
@@ -614,7 +614,7 @@ export default class AuthModule extends VuexModule {
   public async logout() {
     await authService.logout();
 
-    window.localStorage.removeItem('auth');
+    window.localStorage.removeItem('cp-auth');
 
     authProvider = null;
 

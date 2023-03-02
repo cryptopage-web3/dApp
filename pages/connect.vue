@@ -646,7 +646,7 @@ export default class ConnectPage extends Vue {
   }
 
   connectHint() {
-    const completed = localStorage.getItem('onboarding-connect-hint');
+    const completed = localStorage.getItem('cp-onboarding-connect-hint');
 
     if (completed) {
       return;
@@ -656,7 +656,7 @@ export default class ConnectPage extends Vue {
       title: 'Attention',
       content: 'Select a network and log in to continue onboarding',
       onClose: () => {
-        localStorage.setItem('onboarding-connect-hint', 'done');
+        localStorage.setItem('cp-onboarding-connect-hint', 'done');
       },
     });
   }
