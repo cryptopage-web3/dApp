@@ -136,7 +136,13 @@
                       Not seeing the wallet request? Please make sure to open
                       your wallet extension. If you’re still not seeing it, we
                       can resend it.
-                      <a href="#" @click.prevent="startStep">Resend request</a>
+                      <a
+                        v-if="stepIndex === 1"
+                        href="#"
+                        @click.prevent="startStep"
+                      >
+                        Resend request
+                      </a>
                     </div>
                   </div>
                 </li>
@@ -157,7 +163,7 @@
                       :class="{ main_black: stepIndex === 2 }"
                     >
                       Sign the message to get access to Crypto.Page sevices.
-                      <small class="global-text_12">
+                      <small v-if="stepIndex === 2" class="global-text_12">
                         <a href="#" @click.prevent="startStep">
                           Resend request
                         </a>
@@ -182,7 +188,7 @@
                       :class="{ main_black: stepIndex === 3 }"
                     >
                       Consent to register your public profile on Crypto.Page.
-                      <small class="global-text_12">
+                      <small v-if="stepIndex === 3" class="global-text_12">
                         <a href="#" @click.prevent="startStep">
                           Resend request
                         </a>
@@ -408,6 +414,10 @@ export default class SignupModal extends Vue {
     if (this.step === ESignupStep.consent) {
       this.startConsent();
     }
+
+    if (this.step === ESignupStep.final) {
+      this.startFinal();
+    }
   }
 
   async startVerify() {
@@ -525,6 +535,12 @@ export default class SignupModal extends Vue {
     } catch {
       this.loading = false;
     }
+  }
+
+  startFinal() {
+    setTimeout(() => {
+      this.hide();
+    }, 2000);
   }
 
   handleCancelVerify() {

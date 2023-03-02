@@ -61,6 +61,11 @@ export default class AccountLayout extends Vue {
     }
 
     this.$nextTick(() => {
+      if (authModule.isSignupCompleted) {
+        authModule.setShowBuyPageModal(true);
+        return;
+      }
+
       authModule.setShowSignupModal(true);
     });
   }

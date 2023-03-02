@@ -124,6 +124,15 @@ export default class AuthModule extends VuexModule {
     ).size;
   }
 
+  get isSignupCompleted(): boolean {
+    return (
+      this.isAuth &&
+      this.verifiedStatus.isChecked &&
+      this.messengerStatus === EMessengerStatus.success &&
+      this.consentStatus === EConsentStatus.success
+    );
+  }
+
   @Mutation
   public setAuth(isAuth: boolean) {
     this.isAuth = isAuth;
