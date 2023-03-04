@@ -547,7 +547,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public getVerifiedStatus(address: string): TVerifiedStatus {
-    const str = window.localStorage.getItem('cp-verified-status');
+    const str = window.localStorage.getItem('cp-signup-verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
       TVerifiedStatus
@@ -563,21 +563,21 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public getMessengerStatus(): TMessengerStatus {
-    const str = window.localStorage.getItem('cp-messenger-status');
+    const str = window.localStorage.getItem('cp-signup-messenger-status');
 
     return str as TMessengerStatus;
   }
 
   @Action
   public getConsentStatus(): TConsentStatus {
-    const str = window.localStorage.getItem('cp-consent-status');
+    const str = window.localStorage.getItem('cp-signup-consent-status');
 
     return str as TConsentStatus;
   }
 
   @Action
   public saveVerifiedStatus({ address, status }: TSaveVerifiedStatusParams) {
-    const str = window.localStorage.getItem('cp-verified-status');
+    const str = window.localStorage.getItem('cp-signup-verified-status');
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
       TVerifiedStatus
@@ -585,7 +585,7 @@ export default class AuthModule extends VuexModule {
     verifiedStatus[address] = status;
 
     window.localStorage.setItem(
-      'cp-verified-status',
+      'cp-signup-verified-status',
       JSON.stringify(verifiedStatus),
     );
   }
@@ -593,21 +593,21 @@ export default class AuthModule extends VuexModule {
   @Action
   public saveMessengerStatus(status: TMessengerStatus) {
     if (!status) {
-      window.localStorage.removeItem('cp-messenger-status');
+      window.localStorage.removeItem('cp-signup-messenger-status');
       return;
     }
 
-    window.localStorage.setItem('cp-messenger-status', status);
+    window.localStorage.setItem('cp-signup-messenger-status', status);
   }
 
   @Action
   public saveConsentStatus(status: TConsentStatus) {
     if (!status) {
-      window.localStorage.removeItem('cp-consent-status');
+      window.localStorage.removeItem('cp-signup-consent-status');
       return;
     }
 
-    window.localStorage.setItem('cp-consent-status', status);
+    window.localStorage.setItem('cp-signup-consent-status', status);
   }
 
   @Action
