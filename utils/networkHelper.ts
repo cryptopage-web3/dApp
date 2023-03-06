@@ -153,6 +153,13 @@ export const networkHelper = {
     [EMainChain.eth]: {
       chainId: '0x1',
     },
+    [EMainChain.goerli]: {
+      chainId: '0x5',
+      rpcUrls: ['https://goerli.infura.io/v3/'],
+      chainName: 'Goerli',
+      nativeCurrency: { name: 'GoerliETH', symbol: 'GoerliETH', decimals: 18 },
+      blockExplorerUrls: ['https://goerli.etherscan.io'],
+    },
     [EMainChain.tron]: {
       chainId: 'tron',
     },
