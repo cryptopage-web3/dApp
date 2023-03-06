@@ -50,6 +50,14 @@
           </a>
         </li>
         <li>
+          <a href="#" @click.prevent="switchChain(EMainChain.goerli)">
+            <div class="thumb">
+              <img src="@/assets/img/market-header__wallet_icon2.svg" alt="" />
+            </div>
+            <span> Goerli </span>
+          </a>
+        </li>
+        <li>
           <a href="#" @click.prevent="switchChain(EMainChain.bsc)">
             <div class="thumb">
               <img src="@/assets/img/market-header__wallet_icon3.svg" alt="" />
