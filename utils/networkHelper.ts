@@ -36,7 +36,7 @@ export const networkHelper = {
       symbol: 'ETH',
     },
     [EChainId.goerli]: {
-      network: EChainType.eth,
+      network: EChainType.goerli,
       name: 'Goerli TestNet',
       slug: EChainSlug.goerli,
       symbol: 'ETH',

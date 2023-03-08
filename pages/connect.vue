@@ -109,7 +109,7 @@
             >
               <div class="thumb">
                 <img
-                  src="@/assets/img/profile-login-accordion_img1.svg"
+                  src="@/assets/img-custom/profile-login-accordion_img9.png"
                   alt=""
                 />
               </div>

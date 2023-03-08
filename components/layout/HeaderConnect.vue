@@ -52,7 +52,10 @@
         <li>
           <a href="#" @click.prevent="switchChain(EMainChain.goerli)">
             <div class="thumb">
-              <img src="@/assets/img/market-header__wallet_icon2.svg" alt="" />
+              <img
+                src="@/assets/img-custom/profile-login-accordion_img9.png"
+                alt=""
+              />
             </div>
             <span> Goerli </span>
           </a>
@@ -185,6 +188,7 @@ export default class HeaderConnect extends Vue {
   get authChainIcon(): string {
     const icons: Record<string, string> = {
       eth: require('@/assets/img/market-header__wallet_icon1.svg'),
+      goerli: require('@/assets/img-custom/profile-login-accordion_img9.png'),
       bsc: require('@/assets/img/market-header__wallet_icon3.svg'),
       polygon: require('@/assets/img/market-header__wallet_icon4.svg'),
       tron: require('@/assets/img/market-header__wallet_icon5.svg'),
