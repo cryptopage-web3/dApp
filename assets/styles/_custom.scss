@@ -1073,6 +1073,18 @@
 
 /* ======== onboarding ======== */
 
+.onboarding-welcome__thumb-container {
+  position: relative;
+}
+
+.onboarding-welcome__thumb-title {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .onboarding-welcome-btns {
   position: relative;
 }
