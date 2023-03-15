@@ -16,34 +16,64 @@
       @click.prevent="showDisableNotify"
     />
 
-    <NftFormTitle :is-owner="isOwner" @focus="openForm" />
-    <NftFormDescription />
+    <NftFormTitle />
+    <div class="global-line mb_20"></div>
     <NftFormUpload ref="refUpload" />
+    <NftFormDescription />
     <NftFormUnlockable v-show="isOpen && isUnlockable" />
 
     <div class="form-creat-bottom">
       <div class="form-creat-nav">
-        <a
-          href="#"
-          class="form-creat-nav-item stroke"
-          @click.prevent="uploadFile('audio')"
-        >
-          <NftFormAudioIcon />
-        </a>
-        <a
-          href="#"
-          class="form-creat-nav-item all"
-          @click.prevent="uploadFile('image')"
-        >
-          <NftFormImageIcon />
-        </a>
-        <a
-          href="#"
-          class="form-creat-nav-item all"
-          @click.prevent="uploadFile('video')"
-        >
-          <NftFormVideoIcon />
-        </a>
+        <div class="form-creat-nav-files drop-down">
+          <a
+            data-toggle="collapse"
+            aria-expanded="false"
+            role="button"
+            href="#form-creat-nav-files"
+            class="form-creat-nav-item all"
+          >
+            <NftFormAttachIcon />
+          </a>
+          <div id="form-creat-nav-files" class="collapse drop-down__col">
+            <ul class="drop-down__list pt_5 pb_5">
+              <li>
+                <label
+                  class="form-creat-nav-item form-creat-nav-item__photo all"
+                  @click.prevent="uploadFile('image')"
+                >
+                  <NftFormImageIcon />
+                </label>
+              </li>
+              <li>
+                <label
+                  class="form-creat-nav-item form-creat-nav-item__video all"
+                  @click.prevent="uploadFile('video')"
+                >
+                  <NftFormVideoIcon />
+                </label>
+              </li>
+              <li>
+                <label
+                  class="form-creat-nav-item form-creat-nav-item__audio stroke"
+                  @click.prevent="uploadFile('audio')"
+                >
+                  <NftFormAudioIcon />
+                </label>
+              </li>
+              <li>
+                <a
+                  href="#form-creat-nav-text"
+                  role="button"
+                  data-toggle="collapse"
+                  aria-expanded="false"
+                  class="form-creat-nav-item form-creat-nav-item__text all"
+                >
+                  <NftFormTextIcon />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <a
           href="#"
           class="form-creat-nav-item form-creat-nav-item_moneta fill"
@@ -62,6 +92,9 @@
         >
           <NftFormSettingIcon />
         </a>
+        <button class="modal-creat-pc-send" :class="{ active: isValid }">
+          <img src="@/assets/img/message-send_img.svg" alt="" />
+        </button>
       </div>
       <div class="form-creat-btns">
         <a
@@ -74,7 +107,7 @@
         <div ref="sendBtn" class="d-inline-block">
           <a
             href="#"
-            class="btn btn_large btn_default form-creat__plus w_xl_100 w_sm_80 w_80"
+            class="btn btn_large btn_default form-creat__plus btn-blue w_xl_100 w_sm_80 w_80"
             :class="{ 'btn-blue': isValid, disabled: !isValid }"
             @click.prevent="createNft"
           >
@@ -115,6 +148,8 @@ import { addressModule, authModule, nftFormModule } from '~/store';
 import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
 import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
 import NftFormVideoIcon from '~/components/icon/nft-form/NftFormVideoIcon.vue';
+import NftFormTextIcon from '~/components/icon/nft-form/NftFormTextIcon.vue';
+import NftFormAttachIcon from '~/components/icon/nft-form/NftFormAttachIcon.vue';
 import NftFormSettingIcon from '~/components/icon/nft-form/NftFormSettingIcon.vue';
 import NftFormMonetaIcon from '~/components/icon/nft-form/NftFormMonetaIcon.vue';
 
@@ -123,6 +158,8 @@ import NftFormMonetaIcon from '~/components/icon/nft-form/NftFormMonetaIcon.vue'
     NftFormAudioIcon,
     NftFormImageIcon,
     NftFormVideoIcon,
+    NftFormTextIcon,
+    NftFormAttachIcon,
     NftFormSettingIcon,
     NftFormMonetaIcon,
     NftFormTitle,
@@ -190,8 +227,13 @@ export default class NftForm extends Vue {
     return nftFormModule.values.isUnlockableContent;
   }
 
+  get isNeedOpen(): boolean {
+    const { isUnlockableContent, description, file } = nftFormModule.values;
+
+    return Boolean(isUnlockableContent || description || file);
+  }
+
   toggleIsUnlockable() {
-    this.openForm();
     nftFormModule.setIsUnlockableContent(!this.isUnlockable);
   }
 
@@ -199,6 +241,13 @@ export default class NftForm extends Vue {
   onIsValidChanged(isValid: boolean) {
     if (process.client) {
       ($(this.$refs.sendBtn) as any).tooltip(isValid ? 'disable' : 'enable');
+    }
+  }
+
+  @Watch('isNeedOpen', { immediate: true })
+  onIsNeedOpenChanged(isNeedOpen: boolean) {
+    if (isNeedOpen) {
+      this.openForm();
     }
   }
 
@@ -245,7 +294,6 @@ export default class NftForm extends Vue {
   }
 
   uploadFile(type: string) {
-    this.openForm();
     this.$refs.refUpload.upload(type);
   }
 
@@ -296,7 +344,6 @@ export default class NftForm extends Vue {
   }
 
   showModal() {
-    this.openForm();
     nftFormModule.setShowModal(true);
   }
 }

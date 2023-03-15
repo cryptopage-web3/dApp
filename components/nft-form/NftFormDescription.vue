@@ -1,8 +1,10 @@
 <template>
-  <div class="form-creat-textarea-wrap">
-    <textarea
+  <div class="mt_15 collapse form-creat-nav-text">
+    <div class="global-text_14 light_grey">Post text (optional)</div>
+    <input
+      type="text"
       placeholder="Enter post text"
-      class="form-creat__text form-creat-input-js"
+      class="global-input global-input_large w-100 mt_4"
       :value="description"
       @input="updateDescription"
     />

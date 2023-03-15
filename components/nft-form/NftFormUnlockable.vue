@@ -2,9 +2,9 @@
   <div
     v-show="isUnlockable"
     id="form-creat-moneta"
-    class="form-creat-moneta voite-collapse mt_15 mb_15"
+    class="form-creat-moneta form-creat-moneta-pc voite-collapse"
   >
-    <div class="mb_10">
+    <div class="mb_10 mt_20">
       <div class="global-text_16 fw-700 main_black mb_5">
         NFT monetization settings
       </div>

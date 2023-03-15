@@ -86,7 +86,7 @@ export default class NftFormModule extends VuexModule {
   get isValid(): boolean {
     const { title, file } = this.values;
 
-    return Boolean(title && file);
+    return Boolean(title || file);
   }
 
   get hasSettings(): boolean {
@@ -290,26 +290,23 @@ export default class NftFormModule extends VuexModule {
 
     /** загружаем файл в IPFS */
 
-    if (!file) {
-      this.setLoading(false);
-      return;
-    }
+    if (file) {
+      try {
+        const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
+        const fileHash = await metadataService.uploadFileToIPFS(
+          file,
+          isUnlockableContent,
+        );
 
-    try {
-      const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
-      const fileHash = await metadataService.uploadFileToIPFS(
-        file,
-        isUnlockableContent,
-      );
+        nftParams[isMediaFile ? 'animation_url' : 'image'] =
+          fileHash && `https://ipfs.io/ipfs/${fileHash}`;
 
-      nftParams[isMediaFile ? 'animation_url' : 'image'] =
-        fileHash && `https://ipfs.io/ipfs/${fileHash}`;
-
-      alertModule.info('Got file hash from IPFS');
-    } catch {
-      alertModule.error('Failed to save file into IPFS');
-      this.setLoading(false);
-      return;
+        alertModule.info('Got file hash from IPFS');
+      } catch {
+        alertModule.error('Failed to save file into IPFS');
+        this.setLoading(false);
+        return;
+      }
     }
 
     /** загружаем NFT в IPFS */

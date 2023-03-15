@@ -35,7 +35,7 @@
       </a>
     </div>
 
-    <div class="voite-collapse-wrap">
+    <div class="voite-collapse-wrap mb_15">
       <div
         v-show="
           unlockableContentAccessType ===
@@ -44,7 +44,7 @@
         class="voite-collapse-cont"
         style="display: block"
       >
-        <div class="voite-collapse-body">
+        <div class="voite-collapse-body pt-0">
           <div class="global-text_12 mb_10">
             Enter the amount that the user will have to pay to view the content
           </div>
