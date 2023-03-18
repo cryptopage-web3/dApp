@@ -1,10 +1,6 @@
 <template>
   <div>
     <div class="form-creat-files" :class="{ active: file }">
-      <div v-if="isUnlockable" class="form-creat-coded-files w-100 mb_15">
-        <div class="global-text_16 fw-700 main_black mb_5">Paid content</div>
-        <div class="global-text_12">This content will be encoded</div>
-      </div>
       <div class="form-creat-files-item">
         <a
           href="#"
@@ -48,10 +44,6 @@ export default class NftFormUpload extends Vue {
   $refs!: {
     refFile: HTMLInputElement;
   };
-
-  get isUnlockable(): boolean {
-    return nftFormModule.values.isUnlockableContent;
-  }
 
   get file(): File | null {
     return nftFormModule.values.file;

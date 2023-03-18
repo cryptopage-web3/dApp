@@ -17,7 +17,13 @@
     />
 
     <NftFormTitle />
+
     <div class="global-line mb_20"></div>
+    <div v-if="isUnlockable" class="form-creat-coded-files w-100 mb_15 d-block">
+      <div class="global-text_16 fw-700 main_black mb_5">Paid content</div>
+      <div class="global-text_12">This content will be encoded</div>
+    </div>
+
     <NftFormUpload ref="refUpload" />
     <NftFormDescription />
     <NftFormUnlockable v-show="isOpen && isUnlockable" />
