@@ -92,9 +92,20 @@
         >
           <NftFormSettingIcon />
         </a>
-        <button class="modal-creat-pc-send" :class="{ active: isValid }">
-          <img src="@/assets/img/message-send_img.svg" alt="" />
-        </button>
+        <template v-if="isValid">
+          <div v-if="loadingForm" class="modal-creat-pc-send active">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+          <button
+            v-else
+            class="modal-creat-pc-send active"
+            @click.prevent="createNft"
+          >
+            <img src="@/assets/img/message-send_img.svg" alt="" />
+          </button>
+        </template>
       </div>
       <div class="form-creat-btns">
         <a
