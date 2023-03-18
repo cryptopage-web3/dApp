@@ -12,11 +12,18 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-body">
-          <img
-            src="@/assets/img-custom/onboarding-welcome_img2.jpg"
-            alt=""
-            class="onboarding-welcome__thumb"
-          />
+          <div class="onboarding-welcome__thumb-container">
+            <img
+              src="@/assets/img-custom/onboarding-welcome_img3.jpg"
+              alt=""
+              class="onboarding-welcome__thumb"
+            />
+            <img
+              src="@/assets/img-custom/onboarding-welcome_img-title.svg"
+              alt=""
+              class="onboarding-welcome__thumb-title"
+            />
+          </div>
           <div class="global-modal-body">
             <h3 class="global-zag mb_xl_20 mb_md_15 mb_10">
               Create an account using your<br />

@@ -25,21 +25,12 @@ export const validateNftForm = (
     chain,
   } = values;
 
-  // validate title
+  // validate title and file
 
-  if (!title) {
+  if (!title && !file) {
     return {
       status: false,
-      error: 'Title: empty field',
-    };
-  }
-
-  // validate file
-
-  if (!file) {
-    return {
-      status: false,
-      error: 'File: empty field',
+      error: 'Need to set title or file',
     };
   }
 

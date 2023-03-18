@@ -730,6 +730,18 @@
   display: block;
 }
 
+.form-creat-file__label_short {
+  .form-creat-file__cont {
+    flex-direction: row;
+  }
+
+  .form-creat-file__icon {
+    margin-bottom: 0;
+    margin-right: 10px;
+    width: 30px;
+  }
+}
+
 .form-creat-file__cont {
   position: absolute;
   top: 5px;
@@ -742,22 +754,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
-
-.form-creat-textarea-wrap {
-  display: none;
-}
-
-.input--filled .form-creat-textarea-wrap {
-  display: block;
-}
-
-.form-creat-files__upload {
-  display: none;
-}
-
-.input--filled .form-creat-files__upload {
-  display: block;
 }
 
 .form-creat-avatar {
@@ -873,6 +869,11 @@
 
 .unlockable-fields-container .global-input {
   width: 100%;
+}
+
+.modal-creat-pc-send .spinner-border {
+  width: 24px;
+  height: 24px;
 }
 
 /* ===== my nft ===== */
@@ -1072,6 +1073,18 @@
 }
 
 /* ======== onboarding ======== */
+
+.onboarding-welcome__thumb-container {
+  position: relative;
+}
+
+.onboarding-welcome__thumb-title {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .onboarding-welcome-btns {
   position: relative;

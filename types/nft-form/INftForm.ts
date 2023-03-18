@@ -22,6 +22,7 @@ export interface INftForm {
   unlockableContentPrice: number | null;
   unlockableContentAccessDuration: number | null;
   unlockableContentAccessDurationType: ENftFormUnlockableContentAccessDurationType | null;
+  unlockableContentDescription: string;
   isExplicit: boolean;
   attributes: IAttributes;
   supply: string;

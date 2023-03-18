@@ -33,6 +33,7 @@ const genUnlockableContentDisabledState = () => ({
   unlockableContentPrice: null,
   unlockableContentAccessDuration: null,
   unlockableContentAccessDurationType: null,
+  unlockableContentDescription: '',
 });
 
 const genUnlockableContentEnabledDefaultState = () => ({
@@ -42,6 +43,7 @@ const genUnlockableContentEnabledDefaultState = () => ({
   unlockableContentAccessDuration: 0,
   unlockableContentAccessDurationType:
     ENftFormUnlockableContentAccessDurationType.days,
+  unlockableContentDescription: '',
 });
 
 const genInitValues = (): TNftForm => ({
@@ -77,6 +79,8 @@ export default class NftFormModule extends VuexModule {
 
   showModal = false;
 
+  showDescription = false;
+
   forceOwner = false;
 
   showSuccessModal: TSuccessModal = {
@@ -86,7 +90,7 @@ export default class NftFormModule extends VuexModule {
   get isValid(): boolean {
     const { title, file } = this.values;
 
-    return Boolean(title && file);
+    return Boolean(title || file);
   }
 
   get hasSettings(): boolean {
@@ -121,6 +125,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setDescription(description: string) {
     this.values.description = description;
+
+    if (description) {
+      this.showDescription = true;
+    }
   }
 
   @Mutation
@@ -151,6 +159,11 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setForceOwner(force: boolean) {
     this.forceOwner = force;
+  }
+
+  @Mutation
+  public setShowDescription(show: boolean) {
+    this.showDescription = show;
   }
 
   @Mutation
@@ -191,6 +204,10 @@ export default class NftFormModule extends VuexModule {
     type: ENftFormUnlockableContentAccessDurationType,
   ) {
     this.values.unlockableContentAccessDurationType = type;
+  }
+
+  @Mutation setUnlockableContentDescription(description: string) {
+    this.values.unlockableContentDescription = description;
   }
 
   @Mutation
@@ -290,26 +307,23 @@ export default class NftFormModule extends VuexModule {
 
     /** загружаем файл в IPFS */
 
-    if (!file) {
-      this.setLoading(false);
-      return;
-    }
+    if (file) {
+      try {
+        const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
+        const fileHash = await metadataService.uploadFileToIPFS(
+          file,
+          isUnlockableContent,
+        );
 
-    try {
-      const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
-      const fileHash = await metadataService.uploadFileToIPFS(
-        file,
-        isUnlockableContent,
-      );
+        nftParams[isMediaFile ? 'animation_url' : 'image'] =
+          fileHash && `https://ipfs.io/ipfs/${fileHash}`;
 
-      nftParams[isMediaFile ? 'animation_url' : 'image'] =
-        fileHash && `https://ipfs.io/ipfs/${fileHash}`;
-
-      alertModule.info('Got file hash from IPFS');
-    } catch {
-      alertModule.error('Failed to save file into IPFS');
-      this.setLoading(false);
-      return;
+        alertModule.info('Got file hash from IPFS');
+      } catch {
+        alertModule.error('Failed to save file into IPFS');
+        this.setLoading(false);
+        return;
+      }
     }
 
     /** загружаем NFT в IPFS */
@@ -426,6 +440,7 @@ export default class NftFormModule extends VuexModule {
   @Action
   public clear() {
     this.setTxHash(null);
+    this.setShowDescription(false);
 
     this.setValues({
       ...genInitValues(),
