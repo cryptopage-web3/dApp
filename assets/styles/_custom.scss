@@ -730,6 +730,18 @@
   display: block;
 }
 
+.form-creat-file__label_short {
+  .form-creat-file__cont {
+    flex-direction: row;
+  }
+
+  .form-creat-file__icon {
+    margin-bottom: 0;
+    margin-right: 10px;
+    width: 30px;
+  }
+}
+
 .form-creat-file__cont {
   position: absolute;
   top: 5px;

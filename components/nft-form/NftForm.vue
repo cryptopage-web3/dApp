@@ -140,7 +140,12 @@
     </div>
 
     <!-- заглушка при D&D -->
-    <label class="form-creat-file__label">
+    <label
+      class="form-creat-file__label"
+      :class="{
+        'form-creat-file__label_short': !isOpen,
+      }"
+    >
       <div class="form-creat-file__cont">
         <img
           src="@/assets/img/form-creat-file_img.svg"
