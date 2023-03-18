@@ -77,6 +77,8 @@ export default class NftFormModule extends VuexModule {
 
   showModal = false;
 
+  showDescription = false;
+
   forceOwner = false;
 
   showSuccessModal: TSuccessModal = {
@@ -121,6 +123,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setDescription(description: string) {
     this.values.description = description;
+
+    if (description) {
+      this.showDescription = true;
+    }
   }
 
   @Mutation
@@ -151,6 +157,11 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setForceOwner(force: boolean) {
     this.forceOwner = force;
+  }
+
+  @Mutation
+  public setShowDescription(show: boolean) {
+    this.showDescription = show;
   }
 
   @Mutation
@@ -423,6 +434,7 @@ export default class NftFormModule extends VuexModule {
   @Action
   public clear() {
     this.setTxHash(null);
+    this.setShowDescription(false);
 
     this.setValues({
       ...genInitValues(),

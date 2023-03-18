@@ -62,11 +62,10 @@
               </li>
               <li>
                 <a
-                  href="#form-creat-nav-text"
-                  role="button"
-                  data-toggle="collapse"
-                  aria-expanded="false"
                   class="form-creat-nav-item form-creat-nav-item__text all"
+                  data-toggle="collapse"
+                  href="#form-creat-nav-files"
+                  @click.prevent="showDescription"
                 >
                   <NftFormTextIcon />
                 </a>
@@ -239,9 +238,14 @@ export default class NftForm extends Vue {
   }
 
   get isNeedOpen(): boolean {
-    const { isUnlockableContent, description, file } = nftFormModule.values;
+    const {
+      values: { isUnlockableContent, description, file },
+      showDescription,
+    } = nftFormModule;
 
-    return Boolean(isUnlockableContent || description || file);
+    return Boolean(
+      isUnlockableContent || description || file || showDescription,
+    );
   }
 
   toggleIsUnlockable() {
@@ -287,7 +291,7 @@ export default class NftForm extends Vue {
   mounted() {
     ($(this.$refs.sendBtn) as any).tooltip({
       trigger: 'hover',
-      title: 'Name and file are required',
+      title: 'Name or file are required',
     });
 
     ($(this.$refs.settingBtn) as any).tooltip({
@@ -356,6 +360,10 @@ export default class NftForm extends Vue {
 
   showModal() {
     nftFormModule.setShowModal(true);
+  }
+
+  showDescription() {
+    nftFormModule.setShowDescription(true);
   }
 }
 </script>

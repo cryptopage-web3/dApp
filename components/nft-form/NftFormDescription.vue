@@ -1,5 +1,5 @@
 <template>
-  <div class="mt_15 collapse form-creat-nav-text">
+  <div v-if="showDescription" class="mt_15 collapse form-creat-nav-text show">
     <div class="global-text_14 light_grey">Post text (optional)</div>
     <input
       type="text"
@@ -20,6 +20,10 @@ import { nftFormModule } from '~/store';
 export default class NftFormDescription extends Vue {
   get description(): string {
     return nftFormModule.values.description;
+  }
+
+  get showDescription(): boolean {
+    return nftFormModule.showDescription;
   }
 
   updateDescription(e: InputEvent) {
