@@ -33,6 +33,7 @@ const genUnlockableContentDisabledState = () => ({
   unlockableContentPrice: null,
   unlockableContentAccessDuration: null,
   unlockableContentAccessDurationType: null,
+  unlockableContentDescription: '',
 });
 
 const genUnlockableContentEnabledDefaultState = () => ({
@@ -42,6 +43,7 @@ const genUnlockableContentEnabledDefaultState = () => ({
   unlockableContentAccessDuration: 0,
   unlockableContentAccessDurationType:
     ENftFormUnlockableContentAccessDurationType.days,
+  unlockableContentDescription: '',
 });
 
 const genInitValues = (): TNftForm => ({
@@ -202,6 +204,10 @@ export default class NftFormModule extends VuexModule {
     type: ENftFormUnlockableContentAccessDurationType,
   ) {
     this.values.unlockableContentAccessDurationType = type;
+  }
+
+  @Mutation setUnlockableContentDescription(description: string) {
+    this.values.unlockableContentDescription = description;
   }
 
   @Mutation

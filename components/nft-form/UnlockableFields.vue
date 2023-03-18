@@ -95,7 +95,7 @@
         class="voite-collapse-cont"
         style="display: block"
       >
-        <div class="voite-collapse-body">
+        <div class="voite-collapse-body pt-0">
           <div class="global-text_12 mb_10">
             This post will be paid as part of the payment for the entire
             subscription
@@ -178,6 +178,26 @@
         </div>
       </div>
     </div>
+    <div>
+      <div class="global-text_14 light_grey">Public description</div>
+      <div class="mt_4 p-relative">
+        <input
+          type="text"
+          placeholder="Enter a description of the encrypted content"
+          class="global-input global-input_large w-100 pr_45"
+          :value="description"
+          @input="updateDescription"
+        />
+        <a
+          ref="publicDescription"
+          href="#"
+          class="global-info"
+          title="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente, nemo."
+        >
+          <img src="@/assets/img/global-status_icon4.svg" alt="" />
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -208,6 +228,7 @@ export default class UnlockableFields extends Vue {
     onetimePriceDropLink: HTMLDivElement;
     durationDropLink: HTMLDivElement;
     timePriceDropLink: HTMLDivElement;
+    publicDescription: HTMLAnchorElement;
   };
 
   get durationTypeLabel() {
@@ -224,6 +245,10 @@ export default class UnlockableFields extends Vue {
 
   get unlockableContentPrice() {
     return nftFormModule.values.unlockableContentPrice;
+  }
+
+  get description(): string {
+    return nftFormModule.values.unlockableContentDescription;
   }
 
   @Watch('priceLocal')
@@ -295,6 +320,12 @@ export default class UnlockableFields extends Vue {
       profileContentDropTarget(this.$refs.onetimePriceDropLink);
       profileContentDropTarget(this.$refs.durationDropLink);
       profileContentDropTarget(this.$refs.timePriceDropLink);
+
+      ($(this.$refs.publicDescription) as any).tooltip({
+        trigger: 'hover',
+        title:
+          'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente, nemo.',
+      });
     });
   }
 
@@ -312,6 +343,12 @@ export default class UnlockableFields extends Vue {
     /** закрываем дропдаун */
 
     hideProfileContentDropTarget(this.$refs.durationDropLink);
+  }
+
+  updateDescription(e: InputEvent) {
+    nftFormModule.setUnlockableContentDescription(
+      (e.target as HTMLTextAreaElement)?.value || '',
+    );
   }
 
   handlePriceBlur() {
