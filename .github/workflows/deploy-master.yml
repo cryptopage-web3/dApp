@@ -36,4 +36,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ vars.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: [ -s "/home/user/.nvm/nvm.sh" ] && \. "/home/user/.nvm/nvm.sh" && /bin/bash /tmp/deploy.sh > "$DEPLOY_LOG_FILE"
+        script: [ -s "/home/user/.nvm/nvm.sh" ] \&& \. "/home/user/.nvm/nvm.sh" && /bin/bash /tmp/deploy.sh > "$DEPLOY_LOG_FILE"
