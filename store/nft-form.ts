@@ -11,11 +11,10 @@ import {
   ISendNFTParams,
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
-import { IPFSService, Web3Service } from '~/services';
+import { IPFSService, MetadataService, Web3Service } from '~/services';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug } from '~/types';
-import { MetadataService } from '~/services/MetadataService';
 import { getSecDuration } from '~/utils/durationType';
 
 type TNftForm = INftForm;
@@ -34,6 +33,7 @@ const genUnlockableContentDisabledState = () => ({
   unlockableContentPrice: null,
   unlockableContentAccessDuration: null,
   unlockableContentAccessDurationType: null,
+  unlockableContentDescription: '',
 });
 
 const genUnlockableContentEnabledDefaultState = () => ({
@@ -43,6 +43,7 @@ const genUnlockableContentEnabledDefaultState = () => ({
   unlockableContentAccessDuration: 0,
   unlockableContentAccessDurationType:
     ENftFormUnlockableContentAccessDurationType.days,
+  unlockableContentDescription: '',
 });
 
 const genInitValues = (): TNftForm => ({
@@ -78,6 +79,10 @@ export default class NftFormModule extends VuexModule {
 
   showModal = false;
 
+  showDescription = false;
+
+  forceOwner = false;
+
   showSuccessModal: TSuccessModal = {
     status: false,
   };
@@ -85,7 +90,7 @@ export default class NftFormModule extends VuexModule {
   get isValid(): boolean {
     const { title, file } = this.values;
 
-    return Boolean(title && file);
+    return Boolean(title || file);
   }
 
   get hasSettings(): boolean {
@@ -120,6 +125,10 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setDescription(description: string) {
     this.values.description = description;
+
+    if (description) {
+      this.showDescription = true;
+    }
   }
 
   @Mutation
@@ -145,6 +154,16 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setShowSuccessModal(status: TSuccessModal) {
     this.showSuccessModal = status;
+  }
+
+  @Mutation
+  public setForceOwner(force: boolean) {
+    this.forceOwner = force;
+  }
+
+  @Mutation
+  public setShowDescription(show: boolean) {
+    this.showDescription = show;
   }
 
   @Mutation
@@ -185,6 +204,10 @@ export default class NftFormModule extends VuexModule {
     type: ENftFormUnlockableContentAccessDurationType,
   ) {
     this.values.unlockableContentAccessDurationType = type;
+  }
+
+  @Mutation setUnlockableContentDescription(description: string) {
+    this.values.unlockableContentDescription = description;
   }
 
   @Mutation
@@ -236,34 +259,17 @@ export default class NftFormModule extends VuexModule {
   public async submit() {
     /** проверяем валидность данных */
 
-    const validateSuccess = await this.validate();
+    const validateSuccess = await this.validateValues();
 
     if (!validateSuccess) {
       return;
     }
 
-    /** проверяем наличие авторизации */
+    /** проверяем валидность подключения */
 
-    if (!authModule.isAuth) {
-      alertModule.error('Need to connect a wallet to create NFTs');
-      return;
-    }
+    const connectSuccess = await this.validateConnect();
 
-    /** owner в NFT будет из addressModule */
-    /** проверяем что addressModule той же сети, что и authModule */
-
-    const isSameChain = authModule.chainSlug === addressModule.chainSlug;
-    const isOwner =
-      authModule.address.toLowerCase() === addressModule.address.toLowerCase();
-
-    if (!isSameChain) {
-      alertModule.error(`Active chain - ${authModule.chainName}<br>
-          You are trying ${
-            isOwner ? 'create' : 'send'
-          } nft to account with chain ${addressModule.chainName}<br>
-          Please connect to ${addressModule.chainName}
-        `);
-
+    if (!connectSuccess) {
       return;
     }
 
@@ -301,26 +307,23 @@ export default class NftFormModule extends VuexModule {
 
     /** загружаем файл в IPFS */
 
-    if (!file) {
-      this.setLoading(false);
-      return;
-    }
+    if (file) {
+      try {
+        const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
+        const fileHash = await metadataService.uploadFileToIPFS(
+          file,
+          isUnlockableContent,
+        );
 
-    try {
-      const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
-      const fileHash = await metadataService.uploadFileToIPFS(
-        file,
-        isUnlockableContent,
-      );
+        nftParams[isMediaFile ? 'animation_url' : 'image'] =
+          fileHash && `https://ipfs.io/ipfs/${fileHash}`;
 
-      nftParams[isMediaFile ? 'animation_url' : 'image'] =
-        fileHash && `https://ipfs.io/ipfs/${fileHash}`;
-
-      alertModule.info('Got file hash from IPFS');
-    } catch {
-      alertModule.error('Failed to save file into IPFS');
-      this.setLoading(false);
-      return;
+        alertModule.info('Got file hash from IPFS');
+      } catch {
+        alertModule.error('Failed to save file into IPFS');
+        this.setLoading(false);
+        return;
+      }
     }
 
     /** загружаем NFT в IPFS */
@@ -339,10 +342,14 @@ export default class NftFormModule extends VuexModule {
 
     /** передача NFT в контракт через web3 */
 
+    const ownerAddress = this.forceOwner
+      ? authModule.address
+      : addressModule.address;
+
     const sendNFTParams: ISendNFTParams = {
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
-      ownerAddress: addressModule.address,
+      ownerAddress,
       communityId: OPEN_FORUM_ID,
       ipfsHash: nftHash,
       isEncrypted: isUnlockableContent,
@@ -387,7 +394,39 @@ export default class NftFormModule extends VuexModule {
   }
 
   @Action
-  public validate(): boolean {
+  public validateConnect(): boolean {
+    /** проверяем наличие авторизации */
+
+    if (!authModule.isAuth) {
+      alertModule.error('Need to connect a wallet to create NFTs');
+      return false;
+    }
+
+    /** owner в NFT будет из addressModule */
+    /** проверяем что addressModule той же сети, что и authModule */
+
+    const isSameChain =
+      this.forceOwner || authModule.chainSlug === addressModule.chainSlug;
+    const isOwner =
+      this.forceOwner ||
+      authModule.address.toLowerCase() === addressModule.address.toLowerCase();
+
+    if (!isSameChain) {
+      alertModule.error(`Active chain - ${authModule.chainName}<br>
+          You are trying ${
+            isOwner ? 'create' : 'send'
+          } nft to account with chain ${addressModule.chainName}<br>
+          Please connect to ${addressModule.chainName}
+        `);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  @Action
+  public validateValues(): boolean {
     const status = validateNftForm(this.values, authModule.chainSlug);
 
     if (!status.status) {
@@ -401,6 +440,7 @@ export default class NftFormModule extends VuexModule {
   @Action
   public clear() {
     this.setTxHash(null);
+    this.setShowDescription(false);
 
     this.setValues({
       ...genInitValues(),

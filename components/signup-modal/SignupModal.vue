@@ -101,9 +101,10 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 0 }"
                     >
-                      <strong class="fw-600 mb_5"
-                        >You’ve connected an {{ authChainName }} address</strong
-                      ><br />
+                      <strong class="fw-600 mb_5">
+                        You’ve connected an {{ authChainName }} address
+                      </strong>
+                      <br />
                       <span class="break-all">{{ authAddress }}</span>
                     </div>
                   </div>
@@ -124,9 +125,10 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 1 }"
                     >
-                      <strong class="fw-600 mb_5"
-                        >Verify that you own this address</strong
-                      ><br />
+                      <strong class="fw-600 mb_5">
+                        Verify that you own this address
+                      </strong>
+                      <br />
                       You’ll be able to sign in to Crypto.Page using this
                       address.
                     </div>
@@ -134,7 +136,13 @@
                       Not seeing the wallet request? Please make sure to open
                       your wallet extension. If you’re still not seeing it, we
                       can resend it.
-                      <a href="#" @click.prevent="startStep">Resend request</a>
+                      <a
+                        v-if="stepIndex === 1"
+                        href="#"
+                        @click.prevent="startStep"
+                      >
+                        Resend request
+                      </a>
                     </div>
                   </div>
                 </li>
@@ -154,7 +162,12 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 2 }"
                     >
-                      Sign the message to get access to Crypto.Page sevices
+                      Sign the message to get access to Crypto.Page sevices.
+                      <small v-if="stepIndex === 2" class="global-text_12">
+                        <a href="#" @click.prevent="startStep">
+                          Resend request
+                        </a>
+                      </small>
                     </div>
                   </div>
                 </li>
@@ -174,7 +187,12 @@
                       class="global-text_14"
                       :class="{ main_black: stepIndex === 3 }"
                     >
-                      Consent to register your public profile on Crypto.Page
+                      Consent to register your public profile on Crypto.Page.
+                      <small v-if="stepIndex === 3" class="global-text_12">
+                        <a href="#" @click.prevent="startStep">
+                          Resend request
+                        </a>
+                      </small>
                     </div>
                   </div>
                 </li>
@@ -185,10 +203,32 @@
       </div>
     </div>
 
-    <ConfirmModal
-      ref="confirmModal"
+    <ConfirmVerifyModal
+      ref="confirmVerifyModal"
       @cancel="handleCancelVerify"
       @accept="handleAcceptVerify"
+    />
+
+    <ConfirmSignModal
+      ref="confirmSignModal"
+      @cancel="handleCancelSign"
+      @accept="handleAcceptSign"
+    />
+
+    <ConfirmConsentModal
+      ref="confirmConsentModal"
+      @cancel="handleCancelConsent"
+      @accept="handleAcceptConsent"
+    />
+
+    <iframe
+      ref="signIframe"
+      allowtransparency
+      frameborder="0"
+      width="0"
+      height="0"
+      class="onboarding-sign-iframe"
+      sandbox="allow-same-origin || allow-top-navigation || allow-forms || allow-scripts"
     />
   </div>
 </template>
@@ -196,27 +236,47 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
-import ConfirmModal from './ConfirmModal.vue';
+import ConfirmVerifyModal from './ConfirmVerifyModal.vue';
+import ConfirmSignModal from './ConfirmSignModal.vue';
+import ConfirmConsentModal from './ConfirmConsentModal.vue';
 import SignupModalCloseIcon from '~/components/icon/signup-modal/SignupModalCloseIcon.vue';
 import { authModule } from '~/store';
-import { ESignupStep } from '~/types';
+import {
+  EConsentStatus,
+  EMessengerStatus,
+  ESignupStep,
+  IMessengerOnboardingBroadcast,
+} from '~/types';
+import { MESSENGER_SIGNUP_URL } from '~/constants';
 
 @Component({
   components: {
     SignupModalCloseIcon,
-    ConfirmModal,
+    ConfirmVerifyModal,
+    ConfirmSignModal,
+    ConfirmConsentModal,
   },
 })
 export default class SignupModal extends Vue {
   loading = true;
   ESignupStep = ESignupStep;
   step: ESignupStep = ESignupStep.connect;
+
   cancelVerify: any = null;
   acceptVerify: any = null;
 
+  cancelSign: any = null;
+  acceptSign: any = null;
+
+  cancelConsent: any = null;
+  acceptConsent: any = null;
+
   $refs!: {
     modal: HTMLDivElement;
-    confirmModal: ConfirmModal;
+    signIframe: HTMLIFrameElement;
+    confirmVerifyModal: ConfirmVerifyModal;
+    confirmSignModal: ConfirmSignModal;
+    confirmConsentModal: ConfirmConsentModal;
   };
 
   get authAddress(): string {
@@ -229,6 +289,14 @@ export default class SignupModal extends Vue {
 
   get verifiedStatus() {
     return authModule.verifiedStatus;
+  }
+
+  get messengerStatus() {
+    return authModule.messengerStatus;
+  }
+
+  get consentStatus() {
+    return authModule.consentStatus;
   }
 
   get stepIndex() {
@@ -251,6 +319,9 @@ export default class SignupModal extends Vue {
   mounted() {
     ($(this.$refs.modal) as any).on('hide.bs.modal', function () {
       authModule.setShowSignupModal(false);
+
+      /** открываем модалку BuyPageModal при закрытии SignupModal */
+      authModule.setShowBuyPageModal(true);
     });
   }
 
@@ -275,7 +346,15 @@ export default class SignupModal extends Vue {
       return ESignupStep.verify;
     }
 
-    return ESignupStep.signMessage;
+    if (this.messengerStatus !== EMessengerStatus.success) {
+      return ESignupStep.signMessage;
+    }
+
+    if (this.consentStatus !== EConsentStatus.success) {
+      return ESignupStep.consent;
+    }
+
+    return ESignupStep.final;
   }
 
   getStepIndex(step: ESignupStep) {
@@ -284,6 +363,7 @@ export default class SignupModal extends Vue {
       [ESignupStep.verify]: 1,
       [ESignupStep.signMessage]: 2,
       [ESignupStep.consent]: 3,
+      [ESignupStep.final]: 4,
     };
 
     return steps[step];
@@ -334,6 +414,10 @@ export default class SignupModal extends Vue {
     if (this.step === ESignupStep.consent) {
       this.startConsent();
     }
+
+    if (this.step === ESignupStep.final) {
+      this.startFinal();
+    }
   }
 
   async startVerify() {
@@ -346,7 +430,7 @@ export default class SignupModal extends Vue {
         this.acceptVerify = resolve;
         this.cancelVerify = reject;
 
-        this.$refs.confirmModal.show();
+        this.$refs.confirmVerifyModal.show();
       });
 
       /** проверяем верификацию */
@@ -363,12 +447,100 @@ export default class SignupModal extends Vue {
     }
   }
 
-  startSignMessage() {
-    this.loading = true;
+  async startSignMessage() {
+    try {
+      this.loading = true;
+
+      /** подтверждение старта подписи в мессенджере */
+
+      await new Promise<void>((resolve, reject) => {
+        this.acceptSign = resolve;
+        this.cancelSign = reject;
+
+        this.$refs.confirmSignModal.show();
+      });
+
+      /** показываем или перезапускаем iframe */
+
+      this.$refs.signIframe.src = MESSENGER_SIGNUP_URL;
+
+      /** ожидаем ответ от мессенджера */
+
+      await new Promise<void>((resolve, reject) => {
+        const channel = new BroadcastChannel('peer:onboarding');
+
+        channel.addEventListener(
+          'message',
+          ({ data }: IMessengerOnboardingBroadcast) => {
+            if (data.status === EMessengerStatus.error) {
+              reject(new Error(data.message));
+              return;
+            }
+
+            resolve();
+          },
+          { once: true },
+        );
+
+        setTimeout(() => {
+          reject(new Error('Request timed out'));
+        }, 20000);
+      });
+
+      /** успех sign message */
+
+      await authModule.updateMessengerStatus(EMessengerStatus.success);
+
+      this.loading = false;
+
+      this.startStep();
+    } catch (e: unknown) {
+      const error = e as Error | undefined;
+
+      if (error?.message) {
+        this.$notify({
+          type: 'error',
+          title: error.message,
+        });
+      }
+
+      if (error) {
+        await authModule.updateMessengerStatus(EMessengerStatus.error);
+      }
+
+      this.loading = false;
+    }
   }
 
-  startConsent() {
-    this.loading = true;
+  async startConsent() {
+    try {
+      this.loading = true;
+
+      /** подтверждение старта Consent */
+
+      await new Promise<void>((resolve, reject) => {
+        this.acceptConsent = resolve;
+        this.cancelConsent = reject;
+
+        this.$refs.confirmConsentModal.show();
+      });
+
+      /** успех Consent */
+
+      await authModule.updateConsentStatus(EConsentStatus.success);
+
+      this.loading = false;
+
+      this.startStep();
+    } catch {
+      this.loading = false;
+    }
+  }
+
+  startFinal() {
+    setTimeout(() => {
+      this.hide();
+    }, 2000);
   }
 
   handleCancelVerify() {
@@ -377,6 +549,22 @@ export default class SignupModal extends Vue {
 
   handleAcceptVerify() {
     this.acceptVerify && this.acceptVerify();
+  }
+
+  handleCancelSign() {
+    this.cancelSign && this.cancelSign();
+  }
+
+  handleAcceptSign() {
+    this.acceptSign && this.acceptSign();
+  }
+
+  handleCancelConsent() {
+    this.cancelConsent && this.cancelConsent();
+  }
+
+  handleAcceptConsent() {
+    this.acceptConsent && this.acceptConsent();
   }
 }
 </script>

@@ -2,8 +2,8 @@
   <input
     type="text"
     :value="title"
-    :placeholder="isOwner ? 'What\'s new with you?' : 'Title of the sent nft'"
-    class="form-creat__name form-creat-input-js form-creat-focus-js"
+    placeholder="ENTER YOUR MESSAGE"
+    class="form-creat__name form-creat-input-pc"
     @input="updateTitle"
     @focus="$emit('focus')"
   />
@@ -11,14 +11,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Prop } from 'nuxt-property-decorator';
+import { Component } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 
 @Component({})
 export default class NftFormTitle extends Vue {
-  @Prop({ type: Boolean, default: false })
-  readonly isOwner!: boolean;
-
   get title(): string {
     return nftFormModule.values.title;
   }

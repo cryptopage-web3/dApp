@@ -43,7 +43,7 @@ export default class AccountRightSidebar extends Vue {
 
   mounted() {
     setTimeout(() => {
-      this.stickySidebar = marketSidebarInit();
+      this.refreshSticky();
     }, 100);
   }
 

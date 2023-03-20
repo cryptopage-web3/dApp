@@ -21,8 +21,13 @@ export default class StickyModule extends VuexModule {
 
   @Action
   public update() {
-    this.setLeftRefresh(true);
-    this.setRightRefresh(true);
+    this.setLeftRefresh(false);
+    this.setRightRefresh(false);
+
+    setTimeout(() => {
+      this.setLeftRefresh(true);
+      this.setRightRefresh(true);
+    });
   }
 
   @Action

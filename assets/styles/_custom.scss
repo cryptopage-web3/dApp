@@ -77,6 +77,20 @@
   }
 }
 
+.width_100 {
+  width: 100% !important;
+}
+
+.btn-white-transparent_custom {
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+  background-color: transparent;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+}
+
 /* ===== popover ===== */
 
 .ui-popover {
@@ -554,13 +568,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-
+  padding-left: 20px;
+  padding-right: 20px;
   text-align: center;
 
   p {
-    mix-blend-mode: difference;
+    color: #FFFFFF;
+    font-size: 14px;
+    line-height: 19px;
   }
+}
+
+.profile-content__media-encrypted-lock {
+  margin-bottom: 12px;
 }
 
 .profile-content__media-refresh {
@@ -589,6 +609,27 @@
   path {
     fill: #FFFFFF;
   }
+}
+
+.profile-content__media-loading {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .spinner-border {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+.confirm-buy-access-modal {
+  background-color: rgba(0, 0, 0, .5) !important;
 }
 
 @media (max-width: 767px) {
@@ -689,6 +730,18 @@
   display: block;
 }
 
+.form-creat-file__label_short {
+  .form-creat-file__cont {
+    flex-direction: row;
+  }
+
+  .form-creat-file__icon {
+    margin-bottom: 0;
+    margin-right: 10px;
+    width: 30px;
+  }
+}
+
 .form-creat-file__cont {
   position: absolute;
   top: 5px;
@@ -701,22 +754,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
-
-.form-creat-textarea-wrap {
-  display: none;
-}
-
-.input--filled .form-creat-textarea-wrap {
-  display: block;
-}
-
-.form-creat-files__upload {
-  display: none;
-}
-
-.input--filled .form-creat-files__upload {
-  display: block;
 }
 
 .form-creat-avatar {
@@ -828,6 +865,15 @@
 
 .modal-creat-result__thumb-audio audio {
   width: 100%;
+}
+
+.unlockable-fields-container .global-input {
+  width: 100%;
+}
+
+.modal-creat-pc-send .spinner-border {
+  width: 24px;
+  height: 24px;
 }
 
 /* ===== my nft ===== */
@@ -1023,9 +1069,22 @@
 
 .global-cookie {
   display: block;
+  z-index: 11;
 }
 
 /* ======== onboarding ======== */
+
+.onboarding-welcome__thumb-container {
+  position: relative;
+}
+
+.onboarding-welcome__thumb-title {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .onboarding-welcome-btns {
   position: relative;
@@ -1094,6 +1153,14 @@
   background-color: rgba(0, 0, 0, .5) !important;
 }
 
+.buy-page-modal__content p {
+  margin-bottom: 12px;
+}
+
+.onboarding-sign-iframe {
+  display: none;
+}
+
 /* ===== settings ===== */
 
 .global-status span {
@@ -1125,6 +1192,15 @@
       opacity: 0.7;
     }
   }
+}
+
+/* ===== beta warning ===== */
+
+.info-fixed-block_relative {
+  position: static;
+  z-index: auto;
+  top: 0;
+  left: 0;
 }
 
 /* ======================= */

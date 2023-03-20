@@ -56,7 +56,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { profileContentDropInit } from '~/utils/profileContentDrop';
 import { stickyModule, addressModule } from '~/store';
 
 @Component({
@@ -80,10 +79,6 @@ export default class AddressPage extends Vue {
 
   get transactionCount() {
     return addressModule.transactions.count;
-  }
-
-  mounted() {
-    profileContentDropInit();
   }
 
   selectTab(tab: string, id: string) {

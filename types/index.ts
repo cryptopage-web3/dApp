@@ -37,3 +37,7 @@ export * from './INftDetailsParams';
 export * from './INftTransactionDetailsResponse';
 export * from './INftComment';
 export * from './IVerifiedStatus';
+export * from './IOwnNftDetailsParams';
+export * from './IOwnNftDetailsResponse';
+export * from './IMessengerOnboardingBroadcast';
+export * from './EConsentStatus';

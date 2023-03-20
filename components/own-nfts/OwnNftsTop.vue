@@ -54,40 +54,10 @@ export default class OwnNftsTop extends Vue {
 
   // methods
 
-  validateCreateNFT() {
-    const isAuth = authModule.isAuth;
-    const isSameChain = authModule.chainSlug === addressModule.chainSlug;
-    const authChainName = authModule.chainName;
-    const addressChainName = addressModule.chainName;
+  async showModal() {
+    const connectSuccess = await nftFormModule.validateConnect();
 
-    if (!isAuth) {
-      this.$notify({
-        type: 'error',
-        title: 'Need to connect a wallet to create NFTs',
-      });
-
-      return false;
-    }
-
-    if (!isSameChain) {
-      this.$notify({
-        type: 'error',
-        title: `Active chain - ${authChainName}<br>
-          You are trying ${
-            this.isOwner ? 'create' : 'send'
-          } nft to account with chain ${addressChainName}<br>
-          Please connect to ${addressChainName}
-        `,
-      });
-
-      return false;
-    }
-
-    return true;
-  }
-
-  showModal() {
-    if (!this.validateCreateNFT()) {
+    if (!connectSuccess) {
       return;
     }
 

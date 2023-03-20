@@ -4,8 +4,10 @@ export const marketSidebarInit = (): any => {
     return null;
   }
 
+  const height = $('#header').height() || 0;
+
   const sidebar2 = new (window as any).StickySidebar('.market-sidebar-wrap', {
-    topSpacing: 115.8,
+    topSpacing: height + 1,
     bottomSpacing: 20,
     containerSelector: '.market-main-right',
     innerWrapperSelector: '.market-sidebar-wrap',

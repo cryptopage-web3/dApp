@@ -9,7 +9,7 @@ import {
 const providerTitleMap = new Map<EProvider, string>([
   [EProvider.metamask, 'MetaMask Ext.'],
   [EProvider.bscWallet, 'Binance Wallet Ext.'],
-  [EProvider.okex, 'MetaX Ext.'],
+  [EProvider.okex, 'OKX Ext.'],
   [EProvider.phantom, 'Phantom Ext.'],
   [EProvider.tron, 'TronLink Ext.'],
   [EProvider.walletConnect, 'WalletConnect'],
@@ -36,7 +36,7 @@ export const networkHelper = {
       symbol: 'ETH',
     },
     [EChainId.goerli]: {
-      network: EChainType.eth,
+      network: EChainType.goerli,
       name: 'Goerli TestNet',
       slug: EChainSlug.goerli,
       symbol: 'ETH',
@@ -152,6 +152,13 @@ export const networkHelper = {
     },
     [EMainChain.eth]: {
       chainId: '0x1',
+    },
+    [EMainChain.goerli]: {
+      chainId: '0x5',
+      rpcUrls: ['https://goerli.infura.io/v3/'],
+      chainName: 'Goerli',
+      nativeCurrency: { name: 'GoerliETH', symbol: 'GoerliETH', decimals: 18 },
+      blockExplorerUrls: ['https://goerli.etherscan.io'],
     },
     [EMainChain.tron]: {
       chainId: 'tron',

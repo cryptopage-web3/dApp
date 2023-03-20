@@ -3,4 +3,5 @@ export enum ESignupStep {
   verify = 'verify',
   signMessage = 'sign_message',
   consent = 'consent',
+  final = 'final',
 }

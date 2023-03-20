@@ -5,6 +5,8 @@ import {
   INftsResponse,
   INftTransactionDetailsResponse,
   INftTransactionsResponse,
+  IOwnNftDetailsParams,
+  IOwnNftDetailsResponse,
 } from '~/types';
 import { API_CHAIN_MAP } from '~/constants';
 
@@ -29,6 +31,24 @@ export class NftsService extends BaseService {
           pageSize: params.pageSize,
         },
       },
+    );
+
+    return data;
+  };
+
+  getOwnDetails = async (
+    params: IOwnNftDetailsParams,
+  ): Promise<IOwnNftDetailsResponse> => {
+    const slugMap = API_CHAIN_MAP;
+
+    if (!slugMap.has(params.chainSlug)) {
+      return {};
+    }
+
+    const { data } = await this.get<IOwnNftDetailsResponse>(
+      `${this.apiURL}/token-details/${slugMap.get(params.chainSlug)}/contract/${
+        params.contractAddress
+      }/token/${params.tokenId}`,
     );
 
     return data;

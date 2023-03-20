@@ -1,6 +1,6 @@
 <template>
   <ul
-    id="myTab"
+    id="home-tabs"
     class="nav nav-tabs main-tabs spaces-tabs mb_20 scroll-el"
     role="tablist"
   >
@@ -49,7 +49,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { stickyModule } from '~/store';
 
 @Component({})
-export default class Tabs extends Vue {}
+export default class Tabs extends Vue {
+  mounted() {
+    $('#home-tabs .spaces-tabs-link').on('shown.bs.tab', () => {
+      stickyModule.update();
+    });
+  }
+}
 </script>

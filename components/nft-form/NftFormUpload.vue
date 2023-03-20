@@ -1,15 +1,6 @@
 <template>
-  <div class="form-creat-files__upload">
-    <input
-      ref="refFile"
-      style="display: none"
-      type="file"
-      name="file"
-      :accept="accept"
-      @change="update"
-    />
-
-    <div v-if="file" class="form-creat-files">
+  <div>
+    <div class="form-creat-files" :class="{ active: file }">
       <div class="form-creat-files-item">
         <a
           href="#"
@@ -29,6 +20,15 @@
         </div>
       </div>
     </div>
+
+    <input
+      ref="refFile"
+      style="display: none"
+      type="file"
+      name="file"
+      :accept="accept"
+      @change="update"
+    />
   </div>
 </template>
 

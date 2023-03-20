@@ -35,7 +35,7 @@ export default class LayoutCookies extends Vue {
   isOpen = false;
 
   mounted() {
-    const isAgree = localStorage.getItem('cookies-agree');
+    const isAgree = localStorage.getItem('cp-cookies-agree');
 
     if (isAgree) {
       return;
@@ -45,7 +45,7 @@ export default class LayoutCookies extends Vue {
   }
 
   agree() {
-    localStorage.setItem('cookies-agree', 'true');
+    localStorage.setItem('cp-cookies-agree', 'true');
     this.isOpen = false;
   }
 

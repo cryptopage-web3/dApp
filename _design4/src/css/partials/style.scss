@@ -1700,7 +1700,7 @@ body.body-market{
 	color: $dark_grey;
 }
 .height-full {
-	min-height: calc(100vh - 402px);
+	min-height: calc(100vh - 350px);
 }
 .profile-login-accordion {
 	margin-bottom: 30px;
@@ -6364,6 +6364,9 @@ body.body-market{
 #header.sticky {
 	backdrop-filter: blur(20px);
 	background: rgba(255, 255, 255, 0.85);
+	header {
+		background: transparent;
+	}
 }
 .header-fixed {
 	padding-top: 111.8px;
@@ -7335,7 +7338,7 @@ body.body-market{
 	}
 }
 .main-profile-statistics {
-	margin-bottom: 25px;
+	margin-bottom: 20px;
 	display: flex;
 	align-items: flex-start;
 	justify-content: space-around;
@@ -7804,10 +7807,6 @@ body.body-market{
 }
 .info-fixed-block {
 	background: $blue;
-	position: fixed;
-	z-index: 13;
-	top: 0;
-	left: 0;
 	width: 100%;
 	padding: 13px 15px;
 }
@@ -7822,6 +7821,9 @@ body.body-market{
 	.global-checkbox {
 		margin-top: 4px;
 	}
+}
+#onboarding-modal1 .modal-dialog {
+	max-width: 490px;
 }
 
 

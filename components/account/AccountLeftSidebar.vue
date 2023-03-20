@@ -119,7 +119,7 @@
                 </svg>
               </div>
               <span> Spaces </span>
-              <mark> Comming Soon </mark>
+              <mark> Soon </mark>
             </a>
           </li>
           <li>
@@ -143,7 +143,7 @@
                 </svg>
               </div>
               <span> Mini apps </span>
-              <mark> Comming Soon </mark>
+              <mark> Soon </mark>
             </a>
           </li>
           <li>
@@ -185,7 +185,7 @@
                 </svg>
               </div>
               <span> Games </span>
-              <mark> Comming Soon </mark>
+              <mark> Soon </mark>
             </a>
           </li>
           <li>
@@ -281,7 +281,7 @@ export default class AccountLeftSidebar extends Vue {
     accountLeftSidebarInit();
 
     setTimeout(() => {
-      this.stickySidebar = leftStickySidebarInit();
+      this.refreshSticky();
     }, 100);
   }
 

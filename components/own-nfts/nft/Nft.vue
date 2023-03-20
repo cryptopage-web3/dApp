@@ -9,26 +9,59 @@
         <div v-else class="market-product__media">
           <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
           <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-          <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+          <NftImage
+            v-else-if="nft.type === ETypeNft.image"
+            :nft="nft"
+            @show-modal="showNftModal"
+          />
           <div v-else class="market-product__media-image">
             <div class="market-product__media-image-empty">No NFT Content</div>
           </div>
+
+          <NftAccessControl
+            :loading="decryptLoading"
+            :is-encrypted="isEncrypted"
+            :access-duration="accessDuration"
+            :access-price="accessPrice"
+            :access-type="accessType"
+            @check-access="checkIfHaveAccessToSeePost"
+            @decrypt="decryptPostContent"
+            @unlock="showConfirmModal"
+          />
         </div>
         <NftFavorite :nft="nft" />
         <NftDropdown />
       </div>
-      <NftText :nft="nft" />
+      <NftText :nft="nft" @show-modal="showNftModal" />
       <NftComments :nft="nft" @select="selectReaction" />
     </div>
 
-    <NftCommentsModal ref="modal" :nft="nft" />
+    <NftCommentsModal ref="commentsModal" :nft="nft" />
+
+    <NftModal
+      ref="nftModal"
+      :nft="nft"
+      :decrypt-loading="decryptLoading"
+      @check-access="checkIfHaveAccessToSeePost"
+      @decrypt="decryptPostContent"
+      @unlock="showConfirmModal"
+    />
+
+    <NftAccessConfirmModal
+      ref="confirmBuyModal"
+      :access-duration="accessDuration"
+      :access-price="accessPrice"
+      @accept="buyPostAccess"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { ETypeNft, INft } from '~/types';
+import NftModal from './modal/Modal.vue';
+import NftAccessConfirmModal from '~/components/shared/nft-access/NftAccessConfirmModal.vue';
+import { ENftTransactionAccessType, ETypeNft, INft } from '~/types';
 import NftDropdown from '~/components/own-nfts/nft/NftDropdown.vue';
 import NftText from '~/components/own-nfts/nft/NftText.vue';
 import NftComments from '~/components/own-nfts/nft/NftComments.vue';
@@ -38,8 +71,10 @@ import NftAudio from '~/components/own-nfts/nft/NftAudio.vue';
 import NftFavorite from '~/components/own-nfts/nft/NftFavorite.vue';
 import NftCommentsModal from '~/components/own-nfts/nft/NftCommentsModal.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
-import { addressModule } from '~/store';
+import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
+import { addressModule, authModule } from '~/store';
 import { TCommentType } from '~/types/comment-form';
+import { MetadataService, Web3Service } from '~/services';
 
 type TNft = INft;
 
@@ -54,20 +89,43 @@ type TNft = INft;
     NftAudio,
     Skeleton,
     NftCommentsModal,
+    NftModal,
+    NftAccessConfirmModal,
+    NftAccessControl,
   },
 })
 export default class Nft extends Vue {
   loading = true;
   visible = false;
+  decryptLoading = false;
   ETypeNft = ETypeNft;
+  ENftTransactionAccessType = ENftTransactionAccessType;
 
   scrollListener: null | (() => void) = null;
 
   @Prop({ required: true })
   readonly nft!: TNft;
 
+  get isEncrypted(): boolean {
+    return this.nft.isEncrypted || false;
+  }
+
+  get accessType(): ENftTransactionAccessType {
+    return this.nft.accessType || ENftTransactionAccessType.has_access;
+  }
+
+  get accessPrice(): number {
+    return this.nft.accessPrice || 0;
+  }
+
+  get accessDuration(): number {
+    return this.nft.accessDuration || 0;
+  }
+
   $refs!: {
-    modal: NftCommentsModal;
+    commentsModal: NftCommentsModal;
+    nftModal: NftModal;
+    confirmBuyModal: NftAccessConfirmModal;
     root: HTMLDivElement;
   };
 
@@ -79,6 +137,8 @@ export default class Nft extends Vue {
     }
 
     this.$nextTick(() => {
+      $(window).scrollTop(0);
+
       this.scrollListener = this.scrollHandler.bind(this);
       this.scrollListener();
 
@@ -125,7 +185,11 @@ export default class Nft extends Vue {
   }
 
   selectReaction(type: TCommentType) {
-    this.$refs.modal.show(type);
+    this.$refs.commentsModal.show(type);
+  }
+
+  showNftModal() {
+    this.$refs.nftModal.show();
   }
 
   async fetchDetails() {
@@ -134,6 +198,96 @@ export default class Nft extends Vue {
     await addressModule.fetchOwnNftDetails(this.nft);
 
     this.loading = false;
+  }
+
+  /** access methods */
+
+  async checkIfHaveAccessToSeePost() {
+    const web3Service = new Web3Service(authModule.provider);
+
+    try {
+      this.decryptLoading = true;
+
+      const access = await web3Service.checkIfHaveAccessToEncryptedPost(
+        this.nft.tokenId,
+      );
+
+      addressModule.updateOwnNftDetails({
+        nft: this.nft,
+        updatedDetails: {
+          accessType: access
+            ? ENftTransactionAccessType.has_access
+            : ENftTransactionAccessType.has_not_access,
+        },
+      });
+
+      this.decryptLoading = false;
+    } catch {
+      this.decryptLoading = false;
+
+      this.$notify({
+        type: 'error',
+        title: 'Error to check access',
+      });
+    }
+  }
+
+  async decryptPostContent() {
+    const metadataService = new MetadataService();
+
+    try {
+      this.decryptLoading = true;
+
+      const imageData = await metadataService.decryptIpfsFile(this.nft.tokenId);
+
+      addressModule.updateOwnNftDetails({
+        nft: this.nft,
+        updatedDetails: {
+          type: ETypeNft.image,
+          contentUrl: imageData,
+          isEncrypted: false,
+        },
+      });
+
+      this.decryptLoading = false;
+    } catch {
+      this.decryptLoading = false;
+
+      this.$notify({
+        type: 'error',
+        title: 'Error to decrypt content',
+      });
+    }
+  }
+
+  showConfirmModal() {
+    this.$refs.confirmBuyModal.show();
+  }
+
+  async buyPostAccess() {
+    const web3Service = new Web3Service(authModule.provider);
+
+    try {
+      this.decryptLoading = true;
+
+      await web3Service.buyPostAccess(authModule.address, this.nft.tokenId);
+
+      addressModule.updateOwnNftDetails({
+        nft: this.nft,
+        updatedDetails: {
+          accessType: ENftTransactionAccessType.has_access,
+        },
+      });
+
+      this.decryptLoading = false;
+    } catch {
+      this.decryptLoading = false;
+
+      this.$notify({
+        type: 'error',
+        title: 'Error to unlock post',
+      });
+    }
   }
 }
 </script>

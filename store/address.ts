@@ -222,7 +222,7 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchNftTransactions() {
     try {
-      const { page, pageSize, nfts: oldNfts } = this.nftTransactions;
+      const { page, pageSize } = this.nftTransactions;
       const nextPage = page + 1;
 
       const { list, count } = await nftsService.getTransactionsList({
@@ -232,6 +232,10 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+      /** текущие NFTs достаем только перед объединением
+       * за время запроса уже могли получить детали и обновить старые NFT
+       */
+      const { nfts: oldNfts } = this.nftTransactions;
       const newNfts = uniqueNftTransactionConcat(oldNfts, list);
 
       this.setNftTransactions({
@@ -352,7 +356,7 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchOwnNfts() {
     try {
-      const { page, pageSize, nfts: oldNfts } = this.ownNfts;
+      const { page, pageSize } = this.ownNfts;
       const nextPage = page + 1;
 
       const { list, count } = await nftsService.getList({
@@ -362,6 +366,10 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+      /** текущие NFTs достаем только перед объединением
+       * за время запроса уже могли получить детали и обновить старые NFT
+       */
+      const { nfts: oldNfts } = this.ownNfts;
       const newNfts = uniqueNftConcat(oldNfts, list);
 
       this.setOwnNfts({
@@ -388,14 +396,73 @@ export default class AddressModule extends VuexModule {
   }
 
   @Action
+  public updateOwnNftDetails({
+    nft,
+    updatedDetails,
+  }: {
+    nft: TNft;
+    updatedDetails: Record<string, any>;
+  }) {
+    const { nfts } = this.ownNfts;
+    const index = nfts.findIndex((item) => item === nft);
+
+    this.setOwnNftDetails({
+      index,
+      nft: {
+        ...nft,
+        ...updatedDetails,
+      },
+    });
+  }
+
+  @Action
   public async fetchOwnNftDetails(nft: TNft) {
     const { nfts } = this.ownNfts;
     const index = nfts.findIndex((item) => item === nft);
     let nftType = nft.type;
+    const nftTemp = { ...nft };
 
     try {
-      if (nft.contentUrl) {
-        const mimeType = await nftsService.getMimeType(nft.contentUrl);
+      /** если нет contentUrl, то скорее всего это зашифрованное NFT
+       * получаем датели только для пустых contentUrl
+       */
+      if (!nft.contentUrl) {
+        const data = await nftsService.getOwnDetails({
+          chainSlug: this.chainSlug,
+          contractAddress: nft.contract_address,
+          tokenId: nft.tokenId,
+        });
+
+        let accessType: ENftTransactionAccessType;
+
+        if (data.isEncrypted) {
+          if (
+            this.address.toLocaleLowerCase() ===
+            authModule.address.toLocaleLowerCase()
+          ) {
+            accessType = ENftTransactionAccessType.has_access;
+          } else {
+            accessType = ENftTransactionAccessType.not_requested;
+          }
+        } else {
+          accessType = ENftTransactionAccessType.has_access;
+        }
+
+        Object.assign(nftTemp, {
+          description: data.description || '',
+          name: data.name || '',
+          attributes: data.attributes || [],
+          comments: data.comments || [],
+          contentUrl: data.contentUrl || '',
+          isEncrypted: data.isEncrypted,
+          accessPrice: data.accessPrice,
+          accessDuration: data.accessDuration,
+          accessType,
+        });
+      }
+
+      if (nftTemp.contentUrl) {
+        const mimeType = await nftsService.getMimeType(nftTemp.contentUrl);
 
         if (/audio/.test(mimeType)) {
           nftType = ETypeNft.audio;
@@ -416,6 +483,7 @@ export default class AddressModule extends VuexModule {
         index,
         nft: {
           ...nft,
+          ...nftTemp,
           type: nftType,
           hasDetails: true,
         },
@@ -429,6 +497,28 @@ export default class AddressModule extends VuexModule {
         },
       });
     }
+  }
+
+  @Action
+  public async fetchOwnNftComments(nft: TNft) {
+    const { nfts } = this.ownNfts;
+    const index = nfts.findIndex((item) => item === nft);
+
+    try {
+      const data = await nftsService.getOwnDetails({
+        chainSlug: this.chainSlug,
+        contractAddress: nft.contract_address,
+        tokenId: nft.tokenId,
+      });
+
+      this.setOwnNftDetails({
+        index,
+        nft: {
+          ...nft,
+          comments: data.comments,
+        },
+      });
+    } catch {}
   }
 
   @Action
@@ -451,12 +541,7 @@ export default class AddressModule extends VuexModule {
 
   @Action
   public async fetchEthTransactions() {
-    const {
-      page,
-      pageSize,
-      transactions: oldTransactions,
-      continue: oldContinue,
-    } = this.transactions;
+    const { page, pageSize, continue: oldContinue } = this.transactions;
 
     const { transactions, continue: newContinue } =
       await transactionsService.getEthList({
@@ -466,6 +551,7 @@ export default class AddressModule extends VuexModule {
         pageSize,
       });
 
+    const { transactions: oldTransactions } = this.transactions;
     const newTransactions = uniqueHashConcat(
       oldTransactions,
       transactions.map((t) => normalizeEth(t, this.chainId)),
@@ -483,12 +569,7 @@ export default class AddressModule extends VuexModule {
 
   @Action
   public async fetchDefaultTransactions() {
-    const {
-      page,
-      pageSize,
-      transactions: oldTransactions,
-      continue: oldContinue,
-    } = this.transactions;
+    const { page, pageSize, continue: oldContinue } = this.transactions;
     const nextPage = page + 1;
 
     const {
@@ -503,6 +584,7 @@ export default class AddressModule extends VuexModule {
       continue: oldContinue,
     });
 
+    const { transactions: oldTransactions } = this.transactions;
     const newTransactions = uniqueHashConcat(
       oldTransactions,
       transactions.map((t) => defaultNormalizer(t, this.address, this.chainId)),
@@ -550,8 +632,6 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка NFT, возвращает флаг наличия целевой NFT */
 
       const fetchNftTransactions = async () => {
-        const { nfts: oldNfts } = this.nftTransactions;
-
         const { list, count } = await nftsService.getTransactionsList({
           chainSlug: this.chainSlug,
           address: this.address,
@@ -561,6 +641,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
+        const { nfts: oldNfts } = this.nftTransactions;
         const uniqueList: TNftTransaction[] = [];
 
         list.forEach((item) => {
@@ -643,8 +724,6 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка транзакций, возвращает флаг наличия целевой транзакции */
 
       const fetchTransactions = async () => {
-        const { transactions: oldTransactions } = this.transactions;
-
         const { transactions, count } = await transactionsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
@@ -654,6 +733,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
+        const { transactions: oldTransactions } = this.transactions;
         const uniqueList: ITransaction[] = [];
 
         transactions
@@ -730,8 +810,6 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка NFT, возвращает флаг наличия целевой транзакции */
 
       const fetchOwnNfts = async () => {
-        const { nfts: oldNfts } = this.ownNfts;
-
         const { list, count } = await nftsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
@@ -741,6 +819,7 @@ export default class AddressModule extends VuexModule {
 
         /** отбираем уникальные значения */
 
+        const { nfts: oldNfts } = this.ownNfts;
         const uniqueList: INft[] = [];
 
         list.forEach((item) => {

@@ -4,7 +4,11 @@
       <tbody>
         <tr>
           <td>
-            <a href="#" class="market-product__title">
+            <a
+              href="#"
+              class="market-product__title"
+              @click.prevent="$emit('show-modal')"
+            >
               {{ collectionName }}
             </a>
           </td>
@@ -12,7 +16,11 @@
         </tr>
         <tr>
           <td>
-            <a href="#" class="market-product__name">
+            <a
+              href="#"
+              class="market-product__name"
+              @click.prevent="$emit('show-modal')"
+            >
               {{ title }}
             </a>
           </td>

@@ -323,8 +323,8 @@ export class AuthService {
       return {
         status: 'error',
         message: {
-          title: 'Not found MetaX extension',
-          text: 'Please install MetaX Ext.,<br>reload page and try again',
+          title: 'Not found OKX extension',
+          text: 'Please install OKX Ext.,<br>reload page and try again',
         },
       };
     }
@@ -357,8 +357,8 @@ export class AuthService {
       return {
         status: 'error',
         message: {
-          title: 'Not connected to MetaX',
-          text: 'Please choose supported chain in the MetaX Ext.<br>and accept connect',
+          title: 'Not connected to OKX',
+          text: 'Please choose supported chain in the OKX Ext.<br>and accept connect',
         },
       };
     }
@@ -597,7 +597,7 @@ export class AuthService {
     ) {
       const providerTitle =
         connectData.providerSlug === EProvider.okex
-          ? 'MetaX Ext.'
+          ? 'OKX Ext.'
           : 'MetaMask Ext.';
 
       try {

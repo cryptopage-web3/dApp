@@ -68,7 +68,7 @@ export default class OnboardingModals extends Vue {
     }
 
     this.$nextTick(() => {
-      const completed = localStorage.getItem('onboarding-completed');
+      const completed = localStorage.getItem('cp-onboarding-completed');
 
       /** если ранее открывалось окно, то пропускаем */
 
@@ -90,11 +90,11 @@ export default class OnboardingModals extends Vue {
   }
 
   skip() {
-    localStorage.setItem('onboarding-completed', 'skip');
+    localStorage.setItem('cp-onboarding-completed', 'skip');
   }
 
   public() {
-    localStorage.setItem('onboarding-completed', 'public');
+    localStorage.setItem('cp-onboarding-completed', 'public');
   }
 
   next() {
