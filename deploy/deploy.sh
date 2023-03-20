@@ -1,12 +1,23 @@
+# ENV variables required 
+# PM2_NAME - pm2 service name
+# DEPLOY_LOG_FILE - absolute path to deoploy log file
+# TG_TEXT_PREFIX - text added to each tg message
+# TG_CHAT_ID - telegram chatid for send messages
+# TG_BOT_ID - telegram bot id for send messages
+# DEPLOY_DIR - directory for deploy build
+# DEPLOY_PORT - deploy run port
+# RUN_DIR - directory for run build
+# RUN_PORT - run port
+
 #unclude utils
 . $(dirname "$0")/utils.sh
 
-deploy_dir=/home/user/deploy
-run_dir=/home/user/crypto.page
-deploy_port=3010
-run_port=3000
-pm2_deploy_name=crypto_twitter_deploy
-pm2_run_name=crypto_twitter
+deploy_dir=${DEPLOY_DIR}
+run_dir=${RUN_DIR}
+deploy_port=${DEPLOY_PORT}
+run_port=${RUN_PORT}
+pm2_run_name="${PM2_NAME}"
+pm2_deploy_name="${PM2_NAME}_deploy"
 
 tg_message "Deploy started"
 
