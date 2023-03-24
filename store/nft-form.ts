@@ -14,7 +14,7 @@ import { validateNftForm } from '~/utils/validateNftForm';
 import { IPFSService, MetadataService, Web3Service } from '~/services';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
-import { EChainSlug } from '~/types';
+import { EChainSlug, ILandingMessageNFTData } from '~/types';
 import { getSecDuration } from '~/utils/durationType';
 
 type TNftForm = INftForm;
@@ -253,6 +253,44 @@ export default class NftFormModule extends VuexModule {
   @Mutation
   public setLoading(loading: boolean) {
     this.loading = loading;
+  }
+
+  @Action
+  public init() {
+    /** проверяем есть ли дефолтные значения из лендинга */
+    const strData = window.localStorage.getItem('cp-landing-message');
+
+    if (strData) {
+      this.clear();
+
+      const data = JSON.parse(strData) as ILandingMessageNFTData;
+
+      this.setTitle(data.title || '');
+
+      if (data.price && data.price !== 'free') {
+        this.setIsUnlockableContent(true);
+        this.setUnlockableContentPrice(Number(data.price));
+
+        const isOneTime = data.duration === 'unlimited';
+        const days = isOneTime ? 0 : Number(data.duration);
+
+        if (isOneTime) {
+          this.setUnlockableContentAccessType(
+            ENftFormUnlockableContentAccessType.oneTime,
+          );
+        } else {
+          this.setUnlockableContentAccessType(
+            ENftFormUnlockableContentAccessType.customDuration,
+          );
+          this.setUnlockableContentAccessDuration(days);
+          this.setUnlockableContentAccessDurationType(
+            ENftFormUnlockableContentAccessDurationType.days,
+          );
+        }
+      }
+
+      window.localStorage.removeItem('cp-landing-message');
+    }
   }
 
   @Action

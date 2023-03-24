@@ -42,3 +42,4 @@ export * from './IOwnNftDetailsResponse';
 export * from './IMessengerOnboardingBroadcast';
 export * from './EConsentStatus';
 export * from './ILandingMessageBroadcast';
+export * from './ILandingMessageNFTData';

@@ -312,6 +312,9 @@ export default class NftForm extends Vue {
     ($(this.$refs.settingBtn) as any).tooltip(
       !this.hasSettings ? 'disable' : 'enable',
     );
+
+    /** выставление дефолтных значений формы */
+    nftFormModule.init();
   }
 
   showDisableNotify() {
