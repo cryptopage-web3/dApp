@@ -12,29 +12,33 @@ import { ILandingMessageBroadcast } from '~/types';
 })
 export default class LandingMessagePage extends Vue {
   mounted() {
-    const channel = new BroadcastChannel('cp-landing-message');
-
-    channel.addEventListener(
+    window.addEventListener(
       'message',
-      ({ data }: ILandingMessageBroadcast) => {
-        const file = data.files && data.files[0];
+      ({ data: { target, params } }: ILandingMessageBroadcast) => {
+        console.log(target, params);
+
+        if (target !== 'cp-landing-message') {
+          return;
+        }
+
+        const file = params.files && params.files[0];
         const reader = new FileReader();
 
         if (file) {
           reader.onload = (base64) => {
-            this.save(data, String(base64));
+            this.save(params, String(base64));
           };
           reader.readAsDataURL(file);
 
           return;
         }
 
-        this.save(data, '');
+        this.save(params, '');
       },
     );
   }
 
-  save(data: ILandingMessageBroadcast['data'], file: string) {
+  save(data: ILandingMessageBroadcast['data']['params'], file: string) {
     const params = {
       currency: data.currency,
       duration: data.duration,
