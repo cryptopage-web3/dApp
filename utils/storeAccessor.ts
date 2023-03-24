@@ -24,6 +24,12 @@ function initialiseStores(store: Store<any>): void {
   nftFormModule = getModule(NftFormModule, store);
 
   if (process.browser) {
+    /** если это страница приема сообщений от лендинга,
+     * то в ней не нужна авторизация */
+    if (window.location.pathname === '/landing-message') {
+      return;
+    }
+
     authModule.init();
   }
 }
