@@ -267,6 +267,8 @@ export default class NftFormModule extends VuexModule {
 
       this.setTitle(data.title || '');
 
+      /** обрабатываем монетизацию */
+
       if (data.price && data.price !== 'free') {
         this.setIsUnlockableContent(true);
         this.setUnlockableContentPrice(Number(data.price));
@@ -288,6 +290,24 @@ export default class NftFormModule extends VuexModule {
           );
         }
       }
+
+      /** обрабатываем файл */
+
+      // if (data.file) {
+      //   const pieces = data.file.split(',');
+      //   const fileFormat = pieces[0].split(';')[1];
+      //   const fileContent = pieces[1];
+
+      //   if (fileFormat && fileContent) {
+      //     const file = new File([fileContent], 'nftFile.png', {
+      //       type: 'image/png',
+      //     });
+
+      //     this.setFile(file);
+      //   }
+      // }
+
+      /** чистим localStorage */
 
       window.localStorage.removeItem('cp-landing-message');
     }

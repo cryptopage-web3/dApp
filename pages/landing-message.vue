@@ -25,9 +25,12 @@ export default class LandingMessagePage extends Vue {
         const reader = new FileReader();
 
         if (file) {
-          reader.onload = (base64) => {
-            this.save(params, String(base64));
+          reader.onload = (event) => {
+            const dataUrl = event.target?.result || '';
+
+            this.save(params, String(dataUrl));
           };
+
           reader.readAsDataURL(file);
 
           return;
