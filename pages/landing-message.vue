@@ -5,7 +5,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { ILandingMessageBroadcast } from '~/types';
+import { ELocalStorageKey, ILandingMessageBroadcast } from '~/types';
 
 @Component({
   layout: 'empty',
@@ -17,7 +17,7 @@ export default class LandingMessagePage extends Vue {
       ({ data: { target, params } }: ILandingMessageBroadcast) => {
         console.log(target, params);
 
-        if (target !== 'cp-landing-message') {
+        if (target !== ELocalStorageKey.landingMessage) {
           return;
         }
 
@@ -51,7 +51,10 @@ export default class LandingMessagePage extends Vue {
       title: data.title,
     };
 
-    localStorage.setItem('cp-landing-message', JSON.stringify(params));
+    localStorage.setItem(
+      ELocalStorageKey.landingMessage,
+      JSON.stringify(params),
+    );
   }
 }
 </script>

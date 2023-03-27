@@ -29,13 +29,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { ELocalStorageKey } from '~/types';
 
 @Component({})
 export default class LayoutCookies extends Vue {
   isOpen = false;
 
   mounted() {
-    const isAgree = localStorage.getItem('cp-cookies-agree');
+    const isAgree = localStorage.getItem(ELocalStorageKey.cookiesAgree);
 
     if (isAgree) {
       return;
@@ -45,7 +46,7 @@ export default class LayoutCookies extends Vue {
   }
 
   agree() {
-    localStorage.setItem('cp-cookies-agree', 'true');
+    localStorage.setItem(ELocalStorageKey.cookiesAgree, 'true');
     this.isOpen = false;
   }
 

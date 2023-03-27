@@ -19,6 +19,7 @@ import {
   EVerifiedStatus,
   EMessengerStatus,
   EConsentStatus,
+  ELocalStorageKey,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -195,7 +196,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public async init() {
-    const auth = localStorage.getItem('cp-auth');
+    const auth = localStorage.getItem(ELocalStorageKey.auth);
 
     if (!auth) {
       setTimeout(() => {
@@ -233,7 +234,7 @@ export default class AuthModule extends VuexModule {
       /** сохраняем данные connect */
 
       window.localStorage.setItem(
-        'cp-auth',
+        ELocalStorageKey.auth,
         JSON.stringify({
           address: connectData.address,
           chainId: connectData.chainId,
@@ -360,7 +361,7 @@ export default class AuthModule extends VuexModule {
     /** подключение прошло успешно */
 
     window.localStorage.setItem(
-      'cp-auth',
+      ELocalStorageKey.auth,
       JSON.stringify({
         address: connectData.address,
         chainId: connectData.chainId,
@@ -445,7 +446,10 @@ export default class AuthModule extends VuexModule {
       providerSlug,
     };
 
-    window.localStorage.setItem('cp-auth', JSON.stringify(connectData));
+    window.localStorage.setItem(
+      ELocalStorageKey.auth,
+      JSON.stringify(connectData),
+    );
 
     /** получаем данные verifiedStatus */
 
@@ -547,7 +551,7 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public getVerifiedStatus(address: string): TVerifiedStatus {
-    const str = window.localStorage.getItem('cp-signup-verified-status');
+    const str = window.localStorage.getItem(ELocalStorageKey.signupVerified);
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
       TVerifiedStatus
@@ -563,21 +567,21 @@ export default class AuthModule extends VuexModule {
 
   @Action
   public getMessengerStatus(): TMessengerStatus {
-    const str = window.localStorage.getItem('cp-signup-messenger-status');
+    const str = window.localStorage.getItem(ELocalStorageKey.signupMessenger);
 
     return str as TMessengerStatus;
   }
 
   @Action
   public getConsentStatus(): TConsentStatus {
-    const str = window.localStorage.getItem('cp-signup-consent-status');
+    const str = window.localStorage.getItem(ELocalStorageKey.signupConsent);
 
     return str as TConsentStatus;
   }
 
   @Action
   public saveVerifiedStatus({ address, status }: TSaveVerifiedStatusParams) {
-    const str = window.localStorage.getItem('cp-signup-verified-status');
+    const str = window.localStorage.getItem(ELocalStorageKey.signupVerified);
     const verifiedStatus = (str ? JSON.parse(str) : {}) as Record<
       string,
       TVerifiedStatus
@@ -585,7 +589,7 @@ export default class AuthModule extends VuexModule {
     verifiedStatus[address] = status;
 
     window.localStorage.setItem(
-      'cp-signup-verified-status',
+      ELocalStorageKey.signupVerified,
       JSON.stringify(verifiedStatus),
     );
   }
@@ -593,28 +597,28 @@ export default class AuthModule extends VuexModule {
   @Action
   public saveMessengerStatus(status: TMessengerStatus) {
     if (!status) {
-      window.localStorage.removeItem('cp-signup-messenger-status');
+      window.localStorage.removeItem(ELocalStorageKey.signupMessenger);
       return;
     }
 
-    window.localStorage.setItem('cp-signup-messenger-status', status);
+    window.localStorage.setItem(ELocalStorageKey.signupMessenger, status);
   }
 
   @Action
   public saveConsentStatus(status: TConsentStatus) {
     if (!status) {
-      window.localStorage.removeItem('cp-signup-consent-status');
+      window.localStorage.removeItem(ELocalStorageKey.signupConsent);
       return;
     }
 
-    window.localStorage.setItem('cp-signup-consent-status', status);
+    window.localStorage.setItem(ELocalStorageKey.signupConsent, status);
   }
 
   @Action
   public async logout() {
     await authService.logout();
 
-    window.localStorage.removeItem('cp-auth');
+    window.localStorage.removeItem(ELocalStorageKey.auth);
 
     authProvider = null;
 

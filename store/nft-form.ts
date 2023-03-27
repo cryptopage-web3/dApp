@@ -14,7 +14,7 @@ import { validateNftForm } from '~/utils/validateNftForm';
 import { IPFSService, MetadataService, Web3Service } from '~/services';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
-import { EChainSlug, ILandingMessageNFTData } from '~/types';
+import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
 import { getSecDuration } from '~/utils/durationType';
 
 type TNftForm = INftForm;
@@ -258,7 +258,9 @@ export default class NftFormModule extends VuexModule {
   @Action
   public init() {
     /** проверяем есть ли дефолтные значения из лендинга */
-    const strData = window.localStorage.getItem('cp-landing-message');
+    const strData = window.localStorage.getItem(
+      ELocalStorageKey.landingMessage,
+    );
 
     if (strData) {
       this.clear();
@@ -309,7 +311,7 @@ export default class NftFormModule extends VuexModule {
 
       /** чистим localStorage */
 
-      window.localStorage.removeItem('cp-landing-message');
+      window.localStorage.removeItem(ELocalStorageKey.landingMessage);
     }
   }
 

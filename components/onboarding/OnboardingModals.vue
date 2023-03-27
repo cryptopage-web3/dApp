@@ -19,6 +19,7 @@ import OnboardingStep3 from './OnboardingStep3.vue';
 import OnboardingStep4 from './OnboardingStep4.vue';
 import OnboardingStep5 from './OnboardingStep5.vue';
 import { authModule } from '~/store';
+import { ELocalStorageKey } from '~/types';
 
 type TRefs = {
   welcome: OnboardingWelcome;
@@ -68,7 +69,9 @@ export default class OnboardingModals extends Vue {
     }
 
     this.$nextTick(() => {
-      const completed = localStorage.getItem('cp-onboarding-completed');
+      const completed = localStorage.getItem(
+        ELocalStorageKey.onboardingCompleted,
+      );
 
       /** если ранее открывалось окно, то пропускаем */
 
@@ -90,11 +93,11 @@ export default class OnboardingModals extends Vue {
   }
 
   skip() {
-    localStorage.setItem('cp-onboarding-completed', 'skip');
+    localStorage.setItem(ELocalStorageKey.onboardingCompleted, 'skip');
   }
 
   public() {
-    localStorage.setItem('cp-onboarding-completed', 'public');
+    localStorage.setItem(ELocalStorageKey.onboardingCompleted, 'public');
   }
 
   next() {
