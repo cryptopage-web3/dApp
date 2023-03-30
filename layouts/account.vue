@@ -34,6 +34,7 @@ import NftSuccessModal from '~/components/nft-form/modal-success/ModalSuccess.vu
 import SignupModal from '~/components/signup-modal/SignupModal.vue';
 import BuyPageModal from '~/components/buy-page-modal/BuyPageModal.vue';
 import { authModule } from '~/store';
+import { ELocalStorageKey } from '~/types';
 
 @Component({
   components: {
@@ -54,9 +55,22 @@ export default class AccountLayout extends Vue {
     return authModule.isAuth;
   }
 
+  get isNftFromLanding(): boolean {
+    /** проверяем есть ли дефолтные значения из лендинга */
+    const hasData = !!window.localStorage.getItem(
+      ELocalStorageKey.landingMessage,
+    );
+
+    return hasData && this.$route.name === 'network-address';
+  }
+
   @Watch('isAuth', { immediate: true })
   onIsAuthChange(isAuth: boolean) {
     if (!isAuth) {
+      return;
+    }
+
+    if (this.isNftFromLanding) {
       return;
     }
 
