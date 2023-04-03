@@ -16,6 +16,7 @@ import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
 import { getSecDuration } from '~/utils/durationType';
+import { buildFileFromDataURL } from '~/utils/buildFileFromDataURL';
 
 type TNftForm = INftForm;
 
@@ -295,19 +296,9 @@ export default class NftFormModule extends VuexModule {
 
       /** обрабатываем файл */
 
-      // if (data.file) {
-      //   const pieces = data.file.split(',');
-      //   const fileFormat = pieces[0].split(';')[1];
-      //   const fileContent = pieces[1];
-
-      //   if (fileFormat && fileContent) {
-      //     const file = new File([fileContent], 'nftFile.png', {
-      //       type: 'image/png',
-      //     });
-
-      //     this.setFile(file);
-      //   }
-      // }
+      if (data.file) {
+        this.setFile(buildFileFromDataURL(data.file, 'nftFile'));
+      }
 
       /** чистим localStorage */
 
