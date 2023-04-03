@@ -44,7 +44,14 @@
       Show more
     </nuxt-link>
 
-    <NftModal v-if="selectedNft" ref="nftModal" :nft="selectedNft" />
+    <portal to="nft-sidebar-modal">
+      <NftModal
+        v-if="selectedNft"
+        ref="nftModal"
+        :nft="selectedNft"
+        :decrypt-loading="decryptLoading"
+      />
+    </portal>
   </div>
 </template>
 
@@ -71,6 +78,7 @@ type TAddressInfo = IAddressInfo;
 })
 export default class AccountSidebarNfts extends Vue {
   loading = false;
+  decryptLoading = false;
   selectedNft: INft | null = null;
 
   $refs!: {
@@ -133,7 +141,8 @@ export default class AccountSidebarNfts extends Vue {
 
   showNftModal(nft: INft) {
     this.selectedNft = nft;
-    this.$nextTick(() => {
+
+    setTimeout(() => {
       this.$refs.nftModal.show();
     });
   }

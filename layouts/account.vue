@@ -22,6 +22,7 @@
       <NftSuccessModal />
       <SignupModal />
       <BuyPageModal />
+      <portal-target name="nft-sidebar-modal" />
     </client-only>
   </div>
 </template>
