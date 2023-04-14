@@ -27,13 +27,14 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { stickyModule } from '~/store';
+import { ELocalStorageKey } from '~/types';
 
 @Component({})
 export default class LayoutBetaWarning extends Vue {
   isOpen = false;
 
   mounted() {
-    const hasClosed = localStorage.getItem('cp-beta-warning');
+    const hasClosed = localStorage.getItem(ELocalStorageKey.betaWarning);
 
     if (hasClosed) {
       return;
@@ -43,7 +44,7 @@ export default class LayoutBetaWarning extends Vue {
   }
 
   close() {
-    localStorage.setItem('cp-beta-warning', 'true');
+    localStorage.setItem(ELocalStorageKey.betaWarning, 'true');
     stickyModule.update();
 
     this.isOpen = false;

@@ -584,7 +584,7 @@
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
-import { EChainSlug, EMainChain, EProvider } from '~/types';
+import { EChainSlug, ELocalStorageKey, EMainChain, EProvider } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import ConnectCollapseIcon from '~/components/icon/connect/ConnectCollapseIcon.vue';
@@ -650,7 +650,9 @@ export default class ConnectPage extends Vue {
   }
 
   connectHint() {
-    const completed = localStorage.getItem('cp-onboarding-connect-hint');
+    const completed = localStorage.getItem(
+      ELocalStorageKey.onboardingConnectHint,
+    );
 
     if (completed) {
       return;
@@ -660,7 +662,7 @@ export default class ConnectPage extends Vue {
       title: 'Attention',
       content: 'Select a network and log in to continue onboarding',
       onClose: () => {
-        localStorage.setItem('cp-onboarding-connect-hint', 'done');
+        localStorage.setItem(ELocalStorageKey.onboardingConnectHint, 'done');
       },
     });
   }

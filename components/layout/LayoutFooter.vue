@@ -14,14 +14,6 @@
           <a href="#" class="market-footer-logo d-xl-none">
             <img src="@/assets/img/market-footer-logo_img.svg" alt="" />
           </a>
-          <div class="market-footer-apps">
-            <a href="#">
-              <img src="@/assets/img/market-footer-apps_img1.svg" alt="" />
-            </a>
-            <a href="#">
-              <img src="@/assets/img/market-footer-apps_img2.svg" alt="" />
-            </a>
-          </div>
           <div class="market-footer-search">
             <input
               type="text"

@@ -167,6 +167,24 @@
   border-bottom-color: #1886FF !important;
 }
 
+/* ======= header ======== */
+
+@media (max-width: 991px) {
+  .market-header-search {
+    display: none;
+  }
+
+  .profile-left2 {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .profile {
+    padding-top: 15px;
+  }
+}
+
 /* ===== address ===== */
 
 .market-header__wallet .drop-down__link .thumb {

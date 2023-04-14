@@ -5,7 +5,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import { ILandingMessageBroadcast } from '~/types';
+import { ELocalStorageKey, ILandingMessageBroadcast } from '~/types';
 
 @Component({
   layout: 'empty',
@@ -17,7 +17,7 @@ export default class LandingMessagePage extends Vue {
       ({ data: { target, params } }: ILandingMessageBroadcast) => {
         console.log(target, params);
 
-        if (target !== 'cp-landing-message') {
+        if (target !== ELocalStorageKey.landingMessage) {
           return;
         }
 
@@ -25,9 +25,12 @@ export default class LandingMessagePage extends Vue {
         const reader = new FileReader();
 
         if (file) {
-          reader.onload = (base64) => {
-            this.save(params, String(base64));
+          reader.onload = (event) => {
+            const dataUrl = event.target?.result || '';
+
+            this.save(params, String(dataUrl));
           };
+
           reader.readAsDataURL(file);
 
           return;
@@ -48,7 +51,10 @@ export default class LandingMessagePage extends Vue {
       title: data.title,
     };
 
-    localStorage.setItem('cp-landing-message', JSON.stringify(params));
+    localStorage.setItem(
+      ELocalStorageKey.landingMessage,
+      JSON.stringify(params),
+    );
   }
 }
 </script>
