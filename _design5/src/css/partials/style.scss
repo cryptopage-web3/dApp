@@ -7946,6 +7946,87 @@ body.body-market{
 		position: relative;
 	}
 }
+.global-request {
+	display: none;
+	max-width: 235px;
+	width: 100%;
+	position: fixed;
+	z-index: 999;
+	background: $white;
+	right: 30px;
+	top: 105px;
+	box-shadow: 0px 4px 40px rgba(0, 0, 0, 0.15);
+	border-radius: 5px;
+	&.active {
+		display: block;
+	}
+	.main-profile-user {
+		.thumb {
+			position: relative;
+		}
+		.ident {
+			display: inline-block;
+			position: absolute;
+			width: 16px;
+			top: -8px;
+			right: -8px;
+		}
+	}
+}
+.sign-variations__metamask {
+	background-color: $dark_grey !important;
+	&:hover {
+		background-color: $light_grey !important;
+	}
+}
+.sign-variations__input {
+	border-color: $dark_grey;
+}
+.sign-variations-wrap, .sign-variations__request-code {
+	display: none;
+}
+.sign-variations-wrap {
+	&.active {
+		.sign-variations__timer {
+			display: none;
+		}
+		.sign-variations__request-code {
+			display: inline-block;
+		}
+	}
+}
+.profile-login-sh-h {
+	span {
+		text-decoration: underline;
+	}
+	&:hover {
+		color: $blue_hover;
+		span {
+			text-decoration: none;
+		}
+	}
+	.show {
+		display: inline-block;
+	}
+	.hide {
+		display: none;
+	}
+	&[aria-expanded="true"] {
+		.show {
+			display: none;
+		}
+		.hide {
+			display: inline-block;
+		}
+	}
+}
+.sign-variations {
+	max-width: 495px;
+	width: 100%;
+	margin-right: auto;
+	margin-left: auto;
+}
+
 
 
 
@@ -8446,6 +8527,9 @@ body.body-market{
 	}
 	.global-copy__link-copied {
 		display: none !important;
+	}
+	.global-request {
+		right: 15px;
 	}
 
 }

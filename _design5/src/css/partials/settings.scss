@@ -648,6 +648,15 @@ $dark: #333;
 	height: 40px;
 	font-size: 14px !important;
 }
+.btn_extra-large {
+	max-height: 50px;
+	height: 50px;
+	@extend .fs_14;
+}
+.global-input_extra-large {
+	height: 50px;
+	font-size: 14px !important;
+}
 
 /*z-index*/
 @for $i from 1 through 5 {
