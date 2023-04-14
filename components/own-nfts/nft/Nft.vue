@@ -74,7 +74,7 @@ import Skeleton from '~/components/loaders/Skeleton.vue';
 import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import { addressModule, authModule } from '~/store';
 import { TCommentType } from '~/types/comment-form';
-import { MetadataService, Web3Service } from '~/services';
+import { EncryptionService, Web3Service } from '~/services';
 
 type TNft = INft;
 
@@ -233,12 +233,14 @@ export default class Nft extends Vue {
   }
 
   async decryptPostContent() {
-    const metadataService = new MetadataService();
+    const encryptionService = new EncryptionService();
 
     try {
       this.decryptLoading = true;
 
-      const imageData = await metadataService.decryptIpfsFile(this.nft.tokenId);
+      const imageData = await encryptionService.getDecryptedNftImage(
+        this.nft.tokenId,
+      );
 
       addressModule.updateOwnNftDetails({
         nft: this.nft,
