@@ -1,12 +1,7 @@
 <template>
   <div id="accordionExample" class="accordion profile-login-accordion mt_30">
     <div class="card profile-login__card">
-      <div
-        id="profile-login-accordion1_2"
-        ref="hintRef"
-        class="card-header"
-        data-toggle="popover"
-      >
+      <div id="profile-login-accordion1_2" class="card-header">
         <button
           class="profile-login-accordion__link"
           type="button"
@@ -544,9 +539,8 @@
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
-import { EChainSlug, ELocalStorageKey, EMainChain, EProvider } from '~/types';
+import { EChainSlug, EMainChain, EProvider } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
-import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import ConnectCollapseIcon from '~/components/icon/connect/ConnectCollapseIcon.vue';
 
 @Component({
@@ -563,10 +557,6 @@ export default class ConnectProviders extends Vue {
     return authModule.chainSlug;
   }
 
-  $refs!: {
-    hintRef: HTMLDivElement;
-  };
-
   @Watch('authChainSlug')
   onAuthNetworkTypeChange(slug: EChainSlug) {
     this.collapseChain(slug);
@@ -574,14 +564,6 @@ export default class ConnectProviders extends Vue {
 
   mounted() {
     this.collapseChain(this.authChainSlug as EChainSlug);
-
-    /** подсказка для connect */
-
-    this.connectHint();
-  }
-
-  beforeDestroy() {
-    this.destroyConnectHint();
   }
 
   collapseChain(slug: EChainSlug) {
@@ -595,28 +577,6 @@ export default class ConnectProviders extends Vue {
 
     const element = elementMap.get(slug);
     element && ($(element) as any).collapse('show');
-  }
-
-  connectHint() {
-    const completed = localStorage.getItem(
-      ELocalStorageKey.onboardingConnectHint,
-    );
-
-    if (completed) {
-      return;
-    }
-
-    popoverHintInit(this.$refs.hintRef, {
-      title: 'Attention',
-      content: 'Select a network and log in to continue onboarding',
-      onClose: () => {
-        localStorage.setItem(ELocalStorageKey.onboardingConnectHint, 'done');
-      },
-    });
-  }
-
-  destroyConnectHint() {
-    popoverHintDestroy(this.$refs.hintRef);
   }
 
   async connectToProvider(chain: EChainSlug, provider: EProvider) {
