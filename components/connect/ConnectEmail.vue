@@ -1,16 +1,21 @@
 <template>
   <div>
     <input
+      v-if="!showCode"
+      v-model="value"
       type="text"
       placeholder="Sign up / Sign in Phone or Email"
       class="global-input_extra-large sign-variations__input global-input w-100"
     />
-    <div class="sign-variations-wrap">
-      <div class="mt_15"></div>
+    <div v-else class="sign-variations-wrap">
       <div class="global-text_12 dark_grey mb_10">
-        We have sent a verification code to your phone
+        We have sent a verification code to your phone.
+        <a href="#" class="global-text_12 blue" @click.prevent="handleBack">
+          Change Phone
+        </a>
       </div>
       <input
+        v-model="code"
         type="text"
         placeholder="Enter the code"
         class="global-input_extra-large sign-variations__code global-input w-100 mb_10"
@@ -35,9 +40,9 @@
       <a
         href="#"
         class="send-code btn btn-blue_button btn_extra-large pr_25 pl_25"
-        @click.prevent="sendCode"
+        @click.prevent="handleSubmit"
       >
-        Send code
+        {{ showCode ? 'Send code' : 'Send' }}
       </a>
     </div>
   </div>
@@ -52,6 +57,9 @@ const REPEAT_SEC_COUNT = 30;
 @Component({})
 export default class ConnectEmail extends Vue {
   timerId: any = null;
+  showCode = false;
+  value = '';
+  code = '';
   seconds = 0;
 
   get secondsFormat(): string {
@@ -73,14 +81,6 @@ export default class ConnectEmail extends Vue {
     clearTimeout(this.timerId);
   }
 
-  sendCode() {
-    this.seconds = REPEAT_SEC_COUNT;
-    this.timerId = setTimeout(() => this.makeTimer(), 1000);
-
-    $('.sign-variations-wrap').slideDown(300);
-    $('.sign-variations__control').fadeOut(300);
-  }
-
   repeatSendCode() {
     this.seconds = REPEAT_SEC_COUNT;
     this.timerId = setTimeout(() => this.makeTimer(), 1000);
@@ -93,6 +93,31 @@ export default class ConnectEmail extends Vue {
       this.seconds = countSec - 1;
       this.timerId = setTimeout(() => this.makeTimer(), 1000);
     }
+  }
+
+  handleSubmit() {
+    if (this.showCode) {
+      this.sendCode();
+    } else {
+      this.sendValue();
+    }
+  }
+
+  handleBack() {
+    this.code = '';
+    this.showCode = false;
+
+    clearTimeout(this.timerId);
+  }
+
+  sendValue() {
+    this.seconds = REPEAT_SEC_COUNT;
+    this.timerId = setTimeout(() => this.makeTimer(), 1000);
+    this.showCode = true;
+  }
+
+  sendCode() {
+    console.log('sendCode');
   }
 }
 </script>
