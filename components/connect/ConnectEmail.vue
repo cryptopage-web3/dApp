@@ -16,13 +16,14 @@
         class="global-input_extra-large sign-variations__code global-input w-100 mb_10"
       />
       <div
-        data-time="30"
+        v-if="seconds"
         class="sign-variations__timer global-text_12 dark_grey"
       >
         You can request the code again after
-        <span id="sign-variations__timer-wrap"></span>
+        <span>{{ secondsFormat }}</span>
       </div>
       <a
+        v-else
         href="#"
         class="global-text_12 sign-variations__request-code blue"
         @click.prevent="repeatSendCode"
@@ -30,7 +31,7 @@
         Request code again
       </a>
     </div>
-    <div class="text-center mt_15">
+    <div class="text-center mt_15 sign-variations__control">
       <a
         href="#"
         class="send-code btn btn-blue_button btn_extra-large pr_25 pl_25"
@@ -46,53 +47,52 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 
+const REPEAT_SEC_COUNT = 30;
+
 @Component({})
 export default class ConnectEmail extends Vue {
   timerId: any = null;
-  startTime = 30;
+  seconds = 0;
 
-  sendCode() {
-    $('.sign-variations-wrap').slideDown(300);
-    this.timerId = setInterval(() => {
-      this.makeTimer($('.sign-variations__timer').attr('data-time'));
-    }, 1000);
-    $(this).closest('div').fadeOut(300);
-  }
-
-  repeatSendCode() {
-    $('.sign-variations-wrap').removeClass('active');
-    $('.sign-variations__timer').attr('data-time', this.startTime);
-
-    setTimeout(() => {
-      clearInterval(this.timerId);
-    }, 1000);
-
-    this.timerId = setInterval(() => {
-      this.makeTimer($('.sign-variations__timer').attr('data-time'));
-    }, 1000);
-  }
-
-  makeTimer(countSeconds: string | undefined) {
-    let timeLeft = Number(countSeconds);
-
-    if (timeLeft === -1) {
-      $('.sign-variations-wrap').addClass('active');
-      return;
-    }
-
-    const days = Math.floor(timeLeft / 86400);
-    const hours = Math.floor((timeLeft - days * 86400) / 3600);
-    const minutes = Math.floor((timeLeft - days * 86400 - hours * 3600) / 60);
+  get secondsFormat(): string {
+    const countSec = this.seconds;
+    const days = Math.floor(countSec / 86400);
+    const hours = Math.floor((countSec - days * 86400) / 3600);
+    const minutes = Math.floor((countSec - days * 86400 - hours * 3600) / 60);
     const seconds = Math.floor(
-      timeLeft - days * 86400 - hours * 3600 - minutes * 60,
+      countSec - days * 86400 - hours * 3600 - minutes * 60,
     );
 
     const strMinutes = minutes < 10 ? '0' + minutes : String(minutes);
     const strSeconds = seconds < 10 ? '0' + seconds : String(seconds);
 
-    $('#sign-variations__timer-wrap').html(strMinutes + ':' + strSeconds);
-    timeLeft = timeLeft - 1;
-    $('.sign-variations__timer').attr('data-time', timeLeft);
+    return strMinutes + ':' + strSeconds;
+  }
+
+  beforeDestroy() {
+    clearTimeout(this.timerId);
+  }
+
+  sendCode() {
+    this.seconds = REPEAT_SEC_COUNT;
+    this.timerId = setTimeout(() => this.makeTimer(), 1000);
+
+    $('.sign-variations-wrap').slideDown(300);
+    $('.sign-variations__control').fadeOut(300);
+  }
+
+  repeatSendCode() {
+    this.seconds = REPEAT_SEC_COUNT;
+    this.timerId = setTimeout(() => this.makeTimer(), 1000);
+  }
+
+  makeTimer() {
+    const countSec = this.seconds;
+
+    if (countSec > 0) {
+      this.seconds = countSec - 1;
+      this.timerId = setTimeout(() => this.makeTimer(), 1000);
+    }
   }
 }
 </script>
