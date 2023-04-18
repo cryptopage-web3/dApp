@@ -52,6 +52,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
+import { validatePhone } from '~/utils/validatePhone';
+import { validateEmail } from '~/utils/validateEmail';
 
 const REPEAT_SEC_COUNT = 30;
 
@@ -64,7 +66,7 @@ export default class ConnectEmail extends Vue {
   seconds = 0;
 
   get isPhone(): boolean {
-    return /^(\+?\d+)$/.test(this.value);
+    return /^\d+$/.test(this.value);
   }
 
   get submitCaption(): string {
@@ -126,15 +128,65 @@ export default class ConnectEmail extends Vue {
   }
 
   sendValue() {
-    /** TODO: добавить валидацию на телефон и email */
+    if (!this.validateValue()) {
+      return;
+    }
 
     this.seconds = REPEAT_SEC_COUNT;
     this.timerId = setTimeout(() => this.makeTimer(), 1000);
     this.showCode = true;
   }
 
+  validateValue() {
+    if (!this.value) {
+      this.$notify({
+        type: 'error',
+        title: 'Enter Phone or Email',
+      });
+      return false;
+    }
+
+    if (this.isPhone) {
+      if (!validatePhone(this.value)) {
+        this.$notify({
+          type: 'error',
+          title: 'Phone must be 8 to 15 digits long',
+        });
+        return false;
+      }
+
+      return true;
+    }
+
+    if (!validateEmail(this.value)) {
+      this.$notify({
+        type: 'error',
+        title: 'Invalid Email format',
+      });
+      return false;
+    }
+
+    return true;
+  }
+
   sendCode() {
+    if (!this.validateCode()) {
+      return;
+    }
+
     console.log('sendCode');
+  }
+
+  validateCode() {
+    if (!this.code) {
+      this.$notify({
+        type: 'error',
+        title: 'Enter verification code',
+      });
+      return false;
+    }
+
+    return true;
   }
 }
 </script>
