@@ -9,9 +9,10 @@
     />
     <div v-else class="sign-variations-wrap">
       <div class="global-text_12 dark_grey mb_10">
-        We have sent a verification code to your phone.
+        We have sent a verification code to your
+        {{ isPhone ? 'phone' : 'email' }}.
         <a href="#" class="global-text_12 blue" @click.prevent="handleBack">
-          Change Phone
+          Change {{ isPhone ? 'Phone' : 'Email' }}
         </a>
       </div>
       <input
@@ -42,7 +43,7 @@
         class="send-code btn btn-blue_button btn_extra-large pr_25 pl_25"
         @click.prevent="handleSubmit"
       >
-        {{ showCode ? 'Send code' : 'Send' }}
+        {{ submitCaption }}
       </a>
     </div>
   </div>
@@ -61,6 +62,20 @@ export default class ConnectEmail extends Vue {
   value = '';
   code = '';
   seconds = 0;
+
+  get isPhone(): boolean {
+    return /^(\+?\d+)$/.test(this.value);
+  }
+
+  get submitCaption(): string {
+    return this.showCode
+      ? 'Send code'
+      : this.value
+      ? this.isPhone
+        ? 'Send Phone'
+        : 'Send Email'
+      : 'Send';
+  }
 
   get secondsFormat(): string {
     const countSec = this.seconds;
@@ -111,6 +126,8 @@ export default class ConnectEmail extends Vue {
   }
 
   sendValue() {
+    /** TODO: добавить валидацию на телефон и email */
+
     this.seconds = REPEAT_SEC_COUNT;
     this.timerId = setTimeout(() => this.makeTimer(), 1000);
     this.showCode = true;
