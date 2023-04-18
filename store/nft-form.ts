@@ -15,6 +15,7 @@ import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
 import { getSecDuration } from '~/utils/durationType';
 import { buildFileFromDataURL } from '~/utils/buildFileFromDataURL';
+import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 
 type TNftForm = INftForm;
 
@@ -338,7 +339,7 @@ export default class NftFormModule extends VuexModule {
       file,
       title,
       description,
-      //  attributes,
+      attributes,
       externalLink,
       isUnlockableContent,
       unlockableContentPrice,
@@ -358,6 +359,7 @@ export default class NftFormModule extends VuexModule {
           name: title,
           description,
           externalUrl: externalLink,
+          attributes: getAdaptedAttributes(attributes),
         });
 
         alertModule.success('Nft successfully uploaded to Arweave');

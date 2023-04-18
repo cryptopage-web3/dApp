@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ENCRYPTION_SERVICE_URL } from '~/constants';
 import { Web3Service } from '~/services/Web3Service';
+import { IAttributesServer } from '~/types/nft-form';
 import { authModule } from '~/utils/storeAccessor';
 
 export class EncryptionService {
@@ -65,12 +66,14 @@ export class EncryptionService {
     name,
     description,
     externalUrl,
+    attributes,
   }: {
     file: File;
     isEncrypted: boolean;
     name: string;
     description?: string;
     externalUrl?: string;
+    attributes?: IAttributesServer[];
   }) {
     const {
       data: { url: signedUrl, fileId },
@@ -92,6 +95,7 @@ export class EncryptionService {
         name,
         description,
         external_url: externalUrl,
+        attributes,
       },
       encrypt: isEncrypted,
     });
