@@ -38,7 +38,13 @@
       </a>
     </div>
     <div class="text-center mt_15 sign-variations__control">
+      <div v-if="loading" class="sign-variations__loading">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
       <a
+        v-else
         href="#"
         class="send-code btn btn-blue_button btn_extra-large pr_25 pl_25"
         @click.prevent="handleSubmit"
@@ -61,6 +67,7 @@ const REPEAT_SEC_COUNT = 30;
 export default class ConnectEmail extends Vue {
   timerId: any = null;
   showCode = false;
+  loading = false;
   value = '';
   code = '';
   seconds = 0;
@@ -123,14 +130,24 @@ export default class ConnectEmail extends Vue {
   handleBack() {
     this.code = '';
     this.showCode = false;
+    this.loading = false;
 
     clearTimeout(this.timerId);
   }
 
-  sendValue() {
+  async sendValue() {
     if (!this.validateValue()) {
       return;
     }
+
+    this.loading = true;
+
+    /** имитация запроса */
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
+    this.loading = false;
 
     this.seconds = REPEAT_SEC_COUNT;
     this.timerId = setTimeout(() => this.makeTimer(), 1000);
@@ -174,7 +191,7 @@ export default class ConnectEmail extends Vue {
       return;
     }
 
-    console.log('sendCode');
+    this.loading = true;
   }
 
   validateCode() {
