@@ -12,6 +12,7 @@
       <div class="sign-variations">
         <ConnectMetamask />
         <ConnectGoogle />
+        <ConnectApple />
         <ConnectEmail />
       </div>
 
@@ -42,6 +43,7 @@ import ConnectProviders from '~/components/connect/ConnectProviders.vue';
 import ConnectMetamask from '~/components/connect/ConnectMetamask.vue';
 import ConnectGoogle from '~/components/connect/ConnectGoogle.vue';
 import ConnectEmail from '~/components/connect/ConnectEmail.vue';
+import ConnectApple from '~/components/connect/ConnectApple.vue';
 
 @Component({
   head: {
@@ -61,6 +63,7 @@ import ConnectEmail from '~/components/connect/ConnectEmail.vue';
     ConnectMetamask,
     ConnectGoogle,
     ConnectEmail,
+    ConnectApple,
   },
 })
 export default class ConnectPage extends Vue {}
