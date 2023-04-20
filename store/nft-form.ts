@@ -6,17 +6,16 @@ import {
   IAttributeLevel,
   IAttributeProperty,
   IAttributeStat,
-  INFTCreateParams,
   INftForm,
   ISendNFTParams,
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
-import { IPFSService, MetadataService, Web3Service } from '~/services';
-import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
+import { Web3Service, EncryptionService } from '~/services';
 import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
 import { getSecDuration } from '~/utils/durationType';
 import { buildFileFromDataURL } from '~/utils/buildFileFromDataURL';
+import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 
 type TNftForm = INftForm;
 
@@ -25,8 +24,7 @@ type TSuccessModal = {
   data?: TNftForm;
 };
 
-const ipfsService = new IPFSService();
-const metadataService = new MetadataService();
+const encryptionService = new EncryptionService();
 
 const genUnlockableContentDisabledState = () => ({
   isUnlockableContent: false,
@@ -349,46 +347,27 @@ export default class NftFormModule extends VuexModule {
       unlockableContentAccessDurationType,
     } = this.values;
 
-    const nftParams: INFTCreateParams = {
-      name: title,
-      description,
-      external_url: externalLink,
-      attributes: getAdaptedAttributes(attributes),
-    };
-
-    /** загружаем файл в IPFS */
+    let nftHash = '';
 
     if (file) {
       try {
-        const isMediaFile = /(audio|video)/.test(file.type.split('/')[0]);
-        const fileHash = await metadataService.uploadFileToIPFS(
+        alertModule.info('Uploading Nft to Arweave');
+
+        nftHash = await encryptionService.uploadNft({
           file,
-          isUnlockableContent,
-        );
+          isEncrypted: isUnlockableContent,
+          name: title,
+          description,
+          externalUrl: externalLink,
+          attributes: getAdaptedAttributes(attributes),
+        });
 
-        nftParams[isMediaFile ? 'animation_url' : 'image'] =
-          fileHash && `https://ipfs.io/ipfs/${fileHash}`;
-
-        alertModule.info('Got file hash from IPFS');
+        alertModule.success('Nft successfully uploaded to Arweave');
       } catch {
-        alertModule.error('Failed to save file into IPFS');
+        alertModule.error('Failed to save file into Arweave');
         this.setLoading(false);
         return;
       }
-    }
-
-    /** загружаем NFT в IPFS */
-
-    let nftHash = '';
-
-    try {
-      nftHash = await ipfsService.saveNFT(nftParams);
-
-      alertModule.info('Got NFT hash from IPFS');
-    } catch {
-      alertModule.error('Failed to save NFT into IPFS');
-      this.setLoading(false);
-      return;
     }
 
     /** передача NFT в контракт через web3 */

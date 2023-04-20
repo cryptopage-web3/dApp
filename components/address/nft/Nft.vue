@@ -62,7 +62,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
-import { MetadataService, Web3Service } from '~/services';
+import { EncryptionService, Web3Service } from '~/services';
 import NftAccessConfirmModal from '~/components/shared/nft-access/NftAccessConfirmModal.vue';
 import { INftTransaction, ENftTransactionAccessType, ETypeNft } from '~/types';
 import { addressModule, authModule } from '~/store';
@@ -202,12 +202,14 @@ export default class Nft extends Vue {
   }
 
   async decryptPostContent() {
-    const metadataService = new MetadataService();
+    const encryptionService = new EncryptionService();
 
     try {
       this.decryptLoading = true;
 
-      const imageData = await metadataService.decryptIpfsFile(this.nft.tokenId);
+      const imageData = await encryptionService.getDecryptedNftImage(
+        this.nft.tokenId,
+      );
 
       addressModule.updateNftDetails({
         nft: this.nft,
