@@ -21,7 +21,7 @@ export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
   [EChainId.bsc]: `https://bsc-dataseed.binance.org`,
   [EChainId.bscTestnet]: `https://data-seed-prebsc-1-s1.binance.org:8545`,
   [EChainId.polygon]: `https://polygon-rpc.com`,
-  [EChainId.polygonTestnet]: `https://rpc-mumbai.matic.today`,
+  [EChainId.mumbai]: `https://rpc-mumbai.maticvigil.com`,
 };
 
 export const API_CHAIN_MAP = new Map<string, string>()
@@ -30,7 +30,8 @@ export const API_CHAIN_MAP = new Map<string, string>()
   .set(EChainSlug.solana, 'sol')
   .set(EChainSlug.tron, 'tron')
   .set(EChainSlug.polygon, 'matic')
-  .set(EChainSlug.goerli, 'goerli');
+  .set(EChainSlug.goerli, 'goerli')
+  .set(EChainSlug.mumbai, 'mumbai');
 
 /** дефолтное комьюнити для создания NFT */
 export const OPEN_FORUM_ID = 1;

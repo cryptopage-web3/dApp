@@ -65,10 +65,10 @@ export const networkHelper = {
       slug: EChainSlug.polygon,
       symbol: 'MATIC',
     },
-    [EChainId.polygonTestnet]: {
-      network: EChainType.polygon,
-      name: 'Polygon TestNet',
-      slug: EChainSlug.polygonTestnet,
+    [EChainId.mumbai]: {
+      network: EChainType.mumbai,
+      name: 'Mumbai TestNet',
+      slug: EChainSlug.mumbai,
       symbol: 'MATIC',
     },
     tron: {
@@ -94,7 +94,7 @@ export const networkHelper = {
     [EChainSlug.bsc]: EChainId.bsc,
     [EChainSlug.bscTestnet]: EChainId.bscTestnet,
     [EChainSlug.polygon]: EChainId.polygon,
-    [EChainSlug.polygonTestnet]: EChainId.polygonTestnet,
+    [EChainSlug.mumbai]: EChainId.mumbai,
     [EChainSlug.tron]: EChainId.tron,
     [EChainSlug.solana]: EChainId.solana,
   } as Record<string, number | string>,
@@ -108,6 +108,7 @@ export const networkHelper = {
       EChainId.kovan,
       EChainId.bsc,
       EChainId.polygon,
+      EChainId.mumbai,
     ],
     [EProvider.bscWallet]: [EChainId.bsc, EChainId.bscTestnet],
     [EProvider.okex]: [
@@ -118,6 +119,7 @@ export const networkHelper = {
       EChainId.kovan,
       EChainId.bsc,
       EChainId.polygon,
+      EChainId.mumbai,
     ],
     [EProvider.tron]: [EChainId.tron],
     [EProvider.phantom]: [EChainId.solana],
@@ -129,6 +131,7 @@ export const networkHelper = {
       EChainId.kovan,
       EChainId.bsc,
       EChainId.polygon,
+      EChainId.mumbai,
     ],
   } as any,
 
@@ -159,6 +162,13 @@ export const networkHelper = {
       chainName: 'Goerli',
       nativeCurrency: { name: 'GoerliETH', symbol: 'GoerliETH', decimals: 18 },
       blockExplorerUrls: ['https://goerli.etherscan.io'],
+    },
+    [EMainChain.mumbai]: {
+      chainId: '0x13881',
+      rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+      chainName: 'Mumbai TestNet',
+      nativeCurrency: { name: 'MATIC', symbol: 'MATIC', decimals: 18 },
+      blockExplorerUrls: ['https://polygonscan.com/'],
     },
     [EMainChain.tron]: {
       chainId: 'tron',

@@ -7,7 +7,7 @@ export enum EChainSlug {
   bsc = 'bsc',
   bscTestnet = 'bsc-testnet',
   polygon = 'polygon',
-  polygonTestnet = 'polygon-testnet',
+  mumbai = 'mumbai',
   tron = 'tron',
   solana = 'solana',
 }

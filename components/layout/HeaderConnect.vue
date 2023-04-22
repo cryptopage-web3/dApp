@@ -77,6 +77,14 @@
           </a>
         </li>
         <li>
+          <a href="#" @click.prevent="switchChain(EMainChain.mumbai)">
+            <div class="thumb">
+              <img src="@/assets/img/market-header__wallet_icon4.svg" alt="" />
+            </div>
+            <span> Mumbai </span>
+          </a>
+        </li>
+        <li>
           <a href="#" @click.prevent="switchChain(EMainChain.tron)">
             <div class="thumb">
               <img src="@/assets/img/market-header__wallet_icon5.svg" alt="" />
@@ -191,6 +199,7 @@ export default class HeaderConnect extends Vue {
       goerli: require('@/assets/img-custom/profile-login-accordion_img9.png'),
       bsc: require('@/assets/img/market-header__wallet_icon3.svg'),
       polygon: require('@/assets/img/market-header__wallet_icon4.svg'),
+      mumbai: require('@/assets/img/market-header__wallet_icon4.svg'),
       tron: require('@/assets/img/market-header__wallet_icon5.svg'),
       solana: require('@/assets/img/market-header__wallet_icon6.svg'),
     };

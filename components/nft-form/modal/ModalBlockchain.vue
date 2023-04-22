@@ -61,6 +61,11 @@ export default class ModalBlockchain extends Vue {
       icon: require('@/assets/img/market-header__wallet_icon4.svg'),
     },
     {
+      slug: EChainSlug.mumbai,
+      title: 'Mumbai',
+      icon: require('@/assets/img/market-header__wallet_icon4.svg'),
+    },
+    {
       slug: EChainSlug.tron,
       title: 'Tron',
       icon: require('@/assets/img/market-header__wallet_icon5.svg'),

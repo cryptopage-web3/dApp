@@ -7,7 +7,7 @@ export enum EChainId {
   bsc = 56,
   bscTestnet = 97,
   polygon = 137,
-  polygonTestnet = 80001,
+  mumbai = 80001,
   tron = 'tron',
   solana = 'solana',
 }

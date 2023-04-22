@@ -372,6 +372,93 @@
             </div>
           </div>
         </div>
+        <div class="card profile-login__card">
+          <div id="profile-login-accordion10_2" class="card-header">
+            <button
+              class="profile-login-accordion__link"
+              type="button"
+              data-toggle="collapse"
+              data-target="#profile-login-accordion10"
+              aria-expanded="false"
+              aria-controls="profile-login-accordion10"
+            >
+              <div class="thumb">
+                <img
+                  src="@/assets/img/profile-login-accordion_img3.svg"
+                  alt=""
+                />
+              </div>
+              <span> Mumbai </span>
+              <ConnectCollapseIcon />
+            </button>
+          </div>
+
+          <div
+            id="profile-login-accordion10"
+            class="collapse"
+            aria-labelledby="profile-login-accordion10_2"
+            data-parent="#accordionExample"
+          >
+            <div class="profile-login-accordion__body">
+              <ul class="profile-login__list">
+                <li>
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.mumbai, EProvider.metamask)
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img1_2x.png"
+                        alt=""
+                      />
+                    </div>
+                    <span> Metamask </span>
+                  </a>
+                </li>
+                <li class="profile-login__list__walletconnect">
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(
+                        EMainChain.mumbai,
+                        EProvider.walletConnect,
+                      )
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img2_2x.png"
+                        alt=""
+                      />
+                    </div>
+                    <span> WalletConnect </span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    role="button"
+                    @click.prevent="
+                      connectToProvider(EMainChain.mumbai, EProvider.okex)
+                    "
+                  >
+                    <div class="thumb">
+                      <img
+                        src="@/assets/img-custom/profile-login__list_img3_2x.png"
+                        alt=""
+                      />
+                    </div>
+                    <span> OKX Wallet </span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="card profile-login__card profile-login__card_tron">
           <div id="profile-login-accordion4_2" class="card-header">
             <button
@@ -643,7 +730,8 @@ export default class ConnectPage extends Vue {
       .set(EChainSlug.polygon, '#profile-login-accordion3')
       .set(EChainSlug.tron, '#profile-login-accordion4')
       .set(EChainSlug.solana, '#profile-login-accordion5')
-      .set(EChainSlug.goerli, '#profile-login-accordion9');
+      .set(EChainSlug.goerli, '#profile-login-accordion9')
+      .set(EChainSlug.mumbai, '#profile-login-accordion10');
 
     const element = elementMap.get(slug);
     element && ($(element) as any).collapse('show');
