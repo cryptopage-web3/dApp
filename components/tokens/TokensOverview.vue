@@ -41,6 +41,7 @@ export default class TokensOverview extends Vue {
       goerli: require('@/assets/img-custom/profile-login-accordion_img9.png'),
       bsc: require('@/assets/img/market-header__wallet_icon3.svg'),
       polygon: require('@/assets/img/market-header__wallet_icon4.svg'),
+      mumbai: require('@/assets/img-custom/profile-login-accordion_img10.png'),
       tron: require('@/assets/img/market-header__wallet_icon5.svg'),
       solana: require('@/assets/img/market-header__wallet_icon6.svg'),
     };

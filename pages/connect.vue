@@ -384,7 +384,7 @@
             >
               <div class="thumb">
                 <img
-                  src="@/assets/img/profile-login-accordion_img3.svg"
+                  src="@/assets/img-custom/profile-login-accordion_img10.png"
                   alt=""
                 />
               </div>
