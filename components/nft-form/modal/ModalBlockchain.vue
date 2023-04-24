@@ -48,7 +48,7 @@ export default class ModalBlockchain extends Vue {
     {
       slug: EChainSlug.goerli,
       title: 'Goerli',
-      icon: require('@/assets/img/market-header__wallet_icon2.svg'),
+      icon: require('@/assets/img-custom/profile-login-accordion_img9.png'),
     },
     {
       slug: EChainSlug.bsc,
@@ -63,7 +63,7 @@ export default class ModalBlockchain extends Vue {
     {
       slug: EChainSlug.mumbai,
       title: 'Mumbai',
-      icon: require('@/assets/img/market-header__wallet_icon4.svg'),
+      icon: require('@/assets/img-custom/profile-login-accordion_img10.png'),
     },
     {
       slug: EChainSlug.tron,
