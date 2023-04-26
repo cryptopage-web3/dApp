@@ -24,7 +24,7 @@ export class Web3Service {
       } = params;
 
       const CONTRACT = await import(
-        `../contracts/${authChainSlug}/proxy_community.json`
+        `../contracts/${authChainSlug}/executor.json`
       );
 
       const contract = new this.web3.eth.Contract(
@@ -58,7 +58,7 @@ export class Web3Service {
         params;
 
       const CONTRACT = await import(
-        `../contracts/${authChainSlug}/proxy_community.json`
+        `../contracts/${authChainSlug}/executor.json`
       );
 
       const contract = new this.web3.eth.Contract(
@@ -84,7 +84,7 @@ export class Web3Service {
       const { authAddress, authChainSlug, nftTokenId } = params;
 
       const CONTRACT = await import(
-        `../contracts/${authChainSlug}/proxy_community.json`
+        `../contracts/${authChainSlug}/executor.json`
       );
 
       const contract = new this.web3.eth.Contract(
@@ -105,10 +105,12 @@ export class Web3Service {
     }
   };
 
-  public checkIfHaveAccessToEncryptedPost = async (postId: string) => {
-    // TODO replace by authChainSlug
+  public checkIfHaveAccessToEncryptedPost = async (
+    postId: string,
+    authChainSlug: string,
+  ) => {
     const CONTRACT = await import(
-      `../contracts/${'goerli'}/proxy_community.json`
+      `../contracts/${authChainSlug}/executor.json`
     );
 
     const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
@@ -121,10 +123,10 @@ export class Web3Service {
   public buyPostAccess = async (
     authAddress: string,
     postId: string,
+    authChainSlug: string,
   ): Promise<void> => {
-    // TODO replace by authChainSlug
     const CONTRACT = await import(
-      `../contracts/${'goerli'}/proxy_community.json`
+      `../contracts/${authChainSlug}/executor.json`
     );
 
     const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);

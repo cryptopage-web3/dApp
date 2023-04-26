@@ -322,10 +322,10 @@ export default class NftFormModule extends VuexModule {
       return;
     }
 
-    /** пока есть возможность создать только для goerli */
+    /** пока есть возможность создать только для mumbai */
 
-    if (authModule.chainSlug !== EChainSlug.goerli) {
-      alertModule.error('Available only Goerli');
+    if (authModule.chainSlug !== EChainSlug.mumbai) {
+      alertModule.error('Available only Mumbai');
       return;
     }
 
