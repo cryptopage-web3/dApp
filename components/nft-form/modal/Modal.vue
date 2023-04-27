@@ -172,7 +172,7 @@ export default class Modal extends Vue {
   mounted() {
     ($(this.$refs.sendBtn) as any).tooltip({
       trigger: 'hover',
-      title: 'Name and file are required',
+      title: 'Name or file are required',
     });
 
     ($(this.$refs.modal) as any).on('hide.bs.modal', function () {
