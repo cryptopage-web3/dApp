@@ -1,7 +1,9 @@
 import Web3 from 'web3';
+import { defaultAbiCoder, formatBytes32String } from 'ethers/lib/utils';
 import { IWriteCommentParams } from '~/types/comment-form';
 import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
+import { contractAddresses, defaultCommunityAddress } from '~/contracts';
 
 export class Web3Service {
   web3!: Web3;
@@ -27,10 +29,29 @@ export class Web3Service {
         `../contracts/${authChainSlug}/executor.json`
       );
 
+      console.log(authChainSlug, CONTRACT);
+      debugger;
+
       const contract = new this.web3.eth.Contract(
         CONTRACT.abi,
         CONTRACT.address,
       );
+
+      const transactionId = formatBytes32String(String(Date.now()));
+      const data = defaultAbiCoder.encode(
+        ['address', 'uint256'],
+        [defaultCommunityAddress, 0],
+      );
+
+      console.log(transactionId, data);
+      debugger;
+
+      const ddd = await contract.methods
+        .run(transactionId, contractAddresses.communityJoin, 1, data)
+        .call();
+
+      console.log(ddd);
+      debugger;
 
       contract.methods
         .writePost(
