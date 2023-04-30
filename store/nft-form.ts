@@ -401,11 +401,13 @@ export default class NftFormModule extends VuexModule {
       params: sendNFTParams,
       callbacks: {
         onTransactionHash(hash: string) {
+          debugger;
           txHash = hash;
 
           alertModule.info(`${txHash}: Transaction on pending`);
         },
         onReceipt() {
+          debugger;
           alertModule.success('Transaction completed');
 
           self.setShowSuccessModal({
@@ -416,6 +418,7 @@ export default class NftFormModule extends VuexModule {
           self.setLoading(false);
         },
         onError() {
+          debugger;
           alertModule.error('Transaction has some error');
           self.setLoading(false);
         },

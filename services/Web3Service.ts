@@ -3,7 +3,11 @@ import { defaultAbiCoder, formatBytes32String } from 'ethers/lib/utils';
 import { IWriteCommentParams } from '~/types/comment-form';
 import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
-import { contractAddresses, defaultCommunityAddress } from '~/contracts';
+import {
+  contractPlugins,
+  defaultCommunityAddress,
+  zeroAddress,
+} from '~/contracts';
 
 export class Web3Service {
   web3!: Web3;
@@ -18,11 +22,11 @@ export class Web3Service {
         authChainSlug,
         authAddress,
         ownerAddress,
-        communityId,
         ipfsHash,
+        // communityId,
         isEncrypted,
-        accessPrice,
-        accessDuration,
+        // accessPrice,
+        // accessDuration,
       } = params;
 
       const CONTRACT = await import(
@@ -37,31 +41,56 @@ export class Web3Service {
         CONTRACT.address,
       );
 
-      const transactionId = formatBytes32String(String(Date.now()));
-      const data = defaultAbiCoder.encode(
+      const timeNow = Date.now();
+
+      /** добавление адреса к сообществу по умолчанию */
+
+      const transactionJoinId = formatBytes32String(String(timeNow + 1));
+      const dataJoin = defaultAbiCoder.encode(
         ['address', 'uint256'],
         [defaultCommunityAddress, 0],
       );
 
-      console.log(transactionId, data);
+      console.log(transactionJoinId, dataJoin);
       debugger;
 
-      const ddd = await contract.methods
-        .run(transactionId, contractAddresses.communityJoin, 1, data)
-        .call();
+      // const resultJoin = await contract.methods
+      //   .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
+      //   .send();
 
-      console.log(ddd);
-      debugger;
+      // console.log(resultJoin);
+      // debugger;
+
+      /** создание поста */
+
+      const transactionPostId = formatBytes32String(String(timeNow + 2));
+      const dataPost = defaultAbiCoder.encode(
+        [
+          'address',
+          'address',
+          'address',
+          'string',
+          'uint256',
+          'string[]',
+          'bool',
+          'bool',
+          'uint256',
+        ],
+        [
+          defaultCommunityAddress,
+          zeroAddress,
+          ownerAddress,
+          ipfsHash,
+          0,
+          [],
+          isEncrypted,
+          true,
+          0,
+        ],
+      );
 
       contract.methods
-        .writePost(
-          communityId,
-          ipfsHash,
-          ownerAddress,
-          isEncrypted,
-          accessPrice.toString(),
-          accessDuration,
-        )
+        .run(transactionPostId, contractPlugins.writePost, 1, dataPost)
         .send({
           from: authAddress,
         })
