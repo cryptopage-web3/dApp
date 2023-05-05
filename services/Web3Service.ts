@@ -1,7 +1,13 @@
 import Web3 from 'web3';
+import { defaultAbiCoder, formatBytes32String } from 'ethers/lib/utils';
 import { IWriteCommentParams } from '~/types/comment-form';
 import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
+import {
+  contractPlugins,
+  defaultCommunityAddress,
+  zeroAddress,
+} from '~/contracts';
 
 export class Web3Service {
   web3!: Web3;
@@ -16,31 +22,83 @@ export class Web3Service {
         authChainSlug,
         authAddress,
         ownerAddress,
-        communityId,
         ipfsHash,
+        // communityId,
         isEncrypted,
-        accessPrice,
-        accessDuration,
+        // accessPrice,
+        // accessDuration,
       } = params;
 
-      const CONTRACT = await import(
-        `../contracts/${authChainSlug}/proxy_community.json`
+      const CONTRACT_EXECUTOR = await import(
+        `../contracts/${authChainSlug}/executor.json`
       );
 
-      const contract = new this.web3.eth.Contract(
-        CONTRACT.abi,
-        CONTRACT.address,
+      const contractExecutor = new this.web3.eth.Contract(
+        CONTRACT_EXECUTOR.abi,
+        CONTRACT_EXECUTOR.address,
       );
 
-      contract.methods
-        .writePost(
-          communityId,
-          ipfsHash,
-          ownerAddress,
-          isEncrypted,
-          accessPrice.toString(),
-          accessDuration,
-        )
+      const CONTRACT_ACCOUNT = await import(
+        `../contracts/${authChainSlug}/account.json`
+      );
+
+      const contractAccount = new this.web3.eth.Contract(
+        CONTRACT_ACCOUNT.abi,
+        CONTRACT_ACCOUNT.address,
+      );
+
+      const timeNow = Date.now();
+
+      /** добавление адреса к сообществу по умолчанию */
+
+      const isCommunityUser = await contractAccount.methods
+        .isCommunityUser(defaultCommunityAddress, authAddress)
+        .call();
+
+      if (!isCommunityUser) {
+        const transactionJoinId = formatBytes32String(String(timeNow + 1));
+        const dataJoin = defaultAbiCoder.encode(
+          ['address', 'uint256'],
+          [defaultCommunityAddress, 0],
+        );
+
+        await contractExecutor.methods
+          .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
+          .send({
+            from: authAddress,
+          });
+      }
+
+      /** создание поста */
+
+      const transactionPostId = formatBytes32String(String(timeNow + 2));
+      const dataPost = defaultAbiCoder.encode(
+        [
+          'address',
+          'address',
+          'address',
+          'string',
+          'uint256',
+          'string[]',
+          'bool',
+          'bool',
+          'uint256',
+        ],
+        [
+          defaultCommunityAddress, // communityAddress
+          zeroAddress, // repostFromCommunityAddress
+          ownerAddress, // userAddress
+          ipfsHash, // postHash
+          0, // encodingType
+          [], // tags
+          isEncrypted, // isEncrypted
+          true, // isView
+          0, // writeNftId
+        ],
+      );
+
+      contractExecutor.methods
+        .run(transactionPostId, contractPlugins.writePost, 1, dataPost)
         .send({
           from: authAddress,
         })
@@ -58,7 +116,7 @@ export class Web3Service {
         params;
 
       const CONTRACT = await import(
-        `../contracts/${authChainSlug}/proxy_community.json`
+        `../contracts/${authChainSlug}/executor.json`
       );
 
       const contract = new this.web3.eth.Contract(
@@ -84,7 +142,7 @@ export class Web3Service {
       const { authAddress, authChainSlug, nftTokenId } = params;
 
       const CONTRACT = await import(
-        `../contracts/${authChainSlug}/proxy_community.json`
+        `../contracts/${authChainSlug}/executor.json`
       );
 
       const contract = new this.web3.eth.Contract(
@@ -105,10 +163,12 @@ export class Web3Service {
     }
   };
 
-  public checkIfHaveAccessToEncryptedPost = async (postId: string) => {
-    // TODO replace by authChainSlug
+  public checkIfHaveAccessToEncryptedPost = async (
+    postId: string,
+    authChainSlug: string,
+  ) => {
     const CONTRACT = await import(
-      `../contracts/${'goerli'}/proxy_community.json`
+      `../contracts/${authChainSlug}/executor.json`
     );
 
     const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
@@ -121,10 +181,10 @@ export class Web3Service {
   public buyPostAccess = async (
     authAddress: string,
     postId: string,
+    authChainSlug: string,
   ): Promise<void> => {
-    // TODO replace by authChainSlug
     const CONTRACT = await import(
-      `../contracts/${'goerli'}/proxy_community.json`
+      `../contracts/${authChainSlug}/executor.json`
     );
 
     const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
