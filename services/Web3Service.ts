@@ -29,37 +29,45 @@ export class Web3Service {
         // accessDuration,
       } = params;
 
-      const CONTRACT = await import(
+      const CONTRACT_EXECUTOR = await import(
         `../contracts/${authChainSlug}/executor.json`
       );
 
-      console.log(authChainSlug, CONTRACT);
-      debugger;
+      const contractExecutor = new this.web3.eth.Contract(
+        CONTRACT_EXECUTOR.abi,
+        CONTRACT_EXECUTOR.address,
+      );
 
-      const contract = new this.web3.eth.Contract(
-        CONTRACT.abi,
-        CONTRACT.address,
+      const CONTRACT_ACCOUNT = await import(
+        `../contracts/${authChainSlug}/account.json`
+      );
+
+      const contractAccount = new this.web3.eth.Contract(
+        CONTRACT_ACCOUNT.abi,
+        CONTRACT_ACCOUNT.address,
       );
 
       const timeNow = Date.now();
 
       /** добавление адреса к сообществу по умолчанию */
 
-      const transactionJoinId = formatBytes32String(String(timeNow + 1));
-      const dataJoin = defaultAbiCoder.encode(
-        ['address', 'uint256'],
-        [defaultCommunityAddress, 0],
-      );
+      const isCommunityUser = await contractAccount.methods
+        .isCommunityUser(defaultCommunityAddress, authAddress)
+        .call();
 
-      console.log(transactionJoinId, dataJoin);
-      debugger;
+      if (!isCommunityUser) {
+        const transactionJoinId = formatBytes32String(String(timeNow + 1));
+        const dataJoin = defaultAbiCoder.encode(
+          ['address', 'uint256'],
+          [defaultCommunityAddress, 0],
+        );
 
-      // const resultJoin = await contract.methods
-      //   .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
-      //   .send();
-
-      // console.log(resultJoin);
-      // debugger;
+        await contractExecutor.methods
+          .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
+          .send({
+            from: authAddress,
+          });
+      }
 
       /** создание поста */
 
@@ -77,19 +85,19 @@ export class Web3Service {
           'uint256',
         ],
         [
-          defaultCommunityAddress,
-          zeroAddress,
-          ownerAddress,
-          ipfsHash,
-          0,
-          [],
-          isEncrypted,
-          true,
-          0,
+          defaultCommunityAddress, // communityAddress
+          zeroAddress, // repostFromCommunityAddress
+          ownerAddress, // userAddress
+          ipfsHash, // postHash
+          0, // encodingType
+          [], // tags
+          isEncrypted, // isEncrypted
+          true, // isView
+          0, // writeNftId
         ],
       );
 
-      contract.methods
+      contractExecutor.methods
         .run(transactionPostId, contractPlugins.writePost, 1, dataPost)
         .send({
           from: authAddress,
