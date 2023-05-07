@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import { defaultAbiCoder, formatBytes32String } from 'ethers/lib/utils';
+import { BigNumber } from 'ethers';
 import { IWriteCommentParams } from '~/types/comment-form';
 import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
@@ -149,7 +150,7 @@ export class Web3Service {
       const transactionId = formatBytes32String(String(Date.now()));
       const dataBurn = defaultAbiCoder.encode(
         ['uint256'],
-        [Number(nftTokenId)],
+        [BigNumber.from(nftTokenId)],
       );
 
       contract.methods
