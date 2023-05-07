@@ -20,6 +20,8 @@ export const contractPlugins = {
     '0xabb73a7cacd6d5a3b8b8b9a80071487e18ca4f45686143e16706fd3a9df138e8',
   writePost:
     '0x837b8271e750549d244e6741875c390f9941a5da61478e8846e8bf006133e4cb',
+  burnPost:
+    '0xb2cde8c07a13cb40b214c39ca8c80ae844ff5ce80b0d241b17fbc9c38f5aa9f9',
 };
 
 /** адрес сообщества по умолчанию */

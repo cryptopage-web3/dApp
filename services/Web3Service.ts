@@ -146,8 +146,11 @@ export class Web3Service {
         CONTRACT.address,
       );
 
+      const transactionId = formatBytes32String(String(Date.now()));
+      const dataBurn = defaultAbiCoder.encode(['uint256'], [nftTokenId]);
+
       contract.methods
-        .burnPost(nftTokenId)
+        .run(transactionId, contractPlugins.burnPost, 1, dataBurn)
         .send({
           from: authAddress,
         })
