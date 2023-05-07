@@ -3,11 +3,7 @@ import { defaultAbiCoder, formatBytes32String } from 'ethers/lib/utils';
 import { IWriteCommentParams } from '~/types/comment-form';
 import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
-import {
-  contractPlugins,
-  defaultCommunityAddress,
-  zeroAddress,
-} from '~/contracts';
+import { contractPlugins, zeroAddress } from '~/contracts';
 
 export class Web3Service {
   web3!: Web3;
@@ -23,7 +19,7 @@ export class Web3Service {
         authAddress,
         ownerAddress,
         ipfsHash,
-        // communityId,
+        communityAddress,
         isEncrypted,
         // accessPrice,
         // accessDuration,
@@ -52,14 +48,14 @@ export class Web3Service {
       /** добавление адреса к сообществу по умолчанию */
 
       const isCommunityUser = await contractAccount.methods
-        .isCommunityUser(defaultCommunityAddress, authAddress)
+        .isCommunityUser(communityAddress, authAddress)
         .call();
 
       if (!isCommunityUser) {
         const transactionJoinId = formatBytes32String(String(timeNow + 1));
         const dataJoin = defaultAbiCoder.encode(
           ['address', 'uint256'],
-          [defaultCommunityAddress, 0],
+          [communityAddress, 0],
         );
 
         await contractExecutor.methods
@@ -85,7 +81,7 @@ export class Web3Service {
           'uint256',
         ],
         [
-          defaultCommunityAddress, // communityAddress
+          communityAddress, // communityAddress
           zeroAddress, // repostFromCommunityAddress
           ownerAddress, // userAddress
           ipfsHash, // postHash

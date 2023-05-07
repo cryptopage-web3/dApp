@@ -11,11 +11,11 @@ import {
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
 import { Web3Service, EncryptionService } from '~/services';
-import { OPEN_FORUM_ID } from '~/constants';
 import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
 import { getSecDuration } from '~/utils/durationType';
 import { buildFileFromDataURL } from '~/utils/buildFileFromDataURL';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
+import { defaultCommunityAddress } from '~/contracts';
 
 type TNftForm = INftForm;
 
@@ -380,7 +380,7 @@ export default class NftFormModule extends VuexModule {
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
       ownerAddress,
-      communityId: OPEN_FORUM_ID,
+      communityAddress: defaultCommunityAddress,
       ipfsHash: nftHash,
       isEncrypted: isUnlockableContent,
       accessPrice: (unlockableContentPrice || 0) * 10 ** 18,

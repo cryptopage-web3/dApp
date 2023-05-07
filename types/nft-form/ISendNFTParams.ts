@@ -2,7 +2,7 @@ export interface ISendNFTParams {
   authChainSlug: string;
   authAddress: string;
   ownerAddress: string;
-  communityId: number;
+  communityAddress: string;
   ipfsHash: string;
   isEncrypted: boolean;
   accessPrice: number;
