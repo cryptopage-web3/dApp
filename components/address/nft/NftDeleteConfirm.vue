@@ -59,6 +59,7 @@ import { INftTransaction } from '~/types';
 import { Web3Service } from '~/services';
 import { addressModule, authModule } from '~/store';
 import { IDeleteNFTParams } from '~/types/nft-form';
+import { defaultCommunityAddress } from '~/contracts';
 
 type TNftTransaction = INftTransaction;
 
@@ -108,6 +109,7 @@ export default class NftDeleteConfirm extends Vue {
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
       nftTokenId: this.nft.tokenId,
+      communityAddress: defaultCommunityAddress,
     };
 
     let txHash = '';
