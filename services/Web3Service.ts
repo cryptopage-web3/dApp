@@ -53,17 +53,6 @@ export class Web3Service {
       // console.log(posts, communityAddress);
       // debugger;
 
-      // this.burnPost({
-      //   params: {
-      //     authChainSlug,
-      //     authAddress,
-      //     nftTokenId: '80001000000000010',
-      //     communityAddress,
-      //   },
-      //   callbacks,
-      // });
-      // return;
-
       /** добавление адреса к сообществу по умолчанию */
 
       const isCommunityUser = await contractAccount.methods
