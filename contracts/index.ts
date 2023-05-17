@@ -22,8 +22,10 @@ export const contractPlugins = {
     '0x837b8271e750549d244e6741875c390f9941a5da61478e8846e8bf006133e4cb',
   burnPost:
     '0xb2cde8c07a13cb40b214c39ca8c80ae844ff5ce80b0d241b17fbc9c38f5aa9f9',
-  communityEditModerators:
+  editModerators:
     '0x735720fb886331ee35c4c410405c3733d54a974426a5f7e3aa5e58c777c29215',
+  writeComment:
+    '0xe32670d3f899fd73be01c80d75c5a93935c33f6f4df302f97f876b03d4e705f9',
 };
 
 /** адрес сообщества по умолчанию */

@@ -73,7 +73,7 @@ export class Web3Service {
           });
       }
 
-      /** создание поста */
+      /** добавление комментария */
 
       const transactionPostId = formatBytes32String(String(timeNow + 2));
       const dataPost = defaultAbiCoder.encode(
@@ -116,20 +116,84 @@ export class Web3Service {
 
   public writeComment = async ({ params, callbacks }: IWriteCommentParams) => {
     try {
-      const { authAddress, authChainSlug, nftTokenId, ipfsHash, isUp, isDown } =
-        params;
+      const {
+        authAddress,
+        authChainSlug,
+        nftTokenId,
+        ipfsHash,
+        isUp,
+        isDown,
+        communityAddress,
+      } = params;
 
-      const CONTRACT = await import(
+      const CONTRACT_EXECUTOR = await import(
         `../contracts/${authChainSlug}/executor.json`
       );
 
-      const contract = new this.web3.eth.Contract(
-        CONTRACT.abi,
-        CONTRACT.address,
+      const contractExecutor = new this.web3.eth.Contract(
+        CONTRACT_EXECUTOR.abi,
+        CONTRACT_EXECUTOR.address,
       );
 
-      contract.methods
-        .writeComment(nftTokenId, ipfsHash, isUp, isDown, authAddress)
+      const CONTRACT_ACCOUNT = await import(
+        `../contracts/${authChainSlug}/account.json`
+      );
+
+      const contractAccount = new this.web3.eth.Contract(
+        CONTRACT_ACCOUNT.abi,
+        CONTRACT_ACCOUNT.address,
+      );
+
+      const timeNow = Date.now();
+
+      /** добавление адреса к сообществу по умолчанию */
+
+      const isCommunityUser = await contractAccount.methods
+        .isCommunityUser(communityAddress, authAddress)
+        .call();
+
+      if (!isCommunityUser) {
+        const transactionJoinId = formatBytes32String(String(timeNow + 1));
+        const dataJoin = defaultAbiCoder.encode(
+          ['address', 'uint256'],
+          [communityAddress, 0],
+        );
+
+        await contractExecutor.methods
+          .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
+          .send({
+            from: authAddress,
+          });
+      }
+
+      /** создание поста */
+
+      const transactionCommentId = formatBytes32String(String(timeNow + 2));
+      const dataComment = defaultAbiCoder.encode(
+        [
+          'address',
+          'uint256',
+          'address',
+          'string',
+          'bool',
+          'bool',
+          'bool',
+          'bool',
+        ],
+        [
+          communityAddress, // communityAddress
+          BigNumber.from(nftTokenId), // postId
+          authAddress, // userAddress
+          ipfsHash, // commentHash
+          isUp, // up
+          isDown, // down
+          false, // isEncrypted
+          true, // isView
+        ],
+      );
+
+      contractExecutor.methods
+        .run(transactionCommentId, contractPlugins.writeComment, 1, dataComment)
         .send({
           from: authAddress,
         })
@@ -184,7 +248,7 @@ export class Web3Service {
         await contractExecutor.methods
           .run(
             transactionEditId,
-            contractPlugins.communityEditModerators,
+            contractPlugins.editModerators,
             1,
             dataEditModerators,
           )

@@ -59,7 +59,7 @@ import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import { INft } from '~/types';
 import { ISendCommentParams, TCommentType } from '~/types/comment-form';
 import { IPFSService, Web3Service } from '~/services';
-import { nftContractAddress } from '~/contracts';
+import { defaultCommunityAddress, nftContractAddress } from '~/contracts';
 import CommentLikeEmptyIcon from '~/components/icon/nft/CommentLikeEmptyIcon.vue';
 import CommentLikeActiveIcon from '~/components/icon/nft/CommentLikeActiveIcon.vue';
 import CommentDislikeEmptyIcon from '~/components/icon/nft/CommentDislikeEmptyIcon.vue';
@@ -238,6 +238,7 @@ export default class ControlComments extends Vue {
     /** создаем комментарий в контракт через web3 */
 
     const sendCommentParams: ISendCommentParams = {
+      communityAddress: defaultCommunityAddress,
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
       nftTokenId: this.nft.tokenId,
