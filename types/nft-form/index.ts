@@ -10,3 +10,4 @@ export * from './ISendNFTParams';
 export * from './IWritePostParams';
 export * from './IDeleteNFTParams';
 export * from './IBurnPostParams';
+export * from './IReadPostParams';

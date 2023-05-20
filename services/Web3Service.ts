@@ -2,7 +2,11 @@ import Web3 from 'web3';
 import { defaultAbiCoder, formatBytes32String } from 'ethers/lib/utils';
 import { BigNumber } from 'ethers';
 import { IWriteCommentParams } from '~/types/comment-form';
-import { IBurnPostParams, IWritePostParams } from '~/types/nft-form';
+import {
+  IBurnPostParams,
+  IReadPostParams,
+  IWritePostParams,
+} from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
 import { contractPlugins, zeroAddress } from '~/contracts';
 
@@ -12,6 +16,70 @@ export class Web3Service {
   constructor(provider: any = null) {
     this.web3 = new Web3(provider || Web3.givenProvider);
   }
+
+  /*
+  public testRequest = async ({
+    params,
+  }: // callbacks,
+  IWritePostParams) => {
+    const {
+      authChainSlug,
+      authAddress,
+      // ownerAddress,
+      // ipfsHash,
+      communityAddress,
+      // isEncrypted,
+      // accessPrice,
+      // accessDuration,
+    } = params;
+
+    const CONTRACT_ACCOUNT = await import(
+      `../contracts/${authChainSlug}/account.json`
+    );
+
+    const contractAccount = new this.web3.eth.Contract(
+      CONTRACT_ACCOUNT.abi,
+      CONTRACT_ACCOUNT.address,
+    );
+
+    const posts = await contractAccount.methods
+      .getPostIdsByUserAndCommunity(communityAddress, authAddress)
+      .call();
+
+    console.log(posts, communityAddress);
+    debugger;
+
+    this.readPost({
+      authChainSlug,
+      nftTokenId: '80001000000000015',
+    });
+
+    // this.writeComment({
+    //   params: {
+    //     communityAddress,
+    //     authChainSlug,
+    //     authAddress,
+    //     nftTokenId: '80001000000000015',
+    //     ipfsHash: 'test hash',
+    //     isUp: true,
+    //     isDown: false,
+    //   },
+    //   callbacks,
+    // });
+    // return;
+
+    // this.burnPost({
+    //   params: {
+    //     authChainSlug,
+    //     authAddress,
+    //     nftTokenId: '80001000000000014',
+    //     communityAddress,
+    //   },
+    //   callbacks,
+    // });
+    // return;
+  };
+  */
 
   public writePost = async ({ params, callbacks }: IWritePostParams) => {
     try {
@@ -46,12 +114,8 @@ export class Web3Service {
 
       const timeNow = Date.now();
 
-      // const posts = await contractAccount.methods
-      //   .getPostIdsByUserAndCommunity(communityAddress, authAddress)
-      //   .call();
-
-      // console.log(posts, communityAddress);
-      // debugger;
+      // this.testRequest({ params, callbacks });
+      // return;
 
       /** добавление адреса к сообществу по умолчанию */
 
@@ -276,6 +340,40 @@ export class Web3Service {
     } catch {
       callbacks.onError();
     }
+  };
+
+  public readPost = async ({ authChainSlug, nftTokenId }: IReadPostParams) => {
+    const CONTRACT_MAIN = await import(
+      `../contracts/${authChainSlug}/main.json`
+    );
+
+    const contractMain = new this.web3.eth.Contract(
+      CONTRACT_MAIN.abi,
+      CONTRACT_MAIN.address,
+    );
+
+    const CONTRACT_POST_INFO = await import(
+      `../contracts/${authChainSlug}/postInfo.json`
+    );
+
+    /** получаем адрес плагина */
+
+    const pluginAddress = await contractMain.methods
+      .getPluginContract(contractPlugins.readPost, 1)
+      .call();
+
+    const contractPlugin = new this.web3.eth.Contract(
+      CONTRACT_POST_INFO.abi,
+      pluginAddress,
+    );
+
+    /** получаем данные поста */
+
+    const postInfo = await contractPlugin.methods.read(nftTokenId).call();
+
+    // console.log(postInfo);
+
+    return postInfo;
   };
 
   public checkIfHaveAccessToEncryptedPost = async (

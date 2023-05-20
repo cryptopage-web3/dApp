@@ -26,6 +26,8 @@ export const contractPlugins = {
     '0x735720fb886331ee35c4c410405c3733d54a974426a5f7e3aa5e58c777c29215',
   writeComment:
     '0xe32670d3f899fd73be01c80d75c5a93935c33f6f4df302f97f876b03d4e705f9',
+  readPost:
+    '0x58d1867e9921459336ab353b1045e91c2c345f6e4e42a04a53850ea42e6ce2f1',
 };
 
 /** адрес сообщества по умолчанию */
