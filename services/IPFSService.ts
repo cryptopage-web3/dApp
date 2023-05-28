@@ -31,19 +31,16 @@ export class IPFSService {
 
   saveFile = async (file: File): Promise<string> => {
     const data = await this.api.add(file);
-    await this.api.pin.add(data.path);
     return data.path;
   };
 
   saveNFT = async (nft: INFTCreateParams): Promise<string> => {
     const data = await this.api.add(JSON.stringify(nft));
-    await this.api.pin.add(data.path);
     return data.path;
   };
 
   saveComment = async (text: string): Promise<string> => {
     const data = await this.api.add(text);
-    await this.api.pin.add(data.path);
     return data.path;
   };
 
