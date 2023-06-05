@@ -6,6 +6,8 @@ import { EChainId } from '~/types';
  * все плагины - 0x03D2F15cc5d2AC4F90cBf297f28B426e9CD5a4A7
  * общий контракт - 0x7E754F7D127eea39a3F7078ad4a8e9c61D6cD534
  * контракт executor - 0x43876793bd3a12f84773542033b2ebc29f7f02c5
+ * контракт pluginList - 0x3ed99873bc1a0935b36257ab67367622d9c97069
+ * список плагинов - https://mumbai.polygonscan.com/address/0x3ed99873bc1a0935b36257ab67367622d9c97069#readContract
  * тесты - https://github.com/cryptopage-web3/smart_contracts/tree/master/test
  */
 
@@ -28,6 +30,10 @@ export const contractPlugins = {
     '0xe32670d3f899fd73be01c80d75c5a93935c33f6f4df302f97f876b03d4e705f9',
   readPost:
     '0x58d1867e9921459336ab353b1045e91c2c345f6e4e42a04a53850ea42e6ce2f1',
+  singleWritePost:
+    '0xbbff7889cff09dddaf3690b2cfd43476346b29cb488f1f19426947d13094674c',
+  singleReadPost:
+    '0x9e5224d23f22a6d0daa46d942305d0c94d3739ee0bd58cb2725e2f7f71c2ff73',
 };
 
 /** адрес сообщества по умолчанию */

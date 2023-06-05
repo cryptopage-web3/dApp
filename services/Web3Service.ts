@@ -8,7 +8,7 @@ import {
   IWritePostParams,
 } from '~/types/nft-form';
 import { alertModule, authModule } from '~/utils/storeAccessor';
-import { contractPlugins, zeroAddress } from '~/contracts';
+import { contractPlugins } from '~/contracts';
 
 export class Web3Service {
   web3!: Web3;
@@ -24,35 +24,47 @@ export class Web3Service {
   IWritePostParams) => {
     const {
       authChainSlug,
-      authAddress,
-      // ownerAddress,
+      // authAddress,
+      ownerAddress,
       // ipfsHash,
-      communityAddress,
+      // communityAddress,
       // isEncrypted,
       // accessPrice,
       // accessDuration,
     } = params;
 
-    const CONTRACT_ACCOUNT = await import(
-      `../contracts/${authChainSlug}/account.json`
-    );
+    // const CONTRACT_ACCOUNT = await import(
+    //   `../contracts/${authChainSlug}/account.json`
+    // );
 
-    const contractAccount = new this.web3.eth.Contract(
-      CONTRACT_ACCOUNT.abi,
-      CONTRACT_ACCOUNT.address,
-    );
+    // const contractAccount = new this.web3.eth.Contract(
+    //   CONTRACT_ACCOUNT.abi,
+    //   CONTRACT_ACCOUNT.address,
+    // );
 
-    const posts = await contractAccount.methods
-      .getPostIdsByUserAndCommunity(communityAddress, authAddress)
-      .call();
+    // const CONTRACT_NFT = await import(`../contracts/${authChainSlug}/nft.json`);
 
-    console.log(posts, communityAddress);
-    debugger;
+    // const contractNft = new this.web3.eth.Contract(
+    //   CONTRACT_NFT.abi,
+    //   CONTRACT_NFT.address,
+    // );
 
-    this.readPost({
-      authChainSlug,
-      nftTokenId: '80001000000000015',
-    });
+    // debugger;
+
+    // const postIds = await contractNft.methods
+    //   .tokensOfOwner(ownerAddress)
+    //   .call();
+
+    // console.log(postIds);
+    // debugger;
+
+    // const postInfo = await this.readPost({
+    //   authChainSlug,
+    //   nftTokenId: '80001000000000020',
+    // });
+
+    // console.log(postInfo);
+    // debugger;
 
     // this.writeComment({
     //   params: {
@@ -88,11 +100,13 @@ export class Web3Service {
         authAddress,
         ownerAddress,
         ipfsHash,
-        communityAddress,
         isEncrypted,
         // accessPrice,
         // accessDuration,
       } = params;
+
+      // this.testRequest({ params, callbacks });
+      // return;
 
       const CONTRACT_EXECUTOR = await import(
         `../contracts/${authChainSlug}/executor.json`
@@ -103,70 +117,38 @@ export class Web3Service {
         CONTRACT_EXECUTOR.address,
       );
 
-      const CONTRACT_ACCOUNT = await import(
-        `../contracts/${authChainSlug}/account.json`
-      );
-
-      const contractAccount = new this.web3.eth.Contract(
-        CONTRACT_ACCOUNT.abi,
-        CONTRACT_ACCOUNT.address,
-      );
-
       const timeNow = Date.now();
 
-      // this.testRequest({ params, callbacks });
-      // return;
+      /** добавление поста */
 
-      /** добавление адреса к сообществу по умолчанию */
-
-      const isCommunityUser = await contractAccount.methods
-        .isCommunityUser(communityAddress, authAddress)
-        .call();
-
-      if (!isCommunityUser) {
-        const transactionJoinId = formatBytes32String(String(timeNow + 1));
-        const dataJoin = defaultAbiCoder.encode(
-          ['address', 'uint256'],
-          [communityAddress, 0],
-        );
-
-        await contractExecutor.methods
-          .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
-          .send({
-            from: authAddress,
-          });
-      }
-
-      /** добавление комментария */
-
-      const transactionPostId = formatBytes32String(String(timeNow + 2));
+      const transactionPostId = formatBytes32String(String(timeNow));
       const dataPost = defaultAbiCoder.encode(
         [
           'address',
-          'address',
-          'address',
           'string',
           'uint256',
-          'string[]',
-          'bool',
-          'bool',
           'uint256',
+          'uint256',
+          'bool',
+          'bool',
+          'bool',
+          'bool',
         ],
         [
-          communityAddress, // communityAddress
-          zeroAddress, // repostFromCommunityAddress
-          ownerAddress, // userAddress
+          ownerAddress, // owner
           ipfsHash, // postHash
           0, // encodingType
-          [], // tags
+          0, // paymentType
+          0, // payAmount
           isEncrypted, // isEncrypted
           true, // isView
-          0, // writeNftId
+          true, // isSensitive
+          true, // isCommented
         ],
       );
 
       contractExecutor.methods
-        .run(transactionPostId, contractPlugins.writePost, 1, dataPost)
+        .run(transactionPostId, contractPlugins.singleWritePost, 1, dataPost)
         .send({
           from: authAddress,
         })
@@ -353,13 +335,13 @@ export class Web3Service {
     );
 
     const CONTRACT_POST_INFO = await import(
-      `../contracts/${authChainSlug}/postInfo.json`
+      `../contracts/${authChainSlug}/singlePostInfo.json`
     );
 
     /** получаем адрес плагина */
 
     const pluginAddress = await contractMain.methods
-      .getPluginContract(contractPlugins.readPost, 1)
+      .getPluginContract(contractPlugins.singleReadPost, 1)
       .call();
 
     const contractPlugin = new this.web3.eth.Contract(
@@ -369,9 +351,7 @@ export class Web3Service {
 
     /** получаем данные поста */
 
-    const postInfo = await contractPlugin.methods.read(nftTokenId).call();
-
-    // console.log(postInfo);
+    const postInfo = await contractPlugin.methods.read(nftTokenId, 0).call();
 
     return postInfo;
   };
