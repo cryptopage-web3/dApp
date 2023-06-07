@@ -49,7 +49,7 @@ const genInitValues = (): TNftForm => ({
   description: '',
   file: null,
   externalLink: '',
-  isCommentsEnable: false,
+  isCommentsEnable: true,
   attributes: {
     properties: [],
     levels: [],
@@ -341,6 +341,8 @@ export default class NftFormModule extends VuexModule {
       attributes,
       externalLink,
       isUnlockableContent,
+      isExplicit,
+      isCommentsEnable,
       unlockableContentPrice,
       unlockableContentAccessDuration,
       unlockableContentAccessDurationType,
@@ -381,6 +383,8 @@ export default class NftFormModule extends VuexModule {
       ownerAddress,
       ipfsHash: nftHash,
       isEncrypted: isUnlockableContent,
+      isSensitive: isExplicit,
+      isCommented: isCommentsEnable,
       accessPrice: (unlockableContentPrice || 0) * 10 ** 18,
       accessDuration: getSecDuration(
         unlockableContentAccessDuration,

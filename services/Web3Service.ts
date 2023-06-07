@@ -42,29 +42,29 @@ export class Web3Service {
     //   CONTRACT_ACCOUNT.address,
     // );
 
-    // const CONTRACT_NFT = await import(`../contracts/${authChainSlug}/nft.json`);
+    const CONTRACT_NFT = await import(`../contracts/${authChainSlug}/nft.json`);
 
-    // const contractNft = new this.web3.eth.Contract(
-    //   CONTRACT_NFT.abi,
-    //   CONTRACT_NFT.address,
-    // );
+    const contractNft = new this.web3.eth.Contract(
+      CONTRACT_NFT.abi,
+      CONTRACT_NFT.address,
+    );
 
-    // debugger;
+    debugger;
 
-    // const postIds = await contractNft.methods
-    //   .tokensOfOwner(ownerAddress)
-    //   .call();
+    const postIds = await contractNft.methods
+      .tokensOfOwner(ownerAddress)
+      .call();
 
-    // console.log(postIds);
-    // debugger;
+    console.log(postIds);
+    debugger;
 
-    // const postInfo = await this.readPost({
-    //   authChainSlug,
-    //   nftTokenId: '80001000000000020',
-    // });
+    const postInfo = await this.readPost({
+      authChainSlug,
+      nftTokenId: '80001000000000024',
+    });
 
-    // console.log(postInfo);
-    // debugger;
+    console.log(postInfo);
+    debugger;
 
     // this.writeComment({
     //   params: {
@@ -101,6 +101,8 @@ export class Web3Service {
         ownerAddress,
         ipfsHash,
         isEncrypted,
+        isSensitive,
+        isCommented,
         // accessPrice,
         // accessDuration,
       } = params;
@@ -142,8 +144,8 @@ export class Web3Service {
           0, // payAmount
           isEncrypted, // isEncrypted
           true, // isView
-          true, // isSensitive
-          true, // isCommented
+          isSensitive, // isSensitive
+          isCommented, // isCommented
         ],
       );
 
