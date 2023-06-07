@@ -60,7 +60,7 @@ export class Web3Service {
 
     const postInfo = await this.readPost({
       authChainSlug,
-      nftTokenId: '80001000000000024',
+      nftTokenId: '80001000000000023',
     });
 
     console.log(postInfo);
@@ -84,12 +84,10 @@ export class Web3Service {
     //   params: {
     //     authChainSlug,
     //     authAddress,
-    //     nftTokenId: '80001000000000014',
-    //     communityAddress,
+    //     nftTokenId: '80001000000000023',
     //   },
     //   callbacks,
     // });
-    // return;
   };
   */
 
@@ -255,8 +253,7 @@ export class Web3Service {
 
   public burnPost = async ({ params, callbacks }: IBurnPostParams) => {
     try {
-      const { authAddress, authChainSlug, nftTokenId, communityAddress } =
-        params;
+      const { authAddress, authChainSlug, nftTokenId } = params;
 
       const CONTRACT_EXECUTOR = await import(
         `../contracts/${authChainSlug}/executor.json`
@@ -267,54 +264,18 @@ export class Web3Service {
         CONTRACT_EXECUTOR.address,
       );
 
-      const CONTRACT_ACCOUNT = await import(
-        `../contracts/${authChainSlug}/account.json`
-      );
-
-      const contractAccount = new this.web3.eth.Contract(
-        CONTRACT_ACCOUNT.abi,
-        CONTRACT_ACCOUNT.address,
-      );
-
       const timeNow = Date.now();
-
-      /** добавление адреса в модераторы */
-
-      const isModerator = await contractAccount.methods
-        .isModerator(communityAddress, authAddress)
-        .call();
-
-      if (!isModerator) {
-        /** true - добавление, false - удаление */
-        const dataEditModerators = defaultAbiCoder.encode(
-          ['address', 'address', 'bool'],
-          [communityAddress, authAddress, true],
-        );
-
-        const transactionEditId = formatBytes32String(String(timeNow + 1));
-
-        await contractExecutor.methods
-          .run(
-            transactionEditId,
-            contractPlugins.editModerators,
-            1,
-            dataEditModerators,
-          )
-          .send({
-            from: authAddress,
-          });
-      }
 
       /** удаление поста */
 
-      const transactionBurnId = formatBytes32String(String(timeNow + 2));
+      const transactionBurnId = formatBytes32String(String(timeNow));
       const dataBurn = defaultAbiCoder.encode(
         ['uint256'],
         [BigNumber.from(nftTokenId)],
       );
 
       contractExecutor.methods
-        .run(transactionBurnId, contractPlugins.burnPost, 1, dataBurn)
+        .run(transactionBurnId, contractPlugins.singleBurnPost, 1, dataBurn)
         .send({
           from: authAddress,
         })

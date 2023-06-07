@@ -34,6 +34,8 @@ export const contractPlugins = {
     '0xbbff7889cff09dddaf3690b2cfd43476346b29cb488f1f19426947d13094674c',
   singleReadPost:
     '0x9e5224d23f22a6d0daa46d942305d0c94d3739ee0bd58cb2725e2f7f71c2ff73',
+  singleBurnPost:
+    '0x061c3d03a0e9b92ebecd62c59defb345a1a01269fd2eb0f29e06268290cd9d8b',
 };
 
 /** адрес сообщества по умолчанию */
