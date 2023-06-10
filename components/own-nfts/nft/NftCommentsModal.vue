@@ -106,7 +106,6 @@ import {
 } from '~/utils/nftsComment';
 import { addressModule, authModule } from '~/store';
 import { IPFSService, Web3Service } from '~/services';
-import { defaultCommunityAddress } from '~/contracts';
 
 type TNft = INft;
 
@@ -254,7 +253,6 @@ export default class NftCommentsModal extends Vue {
     /** создаем комментарий в контракт через web3 */
 
     const sendCommentParams: ISendCommentParams = {
-      communityAddress: defaultCommunityAddress,
       authChainSlug: authModule.chainSlug,
       authAddress: authModule.address,
       nftTokenId: this.nft.tokenId,

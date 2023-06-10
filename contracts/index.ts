@@ -36,6 +36,8 @@ export const contractPlugins = {
     '0x9e5224d23f22a6d0daa46d942305d0c94d3739ee0bd58cb2725e2f7f71c2ff73',
   singleBurnPost:
     '0x061c3d03a0e9b92ebecd62c59defb345a1a01269fd2eb0f29e06268290cd9d8b',
+  singleWriteComment:
+    '0x998072615265679bf1f5709eafe357ca6093b8d24e66cc3c05f76f90504927f6',
 };
 
 /** адрес сообщества по умолчанию */

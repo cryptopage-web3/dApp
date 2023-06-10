@@ -162,15 +162,8 @@ export class Web3Service {
 
   public writeComment = async ({ params, callbacks }: IWriteCommentParams) => {
     try {
-      const {
-        authAddress,
-        authChainSlug,
-        nftTokenId,
-        ipfsHash,
-        isUp,
-        isDown,
-        communityAddress,
-      } = params;
+      const { authAddress, authChainSlug, nftTokenId, ipfsHash, isUp, isDown } =
+        params;
 
       const CONTRACT_EXECUTOR = await import(
         `../contracts/${authChainSlug}/executor.json`
@@ -181,43 +174,14 @@ export class Web3Service {
         CONTRACT_EXECUTOR.address,
       );
 
-      const CONTRACT_ACCOUNT = await import(
-        `../contracts/${authChainSlug}/account.json`
-      );
-
-      const contractAccount = new this.web3.eth.Contract(
-        CONTRACT_ACCOUNT.abi,
-        CONTRACT_ACCOUNT.address,
-      );
-
       const timeNow = Date.now();
 
-      /** добавление адреса к сообществу по умолчанию */
+      /** создание комментария */
 
-      const isCommunityUser = await contractAccount.methods
-        .isCommunityUser(communityAddress, authAddress)
-        .call();
-
-      if (!isCommunityUser) {
-        const transactionJoinId = formatBytes32String(String(timeNow + 1));
-        const dataJoin = defaultAbiCoder.encode(
-          ['address', 'uint256'],
-          [communityAddress, 0],
-        );
-
-        await contractExecutor.methods
-          .run(transactionJoinId, contractPlugins.communityJoin, 1, dataJoin)
-          .send({
-            from: authAddress,
-          });
-      }
-
-      /** создание поста */
-
-      const transactionCommentId = formatBytes32String(String(timeNow + 2));
+      const transactionCommentId = formatBytes32String(String(timeNow));
       const dataComment = defaultAbiCoder.encode(
         [
-          'address',
+          'uint256',
           'uint256',
           'address',
           'string',
@@ -227,7 +191,7 @@ export class Web3Service {
           'bool',
         ],
         [
-          communityAddress, // communityAddress
+          0, // subscriptionId
           BigNumber.from(nftTokenId), // postId
           authAddress, // userAddress
           ipfsHash, // commentHash
@@ -239,7 +203,12 @@ export class Web3Service {
       );
 
       contractExecutor.methods
-        .run(transactionCommentId, contractPlugins.writeComment, 1, dataComment)
+        .run(
+          transactionCommentId,
+          contractPlugins.singleWriteComment,
+          1,
+          dataComment,
+        )
         .send({
           from: authAddress,
         })
