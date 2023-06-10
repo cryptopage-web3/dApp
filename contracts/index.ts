@@ -38,6 +38,8 @@ export const contractPlugins = {
     '0x061c3d03a0e9b92ebecd62c59defb345a1a01269fd2eb0f29e06268290cd9d8b',
   singleWriteComment:
     '0x998072615265679bf1f5709eafe357ca6093b8d24e66cc3c05f76f90504927f6',
+  singleReadAllComment:
+    '0x4109142687fb920f2169e9f03a6c4544f567cb8d156347cdfbdb34b589e10879',
 };
 
 /** адрес сообщества по умолчанию */

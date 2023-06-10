@@ -4,6 +4,7 @@ import { BigNumber } from 'ethers';
 import { IWriteCommentParams } from '~/types/comment-form';
 import {
   IBurnPostParams,
+  IReadPostCommentsParams,
   IReadPostParams,
   IWritePostParams,
 } from '~/types/nft-form';
@@ -60,25 +61,31 @@ export class Web3Service {
 
     const postInfo = await this.readPost({
       authChainSlug,
-      nftTokenId: '80001000000000023',
+      nftTokenId: '80001000000000028',
     });
 
     console.log(postInfo);
     debugger;
 
+    // const comments = await this.readPostComments({
+    //   authChainSlug,
+    //   nftTokenId: '80001000000000028',
+    // });
+
+    // console.log(comments);
+    // debugger;
+
     // this.writeComment({
     //   params: {
-    //     communityAddress,
     //     authChainSlug,
     //     authAddress,
-    //     nftTokenId: '80001000000000015',
+    //     nftTokenId: '80001000000000028',
     //     ipfsHash: 'test hash',
     //     isUp: true,
     //     isDown: false,
     //   },
     //   callbacks,
     // });
-    // return;
 
     // this.burnPost({
     //   params: {
@@ -286,6 +293,41 @@ export class Web3Service {
     const postInfo = await contractPlugin.methods.read(nftTokenId, 0).call();
 
     return postInfo;
+  };
+
+  public readPostComments = async ({
+    authChainSlug,
+    nftTokenId,
+  }: IReadPostCommentsParams) => {
+    const CONTRACT_MAIN = await import(
+      `../contracts/${authChainSlug}/main.json`
+    );
+
+    const contractMain = new this.web3.eth.Contract(
+      CONTRACT_MAIN.abi,
+      CONTRACT_MAIN.address,
+    );
+
+    const CONTRACT_ALL_COMMENTS = await import(
+      `../contracts/${authChainSlug}/singleAllComments.json`
+    );
+
+    /** получаем адрес плагина */
+
+    const pluginAddress = await contractMain.methods
+      .getPluginContract(contractPlugins.singleReadAllComment, 1)
+      .call();
+
+    const contractPlugin = new this.web3.eth.Contract(
+      CONTRACT_ALL_COMMENTS.abi,
+      pluginAddress,
+    );
+
+    /** получаем комментарии поста */
+
+    const comments = await contractPlugin.methods.read(nftTokenId, 0).call();
+
+    return comments;
   };
 
   public checkIfHaveAccessToEncryptedPost = async (

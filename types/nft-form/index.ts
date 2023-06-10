@@ -11,3 +11,4 @@ export * from './IWritePostParams';
 export * from './IDeleteNFTParams';
 export * from './IBurnPostParams';
 export * from './IReadPostParams';
+export * from './IReadPostCommentsParams';
