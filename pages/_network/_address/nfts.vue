@@ -11,12 +11,12 @@ import { Component } from 'nuxt-property-decorator';
 
 @Component({
   head: {
-    title: 'My NFTs | Crypto.Page',
+    title: 'My Tokens ERC721 | Crypto.Page',
     meta: [
       {
         hid: 'description',
         name: 'description',
-        content: 'My NFTs | Crypto.Page',
+        content: 'My Tokens ERC721 | Crypto.Page',
       },
     ],
   },

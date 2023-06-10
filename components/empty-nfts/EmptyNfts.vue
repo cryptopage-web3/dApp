@@ -1,7 +1,7 @@
 <template>
   <div class="transactions__empty-block">
     <div v-if="isNft" class="global-text mb_30 text-center">
-      There is not a single NFT on
+      There is not a Content on
       {{ isOwner ? 'your' : 'user' }} address<br />
       you can {{ isOwner ? 'create' : 'send' }} it here
     </div>
@@ -21,7 +21,7 @@
 
     <div class="text-center">
       <a href="#" class="btn-blue_button btn_large" @click.prevent="showModal">
-        + {{ isOwner ? 'Create' : 'Send' }} NFT
+        + {{ isOwner ? 'Create' : 'Send' }} Content
       </a>
     </div>
   </div>

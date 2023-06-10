@@ -2,7 +2,7 @@
   <div v-if="show" class="market-sidebar">
     <div class="market-sidebar-top">
       <h3 class="market-sidebar__title">
-        {{ isOwner ? 'My' : 'Account' }} NFT’s
+        {{ isOwner ? 'My' : 'Account' }} Token's ERC721
       </h3>
       <nuxt-link
         :to="`/${chainSlug}/${address}/nfts`"

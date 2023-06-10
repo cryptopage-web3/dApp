@@ -4,7 +4,9 @@
       <nuxt-link :to="`/${chainSlug}/${address}`" class="market-sidebar__more">
         <OwnNftsBackIcon />
       </nuxt-link>
-      <h2 class="global-zag">{{ isOwner ? 'My' : 'Account' }} NFT’s</h2>
+      <h2 class="global-zag">
+        {{ isOwner ? 'My' : 'Account' }} Token's ERC721
+      </h2>
     </div>
     <div class="profile-my-nfts-top__btns">
       <a href="#" class="btn-blue-transparent" @click.prevent="showModal">
