@@ -20,9 +20,11 @@ export default class AddressPageContainer extends Vue {
   validate({ params }: any) {
     const network = params.network;
     const isValid = networkHelper.isValidSlug(network);
+    const isAvailable = networkHelper.isAvailableBySlug(network);
 
     return (
       isValid &&
+      isAvailable &&
       (network === 'tron' || network === 'solana'
         ? true
         : Web3.utils.isAddress(params.address))
@@ -30,10 +32,12 @@ export default class AddressPageContainer extends Vue {
   }
 
   beforeCreate() {
-    const chainId = networkHelper.getChainId(this.$route.params.network);
+    const slug = this.$route.params.network;
+    const chainId = networkHelper.getChainId(slug);
+    const isAvailable = networkHelper.isAvailableBySlug(slug);
     const address = this.$route.params.address;
 
-    if (!chainId) {
+    if (!chainId || !isAvailable) {
       return;
     }
 
