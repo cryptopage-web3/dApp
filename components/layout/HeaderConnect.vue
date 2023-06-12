@@ -42,41 +42,6 @@
     <div id="market-header__wallet-col" class="collapse drop-down__col">
       <ul class="drop-down__list">
         <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.eth)">
-            <div class="thumb">
-              <img src="@/assets/img/market-header__wallet_icon2.svg" alt="" />
-            </div>
-            <span> Ethereum </span>
-          </a>
-        </li>
-        <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.goerli)">
-            <div class="thumb">
-              <img
-                src="@/assets/img-custom/profile-login-accordion_img9.png"
-                alt=""
-              />
-            </div>
-            <span> Goerli </span>
-          </a>
-        </li>
-        <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.bsc)">
-            <div class="thumb">
-              <img src="@/assets/img/market-header__wallet_icon3.svg" alt="" />
-            </div>
-            <span> Binance Smart Chain </span>
-          </a>
-        </li>
-        <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.polygon)">
-            <div class="thumb">
-              <img src="@/assets/img/market-header__wallet_icon4.svg" alt="" />
-            </div>
-            <span> Polygon </span>
-          </a>
-        </li>
-        <li>
           <a href="#" @click.prevent="switchChain(EMainChain.mumbai)">
             <div class="thumb">
               <img
@@ -85,22 +50,6 @@
               />
             </div>
             <span> Mumbai </span>
-          </a>
-        </li>
-        <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.tron)">
-            <div class="thumb">
-              <img src="@/assets/img/market-header__wallet_icon5.svg" alt="" />
-            </div>
-            <span> Tron </span>
-          </a>
-        </li>
-        <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.solana)">
-            <div class="thumb">
-              <img src="@/assets/img/market-header__wallet_icon6.svg" alt="" />
-            </div>
-            <span> Solana </span>
           </a>
         </li>
       </ul>
@@ -174,6 +123,7 @@ import { Component } from 'nuxt-property-decorator';
 import { EMainChain } from '~/types/EMainChain';
 import { authModule } from '~/store';
 import { MESSENGER_URL } from '~/constants';
+import { networkHelper } from '~/utils/networkHelper';
 
 @Component({})
 export default class HeaderConnect extends Vue {
@@ -223,6 +173,22 @@ export default class HeaderConnect extends Vue {
   }
 
   async switchChain(chain: EMainChain) {
+    if (!networkHelper.isAvailableBySlug(chain)) {
+      this.$notify({
+        type: 'error',
+        title: 'Chosen unsupported chain',
+      });
+      return;
+    }
+
+    if (this.authChainSlug === chain) {
+      this.$notify({
+        type: 'info',
+        title: 'Chosen same chain',
+      });
+      return;
+    }
+
     await authModule.logout();
     authModule.selectMainChain(chain);
 

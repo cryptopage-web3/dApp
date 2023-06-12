@@ -219,7 +219,7 @@ export const networkHelper = {
     return provider ? providerTitleMap.get(provider) : 'Wallet Provider';
   },
 
-  isAvailableBySlug(slug: EChainSlug) {
+  isAvailableBySlug(slug: any) {
     return [EChainSlug.mumbai].includes(slug);
   },
 
