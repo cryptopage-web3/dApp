@@ -218,4 +218,12 @@ export const networkHelper = {
   getProviderTitle(provider: EProvider | null) {
     return provider ? providerTitleMap.get(provider) : 'Wallet Provider';
   },
+
+  isAvailableBySlug(slug: EChainSlug) {
+    return [EChainSlug.mumbai].includes(slug);
+  },
+
+  isAvailableByChainId(chainId: any) {
+    return this.isAvailableBySlug(this.getNetworkSlug(chainId));
+  },
 };

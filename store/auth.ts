@@ -20,6 +20,7 @@ import {
   EMessengerStatus,
   EConsentStatus,
   ELocalStorageKey,
+  EChainId,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -56,7 +57,7 @@ export default class AuthModule extends VuexModule {
 
   connect: IConnectData = {
     address: '',
-    chainId: 1,
+    chainId: EChainId.mumbai,
     providerSlug: null,
     /** не храним authProvider в сторе, т.к. ошибка при прокcировании объекта vue */
     // provider: null,
@@ -214,6 +215,14 @@ export default class AuthModule extends VuexModule {
         return;
       }
 
+      /** проверяем поддержку сети */
+
+      if (!networkHelper.isAvailableByChainId(chainId)) {
+        await this.logout();
+        this.setInitLoading(false);
+        return;
+      }
+
       /** узнаем текущие данные провайдера  */
 
       const providerResponse = await authService.connectToProvider(
@@ -285,6 +294,20 @@ export default class AuthModule extends VuexModule {
     chain,
     provider,
   }: TConnectToProviderParams): Promise<IConnectToProviderResponse> {
+    /** проверяем поддержку сети */
+
+    if (!networkHelper.isAvailableBySlug(chain)) {
+      await this.logout();
+
+      return {
+        status: 'error',
+        message: {
+          title: 'Wallet not connected',
+          text: 'Please choose supported chain in the wallet<br>and accept connect',
+        },
+      };
+    }
+
     /** подключаемся к провайдеру */
 
     const providerResponse = await authService.connectToProvider(
@@ -422,6 +445,19 @@ export default class AuthModule extends VuexModule {
     /** если нет изменений, то ничего не делаем */
 
     if (!isChainChange && !isAddressChange) {
+      return;
+    }
+
+    /** проверяем поддержку сети */
+
+    if (!networkHelper.isAvailableByChainId(chainId)) {
+      alertModule.error(
+        `${networkHelper.getProviderTitle(
+          providerSlug,
+        )}: set unsupported chain`,
+      );
+
+      this.logout();
       return;
     }
 
