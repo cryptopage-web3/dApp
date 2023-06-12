@@ -41,39 +41,9 @@ import { profileContentDropTarget } from '~/utils/profileContentDrop';
 export default class ModalBlockchain extends Vue {
   chainList = [
     {
-      slug: EChainSlug.eth,
-      title: 'Ethereum',
-      icon: require('@/assets/img/market-header__wallet_icon2.svg'),
-    },
-    {
-      slug: EChainSlug.goerli,
-      title: 'Goerli',
-      icon: require('@/assets/img-custom/profile-login-accordion_img9.png'),
-    },
-    {
-      slug: EChainSlug.bsc,
-      title: 'Binance Smart Chain',
-      icon: require('@/assets/img/market-header__wallet_icon3.svg'),
-    },
-    {
-      slug: EChainSlug.polygon,
-      title: 'Polygon',
-      icon: require('@/assets/img/market-header__wallet_icon4.svg'),
-    },
-    {
       slug: EChainSlug.mumbai,
       title: 'Mumbai',
       icon: require('@/assets/img-custom/profile-login-accordion_img10.png'),
-    },
-    {
-      slug: EChainSlug.tron,
-      title: 'Tron',
-      icon: require('@/assets/img/market-header__wallet_icon5.svg'),
-    },
-    {
-      slug: EChainSlug.solana,
-      title: 'Solana',
-      icon: require('@/assets/img/market-header__wallet_icon6.svg'),
     },
   ];
 
