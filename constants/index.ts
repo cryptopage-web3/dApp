@@ -50,5 +50,4 @@ export const MESSENGER_CHAT_LIST_SIDEBAR_URL = `${MESSENGER_URL}ChatListSidebar`
 
 /** BuyPageModal: открытие вкладки для верифицированных аккаунтов */
 export const BUYPAGEMODAL_VERIFIED_URL = 'https://uniswap.org/';
-export const BUYPAGE_QUIZ_URL =
-  'https://cryptopage.typeform.com/cryptopage-quiz';
+export const BUYPAGE_QUIZ_URL = 'https://form.typeform.com/to/bHVwOAcM';
