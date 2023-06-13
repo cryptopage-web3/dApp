@@ -7,7 +7,7 @@
         </div>
         <div class="modal-creat-checkbox__cont">
           <div class="modal-creat-checkbox__title">
-            NFT monetization settings
+            Content monetization settings
           </div>
           <div class="modal-creat-checkbox__text">
             Include unlockable content that can only be revealed by the owner of

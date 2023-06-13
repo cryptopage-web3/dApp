@@ -6,7 +6,7 @@
   >
     <div class="mb_10 mt_20">
       <div class="global-text_16 fw-700 main_black mb_5">
-        NFT monetization settings
+        Content monetization settings
       </div>
       <div class="global-text_12">
         Include unlockable content that can only be revealed by the owner of the
