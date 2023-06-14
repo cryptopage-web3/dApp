@@ -4,7 +4,7 @@
       <tr v-for="token in tokens" :key="token.address">
         <td>
           <div>
-            <img :src="token.logo" alt="" />
+            <img v-if="token.logo" :src="token.logo" alt="" />
             <span> Your {{ token.symbol }}: </span>
           </div>
         </td>

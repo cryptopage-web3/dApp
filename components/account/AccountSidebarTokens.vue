@@ -2,7 +2,7 @@
   <div v-if="show" class="market-sidebar">
     <div class="market-sidebar-top">
       <h3 class="market-sidebar__title">
-        {{ isOwner ? 'My' : 'Account' }} Token's (erc20)
+        {{ isOwner ? 'My' : 'Account' }} Token's ERC20
       </h3>
       <nuxt-link
         :to="`/${chainSlug}/${address}/tokens`"
