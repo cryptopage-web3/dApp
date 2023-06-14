@@ -1,14 +1,15 @@
 <template>
   <div class="token">
     <div class="token-left">
-      <img :src="token.logo" alt="" class="token__icon" />
+      <img :src="logo" alt="" class="token__icon" />
       <div>
-        <div class="token__name">{{ token.name }} ({{ token.symbol }})</div>
+        <div class="token__name">{{ name }} ({{ symbol }})</div>
         <div class="token__address">
           Contract address:
-          <nuxt-link :to="`/${chainSlug}/${token.address}`">
-            {{ token.address | shortAddress }}
+          <nuxt-link v-if="address" :to="`/${chainSlug}/${address}`">
+            {{ address | shortAddress }}
           </nuxt-link>
+          <span v-else>unknown</span>
         </div>
       </div>
     </div>
@@ -17,23 +18,21 @@
         <div
           class="token__procent"
           :class="{
-            'token__procent-green': token.percentChange >= 0,
-            'token__procent-red': token.percentChange < 0,
+            'token__procent-green': percentChange >= 0,
+            'token__procent-red': percentChange < 0,
           }"
         >
-          {{ Math.abs(token.percentChange) }}%
+          {{ Math.abs(percentChange) }}%
         </div>
-        <div class="token__dollar" :title="token.balancePrice">
-          ${{ token.balancePrice | formatNumberFloatDigits }}
+        <div class="token__dollar" :title="balancePrice">
+          ${{ balancePrice | formatNumberFloatDigits }}
         </div>
         <TokenDropdown />
       </div>
       <div class="token-row">
-        <div class="token__count" :title="token.balance">
-          Quantity: {{ token.balance }}
-        </div>
-        <div class="token__price" :title="token.price">
-          Price: ${{ token.price | formatNumberFloatDigits }}
+        <div class="token__count" :title="balance">Quantity: {{ balance }}</div>
+        <div class="token__price" :title="price">
+          Price: ${{ price | formatNumberFloatDigits }}
         </div>
       </div>
     </div>
@@ -60,6 +59,38 @@ export default class Token extends Vue {
 
   get chainSlug(): string {
     return addressModule.chainSlug;
+  }
+
+  get address() {
+    return this.token.address || '';
+  }
+
+  get logo() {
+    return this.token.logo || '';
+  }
+
+  get balance() {
+    return this.token.balance || 0;
+  }
+
+  get name() {
+    return this.token.name || '';
+  }
+
+  get symbol() {
+    return this.token.symbol || '';
+  }
+
+  get percentChange() {
+    return this.token.percentChange || 0;
+  }
+
+  get price() {
+    return this.token.price || 0;
+  }
+
+  get balancePrice() {
+    return this.token.balancePrice || 0;
   }
 }
 </script>

@@ -7,7 +7,12 @@
   >
     <Loader v-if="loading" />
     <div v-else-if="!tokens.length" class="transactions__empty">No Tokens</div>
-    <Token v-for="token in tokens" v-else :key="token.address" :token="token" />
+    <Token
+      v-for="(token, index) in tokens"
+      v-else
+      :key="token.address || index"
+      :token="token"
+    />
   </div>
 </template>
 

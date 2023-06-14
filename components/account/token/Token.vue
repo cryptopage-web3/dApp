@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="my-token" @click.prevent="">
+  <a :href="address" class="my-token" @click.prevent="">
     <div class="my-token__top">
       <div v-if="logo" class="my-token__icon">
         <img :src="logo" alt="" />
@@ -50,8 +50,12 @@ export default class Token extends Vue {
   @Prop({ required: true })
   readonly token!: TToken;
 
+  get address() {
+    return this.token.address || '';
+  }
+
   get logo() {
-    return this.token.logo;
+    return this.token.logo || '';
   }
 
   get balance() {

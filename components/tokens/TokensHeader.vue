@@ -4,7 +4,7 @@
       <nuxt-link :to="`/${chainSlug}/${address}`" class="market-sidebar__more">
         <TokensBackIcon />
       </nuxt-link>
-      <h2 class="global-zag">{{ isOwner ? 'My' : 'Account' }} Token's</h2>
+      <h2 class="global-zag">{{ isOwner ? 'My' : 'Account' }} Token's ERC20</h2>
     </div>
   </div>
 </template>
