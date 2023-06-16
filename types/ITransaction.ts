@@ -1,94 +1,20 @@
-export enum EOperationType {
-  send = 'send',
-  receive = 'receive',
-  swap = 'swap',
-  contract_execution = 'contract_execution',
-}
-
 export enum ETransactionType {
-  normal = 'normal',
+  external = 'external',
   erc20 = 'erc20',
 }
 
 /**
  * Данные которые получаем из api
  */
-export interface IErc20TransactionData {
-  transactionType: ETransactionType.erc20;
-  operationType: EOperationType;
-  blockNumber: number;
-  timeStamp: number;
-  hash: string;
-  nonce: number;
-  blockHash: string;
-  from: string;
-  contractAddress: string;
-  to: string;
-  value: number;
-  tokenName: string;
-  tokenSymbol: string;
-  tokenDecimal: number;
-  transactionIndex: number;
-  gas: number;
-  gasPrice: number;
-  gasUsed: number;
-  cumulativeGasUsed: number;
-  input: string;
-  confirmations: number;
-  send?: IErc20TransactionData[];
-  receive?: IErc20TransactionData[];
-}
-
-/**
- * Данные которые получаем из api
- */
-export interface IEthTransactionData {
-  transactionType: ETransactionType.normal;
-  operationType: EOperationType;
-  blockNumber: number;
-  timeStamp: number;
-  hash: string;
-  nonce: number;
-  blockHash: number;
-  transactionIndex: number;
-  from: string;
-  to: string;
-  value: number;
-  gas: number;
-  gasPrice: number;
-  isError: string;
-  txreceipt_status: string;
-  input: string;
-  contractAddress: string;
-  cumulativeGasUsed: number;
-  gasUsed: string;
-  confirmations: number;
-  methodId: string;
-  functionName: string;
-  send?: IErc20TransactionData[];
-  receive?: IErc20TransactionData[];
-}
-
-export type TEthTransaction = IEthTransactionData | IErc20TransactionData;
-
-/**
- * Данные которые получаем из api
- */
 export interface ITransactionData {
-  transactionType: ETransactionType.erc20 | ETransactionType.normal;
+  asset: string;
+  blockNum: number;
+  category: ETransactionType.erc20 | ETransactionType.external;
   date: string;
-  explorerUrl: string;
-  fee: number;
   from: string;
-  to: string;
-  description?: string;
   hash: string;
-  title: string;
-  tokenAddress: string;
-  tokenAmount: number;
-  tokenSymbol: string;
+  to: string;
   value: number;
-  valueUSD: number;
 }
 
 /**

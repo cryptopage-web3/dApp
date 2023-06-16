@@ -22,8 +22,6 @@ export * from './ITransaction';
 export * from './ITransactionsParams';
 export * from './ITransactionsPagination';
 export * from './ITransactionsResponse';
-export * from './IEthTransactionsParams';
-export * from './IEthTransactionsResponse';
 export * from './ICollection';
 export * from './ICollectionsParams';
 export * from './ICollectionsResponse';

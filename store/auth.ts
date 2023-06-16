@@ -1,6 +1,4 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
-import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
 import { alertModule } from '.';
 import { AuthService, TokensService, TransactionsService } from '~/services';
 import {
@@ -13,7 +11,6 @@ import {
   IConnectData,
   IToken,
   ITransaction,
-  EChainSlug,
   IVerifiedStatus,
   ISaveVerifiedStatusParams,
   EVerifiedStatus,
@@ -29,6 +26,7 @@ import {
   FRACTAL_LEVEL,
   FRACTAL_URL,
 } from '~/constants';
+import { transactionResAdapter } from '~/adapters';
 
 type TConnectData = IConnectData;
 type TConnectToProviderParams = IConnectToProviderParams;
@@ -713,41 +711,21 @@ export default class AuthModule extends VuexModule {
   @Action
   public async fetchTransactions() {
     try {
-      if (this.chainSlug === EChainSlug.eth) {
-        await this.fetchEthTransactions();
-      } else {
-        await this.fetchDefaultTransactions();
-      }
+      const { transactions } = await transactionsService.getList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+        pageSize: 200,
+      });
+
+      this.setTransactions(
+        transactions.map((t) =>
+          transactionResAdapter(t, this.address, this.chainId),
+        ),
+      );
     } catch {
       alertModule.error('Error getting AUTH transactions data');
 
       this.setTransactions([]);
     }
-  }
-
-  @Action
-  public async fetchEthTransactions() {
-    const { transactions } = await transactionsService.getEthList({
-      chainSlug: this.chainSlug,
-      address: this.address,
-      pageSize: 200,
-    });
-
-    this.setTransactions(
-      transactions.map((t) => normalizeEth(t, this.chainId)),
-    );
-  }
-
-  @Action
-  public async fetchDefaultTransactions() {
-    const { transactions } = await transactionsService.getList({
-      chainSlug: this.chainSlug,
-      address: this.address,
-      pageSize: 200,
-    });
-
-    this.setTransactions(
-      transactions.map((t) => defaultNormalizer(t, this.address, this.chainId)),
-    );
   }
 }

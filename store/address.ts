@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { AxiosError } from 'axios';
-import { defaultNormalizer } from './address/tx-normalizer/default-normalizer';
-import { normalizeEth } from './address/tx-normalizer/eth-normalizer';
+
 import { alertModule, authModule } from '.';
 import { NftsService, TokensService, TransactionsService } from '~/services';
 import {
-  EChainSlug,
   EChainType,
   ETypeNft,
   IAddressInfo,
@@ -28,6 +26,7 @@ import {
   uniqueNftConcat,
   uniqueNftTransactionConcat,
 } from '~/utils/array';
+import { transactionResAdapter } from '~/adapters';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -524,11 +523,36 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchTransactions() {
     try {
-      if (this.chainSlug === EChainSlug.eth) {
-        await this.fetchEthTransactions();
-      } else {
-        await this.fetchDefaultTransactions();
-      }
+      const { page, pageSize, continue: oldContinue } = this.transactions;
+      const nextPage = page + 1;
+
+      const {
+        transactions,
+        count,
+        continue: newContinue,
+      } = await transactionsService.getList({
+        chainSlug: this.chainSlug,
+        address: this.address,
+        pageSize,
+        continue: oldContinue,
+      });
+
+      const { transactions: oldTransactions } = this.transactions;
+      const newTransactions = uniqueHashConcat(
+        oldTransactions,
+        transactions.map((t) =>
+          transactionResAdapter(t, this.address, this.chainId),
+        ),
+      );
+
+      this.setTransactions({
+        ...this.transactions,
+        transactions: newTransactions,
+        count: count === undefined ? newTransactions.length : count,
+        continue: newContinue,
+        page: nextPage,
+        hasAllPages: transactions.length === 0,
+      });
     } catch {
       alertModule.error('Error getting transactions data');
 
@@ -537,67 +561,6 @@ export default class AddressModule extends VuexModule {
         hasAllPages: true,
       });
     }
-  }
-
-  @Action
-  public async fetchEthTransactions() {
-    const { page, pageSize, continue: oldContinue } = this.transactions;
-
-    const { transactions, continue: newContinue } =
-      await transactionsService.getEthList({
-        chainSlug: this.chainSlug,
-        address: this.address,
-        continue: oldContinue,
-        pageSize,
-      });
-
-    const { transactions: oldTransactions } = this.transactions;
-    const newTransactions = uniqueHashConcat(
-      oldTransactions,
-      transactions.map((t) => normalizeEth(t, this.chainId)),
-    );
-
-    this.setTransactions({
-      ...this.transactions,
-      transactions: newTransactions,
-      count: newTransactions.length,
-      continue: newContinue,
-      page: page + 1,
-      hasAllPages: transactions.length === 0,
-    });
-  }
-
-  @Action
-  public async fetchDefaultTransactions() {
-    const { page, pageSize, continue: oldContinue } = this.transactions;
-    const nextPage = page + 1;
-
-    const {
-      transactions,
-      count,
-      continue: newContinue,
-    } = await transactionsService.getList({
-      chainSlug: this.chainSlug,
-      address: this.address,
-      page: nextPage,
-      pageSize,
-      continue: oldContinue,
-    });
-
-    const { transactions: oldTransactions } = this.transactions;
-    const newTransactions = uniqueHashConcat(
-      oldTransactions,
-      transactions.map((t) => defaultNormalizer(t, this.address, this.chainId)),
-    );
-
-    this.setTransactions({
-      ...this.transactions,
-      transactions: newTransactions,
-      count: count === undefined ? newTransactions.length : count,
-      continue: newContinue,
-      page: nextPage,
-      hasAllPages: transactions.length === 0,
-    });
   }
 
   @Action
@@ -727,7 +690,6 @@ export default class AddressModule extends VuexModule {
         const { transactions, count } = await transactionsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
-          page: 1,
           pageSize: 10,
         });
 
@@ -737,7 +699,7 @@ export default class AddressModule extends VuexModule {
         const uniqueList: ITransaction[] = [];
 
         transactions
-          .map((t) => defaultNormalizer(t, this.address, this.chainId))
+          .map((t) => transactionResAdapter(t, this.address, this.chainId))
           .forEach((item) => {
             const same = oldTransactions.find(
               (tx) => getUniqueKey(tx) === getUniqueKey(item),

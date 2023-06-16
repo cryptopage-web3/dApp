@@ -1,28 +1,28 @@
 import { ITransaction, ITransactionData } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 
-export function defaultNormalizer(
+export function transactionResAdapter(
   data: ITransactionData,
   walletAddress: string,
   chainId: string | number,
 ): ITransaction {
   const isIncome = getIsIncome(data, walletAddress);
   const transferType = isIncome ? 'Receive' : 'Send';
-  const isTokenTx = Boolean(data.tokenAddress);
-  const symbol = isTokenTx
-    ? data.tokenSymbol
-    : networkHelper.getNetworkSymbol(chainId);
+  const symbol = data.asset || networkHelper.getNetworkSymbol(chainId);
 
   return {
-    ...data,
-    isIncome,
     transactionAddress: isIncome ? data.from : data.to,
+    isIncome,
     transferType,
     tokenOrCoinSymbolLeft: symbol,
     tokenOrCoinSymbolRight: symbol,
-    tokenOrCoinAmount: isTokenTx ? data.tokenAmount : data.value,
+    tokenOrCoinAmount: data.value,
     transferDirection: isIncome ? 'From' : 'To',
-    valueUSD: data.valueUSD || 0,
+    from: data.from,
+    to: data.to,
+    value: data.value,
+    hash: data.hash,
+    valueUSD: 0,
   };
 }
 
