@@ -548,7 +548,8 @@ export default class AddressModule extends VuexModule {
         count: newTransactions.length,
         continue: newContinue,
         page: nextPage,
-        hasAllPages: transactions.length === 0,
+        /** получили все страницы, если continue: {} */
+        hasAllPages: !newContinue?.pageKey,
       });
     } catch {
       alertModule.error('Error getting transactions data');
