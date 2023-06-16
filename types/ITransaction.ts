@@ -35,6 +35,7 @@ export interface ITransaction {
   to: string;
   value: number;
   hash: string;
+  date: string;
 
   valueUSD?: number;
 }

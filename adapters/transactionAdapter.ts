@@ -22,6 +22,7 @@ export function transactionResAdapter(
     to: data.to,
     value: data.value,
     hash: data.hash,
+    date: data.date,
     valueUSD: 0,
   };
 }
