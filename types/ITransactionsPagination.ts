@@ -4,8 +4,6 @@ export interface ITransactionsPagination extends IPagination {
   transactions: ITransaction[];
   count: number;
   continue?: {
-    tx?: number;
-    erc20?: number;
-    fingerprint?: string;
+    pageKey?: string;
   };
 }

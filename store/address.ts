@@ -526,16 +526,13 @@ export default class AddressModule extends VuexModule {
       const { page, pageSize, continue: oldContinue } = this.transactions;
       const nextPage = page + 1;
 
-      const {
-        transactions,
-        count,
-        continue: newContinue,
-      } = await transactionsService.getList({
-        chainSlug: this.chainSlug,
-        address: this.address,
-        pageSize,
-        continue: oldContinue,
-      });
+      const { transactions, continue: newContinue } =
+        await transactionsService.getList({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize,
+          continue: oldContinue,
+        });
 
       const { transactions: oldTransactions } = this.transactions;
       const newTransactions = uniqueHashConcat(
@@ -548,7 +545,7 @@ export default class AddressModule extends VuexModule {
       this.setTransactions({
         ...this.transactions,
         transactions: newTransactions,
-        count: count === undefined ? newTransactions.length : count,
+        count: newTransactions.length,
         continue: newContinue,
         page: nextPage,
         hasAllPages: transactions.length === 0,
@@ -687,7 +684,7 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка транзакций, возвращает флаг наличия целевой транзакции */
 
       const fetchTransactions = async () => {
-        const { transactions, count } = await transactionsService.getList({
+        const { transactions } = await transactionsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
           pageSize: 10,
@@ -721,7 +718,7 @@ export default class AddressModule extends VuexModule {
         this.setTransactions({
           ...this.transactions,
           transactions: newTransactions,
-          count: count === undefined ? newTransactions.length : count,
+          count: newTransactions.length,
         });
 
         const hasTargetTx = newTransactions.some(

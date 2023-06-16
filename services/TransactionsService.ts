@@ -13,7 +13,6 @@ export class TransactionsService extends BaseService {
     if (!slugMap.has(params.chainSlug)) {
       return {
         transactions: [],
-        count: 0,
       };
     }
 
