@@ -1,14 +1,16 @@
-import { ETypeNft, IAttribute } from '.';
+import { IAttribute, INftComment } from '.';
 
 export interface INftTransactionDetailsResponse {
-  id?: number;
-  date?: string;
-  type?: ETypeNft;
-  contentUrl?: string;
+  tokenId?: string;
+  chain?: string;
+  contractAddress?: string;
   name?: string;
   description?: string;
-  chain?: string;
-  tokenId?: string;
+  contentUrl?: string;
   attributes?: IAttribute[];
   isEncrypted?: boolean;
+  accessPrice?: number | null;
+  accessDuration?: number | null;
+  date?: string;
+  comments?: INftComment[];
 }

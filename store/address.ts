@@ -27,6 +27,7 @@ import {
   uniqueNftTransactionConcat,
 } from '~/utils/array';
 import { nftTransactionResAdapter, transactionResAdapter } from '~/adapters';
+import { setNftTransactionDetails } from '~/utils/setNftTransactionDetails';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -299,47 +300,43 @@ export default class AddressModule extends VuexModule {
         blockNumber: nft.blockNumber,
       });
 
-      if (data.contentUrl) {
-        const mimeType = await nftsService.getMimeType(data.contentUrl);
+      const nftWithDetails = setNftTransactionDetails(nft, data);
+      const { contentUrl, isEncrypted } = nftWithDetails;
+
+      if (contentUrl) {
+        const mimeType = await nftsService.getMimeType(contentUrl);
 
         if (/audio/.test(mimeType)) {
-          data.type = ETypeNft.audio;
+          nftWithDetails.type = ETypeNft.audio;
         }
 
         if (/video/.test(mimeType)) {
-          data.type = ETypeNft.video;
+          nftWithDetails.type = ETypeNft.video;
         }
 
         /** если есть урл и не удалось определить mimeType,
          * то по умолчанию указываем картинку */
         if (/image/.test(mimeType) || !mimeType) {
-          data.type = ETypeNft.image;
+          nftWithDetails.type = ETypeNft.image;
         }
       }
 
-      let accessType: ENftTransactionAccessType;
-
-      if (data.isEncrypted) {
+      if (isEncrypted) {
         if (
           this.address.toLocaleLowerCase() ===
           authModule.address.toLocaleLowerCase()
         ) {
-          accessType = ENftTransactionAccessType.has_access;
+          nftWithDetails.accessType = ENftTransactionAccessType.has_access;
         } else {
-          accessType = ENftTransactionAccessType.not_requested;
+          nftWithDetails.accessType = ENftTransactionAccessType.not_requested;
         }
       } else {
-        accessType = ENftTransactionAccessType.has_access;
+        nftWithDetails.accessType = ENftTransactionAccessType.has_access;
       }
 
       this.setNftTransactionDetails({
         index,
-        nft: {
-          ...nft,
-          ...data,
-          accessType,
-          hasDetails: true,
-        },
+        nft: nftWithDetails,
       });
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {

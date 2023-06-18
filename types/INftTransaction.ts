@@ -16,7 +16,6 @@ export interface INftTransaction {
   from: string;
 
   hasDetails?: boolean;
-  id?: number;
   date?: string;
   chain?: string;
   name?: string;
@@ -26,11 +25,8 @@ export interface INftTransaction {
 
   isEncrypted?: boolean;
   accessType?: ENftTransactionAccessType;
-  accessPrice?: number;
-  accessDuration?: number;
-
-  price?: number;
-  symbol?: string;
+  accessPrice?: number | null;
+  accessDuration?: number | null;
 
   comments?: INftComment[];
 }
