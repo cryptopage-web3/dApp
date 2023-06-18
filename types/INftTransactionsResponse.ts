@@ -1,6 +1,8 @@
-import { INftTransaction } from '.';
+import { INftTransactionServer } from './INftTransactionServer';
 
 export interface INftTransactionsResponse {
-  count?: number;
-  list: INftTransaction[];
+  transactions: INftTransactionServer[];
+  continue?: {
+    pageKey?: string;
+  };
 }

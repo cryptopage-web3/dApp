@@ -4,6 +4,7 @@ import {
   INftsParams,
   INftsResponse,
   INftTransactionDetailsResponse,
+  INftTransactionsParams,
   INftTransactionsResponse,
   IOwnNftDetailsParams,
   IOwnNftDetailsResponse,
@@ -55,14 +56,13 @@ export class NftsService extends BaseService {
   };
 
   getTransactionsList = async (
-    params: INftsParams,
+    params: INftTransactionsParams,
   ): Promise<INftTransactionsResponse> => {
     const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
       return {
-        list: [],
-        count: 0,
+        transactions: [],
       };
     }
 
@@ -72,8 +72,8 @@ export class NftsService extends BaseService {
       }`,
       {
         params: {
-          page: params.page,
           pageSize: params.pageSize,
+          continue: params.continue,
         },
       },
     );

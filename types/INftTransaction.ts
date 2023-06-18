@@ -24,10 +24,10 @@ export interface INftTransaction {
   contentUrl?: string;
   attributes?: IAttribute[];
 
-  isEncrypted: boolean;
-  accessType: ENftTransactionAccessType;
-  accessPrice: number;
-  accessDuration: number;
+  isEncrypted?: boolean;
+  accessType?: ENftTransactionAccessType;
+  accessPrice?: number;
+  accessDuration?: number;
 
   price?: number;
   symbol?: string;

@@ -3,4 +3,5 @@ export enum ETypeNft {
   audio = 'audio',
   video = 'video',
   baseInfo = 'base_info',
+  fullInfo = 'full_info',
 }

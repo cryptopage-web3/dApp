@@ -26,7 +26,7 @@ import {
   uniqueNftConcat,
   uniqueNftTransactionConcat,
 } from '~/utils/array';
-import { transactionResAdapter } from '~/adapters';
+import { nftTransactionResAdapter, transactionResAdapter } from '~/adapters';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -221,28 +221,34 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchNftTransactions() {
     try {
-      const { page, pageSize } = this.nftTransactions;
+      const { page, pageSize, continue: oldContinue } = this.nftTransactions;
       const nextPage = page + 1;
 
-      const { list, count } = await nftsService.getTransactionsList({
-        chainSlug: this.chainSlug,
-        address: this.address,
-        page: nextPage,
-        pageSize,
-      });
+      const { transactions, continue: newContinue } =
+        await nftsService.getTransactionsList({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize,
+          continue: oldContinue,
+        });
 
       /** текущие NFTs достаем только перед объединением
        * за время запроса уже могли получить детали и обновить старые NFT
        */
       const { nfts: oldNfts } = this.nftTransactions;
-      const newNfts = uniqueNftTransactionConcat(oldNfts, list);
+      const newNfts = uniqueNftTransactionConcat(
+        oldNfts,
+        transactions.map((t) => nftTransactionResAdapter(t)),
+      );
 
       this.setNftTransactions({
         ...this.nftTransactions,
         nfts: newNfts,
-        count: count === undefined ? newNfts.length : count,
+        count: newNfts.length,
+        continue: newContinue,
         page: nextPage,
-        hasAllPages: list.length === 0,
+        /** получили все страницы, если continue: {} */
+        hasAllPages: !newContinue?.pageKey,
       });
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
@@ -593,10 +599,9 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка NFT, возвращает флаг наличия целевой NFT */
 
       const fetchNftTransactions = async () => {
-        const { list, count } = await nftsService.getTransactionsList({
+        const { transactions } = await nftsService.getTransactionsList({
           chainSlug: this.chainSlug,
           address: this.address,
-          page: 1,
           pageSize: 10,
         });
 
@@ -605,17 +610,19 @@ export default class AddressModule extends VuexModule {
         const { nfts: oldNfts } = this.nftTransactions;
         const uniqueList: TNftTransaction[] = [];
 
-        list.forEach((item) => {
-          const same = oldNfts.find(
-            (tx) =>
-              getNftTransactionUniqueKey(tx) ===
-              getNftTransactionUniqueKey(item),
-          );
+        transactions
+          .map((t) => nftTransactionResAdapter(t))
+          .forEach((item) => {
+            const same = oldNfts.find(
+              (tx) =>
+                getNftTransactionUniqueKey(tx) ===
+                getNftTransactionUniqueKey(item),
+            );
 
-          if (!same) {
-            uniqueList.push(item);
-          }
-        });
+            if (!same) {
+              uniqueList.push(item);
+            }
+          });
 
         if (!uniqueList.length) {
           return false;
@@ -628,7 +635,7 @@ export default class AddressModule extends VuexModule {
         this.setNftTransactions({
           ...this.nftTransactions,
           nfts: newNfts,
-          count: count === undefined ? newNfts.length : count,
+          count: newNfts.length,
         });
 
         const hasTargetTx = newNfts.some(
