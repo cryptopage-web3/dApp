@@ -43,7 +43,7 @@ export const shortMonthAndDay = (timestamp: string) => {
 };
 
 export const formatDate = (timestamp: string) => {
-  return moment(timestamp).format('HH:mm / DD.MM.YYYY');
+  return timestamp ? moment(timestamp).format('HH:mm / DD.MM.YYYY') : '—';
 };
 
 export const shortMonthDayYear = (timestamp: string) => {
