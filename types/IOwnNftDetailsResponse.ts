@@ -1,6 +1,5 @@
 import { IAttribute } from './IAttribute';
 import { INftComment } from './INftComment';
-import { ENftTransactionAccessType } from './INftTransaction';
 
 export interface IOwnNftDetailsResponse {
   tokenId?: string;
@@ -12,7 +11,6 @@ export interface IOwnNftDetailsResponse {
   attributes?: IAttribute[];
   comments?: INftComment[];
   isEncrypted?: boolean;
-  accessType?: ENftTransactionAccessType;
   accessPrice?: number;
   accessDuration?: number;
 }

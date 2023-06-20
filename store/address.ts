@@ -484,7 +484,6 @@ export default class AddressModule extends VuexModule {
       this.setOwnNftDetails({
         index,
         nft: {
-          ...nft,
           ...nftTemp,
           type: nftType,
           hasDetails: true,
@@ -517,7 +516,7 @@ export default class AddressModule extends VuexModule {
         index,
         nft: {
           ...nft,
-          comments: data.comments,
+          comments: data.comments || [],
         },
       });
     } catch {}
@@ -811,12 +810,7 @@ export default class AddressModule extends VuexModule {
         });
 
         /** TODO: с бэка не приходит hash по моим NFT, в результате данное условие всегда будет false */
-        const hasTargetTx = newNfts.some(
-          (item) =>
-            item.from?.toLowerCase() === (targetTxHash || '').toLowerCase(),
-        );
-
-        return hasTargetTx;
+        return false;
       };
 
       /** запуск цикла обновления транзакций */

@@ -11,17 +11,16 @@ export interface INft {
   date: string;
   description?: string;
   contentUrl: string;
-  hasDetails?: boolean;
   name: string;
-  to: string;
-  from: string;
-  tokenId: string;
-  usdPrice: number;
   likes: number;
   dislikes: number;
-  type: ETypeNft;
+  symbol: string;
+  tokenId: string;
   attributes: IAttribute[];
-  comments?: INftComment[];
+  comments: INftComment[];
+
+  hasDetails?: boolean;
+  type?: ETypeNft;
 
   isEncrypted?: boolean;
   accessType?: ENftTransactionAccessType;
