@@ -187,18 +187,8 @@ export class Web3Service {
 
       const transactionCommentId = formatBytes32String(String(timeNow));
       const dataComment = defaultAbiCoder.encode(
+        ['uint256', 'address', 'string', 'bool', 'bool', 'bool', 'bool'],
         [
-          'uint256',
-          'uint256',
-          'address',
-          'string',
-          'bool',
-          'bool',
-          'bool',
-          'bool',
-        ],
-        [
-          0, // subscriptionId
           BigNumber.from(nftTokenId), // postId
           authAddress, // userAddress
           ipfsHash, // commentHash
@@ -290,7 +280,7 @@ export class Web3Service {
 
     /** получаем данные поста */
 
-    const postInfo = await contractPlugin.methods.read(nftTokenId, 0).call();
+    const postInfo = await contractPlugin.methods.read(nftTokenId).call();
 
     return postInfo;
   };
@@ -325,7 +315,7 @@ export class Web3Service {
 
     /** получаем комментарии поста */
 
-    const comments = await contractPlugin.methods.read(nftTokenId, 0).call();
+    const comments = await contractPlugin.methods.read(nftTokenId).call();
 
     return comments;
   };
