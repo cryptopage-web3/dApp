@@ -38,12 +38,14 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { IToken } from '~/types';
 import UpTokenIcon from '~/components/icon/account/UpTokenIcon.vue';
+import DownTokenIcon from '~/components/icon/account/DownTokenIcon.vue';
 
 type TToken = IToken;
 
 @Component({
   components: {
     UpTokenIcon,
+    DownTokenIcon,
   },
 })
 export default class Token extends Vue {
