@@ -61,19 +61,19 @@ export class Web3Service {
 
     const postInfo = await this.readPost({
       authChainSlug,
-      nftTokenId: '80001000000000028',
+      nftTokenId: '80001000000000035',
     });
 
     console.log(postInfo);
     debugger;
 
-    // const comments = await this.readPostComments({
-    //   authChainSlug,
-    //   nftTokenId: '80001000000000028',
-    // });
+    const comments = await this.readPostComments({
+      authChainSlug,
+      nftTokenId: '80001000000000035',
+    });
 
-    // console.log(comments);
-    // debugger;
+    console.log(comments);
+    debugger;
 
     // this.writeComment({
     //   params: {
