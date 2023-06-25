@@ -32,3 +32,18 @@ export const getSecDuration = (
 
   return duration * count * 24 * 60 * 60;
 };
+
+/** продолжительность в днях */
+export const getDaysDuration = (
+  duration: number | null,
+  type: ENftFormUnlockableContentAccessDurationType | null,
+) => {
+  if (!duration) {
+    return 0;
+  }
+
+  const find = durationTypeList.find((item) => item.slug === type);
+  const count = find?.count || 1;
+
+  return duration * count;
+};

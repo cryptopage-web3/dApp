@@ -6,6 +6,7 @@ export interface ISendNFTParams {
   isEncrypted: boolean;
   isSensitive: boolean;
   isCommented: boolean;
+  accessType: number;
   accessPrice: number;
   accessDuration: number;
 }

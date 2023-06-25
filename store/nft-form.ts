@@ -12,9 +12,10 @@ import {
 import { validateNftForm } from '~/utils/validateNftForm';
 import { Web3Service, EncryptionService } from '~/services';
 import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
-import { getSecDuration } from '~/utils/durationType';
+import { getDaysDuration } from '~/utils/durationType';
 import { buildFileFromDataURL } from '~/utils/buildFileFromDataURL';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
+import { getAccessTypeContract } from '~/utils/accessType';
 
 type TNftForm = INftForm;
 
@@ -344,6 +345,7 @@ export default class NftFormModule extends VuexModule {
       isExplicit,
       isCommentsEnable,
       unlockableContentPrice,
+      unlockableContentAccessType,
       unlockableContentAccessDuration,
       unlockableContentAccessDurationType,
     } = this.values;
@@ -385,8 +387,9 @@ export default class NftFormModule extends VuexModule {
       isEncrypted: isUnlockableContent,
       isSensitive: isExplicit,
       isCommented: isCommentsEnable,
-      accessPrice: (unlockableContentPrice || 0) * 10 ** 18,
-      accessDuration: getSecDuration(
+      accessPrice: unlockableContentPrice || 0,
+      accessType: getAccessTypeContract(unlockableContentAccessType),
+      accessDuration: getDaysDuration(
         unlockableContentAccessDuration,
         unlockableContentAccessDurationType,
       ),

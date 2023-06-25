@@ -51,3 +51,7 @@ export const MESSENGER_CHAT_LIST_SIDEBAR_URL = `${MESSENGER_URL}ChatListSidebar`
 /** BuyPageModal: открытие вкладки для верифицированных аккаунтов */
 export const BUYPAGEMODAL_VERIFIED_URL = 'https://uniswap.org/';
 export const BUYPAGE_QUIZ_URL = 'https://form.typeform.com/to/bHVwOAcM';
+
+/** payment type */
+export const FOR_SINGLE_POST_ONE_TIME = 5;
+export const FOR_SINGLE_POST_DAYS = 6;

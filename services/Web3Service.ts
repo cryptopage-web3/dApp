@@ -108,7 +108,8 @@ export class Web3Service {
         isEncrypted,
         isSensitive,
         isCommented,
-        // accessPrice,
+        accessPrice,
+        accessType,
         // accessDuration,
       } = params;
 
@@ -145,8 +146,8 @@ export class Web3Service {
           ownerAddress, // owner
           ipfsHash, // postHash
           0, // encodingType
-          0, // paymentType
-          0, // payAmount
+          accessType, // paymentType
+          accessPrice, // payAmount
           isEncrypted, // isEncrypted
           true, // isView
           isSensitive, // isSensitive
