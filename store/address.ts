@@ -578,8 +578,8 @@ export default class AddressModule extends VuexModule {
     /** запускаем параллельную синхронизацию, без async/await */
 
     this.syncNftTransactions(targetTxHash);
-    this.syncTransactions(targetTxHash);
-    this.syncOwnNfts(targetTxHash);
+    // this.syncTransactions(targetTxHash);
+    // this.syncOwnNfts(targetTxHash);
   }
 
   @Action
