@@ -61,7 +61,7 @@ export class Web3Service {
 
     const postInfo = await this.readPost({
       authChainSlug,
-      nftTokenId: '80001000000000035',
+      nftTokenId: '80001000000000046',
     });
 
     console.log(postInfo);
@@ -69,7 +69,7 @@ export class Web3Service {
 
     const comments = await this.readPostComments({
       authChainSlug,
-      nftTokenId: '80001000000000035',
+      nftTokenId: '80001000000000046',
     });
 
     console.log(comments);
@@ -275,6 +275,8 @@ export class Web3Service {
     const pluginAddress = await contractMain.methods
       .getPluginContract(contractPlugins.singleReadPost, 1)
       .call();
+
+    // console.log(pluginAddress);
 
     const contractPlugin = new this.web3.eth.Contract(
       CONTRACT_POST_INFO.abi,
