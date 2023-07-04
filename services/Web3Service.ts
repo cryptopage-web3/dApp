@@ -110,7 +110,7 @@ export class Web3Service {
         isCommented,
         accessPrice,
         accessType,
-        // accessDuration,
+        accessDuration,
       } = params;
 
       // this.testRequest({ params, callbacks });
@@ -137,6 +137,7 @@ export class Web3Service {
           'uint256',
           'uint256',
           'uint256',
+          'uint256',
           'bool',
           'bool',
           'bool',
@@ -148,6 +149,7 @@ export class Web3Service {
           0, // encodingType
           accessType, // paymentType
           accessPrice, // payAmount
+          accessDuration, // minimalPeriod
           isEncrypted, // isEncrypted
           true, // isView
           isSensitive, // isSensitive

@@ -1,7 +1,7 @@
 export interface INftComment {
   ipfsHash: string;
   creator: string;
-  _owner: string;
+  owner: string;
   price: string;
   isUp: boolean;
   isDown: boolean;
