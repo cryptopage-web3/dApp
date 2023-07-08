@@ -109,9 +109,10 @@ export class Web3Service {
         isSensitive,
         isCommented,
         accessPrice,
-        accessType,
+        // accessType,
         accessDuration,
       } = params;
+      const accessType = 0;
 
       // this.testRequest({ params, callbacks });
       // return;
