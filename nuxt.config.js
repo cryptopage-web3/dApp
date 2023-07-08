@@ -5,7 +5,9 @@ const webpack = require('webpack');
 export default {
   env: {
     API_SERVER_URL: process.env.API_SERVER_URL || 'https://api-m.crypto.page',
-    ENCRYPTION_SERVICE_URL: process.env.ENCRYPTION_SERVICE_URL,
+    ENCRYPTION_SERVICE_URL:
+      process.env.ENCRYPTION_SERVICE_URL ||
+      'https://mamzximrqe.execute-api.us-east-1.amazonaws.com/api/',
     INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID || '',
     IPFS_INFURA_PROJECT_ID: process.env.IPFS_INFURA_PROJECT_ID || '',
     IPFS_INFURA_SECRET_KEY: process.env.IPFS_INFURA_SECRET_KEY || '',
