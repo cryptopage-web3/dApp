@@ -90,7 +90,7 @@ export class EncryptionService {
     const {
       data: { id: nftHash },
     } = await this.axios.post('/upload/publish_nft', {
-      fileId,
+      attachments: [{ type: 'Image', fileId }],
       metadata: {
         name,
         description,
