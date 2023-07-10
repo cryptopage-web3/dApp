@@ -112,6 +112,7 @@ export class Web3Service {
         // accessType,
         accessDuration,
       } = params;
+      /** TODO: убрать, фиксирует что NFT всегда бесплатное, нулевой период */
       const accessType = 0;
 
       // this.testRequest({ params, callbacks });

@@ -348,29 +348,29 @@ export default class NftFormModule extends VuexModule {
       unlockableContentAccessType,
       unlockableContentAccessDuration,
       unlockableContentAccessDurationType,
+      unlockableContentDescription,
     } = this.values;
 
     let nftHash = '';
 
-    if (file) {
-      try {
-        alertModule.info('Uploading Nft to Arweave');
+    try {
+      alertModule.info('Uploading Nft to Arweave');
 
-        nftHash = await encryptionService.uploadNft({
-          file,
-          isEncrypted: isUnlockableContent,
-          name: title,
-          description,
-          externalUrl: externalLink,
-          attributes: getAdaptedAttributes(attributes),
-        });
+      nftHash = await encryptionService.uploadNft({
+        file,
+        isEncrypted: isUnlockableContent,
+        name: title,
+        description,
+        unlockableDescription: unlockableContentDescription,
+        externalUrl: externalLink,
+        attributes: getAdaptedAttributes(attributes),
+      });
 
-        alertModule.success('Nft successfully uploaded to Arweave');
-      } catch {
-        alertModule.error('Failed to save file into Arweave');
-        this.setLoading(false);
-        return;
-      }
+      alertModule.success('Nft successfully uploaded to Arweave');
+    } catch {
+      alertModule.error('Failed to save file into Arweave');
+      this.setLoading(false);
+      return;
     }
 
     /** передача NFT в контракт через web3 */

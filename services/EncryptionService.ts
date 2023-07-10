@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ENCRYPTION_SERVICE_URL } from '~/constants';
 import { Web3Service } from '~/services/Web3Service';
-import { IAttributesServer } from '~/types/nft-form';
+import { IAttributesServer, IPublishNFTParams } from '~/types/nft-form';
 import { authModule } from '~/utils/storeAccessor';
 
 export class EncryptionService {
@@ -65,32 +65,19 @@ export class EncryptionService {
     isEncrypted,
     name,
     description,
+    // unlockableDescription,
     externalUrl,
     attributes,
   }: {
-    file: File;
+    file: File | null;
     isEncrypted: boolean;
     name: string;
     description?: string;
+    unlockableDescription?: string;
     externalUrl?: string;
     attributes?: IAttributesServer[];
   }) {
-    const {
-      data: { url: signedUrl, fileId },
-    } = await this.axios.get('/upload/get_signed_url', {
-      params: {
-        content_type: file.type,
-      },
-    });
-
-    await axios.put(signedUrl, file, {
-      headers: { 'Content-Type': file.type },
-    });
-
-    const {
-      data: { id: nftHash },
-    } = await this.axios.post('/upload/publish_nft', {
-      attachments: [{ type: 'Image', fileId }],
+    const params: IPublishNFTParams = {
       metadata: {
         name,
         description,
@@ -98,7 +85,29 @@ export class EncryptionService {
         attributes,
       },
       encrypt: isEncrypted,
-    });
+    };
+
+    if (file) {
+      const {
+        data: { url: signedUrl, fileId },
+      } = await this.axios.get('/upload/get_signed_url', {
+        params: {
+          content_type: file.type,
+        },
+      });
+
+      await axios.put(signedUrl, file, {
+        headers: { 'Content-Type': file.type },
+      });
+
+      params.attachments = [{ type: 'Image', fileId }];
+    } else {
+      params.attachments = [{ type: 'Text', textContent: name }];
+    }
+
+    const {
+      data: { id: nftHash },
+    } = await this.axios.post('/upload/publish_nft', params);
 
     return nftHash;
   }
