@@ -65,7 +65,7 @@ export class EncryptionService {
     isEncrypted,
     name,
     description,
-    // unlockableDescription,
+    unlockableDescription,
     externalUrl,
     attributes,
   }: {
@@ -87,6 +87,7 @@ export class EncryptionService {
       encrypt: isEncrypted,
     };
 
+    /** загружаем файл */
     if (file) {
       const {
         data: { url: signedUrl, fileId },
@@ -101,10 +102,22 @@ export class EncryptionService {
       });
 
       params.attachments = [{ type: 'Image', fileId }];
-    } else {
-      params.attachments = [{ type: 'Text', textContent: name }];
     }
 
+    /** добавляем зашифрованный текст */
+    if (isEncrypted) {
+      if (params.metadata.description) {
+        const description = params.metadata.description;
+        params.attachments = [
+          ...(params.attachments || []),
+          { type: 'Text', textContent: description },
+        ];
+      }
+
+      params.metadata.description = unlockableDescription;
+    }
+
+    /** загружаем мета-данные */
     const {
       data: { id: nftHash },
     } = await this.axios.post('/upload/publish_nft', params);

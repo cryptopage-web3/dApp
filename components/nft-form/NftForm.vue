@@ -21,11 +21,18 @@
     <div class="global-line mb_20"></div>
     <div v-if="isUnlockable" class="form-creat-coded-files w-100 mb_15 d-block">
       <div class="global-text_16 fw-700 main_black mb_5">Paid content</div>
-      <div class="global-text_12">This content will be encoded</div>
+      <div class="global-text_12">This content bellow will be encoded</div>
     </div>
 
+    <div
+      v-if="isEmptyEncodedContent && isUnlockable"
+      class="form-creat__empty-content"
+    >
+      No Encoded Content
+    </div>
     <NftFormUpload ref="refUpload" />
     <NftFormDescription />
+
     <NftFormUnlockable v-show="isOpen && isUnlockable" />
 
     <div class="form-creat-bottom">
@@ -257,6 +264,15 @@ export default class NftForm extends Vue {
     return Boolean(
       isUnlockableContent || description || file || showDescription,
     );
+  }
+
+  get isEmptyEncodedContent(): boolean {
+    const {
+      values: { file },
+      showDescription,
+    } = nftFormModule;
+
+    return Boolean(!showDescription && !file);
   }
 
   toggleIsUnlockable() {
