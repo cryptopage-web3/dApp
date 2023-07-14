@@ -4,6 +4,9 @@ import { EChainId } from '~/types/EChainId';
 /** created by Nail M. at https://infura.io/ */
 export const INFURA_PROJECT_ID = process.env.INFURA_PROJECT_ID;
 
+/** created by Nail M. at https://cloud.walletconnect.com/ */
+export const WALLETCONNECT_PROJECT_ID = '6129b089e527adffd7ee9ca663adcd93';
+
 /** created by P at https://infura.io/ */
 export const IPFS_INFURA_PROJECT_ID = process.env.IPFS_INFURA_PROJECT_ID;
 export const IPFS_INFURA_SECRET_KEY = process.env.IPFS_INFURA_SECRET_KEY;

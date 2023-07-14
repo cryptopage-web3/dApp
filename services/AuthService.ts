@@ -1,5 +1,4 @@
 import { BscConnector } from '@binance-chain/bsc-connector';
-import WalletConnectProvider from '@walletconnect/web3-provider';
 import Web3 from 'web3';
 import {
   EChainId,
@@ -11,7 +10,7 @@ import {
   ITronRequestResponse,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
-import { INFURA_PROJECT_ID, PROVIDER_HOST_BY_CHAINID } from '~/constants';
+import { WALLETCONNECT_PROJECT_ID } from '~/constants';
 
 declare const window: Window &
   typeof globalThis & {
@@ -260,11 +259,19 @@ export class AuthService {
     onConnectChange: (params: IConnectChangeParams) => void,
   ): Promise<IConnectToProviderResponse> => {
     try {
-      const provider = await new WalletConnectProvider({
-        infuraId: INFURA_PROJECT_ID,
-        rpc: PROVIDER_HOST_BY_CHAINID,
+      const { EthereumProvider } = await import(
+        '@walletconnect/ethereum-provider'
+      );
+
+      const provider = await EthereumProvider.init({
+        projectId: WALLETCONNECT_PROJECT_ID,
+        // chains: [Number(EChainId.eth), Number(EChainId.goerli)],
+        chains: [80001],
+        optionalChains: [80001],
+        showQrModal: true,
       });
 
+      await provider.connect();
       await provider.enable();
       this.provider = provider;
       this.web3 = await new Web3(<any>provider);
