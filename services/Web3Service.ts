@@ -8,7 +8,7 @@ import {
   IReadPostParams,
   IWritePostParams,
 } from '~/types/nft-form';
-import { alertModule, authModule } from '~/utils/storeAccessor';
+import { alertModule } from '~/utils/storeAccessor';
 import { contractPlugins } from '~/contracts';
 
 export class Web3Service {
@@ -25,7 +25,7 @@ export class Web3Service {
   IWritePostParams) => {
     const {
       authChainSlug,
-      // authAddress,
+      authAddress,
       ownerAddress,
       // ipfsHash,
       // communityAddress,
@@ -43,37 +43,37 @@ export class Web3Service {
     //   CONTRACT_ACCOUNT.address,
     // );
 
-    const CONTRACT_NFT = await import(`../contracts/${authChainSlug}/nft.json`);
+    // const CONTRACT_NFT = await import(`../contracts/${authChainSlug}/nft.json`);
 
-    const contractNft = new this.web3.eth.Contract(
-      CONTRACT_NFT.abi,
-      CONTRACT_NFT.address,
-    );
+    // const contractNft = new this.web3.eth.Contract(
+    //   CONTRACT_NFT.abi,
+    //   CONTRACT_NFT.address,
+    // );
 
-    debugger;
+    // debugger;
 
-    const postIds = await contractNft.methods
-      .tokensOfOwner(ownerAddress)
-      .call();
+    // const postIds = await contractNft.methods
+    //   .tokensOfOwner(ownerAddress)
+    //   .call();
 
-    console.log(postIds);
-    debugger;
+    // console.log(postIds);
+    // debugger;
 
-    const postInfo = await this.readPost({
-      authChainSlug,
-      nftTokenId: '80001000000000046',
-    });
+    // const postInfo = await this.readPost({
+    //   authChainSlug,
+    //   nftTokenId: '80001000000000046',
+    // });
 
-    console.log(postInfo);
-    debugger;
+    // console.log(postInfo);
+    // debugger;
 
-    const comments = await this.readPostComments({
-      authChainSlug,
-      nftTokenId: '80001000000000046',
-    });
+    // const comments = await this.readPostComments({
+    //   authChainSlug,
+    //   nftTokenId: '80001000000000046',
+    // });
 
-    console.log(comments);
-    debugger;
+    // console.log(comments);
+    // debugger;
 
     // this.writeComment({
     //   params: {
@@ -95,6 +95,8 @@ export class Web3Service {
     //   },
     //   callbacks,
     // });
+
+    // await this.faucetTestMint(authAddress, 200, authChainSlug);
   };
   */
 
@@ -109,11 +111,9 @@ export class Web3Service {
         isSensitive,
         isCommented,
         accessPrice,
-        // accessType,
+        accessType,
         accessDuration,
       } = params;
-      /** TODO: убрать, фиксирует что NFT всегда бесплатное, нулевой период */
-      const accessType = 0;
 
       // this.testRequest({ params, callbacks });
       // return;
@@ -328,34 +328,79 @@ export class Web3Service {
   };
 
   public checkIfHaveAccessToEncryptedPost = async (
+    authAddress: string,
     postId: string,
     authChainSlug: string,
   ) => {
-    const CONTRACT = await import(
-      `../contracts/${authChainSlug}/executor.json`
+    const CONTRACT_MAIN = await import(
+      `../contracts/${authChainSlug}/main.json`
     );
 
-    const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
+    const contractMain = new this.web3.eth.Contract(
+      CONTRACT_MAIN.abi,
+      CONTRACT_MAIN.address,
+    );
 
-    return await contract.methods
-      .hasAccessToPost(parseInt(postId), authModule.address)
+    const CONTRACT_HAS_ACCESS = await import(
+      `../contracts/${authChainSlug}/singleHasPaymentForAccess.json`
+    );
+
+    /** получаем адрес плагина */
+
+    const pluginAddress = await contractMain.methods
+      .getPluginContract(contractPlugins.singleHasPaymentForAccess, 1)
       .call();
+
+    // console.log(pluginAddress);
+
+    const contractPlugin = new this.web3.eth.Contract(
+      CONTRACT_HAS_ACCESS.abi,
+      pluginAddress,
+    );
+
+    /** получаем данные о доступе */
+
+    return await contractPlugin.methods.read(authAddress, postId).call();
   };
 
   public buyPostAccess = async (
     authAddress: string,
     postId: string,
+    amount: number,
     authChainSlug: string,
   ): Promise<void> => {
-    const CONTRACT = await import(
+    const CONTRACT_EXECUTOR = await import(
       `../contracts/${authChainSlug}/executor.json`
     );
 
-    const contract = new this.web3.eth.Contract(CONTRACT.abi, CONTRACT.address);
+    const contractExecutor = new this.web3.eth.Contract(
+      CONTRACT_EXECUTOR.abi,
+      CONTRACT_EXECUTOR.address,
+    );
+
+    const timeNow = Date.now();
+
+    /** покупка подписки */
+
+    const transactionId = formatBytes32String(String(timeNow));
+    const data = defaultAbiCoder.encode(
+      ['address', 'uint256', 'uint256', 'uint256'],
+      [
+        authAddress, // access address
+        BigNumber.from(postId), // postId
+        amount, // amount
+        0, // count days before start
+      ],
+    );
 
     return await new Promise((resolve, reject) => {
-      contract.methods
-        .buyPostAccess(postId)
+      contractExecutor.methods
+        .run(
+          transactionId,
+          contractPlugins.subscriptionBuyForSinglePost,
+          1,
+          data,
+        )
         .send({
           from: authAddress,
         })
@@ -373,5 +418,66 @@ export class Web3Service {
           reject(error);
         });
     });
+  };
+
+  public faucetTestMint = async (
+    authAddress: string,
+    amount: number,
+    authChainSlug: string,
+  ): Promise<void> => {
+    const CONTRACT_EXECUTOR = await import(
+      `../contracts/${authChainSlug}/executor.json`
+    );
+
+    const contractExecutor = new this.web3.eth.Contract(
+      CONTRACT_EXECUTOR.abi,
+      CONTRACT_EXECUTOR.address,
+    );
+
+    const timeNow = Date.now();
+
+    // await this.tokenBalance(authAddress, authChainSlug);
+
+    /** добавление баланса */
+
+    const transactionId = formatBytes32String(String(timeNow));
+    const data = defaultAbiCoder.encode(['uint256'], [amount]);
+
+    return new Promise((resolve, reject) => {
+      contractExecutor.methods
+        .run(transactionId, contractPlugins.faucetTestMint, 1, data)
+        .send({
+          from: authAddress,
+        })
+        .on('transactionHash', (hash: string) => {
+          alertModule.info(`${hash}: Transaction on pending`);
+        })
+        .on('receipt', () => {
+          alertModule.success('Transaction completed');
+          resolve();
+        })
+        .on('error', (error: any) => {
+          alertModule.error('Transaction has some error');
+          reject(error);
+        });
+    });
+  };
+
+  public tokenBalance = async (
+    authAddress: string,
+    authChainSlug: string,
+  ): Promise<void> => {
+    const CONTRACT_TOKEN = await import(
+      `../contracts/${authChainSlug}/token.json`
+    );
+
+    const contractToken = new this.web3.eth.Contract(
+      CONTRACT_TOKEN.abi,
+      CONTRACT_TOKEN.address,
+    );
+
+    const balance = await contractToken.methods.balanceOf(authAddress).call();
+
+    console.log(balance);
   };
 }

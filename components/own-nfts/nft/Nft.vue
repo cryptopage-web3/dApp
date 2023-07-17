@@ -209,6 +209,7 @@ export default class Nft extends Vue {
       this.decryptLoading = true;
 
       const access = await web3Service.checkIfHaveAccessToEncryptedPost(
+        authModule.address,
         this.nft.tokenId,
         authModule.chainSlug,
       );
@@ -276,6 +277,7 @@ export default class Nft extends Vue {
       await web3Service.buyPostAccess(
         authModule.address,
         this.nft.tokenId,
+        this.nft.accessPrice || 0,
         authModule.chainSlug,
       );
 

@@ -3,11 +3,10 @@ import { EChainId } from '~/types';
 /**
  * mumbai - https://mumbai.polygonscan.com/
  *
- * все плагины - 0x03D2F15cc5d2AC4F90cBf297f28B426e9CD5a4A7
  * общий контракт - 0x7E754F7D127eea39a3F7078ad4a8e9c61D6cD534
  * контракт executor - 0x43876793bd3a12f84773542033b2ebc29f7f02c5
- * контракт pluginList - 0x3ed99873bc1a0935b36257ab67367622d9c97069
- * список плагинов - https://mumbai.polygonscan.com/address/0x3ed99873bc1a0935b36257ab67367622d9c97069#readContract
+ * контракт pluginList - 0x4442936327dac90961bdfef55514f04252a010c6
+ * список плагинов - https://mumbai.polygonscan.com/address/0x4442936327dac90961bdfef55514f04252a010c6#readContract
  * тесты - https://github.com/cryptopage-web3/smart_contracts/tree/master/test
  */
 
@@ -40,6 +39,12 @@ export const contractPlugins = {
     '0x998072615265679bf1f5709eafe357ca6093b8d24e66cc3c05f76f90504927f6',
   singleReadAllComment:
     '0x4109142687fb920f2169e9f03a6c4544f567cb8d156347cdfbdb34b589e10879',
+  singleHasPaymentForAccess:
+    '0xf33878605c834f168b1a32454453e38430ee1b250af16141a12cbb3c6bfa4845',
+  faucetTestMint:
+    '0xbaea0fffd27eb7471ad5d7d8cdff64cb1a7334c2ebdc728432c91a5159480073',
+  subscriptionBuyForSinglePost:
+    '0xb5f209e6571e660710906b7b924ba0716e0af7b6999bcac36489c6b839b5a376',
 };
 
 /** адрес сообщества по умолчанию */
