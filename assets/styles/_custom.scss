@@ -378,6 +378,19 @@
   height: 100%;
 }
 
+.profile-content__image-tag_loading {
+  z-index: 4;
+  background-color: #ffffff;
+
+  .loading-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .profile-content__image-tag_bg {
   object-fit: cover;
   z-index: 1;
