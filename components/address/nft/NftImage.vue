@@ -4,9 +4,24 @@
     ref="container"
     :href="nft.contentUrl"
     target="_blank"
-    class="profile-content__image loading-bg"
+    class="profile-content__image"
+    :class="{ 'loading-bg': loading }"
     @click.prevent="$emit('show-modal')"
-  />
+  >
+    <template v-if="!loading">
+      <div
+        class="profile-content__image-tag profile-content__image-tag_backdrop"
+      />
+      <img
+        :src="nft.contentUrl"
+        class="profile-content__image-tag profile-content__image-tag_bg"
+      />
+      <img
+        :src="nft.contentUrl"
+        class="profile-content__image-tag profile-content__image-tag_main"
+      />
+    </template>
+  </a>
   <div v-else class="profile-content__image">
     <div class="profile-content__image-empty">Failed to get nft data</div>
   </div>
@@ -22,6 +37,7 @@ type TNftTransaction = INftTransaction;
 @Component({})
 export default class NftImage extends Vue {
   isError = false;
+  loading = true;
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
@@ -36,8 +52,11 @@ export default class NftImage extends Vue {
   }
 
   loadNftContent() {
+    this.loading = true;
+
     if (!this.nft.contentUrl) {
       this.isError = true;
+      this.loading = false;
       return;
     }
 
@@ -45,15 +64,11 @@ export default class NftImage extends Vue {
     image.src = this.nft.contentUrl;
 
     image.onload = () => {
-      if (!this.$refs.container) {
-        return;
-      }
-
-      this.$refs.container.innerHTML = '';
-      this.$refs.container.append(image);
+      this.loading = false;
     };
     image.onerror = () => {
       this.isError = true;
+      this.loading = false;
     };
   }
 
