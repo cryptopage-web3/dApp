@@ -257,16 +257,19 @@ export default class UnlockableFields extends Vue {
       return;
     }
 
-    const numPrice = parseInt(priceLocal);
+    if (/[^0-9.]/.test(priceLocal)) {
+      let cleanPrice = priceLocal.replace(/[^0-9,.]/g, '');
+      cleanPrice = cleanPrice.replace(/,/g, '.');
+      this.priceLocal = cleanPrice;
+
+      return;
+    }
+
+    const numPrice = parseFloat(priceLocal);
 
     if (!priceLocal || isNaN(numPrice)) {
       nftFormModule.setUnlockableContentPrice(0);
       this.priceLocal = '';
-      return;
-    }
-
-    if (priceLocal !== String(numPrice)) {
-      this.priceLocal = String(numPrice);
       return;
     }
 
@@ -275,7 +278,7 @@ export default class UnlockableFields extends Vue {
 
   @Watch('unlockableContentPrice', { immediate: true })
   onUnlockableContentPriceChanged(unlockableContentPrice: number | null) {
-    if (String(unlockableContentPrice || '') !== this.priceLocal) {
+    if ((unlockableContentPrice || 0) !== parseFloat(this.priceLocal || '0')) {
       this.priceLocal = `${String(unlockableContentPrice)} PAGE`;
     }
   }
@@ -352,7 +355,9 @@ export default class UnlockableFields extends Vue {
   }
 
   handlePriceBlur() {
-    this.priceLocal = this.priceLocal ? `${this.priceLocal} PAGE` : '';
+    this.priceLocal = this.priceLocal
+      ? `${parseFloat(this.priceLocal)} PAGE`
+      : '';
   }
 
   handlePriceFocus() {

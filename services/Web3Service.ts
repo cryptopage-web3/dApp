@@ -378,7 +378,35 @@ export class Web3Service {
       CONTRACT_EXECUTOR.address,
     );
 
+    const CONTRACT_MAIN = await import(
+      `../contracts/${authChainSlug}/main.json`
+    );
+
+    const contractMain = new this.web3.eth.Contract(
+      CONTRACT_MAIN.abi,
+      CONTRACT_MAIN.address,
+    );
+
+    const CONTRACT_TOKEN = await import(
+      `../contracts/${authChainSlug}/token.json`
+    );
+
+    const contractToken = new this.web3.eth.Contract(
+      CONTRACT_TOKEN.abi,
+      CONTRACT_TOKEN.address,
+    );
+
     const timeNow = Date.now();
+
+    /** approve с кошелька пользователя на адрес плагина */
+
+    const buyPlugin = await contractMain.methods
+      .getPlugin(contractPlugins.subscriptionBuyForSinglePost, 1)
+      .call();
+
+    await contractToken.methods.approve(buyPlugin[1], amount).send({
+      from: authAddress,
+    });
 
     /** покупка подписки */
 
