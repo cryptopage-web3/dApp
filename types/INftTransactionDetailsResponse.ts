@@ -9,7 +9,8 @@ export interface INftTransactionDetailsResponse {
   contentUrl?: string;
   attributes?: IAttribute[];
   isEncrypted?: boolean;
-  accessPrice?: number | null;
+  payAmount?: string | null;
+  paymentType?: number | null;
   accessDuration?: number | null;
   date?: string;
   comments?: INftComment[];

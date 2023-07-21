@@ -35,7 +35,7 @@
         :class="{ 'btn-white-transparent_custom': isTransparent }"
         @click.prevent="$emit('unlock')"
       >
-        Unlock post for {{ accessPrice / 10 ** 18 }} PAGE
+        Unlock post for {{ accessPrice }} PAGE
         {{
           accessDuration
             ? `(${Math.round(accessDuration / (24 * 60 * 60))} days)`
