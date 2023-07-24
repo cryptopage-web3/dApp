@@ -6,7 +6,7 @@ export function nftTransactionResAdapter(
   return {
     txHash: data.txHash,
     blockNumber: data.blockNumber,
-    contract_address: data.contract_address,
+    contractAddress: data.contractAddress,
     tokenId: data.tokenId,
     to: data.to,
     from: data.from,

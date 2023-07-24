@@ -7,7 +7,7 @@ import {
 
 export interface INft {
   collectionName: string;
-  contract_address: string;
+  contractAddress: string;
   date: string;
   description?: string;
   contentUrl: string;

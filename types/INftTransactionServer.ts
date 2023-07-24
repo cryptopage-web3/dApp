@@ -4,7 +4,7 @@ export interface INftTransactionServer {
   type: ETypeNft;
   txHash: string;
   blockNumber: number;
-  contract_address: string;
+  contractAddress: string;
   tokenId: string;
   to: string;
   from: string;

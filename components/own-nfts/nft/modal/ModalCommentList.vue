@@ -36,7 +36,7 @@ export default class ModalCommentList extends Vue {
   }
 
   uniqKey(comment: INftComment) {
-    return `${comment.ipfsHash}_${comment.creator}_${this.nft.contract_address}_${this.nft.tokenId}`;
+    return `${comment.ipfsHash}_${comment.creator}_${this.nft.contractAddress}_${this.nft.tokenId}`;
   }
 }
 </script>

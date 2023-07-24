@@ -66,7 +66,7 @@ export default class ModalText extends Vue {
   }
 
   get contractAddress(): string {
-    return this.nft.contract_address;
+    return this.nft.contractAddress;
   }
 
   mounted() {

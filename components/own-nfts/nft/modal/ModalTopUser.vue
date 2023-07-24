@@ -1,15 +1,11 @@
 <template>
   <div class="modal-post-user">
     <nuxt-link
-      :to="`/${chainSlug}/${nft.contract_address}`"
+      :to="`/${chainSlug}/${nft.contractAddress}`"
       class="modal-post-user__icon"
     >
       <client-only>
-        <jazzicon
-          :seed="10211"
-          :address="nft.contract_address"
-          :diameter="34"
-        />
+        <jazzicon :seed="10211" :address="nft.contractAddress" :diameter="34" />
       </client-only>
     </nuxt-link>
     <div class="modal-post-user-right">

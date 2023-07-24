@@ -295,7 +295,7 @@ export default class AddressModule extends VuexModule {
     try {
       const data = await nftsService.getTransactionDetails({
         chainSlug: this.chainSlug,
-        contractAddress: nft.contract_address,
+        contractAddress: nft.contractAddress,
         tokenId: nft.tokenId,
         blockNumber: nft.blockNumber,
       });
@@ -431,7 +431,7 @@ export default class AddressModule extends VuexModule {
       if (!nft.contentUrl) {
         const data = await nftsService.getOwnDetails({
           chainSlug: this.chainSlug,
-          contractAddress: nft.contract_address,
+          contractAddress: nft.contractAddress,
           tokenId: nft.tokenId,
         });
 
@@ -508,7 +508,7 @@ export default class AddressModule extends VuexModule {
     try {
       const data = await nftsService.getOwnDetails({
         chainSlug: this.chainSlug,
-        contractAddress: nft.contract_address,
+        contractAddress: nft.contractAddress,
         tokenId: nft.tokenId,
       });
 

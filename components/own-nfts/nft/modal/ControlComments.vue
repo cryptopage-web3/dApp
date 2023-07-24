@@ -108,7 +108,7 @@ export default class ControlComments extends Vue {
   get cryptoPageNft(): boolean {
     const address = nftContractAddress[addressModule.chainId] || '';
 
-    return address.toLowerCase() === this.nft.contract_address?.toLowerCase();
+    return address.toLowerCase() === this.nft.contractAddress?.toLowerCase();
   }
 
   get isSameChain(): boolean {
