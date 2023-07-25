@@ -98,7 +98,7 @@
         <div class="voite-collapse-body pt-0">
           <div class="global-text_12 mb_10">
             This post will be paid as part of the payment for the entire
-            subscription
+            subscription (price per day)
           </div>
           <div class="row modal-creat-unlocks-tabs-row">
             <div class="col-sm-6 col-12 mb_10 mb_sm_0">
