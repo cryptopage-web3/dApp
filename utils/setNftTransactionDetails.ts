@@ -14,7 +14,7 @@ export const setNftTransactionDetails = (
     contentUrl: data.contentUrl,
     attributes: data.attributes,
     isEncrypted: data.isEncrypted,
-    accessPrice: parseFloat(data.payAmount || '0'),
+    accessPrice: parseFloat(data.payAmount || '0') / 10 ** 18,
     accessDuration: data.accessDuration,
     comments: data.comments,
   };

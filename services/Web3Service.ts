@@ -132,6 +132,7 @@ export class Web3Service {
       /** добавление поста */
 
       const transactionPostId = formatBytes32String(String(timeNow));
+      const normalizePrice = accessPrice * 10 ** 18;
       const dataPost = defaultAbiCoder.encode(
         [
           'address',
@@ -150,7 +151,7 @@ export class Web3Service {
           ipfsHash, // postHash
           0, // encodingType
           accessType, // paymentType
-          accessPrice, // payAmount
+          normalizePrice, // payAmount
           accessDuration, // minimalPeriod
           isEncrypted, // isEncrypted
           true, // isView
@@ -400,11 +401,13 @@ export class Web3Service {
 
     /** approve с кошелька пользователя на адрес плагина */
 
+    const normalizeAmount = amount * 10 ** 18;
+
     const buyPlugin = await contractMain.methods
       .getPlugin(contractPlugins.subscriptionBuyForSinglePost, 1)
       .call();
 
-    await contractToken.methods.approve(buyPlugin[1], amount).send({
+    await contractToken.methods.approve(buyPlugin[1], normalizeAmount).send({
       from: authAddress,
     });
 
@@ -416,7 +419,7 @@ export class Web3Service {
       [
         authAddress, // access address
         BigNumber.from(postId), // postId
-        amount, // amount
+        normalizeAmount, // amount
         0, // count days before start
       ],
     );
@@ -469,7 +472,8 @@ export class Web3Service {
     /** добавление баланса */
 
     const transactionId = formatBytes32String(String(timeNow));
-    const data = defaultAbiCoder.encode(['uint256'], [amount]);
+    const normalizeAmount = amount * 10 ** 18;
+    const data = defaultAbiCoder.encode(['uint256'], [normalizeAmount]);
 
     return new Promise((resolve, reject) => {
       contractExecutor.methods
