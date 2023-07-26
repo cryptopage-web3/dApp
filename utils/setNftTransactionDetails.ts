@@ -1,3 +1,4 @@
+import { normalizeAmountToFront } from './normalizeAmount';
 import { INftTransaction, INftTransactionDetailsResponse } from '~/types';
 
 export const setNftTransactionDetails = (
@@ -14,7 +15,7 @@ export const setNftTransactionDetails = (
     contentUrl: data.contentUrl,
     attributes: data.attributes,
     isEncrypted: data.isEncrypted,
-    accessPrice: parseFloat(data.payAmount || '0') / 10 ** 18,
+    accessPrice: normalizeAmountToFront(parseFloat(data.payAmount || '0')),
     accessDuration: data.accessDuration,
     comments: data.comments,
   };

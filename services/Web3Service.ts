@@ -10,6 +10,7 @@ import {
 } from '~/types/nft-form';
 import { alertModule } from '~/utils/storeAccessor';
 import { contractPlugins } from '~/contracts';
+import { normalizeAmountToServer } from '~/utils/normalizeAmount';
 
 export class Web3Service {
   web3!: Web3;
@@ -132,7 +133,7 @@ export class Web3Service {
       /** добавление поста */
 
       const transactionPostId = formatBytes32String(String(timeNow));
-      const normalizePrice = accessPrice * 10 ** 18;
+      const normalizePrice = normalizeAmountToServer(accessPrice);
       const dataPost = defaultAbiCoder.encode(
         [
           'address',
@@ -401,7 +402,7 @@ export class Web3Service {
 
     /** approve с кошелька пользователя на адрес плагина */
 
-    const normalizeAmount = amount * 10 ** 18;
+    const normalizeAmount = normalizeAmountToServer(amount);
 
     const buyPlugin = await contractMain.methods
       .getPlugin(contractPlugins.subscriptionBuyForSinglePost, 1)
@@ -472,7 +473,7 @@ export class Web3Service {
     /** добавление баланса */
 
     const transactionId = formatBytes32String(String(timeNow));
-    const normalizeAmount = amount * 10 ** 18;
+    const normalizeAmount = normalizeAmountToServer(amount);
     const data = defaultAbiCoder.encode(['uint256'], [normalizeAmount]);
 
     return new Promise((resolve, reject) => {
