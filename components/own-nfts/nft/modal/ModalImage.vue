@@ -4,9 +4,33 @@
     ref="container"
     :href="nft.contentUrl"
     target="_blank"
-    class="profile-content__image loading-bg"
+    class="profile-content__image"
     @click.prevent="$emit('show-modal')"
-  />
+  >
+    <!-- общий лоадер до подгрузки картинки -->
+    <div
+      v-if="loading"
+      class="profile-content__image-tag profile-content__image-tag_loading"
+    >
+      <div class="loading-bg" />
+    </div>
+    <!-- сервый фон между фоновой картинкой и основной -->
+    <div
+      class="profile-content__image-tag profile-content__image-tag_backdrop"
+    />
+    <!-- фоновая картинка -->
+    <img
+      :src="nft.contentUrl"
+      class="profile-content__image-tag profile-content__image-tag_bg"
+    />
+    <!-- основная картинка -->
+    <img
+      :src="nft.contentUrl"
+      class="profile-content__image-tag profile-content__image-tag_main"
+      @load="handleLoad"
+      @error="handleError"
+    />
+  </a>
   <div v-else class="profile-content__image">
     <div class="profile-content__image-empty">Failed to get nft data</div>
   </div>
@@ -22,6 +46,7 @@ type TNft = INft;
 @Component({})
 export default class ModalImage extends Vue {
   isError = false;
+  loading = true;
 
   @Prop({ required: true })
   readonly nft!: TNft;
@@ -35,26 +60,22 @@ export default class ModalImage extends Vue {
     this.loadNftContent();
   }
 
+  handleLoad() {
+    this.loading = false;
+  }
+
+  handleError() {
+    this.isError = true;
+    this.loading = false;
+  }
+
   loadNftContent() {
-    if (!this.nft.contentUrl) {
-      this.isError = true;
+    if (this.nft.contentUrl) {
       return;
     }
 
-    const image = new Image();
-    image.src = this.nft.contentUrl;
-
-    image.onload = () => {
-      if (!this.$refs.container) {
-        return;
-      }
-
-      this.$refs.container.innerHTML = '';
-      this.$refs.container.append(image);
-    };
-    image.onerror = () => {
-      this.isError = true;
-    };
+    this.isError = true;
+    this.loading = false;
   }
 
   mounted() {
