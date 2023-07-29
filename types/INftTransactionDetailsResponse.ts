@@ -1,4 +1,4 @@
-import { IAttribute, INftComment } from '.';
+import { IAttribute, INftAttachment, INftComment } from '.';
 
 export interface INftTransactionDetailsResponse {
   tokenId?: string;
@@ -8,6 +8,7 @@ export interface INftTransactionDetailsResponse {
   description?: string;
   contentUrl?: string;
   attributes?: IAttribute[];
+  attachments?: INftAttachment[];
   isEncrypted?: boolean;
   payAmount?: string | null;
   paymentType?: number | null;

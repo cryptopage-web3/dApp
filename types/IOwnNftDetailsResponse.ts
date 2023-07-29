@@ -1,16 +1,18 @@
 import { IAttribute } from './IAttribute';
+import { INftAttachment } from './INftAttachment';
 import { INftComment } from './INftComment';
 
 export interface IOwnNftDetailsResponse {
-  tokenId?: string;
-  chain?: string;
-  contentUrl?: string;
-  contractAddress?: string;
-  name?: string;
-  description?: string;
-  attributes?: IAttribute[];
+  tokenId: string;
+  chain: string;
+  contractAddress: string;
+  name: string;
+  description: string;
+  contentUrl: string;
+  attributes: IAttribute[];
+  attachments: INftAttachment[];
   comments?: INftComment[];
-  isEncrypted?: boolean;
-  accessPrice?: number;
-  accessDuration?: number;
+  isEncrypted: boolean;
+  paymentType: number;
+  payAmount: string;
 }

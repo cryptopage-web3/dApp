@@ -1,6 +1,6 @@
-import { INft } from '.';
+import { INftServer } from '.';
 
 export interface INftsResponse {
   count?: number;
-  list: INft[];
+  list: INftServer[];
 }

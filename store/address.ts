@@ -26,7 +26,11 @@ import {
   uniqueNftConcat,
   uniqueNftTransactionConcat,
 } from '~/utils/array';
-import { nftTransactionResAdapter, transactionResAdapter } from '~/adapters';
+import {
+  nftResAdapter,
+  nftTransactionResAdapter,
+  transactionResAdapter,
+} from '~/adapters';
 import { setNftTransactionDetails } from '~/utils/setNftTransactionDetails';
 
 type TAddressInfo = IAddressInfo;
@@ -372,7 +376,10 @@ export default class AddressModule extends VuexModule {
        * за время запроса уже могли получить детали и обновить старые NFT
        */
       const { nfts: oldNfts } = this.ownNfts;
-      const newNfts = uniqueNftConcat(oldNfts, list);
+      const newNfts = uniqueNftConcat(
+        oldNfts,
+        list.map((t) => nftResAdapter(t)),
+      );
 
       this.setOwnNfts({
         ...this.ownNfts,
@@ -425,44 +432,6 @@ export default class AddressModule extends VuexModule {
     const nftTemp = { ...nft };
 
     try {
-      /** если нет contentUrl, то скорее всего это зашифрованное NFT
-       * получаем датели только для пустых contentUrl
-       */
-      if (!nft.contentUrl) {
-        const data = await nftsService.getOwnDetails({
-          chainSlug: this.chainSlug,
-          contractAddress: nft.contractAddress,
-          tokenId: nft.tokenId,
-        });
-
-        let accessType: ENftTransactionAccessType;
-
-        if (data.isEncrypted) {
-          if (
-            this.address.toLocaleLowerCase() ===
-            authModule.address.toLocaleLowerCase()
-          ) {
-            accessType = ENftTransactionAccessType.has_access;
-          } else {
-            accessType = ENftTransactionAccessType.not_requested;
-          }
-        } else {
-          accessType = ENftTransactionAccessType.has_access;
-        }
-
-        Object.assign(nftTemp, {
-          description: data.description || '',
-          name: data.name || '',
-          attributes: data.attributes || [],
-          comments: data.comments || [],
-          contentUrl: data.contentUrl || '',
-          isEncrypted: data.isEncrypted,
-          accessPrice: data.accessPrice,
-          accessDuration: data.accessDuration,
-          accessType,
-        });
-      }
-
       if (nftTemp.contentUrl) {
         const mimeType = await nftsService.getMimeType(nftTemp.contentUrl);
 
@@ -481,10 +450,26 @@ export default class AddressModule extends VuexModule {
         }
       }
 
+      let accessType: ENftTransactionAccessType;
+
+      if (nftTemp.isEncrypted) {
+        if (
+          this.address.toLocaleLowerCase() ===
+          authModule.address.toLocaleLowerCase()
+        ) {
+          accessType = ENftTransactionAccessType.has_access;
+        } else {
+          accessType = ENftTransactionAccessType.not_requested;
+        }
+      } else {
+        accessType = ENftTransactionAccessType.has_access;
+      }
+
       this.setOwnNftDetails({
         index,
         nft: {
           ...nftTemp,
+          accessType,
           type: nftType,
           hasDetails: true,
         },
@@ -516,7 +501,7 @@ export default class AddressModule extends VuexModule {
         index,
         nft: {
           ...nft,
-          comments: data.comments || [],
+          comments: data?.comments || [],
         },
       });
     } catch {}
@@ -785,15 +770,17 @@ export default class AddressModule extends VuexModule {
         const { nfts: oldNfts } = this.ownNfts;
         const uniqueList: INft[] = [];
 
-        list.forEach((item) => {
-          const same = oldNfts.find(
-            (tx) => getNftUniqueKey(tx) === getNftUniqueKey(item),
-          );
+        list
+          .map((t) => nftResAdapter(t))
+          .forEach((item) => {
+            const same = oldNfts.find(
+              (tx) => getNftUniqueKey(tx) === getNftUniqueKey(item),
+            );
 
-          if (!same) {
-            uniqueList.push(item);
-          }
-        });
+            if (!same) {
+              uniqueList.push(item);
+            }
+          });
 
         if (!uniqueList.length) {
           return false;

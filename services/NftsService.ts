@@ -39,11 +39,11 @@ export class NftsService extends BaseService {
 
   getOwnDetails = async (
     params: IOwnNftDetailsParams,
-  ): Promise<IOwnNftDetailsResponse> => {
+  ): Promise<IOwnNftDetailsResponse | null> => {
     const slugMap = API_CHAIN_MAP;
 
     if (!slugMap.has(params.chainSlug)) {
-      return {};
+      return null;
     }
 
     const { data } = await this.get<IOwnNftDetailsResponse>(

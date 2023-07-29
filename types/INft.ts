@@ -9,11 +9,9 @@ export interface INft {
   collectionName: string;
   contractAddress: string;
   date: string;
-  description?: string;
+  description: string;
   contentUrl: string;
   name: string;
-  likes: number;
-  dislikes: number;
   symbol: string;
   tokenId: string;
   attributes: IAttribute[];
