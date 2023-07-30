@@ -1,4 +1,5 @@
 import { INft, INftServer } from '~/types';
+import { normalizeAmountToFront } from '~/utils/normalizeAmount';
 
 export function nftResAdapter(data: INftServer): INft {
   return {
@@ -14,7 +15,7 @@ export function nftResAdapter(data: INftServer): INft {
     comments: data.comments,
 
     isEncrypted: data.isEncrypted,
-    accessPrice: parseFloat(data.payAmount || '0'),
+    accessPrice: normalizeAmountToFront(parseFloat(data.payAmount || '0')),
     accessDuration: parseFloat(data.minimalPeriod || '0'),
   };
 }
