@@ -20,7 +20,6 @@ export class NftsService extends BaseService {
     if (!slugMap.has(params.chainSlug)) {
       return {
         list: [],
-        count: 0,
       };
     }
 
@@ -28,8 +27,8 @@ export class NftsService extends BaseService {
       `${this.apiURL}/${slugMap.get(params.chainSlug)}/${params.address}`,
       {
         params: {
-          page: params.page,
           pageSize: params.pageSize,
+          continue: params.continue,
         },
       },
     );

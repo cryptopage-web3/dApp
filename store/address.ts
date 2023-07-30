@@ -362,14 +362,14 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchOwnNfts() {
     try {
-      const { page, pageSize } = this.ownNfts;
+      const { page, pageSize, continue: oldContinue } = this.ownNfts;
       const nextPage = page + 1;
 
-      const { list, count } = await nftsService.getList({
+      const { list, continue: newContinue } = await nftsService.getList({
         chainSlug: this.chainSlug,
         address: this.address,
-        page: nextPage,
         pageSize,
+        continue: oldContinue,
       });
 
       /** текущие NFTs достаем только перед объединением
@@ -384,9 +384,11 @@ export default class AddressModule extends VuexModule {
       this.setOwnNfts({
         ...this.ownNfts,
         nfts: newNfts,
-        count: count === undefined ? newNfts.length : count,
+        count: newNfts.length,
+        continue: newContinue,
         page: nextPage,
-        hasAllPages: list.length === 0,
+        /** получили все страницы, если continue: {} */
+        hasAllPages: !newContinue?.pageKey,
       });
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
@@ -758,10 +760,9 @@ export default class AddressModule extends VuexModule {
       /** метод обновления списка NFT, возвращает флаг наличия целевой транзакции */
 
       const fetchOwnNfts = async () => {
-        const { list, count } = await nftsService.getList({
+        const { list } = await nftsService.getList({
           chainSlug: this.chainSlug,
           address: this.address,
-          page: 1,
           pageSize: 10,
         });
 
@@ -793,7 +794,7 @@ export default class AddressModule extends VuexModule {
         this.setOwnNfts({
           ...this.ownNfts,
           nfts: newNfts,
-          count: count === undefined ? newNfts.length : count,
+          count: newNfts.length,
         });
 
         /** TODO: с бэка не приходит hash по моим NFT, в результате данное условие всегда будет false */

@@ -1,6 +1,8 @@
 import { INftServer } from '.';
 
 export interface INftsResponse {
-  count?: number;
   list: INftServer[];
+  continue?: {
+    pageKey?: string;
+  };
 }
