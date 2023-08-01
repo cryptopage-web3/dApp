@@ -26,6 +26,7 @@ export interface INftTransaction {
   isEncrypted?: boolean;
   accessType?: ENftTransactionAccessType;
   accessPrice?: number | null;
+  /** период в днях */
   accessDuration?: number | null;
 
   comments?: INftComment[];

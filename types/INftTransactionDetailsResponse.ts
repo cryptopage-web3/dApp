@@ -12,6 +12,7 @@ export interface INftTransactionDetailsResponse {
   isEncrypted?: boolean;
   payAmount?: string | null;
   paymentType?: number | null;
+  minimalPeriod?: string;
   accessDuration?: number | null;
   date?: string;
   comments?: INftComment[];

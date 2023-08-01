@@ -36,11 +36,7 @@
         @click.prevent="$emit('unlock')"
       >
         Unlock post for {{ accessPrice }} PAGE
-        {{
-          accessDuration
-            ? `(${Math.round(accessDuration / (24 * 60 * 60))} days)`
-            : ''
-        }}
+        {{ accessDuration ? `(${accessDuration} days)` : '' }}
       </a>
     </div>
   </div>

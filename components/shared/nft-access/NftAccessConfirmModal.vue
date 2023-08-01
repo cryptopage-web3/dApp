@@ -67,9 +67,7 @@ export default class NftAccessConfirmModal extends Vue {
   }
 
   get duration(): string {
-    return this.accessDuration
-      ? String(Math.round(this.accessDuration / (24 * 60 * 60)))
-      : '';
+    return this.accessDuration ? String(this.accessDuration) : '';
   }
 
   // emit

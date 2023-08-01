@@ -23,5 +23,6 @@ export interface INft {
   isEncrypted?: boolean;
   accessType?: ENftTransactionAccessType;
   accessPrice?: number;
+  /** период в днях */
   accessDuration?: number;
 }

@@ -11,7 +11,7 @@ export interface INftServer {
   downCount: string;
   ipfsHash: string;
   isEncrypted: boolean;
-  minimalPeriod: string;
+  minimalPeriod?: string;
   payAmount: string;
   paymentType: string;
   symbol: string;
