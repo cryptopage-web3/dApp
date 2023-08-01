@@ -35,7 +35,7 @@
         :class="{ 'btn-white-transparent_custom': isTransparent }"
         @click.prevent="$emit('unlock')"
       >
-        Unlock post for {{ accessPrice }} PAGE
+        Unlock post for {{ price }} PAGE
         {{ accessDuration ? `(${accessDuration} days)` : '' }}
       </a>
     </div>
@@ -75,5 +75,9 @@ export default class NftAccessControl extends Vue {
 
   @Prop({ type: Boolean, default: false })
   readonly isTransparent!: false;
+
+  get price(): number {
+    return this.accessPrice * (this.accessDuration || 1);
+  }
 }
 </script>

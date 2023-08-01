@@ -63,7 +63,7 @@ export default class NftAccessConfirmModal extends Vue {
   };
 
   get price(): number {
-    return this.accessPrice;
+    return this.accessPrice * (this.accessDuration || 1);
   }
 
   get duration(): string {

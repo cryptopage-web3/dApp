@@ -270,14 +270,16 @@ export default class Nft extends Vue {
 
   async buyPostAccess() {
     const web3Service = new Web3Service(authModule.provider);
+    const { accessPrice, accessDuration, tokenId } = this.nft;
+    const price = (accessPrice || 0) * (accessDuration || 1);
 
     try {
       this.decryptLoading = true;
 
       await web3Service.buyPostAccess(
         authModule.address,
-        this.nft.tokenId,
-        this.nft.accessPrice || 0,
+        tokenId,
+        price,
         authModule.chainSlug,
       );
 
