@@ -1,6 +1,8 @@
+import { EAttachmentType } from './EAttachmentType';
+
 export interface INftAttachment {
   id: string;
-  type: string;
+  type: EAttachmentType;
   data:
     | string
     | {

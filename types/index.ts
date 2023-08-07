@@ -45,4 +45,5 @@ export * from './EConsentStatus';
 export * from './ILandingMessageBroadcast';
 export * from './ILandingMessageNFTData';
 export * from './ELocalStorageKey';
+export * from './EAttachmentType';
 export * from './INftAttachment';

@@ -14,6 +14,7 @@ export const setNftTransactionDetails = (
     description: data.description,
     contentUrl: data.contentUrl,
     attributes: data.attributes,
+    attachments: data.attachments,
     isEncrypted: data.isEncrypted,
     accessPrice: normalizeAmountToFront(parseFloat(data.payAmount || '0')),
     accessDuration: parseFloat(data.minimalPeriod || '0'),

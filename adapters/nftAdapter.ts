@@ -12,6 +12,7 @@ export function nftResAdapter(data: INftServer): INft {
     symbol: data.symbol,
     tokenId: data.tokenId,
     attributes: data.attributes || [],
+    attachments: data.attachments || [],
     comments: data.comments,
 
     isEncrypted: data.isEncrypted,

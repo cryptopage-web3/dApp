@@ -2,6 +2,7 @@ import {
   ENftTransactionAccessType,
   ETypeNft,
   IAttribute,
+  INftAttachment,
   INftComment,
 } from '.';
 
@@ -15,6 +16,7 @@ export interface INft {
   symbol: string;
   tokenId: string;
   attributes: IAttribute[];
+  attachments: INftAttachment[];
   comments: INftComment[];
 
   hasDetails?: boolean;

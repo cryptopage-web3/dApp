@@ -1,4 +1,4 @@
-import { ETypeNft, IAttribute, INftComment } from '.';
+import { ETypeNft, IAttribute, INftAttachment, INftComment } from '.';
 
 export enum ENftTransactionAccessType {
   not_requested = 'not_requested',
@@ -22,6 +22,7 @@ export interface INftTransaction {
   description?: string;
   contentUrl?: string;
   attributes?: IAttribute[];
+  attachments?: INftAttachment[];
 
   isEncrypted?: boolean;
   accessType?: ENftTransactionAccessType;
