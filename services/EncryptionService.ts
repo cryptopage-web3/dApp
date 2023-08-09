@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { ENCRYPTION_SERVICE_URL } from '~/constants';
 import { Web3Service } from '~/services/Web3Service';
+import { EAttachmentType, INftAttachment } from '~/types';
 import { IAttributesServer, IPublishNFTParams } from '~/types/nft-form';
 import { authModule } from '~/utils/storeAccessor';
 
@@ -132,5 +133,36 @@ export class EncryptionService {
       this.axios.defaults.baseURL +
       `decrypt?postId=${postId}&signature=${signature}`
     );
+  }
+
+  async getDecryptedNft(postId: string, attachments?: INftAttachment[]) {
+    const signature = await this.getUserSignature();
+    const getUrl = (attachmentId: string) =>
+      this.axios.defaults.baseURL +
+      `decrypt?postId=${postId}&signature=${signature}&attachmentId=${attachmentId}`;
+
+    const result = {
+      text: '',
+      image: '',
+    };
+
+    const encryptedImage = (attachments || []).find(
+      ({ type }) => type === EAttachmentType.encryptedImage,
+    );
+    const encryptedText = (attachments || []).find(
+      ({ type }) => type === EAttachmentType.encryptedText,
+    );
+
+    if (encryptedImage) {
+      result.image = getUrl(encryptedImage.id);
+    }
+
+    if (encryptedText) {
+      result.text = await this.axios.get(getUrl(encryptedText.id));
+      console.log(result);
+      debugger;
+    }
+
+    return result;
   }
 }

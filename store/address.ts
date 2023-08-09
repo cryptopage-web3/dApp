@@ -28,10 +28,10 @@ import {
 } from '~/utils/array';
 import {
   nftResAdapter,
+  nftTransactionDetailsResAdapter,
   nftTransactionResAdapter,
   transactionResAdapter,
 } from '~/adapters';
-import { setNftTransactionDetails } from '~/utils/setNftTransactionDetails';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -304,7 +304,7 @@ export default class AddressModule extends VuexModule {
         blockNumber: nft.blockNumber,
       });
 
-      const nftWithDetails = setNftTransactionDetails(nft, data);
+      const nftWithDetails = nftTransactionDetailsResAdapter(nft, data);
       const { contentUrl, isEncrypted } = nftWithDetails;
 
       if (contentUrl) {

@@ -346,6 +346,11 @@
 
 .profile-content__desc {
   margin-bottom: 0;
+  word-break: break-word;
+}
+
+.profile-content__desc_mt {
+  margin-top: 10px;
 }
 
 .profile-content__desc span {
