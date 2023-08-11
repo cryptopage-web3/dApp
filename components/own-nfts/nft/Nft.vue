@@ -236,20 +236,23 @@ export default class Nft extends Vue {
 
   async decryptPostContent() {
     const encryptionService = new EncryptionService();
+    const { attachments, tokenId, contentUrl, encryptedText } = this.nft;
 
     try {
       this.decryptLoading = true;
 
-      const imageData = await encryptionService.getDecryptedNftImage(
-        this.nft.tokenId,
+      const decryptedData = await encryptionService.getDecryptedNft(
+        tokenId,
+        attachments,
       );
 
       addressModule.updateOwnNftDetails({
         nft: this.nft,
         updatedDetails: {
           type: ETypeNft.image,
-          contentUrl: imageData,
           isEncrypted: false,
+          contentUrl: decryptedData.image || contentUrl,
+          encryptedText: decryptedData.text || encryptedText,
         },
       });
 

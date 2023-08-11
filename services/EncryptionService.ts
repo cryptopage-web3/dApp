@@ -126,15 +126,6 @@ export class EncryptionService {
     return nftHash;
   }
 
-  async getDecryptedNftImage(postId: string) {
-    const signature = await this.getUserSignature();
-
-    return (
-      this.axios.defaults.baseURL +
-      `decrypt?postId=${postId}&signature=${signature}`
-    );
-  }
-
   async getDecryptedNft(postId: string, attachments?: INftAttachment[]) {
     const signature = await this.getUserSignature();
     const getUrl = (attachmentId: string) =>

@@ -11,27 +11,34 @@
     <div v-if="title" class="profile-content__title">
       {{ title }}
     </div>
-    <div v-if="description" class="profile-content__desc">
-      {{ description }}
-      <span v-if="isLongDescription" @click.prevent.stop="switchFull">
-        {{ showFull ? 'hide' : 'show more' }}
-      </span>
-    </div>
+    <ModalTextDescription
+      v-if="description"
+      :text="description"
+      :has-margin="false"
+    />
+    <ModalTextDescription
+      v-if="encryptedText"
+      :text="encryptedText"
+      :has-margin="!!description"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
+import ModalTextDescription from './ModalTextDescription.vue';
 import { INft } from '~/types';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 
 type TNft = INft;
 
-@Component({})
+@Component({
+  components: {
+    ModalTextDescription,
+  },
+})
 export default class ModalText extends Vue {
-  showFull = false;
-
   @Prop({ required: true })
   readonly nft!: TNft;
 
@@ -39,22 +46,12 @@ export default class ModalText extends Vue {
     hash: HTMLAnchorElement;
   };
 
-  get originDescription(): string {
+  get description(): string {
     return this.nft.description || '';
   }
 
-  get isLongDescription(): boolean {
-    return this.originDescription.length > 250;
-  }
-
-  get shortDescription(): string {
-    return this.isLongDescription
-      ? this.originDescription.slice(0, 200) + '...'
-      : this.originDescription;
-  }
-
-  get description(): string {
-    return this.showFull ? this.originDescription : this.shortDescription;
+  get encryptedText(): string {
+    return this.nft.encryptedText || '';
   }
 
   get title(): string {
@@ -76,10 +73,6 @@ export default class ModalText extends Vue {
         title: 'Click to copy',
       });
     });
-  }
-
-  switchFull() {
-    this.showFull = !this.showFull;
   }
 
   copyHash() {

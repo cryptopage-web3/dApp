@@ -13,6 +13,7 @@ export interface INft {
   description: string;
   contentUrl: string;
   name: string;
+  encryptedText?: string;
   symbol: string;
   tokenId: string;
   attributes: IAttribute[];

@@ -53,7 +53,7 @@ export default class NftText extends Vue {
   }
 
   get usdPrice(): number {
-    return this.nft.usdPrice || 0;
+    return 0;
   }
 
   get collectionName(): string {
