@@ -158,9 +158,8 @@ export class EncryptionService {
     }
 
     if (encryptedText) {
-      result.text = await this.axios.get(getUrl(encryptedText.id));
-      console.log(result);
-      debugger;
+      const { data } = await this.axios.get(getUrl(encryptedText.id));
+      result.text = data;
     }
 
     return result;
