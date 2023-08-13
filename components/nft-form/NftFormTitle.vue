@@ -3,7 +3,7 @@
     type="text"
     :value="title"
     placeholder="ENTER YOUR MESSAGE"
-    class="form-creat__name form-creat-input-pc"
+    class="form-creat__name form-creat__name_main form-creat-input-pc"
     @input="updateTitle"
     @focus="$emit('focus')"
   />

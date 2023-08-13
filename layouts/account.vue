@@ -65,24 +65,25 @@ export default class AccountLayout extends Vue {
     return hasData && this.$route.name === 'network-address';
   }
 
-  @Watch('isAuth', { immediate: true })
-  onIsAuthChange(isAuth: boolean) {
-    if (!isAuth) {
-      return;
-    }
+  /** временно скрываем экран онбординга */
+  // @Watch('isAuth', { immediate: true })
+  // onIsAuthChange(isAuth: boolean) {
+  //   if (!isAuth) {
+  //     return;
+  //   }
 
-    if (this.isNftFromLanding) {
-      return;
-    }
+  //   if (this.isNftFromLanding) {
+  //     return;
+  //   }
 
-    this.$nextTick(() => {
-      if (authModule.isSignupCompleted) {
-        authModule.setShowBuyPageModal(true);
-        return;
-      }
+  //   this.$nextTick(() => {
+  //     if (authModule.isSignupCompleted) {
+  //       authModule.setShowBuyPageModal(true);
+  //       return;
+  //     }
 
-      authModule.setShowSignupModal(true);
-    });
-  }
+  //     authModule.setShowSignupModal(true);
+  //   });
+  // }
 }
 </script>

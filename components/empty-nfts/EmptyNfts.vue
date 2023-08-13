@@ -31,6 +31,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { addressModule, authModule, nftFormModule } from '~/store';
+import { popoverNftMainField } from '~/utils/popoverNftMainField';
 
 @Component({})
 export default class EmptyNfts extends Vue {
@@ -55,6 +56,14 @@ export default class EmptyNfts extends Vue {
     const connectSuccess = await nftFormModule.validateConnect();
 
     if (!connectSuccess) {
+      return;
+    }
+
+    /** если есть основная форма, то открываем поповер под основным полем */
+
+    if ($('.form-creat__name_main').length) {
+      popoverNftMainField($('.form-creat__name_main')[0]);
+
       return;
     }
 
