@@ -126,7 +126,7 @@
             type="text"
             :value="address"
             readonly
-            class="global-input global-input_large profil-settings-item__text"
+            class="global-input global-input_large profil-settings-item__text profil-settings-item__text_address"
           />
           <a
             href="#"
