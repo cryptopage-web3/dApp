@@ -221,7 +221,8 @@ export default class ProfileSettingsPage extends Vue {
   }
 
   mounted() {
-    this.showHint();
+    /** убрал поповер на показ Attention */
+    // this.showHint();
   }
 
   beforeDestroy() {
