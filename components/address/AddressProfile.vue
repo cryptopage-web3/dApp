@@ -10,7 +10,7 @@
             <a ref="address" href="#" @click.prevent="copyAddress">
               {{ address | shortAddress }}
             </a>
-            <div v-if="isVerified" class="profile-iu__nik-icon">
+            <div v-if="isVerified && isOwner" class="profile-iu__nik-icon">
               <ProfileVerifiedIcon />
             </div>
           </div>
