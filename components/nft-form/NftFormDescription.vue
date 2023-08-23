@@ -1,6 +1,12 @@
 <template>
   <div v-if="showDescription" class="mt_15 collapse form-creat-nav-text show">
-    <div class="global-text_14 light_grey">Post text (optional)</div>
+    <div class="global-text_14 light_grey">
+      {{
+        isUnlockable
+          ? 'Encrypted text content (optional)'
+          : 'Text content (optional)'
+      }}
+    </div>
     <input
       type="text"
       placeholder="Enter post text"
@@ -24,6 +30,10 @@ export default class NftFormDescription extends Vue {
 
   get showDescription(): boolean {
     return nftFormModule.showDescription;
+  }
+
+  get isUnlockable(): boolean {
+    return nftFormModule.values.isUnlockableContent;
   }
 
   updateDescription(e: InputEvent) {
