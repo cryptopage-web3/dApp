@@ -14,33 +14,33 @@
         aria-controls="spaces-tabs1"
         aria-selected="true"
       >
-        For you
+        New content
       </a>
     </li>
     <li class="nav-item" role="presentation">
       <a
         id="spaces-tabs2-tab"
         href="#spaces-tabs2"
-        class="spaces-tabs-link"
+        class="spaces-tabs-link disabled"
         data-toggle="tab"
         role="tab"
         aria-controls="spaces-tabs2"
         aria-selected="false"
       >
-        Folowing
+        For you
       </a>
     </li>
     <li class="nav-item" role="presentation">
       <a
         id="spaces-tabs3-tab"
         href="#spaces-tabs3"
-        class="spaces-tabs-link"
+        class="spaces-tabs-link disabled"
         data-toggle="tab"
         role="tab"
         aria-controls="spaces-tabs3"
         aria-selected="false"
       >
-        New content
+        Folowing
       </a>
     </li>
   </ul>

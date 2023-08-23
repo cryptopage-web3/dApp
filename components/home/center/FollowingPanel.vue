@@ -1,9 +1,9 @@
 <template>
   <div
-    id="spaces-tabs2"
+    id="spaces-tabs3"
     class="tab-pane fade"
     role="tabpanel"
-    aria-labelledby="spaces-tabs2-tab"
+    aria-labelledby="spaces-tabs3-tab"
   >
     <div class="profile-content spaces-content">
       <div class="profile-content-top">

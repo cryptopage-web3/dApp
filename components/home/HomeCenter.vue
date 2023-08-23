@@ -3,9 +3,9 @@
     <Tabs />
 
     <div id="myTabContent" class="tab-content">
+      <NewContentPanel />
       <ForYouPanel />
       <FollowingPanel />
-      <NewContentPanel />
     </div>
   </div>
 </template>
