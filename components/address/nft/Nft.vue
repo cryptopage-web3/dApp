@@ -65,7 +65,7 @@ import { Component, Prop } from 'nuxt-property-decorator';
 import { EncryptionService, Web3Service } from '~/services';
 import NftAccessConfirmModal from '~/components/shared/nft-access/NftAccessConfirmModal.vue';
 import { INftTransaction, ENftTransactionAccessType, ETypeNft } from '~/types';
-import { addressModule, authModule } from '~/store';
+import { addressModule, authModule, homeModule } from '~/store';
 import NftTop from '~/components/address/nft/NftTop.vue';
 import NftText from '~/components/address/nft/NftText.vue';
 import NftImage from '~/components/address/nft/NftImage.vue';
@@ -107,6 +107,11 @@ export default class Nft extends Vue {
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
+
+  @Prop({ type: Boolean, default: false })
+  readonly isHomePage!: false;
+
+  storeModule = this.isHomePage ? homeModule : addressModule;
 
   $refs!: {
     nftModal: NftModal;
@@ -183,7 +188,7 @@ export default class Nft extends Vue {
         authModule.chainSlug,
       );
 
-      addressModule.updateNftDetails({
+      this.storeModule.updateNftDetails({
         nft: this.nft,
         updatedDetails: {
           accessType: access
@@ -215,7 +220,7 @@ export default class Nft extends Vue {
         attachments,
       );
 
-      addressModule.updateNftDetails({
+      this.storeModule.updateNftDetails({
         nft: this.nft,
         updatedDetails: {
           type: ETypeNft.image,
@@ -255,7 +260,7 @@ export default class Nft extends Vue {
         authModule.chainSlug,
       );
 
-      addressModule.updateNftDetails({
+      this.storeModule.updateNftDetails({
         nft: this.nft,
         updatedDetails: {
           accessType: ENftTransactionAccessType.has_access,
@@ -276,7 +281,7 @@ export default class Nft extends Vue {
   async refresh() {
     this.loading = true;
 
-    await addressModule.fetchNftTransactionDetails(this.nft);
+    await this.storeModule.fetchNftTransactionDetails(this.nft);
 
     this.loading = false;
   }
