@@ -32,7 +32,7 @@ const DEFAULT_ADDRESS = '0x7ee2bbc5d5004683ed84035591582be1fc4953f5';
 const defaultNewContent: TNftTransactionsPagination = {
   nfts: [],
   count: 0,
-  pageSize: 100,
+  pageSize: 10,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
