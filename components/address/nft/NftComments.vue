@@ -74,7 +74,7 @@ import {
   profileCommentControlVisible,
   profileCommentClose,
 } from '~/utils/nftsComment';
-import { addressModule, authModule } from '~/store';
+import { addressModule, authModule, homeModule } from '~/store';
 
 type TNftTransaction = INftTransaction;
 
@@ -93,6 +93,10 @@ const ipfsService = new IPFSService();
 })
 export default class NftComments extends Vue {
   loading = false;
+  isHomePage = this.$route.name === 'index';
+  /** для стартовой страницы другой стор */
+  storeModule = this.isHomePage ? homeModule : addressModule;
+  chainModule = this.isHomePage ? authModule : addressModule;
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
@@ -110,13 +114,13 @@ export default class NftComments extends Vue {
   commentText = '';
 
   get cryptoPageNft(): boolean {
-    const address = nftContractAddress[addressModule.chainId] || '';
+    const address = nftContractAddress[this.chainModule.chainId] || '';
 
     return address.toLowerCase() === this.nft.contractAddress?.toLowerCase();
   }
 
   get isSameChain(): boolean {
-    return authModule.chainSlug === addressModule.chainSlug;
+    return authModule.chainSlug === this.chainModule.chainSlug;
   }
 
   get isAuth(): boolean {
@@ -124,7 +128,7 @@ export default class NftComments extends Vue {
   }
 
   get addressChainName(): string {
-    return addressModule.chainName;
+    return this.chainModule.chainName;
   }
 
   get myNft(): boolean {
@@ -283,7 +287,7 @@ export default class NftComments extends Vue {
 
           /** обновляем информацию NFT */
 
-          addressModule.fetchNftTransactionDetails(self.nft);
+          self.storeModule.fetchNftTransactionDetails(self.nft);
         },
         onError() {
           self.$notify({

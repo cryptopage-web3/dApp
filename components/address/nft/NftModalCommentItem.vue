@@ -42,7 +42,7 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { INftComment } from '~/types';
-import { addressModule } from '~/store';
+import { addressModule, authModule } from '~/store';
 import { IPFSService } from '~/services';
 
 const ipfsService = new IPFSService();
@@ -54,9 +54,10 @@ export default class NftModalCommentItem extends Vue {
   readonly comment!: TNftComment;
 
   commentText = 'Loading...';
+  chainModule = this.$route.name === 'index' ? authModule : addressModule;
 
   get chainSlug(): string {
-    return addressModule.chainSlug;
+    return this.chainModule.chainSlug;
   }
 
   async mounted() {

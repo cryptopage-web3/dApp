@@ -108,16 +108,28 @@ export default class Nft extends Vue {
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
 
-  @Prop({ type: Boolean, default: false })
-  readonly isHomePage!: false;
-
+  isHomePage = this.$route.name === 'index';
+  /** для стартовой страницы другой стор */
   storeModule = this.isHomePage ? homeModule : addressModule;
+  chainModule = this.isHomePage ? authModule : addressModule;
 
   $refs!: {
     nftModal: NftModal;
     confirmBuyModal: NftAccessConfirmModal;
     root: HTMLDivElement;
   };
+
+  get isSameChain(): boolean {
+    return authModule.chainSlug === this.chainModule.chainSlug;
+  }
+
+  get isAuth(): boolean {
+    return authModule.isAuth;
+  }
+
+  get addressChainName(): string {
+    return this.chainModule.chainName;
+  }
 
   mounted() {
     if (this.nft.hasDetails) {
@@ -178,6 +190,14 @@ export default class Nft extends Vue {
 
   async checkIfHaveAccessToSeePost() {
     const web3Service = new Web3Service(authModule.provider);
+
+    if (!this.isAuth || !this.isSameChain) {
+      this.$notify({
+        type: 'error',
+        title: `Need connect to ${this.addressChainName}`,
+      });
+      return;
+    }
 
     try {
       this.decryptLoading = true;

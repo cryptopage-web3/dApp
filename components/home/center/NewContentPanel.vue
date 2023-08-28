@@ -5,12 +5,7 @@
     role="tabpanel"
     aria-labelledby="spaces-tabs1-tab"
   >
-    <Nft
-      v-for="nft in nfts"
-      :key="uniqueKey(nft)"
-      :nft="nft"
-      :is-home-page="true"
-    />
+    <Nft v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
     <Loader v-if="$fetchState.pending || initLoading" />
   </div>
 </template>

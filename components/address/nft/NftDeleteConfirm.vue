@@ -69,6 +69,9 @@ type TNftTransaction = INftTransaction;
 })
 export default class NftDeleteConfirm extends Vue {
   loading = false;
+  isHomePage = this.$route.name === 'index';
+  /** для стартовой страницы другой стор */
+  chainModule = this.isHomePage ? authModule : addressModule;
 
   @Prop({ required: true })
   readonly nft!: TNftTransaction;
@@ -78,11 +81,11 @@ export default class NftDeleteConfirm extends Vue {
   };
 
   get addressChainName(): string {
-    return addressModule.chainName;
+    return this.chainModule.chainName;
   }
 
   get isSameChain(): boolean {
-    return authModule.chainSlug === addressModule.chainSlug;
+    return authModule.chainSlug === this.chainModule.chainSlug;
   }
 
   show() {
