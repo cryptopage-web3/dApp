@@ -14,6 +14,7 @@ export const IPFS_INFURA_SECRET_KEY = process.env.IPFS_INFURA_SECRET_KEY;
 export const API_URL = process.env.API_SERVER_URL;
 
 export const ENCRYPTION_SERVICE_URL = process.env.ENCRYPTION_SERVICE_URL;
+export const DECRYPTION_SERVICE_URL = process.env.DECRYPTION_SERVICE_URL;
 
 export const PROVIDER_HOST_BY_CHAINID: Record<number | string, string> = {
   [EChainId.eth]: `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`,

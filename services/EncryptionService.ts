@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ENCRYPTION_SERVICE_URL } from '~/constants';
+import { ENCRYPTION_SERVICE_URL, DECRYPTION_SERVICE_URL } from '~/constants';
 import { Web3Service } from '~/services/Web3Service';
 import { EAttachmentType, INftAttachment } from '~/types';
 import { IAttributesServer, IPublishNFTParams } from '~/types/nft-form';
@@ -90,6 +90,14 @@ export class EncryptionService {
 
     /** загружаем файл */
     if (file) {
+      const fileType = file.type.split('/')[0];
+      const type =
+        fileType === 'video'
+          ? 'Video'
+          : fileType === 'audio'
+          ? 'Audio'
+          : 'Image';
+
       const {
         data: { url: signedUrl, fileId },
       } = await this.axios.get('/upload/get_signed_url', {
@@ -102,7 +110,7 @@ export class EncryptionService {
         headers: { 'Content-Type': file.type },
       });
 
-      params.attachments = [{ type: 'Image', fileId }];
+      params.attachments = [{ type, fileId }];
     }
 
     /** добавляем зашифрованный текст */
@@ -129,7 +137,7 @@ export class EncryptionService {
   async getDecryptedNft(postId: string, attachments?: INftAttachment[]) {
     const signature = await this.getUserSignature();
     const getUrl = (attachmentId: string) =>
-      this.axios.defaults.baseURL +
+      DECRYPTION_SERVICE_URL +
       `decrypt?postId=${postId}&signature=${signature}&attachmentId=${attachmentId}`;
 
     const result = {

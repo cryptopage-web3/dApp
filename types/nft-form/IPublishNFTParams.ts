@@ -22,5 +22,13 @@ export interface IPublishNFTParams {
         type: 'Image';
         fileId: string;
       }
+    | {
+        type: 'Video';
+        fileId: string;
+      }
+    | {
+        type: 'Audio';
+        fileId: string;
+      }
   )[];
 }

@@ -16,6 +16,7 @@ import {
   IToken,
   ITransaction,
   ITransactionsPagination,
+  EAttachmentType,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -305,9 +306,22 @@ export default class AddressModule extends VuexModule {
       });
 
       const nftWithDetails = nftTransactionDetailsResAdapter(nft, data);
-      const { contentUrl, isEncrypted } = nftWithDetails;
+      const { contentUrl, isEncrypted, attachments } = nftWithDetails;
 
-      if (contentUrl) {
+      const videoAttach = attachments?.find(
+        (item) => item.type === EAttachmentType.video,
+      );
+      const audioAttach = attachments?.find(
+        (item) => item.type === EAttachmentType.audio,
+      );
+
+      if (videoAttach) {
+        nftWithDetails.type = ETypeNft.video;
+        nftWithDetails.contentUrl = videoAttach.data as string;
+      } else if (audioAttach) {
+        nftWithDetails.type = ETypeNft.audio;
+        nftWithDetails.contentUrl = audioAttach.data as string;
+      } else if (contentUrl) {
         const mimeType = await nftsService.getMimeType(contentUrl);
 
         if (/audio/.test(mimeType)) {

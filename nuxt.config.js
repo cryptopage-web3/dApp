@@ -7,7 +7,10 @@ export default {
     API_SERVER_URL: process.env.API_SERVER_URL || 'https://api-m.crypto.page',
     ENCRYPTION_SERVICE_URL:
       process.env.ENCRYPTION_SERVICE_URL ||
-      'https://fdckbnnja2.execute-api.us-east-1.amazonaws.com/api/',
+      'https://9gsb4563ig.execute-api.us-east-1.amazonaws.com/api/',
+    DECRYPTION_SERVICE_URL:
+      process.env.DECRYPTION_SERVICE_URL ||
+      'https://2gtejqxzlb.execute-api.us-east-1.amazonaws.com/api/',
     INFURA_PROJECT_ID: process.env.INFURA_PROJECT_ID || '',
     IPFS_INFURA_PROJECT_ID: process.env.IPFS_INFURA_PROJECT_ID || '',
     IPFS_INFURA_SECRET_KEY: process.env.IPFS_INFURA_SECRET_KEY || '',
