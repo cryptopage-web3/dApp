@@ -1,7 +1,12 @@
 import axios from 'axios';
 import { ENCRYPTION_SERVICE_URL, DECRYPTION_SERVICE_URL } from '~/constants';
 import { Web3Service } from '~/services/Web3Service';
-import { EAttachmentType, INftAttachment } from '~/types';
+import {
+  EAttachmentType,
+  ETypeNft,
+  IDecryptedNft,
+  INftAttachment,
+} from '~/types';
 import { IAttributesServer, IPublishNFTParams } from '~/types/nft-form';
 import { authModule } from '~/utils/storeAccessor';
 
@@ -140,26 +145,30 @@ export class EncryptionService {
       DECRYPTION_SERVICE_URL +
       `decrypt?postId=${postId}&signature=${signature}&attachmentId=${attachmentId}`;
 
-    const result = {
+    const result: IDecryptedNft = {
+      type: ETypeNft.image,
       text: '',
-      image: '',
+      url: '',
     };
 
-    const encryptedImage = (attachments || []).find(
-      ({ type }) => type === EAttachmentType.encryptedImage,
-    );
-    const encryptedText = (attachments || []).find(
-      ({ type }) => type === EAttachmentType.encryptedText,
-    );
+    await Promise.all(
+      (attachments || []).map(async (item) => {
+        if (item.type === EAttachmentType.encryptedText) {
+          const { data } = await this.axios.get(getUrl(item.id));
+          result.text = data;
 
-    if (encryptedImage) {
-      result.image = getUrl(encryptedImage.id);
-    }
+          return;
+        }
 
-    if (encryptedText) {
-      const { data } = await this.axios.get(getUrl(encryptedText.id));
-      result.text = data;
-    }
+        result.url = getUrl(item.id);
+        result.type =
+          item.type === EAttachmentType.encryptedVideo
+            ? ETypeNft.video
+            : item.type === EAttachmentType.encryptedAudio
+            ? ETypeNft.audio
+            : ETypeNft.image;
+      }),
+    );
 
     return result;
   }

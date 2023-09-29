@@ -243,9 +243,9 @@ export default class Nft extends Vue {
       this.storeModule.updateNftDetails({
         nft: this.nft,
         updatedDetails: {
-          type: ETypeNft.image,
+          type: decryptedData.type,
           isEncrypted: false,
-          contentUrl: decryptedData.image || contentUrl,
+          contentUrl: decryptedData.url || contentUrl,
           encryptedText: decryptedData.text || encryptedText,
         },
       });

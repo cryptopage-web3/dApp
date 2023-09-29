@@ -47,3 +47,4 @@ export * from './ILandingMessageNFTData';
 export * from './ELocalStorageKey';
 export * from './EAttachmentType';
 export * from './INftAttachment';
+export * from './IDecryptedNft';

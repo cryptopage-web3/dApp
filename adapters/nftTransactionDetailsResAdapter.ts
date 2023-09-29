@@ -27,7 +27,9 @@ export const nftTransactionDetailsResAdapter = (
     name: data.name,
     description: data.description,
     contentUrl:
-      encryptedImage && typeof encryptedImage.data !== 'string'
+      encryptedImage &&
+      typeof encryptedImage.data !== 'string' &&
+      'bluredImageUrl' in encryptedImage.data
         ? encryptedImage.data.bluredImageUrl
         : data.contentUrl,
     encryptedText: encryptedText ? getCryptedText(encryptedText.id) : undefined,

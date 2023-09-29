@@ -18,7 +18,9 @@ export function nftResAdapter(data: INftServer): INft {
     date: data.date,
     description: data.description || '',
     contentUrl:
-      encryptedImage && typeof encryptedImage.data !== 'string'
+      encryptedImage &&
+      typeof encryptedImage.data !== 'string' &&
+      'bluredImageUrl' in encryptedImage.data
         ? encryptedImage.data.bluredImageUrl
         : data.contentUrl,
     encryptedText: encryptedText ? getCryptedText(encryptedText.id) : undefined,

@@ -9,5 +9,13 @@ export interface INftAttachment {
         contentType: string;
         bluredImageUrl: string;
         encryptedImageUrl: string;
+      }
+    | {
+        contentType: string;
+        encryptedVideoUrl: string;
+      }
+    | {
+        contentType: string;
+        encryptedAudioUrl: string;
       };
 }
