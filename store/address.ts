@@ -315,6 +315,9 @@ export default class AddressModule extends VuexModule {
         (item) => item.type === EAttachmentType.audio,
       );
 
+      /** в наших NFT в contentUrl для видео содержится картинка - нет изображения
+       * поэтому достаем ссылки на видео из attachments
+       */
       if (videoAttach) {
         nftWithDetails.type = ETypeNft.video;
         nftWithDetails.contentUrl = videoAttach.data as string;
