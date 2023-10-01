@@ -33,6 +33,7 @@ import {
   nftTransactionResAdapter,
   transactionResAdapter,
 } from '~/adapters';
+import { nftContractAddress } from '~/contracts';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -306,7 +307,11 @@ export default class AddressModule extends VuexModule {
       });
 
       const nftWithDetails = nftTransactionDetailsResAdapter(nft, data);
-      const { contentUrl, isEncrypted, attachments } = nftWithDetails;
+      const { contentUrl, isEncrypted, attachments, contractAddress } =
+        nftWithDetails;
+
+      const isCryptoPageNft =
+        contractAddress === nftContractAddress[this.chainId];
 
       const videoAttach = attachments?.find(
         (item) => item.type === EAttachmentType.video,
@@ -315,10 +320,13 @@ export default class AddressModule extends VuexModule {
         (item) => item.type === EAttachmentType.audio,
       );
 
-      /** в наших NFT в contentUrl для видео содержится картинка - нет изображения
-       * поэтому достаем ссылки на видео из attachments
-       */
-      if (videoAttach) {
+      /** если NFT наша и attachments пустой, то значит это текстовое NFT */
+      if (isCryptoPageNft && !attachments?.length) {
+        nftWithDetails.type = ETypeNft.text;
+      } else if (videoAttach) {
+        /** в наших NFT в contentUrl для видео содержится картинка - нет изображения
+         * поэтому достаем ссылки на видео из attachments
+         */
         nftWithDetails.type = ETypeNft.video;
         nftWithDetails.contentUrl = videoAttach.data as string;
       } else if (audioAttach) {

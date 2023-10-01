@@ -8,7 +8,7 @@
     <div v-else class="profile-content__content">
       <NftTop :nft="nft" />
 
-      <div class="profile-content__media">
+      <div v-if="nft.type !== ETypeNft.text" class="profile-content__media">
         <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
         <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
         <NftImage

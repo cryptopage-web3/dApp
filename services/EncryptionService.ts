@@ -146,7 +146,7 @@ export class EncryptionService {
       `decrypt?postId=${postId}&signature=${signature}&attachmentId=${attachmentId}`;
 
     const result: IDecryptedNft = {
-      type: ETypeNft.image,
+      type: ETypeNft.text,
       text: '',
       url: '',
     };
