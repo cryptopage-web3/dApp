@@ -17,7 +17,7 @@
           @show-modal="showModal"
         />
         <div v-else class="profile-content__image">
-          <div class="profile-content__image-empty">No NFT Content</div>
+          <div class="profile-content__image-empty">No Media Content</div>
         </div>
 
         <NftAccessControl
