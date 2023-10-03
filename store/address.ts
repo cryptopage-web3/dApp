@@ -459,7 +459,29 @@ export default class AddressModule extends VuexModule {
     const nftTemp = { ...nft };
 
     try {
-      if (nftTemp.contentUrl) {
+      const isCryptoPageNft =
+        nftTemp.contractAddress === nftContractAddress[this.chainId];
+
+      const videoAttach = nftTemp.attachments?.find(
+        (item) => item.type === EAttachmentType.video,
+      );
+      const audioAttach = nftTemp.attachments?.find(
+        (item) => item.type === EAttachmentType.audio,
+      );
+
+      /** если NFT наша и attachments пустой, то значит это текстовое NFT */
+      if (isCryptoPageNft && !nftTemp.attachments?.length) {
+        nftType = ETypeNft.text;
+      } else if (videoAttach) {
+        /** в наших NFT в contentUrl для видео содержится картинка - нет изображения
+         * поэтому достаем ссылки на видео из attachments
+         */
+        nftType = ETypeNft.video;
+        nftTemp.contentUrl = videoAttach.data as string;
+      } else if (audioAttach) {
+        nftType = ETypeNft.audio;
+        nftTemp.contentUrl = audioAttach.data as string;
+      } else if (nftTemp.contentUrl) {
         const mimeType = await nftsService.getMimeType(nftTemp.contentUrl);
 
         if (/audio/.test(mimeType)) {
