@@ -59,3 +59,6 @@ export const BUYPAGE_QUIZ_URL = 'https://form.typeform.com/to/bHVwOAcM';
 /** payment type */
 export const FOR_SINGLE_POST_ONE_TIME = 5;
 export const FOR_SINGLE_POST_DAYS = 6;
+
+/** максимальный размер файла - 5Мб */
+export const MAX_FILE_SIZE = 5242880;

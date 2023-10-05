@@ -62,6 +62,7 @@ import NftFormAudioIcon from '~/components/icon/nft-form/NftFormAudioIcon.vue';
 import NftFormImageIcon from '~/components/icon/nft-form/NftFormImageIcon.vue';
 import NftFormVideoIcon from '~/components/icon/nft-form/NftFormVideoIcon.vue';
 import { nftFormModule } from '~/store';
+import { MAX_FILE_SIZE } from '~/constants';
 
 @Component({
   components: {
@@ -148,6 +149,15 @@ export default class ModalFile extends Vue {
         type: 'error',
         title: 'Invalid file extension',
         text: 'Please upload only image, audio or video',
+      });
+
+      return false;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      this.$notify({
+        type: 'error',
+        title: 'File size cannot exceed 5 Mb',
       });
 
       return false;
