@@ -1,15 +1,18 @@
 <template>
   <div class="profile-content-top">
-    <nuxt-link :to="`/${chainSlug}/${nft.from}`" class="profile-content__user">
+    <nuxt-link
+      :to="`/${chainSlug}/${fromAddress}`"
+      class="profile-content__user"
+    >
       <div class="profile-content__user-icon">
         <client-only>
-          <jazzicon :seed="10211" :address="nft.from" :diameter="30" />
+          <jazzicon :seed="10211" :address="fromAddress" :diameter="30" />
         </client-only>
       </div>
       <div>
         From:
         <span>
-          {{ nft.from | shortAddress }}
+          {{ fromAddress | shortAddress }}
         </span>
       </div>
     </nuxt-link>
@@ -29,6 +32,7 @@ import { Component, Prop } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
 import { addressModule, authModule } from '~/store';
 import NftDropdown from '~/components/address/nft/NftDropdown.vue';
+import { ZERO_ADDRESS } from '~/constants';
 
 type TNftTransaction = INftTransaction;
 
@@ -45,6 +49,10 @@ export default class NftTop extends Vue {
 
   get chainSlug(): string {
     return this.chainModule.chainSlug;
+  }
+
+  get fromAddress(): string {
+    return this.nft.from === ZERO_ADDRESS ? this.nft.to : this.nft.from;
   }
 }
 </script>

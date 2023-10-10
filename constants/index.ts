@@ -62,3 +62,6 @@ export const FOR_SINGLE_POST_DAYS = 6;
 
 /** максимальный размер файла - 5Мб */
 export const MAX_FILE_SIZE = 5242880;
+
+/** нулевой адрес */
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';

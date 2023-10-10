@@ -50,6 +50,3 @@ export const contractPlugins = {
 /** адрес сообщества по умолчанию */
 export const defaultCommunityAddress =
   '0xd22aa224814A189d0A4a972678885de91015D4F2';
-
-/** нулевой адрес */
-export const zeroAddress = '0x0000000000000000000000000000000000000000';
