@@ -44,7 +44,31 @@ export default {
       {
         src: 'https://unpkg.com/swiper@7/swiper-bundle.min.js',
       },
+      {
+        hid: 'gtm-head',
+        innerHTML: `
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-K3HPG8ZS');
+        `,
+      },
     ],
+    noscript: [
+      {
+        hid: 'gtm-body',
+        pbody: true,
+        innerHTML: `
+          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3HPG8ZS"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        `,
+      },
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      'gtm-head': ['innerHTML'],
+      'gtm-body': ['innerHTML'],
+    },
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
