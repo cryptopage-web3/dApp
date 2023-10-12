@@ -9,7 +9,7 @@
       @show-modal="$emit('show-modal', nft)"
     />
     <div v-else class="market-sidebar__nft-image">
-      <div class="market-sidebar__nft-image-empty">No Media Content</div>
+      <div class="market-sidebar__nft-image-empty">Text Content</div>
     </div>
   </div>
 </template>

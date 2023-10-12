@@ -36,7 +36,7 @@
               <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
               <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
               <div v-else class="profile-content__image">
-                <div class="profile-content__image-empty">No Media Content</div>
+                <div class="profile-content__image-empty">Text Content</div>
               </div>
 
               <NftAccessControl

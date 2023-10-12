@@ -32,7 +32,7 @@
               <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
               <div v-else class="market-product__media-image">
                 <div class="market-product__media-image-empty">
-                  No Media Content
+                  Text Content
                 </div>
               </div>
             </div>

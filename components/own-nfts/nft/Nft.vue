@@ -15,9 +15,7 @@
             @show-modal="showNftModal"
           />
           <div v-else class="market-product__media-image">
-            <div class="market-product__media-image-empty">
-              No Media Content
-            </div>
+            <div class="market-product__media-image-empty">Text Content</div>
           </div>
 
           <NftAccessControl

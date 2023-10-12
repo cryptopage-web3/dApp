@@ -6,7 +6,7 @@
   />
   <div v-else class="market-product__image">
     <div class="market-product__image-empty">
-      {{ isError ? 'Failed to get nft data' : 'No Media Content' }}
+      {{ isError ? 'Failed to get nft data' : 'Text Content' }}
     </div>
   </div>
 </template>
