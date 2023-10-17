@@ -20,7 +20,9 @@
           @show-modal="showModal"
         />
         <div v-else class="profile-content__image">
-          <div class="profile-content__image-empty">Text Content</div>
+          <div class="profile-content__image-empty">
+            <NftTextIcon />
+          </div>
         </div>
 
         <NftAccessControl
@@ -88,6 +90,7 @@ import Skeleton from '~/components/loaders/Skeleton.vue';
 import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 import NftLockIcon from '~/components/icon/nft/NftLockIcon.vue';
+import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 
 type TNftTransaction = INftTransaction;
 
@@ -105,6 +108,7 @@ type TNftTransaction = INftTransaction;
     NftLockIcon,
     NftAccessConfirmModal,
     NftAccessControl,
+    NftTextIcon,
   },
 })
 export default class Nft extends Vue {

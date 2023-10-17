@@ -31,12 +31,17 @@
             class="profile-content"
             :class="{ 'profile-content_no-border': !hasComments }"
           >
-            <div class="profile-content__media">
+            <div
+              v-if="nft.type !== ETypeNft.text && nft.contentUrl"
+              class="profile-content__media"
+            >
               <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
               <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
               <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
               <div v-else class="profile-content__image">
-                <div class="profile-content__image-empty">Text Content</div>
+                <div class="profile-content__image-empty">
+                  <NftTextIcon />
+                </div>
               </div>
 
               <NftAccessControl
@@ -78,6 +83,7 @@ import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vu
 import NftModalTopUser from '~/components/address/nft/NftModalTopUser.vue';
 import NftModalTopDropdown from '~/components/address/nft/NftModalTopDropdown.vue';
 import NftModalCommentList from '~/components/address/nft/NftModalCommentList.vue';
+import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 
 type TNftTransaction = INftTransaction;
 
@@ -93,6 +99,7 @@ type TNftTransaction = INftTransaction;
     NftModalTopUser,
     NftModalCommentList,
     NftAccessControl,
+    NftTextIcon,
   },
 })
 export default class NftModal extends Vue {
