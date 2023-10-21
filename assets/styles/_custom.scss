@@ -506,6 +506,10 @@
   height: 135px;
   position: relative;
   overflow: hidden;
+
+  &_pointer {
+    cursor: pointer;
+  }
 }
 
 .market-sidebar__nft-image img {
@@ -525,14 +529,19 @@
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   line-height: 18px;
-  padding: 20px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.06);
-  color: #4d4d4d;
+  border: 2px solid #1886FF;
+  border-radius: 10px;
+  color: #1886FF;
+
+  & svg {
+    height: 60%;
+    width: 60%;
+  }
 }
 
 .market-sidebar__nft-loading {
@@ -1018,14 +1027,21 @@
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: 18px;
   line-height: 24px;
   text-align: center;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.06);
-  color: #4d4d4d;
+  border: 2px solid #1886FF;
+  border-radius: 10px;
+  color: #1886FF;
+  cursor: pointer;
+
+  & svg {
+    height: 60%;
+    width: 60%;
+  }
 }
 
 .market-product__media-video {

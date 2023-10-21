@@ -7,15 +7,27 @@
           class-name="market-product__media-loading"
         />
         <div v-else class="market-product__media">
-          <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
-          <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
+          <NftVideo
+            v-if="nft.type === ETypeNft.video && nft.contentUrl"
+            :nft="nft"
+          />
+          <NftAudio
+            v-else-if="nft.type === ETypeNft.audio && nft.contentUrl"
+            :nft="nft"
+          />
           <NftImage
-            v-else-if="nft.type === ETypeNft.image"
+            v-else-if="nft.type === ETypeNft.image && nft.contentUrl"
             :nft="nft"
             @show-modal="showNftModal"
           />
-          <div v-else class="market-product__media-image">
-            <div class="market-product__media-image-empty">Text Content</div>
+          <div
+            v-else
+            class="market-product__media-image"
+            @click.prevent="showNftModal"
+          >
+            <div class="market-product__media-image-empty">
+              <NftTextIcon />
+            </div>
           </div>
 
           <NftAccessControl
@@ -72,6 +84,7 @@ import NftFavorite from '~/components/own-nfts/nft/NftFavorite.vue';
 import NftCommentsModal from '~/components/own-nfts/nft/NftCommentsModal.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
+import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 import { addressModule, authModule } from '~/store';
 import { TCommentType } from '~/types/comment-form';
 import { EncryptionService, Web3Service } from '~/services';
@@ -92,6 +105,7 @@ type TNft = INft;
     NftModal,
     NftAccessConfirmModal,
     NftAccessControl,
+    NftTextIcon,
   },
 })
 export default class Nft extends Vue {

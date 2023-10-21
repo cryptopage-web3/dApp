@@ -31,12 +31,17 @@
             class="profile-content"
             :class="{ 'profile-content_no-border': !hasComments }"
           >
-            <div class="profile-content__media">
+            <div
+              v-if="nft.type !== ETypeNft.text && nft.contentUrl"
+              class="profile-content__media"
+            >
               <ModalVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
               <ModalAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
               <ModalImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
               <div v-else class="profile-content__image">
-                <div class="profile-content__image-empty">Text Content</div>
+                <div class="profile-content__image-empty">
+                  <NftTextIcon />
+                </div>
               </div>
 
               <NftAccessControl
@@ -77,6 +82,7 @@ import ModalVideo from './ModalVideo.vue';
 import ModalAudio from './ModalAudio.vue';
 import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vue';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
+import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 import { ENftTransactionAccessType, ETypeNft, INft } from '~/types';
 
 type TNft = INft;
@@ -93,6 +99,7 @@ type TNft = INft;
     ModalTopUser,
     ModalCommentList,
     NftAccessControl,
+    NftTextIcon,
   },
 })
 export default class Modal extends Vue {

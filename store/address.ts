@@ -75,7 +75,7 @@ const defaultNftTransactions: TNftTransactionsPagination = {
 const defaultOwnNfts: TNftsPagination = {
   nfts: [],
   count: 0,
-  pageSize: 100,
+  pageSize: 20,
   sort: 'desc',
   page: 0,
   hasAllPages: false,
