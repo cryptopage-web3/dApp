@@ -438,6 +438,11 @@
     height: 60%;
     width: 60%;
   }
+
+  &_error {
+    border-color: #FF1818;
+    color: #FF1818;
+  }
 }
 
 .profile-content__bottom {
@@ -541,6 +546,11 @@
   & svg {
     height: 60%;
     width: 60%;
+  }
+
+  &_error {
+    border-color: #FF1818;
+    color: #FF1818;
   }
 }
 
@@ -1041,6 +1051,11 @@
   & svg {
     height: 60%;
     width: 60%;
+  }
+
+  &_error {
+    border-color: #FF1818;
+    color: #FF1818;
   }
 }
 

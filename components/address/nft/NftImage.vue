@@ -32,7 +32,11 @@
     />
   </a>
   <div v-else class="profile-content__image">
-    <div class="profile-content__image-empty">Failed to get nft data</div>
+    <div
+      class="profile-content__image-empty profile-content__image-empty_error"
+    >
+      Failed to get Post Data
+    </div>
   </div>
 </template>
 

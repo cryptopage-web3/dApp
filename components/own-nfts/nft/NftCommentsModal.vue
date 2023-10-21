@@ -27,12 +27,21 @@
           </div>
           <div class="modal-comment-nft-wrap">
             <div class="modal-comment-nft-thumb">
-              <NftVideo v-if="nft.type === ETypeNft.video" :nft="nft" />
-              <NftAudio v-else-if="nft.type === ETypeNft.audio" :nft="nft" />
-              <NftImage v-else-if="nft.type === ETypeNft.image" :nft="nft" />
+              <NftVideo
+                v-if="nft.type === ETypeNft.video && nft.contentUrl"
+                :nft="nft"
+              />
+              <NftAudio
+                v-else-if="nft.type === ETypeNft.audio && nft.contentUrl"
+                :nft="nft"
+              />
+              <NftImage
+                v-else-if="nft.type === ETypeNft.image && nft.contentUrl"
+                :nft="nft"
+              />
               <div v-else class="market-product__media-image">
                 <div class="market-product__media-image-empty">
-                  Text Content
+                  <NftTextIcon />
                 </div>
               </div>
             </div>
@@ -99,6 +108,7 @@ import NftImage from '~/components/own-nfts/nft/NftImage.vue';
 import NftVideo from '~/components/own-nfts/nft/NftVideo.vue';
 import NftAudio from '~/components/own-nfts/nft/NftAudio.vue';
 import NftCloseIcon from '~/components/icon/nft/NftCloseIcon.vue';
+import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 import { ISendCommentParams, TCommentType } from '~/types/comment-form';
 import {
   profileCommentClose,
@@ -123,6 +133,7 @@ const ipfsService = new IPFSService();
     NftImage,
     NftVideo,
     NftAudio,
+    NftTextIcon,
   },
 })
 export default class NftCommentsModal extends Vue {

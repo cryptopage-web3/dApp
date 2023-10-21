@@ -7,7 +7,11 @@
     @click.prevent="$emit('show-modal')"
   />
   <div v-else class="market-sidebar__nft-image">
-    <div class="market-sidebar__nft-image-empty">Failed to get nft data</div>
+    <div
+      class="market-sidebar__nft-image-empty market-sidebar__nft-image-empty_error"
+    >
+      Failed to get Post Data
+    </div>
   </div>
 </template>
 
