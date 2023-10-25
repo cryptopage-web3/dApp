@@ -1,7 +1,7 @@
 <template>
   <div class="market-main-catalogs-wrap">
     <div class="market-main-catalogs-body">
-      <a href="#" class="market-main-catalog disabled">All NFT’s</a>
+      <a href="#" class="market-main-catalog disabled">All Posts</a>
       <a href="#" class="market-main-catalog red">Art</a>
       <a href="#" class="market-main-catalog success">Collectibles</a>
       <a href="#" class="market-main-catalog">Domain Names</a>

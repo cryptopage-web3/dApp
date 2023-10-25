@@ -85,7 +85,7 @@
             />
             <div>
               <div class="name">
-                NFT World
+                Content World
                 <img src="@/assets/img/market-header-search-ident.svg" alt="" />
               </div>
               <div class="article">The FABO’S 1934</div>

@@ -27,7 +27,7 @@
         </li>
       </template>
       <template v-else-if="!visibleNfts.length">
-        <li class="market-sidebar__list2-empty">You don't have NFT’s</li>
+        <li class="market-sidebar__list2-empty">You don't have Content</li>
       </template>
       <template v-else>
         <li v-for="nft in visibleNfts" :key="getNftUniqueKey(nft)">

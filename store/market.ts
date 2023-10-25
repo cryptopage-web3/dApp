@@ -54,7 +54,7 @@ export default class MarketModule extends VuexModule {
 
       this.setMarketDashboardNfts(data);
     } catch {
-      alertModule.error('Error getting last updated nfts');
+      alertModule.error('Error getting last updated content');
 
       this.setMarketDashboardNfts([]);
     }

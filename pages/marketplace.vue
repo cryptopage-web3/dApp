@@ -21,7 +21,7 @@ import { Component } from 'nuxt-property-decorator';
         hid: 'description',
         name: 'description',
         content:
-          'Your bridge to the metaverse An anonymous uncensored social network where users own NFT content personally',
+          'Your bridge to the metaverse An anonymous uncensored social network where users own tokenized content personally',
       },
     ],
   },

@@ -30,8 +30,8 @@
               </div>
               <div class="global-checkbox4 mb_md_10 mb_5 mr_10">
                 <label>
-                  <input v-model="interests" type="checkbox" value="#NFT" />
-                  <div class="global-checkbox4__wrap">#NFT</div>
+                  <input v-model="interests" type="checkbox" value="#Content" />
+                  <div class="global-checkbox4__wrap">#Content</div>
                 </label>
               </div>
               <div class="global-checkbox4 mb_md_10 mb_5 mr_10">

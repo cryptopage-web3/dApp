@@ -219,7 +219,7 @@ export default class NftComments extends Vue {
     if (hasComment) {
       this.$notify({
         type: 'error',
-        title: `You have already commented this NFT`,
+        title: `You have already commented this Post`,
       });
       return;
     }

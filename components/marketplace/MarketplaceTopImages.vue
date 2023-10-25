@@ -26,7 +26,9 @@
     </div>
 
     <Loader v-if="loading" />
-    <div v-else-if="!nfts.length" class="market-nft-block__empty">No Nft's</div>
+    <div v-else-if="!nfts.length" class="market-nft-block__empty">
+      No Content
+    </div>
     <div v-else ref="root" class="main-slider">
       <div class="swiper">
         <div class="swiper-wrapper">

@@ -260,10 +260,10 @@ export default class AddressModule extends VuexModule {
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'NFT Transactions: Too Many Requests. Rate limit 30 per second',
+          'Content Transactions: Too Many Requests. Rate limit 30 per second',
         );
       } else {
-        alertModule.error('Error getting nfts data');
+        alertModule.error('Error getting content data');
       }
 
       this.setNftTransactions({
@@ -370,7 +370,7 @@ export default class AddressModule extends VuexModule {
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'NFT Details: Too Many Requests. Rate limit 30 per second',
+          'Content Details: Too Many Requests. Rate limit 30 per second',
         );
       }
 
@@ -418,10 +418,10 @@ export default class AddressModule extends VuexModule {
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'My NFTs: Too Many Requests. Rate limit 30 per second',
+          'My Content: Too Many Requests. Rate limit 30 per second',
         );
       } else {
-        alertModule.error('Error getting own nfts data');
+        alertModule.error('Error getting own content');
       }
 
       this.setOwnNfts({
@@ -694,15 +694,15 @@ export default class AddressModule extends VuexModule {
       }
 
       if (!targetLoaded) {
-        alertModule.info('Created NFT not loaded');
+        alertModule.info('Created Content not loaded');
       }
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'Load created NFT: Too Many Requests. Rate limit 30 per second',
+          'Load created Content: Too Many Requests. Rate limit 30 per second',
         );
       } else {
-        alertModule.error('Failed to load created NFT');
+        alertModule.error('Failed to load created Content');
       }
     } finally {
       this.setSyncNftTransactionsLoading(false);
@@ -868,12 +868,12 @@ export default class AddressModule extends VuexModule {
       /** Не отображаем сообщение, т.к. пользователь его не ждет и не нужен этот спам */
 
       if (!targetLoaded) {
-        // alertModule.info('Created NFT not loaded');
+        // alertModule.info('Created Content not loaded');
       }
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'My NFTs: Too Many Requests. Rate limit 30 per second',
+          'My Content: Too Many Requests. Rate limit 30 per second',
         );
       }
     } finally {

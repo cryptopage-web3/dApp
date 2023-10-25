@@ -354,7 +354,7 @@ export default class NftFormModule extends VuexModule {
     let nftHash = '';
 
     try {
-      alertModule.info('Uploading Nft to Arweave');
+      alertModule.info('Uploading Content to Arweave');
 
       nftHash = await encryptionService.uploadNft({
         file,
@@ -366,7 +366,7 @@ export default class NftFormModule extends VuexModule {
         attributes: getAdaptedAttributes(attributes),
       });
 
-      alertModule.success('Nft successfully uploaded to Arweave');
+      alertModule.success('Content successfully uploaded to Arweave');
     } catch {
       alertModule.error('Failed to save file into Arweave');
       this.setLoading(false);
@@ -433,7 +433,7 @@ export default class NftFormModule extends VuexModule {
     /** проверяем наличие авторизации */
 
     if (!authModule.isAuth) {
-      alertModule.error('Need to connect a wallet to create NFTs');
+      alertModule.error('Need to connect a wallet to create Content');
       return false;
     }
 
@@ -450,7 +450,7 @@ export default class NftFormModule extends VuexModule {
       alertModule.error(`Active chain - ${authModule.chainName}<br>
           You are trying ${
             isOwner ? 'create' : 'send'
-          } nft to account with chain ${addressModule.chainName}<br>
+          } Content to account with chain ${addressModule.chainName}<br>
           Please connect to ${addressModule.chainName}
         `);
 

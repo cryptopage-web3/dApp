@@ -172,7 +172,7 @@ export const validateNftForm = (
 
     return {
       status: false,
-      error: `Blockchain: you connected to ${authChainName}, so you can't create NFT with chain ${chainName}`,
+      error: `Blockchain: you connected to ${authChainName}, so you can't create Content with chain ${chainName}`,
     };
   }
 

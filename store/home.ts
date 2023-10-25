@@ -93,10 +93,10 @@ export default class HomeModule extends VuexModule {
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'NFT Transactions: Too Many Requests. Rate limit 30 per second',
+          'Content Transactions: Too Many Requests. Rate limit 30 per second',
         );
       } else {
-        alertModule.error('Error getting nfts data');
+        alertModule.error('Error getting Content data');
       }
 
       this.setNewContent({
@@ -180,7 +180,7 @@ export default class HomeModule extends VuexModule {
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'NFT Details: Too Many Requests. Rate limit 30 per second',
+          'Content Details: Too Many Requests. Rate limit 30 per second',
         );
       }
 

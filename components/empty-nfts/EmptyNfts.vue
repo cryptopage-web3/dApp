@@ -14,9 +14,9 @@
 
     <div v-if="isReaction" class="global-text mb_30 text-center">
       There is not a single {{ isOwner ? 'Your' : 'User' }} Reaction on any
-      NFT's<br />
-      You can {{ isOwner ? 'create' : 'send' }} NFT to get reaction from another
-      users
+      Post<br />
+      You can {{ isOwner ? 'create' : 'send' }} Post to get reaction from
+      another users
     </div>
 
     <div class="text-center">

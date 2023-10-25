@@ -10,7 +10,7 @@
     </div>
     <div class="profile-my-nfts-top__btns">
       <a href="#" class="btn-blue-transparent" @click.prevent="showModal">
-        + Create NFT
+        + Create Content
       </a>
       <a
         href="#"
