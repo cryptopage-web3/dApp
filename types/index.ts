@@ -48,3 +48,5 @@ export * from './ELocalStorageKey';
 export * from './EAttachmentType';
 export * from './INftAttachment';
 export * from './IDecryptedNft';
+export * from './INftDashboardParams';
+export * from './INftDashboardResponse';

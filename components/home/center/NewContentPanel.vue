@@ -106,7 +106,7 @@ export default class NewContentPanel extends Vue {
       return;
     }
 
-    await homeModule.fetchNftTransactions();
+    await homeModule.fetchNfts();
   }
 
   uniqueKey(nft: INftTransaction) {

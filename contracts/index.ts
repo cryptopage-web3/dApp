@@ -15,6 +15,10 @@ export const nftContractAddress: Record<number | string, string> = {
   [EChainId.mumbai]: '0xc0fc66ba41bea0a1266c681bbc781014e7c67612',
 };
 
+/** mumbai contract address */
+export const MUMBAI_CONTRACT_ADDRESS =
+  '0xc0fc66ba41bea0a1266c681bbc781014e7c67612';
+
 /** плагины */
 export const contractPlugins = {
   communityJoin:

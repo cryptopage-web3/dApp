@@ -1,11 +1,18 @@
 <template>
   <div class="profile-content__text" @click.prevent="$emit('show-modal')">
-    <div class="profile-content__title">
+    <div v-if="txHash" class="profile-content__title">
       Transaction Hash:
       <a ref="hash" href="#" @click.prevent.stop="copyHash">
         {{ txHash | shortAddress(5, 7) }}
       </a>
     </div>
+    <div v-else class="profile-content__title">
+      Token ID:
+      <a href="#" @click.prevent.stop="">
+        {{ tokenId }}
+      </a>
+    </div>
+
     <div v-if="title" class="profile-content__title">
       {{ title }}
     </div>
@@ -58,6 +65,10 @@ export default class NftText extends Vue {
 
   get txHash(): string {
     return this.nft.txHash;
+  }
+
+  get tokenId(): string {
+    return this.nft.tokenId;
   }
 
   mounted() {

@@ -4,6 +4,7 @@ export interface INftTransactionDetailsResponse {
   tokenId?: string;
   chain?: string;
   contractAddress?: string;
+  creator?: string;
   name?: string;
   description?: string;
   contentUrl?: string;

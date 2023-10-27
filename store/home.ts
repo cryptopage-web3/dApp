@@ -12,8 +12,8 @@ import {
 } from '~/types';
 import { uniqueNftTransactionConcat } from '~/utils/array';
 import {
-  nftTransactionDetailsResAdapter,
-  nftTransactionResAdapter,
+  nftDashboardResAdapter,
+  nftDetailsDashboardResAdapter,
 } from '~/adapters';
 
 type TNftTransactionsPagination = INftTransactionsPagination;
@@ -27,7 +27,6 @@ type TNftTransactionDetailsParams = {
 const nftsService = new NftsService();
 
 const DEFAULT_CHAIN_SLUG = 'mumbai';
-const DEFAULT_ADDRESS = '0x7ee2bbc5d5004683ed84035591582be1fc4953f5';
 
 const defaultNewContent: TNftTransactionsPagination = {
   nfts: [],
@@ -59,18 +58,16 @@ export default class HomeModule extends VuexModule {
   }
 
   @Action
-  public async fetchNftTransactions() {
+  public async fetchNfts() {
     try {
-      const { page, pageSize, continue: oldContinue } = this.newContent;
+      const { page, pageSize } = this.newContent;
       const nextPage = page + 1;
 
-      const { transactions, continue: newContinue } =
-        await nftsService.getTransactionsList({
-          chainSlug: DEFAULT_CHAIN_SLUG,
-          address: DEFAULT_ADDRESS,
-          pageSize,
-          continue: oldContinue,
-        });
+      const { tokens } = await nftsService.getDashboardList({
+        chainSlug: DEFAULT_CHAIN_SLUG,
+        page: nextPage,
+        pageSize,
+      });
 
       /** текущие NFTs достаем только перед объединением
        * за время запроса уже могли получить детали и обновить старые NFT
@@ -78,22 +75,20 @@ export default class HomeModule extends VuexModule {
       const { nfts: oldNfts } = this.newContent;
       const newNfts = uniqueNftTransactionConcat(
         oldNfts,
-        transactions.map((t) => nftTransactionResAdapter(t)),
+        tokens.map((t) => nftDashboardResAdapter(t)),
       );
 
       this.setNewContent({
         ...this.newContent,
         nfts: newNfts,
         count: newNfts.length,
-        continue: newContinue,
         page: nextPage,
-        /** получили все страницы, если continue: {} */
-        hasAllPages: !newContinue?.pageKey,
+        hasAllPages: !tokens.length,
       });
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 429) {
         alertModule.error(
-          'Content Transactions: Too Many Requests. Rate limit 30 per second',
+          'Content Dashboard: Too Many Requests. Rate limit 30 per second',
         );
       } else {
         alertModule.error('Error getting Content data');
@@ -139,7 +134,7 @@ export default class HomeModule extends VuexModule {
         blockNumber: nft.blockNumber,
       });
 
-      const nftWithDetails = nftTransactionDetailsResAdapter(nft, data);
+      const nftWithDetails = nftDetailsDashboardResAdapter(nft, data);
       const { contentUrl, isEncrypted } = nftWithDetails;
 
       if (contentUrl) {

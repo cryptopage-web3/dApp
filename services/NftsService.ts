@@ -1,5 +1,7 @@
 import { BaseService } from './BaseService';
 import {
+  INftDashboardParams,
+  INftDashboardResponse,
   INftDetailsParams,
   INftsParams,
   INftsResponse,
@@ -73,6 +75,30 @@ export class NftsService extends BaseService {
         params: {
           pageSize: params.pageSize,
           continue: params.continue,
+        },
+      },
+    );
+
+    return data;
+  };
+
+  getDashboardList = async (
+    params: INftDashboardParams,
+  ): Promise<INftDashboardResponse> => {
+    const slugMap = API_CHAIN_MAP;
+
+    if (!slugMap.has(params.chainSlug)) {
+      return {
+        tokens: [],
+      };
+    }
+
+    const { data } = await this.get<INftDashboardResponse>(
+      `${this.apiURL}/dashboard/${slugMap.get(params.chainSlug)}`,
+      {
+        params: {
+          page: params.page,
+          pageSize: params.pageSize,
         },
       },
     );
