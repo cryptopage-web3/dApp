@@ -9,6 +9,7 @@ import {
   INftTransaction,
   ENftTransactionAccessType,
   INftTransactionsPagination,
+  EAttachmentType,
 } from '~/types';
 import { uniqueNftTransactionConcat } from '~/utils/array';
 import {
@@ -135,9 +136,28 @@ export default class HomeModule extends VuexModule {
       });
 
       const nftWithDetails = nftDetailsDashboardResAdapter(nft, data);
-      const { contentUrl, isEncrypted } = nftWithDetails;
+      const { contentUrl, isEncrypted, attachments } = nftWithDetails;
 
-      if (contentUrl) {
+      const videoAttach = attachments?.find(
+        (item) => item.type === EAttachmentType.video,
+      );
+      const audioAttach = attachments?.find(
+        (item) => item.type === EAttachmentType.audio,
+      );
+
+      /** если attachments пустой, то значит это текстовое NFT */
+      if (!attachments?.length) {
+        nftWithDetails.type = ETypeNft.text;
+      } else if (videoAttach) {
+        /** в наших NFT в contentUrl для видео содержится картинка - нет изображения
+         * поэтому достаем ссылки на видео из attachments
+         */
+        nftWithDetails.type = ETypeNft.video;
+        nftWithDetails.contentUrl = videoAttach.data as string;
+      } else if (audioAttach) {
+        nftWithDetails.type = ETypeNft.audio;
+        nftWithDetails.contentUrl = audioAttach.data as string;
+      } else if (contentUrl) {
         const mimeType = await nftsService.getMimeType(contentUrl);
 
         if (/audio/.test(mimeType)) {

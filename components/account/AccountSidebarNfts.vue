@@ -5,7 +5,7 @@
         {{ isOwner ? 'My' : 'Account' }} Token's ERC721
       </h3>
       <nuxt-link
-        :to="`/${chainSlug}/${address}/nfts`"
+        :to="`/${chainSlug}/${address}/erc721`"
         class="market-sidebar__more"
       >
         <SidebarArrowIcon />
@@ -37,7 +37,7 @@
     </ul>
     <nuxt-link
       v-if="nfts.length > 6"
-      :to="`/${chainSlug}/${address}/nfts`"
+      :to="`/${chainSlug}/${address}/erc721`"
       class="market-sidebar__show-more"
       @click.prevent="showMore"
     >
@@ -86,7 +86,7 @@ export default class AccountSidebarNfts extends Vue {
   };
 
   get show() {
-    return this.$route.name !== 'network-address-nfts';
+    return this.$route.name !== 'network-address-erc721';
   }
 
   get isOwner(): boolean {
