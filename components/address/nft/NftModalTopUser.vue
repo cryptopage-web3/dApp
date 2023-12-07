@@ -28,7 +28,7 @@ import { Component, Prop } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
 import { addressModule, authModule } from '~/store';
 import userBg from '~/assets/img/modal-post-user__thumb_bg.png';
-import { ZERO_ADDRESS } from '~/constants';
+import { getNftFromAddress } from '~/utils/getNftFromAddress';
 
 type TNftTransaction = INftTransaction;
 
@@ -45,7 +45,7 @@ export default class NftModalTopUser extends Vue {
   }
 
   get fromAddress(): string {
-    return this.nft.from === ZERO_ADDRESS ? this.nft.to : this.nft.from;
+    return getNftFromAddress(this.nft);
   }
 }
 </script>

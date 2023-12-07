@@ -20,6 +20,7 @@ export interface INftTransaction {
   chain?: string;
   name?: string;
   description?: string;
+  creator?: string;
   encryptedText?: string;
   contentUrl?: string;
   attributes?: IAttribute[];

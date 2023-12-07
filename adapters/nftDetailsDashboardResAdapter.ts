@@ -23,6 +23,7 @@ export const nftDetailsDashboardResAdapter = (
     ...nft,
     to: data.creator || '',
     from: data.creator || '',
+    creator: data.creator || '',
     hasDetails: true,
     date: data.date,
     chain: data.chain,

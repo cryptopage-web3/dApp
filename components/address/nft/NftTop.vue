@@ -32,7 +32,7 @@ import { Component, Prop } from 'nuxt-property-decorator';
 import { INftTransaction } from '~/types';
 import { addressModule, authModule } from '~/store';
 import NftDropdown from '~/components/address/nft/NftDropdown.vue';
-import { ZERO_ADDRESS } from '~/constants';
+import { getNftFromAddress } from '~/utils/getNftFromAddress';
 
 type TNftTransaction = INftTransaction;
 
@@ -52,7 +52,7 @@ export default class NftTop extends Vue {
   }
 
   get fromAddress(): string {
-    return this.nft.from === ZERO_ADDRESS ? this.nft.to : this.nft.from;
+    return getNftFromAddress(this.nft);
   }
 }
 </script>

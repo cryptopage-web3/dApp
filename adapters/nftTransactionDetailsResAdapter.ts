@@ -26,6 +26,7 @@ export const nftTransactionDetailsResAdapter = (
     chain: data.chain,
     name: data.name,
     description: data.description,
+    creator: data.creator || '',
     contentUrl:
       encryptedImage &&
       typeof encryptedImage.data !== 'string' &&
