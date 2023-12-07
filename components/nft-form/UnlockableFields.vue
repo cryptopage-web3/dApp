@@ -192,7 +192,7 @@
           ref="publicDescription"
           href="#"
           class="global-info"
-          title="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente, nemo."
+          title="Description is shown to the user to explain what is hidden in the post"
         >
           <img src="@/assets/img/global-status_icon4.svg" alt="" />
         </a>
@@ -327,7 +327,7 @@ export default class UnlockableFields extends Vue {
       ($(this.$refs.publicDescription) as any).tooltip({
         trigger: 'hover',
         title:
-          'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sapiente, nemo.',
+          'Description is shown to the user to explain what is hidden in the post',
       });
     });
   }
