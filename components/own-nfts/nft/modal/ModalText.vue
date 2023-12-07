@@ -30,6 +30,7 @@ import { Component, Prop } from 'nuxt-property-decorator';
 import ModalTextDescription from './ModalTextDescription.vue';
 import { INft } from '~/types';
 import { copyToClipboard } from '~/utils/copyToClipboard';
+import { shortToken } from '~/utils/shortToken';
 
 type TNft = INft;
 
@@ -59,7 +60,7 @@ export default class ModalText extends Vue {
   }
 
   get tokenId(): string {
-    return this.nft.tokenId;
+    return this.nft.tokenId && shortToken(this.nft.tokenId);
   }
 
   get contractAddress(): string {
