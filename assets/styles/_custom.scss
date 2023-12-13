@@ -1006,6 +1006,13 @@
   height: 24px;
 }
 
+@media (max-width: 767px) {
+  .modal-creat-pc-send .spinner-border {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 /* ===== my nft ===== */
 
 .market-product__media {
