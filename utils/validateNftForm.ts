@@ -16,6 +16,7 @@ export const validateNftForm = (
   const {
     title,
     file,
+    description,
     attributes,
     isUnlockableContent,
     unlockableContentAccessType,
@@ -118,6 +119,13 @@ export const validateNftForm = (
   // validate unlockable content
 
   if (isUnlockableContent) {
+    if (!description && !file) {
+      return {
+        status: false,
+        error: 'No Encoded Content',
+      };
+    }
+
     if (!unlockableContentPrice || unlockableContentPrice <= 0) {
       return {
         status: false,
