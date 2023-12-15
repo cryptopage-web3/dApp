@@ -271,8 +271,8 @@ export class AuthService {
         showQrModal: true,
       });
 
-      await provider.connect();
       await provider.enable();
+
       this.provider = provider;
       this.web3 = await new Web3(<any>provider);
 
@@ -291,9 +291,14 @@ export class AuthService {
       provider.on('disconnect', () =>
         onConnectChange({ chainId: 0, address: '' }),
       );
+      provider.on('connect', (...args) => {
+        console.log('connect', args);
+      });
 
       const accounts = await this.web3.eth.getAccounts();
       const chainId = await this.web3.eth.net.getId();
+
+      console.log('success', accounts, chainId);
 
       return {
         status: 'success',
