@@ -259,31 +259,9 @@ export class AuthService {
     onConnectChange: (params: IConnectChangeParams) => void,
   ): Promise<IConnectToProviderResponse> => {
     try {
-      try {
-        const { EthereumProvider } = await import(
-          '@walletconnect/ethereum-provider'
-        );
-      } catch (e) {
-        alert('import error ' + JSON.stringify(e));
-        throw e;
-      }
-
       const { EthereumProvider } = await import(
         '@walletconnect/ethereum-provider'
       );
-
-      try {
-        const provider = await EthereumProvider.init({
-          projectId: WALLETCONNECT_PROJECT_ID,
-          // chains: [Number(EChainId.eth), Number(EChainId.goerli)],
-          chains: [80001],
-          optionalChains: [80001],
-          showQrModal: true,
-        });
-      } catch (e) {
-        alert('provider error ' + JSON.stringify(e));
-        throw e;
-      }
 
       const provider = await EthereumProvider.init({
         projectId: WALLETCONNECT_PROJECT_ID,
@@ -326,9 +304,7 @@ export class AuthService {
           provider: this.provider,
         },
       };
-    } catch (e) {
-      alert('common error ' + JSON.stringify(e));
-
+    } catch {
       return {
         status: 'error',
         message: {
