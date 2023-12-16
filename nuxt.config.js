@@ -126,6 +126,7 @@ export default {
   build: {
     transpile: [
       /@walletconnect/,
+      /unstorage/,
       // ({ isClient }) => isClient && /walletconnect/,
     ],
     babel: {
