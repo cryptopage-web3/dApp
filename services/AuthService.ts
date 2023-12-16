@@ -271,7 +271,13 @@ export class AuthService {
         showQrModal: true,
       });
 
-      await provider.enable();
+      try {
+        await provider.enable();
+      } catch (e) {
+        alert('enable error' + JSON.stringify(e));
+        await provider.disconnect();
+        await provider.connect();
+      }
 
       this.provider = provider;
       this.web3 = await new Web3(<any>provider);
