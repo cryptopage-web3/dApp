@@ -274,9 +274,7 @@ export class AuthService {
       try {
         await provider.enable();
       } catch (e) {
-        alert('enable error' + JSON.stringify(e));
-        await provider.disconnect();
-        await provider.connect();
+        alert('enable error ' + JSON.stringify(e));
       }
 
       this.provider = provider;
@@ -297,6 +295,13 @@ export class AuthService {
       provider.on('disconnect', () =>
         onConnectChange({ chainId: 0, address: '' }),
       );
+
+      try {
+        await this.web3.eth.getAccounts();
+        await this.web3.eth.net.getId();
+      } catch (e) {
+        alert('getAccounts error ' + JSON.stringify(e));
+      }
 
       const accounts = await this.web3.eth.getAccounts();
       const chainId = await this.web3.eth.net.getId();
