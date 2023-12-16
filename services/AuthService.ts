@@ -258,61 +258,85 @@ export class AuthService {
   public connectToWalletConnect = async (
     onConnectChange: (params: IConnectChangeParams) => void,
   ): Promise<IConnectToProviderResponse> => {
-    // try {
-    const { EthereumProvider } = await import(
-      '@walletconnect/ethereum-provider'
-    );
+    try {
+      try {
+        const { EthereumProvider } = await import(
+          '@walletconnect/ethereum-provider'
+        );
+      } catch (e) {
+        alert('import error ' + JSON.stringify(e));
+        throw e;
+      }
 
-    const provider = await EthereumProvider.init({
-      projectId: WALLETCONNECT_PROJECT_ID,
-      // chains: [Number(EChainId.eth), Number(EChainId.goerli)],
-      chains: [80001],
-      optionalChains: [80001],
-      showQrModal: true,
-    });
+      const { EthereumProvider } = await import(
+        '@walletconnect/ethereum-provider'
+      );
 
-    await provider.enable();
+      try {
+        const provider = await EthereumProvider.init({
+          projectId: WALLETCONNECT_PROJECT_ID,
+          // chains: [Number(EChainId.eth), Number(EChainId.goerli)],
+          chains: [80001],
+          optionalChains: [80001],
+          showQrModal: true,
+        });
+      } catch (e) {
+        alert('provider error ' + JSON.stringify(e));
+        throw e;
+      }
 
-    this.provider = provider;
-    this.web3 = await new Web3(<any>provider);
+      const provider = await EthereumProvider.init({
+        projectId: WALLETCONNECT_PROJECT_ID,
+        // chains: [Number(EChainId.eth), Number(EChainId.goerli)],
+        chains: [80001],
+        optionalChains: [80001],
+        showQrModal: true,
+      });
 
-    const onChange = async () => {
+      await provider.enable();
+
+      this.provider = provider;
+      this.web3 = await new Web3(<any>provider);
+
+      const onChange = async () => {
+        const accounts = await this.web3.eth.getAccounts();
+        const chainId = await this.web3.eth.net.getId();
+
+        onConnectChange({
+          chainId: Number(chainId),
+          address: accounts?.[0] || '',
+        });
+      };
+
+      provider.on('accountsChanged', onChange);
+      provider.on('chainChanged', onChange);
+      provider.on('disconnect', () =>
+        onConnectChange({ chainId: 0, address: '' }),
+      );
+
       const accounts = await this.web3.eth.getAccounts();
       const chainId = await this.web3.eth.net.getId();
 
-      onConnectChange({
-        chainId: Number(chainId),
-        address: accounts?.[0] || '',
-      });
-    };
+      return {
+        status: 'success',
+        connectData: {
+          chainId: Number(chainId),
+          address: accounts?.[0] || '',
+          providerSlug: EProvider.walletConnect,
+          provider: this.provider,
+        },
+      };
+    } catch (e) {
+      alert('common error ' + JSON.stringify(e));
 
-    provider.on('accountsChanged', onChange);
-    provider.on('chainChanged', onChange);
-    provider.on('disconnect', () =>
-      onConnectChange({ chainId: 0, address: '' }),
-    );
-
-    const accounts = await this.web3.eth.getAccounts();
-    const chainId = await this.web3.eth.net.getId();
-
-    return {
-      status: 'success',
-      connectData: {
-        chainId: Number(chainId),
-        address: accounts?.[0] || '',
-        providerSlug: EProvider.walletConnect,
-        provider: this.provider,
-      },
-    };
-    // } catch {
-    //   return {
-    //     status: 'error',
-    //     message: {
-    //       title: 'WalletConnect not connected',
-    //       text: 'Please choose supported chain in the wallet<br>and accept connect',
-    //     },
-    //   };
-    // }
+      return {
+        status: 'error',
+        message: {
+          title: 'WalletConnect not connected',
+          text: 'Please choose supported chain in the wallet<br>and accept connect',
+        },
+      };
+    }
   };
   /**
    * ========================
