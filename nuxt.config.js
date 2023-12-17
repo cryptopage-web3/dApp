@@ -124,7 +124,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [/@walletconnect/, ({ isClient }) => isClient && /unstorage/],
+    transpile: [
+      /@walletconnect/,
+      // ({ isClient }) => isClient && /walletconnect/,
+    ],
     babel: {
       plugins: [['@babel/plugin-proposal-private-methods', { loose: true }]],
     },
