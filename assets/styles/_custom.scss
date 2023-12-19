@@ -796,6 +796,10 @@
     width: 15px;
     height: 15px;
   }
+
+  .video video {
+    max-height: 200px;
+  }
 }
 
 /* ===== nft form ===== */
