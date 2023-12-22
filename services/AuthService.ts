@@ -269,6 +269,11 @@ export class AuthService {
         chains: [80001],
         optionalChains: [80001],
         showQrModal: true,
+        qrModalOptions: {
+          themeVariables: {
+            '--wcm-z-index': '2000',
+          } as any,
+        },
       });
 
       await provider.enable();

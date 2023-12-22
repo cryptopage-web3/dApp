@@ -22,6 +22,7 @@
       <NftSuccessModal />
       <SignupModal />
       <BuyPageModal />
+      <ConnectModal />
       <portal-target name="nft-sidebar-modal" />
     </client-only>
   </div>
@@ -34,6 +35,7 @@ import NftFormModal from '~/components/nft-form/modal/Modal.vue';
 import NftSuccessModal from '~/components/nft-form/modal-success/ModalSuccess.vue';
 import SignupModal from '~/components/signup-modal/SignupModal.vue';
 import BuyPageModal from '~/components/buy-page-modal/BuyPageModal.vue';
+import ConnectModal from '~/components/connect/ConnectModal.vue';
 import { authModule } from '~/store';
 import { ELocalStorageKey } from '~/types';
 
@@ -43,6 +45,7 @@ import { ELocalStorageKey } from '~/types';
     NftSuccessModal,
     SignupModal,
     BuyPageModal,
+    ConnectModal,
   },
 })
 export default class AccountLayout extends Vue {

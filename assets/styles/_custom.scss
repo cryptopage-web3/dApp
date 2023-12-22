@@ -1365,4 +1365,25 @@
   left: 0;
 }
 
+/* ===== connect modal ===== */
+
+.modal-profile-login .modal-dialog {
+  width: 100%;
+}
+
+.modal-profile-login__form {
+  padding: 25px 25px 0;
+}
+
+@media (max-width: 767px) {
+  .modal-profile-login .modal-dialog {
+    width: auto;
+  }
+
+  .modal-profile-login__form {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
 /* ======================= */

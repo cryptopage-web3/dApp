@@ -34,9 +34,9 @@
             />
           </svg>
         </a>
-        <nuxt-link v-else :to="`/connect`" class="status">
+        <a v-else href="#" class="status" @click.prevent="showConnectModal">
           <span>Connect Wallet</span>
-        </nuxt-link>
+        </a>
       </div>
     </div>
     <div id="market-header__wallet-col" class="collapse drop-down__col">
@@ -170,6 +170,10 @@ export default class HeaderConnect extends Vue {
         ($('#market-header__wallet-col') as any).collapse('hide');
       });
     });
+  }
+
+  showConnectModal() {
+    ($('.modal-profile-login') as any).modal('show');
   }
 
   async switchChain(chain: EMainChain) {
