@@ -190,7 +190,12 @@ export default class ControlComments extends Vue {
 
     /** проверяем, что подключен кошелек нужной сети */
 
-    if (!this.isAuth || !this.isSameChain) {
+    if (!this.isAuth) {
+      ($('.modal-profile-login') as any).modal('show');
+      return;
+    }
+
+    if (!this.isSameChain) {
       this.$notify({
         type: 'error',
         title: `Need connect to ${this.addressChainName}`,

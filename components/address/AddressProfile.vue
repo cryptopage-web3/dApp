@@ -133,11 +133,7 @@ export default class AddressProfile extends Vue {
 
   sendMessage() {
     if (!this.isAuth) {
-      this.$notify({
-        type: 'error',
-        title: 'Need to connect a wallet to send a message',
-      });
-
+      ($('.modal-profile-login') as any).modal('show');
       return;
     }
 

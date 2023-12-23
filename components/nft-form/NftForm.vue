@@ -334,6 +334,11 @@ export default class NftForm extends Vue {
   }
 
   showDisableNotify() {
+    if (!this.isAuth) {
+      ($('.modal-profile-login') as any).modal('show');
+      return;
+    }
+
     /** запускаем валидацию, чтобы показать ошибки */
     nftFormModule.validateConnect();
   }

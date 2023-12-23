@@ -231,7 +231,12 @@ export default class Nft extends Vue {
   async checkIfHaveAccessToSeePost() {
     const web3Service = new Web3Service(authModule.provider);
 
-    if (!this.isAuth || !this.isSameChain) {
+    if (!this.isAuth) {
+      ($('.modal-profile-login') as any).modal('show');
+      return;
+    }
+
+    if (!this.isSameChain) {
       this.$notify({
         type: 'error',
         title: `Need connect to ${this.addressChainName}`,
