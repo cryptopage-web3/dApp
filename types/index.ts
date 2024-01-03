@@ -52,3 +52,4 @@ export * from './INftDashboardParams';
 export * from './INftDashboardResponse';
 export * from './EErrorType';
 export * from './IErrorSaveParams';
+export * from './IErrorSaveResponse';

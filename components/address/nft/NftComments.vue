@@ -58,7 +58,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
-import { INftTransaction } from '~/types';
+import { EErrorType, INftTransaction } from '~/types';
 import { ISendCommentParams, TCommentType } from '~/types/comment-form';
 import { IPFSService, Web3Service } from '~/services';
 import { nftContractAddress } from '~/contracts';
@@ -75,6 +75,7 @@ import {
   profileCommentClose,
 } from '~/utils/nftsComment';
 import { addressModule, authModule, homeModule } from '~/store';
+import { saveError } from '~/utils/saveError';
 
 type TNftTransaction = INftTransaction;
 
@@ -243,6 +244,14 @@ export default class NftComments extends Vue {
         title: 'Got Comment hash from IPFS',
       });
     } catch {
+      saveError(
+        EErrorType.saveIpfsComment,
+        JSON.stringify({
+          address: authModule.address,
+          commentText: this.commentText,
+        }),
+      );
+
       this.$notify({
         type: 'error',
         title: 'Failed to save Comment into IPFS',
@@ -295,6 +304,11 @@ export default class NftComments extends Vue {
           self.storeModule.fetchNftTransactionDetails(self.nft);
         },
         onError() {
+          saveError(
+            EErrorType.createCommentTransaction,
+            JSON.stringify(sendCommentParams),
+          );
+
           self.$notify({
             type: 'error',
             title: 'Transaction has some error',

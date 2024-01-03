@@ -77,7 +77,12 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import { EncryptionService, Web3Service } from '~/services';
 import NftAccessConfirmModal from '~/components/shared/nft-access/NftAccessConfirmModal.vue';
-import { INftTransaction, ENftTransactionAccessType, ETypeNft } from '~/types';
+import {
+  INftTransaction,
+  ENftTransactionAccessType,
+  ETypeNft,
+  EErrorType,
+} from '~/types';
 import { addressModule, authModule, homeModule } from '~/store';
 import NftTop from '~/components/address/nft/NftTop.vue';
 import NftText from '~/components/address/nft/NftText.vue';
@@ -91,6 +96,7 @@ import NftAccessControl from '~/components/shared/nft-access/NftAccessControl.vu
 import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 import NftLockIcon from '~/components/icon/nft/NftLockIcon.vue';
 import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
+import { saveError } from '~/utils/saveError';
 
 type TNftTransaction = INftTransaction;
 
@@ -241,6 +247,15 @@ export default class Nft extends Vue {
     } catch {
       this.decryptLoading = false;
 
+      saveError(
+        EErrorType.checkIfHaveAccessToEncryptedPost,
+        JSON.stringify({
+          address: authModule.address,
+          tokenId: this.nft.tokenId,
+          chainSlug: authModule.chainSlug,
+        }),
+      );
+
       this.$notify({
         type: 'error',
         title: 'Error to check access',
@@ -273,6 +288,15 @@ export default class Nft extends Vue {
       this.decryptLoading = false;
     } catch {
       this.decryptLoading = false;
+
+      saveError(
+        EErrorType.getDecryptedNft,
+        JSON.stringify({
+          address: authModule.address,
+          tokenId,
+          attachments,
+        }),
+      );
 
       this.$notify({
         type: 'error',
@@ -310,6 +334,16 @@ export default class Nft extends Vue {
       this.decryptLoading = false;
     } catch {
       this.decryptLoading = false;
+
+      saveError(
+        EErrorType.buyPostAccessComponents,
+        JSON.stringify({
+          address: authModule.address,
+          tokenId,
+          price,
+          chainSlug: authModule.chainSlug,
+        }),
+      );
 
       this.$notify({
         type: 'error',

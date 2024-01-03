@@ -14,4 +14,9 @@ export enum EErrorType {
   getDashboardDetails = 'getDashboardDetails',
   uploadingContentToArweave = 'uploadingContentToArweave',
   createPostTransaction = 'createPostTransaction',
+  checkIfHaveAccessToEncryptedPost = 'checkIfHaveAccessToEncryptedPost',
+  getDecryptedNft = 'getDecryptedNft',
+  buyPostAccessComponents = 'buyPostAccessComponents',
+  saveIpfsComment = 'saveIpfsComment',
+  createCommentTransaction = 'createCommentTransaction',
 }
