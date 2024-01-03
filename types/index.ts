@@ -50,3 +50,5 @@ export * from './INftAttachment';
 export * from './IDecryptedNft';
 export * from './INftDashboardParams';
 export * from './INftDashboardResponse';
+export * from './EErrorType';
+export * from './IErrorSaveParams';

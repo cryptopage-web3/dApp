@@ -11,11 +11,17 @@ import {
 } from '~/types/nft-form';
 import { validateNftForm } from '~/utils/validateNftForm';
 import { Web3Service, EncryptionService } from '~/services';
-import { EChainSlug, ELocalStorageKey, ILandingMessageNFTData } from '~/types';
+import {
+  EChainSlug,
+  EErrorType,
+  ELocalStorageKey,
+  ILandingMessageNFTData,
+} from '~/types';
 import { getDaysDuration } from '~/utils/durationType';
 import { buildFileFromDataURL } from '~/utils/buildFileFromDataURL';
 import { getAdaptedAttributes } from '~/utils/getAdaptedAttributes';
 import { getAccessTypeContract } from '~/utils/accessType';
+import { saveError } from '~/utils/saveError';
 
 type TNftForm = INftForm;
 
@@ -368,7 +374,21 @@ export default class NftFormModule extends VuexModule {
 
       alertModule.success('Content successfully uploaded to Arweave');
     } catch {
+      saveError(
+        EErrorType.uploadingContentToArweave,
+        JSON.stringify({
+          type: 'Failed to save file into Arweave',
+          isEncrypted: isUnlockableContent,
+          name: title,
+          description,
+          unlockableDescription: unlockableContentDescription,
+          externalUrl: externalLink,
+          attributes: getAdaptedAttributes(attributes),
+        }),
+      );
+
       alertModule.error('Failed to save file into Arweave');
+
       this.setLoading(false);
       return;
     }
@@ -421,6 +441,11 @@ export default class NftFormModule extends VuexModule {
           self.setLoading(false);
         },
         onError() {
+          saveError(
+            EErrorType.createPostTransaction,
+            JSON.stringify(sendNFTParams),
+          );
+
           alertModule.error('Transaction has some error');
           self.setLoading(false);
         },

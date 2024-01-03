@@ -11,6 +11,8 @@ import {
 import { alertModule } from '~/utils/storeAccessor';
 import { contractPlugins } from '~/contracts';
 import { normalizeAmountToServer } from '~/utils/normalizeAmount';
+import { saveError } from '~/utils/saveError';
+import { EErrorType } from '~/types';
 
 export class Web3Service {
   web3!: Web3;
@@ -440,12 +442,20 @@ export class Web3Service {
           alertModule.info(`${hash}: Transaction on pending`);
         })
         .on('receipt', (receipt: any) => {
-          console.log('receipt', receipt);
           alertModule.success('Transaction completed');
           resolve();
         })
         .on('error', (error: any) => {
-          console.log('error', error);
+          saveError(
+            EErrorType.buyPostAccess,
+            JSON.stringify({
+              address: authAddress,
+              postId,
+              amount,
+              authChainSlug,
+            }),
+          );
+
           alertModule.error('Transaction has some error');
           reject(error);
         });
@@ -490,6 +500,15 @@ export class Web3Service {
           resolve();
         })
         .on('error', (error: any) => {
+          saveError(
+            EErrorType.faucetTestMint,
+            JSON.stringify({
+              address: authAddress,
+              amount,
+              authChainSlug,
+            }),
+          );
+
           alertModule.error('Transaction has some error');
           reject(error);
         });
@@ -511,6 +530,6 @@ export class Web3Service {
 
     const balance = await contractToken.methods.balanceOf(authAddress).call();
 
-    console.log(balance);
+    // console.log(balance);
   };
 }

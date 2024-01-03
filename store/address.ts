@@ -17,6 +17,7 @@ import {
   ITransaction,
   ITransactionsPagination,
   EAttachmentType,
+  EErrorType,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -34,6 +35,7 @@ import {
   transactionResAdapter,
 } from '~/adapters';
 import { nftContractAddress } from '~/contracts';
+import { saveError } from '~/utils/saveError';
 
 type TAddressInfo = IAddressInfo;
 type TTransactionsPagination = ITransactionsPagination;
@@ -219,6 +221,14 @@ export default class AddressModule extends VuexModule {
 
       this.setTokens(tokens);
     } catch {
+      saveError(
+        EErrorType.fetchTokens,
+        JSON.stringify({
+          chainSlug: this.chainSlug,
+          address: this.address,
+        }),
+      );
+
       alertModule.error('Error getting tokens data');
 
       this.setTokens([]);
@@ -265,6 +275,20 @@ export default class AddressModule extends VuexModule {
       } else {
         alertModule.error('Error getting content data');
       }
+
+      saveError(
+        EErrorType.fetchNftTransactions,
+        JSON.stringify({
+          type:
+            (error as AxiosError)?.response?.status === 429
+              ? 'Too Many Requests'
+              : 'Error',
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: this.nftTransactions.pageSize,
+          continue: this.nftTransactions.continue,
+        }),
+      );
 
       this.setNftTransactions({
         ...this.nftTransactions,
@@ -374,6 +398,20 @@ export default class AddressModule extends VuexModule {
         );
       }
 
+      saveError(
+        EErrorType.fetchNftTransactionDetails,
+        JSON.stringify({
+          type:
+            (error as AxiosError)?.response?.status === 429
+              ? 'Too Many Requests'
+              : 'Error',
+          chainSlug: this.chainSlug,
+          contractAddress: nft.contractAddress,
+          tokenId: nft.tokenId,
+          blockNumber: nft.blockNumber,
+        }),
+      );
+
       this.setNftTransactionDetails({
         index,
         nft: {
@@ -423,6 +461,20 @@ export default class AddressModule extends VuexModule {
       } else {
         alertModule.error('Error getting own content');
       }
+
+      saveError(
+        EErrorType.fetchOwnNfts,
+        JSON.stringify({
+          type:
+            (error as AxiosError)?.response?.status === 429
+              ? 'Too Many Requests'
+              : 'Error',
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: this.ownNfts.pageSize,
+          continue: this.ownNfts.continue,
+        }),
+      );
 
       this.setOwnNfts({
         ...this.ownNfts,
@@ -590,6 +642,16 @@ export default class AddressModule extends VuexModule {
     } catch {
       alertModule.error('Error getting transactions data');
 
+      saveError(
+        EErrorType.fetchTransactions,
+        JSON.stringify({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: this.transactions.pageSize,
+          continue: this.transactions.continue,
+        }),
+      );
+
       this.setTransactions({
         ...this.transactions,
         hasAllPages: true,
@@ -704,6 +766,19 @@ export default class AddressModule extends VuexModule {
       } else {
         alertModule.error('Failed to load created Content');
       }
+
+      saveError(
+        EErrorType.syncNftTransactions,
+        JSON.stringify({
+          type:
+            (error as AxiosError)?.response?.status === 429
+              ? 'Too Many Requests'
+              : 'Error',
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: 10,
+        }),
+      );
     } finally {
       this.setSyncNftTransactionsLoading(false);
     }
@@ -789,6 +864,15 @@ export default class AddressModule extends VuexModule {
       }
     } catch {
       alertModule.error('Failed to load created transaction');
+
+      saveError(
+        EErrorType.syncTransactions,
+        JSON.stringify({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: 10,
+        }),
+      );
     } finally {
       this.setSyncTransactionsLoading(false);
     }
@@ -876,6 +960,19 @@ export default class AddressModule extends VuexModule {
           'My Content: Too Many Requests. Rate limit 30 per second',
         );
       }
+
+      saveError(
+        EErrorType.syncOwnNfts,
+        JSON.stringify({
+          type:
+            (error as AxiosError)?.response?.status === 429
+              ? 'Too Many Requests'
+              : 'Error',
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: 10,
+        }),
+      );
     } finally {
       this.setSyncTransactionsLoading(false);
     }

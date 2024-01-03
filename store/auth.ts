@@ -18,6 +18,7 @@ import {
   EConsentStatus,
   ELocalStorageKey,
   EChainId,
+  EErrorType,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -27,6 +28,7 @@ import {
   FRACTAL_URL,
 } from '~/constants';
 import { transactionResAdapter } from '~/adapters';
+import { saveError } from '~/utils/saveError';
 
 type TConnectData = IConnectData;
 type TConnectToProviderParams = IConnectToProviderParams;
@@ -455,6 +457,15 @@ export default class AuthModule extends VuexModule {
         )}: set unsupported chain`,
       );
 
+      saveError(
+        EErrorType.authUnsupportedChain,
+        JSON.stringify({
+          providerSlug,
+          chainId,
+          address,
+        }),
+      );
+
       this.logout();
       return;
     }
@@ -466,6 +477,15 @@ export default class AuthModule extends VuexModule {
         `${networkHelper.getProviderTitle(
           providerSlug,
         )}: set unsupported chain`,
+      );
+
+      saveError(
+        EErrorType.authUnsupportedChain,
+        JSON.stringify({
+          providerSlug,
+          chainId,
+          address,
+        }),
       );
 
       this.logout();
@@ -702,6 +722,14 @@ export default class AuthModule extends VuexModule {
 
       this.setTokens(tokens);
     } catch {
+      saveError(
+        EErrorType.fetchTokens,
+        JSON.stringify({
+          chainSlug: this.chainSlug,
+          address: this.address,
+        }),
+      );
+
       alertModule.error('Error getting AUTH tokens data');
 
       this.setTokens([]);
@@ -723,6 +751,15 @@ export default class AuthModule extends VuexModule {
         ),
       );
     } catch {
+      saveError(
+        EErrorType.fetchTransactions,
+        JSON.stringify({
+          chainSlug: this.chainSlug,
+          address: this.address,
+          pageSize: 200,
+        }),
+      );
+
       alertModule.error('Error getting AUTH transactions data');
 
       this.setTransactions([]);

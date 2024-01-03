@@ -15,8 +15,6 @@ export default class LandingMessagePage extends Vue {
     window.addEventListener(
       'message',
       ({ data: { target, params } }: ILandingMessageBroadcast) => {
-        console.log(target, params);
-
         if (target !== ELocalStorageKey.landingMessage) {
           return;
         }
