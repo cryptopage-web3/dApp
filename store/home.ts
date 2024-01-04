@@ -89,26 +89,18 @@ export default class HomeModule extends VuexModule {
         hasAllPages: !tokens.length,
       });
     } catch (error) {
-      if ((error as AxiosError)?.response?.status === 429) {
-        alertModule.error(
-          'Content Dashboard: Too Many Requests. Rate limit 30 per second',
-        );
-      } else {
-        alertModule.error('Error getting Content data');
-      }
+      const errorMessage =
+        (error as AxiosError)?.response?.status === 429
+          ? 'Content Dashboard: Too Many Requests. Rate limit 30 per second'
+          : 'Error getting Content data';
 
-      saveError(
-        EErrorType.getDashboardList,
-        JSON.stringify({
-          type:
-            (error as AxiosError)?.response?.status === 429
-              ? 'Too Many Requests'
-              : 'Error',
-          chainSlug: DEFAULT_CHAIN_SLUG,
-          page: this.newContent.page + 1,
-          pageSize: this.newContent.pageSize,
-        }),
-      );
+      alertModule.error(errorMessage);
+
+      saveError(EErrorType.getDashboardList, errorMessage, {
+        chainSlug: DEFAULT_CHAIN_SLUG,
+        page: this.newContent.page + 1,
+        pageSize: this.newContent.pageSize,
+      });
 
       this.setNewContent({
         ...this.newContent,
@@ -214,19 +206,12 @@ export default class HomeModule extends VuexModule {
         );
       }
 
-      saveError(
-        EErrorType.getDashboardDetails,
-        JSON.stringify({
-          type:
-            (error as AxiosError)?.response?.status === 429
-              ? 'Too Many Requests'
-              : 'Error',
-          chainSlug: DEFAULT_CHAIN_SLUG,
-          contractAddress: nft.contractAddress,
-          tokenId: nft.tokenId,
-          blockNumber: nft.blockNumber,
-        }),
-      );
+      saveError(EErrorType.getDashboardDetails, '', {
+        chainSlug: DEFAULT_CHAIN_SLUG,
+        contractAddress: nft.contractAddress,
+        tokenId: nft.tokenId,
+        blockNumber: nft.blockNumber,
+      });
 
       this.setNewContentDetails({
         index,

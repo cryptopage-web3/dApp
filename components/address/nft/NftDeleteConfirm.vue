@@ -147,7 +147,8 @@ export default class NftDeleteConfirm extends Vue {
         onError() {
           saveError(
             EErrorType.deleteNftTransaction,
-            JSON.stringify(deleteNFTParams),
+            'Transaction has some error',
+            deleteNFTParams,
           );
 
           self.$notify({

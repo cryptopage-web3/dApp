@@ -446,15 +446,12 @@ export class Web3Service {
           resolve();
         })
         .on('error', (error: any) => {
-          saveError(
-            EErrorType.buyPostAccess,
-            JSON.stringify({
-              address: authAddress,
-              postId,
-              amount,
-              authChainSlug,
-            }),
-          );
+          saveError(EErrorType.buyPostAccess, 'Transaction has some error', {
+            address: authAddress,
+            postId,
+            amount,
+            authChainSlug,
+          });
 
           alertModule.error('Transaction has some error');
           reject(error);
@@ -500,14 +497,11 @@ export class Web3Service {
           resolve();
         })
         .on('error', (error: any) => {
-          saveError(
-            EErrorType.faucetTestMint,
-            JSON.stringify({
-              address: authAddress,
-              amount,
-              authChainSlug,
-            }),
-          );
+          saveError(EErrorType.faucetTestMint, 'Transaction has some error', {
+            address: authAddress,
+            amount,
+            authChainSlug,
+          });
 
           alertModule.error('Transaction has some error');
           reject(error);

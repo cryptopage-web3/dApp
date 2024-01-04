@@ -249,11 +249,12 @@ export default class Nft extends Vue {
 
       saveError(
         EErrorType.checkIfHaveAccessToEncryptedPost,
-        JSON.stringify({
+        'Error to check access',
+        {
           address: authModule.address,
           tokenId: this.nft.tokenId,
           chainSlug: authModule.chainSlug,
-        }),
+        },
       );
 
       this.$notify({
@@ -289,14 +290,11 @@ export default class Nft extends Vue {
     } catch {
       this.decryptLoading = false;
 
-      saveError(
-        EErrorType.getDecryptedNft,
-        JSON.stringify({
-          address: authModule.address,
-          tokenId,
-          attachments,
-        }),
-      );
+      saveError(EErrorType.getDecryptedNft, 'Error to decrypt content', {
+        address: authModule.address,
+        tokenId,
+        attachments,
+      });
 
       this.$notify({
         type: 'error',
@@ -335,15 +333,12 @@ export default class Nft extends Vue {
     } catch {
       this.decryptLoading = false;
 
-      saveError(
-        EErrorType.buyPostAccessComponents,
-        JSON.stringify({
-          address: authModule.address,
-          tokenId,
-          price,
-          chainSlug: authModule.chainSlug,
-        }),
-      );
+      saveError(EErrorType.buyPostAccessComponents, 'Error to unlock post', {
+        address: authModule.address,
+        tokenId,
+        price,
+        chainSlug: authModule.chainSlug,
+      });
 
       this.$notify({
         type: 'error',

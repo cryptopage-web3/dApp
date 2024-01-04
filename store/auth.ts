@@ -451,20 +451,17 @@ export default class AuthModule extends VuexModule {
     /** проверяем поддержку сети */
 
     if (!networkHelper.isAvailableByChainId(chainId)) {
-      alertModule.error(
-        `${networkHelper.getProviderTitle(
-          providerSlug,
-        )}: set unsupported chain`,
-      );
+      const errorMessage = `${networkHelper.getProviderTitle(
+        providerSlug,
+      )}: set unsupported chain`;
 
-      saveError(
-        EErrorType.authUnsupportedChain,
-        JSON.stringify({
-          providerSlug,
-          chainId,
-          address,
-        }),
-      );
+      alertModule.error(errorMessage);
+
+      saveError(EErrorType.authUnsupportedChain, errorMessage, {
+        providerSlug,
+        chainId,
+        address,
+      });
 
       this.logout();
       return;
@@ -473,20 +470,17 @@ export default class AuthModule extends VuexModule {
     /** если сеть не поддерживается провайдером, то сбрасываем авторизацию */
 
     if (!networkHelper.isSupportedByProvider(chainId, providerSlug)) {
-      alertModule.error(
-        `${networkHelper.getProviderTitle(
-          providerSlug,
-        )}: set unsupported chain`,
-      );
+      const errorMessage = `${networkHelper.getProviderTitle(
+        providerSlug,
+      )}: set unsupported chain`;
 
-      saveError(
-        EErrorType.authUnsupportedChain,
-        JSON.stringify({
-          providerSlug,
-          chainId,
-          address,
-        }),
-      );
+      alertModule.error(errorMessage);
+
+      saveError(EErrorType.authUnsupportedChain, errorMessage, {
+        providerSlug,
+        chainId,
+        address,
+      });
 
       this.logout();
       return;
@@ -722,13 +716,10 @@ export default class AuthModule extends VuexModule {
 
       this.setTokens(tokens);
     } catch {
-      saveError(
-        EErrorType.fetchTokens,
-        JSON.stringify({
-          chainSlug: this.chainSlug,
-          address: this.address,
-        }),
-      );
+      saveError(EErrorType.fetchTokens, 'Error getting AUTH tokens data', {
+        chainSlug: this.chainSlug,
+        address: this.address,
+      });
 
       alertModule.error('Error getting AUTH tokens data');
 
@@ -753,11 +744,12 @@ export default class AuthModule extends VuexModule {
     } catch {
       saveError(
         EErrorType.fetchTransactions,
-        JSON.stringify({
+        'Error getting AUTH transactions data',
+        {
           chainSlug: this.chainSlug,
           address: this.address,
           pageSize: 200,
-        }),
+        },
       );
 
       alertModule.error('Error getting AUTH transactions data');

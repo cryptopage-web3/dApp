@@ -3,7 +3,11 @@ import { EErrorType } from '~/types';
 
 const errorService = new ErrorService();
 
-export const saveError = async (type: EErrorType, message: string) => {
+export const saveError = async (
+  type: EErrorType,
+  message: string,
+  params: Record<string, any>,
+) => {
   try {
     await errorService.save({
       message,

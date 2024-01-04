@@ -376,15 +376,15 @@ export default class NftFormModule extends VuexModule {
     } catch {
       saveError(
         EErrorType.uploadingContentToArweave,
-        JSON.stringify({
-          type: 'Failed to save file into Arweave',
+        'Failed to save file into Arweave',
+        {
           isEncrypted: isUnlockableContent,
           name: title,
           description,
           unlockableDescription: unlockableContentDescription,
           externalUrl: externalLink,
           attributes: getAdaptedAttributes(attributes),
-        }),
+        },
       );
 
       alertModule.error('Failed to save file into Arweave');
@@ -443,7 +443,8 @@ export default class NftFormModule extends VuexModule {
         onError() {
           saveError(
             EErrorType.createPostTransaction,
-            JSON.stringify(sendNFTParams),
+            'Transaction has some error',
+            sendNFTParams,
           );
 
           alertModule.error('Transaction has some error');

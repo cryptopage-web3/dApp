@@ -234,10 +234,11 @@ export default class ControlComments extends Vue {
     } catch {
       saveError(
         EErrorType.saveIpfsComment,
-        JSON.stringify({
+        'Failed to save Comment into IPFS',
+        {
           address: authModule.address,
           commentText: this.commentText,
-        }),
+        },
       );
 
       this.$notify({
@@ -294,7 +295,8 @@ export default class ControlComments extends Vue {
         onError() {
           saveError(
             EErrorType.createCommentTransaction,
-            JSON.stringify(sendCommentParams),
+            'Transaction has some error',
+            sendCommentParams,
           );
 
           self.$notify({

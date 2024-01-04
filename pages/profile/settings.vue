@@ -278,11 +278,12 @@ export default class ProfileSettingsPage extends Vue {
     } catch {
       saveError(
         EErrorType.faucetTestMintComponents,
-        JSON.stringify({
+        "Error to get PAGE Token's",
+        {
           address: authModule.address,
           amount: this.TOKEN_AMOUNT,
           chainSlug: authModule.chainSlug,
-        }),
+        },
       );
 
       this.$notify({
