@@ -55,10 +55,11 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import CommentCloseIcon from '~/components/icon/nft/CommentCloseIcon.vue';
-import { INftTransaction } from '~/types';
+import { EErrorType, INftTransaction } from '~/types';
 import { Web3Service } from '~/services';
 import { addressModule, authModule } from '~/store';
 import { IDeleteNFTParams } from '~/types/nft-form';
+import { saveError } from '~/utils/saveError';
 
 type TNftTransaction = INftTransaction;
 
@@ -144,6 +145,11 @@ export default class NftDeleteConfirm extends Vue {
           self.hide();
         },
         onError() {
+          saveError(
+            EErrorType.deleteNftTransaction,
+            JSON.stringify(deleteNFTParams),
+          );
+
           self.$notify({
             type: 'error',
             title: 'Transaction has some error',

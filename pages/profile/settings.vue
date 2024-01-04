@@ -175,8 +175,9 @@ import { copyToClipboard } from '~/utils/copyToClipboard';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import { FRACTAL_VERIFICATION_URL } from '~/constants';
 import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
-import { EVerifiedStatus } from '~/types';
+import { EErrorType, EVerifiedStatus } from '~/types';
 import { Web3Service } from '~/services';
+import { saveError } from '~/utils/saveError';
 
 @Component({
   head: {
@@ -275,6 +276,15 @@ export default class ProfileSettingsPage extends Vue {
         authModule.chainSlug,
       );
     } catch {
+      saveError(
+        EErrorType.faucetTestMintComponents,
+        JSON.stringify({
+          address: authModule.address,
+          amount: this.TOKEN_AMOUNT,
+          chainSlug: authModule.chainSlug,
+        }),
+      );
+
       this.$notify({
         type: 'error',
         title: "Error to get PAGE Token's",

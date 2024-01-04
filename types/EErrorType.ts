@@ -19,4 +19,6 @@ export enum EErrorType {
   buyPostAccessComponents = 'buyPostAccessComponents',
   saveIpfsComment = 'saveIpfsComment',
   createCommentTransaction = 'createCommentTransaction',
+  deleteNftTransaction = 'deleteNftTransaction',
+  faucetTestMintComponents = 'faucetTestMintComponents',
 }

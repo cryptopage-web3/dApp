@@ -73,7 +73,7 @@ import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import NftModal from './modal/Modal.vue';
 import NftAccessConfirmModal from '~/components/shared/nft-access/NftAccessConfirmModal.vue';
-import { ENftTransactionAccessType, ETypeNft, INft } from '~/types';
+import { EErrorType, ENftTransactionAccessType, ETypeNft, INft } from '~/types';
 import NftDropdown from '~/components/own-nfts/nft/NftDropdown.vue';
 import NftText from '~/components/own-nfts/nft/NftText.vue';
 import NftComments from '~/components/own-nfts/nft/NftComments.vue';
@@ -88,6 +88,7 @@ import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 import { addressModule, authModule } from '~/store';
 import { TCommentType } from '~/types/comment-form';
 import { EncryptionService, Web3Service } from '~/services';
+import { saveError } from '~/utils/saveError';
 
 type TNft = INft;
 
@@ -266,6 +267,15 @@ export default class Nft extends Vue {
     } catch {
       this.decryptLoading = false;
 
+      saveError(
+        EErrorType.checkIfHaveAccessToEncryptedPost,
+        JSON.stringify({
+          address: authModule.address,
+          tokenId: this.nft.tokenId,
+          chainSlug: authModule.chainSlug,
+        }),
+      );
+
       this.$notify({
         type: 'error',
         title: 'Error to check access',
@@ -298,6 +308,15 @@ export default class Nft extends Vue {
       this.decryptLoading = false;
     } catch {
       this.decryptLoading = false;
+
+      saveError(
+        EErrorType.getDecryptedNft,
+        JSON.stringify({
+          address: authModule.address,
+          tokenId,
+          attachments,
+        }),
+      );
 
       this.$notify({
         type: 'error',
@@ -335,6 +354,16 @@ export default class Nft extends Vue {
       this.decryptLoading = false;
     } catch {
       this.decryptLoading = false;
+
+      saveError(
+        EErrorType.buyPostAccessComponents,
+        JSON.stringify({
+          address: authModule.address,
+          tokenId,
+          price,
+          chainSlug: authModule.chainSlug,
+        }),
+      );
 
       this.$notify({
         type: 'error',
