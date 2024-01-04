@@ -10,7 +10,11 @@ export const saveError = async (
 ) => {
   try {
     await errorService.save({
-      message,
+      message: JSON.stringify({
+        errorText: message,
+        url: location.href,
+        ...params,
+      }),
       callStack: type,
     });
   } catch {
