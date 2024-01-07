@@ -6,6 +6,7 @@ export interface IOwnNftDetailsResponse {
   tokenId: string;
   chain: string;
   contractAddress: string;
+  creator?: string;
   name: string;
   description: string;
   contentUrl: string;
@@ -15,4 +16,6 @@ export interface IOwnNftDetailsResponse {
   isEncrypted: boolean;
   paymentType: number;
   payAmount: string;
+  minimalPeriod?: string;
+  date?: string;
 }

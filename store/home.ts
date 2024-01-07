@@ -135,11 +135,10 @@ export default class HomeModule extends VuexModule {
     const index = nfts.findIndex((item) => item === nft);
 
     try {
-      const data = await nftsService.getTransactionDetails({
+      const data = await nftsService.getOwnDetails({
         chainSlug: DEFAULT_CHAIN_SLUG,
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId,
-        blockNumber: nft.blockNumber,
       });
 
       const nftWithDetails = nftDetailsDashboardResAdapter(nft, data);
