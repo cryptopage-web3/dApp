@@ -97,7 +97,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Prop, Watch } from 'nuxt-property-decorator';
-import { EErrorType, ETypeNft, INft } from '~/types';
+import { EErrorType, ENftTransactionAccessType, ETypeNft, INft } from '~/types';
 import CommentLikeEmptyIcon from '~/components/icon/nft/CommentLikeEmptyIcon.vue';
 import CommentDislikeEmptyIcon from '~/components/icon/nft/CommentDislikeEmptyIcon.vue';
 import CommentLikeActiveIcon from '~/components/icon/nft/CommentLikeActiveIcon.vue';
@@ -206,6 +206,63 @@ export default class NftCommentsModal extends Vue {
     this.hide();
   }
 
+  async haveAccessToSeePost() {
+    if (
+      !this.nft.isEncrypted ||
+      this.nft.accessType === ENftTransactionAccessType.has_access
+    ) {
+      return true;
+    }
+
+    if (this.nft.accessType === ENftTransactionAccessType.has_not_access) {
+      return false;
+    }
+
+    const web3Service = new Web3Service(authModule.provider);
+
+    try {
+      this.loading = true;
+
+      const access = await web3Service.checkIfHaveAccessToEncryptedPost(
+        authModule.address,
+        this.nft.tokenId,
+        authModule.chainSlug,
+      );
+
+      addressModule.updateOwnNftDetails({
+        nft: this.nft,
+        updatedDetails: {
+          accessType: access
+            ? ENftTransactionAccessType.has_access
+            : ENftTransactionAccessType.has_not_access,
+        },
+      });
+
+      this.loading = false;
+
+      return !!access;
+    } catch {
+      this.loading = false;
+
+      saveError(
+        EErrorType.checkIfHaveAccessToEncryptedPost,
+        'Error to check access',
+        {
+          address: authModule.address,
+          tokenId: this.nft.tokenId,
+          chainSlug: authModule.chainSlug,
+        },
+      );
+
+      this.$notify({
+        type: 'error',
+        title: 'Error to check access',
+      });
+
+      return false;
+    }
+  }
+
   async sendComment() {
     if (!this.commentText) {
       this.$notify({
@@ -240,6 +297,18 @@ export default class NftCommentsModal extends Vue {
       this.$notify({
         type: 'error',
         title: `You have already commented this Post`,
+      });
+      return;
+    }
+
+    /** проверяем, что есть доступ к посту */
+
+    const haveAccess = await this.haveAccessToSeePost();
+
+    if (!haveAccess) {
+      this.$notify({
+        type: 'error',
+        title: `You don't have access to the post and you can't add a comment`,
       });
       return;
     }
