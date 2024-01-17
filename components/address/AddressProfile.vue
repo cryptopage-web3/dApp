@@ -58,6 +58,7 @@ import ProfileShareIcon from '~/components/icon/profile/ProfileShareIcon.vue';
 import ProfileMessageIcon from '~/components/icon/profile/ProfileMessageIcon.vue';
 import ProfileVerifiedIcon from '~/components/icon/profile/ProfileVerifiedIcon.vue';
 import { EVerifiedStatus } from '~/types';
+import { notify } from '~/utils/notify';
 
 @Component({
   components: {
@@ -125,10 +126,7 @@ export default class AddressProfile extends Vue {
     copyToClipboard(this.address);
     ($(this.$refs.address) as any).tooltip('hide');
 
-    this.$notify({
-      type: 'success',
-      title: 'Address copied to clipboard',
-    });
+    notify.success('Address copied to clipboard');
   }
 
   sendMessage() {
@@ -137,10 +135,7 @@ export default class AddressProfile extends Vue {
       return;
     }
 
-    this.$notify({
-      type: 'error',
-      title: 'Sending a message is temporarily unavailable',
-    });
+    notify.error('Sending a message is temporarily unavailable');
   }
 }
 </script>

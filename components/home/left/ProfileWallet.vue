@@ -31,6 +31,7 @@ import { Component } from 'nuxt-property-decorator';
 import HomeExitIcon from '~/components/icon/home/HomeExitIcon.vue';
 import { authModule } from '~/store';
 import { copyToClipboard } from '~/utils/copyToClipboard';
+import { notify } from '~/utils/notify';
 
 @Component({
   components: {
@@ -63,10 +64,7 @@ export default class ProfileWallet extends Vue {
     copyToClipboard(this.address);
     ($(this.$refs.refCopy) as any).tooltip('hide');
 
-    this.$notify({
-      type: 'success',
-      title: 'Address copied to clipboard',
-    });
+    notify.success('Address copied to clipboard');
   }
 }
 </script>

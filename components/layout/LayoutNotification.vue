@@ -7,6 +7,7 @@ import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { alertModule } from '~/store';
 import { IAlertMessage } from '~/types';
+import { notify } from '~/utils/notify';
 
 @Component({})
 export default class LayoutNotification extends Vue {
@@ -20,7 +21,7 @@ export default class LayoutNotification extends Vue {
       return;
     }
 
-    this.$notify(message);
+    notify.send(message);
     alertModule.clean();
   }
 }

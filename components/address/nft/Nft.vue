@@ -97,6 +97,7 @@ import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 import NftLockIcon from '~/components/icon/nft/NftLockIcon.vue';
 import NftTextIcon from '~/components/icon/nft/NftTextIcon.vue';
 import { saveError } from '~/utils/saveError';
+import { notify } from '~/utils/notify';
 
 type TNftTransaction = INftTransaction;
 
@@ -218,10 +219,7 @@ export default class Nft extends Vue {
     }
 
     if (!this.isSameChain) {
-      this.$notify({
-        type: 'error',
-        title: `Need connect to ${this.addressChainName}`,
-      });
+      notify.error(`Need connect to ${this.addressChainName}`);
       return;
     }
 
@@ -257,10 +255,7 @@ export default class Nft extends Vue {
         },
       );
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to check access',
-      });
+      notify.error('Error to check access');
     }
   }
 
@@ -296,10 +291,7 @@ export default class Nft extends Vue {
         attachments,
       });
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to decrypt content',
-      });
+      notify.error('Error to decrypt content');
     }
   }
 
@@ -340,10 +332,7 @@ export default class Nft extends Vue {
         chainSlug: authModule.chainSlug,
       });
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to unlock post',
-      });
+      notify.error('Error to unlock post');
     }
   }
 

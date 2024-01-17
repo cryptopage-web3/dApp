@@ -74,6 +74,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard';
 import TransactionDropdown from '~/components/address/transaction/TransactionDropdown.vue';
 import TransactionInIcon from '~/components/icon/transaction/TransactionInIcon.vue';
 import TransactionOutIcon from '~/components/icon/transaction/TransactionOutIcon.vue';
+import { notify } from '~/utils/notify';
 
 type TTransaction = ITransaction;
 
@@ -113,10 +114,7 @@ export default class Transaction extends Vue {
     copyToClipboard(this.transaction.hash);
     ($(this.$refs.hash) as any).tooltip('hide');
 
-    this.$notify({
-      type: 'success',
-      title: 'Transaction Hash copied to clipboard',
-    });
+    notify.success('Transaction Hash copied to clipboard');
   }
 }
 </script>

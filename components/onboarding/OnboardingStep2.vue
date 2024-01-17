@@ -57,6 +57,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Emit } from 'nuxt-property-decorator';
+import { notify } from '~/utils/notify';
 
 @Component({})
 export default class OnboardingStep2 extends Vue {
@@ -95,11 +96,7 @@ export default class OnboardingStep2 extends Vue {
 
   next() {
     if (!this.email) {
-      this.$notify({
-        type: 'error',
-        title: 'Enter your email',
-      });
-
+      notify.error('Enter your email');
       return;
     }
 

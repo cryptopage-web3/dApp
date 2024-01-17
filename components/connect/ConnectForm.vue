@@ -102,10 +102,17 @@
 import Vue from 'vue';
 import { Component, Watch } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
-import { EChainSlug, ELocalStorageKey, EMainChain, EProvider } from '~/types';
+import {
+  EAlertType,
+  EChainSlug,
+  ELocalStorageKey,
+  EMainChain,
+  EProvider,
+} from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import ConnectCollapseIcon from '~/components/icon/connect/ConnectCollapseIcon.vue';
+import { notify } from '~/utils/notify';
 
 @Component({
   components: {
@@ -181,8 +188,8 @@ export default class ConnectForm extends Vue {
     });
 
     if (response.status === 'error') {
-      this.$notify({
-        type: response.status,
+      notify.send({
+        type: EAlertType.error,
         title: response.message?.title,
         text: response.message?.text,
       });

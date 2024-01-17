@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { IAlertMessage, IAlertType } from '~/types';
+import { IAlertMessage, EAlertType } from '~/types';
 
 @Module({
   name: 'alert',
@@ -17,7 +17,7 @@ export default class AlertModule extends VuexModule {
   @Action
   public success(title: string) {
     this.setMessage({
-      type: IAlertType.success,
+      type: EAlertType.success,
       title,
     });
   }
@@ -25,7 +25,7 @@ export default class AlertModule extends VuexModule {
   @Action
   public error(title: string) {
     this.setMessage({
-      type: IAlertType.error,
+      type: EAlertType.error,
       title,
     });
   }
@@ -33,7 +33,7 @@ export default class AlertModule extends VuexModule {
   @Action
   public info(title: string) {
     this.setMessage({
-      type: IAlertType.info,
+      type: EAlertType.info,
       title,
     });
   }

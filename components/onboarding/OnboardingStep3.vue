@@ -103,6 +103,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component, Emit } from 'nuxt-property-decorator';
+import { notify } from '~/utils/notify';
 
 @Component({})
 export default class OnboardingStep3 extends Vue {
@@ -141,11 +142,7 @@ export default class OnboardingStep3 extends Vue {
 
   next() {
     if (!this.interests.length) {
-      this.$notify({
-        type: 'error',
-        title: 'Choose your interests',
-      });
-
+      notify.error('Choose your interests');
       return;
     }
 

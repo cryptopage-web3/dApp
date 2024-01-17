@@ -124,6 +124,7 @@ import { EMainChain } from '~/types/EMainChain';
 import { authModule } from '~/store';
 import { MESSENGER_URL } from '~/constants';
 import { networkHelper } from '~/utils/networkHelper';
+import { notify } from '~/utils/notify';
 
 @Component({})
 export default class HeaderConnect extends Vue {
@@ -178,18 +179,12 @@ export default class HeaderConnect extends Vue {
 
   async switchChain(chain: EMainChain) {
     if (!networkHelper.isAvailableBySlug(chain)) {
-      this.$notify({
-        type: 'error',
-        title: 'Chosen unsupported chain',
-      });
+      notify.error('Chosen unsupported chain');
       return;
     }
 
     if (this.authChainSlug === chain) {
-      this.$notify({
-        type: 'info',
-        title: 'Chosen same chain',
-      });
+      notify.info('Chosen same chain');
       return;
     }
 

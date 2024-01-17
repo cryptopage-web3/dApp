@@ -60,6 +60,7 @@ import { Web3Service } from '~/services';
 import { addressModule, authModule } from '~/store';
 import { IDeleteNFTParams } from '~/types/nft-form';
 import { saveError } from '~/utils/saveError';
+import { notify } from '~/utils/notify';
 
 type TNftTransaction = INftTransaction;
 
@@ -99,10 +100,7 @@ export default class NftDeleteConfirm extends Vue {
 
   deleteNft() {
     if (!this.isSameChain) {
-      this.$notify({
-        type: 'error',
-        title: `Need connect to ${this.addressChainName}`,
-      });
+      notify.error(`Need connect to ${this.addressChainName}`);
       return;
     }
 
@@ -127,16 +125,10 @@ export default class NftDeleteConfirm extends Vue {
         onTransactionHash(hash: string) {
           txHash = hash;
 
-          self.$notify({
-            type: 'info',
-            title: `${txHash}: Transaction on pending`,
-          });
+          notify.info(`${txHash}: Transaction on pending`);
         },
         onReceipt() {
-          self.$notify({
-            type: 'success',
-            title: 'Transaction completed',
-          });
+          notify.success('Transaction completed');
 
           self.loading = false;
 
@@ -151,10 +143,7 @@ export default class NftDeleteConfirm extends Vue {
             deleteNFTParams,
           );
 
-          self.$notify({
-            type: 'error',
-            title: 'Transaction has some error',
-          });
+          notify.error('Transaction has some error');
 
           self.loading = false;
         },

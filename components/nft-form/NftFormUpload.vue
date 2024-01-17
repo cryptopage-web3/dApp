@@ -37,6 +37,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { nftFormModule } from '~/store';
 import { MAX_FILE_SIZE } from '~/constants';
+import { notify } from '~/utils/notify';
 
 @Component({})
 export default class NftFormUpload extends Vue {
@@ -113,21 +114,12 @@ export default class NftFormUpload extends Vue {
     const fileType = file.type.split('/')[0];
 
     if (!/(image|video|audio)/.test(fileType)) {
-      this.$notify({
-        type: 'error',
-        title: 'Invalid file extension',
-        text: 'Please upload only image, audio or video',
-      });
-
+      notify.error('Please upload only image, audio or video');
       return false;
     }
 
     if (file.size > MAX_FILE_SIZE) {
-      this.$notify({
-        type: 'error',
-        title: 'File size cannot exceed 5 Mb',
-      });
-
+      notify.error('File size cannot exceed 5 Mb');
       return false;
     }
 

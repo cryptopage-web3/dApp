@@ -80,6 +80,7 @@ import {
 } from '~/utils/nftsComment';
 import { addressModule, authModule, homeModule } from '~/store';
 import { saveError } from '~/utils/saveError';
+import { notify } from '~/utils/notify';
 
 type TNftTransaction = INftTransaction;
 
@@ -236,10 +237,7 @@ export default class NftComments extends Vue {
         },
       );
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to check access',
-      });
+      notify.error('Error to check access');
 
       return false;
     }
@@ -247,18 +245,12 @@ export default class NftComments extends Vue {
 
   async sendComment() {
     if (!this.commentType) {
-      this.$notify({
-        type: 'error',
-        title: 'No comment type',
-      });
+      notify.error('No comment type');
       return;
     }
 
     if (!this.commentText) {
-      this.$notify({
-        type: 'error',
-        title: 'No comment text',
-      });
+      notify.error('No comment text');
       return;
     }
 
@@ -270,10 +262,7 @@ export default class NftComments extends Vue {
     }
 
     if (!this.isSameChain) {
-      this.$notify({
-        type: 'error',
-        title: `Need connect to ${this.addressChainName}`,
-      });
+      notify.error(`Need connect to ${this.addressChainName}`);
       return;
     }
 
@@ -284,10 +273,7 @@ export default class NftComments extends Vue {
     );
 
     if (hasComment) {
-      this.$notify({
-        type: 'error',
-        title: `You have already commented this Post`,
-      });
+      notify.error(`You have already commented this Post`);
       return;
     }
 
@@ -296,10 +282,9 @@ export default class NftComments extends Vue {
     const haveAccess = await this.haveAccessToSeePost();
 
     if (!haveAccess) {
-      this.$notify({
-        type: 'error',
-        title: `You don't have access to the post and you can't add a comment`,
-      });
+      notify.error(
+        `You don't have access to the post and you can't add a comment`,
+      );
       return;
     }
 
@@ -312,10 +297,7 @@ export default class NftComments extends Vue {
     try {
       ipfsHash = await ipfsService.saveComment(this.commentText);
 
-      this.$notify({
-        type: 'info',
-        title: 'Got Comment hash from IPFS',
-      });
+      notify.info('Got Comment hash from IPFS');
     } catch {
       saveError(
         EErrorType.saveIpfsComment,
@@ -326,10 +308,7 @@ export default class NftComments extends Vue {
         },
       );
 
-      this.$notify({
-        type: 'error',
-        title: 'Failed to save Comment into IPFS',
-      });
+      notify.error('Failed to save Comment into IPFS');
 
       this.loading = false;
       return;
@@ -359,16 +338,10 @@ export default class NftComments extends Vue {
         onTransactionHash(hash: string) {
           txHash = hash;
 
-          self.$notify({
-            type: 'info',
-            title: `${txHash}: Transaction on pending`,
-          });
+          notify.info(`${txHash}: Transaction on pending`);
         },
         onReceipt() {
-          self.$notify({
-            type: 'success',
-            title: 'Transaction completed',
-          });
+          notify.success('Transaction completed');
 
           self.loading = false;
           self.resetComment();
@@ -384,10 +357,7 @@ export default class NftComments extends Vue {
             sendCommentParams,
           );
 
-          self.$notify({
-            type: 'error',
-            title: 'Transaction has some error',
-          });
+          notify.error('Transaction has some error');
 
           self.loading = false;
         },

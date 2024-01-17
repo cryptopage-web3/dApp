@@ -36,6 +36,7 @@ import NftTextDescription from './NftTextDescription.vue';
 import { INftTransaction } from '~/types';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 import { shortToken } from '~/utils/shortToken';
+import { notify } from '~/utils/notify';
 
 type TNftTransaction = INftTransaction;
 
@@ -85,10 +86,7 @@ export default class NftText extends Vue {
     copyToClipboard(this.txHash);
     ($(this.$refs.hash) as any).tooltip('hide');
 
-    this.$notify({
-      type: 'success',
-      title: 'Transaction Hash copied to clipboard',
-    });
+    notify.success('Transaction Hash copied to clipboard');
   }
 }
 </script>
