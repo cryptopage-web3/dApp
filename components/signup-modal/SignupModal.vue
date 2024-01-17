@@ -248,6 +248,7 @@ import {
   IMessengerOnboardingBroadcast,
 } from '~/types';
 import { MESSENGER_SIGNUP_URL } from '~/constants';
+import { notify } from '~/utils/notify';
 
 @Component({
   components: {
@@ -391,11 +392,7 @@ export default class SignupModal extends Vue {
     this.step = this.getStep();
 
     if (this.step === ESignupStep.connect) {
-      this.$notify({
-        type: 'error',
-        title: 'Connect to Metamask wallet',
-      });
-
+      notify.error('Connect to Metamask wallet');
       return;
     }
 
@@ -498,10 +495,7 @@ export default class SignupModal extends Vue {
       const error = e as Error | undefined;
 
       if (error?.message) {
-        this.$notify({
-          type: 'error',
-          title: error.message,
-        });
+        notify.error(error.message);
       }
 
       if (error) {

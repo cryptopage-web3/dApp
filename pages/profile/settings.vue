@@ -178,6 +178,7 @@ import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
 import { EErrorType, EVerifiedStatus } from '~/types';
 import { Web3Service } from '~/services';
 import { saveError } from '~/utils/saveError';
+import { notify } from '~/utils/notify';
 
 @Component({
   head: {
@@ -233,10 +234,7 @@ export default class ProfileSettingsPage extends Vue {
   copyAddress() {
     copyToClipboard(this.address);
 
-    this.$notify({
-      type: 'success',
-      title: 'Address copied to clipboard',
-    });
+    notify.success('Address copied to clipboard');
   }
 
   showHint() {
@@ -286,10 +284,7 @@ export default class ProfileSettingsPage extends Vue {
         },
       );
 
-      this.$notify({
-        type: 'error',
-        title: "Error to get PAGE Token's",
-      });
+      notify.error("Error to get PAGE Token's");
     }
   }
 }

@@ -89,6 +89,7 @@ import { addressModule, authModule } from '~/store';
 import { TCommentType } from '~/types/comment-form';
 import { EncryptionService, Web3Service } from '~/services';
 import { saveError } from '~/utils/saveError';
+import { notify } from '~/utils/notify';
 
 type TNft = INft;
 
@@ -238,10 +239,7 @@ export default class Nft extends Vue {
     }
 
     if (!this.isSameChain) {
-      this.$notify({
-        type: 'error',
-        title: `Need connect to ${this.addressChainName}`,
-      });
+      notify.error(`Need connect to ${this.addressChainName}`);
       return;
     }
 
@@ -277,10 +275,7 @@ export default class Nft extends Vue {
         },
       );
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to check access',
-      });
+      notify.error('Error to check access');
     }
   }
 
@@ -316,10 +311,7 @@ export default class Nft extends Vue {
         attachments,
       });
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to decrypt content',
-      });
+      notify.error('Error to decrypt content');
     }
   }
 
@@ -360,10 +352,7 @@ export default class Nft extends Vue {
         chainSlug: authModule.chainSlug,
       });
 
-      this.$notify({
-        type: 'error',
-        title: 'Error to unlock post',
-      });
+      notify.error('Error to unlock post');
     }
   }
 }

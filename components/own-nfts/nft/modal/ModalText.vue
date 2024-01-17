@@ -31,6 +31,7 @@ import ModalTextDescription from './ModalTextDescription.vue';
 import { INft } from '~/types';
 import { copyToClipboard } from '~/utils/copyToClipboard';
 import { shortToken } from '~/utils/shortToken';
+import { notify } from '~/utils/notify';
 
 type TNft = INft;
 
@@ -80,10 +81,7 @@ export default class ModalText extends Vue {
     copyToClipboard(this.contractAddress);
     ($(this.$refs.hash) as any).tooltip('hide');
 
-    this.$notify({
-      type: 'success',
-      title: 'Contract Address copied to clipboard',
-    });
+    notify.success('Contract Address copied to clipboard');
   }
 }
 </script>
