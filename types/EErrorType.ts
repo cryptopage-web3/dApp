@@ -1,4 +1,5 @@
 export enum EErrorType {
+  notify = 'notify',
   buyPostAccess = 'buyPostAccess',
   faucetTestMint = 'faucetTestMint',
   fetchTokens = 'fetchTokens',

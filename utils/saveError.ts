@@ -6,7 +6,7 @@ const errorService = new ErrorService();
 export const saveError = async (
   type: EErrorType,
   message: string,
-  params: Record<string, any>,
+  params: Record<string, any> = {},
 ) => {
   try {
     await errorService.save({

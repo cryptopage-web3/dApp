@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { IAlertMessage, EAlertType } from '~/types';
+import { saveError } from './saveError';
+import { IAlertMessage, EAlertType, EErrorType } from '~/types';
 
 export const notify = {
   error(title: string) {
@@ -24,6 +25,10 @@ export const notify = {
   },
 
   send(params: IAlertMessage) {
+    if (params.type === EAlertType.error) {
+      saveError(EErrorType.notify, params.title || '');
+    }
+
     Vue.notify(params);
   },
 };
