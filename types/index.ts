@@ -53,3 +53,5 @@ export * from './INftDashboardResponse';
 export * from './EErrorType';
 export * from './IErrorSaveParams';
 export * from './IErrorSaveResponse';
+export * from './IUserSaveResponse';
+export * from './IUserListResponse';

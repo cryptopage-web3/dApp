@@ -1,6 +1,11 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { alertModule } from '.';
-import { AuthService, TokensService, TransactionsService } from '~/services';
+import {
+  AuthService,
+  TokensService,
+  TransactionsService,
+  UserService,
+} from '~/services';
 import {
   EChainType,
   EMainChain,
@@ -41,6 +46,7 @@ type TConsentStatus = EConsentStatus | null;
 const authService = new AuthService();
 const tokensService = new TokensService();
 const transactionsService = new TransactionsService();
+const userService = new UserService();
 let authProvider: any = null;
 
 @Module({
@@ -391,6 +397,10 @@ export default class AuthModule extends VuexModule {
         providerSlug: connectData.providerSlug,
       }),
     );
+
+    /** сохранение адреса на бэке */
+
+    userService.save(connectData.address);
 
     /** получаем данные verifiedStatus */
 
