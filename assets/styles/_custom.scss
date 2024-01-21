@@ -1386,4 +1386,32 @@
   }
 }
 
+/* ===== new users ===== */
+
+.spaces-sidebar-users li:first-child {
+  padding-top: 0;
+}
+
+.spaces-sidebar-users__loading-item {
+  display: flex;
+  width: 100%;
+}
+
+.spaces-sidebar-users__loading-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.spaces-sidebar-users__loading-text {
+  flex-grow: 1;
+  border-radius: 8px;
+}
+
+.spaces-sidebar-users .spaces-sidebar-user-thumb::after {
+  display: none;
+}
+
 /* ======================= */

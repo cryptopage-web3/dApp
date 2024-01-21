@@ -3,109 +3,32 @@
     <div class="market-sidebar-top">
       <h3 class="market-sidebar__title">New users</h3>
     </div>
-    <ul class="spaces-sidebar-users">
-      <li class="pt-0">
-        <a
-          href="#"
-          class="spaces-sidebar-user-thumb"
-          :style="{
-            backgroundImage: `url(${homeSidebarImg1})`,
-          }"
-        ></a>
-        <div class="right">
-          <div
-            class="d-flex align-items-start justify-content-between flex-wrap"
-          >
-            <a href="#" class="id-user">
-              <span> 0kl3S...D45 </span>
-              <img src="@/assets/img/market-header-search-ident.svg" alt="" />
-            </a>
-            <a href="#" class="follow"> +Follow </a>
-          </div>
-          <div class="nik mt_4">Vladimir Kanevalin</div>
+    <ul v-if="loading" class="spaces-sidebar-users">
+      <li v-for="index in [1, 2, 3, 4, 5]" :key="index">
+        <div class="spaces-sidebar-users__loading-item">
+          <Skeleton class-name="spaces-sidebar-users__loading-photo" />
+          <Skeleton class-name="spaces-sidebar-users__loading-text" />
         </div>
       </li>
-      <li>
-        <a
-          href="#"
+    </ul>
+    <ul v-else class="spaces-sidebar-users">
+      <li v-for="user in users" :key="user.address">
+        <nuxt-link
+          :to="`/${chainSlug}/${user.address}`"
           class="spaces-sidebar-user-thumb"
-          :style="{
-            backgroundImage: `url(${homeSidebarImg2})`,
-          }"
-        ></a>
+        >
+          <client-only>
+            <jazzicon :seed="10211" :address="user.address" :diameter="40" />
+          </client-only>
+        </nuxt-link>
         <div class="right">
           <div
             class="d-flex align-items-start justify-content-between flex-wrap"
           >
-            <a href="#" class="id-user">
-              <span> 0kl3S...D44 </span>
-              <img src="@/assets/img/market-header-search-ident.svg" alt="" />
-            </a>
-            <a href="#" class="follow"> +Follow </a>
+            <nuxt-link :to="`/${chainSlug}/${user.address}`" class="id-user">
+              <span> {{ user.address | shortAddress }} </span>
+            </nuxt-link>
           </div>
-          <div class="nik mt_4">Angelika Pravsberry</div>
-        </div>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="spaces-sidebar-user-thumb"
-          :style="{
-            backgroundImage: `url(${homeSidebarImg3})`,
-          }"
-        ></a>
-        <div class="right">
-          <div
-            class="d-flex align-items-start justify-content-between flex-wrap"
-          >
-            <a href="#" class="id-user">
-              <span> 0kl3S...D43 </span>
-              <img src="@/assets/img/market-header-search-ident.svg" alt="" />
-            </a>
-            <a href="#" class="follow"> +Follow </a>
-          </div>
-          <div class="nik mt_4">Ivan Naumov</div>
-        </div>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="spaces-sidebar-user-thumb"
-          :style="{
-            backgroundImage: `url(${homeSidebarImg4})`,
-          }"
-        ></a>
-        <div class="right">
-          <div
-            class="d-flex align-items-start justify-content-between flex-wrap"
-          >
-            <a href="#" class="id-user">
-              <span> 0kl3S...D42 </span>
-              <img src="@/assets/img/market-header-search-ident.svg" alt="" />
-            </a>
-            <a href="#" class="follow"> +Follow </a>
-          </div>
-          <div class="nik mt_4">J.D.</div>
-        </div>
-      </li>
-      <li>
-        <a
-          href="#"
-          class="spaces-sidebar-user-thumb"
-          :style="{
-            backgroundImage: `url(${homeSidebarImg5})`,
-          }"
-        ></a>
-        <div class="right">
-          <div
-            class="d-flex align-items-start justify-content-between flex-wrap"
-          >
-            <a href="#" class="id-user">
-              <span> 0kl3S...D41 </span>
-            </a>
-            <a href="#" class="follow"> +Follow </a>
-          </div>
-          <div class="nik mt_4">Perry Koks</div>
         </div>
       </li>
     </ul>
@@ -115,18 +38,36 @@
 <script lang="ts">
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
-import homeSidebarImg1 from '~/assets/img/spaces-sidebar-user_img1.png';
-import homeSidebarImg2 from '~/assets/img/spaces-sidebar-user_img2.png';
-import homeSidebarImg3 from '~/assets/img/spaces-sidebar-user_img3.png';
-import homeSidebarImg4 from '~/assets/img/spaces-sidebar-user_img4.png';
-import homeSidebarImg5 from '~/assets/img/spaces-sidebar-user_img5.png';
+import Skeleton from '~/components/loaders/Skeleton.vue';
+import { authModule, homeModule } from '~/store';
+import { INewUser } from '~/types';
 
-@Component({})
+@Component({
+  components: {
+    Skeleton,
+  },
+})
 export default class NewUsers extends Vue {
-  homeSidebarImg1 = homeSidebarImg1;
-  homeSidebarImg2 = homeSidebarImg2;
-  homeSidebarImg3 = homeSidebarImg3;
-  homeSidebarImg4 = homeSidebarImg4;
-  homeSidebarImg5 = homeSidebarImg5;
+  loading = true;
+
+  get users(): INewUser[] {
+    return homeModule.newUsers.slice(0, 5);
+  }
+
+  get chainSlug(): string {
+    return authModule.chainSlug;
+  }
+
+  mounted() {
+    this.fetchNewUsers();
+  }
+
+  async fetchNewUsers() {
+    this.loading = true;
+
+    await homeModule.fetchNewUsers();
+
+    this.loading = false;
+  }
 }
 </script>

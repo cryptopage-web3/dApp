@@ -22,4 +22,5 @@ export enum EErrorType {
   createCommentTransaction = 'createCommentTransaction',
   deleteNftTransaction = 'deleteNftTransaction',
   faucetTestMintComponents = 'faucetTestMintComponents',
+  fetchNewUsers = 'fetchNewUsers',
 }

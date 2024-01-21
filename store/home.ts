@@ -3,7 +3,7 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { AxiosError } from 'axios';
 
 import { alertModule, authModule } from '.';
-import { NftsService } from '~/services';
+import { NftsService, UserService } from '~/services';
 import {
   ETypeNft,
   INftTransaction,
@@ -11,6 +11,7 @@ import {
   INftTransactionsPagination,
   EAttachmentType,
   EErrorType,
+  INewUser,
 } from '~/types';
 import { uniqueNftTransactionConcat } from '~/utils/array';
 import {
@@ -28,6 +29,7 @@ type TNftTransactionDetailsParams = {
 };
 
 const nftsService = new NftsService();
+const userService = new UserService();
 
 const DEFAULT_CHAIN_SLUG = 'mumbai';
 
@@ -47,10 +49,16 @@ const defaultNewContent: TNftTransactionsPagination = {
 })
 export default class HomeModule extends VuexModule {
   newContent: TNftTransactionsPagination = { ...defaultNewContent };
+  newUsers: INewUser[] = [];
 
   @Mutation
   public setNewContent(data: TNftTransactionsPagination) {
     this.newContent = data;
+  }
+
+  @Mutation
+  public setNewUsers(data: INewUser[]) {
+    this.newUsers = data;
   }
 
   @Mutation
@@ -223,6 +231,17 @@ export default class HomeModule extends VuexModule {
   }
 
   @Action
+  public async fetchNewUsers() {
+    try {
+      const data = await userService.getList();
+
+      this.setNewUsers(data);
+    } catch (error) {
+      saveError(EErrorType.fetchNewUsers, '');
+    }
+  }
+
+  @Action
   public clear(): void {
     /** удаляем nfts */
 
@@ -230,5 +249,9 @@ export default class HomeModule extends VuexModule {
       ...defaultNewContent,
       nfts: [],
     });
+
+    /** удаляем пользователей */
+
+    this.setNewUsers([]);
   }
 }
