@@ -13,7 +13,7 @@ import {
   EErrorType,
   INewUser,
 } from '~/types';
-import { uniqueNftTransactionConcat } from '~/utils/array';
+import { uniqueNftTransactionConcatByTokenId } from '~/utils/array';
 import {
   nftDashboardResAdapter,
   nftDetailsDashboardResAdapter,
@@ -84,7 +84,7 @@ export default class HomeModule extends VuexModule {
        * за время запроса уже могли получить детали и обновить старые NFT
        */
       const { nfts: oldNfts } = this.newContent;
-      const newNfts = uniqueNftTransactionConcat(
+      const newNfts = uniqueNftTransactionConcatByTokenId(
         oldNfts,
         tokens.map((t) => nftDashboardResAdapter(t)),
       );

@@ -65,3 +65,20 @@ export const uniqueNftTransactionConcat = (
 
   return result;
 };
+
+export const uniqueNftTransactionConcatByTokenId = (
+  target: INftTransaction[],
+  additional: INftTransaction[],
+): INftTransaction[] => {
+  const result = [...target];
+
+  additional.forEach((item) => {
+    const same = result.find((tx) => tx.tokenId === item.tokenId);
+
+    if (!same) {
+      result.push(item);
+    }
+  });
+
+  return result;
+};
