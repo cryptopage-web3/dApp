@@ -1,8 +1,10 @@
 <template>
-  <div :key="routeName" class="market-main-right">
+  <div class="market-main-right">
     <div class="market-sidebar-wrap">
-      <account-sidebar-nfts />
-      <account-sidebar-tokens />
+      <div>
+        <account-sidebar-nfts />
+        <account-sidebar-tokens />
+      </div>
     </div>
   </div>
 </template>
