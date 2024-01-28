@@ -1,9 +1,11 @@
 <template>
-  <div :key="isAuth" class="profile-left2">
+  <div class="profile-left2">
     <div class="profile-menu-wrap">
-      <Header />
-      <Connect v-if="!isAuth" />
-      <Profile v-else />
+      <div>
+        <Header />
+        <Connect v-if="!isAuth" />
+        <Profile v-else />
+      </div>
     </div>
   </div>
 </template>
@@ -27,6 +29,7 @@ import { leftStickySidebarInit } from '~/utils/leftStickySidebar';
 })
 export default class HomeLeft extends Vue {
   stickySidebar: any = null;
+  timeout: any = null;
 
   get refresh() {
     return stickyModule.leftRefresh;
@@ -60,10 +63,11 @@ export default class HomeLeft extends Vue {
   }
 
   refreshSticky() {
-    setTimeout(() => {
-      this.stickySidebar && this.stickySidebar.destroy();
-      this.stickySidebar = leftStickySidebarInit();
-    }, 100);
+    this.timeout && clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(() => {
+      this.stickySidebar && this.stickySidebar.updateSticky();
+    }, 500);
   }
 }
 </script>

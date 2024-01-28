@@ -43,7 +43,7 @@ export default class AccountRightSidebar extends Vue {
 
   mounted() {
     setTimeout(() => {
-      this.refreshSticky();
+      this.stickySidebar = marketSidebarInit();
     }, 100);
   }
 
@@ -51,14 +51,7 @@ export default class AccountRightSidebar extends Vue {
     this.timeout && clearTimeout(this.timeout);
 
     this.timeout = setTimeout(() => {
-      this.stickySidebar && this.stickySidebar.destroy();
-      const elements = $('.market-main-right .inner-wrapper-sticky > *');
-      $('.market-sidebar-wrap').append(elements);
-      $('.market-main-right .inner-wrapper-sticky').remove();
-
-      this.$nextTick(() => {
-        this.stickySidebar = marketSidebarInit();
-      });
+      this.stickySidebar && this.stickySidebar.updateSticky();
     }, 500);
   }
 }

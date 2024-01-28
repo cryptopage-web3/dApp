@@ -281,7 +281,7 @@ export default class AccountLeftSidebar extends Vue {
     accountLeftSidebarInit();
 
     setTimeout(() => {
-      this.refreshSticky();
+      this.stickySidebar = leftStickySidebarInit();
     }, 100);
   }
 
@@ -289,14 +289,7 @@ export default class AccountLeftSidebar extends Vue {
     this.timeout && clearTimeout(this.timeout);
 
     this.timeout = setTimeout(() => {
-      this.stickySidebar && this.stickySidebar.destroy();
-      const elements = $('.profile-left2 .inner-wrapper-sticky > *');
-      $('.profile-menu-wrap').append(elements);
-      $('.profile-left2 .inner-wrapper-sticky').remove();
-
-      this.$nextTick(() => {
-        this.stickySidebar = leftStickySidebarInit();
-      });
+      this.stickySidebar && this.stickySidebar.updateSticky();
     }, 500);
   }
 }

@@ -23,6 +23,7 @@ import { stickyModule } from '~/store';
 })
 export default class HomeRight extends Vue {
   stickySidebar: any = null;
+  timeout: any = null;
 
   get refresh() {
     return stickyModule.rightRefresh;
@@ -45,10 +46,11 @@ export default class HomeRight extends Vue {
   }
 
   refreshSticky() {
-    setTimeout(() => {
-      this.stickySidebar && this.stickySidebar.destroy();
-      this.stickySidebar = marketSidebarInit();
-    }, 100);
+    this.timeout && clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(() => {
+      this.stickySidebar && this.stickySidebar.updateSticky();
+    }, 500);
   }
 }
 </script>
