@@ -1300,6 +1300,19 @@
   color: #E4E4E4;
 }
 
+.main-profile-wallet__more {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0 10px;
+  color: #007bff;
+}
+
+.main-profile-wallet__more:hover {
+  color: #007bff;
+  opacity: 0.7;
+}
+
 /* ===== signup modal ===== */
 
 .onboarding-between-list-i__img {
