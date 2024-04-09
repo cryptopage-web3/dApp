@@ -1,7 +1,7 @@
 <template>
   <div class="profile-center profile-my-nfts tokens">
     <TokensHeader />
-    <TokensOverview />
+    <!-- <TokensOverview /> -->
     <TokensContent />
   </div>
 </template>

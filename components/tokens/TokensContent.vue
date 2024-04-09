@@ -53,7 +53,7 @@ import { Component } from 'nuxt-property-decorator';
 import TokensContentAssets from './TokensContentAssets.vue';
 import TokensContentHidden from './TokensContentHidden.vue';
 import TokensContentLiquidity from './TokensContentLiquidity.vue';
-import { IToken } from '~/types';
+import { IUserToken } from '~/types';
 import { addressModule } from '~/store';
 
 @Component({
@@ -64,7 +64,7 @@ import { addressModule } from '~/store';
   },
 })
 export default class TokensContent extends Vue {
-  get tokens(): IToken[] {
+  get tokens(): IUserToken[] {
     return addressModule.tokens;
   }
 }

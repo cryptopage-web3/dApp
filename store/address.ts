@@ -3,7 +3,7 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { AxiosError } from 'axios';
 
 import { alertModule, authModule } from '.';
-import { NftsService, TokensService, TransactionsService } from '~/services';
+import { NftsService, TransactionsService, UserService } from '~/services';
 import {
   EChainType,
   ETypeNft,
@@ -13,11 +13,11 @@ import {
   INftTransaction,
   ENftTransactionAccessType,
   INftTransactionsPagination,
-  IToken,
   ITransaction,
   ITransactionsPagination,
   EAttachmentType,
   EErrorType,
+  IUserToken,
 } from '~/types';
 import { networkHelper } from '~/utils/networkHelper';
 import {
@@ -52,7 +52,7 @@ type TOwnNftDetailsParams = {
   nft: TNft;
 };
 
-const tokensService = new TokensService();
+const userService = new UserService();
 const nftsService = new NftsService();
 const transactionsService = new TransactionsService();
 
@@ -94,7 +94,7 @@ export default class AddressModule extends VuexModule {
     chainId: 1,
   };
 
-  tokens: IToken[] = [];
+  tokens: IUserToken[] = [];
 
   nftTransactions: TNftTransactionsPagination = { ...defaultNftTransactions };
 
@@ -160,7 +160,7 @@ export default class AddressModule extends VuexModule {
   }
 
   @Mutation
-  public setTokens(tokens: IToken[]) {
+  public setTokens(tokens: IUserToken[]) {
     this.tokens = [...tokens];
   }
 
@@ -214,12 +214,9 @@ export default class AddressModule extends VuexModule {
   @Action
   public async fetchTokens() {
     try {
-      const tokens = await tokensService.getList({
-        chainSlug: this.chainSlug,
-        address: this.address,
-      });
+      const data = await userService.getTokens(this.address);
 
-      this.setTokens(tokens);
+      this.setTokens(data.tokens);
     } catch {
       saveError(EErrorType.fetchTokens, 'Error getting tokens data', {
         chainSlug: this.chainSlug,

@@ -56,3 +56,5 @@ export * from './IErrorSaveResponse';
 export * from './IUserSaveResponse';
 export * from './IUserListResponse';
 export * from './INewUser';
+export * from './IUserToken';
+export * from './IUserTokensResponse';

@@ -4,26 +4,10 @@
       <img :src="logo" alt="" class="token__icon" />
       <div>
         <div class="token__name">{{ name }} ({{ symbol }})</div>
-        <div class="token__address">
-          Contract address:
-          <nuxt-link v-if="address" :to="`/${chainSlug}/${address}`">
-            {{ address | shortAddress }}
-          </nuxt-link>
-          <span v-else>unknown</span>
-        </div>
       </div>
     </div>
     <div class="token-right">
       <div class="token-row">
-        <div
-          class="token__procent"
-          :class="{
-            'token__procent-green': percentChange >= 0,
-            'token__procent-red': percentChange < 0,
-          }"
-        >
-          {{ Math.abs(percentChange) }}%
-        </div>
         <div class="token__dollar" :title="balancePrice">
           ${{ balancePrice | formatNumberFloatDigits }}
         </div>
@@ -43,10 +27,10 @@
 import Vue from 'vue';
 import { Component, Prop } from 'nuxt-property-decorator';
 import TokenDropdown from './TokenDropdown.vue';
-import { IToken } from '~/types';
+import { IUserToken } from '~/types';
 import { addressModule } from '~/store';
 
-type TToken = IToken;
+type TToken = IUserToken;
 
 @Component({
   components: {
@@ -61,16 +45,12 @@ export default class Token extends Vue {
     return addressModule.chainSlug;
   }
 
-  get address() {
-    return this.token.address || '';
-  }
-
   get logo() {
-    return this.token.logo || '';
+    return this.token.logo_url || '';
   }
 
   get balance() {
-    return this.token.balance || 0;
+    return this.token.amount || 0;
   }
 
   get name() {
@@ -81,16 +61,12 @@ export default class Token extends Vue {
     return this.token.symbol || '';
   }
 
-  get percentChange() {
-    return this.token.percentChange || 0;
-  }
-
   get price() {
     return this.token.price || 0;
   }
 
   get balancePrice() {
-    return this.token.balancePrice || 0;
+    return this.balance * this.price;
   }
 }
 </script>

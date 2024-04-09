@@ -10,7 +10,7 @@
     <Token
       v-for="(token, index) in tokens"
       v-else
-      :key="token.address || index"
+      :key="`${token.name}_${index}`"
       :token="token"
     />
   </div>
@@ -21,7 +21,7 @@ import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import Token from './token/Token.vue';
 import Loader from '~/components/loaders/GrowLoader.vue';
-import { IToken } from '~/types';
+import { IUserToken } from '~/types';
 import { addressModule } from '~/store';
 
 @Component({
@@ -33,7 +33,7 @@ import { addressModule } from '~/store';
 export default class TokensContentAssets extends Vue {
   loading = true;
 
-  get tokens(): IToken[] {
+  get tokens(): IUserToken[] {
     return addressModule.tokens;
   }
 

@@ -1,15 +1,15 @@
 <template>
   <div class="main-profile-wallet-cont">
     <table class="main-profile-wallet-table">
-      <tr v-for="token in tokens" :key="token.address">
+      <tr v-for="(token, index) in tokens" :key="`${token.name}_${index}`">
         <td>
           <div>
-            <img v-if="token.logo" :src="token.logo" alt="" />
+            <img v-if="token.logo_url" :src="token.logo_url" alt="" />
             <span> Your {{ token.symbol }}: </span>
           </div>
         </td>
-        <td :title="token.balance">
-          {{ token.balance | formatNumberFloatDigits }}
+        <td :title="token.amount">
+          {{ token.amount | formatNumberFloatDigits }}
         </td>
       </tr>
     </table>
@@ -20,11 +20,11 @@
 import Vue from 'vue';
 import { Component } from 'nuxt-property-decorator';
 import { authModule } from '~/store';
-import { IToken } from '~/types';
+import { IUserToken } from '~/types';
 
 @Component({})
 export default class ProfileTokens extends Vue {
-  get tokens(): IToken[] {
+  get tokens(): IUserToken[] {
     return authModule.tokens;
   }
 }

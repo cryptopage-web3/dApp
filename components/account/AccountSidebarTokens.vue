@@ -52,7 +52,7 @@ import { Component, Watch } from 'nuxt-property-decorator';
 import Token from './token/Token.vue';
 import Skeleton from '~/components/loaders/Skeleton.vue';
 import { addressModule, authModule, stickyModule } from '~/store';
-import { IAddressInfo, IToken } from '~/types';
+import { IAddressInfo, IUserToken } from '~/types';
 import SidebarArrowIcon from '~/components/icon/account/SidebarArrowIcon.vue';
 
 type TAddressInfo = IAddressInfo;
@@ -92,11 +92,11 @@ export default class AccountSidebarTokens extends Vue {
     return addressModule.info;
   }
 
-  get tokens(): IToken[] {
+  get tokens(): IUserToken[] {
     return addressModule.tokens;
   }
 
-  get visibleTokens(): IToken[] {
+  get visibleTokens(): IUserToken[] {
     return this.isFullList ? this.tokens : this.tokens.slice(0, 6);
   }
 

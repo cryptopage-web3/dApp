@@ -1,11 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { alertModule } from '.';
-import {
-  AuthService,
-  TokensService,
-  TransactionsService,
-  UserService,
-} from '~/services';
+import { AuthService, TransactionsService, UserService } from '~/services';
 import {
   EChainType,
   EMainChain,
@@ -14,7 +9,7 @@ import {
   IConnectToProviderResponse,
   EProvider,
   IConnectData,
-  IToken,
+  IUserToken,
   ITransaction,
   IVerifiedStatus,
   ISaveVerifiedStatusParams,
@@ -44,7 +39,6 @@ type TMessengerStatus = EMessengerStatus | null;
 type TConsentStatus = EConsentStatus | null;
 
 const authService = new AuthService();
-const tokensService = new TokensService();
 const transactionsService = new TransactionsService();
 const userService = new UserService();
 let authProvider: any = null;
@@ -78,7 +72,7 @@ export default class AuthModule extends VuexModule {
 
   consentStatus: TConsentStatus = null;
 
-  tokens: IToken[] = [];
+  tokens: IUserToken[] = [];
 
   transactions: ITransaction[] = [];
 
@@ -167,7 +161,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public setTokens(tokens: IToken[]) {
+  public setTokens(tokens: IUserToken[]) {
     this.tokens = [...tokens];
   }
 
@@ -719,12 +713,9 @@ export default class AuthModule extends VuexModule {
   @Action
   public async fetchTokens() {
     try {
-      const tokens = await tokensService.getList({
-        chainSlug: this.chainSlug,
-        address: this.address,
-      });
+      const data = await userService.getTokens(this.address);
 
-      this.setTokens(tokens);
+      this.setTokens(data.tokens);
     } catch {
       saveError(EErrorType.fetchTokens, 'Error getting AUTH tokens data', {
         chainSlug: this.chainSlug,
