@@ -282,8 +282,6 @@ export class Web3Service {
       .getPluginContract(contractPlugins.singleReadPost, 1)
       .call();
 
-    // console.log(pluginAddress);
-
     const contractPlugin = new this.web3.eth.Contract(
       CONTRACT_POST_INFO.abi,
       pluginAddress,
@@ -354,8 +352,6 @@ export class Web3Service {
     const pluginAddress = await contractMain.methods
       .getPluginContract(contractPlugins.singleHasPaymentForAccess, 1)
       .call();
-
-    // console.log(pluginAddress);
 
     const contractPlugin = new this.web3.eth.Contract(
       CONTRACT_HAS_ACCESS.abi,
