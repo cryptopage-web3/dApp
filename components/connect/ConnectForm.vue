@@ -8,30 +8,27 @@
     </div>
     <div id="accordionExample" class="accordion profile-login-accordion">
       <div class="card profile-login__card">
-        <div id="profile-login-accordion10_2" class="card-header">
+        <div id="profile-login-accordion3_2" class="card-header">
           <button
             class="profile-login-accordion__link"
             type="button"
             data-toggle="collapse"
-            data-target="#profile-login-accordion10"
+            data-target="#profile-login-accordion3"
             aria-expanded="false"
-            aria-controls="profile-login-accordion10"
+            aria-controls="profile-login-accordion3"
           >
             <div class="thumb">
-              <img
-                src="@/assets/img-custom/profile-login-accordion_img10.png"
-                alt=""
-              />
+              <img src="@/assets/img/profile-login-accordion_img3.svg" alt="" />
             </div>
-            <span> Mumbai </span>
+            <span> Polygon </span>
             <ConnectCollapseIcon />
           </button>
         </div>
 
         <div
-          id="profile-login-accordion10"
+          id="profile-login-accordion3"
           class="collapse"
-          aria-labelledby="profile-login-accordion10_2"
+          aria-labelledby="profile-login-accordion3_2"
           data-parent="#accordionExample"
         >
           <div class="profile-login-accordion__body">
@@ -41,7 +38,7 @@
                   href="#"
                   role="button"
                   @click.prevent="
-                    connectToProvider(EMainChain.mumbai, EProvider.metamask)
+                    connectToProvider(EMainChain.polygon, EProvider.metamask)
                   "
                 >
                   <div class="thumb">
@@ -59,7 +56,7 @@
                   role="button"
                   @click.prevent="
                     connectToProvider(
-                      EMainChain.mumbai,
+                      EMainChain.polygon,
                       EProvider.walletConnect,
                     )
                   "
@@ -78,7 +75,7 @@
                   href="#"
                   role="button"
                   @click.prevent="
-                    connectToProvider(EMainChain.mumbai, EProvider.okex)
+                    connectToProvider(EMainChain.polygon, EProvider.okex)
                   "
                 >
                   <div class="thumb">
@@ -151,8 +148,8 @@ export default class ConnectForm extends Vue {
 
   collapseChain(slug: EChainSlug) {
     const elementMap = new Map<EChainSlug, string>().set(
-      EChainSlug.mumbai,
-      '#profile-login-accordion10',
+      EChainSlug.polygon,
+      '#profile-login-accordion3',
     );
 
     const element = elementMap.get(slug);

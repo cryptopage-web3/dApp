@@ -42,14 +42,11 @@
     <div id="market-header__wallet-col" class="collapse drop-down__col">
       <ul class="drop-down__list">
         <li>
-          <a href="#" @click.prevent="switchChain(EMainChain.mumbai)">
+          <a href="#" @click.prevent="switchChain(EMainChain.polygon)">
             <div class="thumb">
-              <img
-                src="@/assets/img-custom/profile-login-accordion_img10.png"
-                alt=""
-              />
+              <img src="@/assets/img/market-header__wallet_icon4.svg" alt="" />
             </div>
-            <span> Mumbai </span>
+            <span> Polygon </span>
           </a>
         </li>
       </ul>

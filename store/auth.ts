@@ -57,7 +57,7 @@ export default class AuthModule extends VuexModule {
 
   connect: IConnectData = {
     address: '',
-    chainId: EChainId.mumbai,
+    chainId: EChainId.polygon,
     providerSlug: null,
     /** не храним authProvider в сторе, т.к. ошибка при прокcировании объекта vue */
     // provider: null,

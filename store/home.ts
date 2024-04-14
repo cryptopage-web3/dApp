@@ -31,7 +31,7 @@ type TNftTransactionDetailsParams = {
 const nftsService = new NftsService();
 const userService = new UserService();
 
-const DEFAULT_CHAIN_SLUG = 'mumbai';
+const DEFAULT_CHAIN_SLUG = 'polygon';
 
 const defaultNewContent: TNftTransactionsPagination = {
   nfts: [],

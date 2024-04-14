@@ -130,8 +130,8 @@ export const networkHelper = {
       // EChainId.goerli,
       // EChainId.kovan,
       // EChainId.bsc,
-      // EChainId.polygon,
-      EChainId.mumbai,
+      EChainId.polygon,
+      // EChainId.mumbai,
     ],
   } as any,
 
@@ -220,7 +220,7 @@ export const networkHelper = {
   },
 
   isAvailableBySlug(slug: any) {
-    return [EChainSlug.mumbai].includes(slug);
+    return [EChainSlug.polygon].includes(slug);
   },
 
   isAvailableByChainId(chainId: any) {

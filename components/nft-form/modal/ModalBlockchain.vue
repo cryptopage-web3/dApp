@@ -41,9 +41,9 @@ import { profileContentDropTarget } from '~/utils/profileContentDrop';
 export default class ModalBlockchain extends Vue {
   chainList = [
     {
-      slug: EChainSlug.mumbai,
-      title: 'Mumbai',
-      icon: require('@/assets/img-custom/profile-login-accordion_img10.png'),
+      slug: EChainSlug.polygon,
+      title: 'Polygon',
+      icon: require('@/assets/img/market-header__wallet_icon4.svg'),
     },
   ];
 

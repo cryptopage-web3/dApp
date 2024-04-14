@@ -328,10 +328,10 @@ export default class NftFormModule extends VuexModule {
       return;
     }
 
-    /** пока есть возможность создать только для mumbai */
+    /** пока есть возможность создать только для polygon */
 
-    if (authModule.chainSlug !== EChainSlug.mumbai) {
-      alertModule.error('Available only Mumbai');
+    if (authModule.chainSlug !== EChainSlug.polygon) {
+      alertModule.error('Available only Polygon');
       return;
     }
 
