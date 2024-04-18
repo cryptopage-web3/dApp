@@ -160,9 +160,6 @@
     </div>
     <div class="profil-settings-btns">
       <button class="btn btn_default btn_large btn-blue mr-3">Save</button>
-      <button class="btn btn_default btn_large btn-blue" @click="handleFaucet">
-        GET {{ TOKEN_AMOUNT }} PAGE
-      </button>
     </div>
   </div>
 </template>
@@ -175,9 +172,7 @@ import { copyToClipboard } from '~/utils/copyToClipboard';
 import { popoverHintInit, popoverHintDestroy } from '~/utils/popoverHint';
 import { FRACTAL_VERIFICATION_URL } from '~/constants';
 import NftRefreshIcon from '~/components/icon/nft/NftRefreshIcon.vue';
-import { EErrorType, EVerifiedStatus } from '~/types';
-import { Web3Service } from '~/services';
-import { saveError } from '~/utils/saveError';
+import { EVerifiedStatus } from '~/types';
 import { notify } from '~/utils/notify';
 
 @Component({
@@ -200,7 +195,6 @@ import { notify } from '~/utils/notify';
 export default class ProfileSettingsPage extends Vue {
   verificationUrl = FRACTAL_VERIFICATION_URL;
   EVerifiedStatus = EVerifiedStatus;
-  TOKEN_AMOUNT = 200;
 
   $refs!: {
     hintRef: HTMLSpanElement;
@@ -262,30 +256,6 @@ export default class ProfileSettingsPage extends Vue {
     });
 
     authModule.setShowSignupModal(true);
-  }
-
-  async handleFaucet() {
-    const web3Service = new Web3Service(authModule.provider);
-
-    try {
-      await web3Service.faucetTestMint(
-        authModule.address,
-        this.TOKEN_AMOUNT,
-        authModule.chainSlug,
-      );
-    } catch {
-      saveError(
-        EErrorType.faucetTestMintComponents,
-        "Error to get PAGE Token's",
-        {
-          address: authModule.address,
-          amount: this.TOKEN_AMOUNT,
-          chainSlug: authModule.chainSlug,
-        },
-      );
-
-      notify.error("Error to get PAGE Token's");
-    }
   }
 }
 </script>
