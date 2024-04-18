@@ -1,5 +1,5 @@
-import { MUMBAI_CONTRACT_ADDRESS } from '~/contracts';
-import { INftDashboardItemResponse, INftTransaction } from '~/types';
+import { nftContractAddress } from '~/contracts';
+import { EChainId, INftDashboardItemResponse, INftTransaction } from '~/types';
 
 export function nftDashboardResAdapter(
   data: INftDashboardItemResponse,
@@ -7,7 +7,7 @@ export function nftDashboardResAdapter(
   return {
     txHash: '',
     blockNumber: 0,
-    contractAddress: MUMBAI_CONTRACT_ADDRESS,
+    contractAddress: nftContractAddress[EChainId.polygon],
     tokenId: data.tokenId,
     to: '',
     from: '',
