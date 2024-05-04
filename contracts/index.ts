@@ -13,6 +13,7 @@ import { EChainId } from '~/types';
 /**
  * polygon - https://polygonscan.com/
  *
+ * основной адрес - https://polygonscan.com/address/0x522a97008c8744aeeb06b0795025572976DA922B#readProxyContract
  * общий контракт - 0x522a97008c8744aeeb06b0795025572976DA922B
  * контракт executor - 0x8c7EFDb83fffB9615f75061e1A0eE3cE840b2d24
  * контракт pluginList - 0x5E8106dE43c23b8ffdfbCC13FF059d8166260640
