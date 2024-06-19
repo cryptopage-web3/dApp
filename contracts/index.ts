@@ -23,7 +23,7 @@ import { EChainId } from '~/types';
 /** executor */
 export const nftContractAddress: Record<number | string, string> = {
   [EChainId.mumbai]: '0xc0fc66ba41bea0a1266c681bbc781014e7c67612',
-  [EChainId.polygon]: '0x8c7EFDb83fffB9615f75061e1A0eE3cE840b2d24',
+  [EChainId.polygon]: '0x52c89dbdf1511e91f857bf4743eea0fab775e7ca',
 };
 
 /** плагины mumbai */
