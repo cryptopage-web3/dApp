@@ -7,7 +7,7 @@
             <img src="@/assets/img/market-footer-logo_img.svg" alt="" />
           </a>
           <div class="market-footer-copyrite">
-            Copyright © 2022 The CryptoPage. All Rights Reserved
+            Copyright © {{ new Date().getFullYear() }} The CryptoPage. All Rights Reserved
           </div>
         </div>
         <div class="market-footer-right">
