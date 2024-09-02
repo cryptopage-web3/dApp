@@ -116,6 +116,11 @@ export default {
     ],
     ['@nuxtjs/pwa']
   ],
+  pwa:{
+    icon:{
+      source: '[srcDir]/[staticDir]/icon-512.png'
+    }
+  },
 
   eslint: {
     fix: true,
