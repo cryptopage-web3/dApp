@@ -54,9 +54,9 @@ export default {
           })(window,document,'script','dataLayer','GTM-K3HPG8ZS');
         `,
       },
-      {
+      /*{
         src: 'https://telegram.org/js/telegram-web-app.js'
-      }
+      }*/
     ],
     noscript: [
       {
@@ -90,7 +90,7 @@ export default {
     '~/plugins/bootstrap.ts',
     '~/plugins/formstyler.ts',
     '~/plugins/stickySidebar.ts',
-    '~/plugins/telegram-web-app.ts',
+    //'~/plugins/telegram-web-app.ts',
   ],
 
   // Progress bar https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-loading
@@ -118,7 +118,8 @@ export default {
   ],
   pwa:{
     icon:{
-      source: '[srcDir]/[staticDir]/icon-512.png'
+      source: 'static/icon-512.png',
+      filename: 'icon-512.png'
     }
   },
 
