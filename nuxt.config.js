@@ -119,7 +119,7 @@ export default {
   pwa:{
     icon:{
       source: 'static/icon-512.png',
-      filename: 'icon-512.png'
+      filename: 'icon-512-2.png'
     }
   },
 
