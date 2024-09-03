@@ -89,6 +89,7 @@ rm -rf $run_dir/node_modules $run_dir/.nuxt
 
 cp -rf $deploy_dir/node_modules $run_dir/node_modules 2>/dev/null
 cp -rf $deploy_dir/.nuxt $run_dir/.nuxt 2>/dev/null
+cp -rf $deploy_dir/static/sw.js $run_dir/static/sw.js 2>/dev/null
 
 cd $run_dir
 
