@@ -1,9 +1,9 @@
 <template>
   <div
-    id="spaces-tabs1"
-    class="tab-pane fade show active"
+    :id="tabId"
+    :class="{ 'tab-pane': true, fade: true, show: showTab, active: showTab }"
     role="tabpanel"
-    aria-labelledby="spaces-tabs1-tab"
+    :aria-labelledby="tabHeaderId"
   >
     <Nft v-for="nft in nfts" :key="uniqueKey(nft)" :nft="nft" />
     <Loader v-if="$fetchState.pending || initLoading" />
@@ -12,12 +12,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Component, Watch } from 'nuxt-property-decorator';
+import { Component, Prop, Watch } from 'nuxt-property-decorator';
 import Loader from '~/components/loaders/GrowLoader.vue';
 import Nft from '~/components/address/nft/Nft.vue';
 import { homeModule, stickyModule } from '~/store';
 import { INftTransaction } from '~/types';
 import { getNftTransactionUniqueKey } from '~/utils/array';
+
+type TContentSource = 'new-content' | 'for-you';
 
 @Component({
   components: {
@@ -28,19 +30,50 @@ import { getNftTransactionUniqueKey } from '~/utils/array';
 export default class NewContentPanel extends Vue {
   initLoading = true;
 
+  @Prop({ required: false, default: 'new-content' })
+  contentSource: TContentSource;
+
+  @Prop({ default: false, required: false })
+  showTab: boolean;
+
+  @Prop({ required: true })
+  tabIndex: number;
+
   scrollListener: null | (() => void) = null;
 
+  get nftDataSource() {
+    return this.contentSource === 'new-content'
+      ? homeModule.newContent
+      : homeModule.forYou;
+  }
+
   get nfts(): INftTransaction[] {
-    return homeModule.newContent.nfts;
+    return this.nftDataSource.nfts;
   }
 
   get hasAllPages(): boolean {
-    return homeModule.newContent.hasAllPages;
+    return this.nftDataSource.hasAllPages;
   }
 
   get isFetchDisabled(): boolean {
     return Boolean(
       this.hasAllPages || this.$fetchState.pending || this.$fetchState.error,
+    );
+  }
+
+  get tabId() {
+    return 'spaces-tabs' + this.tabIndex;
+  }
+
+  get tabHeaderId() {
+    return this.tabId + '-tab';
+  }
+
+  needLoadDataOnShowtab() {
+    return (
+      !this.hasAllPages &&
+      !this.$fetchState.pending &&
+      this.nftDataSource.count === 0
     );
   }
 
@@ -52,11 +85,34 @@ export default class NewContentPanel extends Vue {
   // lifecycle hooks
 
   mounted() {
+    if (!this.showTab) {
+      const tabHead = $('#home-tabs .spaces-tabs-link');
+      const showTabHandler = (e) => {
+        console.log(
+          'show',
+          e.target.id,
+          this.tabHeaderId,
+          this.$fetchState.timestamp,
+          this.$fetchState.pending,
+        );
+        if (e.target.id === this.tabHeaderId && this.needLoadDataOnShowtab()) {
+          //console.log('load', e.target.id, this.tabHeaderId);
+          this.$fetch();
+          tabHead.off('shown.bs.tab', showTabHandler);
+        }
+      };
+
+      tabHead.on('shown.bs.tab', showTabHandler);
+    }
+
     /** делаем запрос при монтировании,
      * т.к. isActive = true по умолчанию и @Watch не отработает
      */
+
     this.initLoading = false;
-    this.next();
+    if (this.showTab) {
+      this.next();
+    }
 
     this.$nextTick(() => {
       this.scrollListener = this.scrollHandler.bind(this);
@@ -89,8 +145,8 @@ export default class NewContentPanel extends Vue {
      */
     const windowHeight = Number($(window).height());
     const windowScrollTop = Number($(window).scrollTop());
-    const elemOffsetTop = Number($('#spaces-tabs1').offset()?.top);
-    const elemHeight = Number($('#spaces-tabs1').height());
+    const elemOffsetTop = Number($('#' + this.tabId).offset()?.top);
+    const elemHeight = Number($('#' + this.tabId).height());
 
     if (windowScrollTop + windowHeight > elemOffsetTop + elemHeight) {
       this.next();
@@ -105,12 +161,19 @@ export default class NewContentPanel extends Vue {
     if (this.hasAllPages || process.server) {
       return;
     }
+    // console.log('load', this.contentSource);
 
-    await homeModule.fetchNfts();
+    if (this.contentSource === 'new-content') {
+      await homeModule.fetchNewContent();
+    } else {
+      await homeModule.fetchForYou();
+    }
   }
 
   uniqueKey(nft: INftTransaction) {
-    return nft ? getNftTransactionUniqueKey(nft) : '_';
+    return nft
+      ? this.contentSource + '_' + getNftTransactionUniqueKey(nft)
+      : '_';
   }
 }
 </script>

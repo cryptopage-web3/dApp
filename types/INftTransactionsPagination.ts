@@ -1,4 +1,5 @@
-import { INftTransaction, IPagination } from '.';
+import { INftTransaction } from './INftTransaction';
+import { IPagination } from './IPagination';
 
 export interface INftTransactionsPagination extends IPagination {
   nfts: INftTransaction[];
@@ -7,3 +8,5 @@ export interface INftTransactionsPagination extends IPagination {
     pageKey?: string;
   };
 }
+
+export type TNftTransactionsPagination = INftTransactionsPagination;

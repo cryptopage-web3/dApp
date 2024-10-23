@@ -3,8 +3,8 @@
     <Tabs />
 
     <div id="myTabContent" class="tab-content">
-      <NewContentPanel />
-      <ForYouPanel />
+      <NewContentPanel :show-tab="true" :tab-index="1" />
+      <NewContentPanel content-source="for-you" :tab-index="2" />
       <FollowingPanel />
     </div>
   </div>

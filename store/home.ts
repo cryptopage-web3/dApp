@@ -12,6 +12,8 @@ import {
   EAttachmentType,
   EErrorType,
   INewUser,
+  INftDashboardResponse,
+  INftDashboardParams,
 } from '~/types';
 import { uniqueNftTransactionConcatByTokenId } from '~/utils/array';
 import {
@@ -19,12 +21,13 @@ import {
   nftDetailsDashboardResAdapter,
 } from '~/adapters';
 import { saveError } from '~/utils/saveError';
+import { nftTokenDetailsCache } from '~/services/NftTokenDetailsCache';
+import { getApiChainBySlug } from '~/constants';
 
 type TNftTransactionsPagination = INftTransactionsPagination;
 type TNftTransaction = INftTransaction;
 
 type TNftTransactionDetailsParams = {
-  index: number;
   nft: INftTransaction;
 };
 
@@ -42,6 +45,74 @@ const defaultNewContent: TNftTransactionsPagination = {
   hasAllPages: false,
 };
 
+function handleFetchNftsListError(
+  errorType: EErrorType,
+  saveCallback: (params: TNftTransactionsPagination) => void,
+  storage: TNftTransactionsPagination,
+) {
+  return (error: any) => {
+    const errorMessage =
+      (error as AxiosError)?.response?.status === 429
+        ? 'Content Dashboard: Too Many Requests. Rate limit 30 per second'
+        : 'Error getting Content data';
+
+    alertModule.error(errorMessage);
+
+    saveError(errorType, errorMessage, {
+      chainSlug: DEFAULT_CHAIN_SLUG,
+      page: storage.page + 1,
+      pageSize: storage.pageSize,
+    });
+
+    saveCallback({
+      ...storage,
+      hasAllPages: true,
+    });
+
+    return {};
+  };
+}
+
+async function fetchNftList(
+  fetchCallback: (
+    params: INftDashboardParams,
+  ) => Promise<INftDashboardResponse>,
+  saveCallback: (params: TNftTransactionsPagination) => void,
+  storage: TNftTransactionsPagination,
+  errorType: EErrorType,
+) {
+  const { page, pageSize, nfts: oldNfts } = storage;
+  const nextPage = page + 1;
+
+  const { tokens } = (await fetchCallback({
+    chainSlug: DEFAULT_CHAIN_SLUG,
+    page: nextPage,
+    pageSize,
+  }).catch(
+    handleFetchNftsListError(errorType, saveCallback, storage),
+  )) as INftDashboardResponse;
+
+  if (!tokens) {
+    return;
+  }
+
+  /** текущие NFTs достаем только перед объединением
+   * за время запроса уже могли получить детали и обновить старые NFT
+   */
+  const newNfts = uniqueNftTransactionConcatByTokenId(
+    oldNfts,
+    tokens.map((t) => nftDashboardResAdapter(t)),
+  );
+
+  saveCallback({
+    ...storage,
+    nfts: newNfts,
+    count: newNfts.length,
+    page: nextPage,
+    hasAllPages: !tokens.length,
+  });
+}
+
 @Module({
   name: 'home',
   namespaced: true,
@@ -49,6 +120,7 @@ const defaultNewContent: TNftTransactionsPagination = {
 })
 export default class HomeModule extends VuexModule {
   newContent: TNftTransactionsPagination = { ...defaultNewContent };
+  forYou: TNftTransactionsPagination = { ...defaultNewContent };
   newUsers: INewUser[] = [];
 
   @Mutation
@@ -57,64 +129,63 @@ export default class HomeModule extends VuexModule {
   }
 
   @Mutation
+  public setForYou(data: TNftTransactionsPagination) {
+    this.forYou = data;
+  }
+
+  @Mutation
   public setNewUsers(data: INewUser[]) {
     this.newUsers = data;
   }
 
   @Mutation
-  public setNewContentDetails({ index, nft }: TNftTransactionDetailsParams) {
+  public setNewContentDetails({ nft }: TNftTransactionDetailsParams) {
     const { nfts } = this.newContent;
 
-    Vue.set(nfts, index, nft);
+    const index = nfts.findIndex((item) => item.tokenId === nft.tokenId);
+
+    if (index !== -1) {
+      Vue.set(nfts, index, nft);
+    }
+  }
+
+  @Mutation
+  public setForMeDetails({ nft }: TNftTransactionDetailsParams) {
+    const { nfts } = this.forYou;
+
+    const index = nfts.findIndex((item) => item.tokenId === nft.tokenId);
+
+    if (index !== -1) {
+      Vue.set(nfts, index, nft);
+    }
   }
 
   @Action
-  public async fetchNfts() {
-    try {
-      const { page, pageSize } = this.newContent;
-      const nextPage = page + 1;
+  public async fetchNewContent() {
+    const saveCallback = (params: TNftTransactionsPagination) =>
+      this.setNewContent(params);
+    // const storage = this.newContent;
+    // await new Promise<void>((resolve, reject) => resolve());
+    await fetchNftList(
+      (params) => nftsService.getLastPosts(params),
+      saveCallback,
+      this.newContent,
+      EErrorType.getLastPosts,
+    );
+  }
 
-      const { tokens } = await nftsService.getDashboardList({
-        chainSlug: DEFAULT_CHAIN_SLUG,
-        page: nextPage,
-        pageSize,
-      });
+  @Action
+  public async fetchForYou() {
+    const saveCallback = (params: TNftTransactionsPagination) =>
+      this.setForYou(params);
+    const storage = this.forYou;
 
-      /** текущие NFTs достаем только перед объединением
-       * за время запроса уже могли получить детали и обновить старые NFT
-       */
-      const { nfts: oldNfts } = this.newContent;
-      const newNfts = uniqueNftTransactionConcatByTokenId(
-        oldNfts,
-        tokens.map((t) => nftDashboardResAdapter(t)),
-      );
-
-      this.setNewContent({
-        ...this.newContent,
-        nfts: newNfts,
-        count: newNfts.length,
-        page: nextPage,
-        hasAllPages: !tokens.length,
-      });
-    } catch (error) {
-      const errorMessage =
-        (error as AxiosError)?.response?.status === 429
-          ? 'Content Dashboard: Too Many Requests. Rate limit 30 per second'
-          : 'Error getting Content data';
-
-      alertModule.error(errorMessage);
-
-      saveError(EErrorType.getDashboardList, errorMessage, {
-        chainSlug: DEFAULT_CHAIN_SLUG,
-        page: this.newContent.page + 1,
-        pageSize: this.newContent.pageSize,
-      });
-
-      this.setNewContent({
-        ...this.newContent,
-        hasAllPages: true,
-      });
-    }
+    await fetchNftList(
+      (params) => nftsService.getDashboardList(params),
+      saveCallback,
+      storage,
+      EErrorType.getDashboardList,
+    );
   }
 
   @Action
@@ -125,31 +196,47 @@ export default class HomeModule extends VuexModule {
     nft: TNftTransaction;
     updatedDetails: Record<string, any>;
   }) {
-    const { nfts } = this.newContent;
-    const index = nfts.findIndex((item) => item === nft);
+    function update(sourceList: TNftTransaction[]) {
+      const index = sourceList.findIndex(
+        (item) => item.tokenId === nft.tokenId,
+      );
 
-    this.setNewContentDetails({
-      index,
-      nft: {
-        ...nft,
+      if (index === -1) {
+        return;
+      }
+
+      const nftForUpdate = sourceList[index];
+
+      Vue.set(sourceList, index, {
+        ...nftForUpdate,
         ...updatedDetails,
-      },
-    });
+      });
+    }
+
+    update(this.newContent.nfts);
+    update(this.forYou.nfts);
   }
 
   @Action
   public async fetchNftTransactionDetails(nft: TNftTransaction) {
-    const { nfts } = this.newContent;
-    const index = nfts.findIndex((item) => item === nft);
-
     try {
-      const data = await nftsService.getOwnDetails({
-        chainSlug: DEFAULT_CHAIN_SLUG,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId,
-      });
+      let nftWithDetails = nftTokenDetailsCache.get(
+        getApiChainBySlug(DEFAULT_CHAIN_SLUG as any) as any,
+        nft.contractAddress,
+        nft.tokenId,
+      );
 
-      const nftWithDetails = nftDetailsDashboardResAdapter(nft, data);
+      if (!nftWithDetails) {
+        const data = await nftsService.getOwnDetails({
+          chainSlug: DEFAULT_CHAIN_SLUG,
+          contractAddress: nft.contractAddress,
+          tokenId: nft.tokenId,
+        });
+
+        nftWithDetails = nftDetailsDashboardResAdapter(nft, data);
+        nftTokenDetailsCache.add(nftWithDetails);
+      }
+
       const { contentUrl, isEncrypted, attachments } = nftWithDetails;
 
       const videoAttach = attachments?.find(
@@ -203,7 +290,10 @@ export default class HomeModule extends VuexModule {
       }
 
       this.setNewContentDetails({
-        index,
+        nft: nftWithDetails,
+      });
+
+      this.setForMeDetails({
         nft: nftWithDetails,
       });
     } catch (error) {
@@ -221,7 +311,13 @@ export default class HomeModule extends VuexModule {
       });
 
       this.setNewContentDetails({
-        index,
+        nft: {
+          ...nft,
+          hasDetails: true,
+        },
+      });
+
+      this.setForMeDetails({
         nft: {
           ...nft,
           hasDetails: true,
@@ -246,6 +342,11 @@ export default class HomeModule extends VuexModule {
     /** удаляем nfts */
 
     this.setNewContent({
+      ...defaultNewContent,
+      nfts: [],
+    });
+
+    this.setForYou({
       ...defaultNewContent,
       nfts: [],
     });

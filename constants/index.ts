@@ -37,6 +37,10 @@ export const API_CHAIN_MAP = new Map<string, string>()
   .set(EChainSlug.goerli, 'goerli')
   .set(EChainSlug.mumbai, 'mumbai');
 
+export function getApiChainBySlug(key: EChainSlug) {
+  return API_CHAIN_MAP.get(key);
+}
+
 /** дефолтное комьюнити для создания NFT */
 export const OPEN_FORUM_ID = 1;
 

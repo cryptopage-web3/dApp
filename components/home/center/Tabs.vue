@@ -21,7 +21,7 @@
       <a
         id="spaces-tabs2-tab"
         href="#spaces-tabs2"
-        class="spaces-tabs-link disabled"
+        class="spaces-tabs-link"
         data-toggle="tab"
         role="tab"
         aria-controls="spaces-tabs2"

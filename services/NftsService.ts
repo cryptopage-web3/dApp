@@ -106,6 +106,30 @@ export class NftsService extends BaseService {
     return data;
   };
 
+  getLastPosts = async (
+    params: INftDashboardParams,
+  ): Promise<INftDashboardResponse> => {
+    const slugMap = API_CHAIN_MAP;
+
+    if (!slugMap.has(params.chainSlug)) {
+      return {
+        tokens: [],
+      };
+    }
+
+    const { data } = await this.get<INftDashboardResponse>(
+      `${this.apiURL}/last-posts/${slugMap.get(params.chainSlug)}`,
+      {
+        params: {
+          page: params.page,
+          pageSize: params.pageSize,
+        },
+      },
+    );
+
+    return data;
+  };
+
   getTransactionDetails = async (
     params: INftDetailsParams,
   ): Promise<INftTransactionDetailsResponse> => {

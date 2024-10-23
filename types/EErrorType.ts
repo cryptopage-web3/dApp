@@ -12,6 +12,7 @@ export enum EErrorType {
   syncOwnNfts = 'syncOwnNfts',
   authUnsupportedChain = 'authUnsupportedChain',
   getDashboardList = 'getDashboardList',
+  getLastPosts = 'getLastPosts',
   getDashboardDetails = 'getDashboardDetails',
   uploadingContentToArweave = 'uploadingContentToArweave',
   createPostTransaction = 'createPostTransaction',
